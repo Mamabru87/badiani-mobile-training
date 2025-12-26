@@ -3999,9 +3999,10 @@ button,
     max-height: 100dvh;
     border-radius: 0; /* Full screen feel */
     border: none;
+    margin: 0; /* Reset margins to prevent cutoff */
 
     /* Single scroll area for the whole modal (prevents “only sidebar visible”). */
-    overflow-x: hidden;
+    overflow-x: hidden; /* Prevent horizontal scroll */
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
@@ -4015,6 +4016,7 @@ button,
   background: var(--paper);
   border-bottom: 1px solid var(--border);
   box-shadow: 0 2px 10px rgba(15, 33, 84, 0.05);
+  width: 100%; /* Ensure header fits */
 }
 
 @media (max-width: 600px) {
@@ -4053,6 +4055,7 @@ button,
     overflow: visible !important;
     background: transparent;
     border-bottom: none;
+    width: 100%; /* Ensure full width */
   }
 
   .card-modal-body {
@@ -4062,6 +4065,7 @@ button,
     line-height: 1.6;
     /* Let the modal be the scroller on mobile; avoid nested scroll traps. */
     overflow: visible !important;
+    width: 100%; /* Ensure full width */
   }
 
   .card-modal-scroll-spacer {
@@ -4081,21 +4085,28 @@ button,
 }
 
 .modal-product-image {
-  margin: 0 !important;
-  padding: 12px !important; /* Add padding to prevent image touching edges */
-  aspect-ratio: 4 / 3 !important;
-  min-height: 200px !important;
+  margin: 0 auto !important; /* Center horizontally */
+  padding: 0 !important; /* Remove padding to let image fill */
+  aspect-ratio: auto !important; /* Remove forced aspect ratio */
+  min-height: 0 !important; /* Remove forced min-height */
   height: auto !important;
-  max-height: 400px !important;
+  max-height: 300px !important; /* Limit height on mobile */
   width: 100% !important;
   max-width: 100% !important;
-  display: flex !important; /* Use flex to center image */
-  align-items: center;
-  justify-content: center;
-  overflow: hidden !important; /* Revert to hidden to contain image */
+  display: block !important;
+  overflow: hidden !important;
   border-radius: var(--radius-lg) !important;
-  background: var(--cloud);
-  box-shadow: 0 8px 24px rgba(15, 33, 84, 0.15);
+  background: transparent; /* Remove background */
+  box-shadow: none; /* Remove shadow for cleaner look */
+}
+
+.modal-product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Ensure image is fully visible and not cropped */
+  max-height: 300px; /* Match container max-height */
+  display: block;
+  margin: 0 auto;
 }
 
 @media (max-width: 600px) {
