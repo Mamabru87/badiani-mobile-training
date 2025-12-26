@@ -7825,7 +7825,7 @@ const initCarousels = () => {
 
       // Hint to browsers: allow vertical page scrolling, handle horizontal drag ourselves.
       // (Mostly affects touch/pen, harmless for mouse.)
-      carouselTrack.style.touchAction = 'pan-y';
+      carouselTrack.style.touchAction = 'pan-x pan-y';
 
       carouselTrack.addEventListener('pointerdown', onPointerDown, { passive: true });
       carouselTrack.addEventListener('pointermove', onPointerMove, { passive: false });
