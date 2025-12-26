@@ -236,14 +236,15 @@ body.page-home {
 
 .page-home [data-carousel="cockpit"] .cockpit-indicators {
   min-width: auto;
-  justify-content: center;
+  justify-content: flex-start; /* Changed from center to allow scrolling */
   flex-wrap: nowrap;
   max-width: 100%;
   width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 6px 2px;
+  padding: 6px 12px; /* Added some side padding */
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .page-home [data-carousel="cockpit"] .cockpit-indicators::-webkit-scrollbar {
@@ -301,7 +302,7 @@ body.page-home {
   -webkit-overflow-scrolling: touch;
   cursor: grab;
   user-select: none;
-  touch-action: pan-y;
+  touch-action: pan-x pan-y; /* Allow both, or just pan-x if we want to be specific */
 }
 
 .page-home [data-carousel="cockpit"] .cockpit-track::-webkit-scrollbar {
@@ -405,7 +406,7 @@ body.page-home {
   .page-home [data-carousel="cockpit"] .cockpit-indicators {
     width: 100%;
     max-width: none;
-    justify-content: center;
+    justify-content: flex-start;
   }
 
   .page-home [data-carousel="cockpit"] .cockpit-track {
@@ -571,13 +572,12 @@ h4 {
   align-items: center;
   color: var(--ink-soft);
   font-family: var(--font-regular);
-  flex-wrap: wrap;
-  /* Full-width bar on every page (some pages nest nav inside `main`). */
+  flex-wrap: nowrap; /* Prevent wrapping to keep it clean */
   width: 100vw;
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
-  padding-top: 32px;
-  padding-bottom: 18px;
+  padding-top: 12px; /* Reduced from 32px */
+  padding-bottom: 8px; /* Reduced from 18px */
   padding-left: max(12px, calc((100vw - min(1200px, 92vw)) / 2));
   padding-right: max(12px, calc((100vw - min(1200px, 92vw)) / 2));
   border-bottom: 1px solid var(--border);
@@ -592,14 +592,22 @@ h4 {
 
 @media (max-width: 600px) {
   .nav-shell {
-    padding-top: 12px;
-    padding-bottom: 10px;
+    padding-top: 8px;
+    padding-bottom: 6px;
+    gap: 8px;
   }
   .brand-avatar {
-    height: 32px;
+    height: 28px; /* Smaller logo */
   }
   .brand-text small {
-    font-size: 10px;
+    display: none; /* Hide "Training" text on mobile to save space */
+  }
+  .user-nickname-pill {
+    padding: 4px 8px;
+    gap: 4px;
+  }
+  .user-nickname-pill__label {
+    display: none; /* Hide "Profilo" label */
   }
 }
 
@@ -623,11 +631,11 @@ h4 {
 }
 
 .nav-shell.is-shrunk {
-  padding-top: 14px;
-  padding-bottom: 14px;
+  padding-top: 6px;
+  padding-bottom: 6px;
   padding-left: max(12px, calc((100vw - min(1200px, 92vw)) / 2));
   padding-right: max(12px, calc((100vw - min(1200px, 92vw)) / 2));
-  box-shadow: 0 12px 28px rgba(15, 33, 84, 0.12);
+  box-shadow: 0 8px 20px rgba(15, 33, 84, 0.1);
 }
 
 .nav-shell .brand {
@@ -713,16 +721,24 @@ h4 {
   background: rgba(33, 64, 152, 0.05);
   color: var(--ink);
   font-weight: 600;
-  padding: 10px 18px;
+  padding: 8px 14px;
   border-radius: 999px;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   cursor: pointer;
   font-family: inherit;
   letter-spacing: 0.08em;
   transition: transform var(--anim-fast) ease, border-color var(--anim-fast) ease, background var(--anim-fast) ease;
-  margin-left: auto;
+  margin-left: 8px;
+}
+
+@media (max-width: 600px) {
+  .menu-trigger {
+    padding: 6px 10px;
+    font-size: 13px;
+    gap: 6px;
+  }
 }
 
 .menu-trigger:hover,
@@ -759,23 +775,19 @@ h4 {
 }
 
 .nav-token-shell {
-  flex: 0 0 auto;
+  flex: 0 1 auto; /* Allow shrinking */
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 0;
-  border-radius: 0;
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  transition: padding var(--anim-slow) ease, gap var(--anim-slow) ease;
+  gap: 4px;
+  padding: 0;
   margin-left: auto;
   overflow: visible;
 }
 
-.nav-shell.is-shrunk .nav-token-shell {
-  padding: 4px 10px;
-  gap: 4px;
+@media (max-width: 600px) {
+  .nav-token-shell {
+    gap: 2px;
+  }
 }
 
 .nav-token {
@@ -787,20 +799,31 @@ h4 {
   background: transparent;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 12px;
+  gap: 6px;
+  padding: 4px 8px;
   border-radius: 999px;
   font-family: var(--font-medium);
-  letter-spacing: 0.1em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--ink);
   cursor: pointer;
-  transition: background var(--anim-fast) ease, transform var(--anim-fast) ease, padding var(--anim-slow) ease, gap var(--anim-slow) ease;
+  transition: background var(--anim-fast) ease, transform var(--anim-fast) ease;
 }
 
-.nav-shell.is-shrunk .nav-token__btn {
-  padding: 4px 10px;
-  gap: 6px;
+@media (max-width: 600px) {
+  .nav-token__btn {
+    padding: 2px 4px;
+    gap: 4px;
+  }
+  .nav-token__label {
+    display: none; /* Hide "Stelline", "Gelati", "Bonus" labels on mobile */
+  }
+  .nav-token__icon {
+    font-size: 14px;
+  }
+  .reward-value {
+    font-size: 14px;
+  }
 }
 
 .nav-token__btn:hover,
@@ -5594,8 +5617,8 @@ body.page-home {
 }
 
 .page-home .nav-shell {
-  padding-top: 18px;
-  padding-bottom: 10px;
+  padding-top: 10px;
+  padding-bottom: 6px;
   border-bottom: 1px solid rgba(33, 64, 152, 0.12);
   box-shadow: none;
 }

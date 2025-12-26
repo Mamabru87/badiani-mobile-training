@@ -3425,21 +3425,22 @@ const gamification = (() => {
   }
 
   const QUIZ_PRODUCT_GUESS_ITEMS = [
-    { id: 'caffe-espresso', label: 'Espresso', image: 'assets/guides/caffe-espresso.webp', slug: 'caffe' },
-    { id: 'caffe-cappuccino', label: 'Cappuccino', image: 'assets/guides/caffe-cappuccino.webp', slug: 'caffe' },
-    { id: 'caffe-americano', label: 'Americano', image: 'assets/guides/caffe-americano.webp', slug: 'caffe' },
-    { id: 'caffe-affogato', label: 'Affogato', image: 'assets/guides/caffe-affogato.webp', slug: 'caffe' },
-    { id: 'sweet-waffle', label: 'Waffle', image: 'assets/guides/sweet-waffle.webp', slug: 'sweet-treats' },
-    { id: 'sweet-pancake', label: 'Pancake', image: 'assets/guides/sweet-pancake.webp', slug: 'sweet-treats' },
-    { id: 'sweet-mini-stack', label: 'Mini Stack', image: 'assets/guides/sweet-storage.webp', slug: 'sweet-treats' },
-    { id: 'pastry-croissant', label: 'Croissant', image: 'assets/guides/pastry-croissant.webp', slug: 'pastries' },
-    { id: 'pastry-brownie', label: 'Brownie', image: 'assets/guides/pastry-brownie.webp', slug: 'pastries' },
-    { id: 'slitti-praline', label: 'Praline', image: 'assets/guides/slitti-praline.webp', slug: 'slitti-yoyo' },
-    { id: 'gelato-box', label: 'Gelato Box', image: 'assets/guides/gelato-box.webp', slug: 'gelato-lab' },
-    { id: 'gelato-cones', label: 'Coni gelato', image: 'assets/guides/gelato-cones.webp', slug: 'gelato-lab' },
-    { id: 'festive-churros', label: 'Churros', image: 'assets/guides/festive-churros.webp', slug: 'festive' },
-    { id: 'panettone', label: 'Panettone', image: 'assets/guides/panettone.webp', slug: 'festive' },
-    { id: 'pandoro', label: 'Pandoro', image: 'assets/guides/pandoro.webp', slug: 'festive' },
+    { id: 'caffe-espresso', label: 'Espresso', image: 'assets/products/caffe-espresso.webp', slug: 'caffe' },
+    { id: 'caffe-cappuccino', label: 'Cappuccino', image: 'assets/products/caffe-cappuccino.webp', slug: 'caffe' },
+    { id: 'caffe-americano', label: 'Americano', image: 'assets/products/caffe-americano.webp', slug: 'caffe' },
+    { id: 'caffe-affogato', label: 'Affogato', image: 'assets/products/caffe-affogato.webp', slug: 'caffe' },
+    { id: 'sweet-waffle', label: 'Waffle', image: 'assets/products/sweet-waffle.webp', slug: 'sweet-treats' },
+    { id: 'sweet-pancake', label: 'Pancake', image: 'assets/products/sweet-pancake.webp', slug: 'sweet-treats' },
+    { id: 'sweet-mini-stack', label: 'Mini Stack', image: 'assets/products/sweet-storage.webp', slug: 'sweet-treats' },
+    { id: 'pastry-croissant', label: 'Croissant', image: 'assets/products/pastry-croissant.webp', slug: 'pastries' },
+    { id: 'pastry-brownie', label: 'Brownie', image: 'assets/products/pastry-brownie.webp', slug: 'pastries' },
+    { id: 'pastry-cake', label: 'Cake', image: 'assets/products/pastry-cake.webp', slug: 'pastries' },
+    { id: 'slitti-praline', label: 'Praline', image: 'assets/products/slitti-praline.webp', slug: 'slitti-yoyo' },
+    { id: 'gelato-box', label: 'Gelato Box', image: 'assets/products/gelato-box.webp', slug: 'gelato-lab' },
+    { id: 'gelato-cones', label: 'Coni gelato', image: 'assets/products/gelato-cones.webp', slug: 'gelato-lab' },
+    { id: 'festive-churros', label: 'Churros', image: 'assets/products/festive-churros.webp', slug: 'festive' },
+    { id: 'panettone', label: 'Panettone', image: 'assets/products/panettone.webp', slug: 'festive' },
+    { id: 'pandoro', label: 'Pandoro', image: 'assets/products/pandoro.webp', slug: 'festive' },
   ];
 
   const QUIZ_FLASH_QUESTIONS = [
@@ -7984,16 +7985,11 @@ const initCarousels = () => {
           // If siamo attaccati all'inizio, forza la prima card come focus.
           if (carouselTrack.scrollLeft <= 2) {
             applyState(0);
-            goToIndex(0, { behavior: 'auto' });
             return;
           }
 
           const nextIndex = getNearestIndexByCenter();
-          const prevIndex = currentIndex;
           applyState(nextIndex);
-          if (nextIndex !== prevIndex) {
-            goToIndex(nextIndex, { behavior: 'smooth' });
-          }
         });
       };
 
@@ -8024,16 +8020,11 @@ const initCarousels = () => {
           scrollRaf = 0;
           if (carouselTrack.scrollLeft <= 2) {
             applyState(0);
-            goToIndex(0, { behavior: 'auto' });
             return;
           }
 
           const nextIndex = getNearestIndex();
-          const prevIndex = currentIndex;
           applyState(nextIndex);
-          if (nextIndex !== prevIndex) {
-            goToIndex(nextIndex, { behavior: 'smooth' });
-          }
         });
       };
 
