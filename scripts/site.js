@@ -1226,6 +1226,27 @@ const gamification = (() => {
 
   let audioContext = null;
 
+  // Global audio unlocker to ensure context is ready on first touch
+  const unlockAudioContext = () => {
+    const AudioCtor = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtor) return;
+    
+    if (!audioContext) {
+      audioContext = new AudioCtor();
+    }
+    if (audioContext.state === 'suspended') {
+      audioContext.resume().then(() => {
+        // Remove listeners once unlocked
+        ['click', 'touchstart', 'keydown'].forEach(evt => 
+          document.removeEventListener(evt, unlockAudioContext)
+        );
+      }).catch(() => {});
+    }
+  };
+  ['click', 'touchstart', 'keydown'].forEach(evt => 
+    document.addEventListener(evt, unlockAudioContext)
+  );
+
   const playTabOpenSound = () => {
     try {
       const AudioCtor = window.AudioContext || window.webkitAudioContext;
@@ -1245,20 +1266,48 @@ const gamification = (() => {
       osc.connect(gain);
       gain.connect(audioContext.destination);
       
-      // "Cute" UI Pop: Triangle wave for more presence
-      osc.type = 'triangle';
+      // "Cute" UI Pop: High pitch sine wave
+      osc.type = 'sine';
       
       // Pitch envelope: Quick rise (chirp)
-      osc.frequency.setValueAtTime(440, now);
-      osc.frequency.exponentialRampToValueAtTime(880, now + 0.1);
+      osc.frequency.setValueAtTime(800, now);
+      osc.frequency.exponentialRampToValueAtTime(1400, now + 0.1);
       
       // Volume envelope: Fast attack, fast decay
       gain.gain.setValueAtTime(0, now);
-      gain.gain.linearRampToValueAtTime(0.3, now + 0.02); // Louder attack
-      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+      gain.gain.linearRampToValueAtTime(0.6, now + 0.02); // Louder attack
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
       
       osc.start(now);
-      osc.stop(now + 0.15);
+      osc.stop(now + 0.2);
+    } catch (e) {}
+  };
+
+  const playCrystalSound = () => {
+    try {
+      const AudioCtor = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtor) return;
+      if (!audioContext) audioContext = new AudioCtor();
+      if (audioContext.state === 'suspended') audioContext.resume().catch(() => {});
+
+      const now = audioContext.currentTime;
+      const osc = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+
+      osc.connect(gain);
+      gain.connect(audioContext.destination);
+
+      // Crystal "Ting": High pitch sine with bell-like decay
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1800, now);
+      osc.frequency.exponentialRampToValueAtTime(2200, now + 0.1);
+
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(0.4, now + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+
+      osc.start(now);
+      osc.stop(now + 0.5);
     } catch (e) {}
   };
 
@@ -3112,9 +3161,11 @@ const gamification = (() => {
     dispatchCardCrystalsUpdated(cardId, { crystals: crystalsAfter, converted: false, awarded: 0 });
 
     const label = tabTitle ? ` · ${tabTitle}` : '';
-    const anchor = getOriginPoint(source, evt);
+    // Force toast to top-center as requested to avoid distraction
+    const anchor = { x: window.innerWidth / 2, y: 60 };
     showToast(`✧ +${amount} cristallo${amount > 1 ? 'i' : 'o'}${label} (${crystalsAfter}/${CRYSTALS_PER_STAR})`, { anchor });
     playCrystalPing(source, evt);
+    playCrystalSound();
   }
 
   function awardStarFromCrystals(source, { animateFromCrystal = false, evt = null } = {}) {
@@ -3130,7 +3181,8 @@ const gamification = (() => {
     updateUI();
     const readableTitle = (source?.closest('.guide-card') || source)?.querySelector?.('h3')?.textContent?.trim();
     const label = readableTitle ? `: ${readableTitle}` : '';
-    const anchor = getOriginPoint(source, evt);
+    // Force toast to top-center for star award too
+    const anchor = { x: window.innerWidth / 2, y: 60 };
     showToast(`⭐ Cristalli -> +1 stella${label}`, { anchor });
     const celebrateSet = state.quizTokens % STARS_FOR_QUIZ === 0;
     const noteLevel = celebrateSet ? 4 : ((state.quizTokens - 1) % STARS_FOR_QUIZ) + 1;
