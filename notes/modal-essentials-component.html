@@ -1,10 +1,10 @@
 Attached HTML and CSS Context
 
-<section class="modal-specs"><h4 class="modal-specs__title">Specifiche</h4><p class="modal-specs__subtitle">Parametri chiave (senza prezzi).</p><div class="modal-specs__grid"><div class="modal-specs__item"><span class="modal-specs__key">Latte</span><div class="modal-specs__value">1-4 L intero +.</div></div><div class="modal-specs__item"><span class="modal-specs__key">Mix</span><div class="modal-specs__value">cacao + amido (vedi tabella).</div></div><div class="modal-specs__item"><span class="modal-specs__key">Riposo</span><div class="modal-specs__value">5 minuti in frigo dopo la miscelazione.</div></div><div class="modal-specs__item"><span class="modal-specs__key">Shelf life</span><div class="modal-specs__value">life 3 giorni dal primo.</div></div><div class="modal-specs__item"><span class="modal-specs__key">Ricetta</span><div class="modal-specs__value">warm-up.</div></div></div></section>
+<div class="card-modal-essentials"><p class="card-modal-essentials__title">In primo piano</p><div class="card-modal-essentials__chips"><span class="card-modal-essentials__chip"><strong>Latte</strong><span>1-4 L intero +.</span></span><span class="card-modal-essentials__chip"><strong>Mix</strong><span>cacao + amido (vedi tabella).</span></span><span class="card-modal-essentials__chip"><strong>Riposo</strong><span>5 minuti in frigo dopo la miscelazione.</span></span><span class="card-modal-essentials__chip"><strong>Shelf life</strong><span>life 3 giorni dal primo.</span></span></div></div>
 
 
 /* Matched Rule from user-agent */
-article, aside, footer, header, hgroup, main, nav, search, section {
+div {
   display: block;
 }
 
@@ -25,12 +25,11 @@ address, blockquote, center, div, figure, figcaption, footer, form, header, hr, 
 }
 
 /* Matched Rule from regular */
-.modal-specs {
-  border: 1px solid rgba(33, 64, 152, 0.16);
-  border-radius: 18px;
-  background: linear-gradient(135deg, rgba(33, 64, 152, 0.04), rgba(236, 65, 140, 0.03));
-  padding: 18px;
-  box-shadow: 0 14px 34px rgba(15, 33, 84, 0.10);
+.card-modal-essentials {
+  border: 1px solid rgba(33, 64, 152, 0.14);
+  border-radius: 14px;
+  padding: 16px;
+  background: rgba(33, 64, 152, 0.03);
   border-top-width: 1px;
   border-right-width: 1px;
   border-bottom-width: 1px;
@@ -39,20 +38,24 @@ address, blockquote, center, div, figure, figcaption, footer, form, header, hr, 
   border-right-style: solid;
   border-bottom-style: solid;
   border-left-style: solid;
-  border-top-color: rgba(33, 64, 152, 0.16);
-  border-right-color: rgba(33, 64, 152, 0.16);
-  border-bottom-color: rgba(33, 64, 152, 0.16);
-  border-left-color: rgba(33, 64, 152, 0.16);
+  border-top-color: rgba(33, 64, 152, 0.14);
+  border-right-color: rgba(33, 64, 152, 0.14);
+  border-bottom-color: rgba(33, 64, 152, 0.14);
+  border-left-color: rgba(33, 64, 152, 0.14);
   border-image-source: initial;
   border-image-slice: initial;
   border-image-width: initial;
   border-image-outset: initial;
   border-image-repeat: initial;
-  border-top-left-radius: 18px;
-  border-top-right-radius: 18px;
-  border-bottom-right-radius: 18px;
-  border-bottom-left-radius: 18px;
-  background-image: linear-gradient(135deg, rgba(33, 64, 152, 0.04), rgba(236, 65, 140, 0.03));
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+  border-bottom-right-radius: 14px;
+  border-bottom-left-radius: 14px;
+  padding-top: 16px;
+  padding-right: 16px;
+  padding-bottom: 16px;
+  padding-left: 16px;
+  background-image: initial;
   background-position-x: initial;
   background-position-y: initial;
   background-size: initial;
@@ -60,12 +63,7 @@ address, blockquote, center, div, figure, figcaption, footer, form, header, hr, 
   background-attachment: initial;
   background-origin: initial;
   background-clip: initial;
-  background-color: initial;
-  padding-top: 18px;
-  padding-right: 18px;
-  padding-bottom: 18px;
-  padding-left: 18px;
-  box-shadow: rgba(15, 33, 84, 0.1) 0px 14px 34px;
+  background-color: rgba(33, 64, 152, 0.03);
 }
 
 /* Inherited from ancestor level 1 (user-agent) */
@@ -90,51 +88,82 @@ address, blockquote, center, div, figure, figcaption, footer, form, header, hr, 
 }
 
 /* Inherited from ancestor level 1 (regular) */
-.card-modal-sidebar {
-  grid-column: 1;
+.card-modal-primary {
+  display: grid;
+  gap: 18px;
+  display: grid;
+  row-gap: 18px;
+  column-gap: 18px;
+}
+
+/* Inherited from ancestor level 2 (user-agent) */
+div {
+  display: block;
+}
+
+/* Inherited from ancestor level 2 (user-agent) */
+address, blockquote, center, div, figure, figcaption, footer, form, header, hr, legend, listing, main, p, plaintext, pre, summary, xmp, article, aside, h1, h2, h3, h4, h5, h6, hgroup, nav, section, search, table, caption, colgroup, col, thead, tbody, tfoot, tr, td, th, dir, dd, dl, dt, menu, ol, ul, li, bdi, output, [dir="ltr" i], [dir="rtl" i], [dir="auto" i] {
+  unicode-bidi: isolate;
+}
+
+/* Inherited from ancestor level 2 (regular) */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  box-sizing: border-box;
+  margin-top: 0px;
+  margin-right: 0px;
+  margin-bottom: 0px;
+  margin-left: 0px;
+}
+
+/* Inherited from ancestor level 2 (regular) */
+.card-modal-body {
+  grid-column: 2;
   grid-row: 2;
-  padding: 32px;
-  background: linear-gradient(180deg, rgba(33, 64, 152, 0.02), rgba(236, 65, 140, 0.01));
-  border-right: 1px solid var(--border);
+  padding: 36px;
   overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  grid-column-start: 1;
+  gap: 32px;
+  font-size: 18px;
+  line-height: 1.8;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(33, 64, 152, 0.3) transparent;
+  background: var(--paper);
+  grid-column-start: 2;
   grid-column-end: auto;
   grid-row-start: 2;
   grid-row-end: auto;
-  padding-top: 32px;
-  padding-right: 32px;
-  padding-bottom: 32px;
-  padding-left: 32px;
-  background-image: linear-gradient(rgba(33, 64, 152, 0.02), rgba(236, 65, 140, 0.01));
-  background-position-x: initial;
-  background-position-y: initial;
-  background-size: initial;
-  background-repeat: initial;
-  background-attachment: initial;
-  background-origin: initial;
-  background-clip: initial;
-  background-color: initial;
+  padding-top: 36px;
+  padding-right: 36px;
+  padding-bottom: 36px;
+  padding-left: 36px;
   overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  row-gap: 24px;
-  column-gap: 24px;
+  row-gap: 32px;
+  column-gap: 32px;
+  font-size: 18px;
+  line-height: 1.8;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(33, 64, 152, 0.3) transparent;
 }
 
-/* Inherited from ancestor level 2 (user-agent) */
+/* Inherited from ancestor level 3 (user-agent) */
 div {
   display: block;
 }
 
-/* Inherited from ancestor level 2 (user-agent) */
+/* Inherited from ancestor level 3 (user-agent) */
 address, blockquote, center, div, figure, figcaption, footer, form, header, hr, legend, listing, main, p, plaintext, pre, summary, xmp, article, aside, h1, h2, h3, h4, h5, h6, hgroup, nav, section, search, table, caption, colgroup, col, thead, tbody, tfoot, tr, td, th, dir, dd, dl, dt, menu, ol, ul, li, bdi, output, [dir="ltr" i], [dir="rtl" i], [dir="auto" i] {
   unicode-bidi: isolate;
 }
 
-/* Inherited from ancestor level 2 (regular) */
+/* Inherited from ancestor level 3 (regular) */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -145,7 +174,7 @@ address, blockquote, center, div, figure, figcaption, footer, form, header, hr, 
   margin-left: 0px;
 }
 
-/* Inherited from ancestor level 2 (regular) */
+/* Inherited from ancestor level 3 (regular) */
 .card-modal {
   background: var(--paper);
   border-radius: var(--radius-lg);
@@ -178,23 +207,23 @@ address, blockquote, center, div, figure, figcaption, footer, form, header, hr, 
   overflow-y: hidden;
 }
 
-/* Inherited from ancestor level 2 (regular) */
+/* Inherited from ancestor level 3 (regular) */
 .card-modal-overlay.is-visible .card-modal {
   transform: scale(1) translateY(0);
   transform: scale(1) translateY(0px);
 }
 
-/* Inherited from ancestor level 3 (user-agent) */
+/* Inherited from ancestor level 4 (user-agent) */
 div {
   display: block;
 }
 
-/* Inherited from ancestor level 3 (user-agent) */
+/* Inherited from ancestor level 4 (user-agent) */
 address, blockquote, center, div, figure, figcaption, footer, form, header, hr, legend, listing, main, p, plaintext, pre, summary, xmp, article, aside, h1, h2, h3, h4, h5, h6, hgroup, nav, section, search, table, caption, colgroup, col, thead, tbody, tfoot, tr, td, th, dir, dd, dl, dt, menu, ol, ul, li, bdi, output, [dir="ltr" i], [dir="rtl" i], [dir="auto" i] {
   unicode-bidi: isolate;
 }
 
-/* Inherited from ancestor level 3 (regular) */
+/* Inherited from ancestor level 4 (regular) */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -205,7 +234,7 @@ address, blockquote, center, div, figure, figcaption, footer, form, header, hr, 
   margin-left: 0px;
 }
 
-/* Inherited from ancestor level 3 (regular) */
+/* Inherited from ancestor level 4 (regular) */
 .card-modal-overlay {
   position: fixed;
   inset: 0;
@@ -249,13 +278,13 @@ address, blockquote, center, div, figure, figcaption, footer, form, header, hr, 
   transition-property: opacity;
 }
 
-/* Inherited from ancestor level 3 (regular) */
+/* Inherited from ancestor level 4 (regular) */
 .card-modal-overlay.is-visible {
   opacity: 1;
   opacity: 1;
 }
 
-/* Inherited from ancestor level 4 (user-agent) */
+/* Inherited from ancestor level 5 (user-agent) */
 body {
   display: block;
   margin-top: 8px;
@@ -264,7 +293,7 @@ body {
   margin-left: 8px;
 }
 
-/* Inherited from ancestor level 4 (regular) */
+/* Inherited from ancestor level 5 (regular) */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -275,7 +304,7 @@ body {
   margin-left: 0px;
 }
 
-/* Inherited from ancestor level 4 (regular) */
+/* Inherited from ancestor level 5 (regular) */
 body {
   min-height: 100vh;
   background-color: #ffffff;
@@ -303,7 +332,7 @@ body {
   overflow-y: auto;
 }
 
-/* Inherited from ancestor level 4 (regular) */
+/* Inherited from ancestor level 5 (regular) */
 body.no-scroll {
   overflow: hidden !important;
   position: fixed;
@@ -316,17 +345,17 @@ body.no-scroll {
   overflow-y: hidden !important;
 }
 
-/* Inherited from ancestor level 5 (user-agent) */
+/* Inherited from ancestor level 6 (user-agent) */
 html {
   display: block;
 }
 
-/* Inherited from ancestor level 5 (user-agent) */
+/* Inherited from ancestor level 6 (user-agent) */
 :root {
   view-transition-name: root;
 }
 
-/* Inherited from ancestor level 5 (regular) */
+/* Inherited from ancestor level 6 (regular) */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -337,14 +366,14 @@ html {
   margin-left: 0px;
 }
 
-/* Inherited from ancestor level 5 (regular) */
+/* Inherited from ancestor level 6 (regular) */
 html {
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
 }
 
-/* Inherited from ancestor level 5 (regular) */
+/* Inherited from ancestor level 6 (regular) */
 :root {
   --brand-blue: #214098;
   --brand-blue-deep: #0f2154;
@@ -403,3 +432,5 @@ html {
   --font-medium: "SuperGrotesk-Medium", "Helvetica Neue", Arial, sans-serif;
   font-family: var(--font-regular);
 }
+
+

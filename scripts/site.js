@@ -1157,7 +1157,7 @@ scrollButtons.forEach((btn) => {
   if (!nav) return;
   const brandImg = nav.querySelector('.brand-avatar');
   const defaultLogo = brandImg ? brandImg.getAttribute('data-default-src') || brandImg.getAttribute('src') : null;
-  const altLogo = brandImg ? brandImg.getAttribute('data-alt-src') || 'assets/logo-avatar.svg' : null;
+  const altLogo = brandImg ? brandImg.getAttribute('data-alt-src') || 'assets/brand/logo-avatar.svg' : null;
   let ticking = false;
   let isShrunk = false;
   const shrinkThreshold = 90;
@@ -3425,21 +3425,21 @@ const gamification = (() => {
   }
 
   const QUIZ_PRODUCT_GUESS_ITEMS = [
-    { id: 'caffe-espresso', label: 'Espresso', image: 'assets/caffe-espresso.webp', slug: 'caffe' },
-    { id: 'caffe-cappuccino', label: 'Cappuccino', image: 'assets/caffe-cappuccino.webp', slug: 'caffe' },
-    { id: 'caffe-americano', label: 'Americano', image: 'assets/caffe-americano.webp', slug: 'caffe' },
-    { id: 'caffe-affogato', label: 'Affogato', image: 'assets/caffe-affogato.webp', slug: 'caffe' },
-    { id: 'sweet-waffle', label: 'Waffle', image: 'assets/sweet-waffle.webp', slug: 'sweet-treats' },
-    { id: 'sweet-pancake', label: 'Pancake', image: 'assets/sweet-pancake.webp', slug: 'sweet-treats' },
-    { id: 'sweet-mini-stack', label: 'Mini Stack', image: 'assets/sweet-storage.webp', slug: 'sweet-treats' },
-    { id: 'pastry-croissant', label: 'Croissant', image: 'assets/pastry-croissant.webp', slug: 'pastries' },
-    { id: 'pastry-brownie', label: 'Brownie', image: 'assets/pastry-brownie.webp', slug: 'pastries' },
-    { id: 'slitti-praline', label: 'Praline', image: 'assets/slitti-praline.webp', slug: 'slitti-yoyo' },
-    { id: 'gelato-box', label: 'Gelato Box', image: 'assets/gelato-box.webp', slug: 'gelato-lab' },
-    { id: 'gelato-cones', label: 'Coni gelato', image: 'assets/gelato-cones.webp', slug: 'gelato-lab' },
-    { id: 'festive-churros', label: 'Churros', image: 'assets/festive-churros.webp', slug: 'festive' },
-    { id: 'panettone', label: 'Panettone', image: 'assets/panettone.webp', slug: 'festive' },
-    { id: 'pandoro', label: 'Pandoro', image: 'assets/pandoro.webp', slug: 'festive' },
+    { id: 'caffe-espresso', label: 'Espresso', image: 'assets/guides/caffe-espresso.webp', slug: 'caffe' },
+    { id: 'caffe-cappuccino', label: 'Cappuccino', image: 'assets/guides/caffe-cappuccino.webp', slug: 'caffe' },
+    { id: 'caffe-americano', label: 'Americano', image: 'assets/guides/caffe-americano.webp', slug: 'caffe' },
+    { id: 'caffe-affogato', label: 'Affogato', image: 'assets/guides/caffe-affogato.webp', slug: 'caffe' },
+    { id: 'sweet-waffle', label: 'Waffle', image: 'assets/guides/sweet-waffle.webp', slug: 'sweet-treats' },
+    { id: 'sweet-pancake', label: 'Pancake', image: 'assets/guides/sweet-pancake.webp', slug: 'sweet-treats' },
+    { id: 'sweet-mini-stack', label: 'Mini Stack', image: 'assets/guides/sweet-storage.webp', slug: 'sweet-treats' },
+    { id: 'pastry-croissant', label: 'Croissant', image: 'assets/guides/pastry-croissant.webp', slug: 'pastries' },
+    { id: 'pastry-brownie', label: 'Brownie', image: 'assets/guides/pastry-brownie.webp', slug: 'pastries' },
+    { id: 'slitti-praline', label: 'Praline', image: 'assets/guides/slitti-praline.webp', slug: 'slitti-yoyo' },
+    { id: 'gelato-box', label: 'Gelato Box', image: 'assets/guides/gelato-box.webp', slug: 'gelato-lab' },
+    { id: 'gelato-cones', label: 'Coni gelato', image: 'assets/guides/gelato-cones.webp', slug: 'gelato-lab' },
+    { id: 'festive-churros', label: 'Churros', image: 'assets/guides/festive-churros.webp', slug: 'festive' },
+    { id: 'panettone', label: 'Panettone', image: 'assets/guides/panettone.webp', slug: 'festive' },
+    { id: 'pandoro', label: 'Pandoro', image: 'assets/guides/pandoro.webp', slug: 'festive' },
   ];
 
   const QUIZ_FLASH_QUESTIONS = [
@@ -5630,6 +5630,29 @@ try {
   window.addEventListener('DOMContentLoaded', normalizePasteArtifactsInUI);
 } catch {}
 
+// Mobile-first: ensure product photos inside horizontally scrollable carousels actually load.
+// Some mobile browsers are flaky with native lazy-loading inside overflow containers.
+const eagerLoadGuideMedia = () => {
+  try {
+    document.querySelectorAll('.guide-media img').forEach((img) => {
+      try {
+        img.loading = 'eager';
+        img.decoding = 'async';
+        // Optional hint; ignored where unsupported.
+        img.fetchPriority = 'high';
+      } catch (e) {}
+      try {
+        img.removeAttribute('loading');
+      } catch (e) {}
+    });
+  } catch (e) {}
+};
+
+try {
+  eagerLoadGuideMedia();
+  window.addEventListener('DOMContentLoaded', eagerLoadGuideMedia);
+} catch {}
+
 const toggles = document.querySelectorAll('[data-toggle-card]');
 toggles.forEach((button) => {
   button.setAttribute('aria-expanded', 'false');
@@ -5797,6 +5820,26 @@ toggles.forEach((button) => {
     if (figure) {
       const figClone = figure.cloneNode(true);
       figClone.className = 'modal-product-image';
+      figClone.style.display = 'block';
+      figClone.style.visibility = 'visible';
+      figClone.style.opacity = '1';
+
+      // Ensure the modal image loads immediately.
+      try {
+        figClone.querySelectorAll('img').forEach((img) => {
+          try {
+            img.loading = 'eager';
+            img.decoding = 'async';
+            img.fetchPriority = 'high';
+            img.style.display = 'block';
+            img.style.visibility = 'visible';
+            img.style.opacity = '1';
+          } catch (e) {}
+          try {
+            img.removeAttribute('loading');
+          } catch (e) {}
+        });
+      } catch (e) {}
       sidebarFragment.appendChild(figClone);
     }
     if (tags) {
@@ -6558,10 +6601,63 @@ toggles.forEach((button) => {
           meta.insertBefore(ind, meta.firstChild);
         } catch (e) {}
 
+        // Accordion sizing note:
+        // We animate open/close using `max-height`, but keeping a fixed px `max-height`
+        // after opening can clip content on mobile (font wrapping, late image loads, etc.).
+        // Fix: after the open transition ends, set `max-height: none` so the content can
+        // grow naturally. When closing, if `max-height` is `none`, we first snap to the
+        // current scrollHeight, then animate back to 0.
+        const settleOpenMaxHeight = () => {
+          if (!item.classList.contains('is-open')) return;
+          body.style.maxHeight = 'none';
+        };
+
+        const animateOpen = () => {
+          item.classList.add('is-open');
+          header.setAttribute('aria-expanded', 'true');
+
+          // Ensure we start from a numeric max-height so the transition can run.
+          body.style.maxHeight = '0px';
+          requestAnimationFrame(() => {
+            body.style.maxHeight = `${body.scrollHeight}px`;
+          });
+
+          // One extra recalculation shortly after (helps with late layout/line-wrapping).
+          setTimeout(() => {
+            if (!item.classList.contains('is-open')) return;
+            if (body.style.maxHeight === 'none') return;
+            body.style.maxHeight = `${body.scrollHeight}px`;
+          }, 80);
+
+          try {
+            const onEnd = (e) => {
+              if (e && e.target !== body) return;
+              settleOpenMaxHeight();
+            };
+            body.addEventListener('transitionend', onEnd, { once: true });
+            setTimeout(settleOpenMaxHeight, 320);
+          } catch (e) {
+            setTimeout(settleOpenMaxHeight, 0);
+          }
+        };
+
+        const animateClose = () => {
+          if (!item.classList.contains('is-open')) return;
+          item.classList.remove('is-open');
+          header.setAttribute('aria-expanded', 'false');
+
+          // If we previously settled to `none`, snap to current px height first.
+          if (body.style.maxHeight === 'none' || !body.style.maxHeight) {
+            body.style.maxHeight = `${body.scrollHeight}px`;
+          }
+          requestAnimationFrame(() => {
+            body.style.maxHeight = '0px';
+          });
+        };
+
         const setOpen = (expand) => {
-          item.classList.toggle('is-open', expand);
-          header.setAttribute('aria-expanded', String(expand));
-          body.style.maxHeight = expand ? `${body.scrollHeight}px` : '0px';
+          if (expand) animateOpen();
+          else animateClose();
         };
 
         header.addEventListener('click', (event) => {
@@ -6576,7 +6672,15 @@ toggles.forEach((button) => {
                 const openHeader = openItem.querySelector('.accordion-header');
                 const openBody = openItem.querySelector('.accordion-body');
                 if (openHeader) openHeader.setAttribute('aria-expanded', 'false');
-                if (openBody) openBody.style.maxHeight = '0px';
+                if (openBody) {
+                  // If the open body was settled to `none`, snap then animate closed.
+                  if (openBody.style.maxHeight === 'none' || !openBody.style.maxHeight) {
+                    openBody.style.maxHeight = `${openBody.scrollHeight}px`;
+                  }
+                  requestAnimationFrame(() => {
+                    openBody.style.maxHeight = '0px';
+                  });
+                }
               });
             } catch (e) {}
           }
@@ -6854,11 +6958,76 @@ toggles.forEach((button) => {
     modal.appendChild(modalBody);
     overlay.appendChild(modal);
     document.body.appendChild(overlay);
+
+    // Some mobile browsers can fail to render cloned <picture>/<img> nodes inside overlays
+    // (especially when they were lazily loaded inside overflow containers).
+    // Force a refresh + eager loading once the modal is in the DOM.
+    try {
+      const primeOverlayImages = () => {
+        try {
+          overlay.querySelectorAll('source[srcset]').forEach((source) => {
+            const v = source.getAttribute('srcset');
+            if (v) {
+              // Force re-evaluation by resetting the attribute
+              source.removeAttribute('srcset');
+              source.setAttribute('srcset', v);
+            }
+          });
+        } catch (e) {}
+        try {
+          overlay.querySelectorAll('img').forEach((img) => {
+            try {
+              img.loading = 'eager';
+              img.decoding = 'sync';
+              img.fetchPriority = 'high';
+            } catch (e) {}
+            try {
+              img.removeAttribute('loading');
+            } catch (e) {}
+
+            // Re-apply src and srcset to kick some engines into actually fetching/painting.
+            try {
+              const srcAttr = img.getAttribute('src');
+              const srcsetAttr = img.getAttribute('srcset');
+              if (srcAttr) {
+                img.src = ''; 
+                img.src = srcAttr;
+              }
+              if (srcsetAttr) {
+                img.srcset = '';
+                img.srcset = srcsetAttr;
+              }
+            } catch (e) {}
+          });
+        } catch (e) {}
+      };
+
+      primeOverlayImages();
+      requestAnimationFrame(primeOverlayImages);
+      // Multiple attempts to catch slow layout engines on mobile
+      setTimeout(primeOverlayImages, 50);
+      setTimeout(primeOverlayImages, 150);
+      setTimeout(primeOverlayImages, 400);
+    } catch (e) {}
     
     // Animazione apertura
     requestAnimationFrame(() => {
       overlay.classList.add('is-visible');
     });
+
+    // Mobile: start from the top so the sidebar image is immediately visible.
+    // (On small screens users can otherwise land in the body scroll area and
+    // interpret the image as “missing”.)
+    try {
+      const isNarrow = !!(window.matchMedia && window.matchMedia('(max-width: 900px)').matches);
+      if (isNarrow) {
+        requestAnimationFrame(() => {
+          try { modal.scrollTop = 0; } catch (e) {}
+          try { modalSidebar.scrollTop = 0; } catch (e) {}
+          try { modalBody.scrollTop = 0; } catch (e) {}
+        });
+      }
+    } catch (e) {}
     
     if (gamification) {
       gamification.handleCardOpen(card, button, totalTabsCount, event);

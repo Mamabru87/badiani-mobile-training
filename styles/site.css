@@ -119,6 +119,28 @@ body.page-home {
   padding: clamp(18px, 2.8vw, 28px);
 }
 
+@media (max-width: 600px) {
+  .page-home .hero-focus {
+    padding: 14px;
+    border-radius: 20px;
+  }
+  .page-home .hero h1 {
+    font-size: 22px;
+    line-height: 1.2;
+  }
+  .page-home .hero-lede {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .page-home .hero-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .page-home .hero-actions .btn {
+    width: 100%;
+  }
+}
+
 .page-home .hero--orbit::before {
   opacity: 0.08;
   background-size: 160% auto;
@@ -566,6 +588,19 @@ h4 {
   backdrop-filter: blur(8px);
   transition: padding var(--anim-slow) ease, box-shadow var(--anim-slow) ease;
   overflow: visible;
+}
+
+@media (max-width: 600px) {
+  .nav-shell {
+    padding-top: 12px;
+    padding-bottom: 10px;
+  }
+  .brand-avatar {
+    height: 32px;
+  }
+  .brand-text small {
+    font-size: 10px;
+  }
 }
 
 /* Desktop: pull nav content a bit further in from the edge.
@@ -1806,36 +1841,120 @@ h4 {
 }
 
 @media (max-width: 860px) {
+  /* Mobile-only control bar (no markup changes): stable layout + no 100vw overflow quirks */
   .nav-shell {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 14px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "brand profile"
+      "tokens tokens"
+      "menu menu";
+    align-items: center;
+    justify-content: initial;
+    gap: 10px;
+
+    /* Avoid iOS/Android 100vw + negative-margin overflow issues; respect safe areas. */
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: calc(12px + env(safe-area-inset-left, 0px));
+    padding-right: calc(12px + env(safe-area-inset-right, 0px));
+    padding-top: 14px;
+    padding-bottom: 10px;
   }
 
-  .menu-trigger {
-    margin-left: 0;
+  .nav-shell .brand {
+    grid-area: brand;
+    min-width: 0;
+  }
+
+  .brand {
+    gap: 12px;
+  }
+
+  .brand-avatar {
+    height: 44px;
+    max-width: min(220px, 52vw);
+  }
+
+  .user-nickname-bar {
+    grid-area: profile;
+    margin-left: 0 !important;
+    justify-self: end;
+    align-items: center;
+  }
+
+  .user-nickname-pill {
+    padding: 8px 10px;
+    gap: 8px;
+  }
+
+  .user-nickname-pill__label {
+    font-size: 10px;
   }
 
   .nav-token-shell {
+    grid-area: tokens;
+    margin-left: 0;
     width: 100%;
+    padding: 6px 0;
+
+    /* Keep tokens in a compact row; allow horizontal scroll on very small screens. */
     justify-content: space-between;
-    flex-wrap: wrap;
-    padding: 12px 16px;
+    flex-wrap: nowrap;
+    gap: 6px;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .nav-token-shell::-webkit-scrollbar {
+    display: none;
   }
 
   .nav-token {
-    flex: 1 1 calc(50% - 8px);
+    flex: 0 0 auto;
   }
 
   .nav-token__btn {
-    width: 100%;
-    justify-content: flex-start;
+    padding: 6px 10px;
+    gap: 8px;
+    white-space: nowrap;
   }
 
+  .nav-token__icon {
+    font-size: 16px;
+  }
+
+  .nav-token__label {
+    font-size: 8px;
+    letter-spacing: 0.24em;
+  }
+
+  .reward-value {
+    font-size: 16px;
+  }
+
+  .menu-trigger {
+    grid-area: menu;
+    margin-left: 0;
+    justify-self: start;
+    padding: 10px 14px;
+  }
+
+  /* Popovers as a bottom-sheet to avoid layout jumps/distortion on mobile. */
   .reward-popover {
-    position: static;
-    width: 100%;
-    margin-top: 10px;
+    position: fixed;
+    left: calc(12px + env(safe-area-inset-left, 0px));
+    right: calc(12px + env(safe-area-inset-right, 0px));
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    top: auto;
+    width: auto;
+    max-height: min(70vh, 520px);
+    overflow: auto;
+    margin-top: 0;
+    z-index: 1700;
   }
 }
 
@@ -2164,14 +2283,14 @@ h4 {
 }
 
 .pattern-geometric::before {
-  background-image: url("../assets/patterns/pattern-geometric.png");
+  background-image: url("../assets/patterns/pattern-dots.png");
   opacity: 0.18;
   background-size: 210% auto;
   background-position: 60% 40%;
 }
 
 .pattern-waves::before {
-  background-image: url("../assets/patterns/pattern-waves.png");
+  background-image: url("../assets/patterns/pattern-dots.png");
   opacity: 0.26;
   background-size: 205% auto;
   background-position: 40% 60%;
@@ -2951,6 +3070,16 @@ button,
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-family: var(--font-medium);
+}
+
+@media (max-width: 600px) {
+  .tag-row {
+    gap: 6px;
+    font-size: 11px;
+  }
+  .tag {
+    padding: 3px 8px;
+  }
 }
 
 .tag {
@@ -3812,6 +3941,7 @@ button,
   align-items: center;
   justify-content: center;
   padding: 20px;
+  overflow-y: auto;
   opacity: 0;
   transition: opacity 300ms ease;
 }
@@ -3826,6 +3956,7 @@ button,
   box-shadow: 0 50px 100px rgba(15, 33, 84, 0.4);
   width: min(1000px, 96vw);
   max-height: min(92vh, 1200px);
+  max-height: min(92dvh, 1200px);
   display: grid;
   grid-template-columns: 420px 1fr;
   grid-template-rows: auto 1fr;
@@ -3841,9 +3972,90 @@ button,
 }
 
 @media (max-width: 900px) {
+  .card-modal-overlay {
+    /* On mobile, keep modal anchored to the top so content is reachable; respect safe areas. */
+    align-items: flex-start;
+    padding: 0; /* Full screen feel */
+  }
+
   .card-modal {
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto 1fr;
+    /* On mobile, avoid `auto auto 1fr` which can collapse the last track to 0
+       when the sidebar content is tall. Use a single scroll container instead. */
+    grid-template-rows: auto 1fr; /* Header + Content */
+
+    width: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    border-radius: 0; /* Full screen feel */
+    border: none;
+
+    /* Single scroll area for the whole modal (prevents “only sidebar visible”). */
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+.card-modal-header {
+  padding: 14px 16px;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--paper);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 2px 10px rgba(15, 33, 84, 0.05);
+}
+
+@media (max-width: 600px) {
+  .card-modal-header {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+  .card-modal-crystals {
+    padding: 4px 10px;
+    gap: 4px;
+  }
+  .card-modal-crystals__icon {
+    font-size: 14px;
+  }
+  .card-modal-crystals__value {
+    font-size: 13px;
+  }
+  .card-modal-crystals__suffix {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+  }
+  .card-modal-close {
+    padding: 6px;
+  }
+}
+
+  .card-modal-header h3 {
+    font-size: 18px;
+    letter-spacing: 0.03em;
+  }
+
+  .card-modal-sidebar {
+    padding: 16px;
+    gap: 14px;
+    /* Let the modal be the scroller on mobile; avoid nested scroll traps. */
+    overflow: visible !important;
+    background: transparent;
+    border-bottom: none;
+  }
+
+  .card-modal-body {
+    padding: 0 16px 16px 16px;
+    gap: 14px;
+    font-size: 15px;
+    line-height: 1.6;
+    /* Let the modal be the scroller on mobile; avoid nested scroll traps. */
+    overflow: visible !important;
+  }
+
+  .card-modal-scroll-spacer {
+    height: 80px; /* Reduced spacer */
   }
 }
 
@@ -3860,26 +4072,45 @@ button,
 
 .modal-product-image {
   margin: 0 !important;
-  padding: 0 !important;
-  aspect-ratio: auto !important;
+  padding: 12px !important; /* Add padding to prevent image touching edges */
+  aspect-ratio: 4 / 3 !important;
+  min-height: 200px !important;
   height: auto !important;
-  max-height: 450px !important;
+  max-height: 400px !important;
   width: 100% !important;
-  display: block !important;
-  overflow: hidden !important;
+  display: flex !important; /* Use flex to center image */
+  align-items: center;
+  justify-content: center;
+  overflow: hidden !important; /* Revert to hidden to contain image */
   border-radius: var(--radius-lg) !important;
   background: var(--cloud);
   box-shadow: 0 8px 24px rgba(15, 33, 84, 0.15);
 }
 
-.modal-product-image picture,
-.modal-product-image img {
+@media (max-width: 600px) {
+  .modal-product-image {
+    min-height: 180px !important;
+    max-height: 300px !important;
+    padding: 8px !important;
+  }
+}
+
+.modal-product-image picture {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
   width: 100% !important;
   height: 100% !important;
-  max-height: 450px !important;
+}
+
+.modal-product-image img {
+  max-width: 100% !important;
+  max-height: 100% !important;
+  width: auto !important;
+  height: auto !important;
   object-fit: contain !important;
   display: block !important;
-  margin: 0 !important;
+  margin: 0 auto !important;
   padding: 0 !important;
   border: none !important;
 }
@@ -4002,6 +4233,7 @@ button,
   grid-column: 2;
   grid-row: 2;
   padding: 36px;
+  min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
   display: flex;
@@ -4028,6 +4260,7 @@ button,
   padding: 32px;
   background: linear-gradient(180deg, rgba(33, 64, 152, 0.02), rgba(236, 65, 140, 0.01));
   border-right: 1px solid var(--border);
+  min-height: 0;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -4041,6 +4274,31 @@ button,
   background: linear-gradient(135deg, rgba(33, 64, 152, 0.04), rgba(236, 65, 140, 0.03));
   padding: 18px;
   box-shadow: 0 14px 34px rgba(15, 33, 84, 0.10);
+}
+
+@media (max-width: 600px) {
+  .modal-specs {
+    padding: 14px;
+    border-radius: 16px;
+  }
+  .modal-specs__subtitle {
+    margin: 4px 0 10px 0;
+    font-size: 13px;
+  }
+  .modal-specs__grid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 8px;
+  }
+  .modal-specs__item {
+    padding: 8px 10px;
+    gap: 2px;
+  }
+  .modal-specs__key {
+    font-size: 9px;
+  }
+  .modal-specs__value {
+    font-size: 13px;
+  }
 }
 
 .modal-specs__title {
@@ -4118,6 +4376,15 @@ button,
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 14px 18px;
   counter-reset: statitem;
+}
+
+@media (max-width: 600px) {
+  .card-modal-body .stat-list,
+  .card-modal-sidebar .stat-list {
+    padding: 14px;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
 }
 
 .card-modal-body .stat-list::before,
@@ -4198,10 +4465,24 @@ button,
     grid-row: 2;
     border-right: none;
     border-bottom: 1px solid var(--border);
+    /* Critical: on mobile the modal itself is the scroller. Avoid nested scroll areas
+       that can make the sidebar (image) feel like it “disappears”. */
+    overflow: visible !important;
+    max-height: none !important;
   }
   .card-modal-body {
     grid-column: 1;
     grid-row: 3;
+    /* Critical: on mobile the modal itself is the scroller. */
+    overflow: visible !important;
+    max-height: none !important;
+  }
+
+  /* Ensure the modal keeps scrolling enabled (some engines get confused when
+     children have their own overflow + the container has fixed height). */
+  .card-modal {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
   }
 }
 
@@ -4275,6 +4556,14 @@ button,
   filter: blur(0);
   padding-block: 14px;
   border-width: 1px;
+}
+
+/* Mobile-only project: never clip "Specifiche" text on small screens. */
+@media (max-width: 900px) {
+  .guide-card .stat-list.stat-list {
+    max-height: none !important;
+    overflow: visible;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -4382,6 +4671,16 @@ button,
   box-shadow: 0 2px 12px rgba(33, 64, 152, 0.06);
 }
 
+@media (max-width: 600px) {
+  .steps {
+    padding: 18px 16px;
+    font-size: 15px;
+    line-height: 1.6;
+    gap: 10px;
+    border-radius: 14px;
+  }
+}
+
 .steps:not(:has(strong))::before {
   content: "💗 PREPARAZIONE";
   display: block;
@@ -4407,7 +4706,6 @@ button,
   border-left-color: var(--brand-gold);
 }
 .tips {
-    font-size: 18px;
   font-size: 16px;
   line-height: 1.75;
   color: var(--ink);
@@ -4417,6 +4715,15 @@ button,
   padding: 22px 22px;
   position: relative;
   box-shadow: 0 2px 12px rgba(242, 190, 88, 0.12);
+}
+
+@media (max-width: 600px) {
+  .tips {
+    padding: 16px;
+    font-size: 14px;
+    line-height: 1.6;
+    border-radius: 12px;
+  }
 }
 
 .tips:not(:has(strong))::before {
@@ -4517,6 +4824,17 @@ button,
   background: rgba(255, 255, 255, 0.6);
   border-radius: 12px;
   border-left: 4px solid var(--brand-rose);
+}
+
+@media (max-width: 600px) {
+  .card-modal-intro {
+    font-size: 14px;
+    padding: 12px;
+    line-height: 1.5;
+  }
+  .card-modal-primary__intro {
+    padding: 12px;
+  }
 }
 
 .card-modal-primary {
@@ -4658,6 +4976,13 @@ button,
   text-transform: uppercase;
   color: var(--ink);
   cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .accordion-header {
+    padding: 12px 14px;
+    font-size: 14px;
+  }
 }
 
 .accordion-header.tab-opened {
@@ -4869,6 +5194,12 @@ button,
   border-radius: calc(var(--radius-xl) - 10px);
   background: #ffffff;
   box-shadow: inset 0 0 0 1px rgba(33, 64, 152, 0.08);
+}
+
+.story-image picture {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .story-zoom-hint {
@@ -5157,6 +5488,12 @@ button,
   width: 100%;
 }
 
+.story-collage picture {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
 .story-collage img {
   width: 100%;
   height: 100%;
@@ -5389,6 +5726,18 @@ body.page-home {
   z-index: 2001;
   transform: translateX(100%);
   transition: transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@media (max-width: 600px) {
+  .menu-drawer__panel {
+    width: 100%;
+  }
+  .menu-drawer__header {
+    padding: 18px 20px;
+  }
+  .menu-drawer__title {
+    font-size: 20px;
+  }
 }
 
 .menu-drawer[aria-hidden="false"] .menu-drawer__panel {
@@ -5661,9 +6010,18 @@ body.page-home {
 }
 
 @media (max-width: 860px) {
+  .card-modal-overlay {
+    /* Keep top/bottom reachable even when mobile browser UI changes viewport height. */
+    align-items: flex-start;
+    padding: calc(12px + env(safe-area-inset-top, 0px)) calc(12px + env(safe-area-inset-right, 0px))
+      calc(12px + env(safe-area-inset-bottom, 0px)) calc(12px + env(safe-area-inset-left, 0px));
+  }
+
   .menu-drawer__panel {
     width: 280px;
   }
+    width: 100%;
+    max-height: calc(100dvh - 24px);
 
   .menu-categories a {
     padding: 14px 20px;
