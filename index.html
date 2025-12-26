@@ -117,7 +117,7 @@
       flex-direction: column;
       background: transparent !important;
       padding: 10px 0 20px !important;
-      overflow: hidden;
+      overflow: visible !important; /* Allow shadows/scaling to spill */
       margin: 0 !important;
       max-width: none !important;
       perspective: 1000px; /* For 3D effects */
@@ -136,7 +136,8 @@
     .cockpit-track {
       display: flex !important;
       flex-direction: row !important;
-      padding: 0 24px !important; /* More breathing room */
+      /* Dynamic padding to ensure centering of 280px cards */
+      padding: 20px max(24px, calc(50% - 140px)) !important;
       gap: 16px !important;
       overflow-x: auto !important;
       scroll-snap-type: x mandatory;
