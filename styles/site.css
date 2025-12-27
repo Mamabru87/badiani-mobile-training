@@ -4127,14 +4127,14 @@ button,
   .card-modal-header h3 {
     min-width: 0;
     margin: 0;
-    /* Keep long titles readable but contained. */
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    /* Never truncate titles in the modal header: allow wrapping. */
+    display: block;
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+    overflow-wrap: anywhere;
     word-break: break-word;
+    hyphens: auto;
   }
 
   .card-modal-crystals {
@@ -4153,17 +4153,33 @@ button,
   .card-modal-header {
     padding: calc(10px + env(safe-area-inset-top, 0px)) 12px 10px;
     column-gap: 8px;
+    row-gap: 8px;
+    align-items: start;
+    /* Give the title the full first row so it can always wrap completely. */
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-areas:
+      "title title title"
+      ". crystals close";
+  }
+
+  .card-modal-header h3 {
+    grid-area: title;
+    /* Slightly tighter so long names don't feel oversized on small screens. */
+    font-size: 18px;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
   }
 
   .card-modal-crystals {
+    grid-area: crystals;
     padding: 4px 10px;
     gap: 4px;
   }
   .card-modal-crystals__icon {
-    font-size: 14px;
+    font-size: 13px;
   }
   .card-modal-crystals__value {
-    font-size: 13px;
+    font-size: 12px;
   }
   .card-modal-crystals__suffix {
     font-size: 10px;
@@ -4171,13 +4187,14 @@ button,
   }
 
   .card-modal-close {
+    grid-area: close;
     width: 34px;
     height: 34px;
   }
 }
 
 /* Extra-small phones: keep the chip compact by hiding the suffix label. */
-@media (max-width: 420px) {
+@media (max-width: 520px) {
   .card-modal-crystals__suffix {
     display: none;
   }
