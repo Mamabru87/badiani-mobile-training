@@ -2430,7 +2430,7 @@ const gamification = (() => {
       return { href: 'festive.html', label: 'Apri Festive' };
     }
     if (has('espresso', 'cappuccino', 'americano', 'latte ', 'flat white', 'macchiato', 'shot', 'estrazione', 'grinder', 'steam', 'wand', 'portafiltro', 'tamper')) {
-      return { href: 'caffe.html', label: 'Apri Caffè Rituals' };
+      return { href: 'caffe.html', label: 'Apri Bar & Drinks' };
     }
     if (has('croissant', 'brownie', 'pastry', 'scone', 'loaf', 'cake', 'vetrina pasticceria')) {
       return { href: 'pastries.html', label: 'Apri Pastry Lab' };
