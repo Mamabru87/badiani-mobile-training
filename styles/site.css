@@ -952,6 +952,14 @@ h4 {
   z-index: 30;
 }
 
+/* Stars popover: open to the RIGHT of the star token.
+   On some layouts the default `right: 0` makes the panel grow leftwards and the
+   text can get clipped (body uses `overflow-x: hidden`). */
+.nav-token--stars .reward-popover {
+  left: 0;
+  right: auto;
+}
+
 .reward-popover.is-open {
   animation: quizSlide var(--anim-fast) ease;
 }
@@ -2038,6 +2046,12 @@ h4 {
   z-index: 2100;
   border-radius: 18px;
   padding: 14px;
+}
+
+/* Keep the stars popover opening to the right even on mobile. */
+.use-popover-sheet .nav-token--stars .reward-popover {
+  left: 0;
+  right: auto;
 }
 
 .use-popover-sheet .reward-popover.is-open {
