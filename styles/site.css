@@ -4134,11 +4134,17 @@ button,
     width: 100%;
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto auto;
-    align-items: center;
+    align-items: start;
     column-gap: 10px;
+    row-gap: 8px;
+    /* Always keep title on its own row (so crystals never steal width). */
+    grid-template-areas:
+      "title title title"
+      ". crystals close";
   }
 
   .card-modal-header h3 {
+    grid-area: title;
     min-width: 0;
     margin: 0;
     /* Never truncate titles in the modal header: allow wrapping. */
@@ -4146,17 +4152,20 @@ button,
     overflow: visible;
     text-overflow: clip;
     white-space: normal;
-    overflow-wrap: anywhere;
-    word-break: break-word;
-    hyphens: auto;
+    /* Do NOT split words on mobile: wrap only at spaces/punctuation. */
+    overflow-wrap: normal;
+    word-break: normal;
+    hyphens: none;
   }
 
   .card-modal-crystals {
+    grid-area: crystals;
     justify-self: end;
     white-space: nowrap;
   }
 
   .card-modal-close {
+    grid-area: close;
     justify-self: end;
     width: 38px;
     height: 38px;
@@ -4315,26 +4324,28 @@ button,
   border: none !important;
 }
 
-.card-modal-header {
-  grid-column: 1 / -1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 28px 32px;
-  background: linear-gradient(135deg, rgba(33, 64, 152, 0.03), rgba(236, 65, 140, 0.02));
-  border-bottom: 2px solid var(--border);
-  gap: 20px;
-}
+@media (min-width: 901px) {
+  .card-modal-header {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 32px;
+    background: linear-gradient(135deg, rgba(33, 64, 152, 0.03), rgba(236, 65, 140, 0.02));
+    border-bottom: 2px solid var(--border);
+    gap: 20px;
+  }
 
-.card-modal-header h3 {
-  margin: 0;
-  font-size: 30px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-family: var(--font-medium);
-  color: var(--ink);
-  flex: 1;
-  line-height: 1.3;
+  .card-modal-header h3 {
+    margin: 0;
+    font-size: 30px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-family: var(--font-medium);
+    color: var(--ink);
+    flex: 1;
+    line-height: 1.3;
+  }
 }
 
 .card-modal-crystals {
