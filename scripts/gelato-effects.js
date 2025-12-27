@@ -70,45 +70,18 @@
         noise.start(t);
     }
 
-    // Animation: Intersection Observer for "Focus" effect
+    // IMPORTANT:
+    // The main carousel system in `scripts/site.js` already handles focus and transforms.
+    // On mobile, an additional IntersectionObserver that sets inline transforms/opacity
+    // causes visible flicker (two systems fight each other). Keep gelato-effects
+    // lightweight: sounds only.
     function initGelatoObserver() {
         const track = document.querySelector('.cockpit-track');
         if (!track) return;
 
-        // Ensure we have the right styles for the transition
-        const cards = track.querySelectorAll('.summary-card');
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                const card = entry.target;
-                if (entry.isIntersecting) {
-                    // Active State
-                    card.style.transform = 'scale(1.05) translateY(-5px)';
-                    card.style.opacity = '1';
-                    card.style.zIndex = '10';
-                    card.style.filter = 'brightness(1.05)';
-                    // Optional: Add a class for CSS to handle if preferred
-                    card.classList.add('is-gelato-active');
-                } else {
-                    // Inactive State
-                    card.style.transform = 'scale(0.92)';
-                    card.style.opacity = '0.6';
-                    card.style.zIndex = '1';
-                    card.style.filter = 'brightness(0.95) blur(1px)';
-                    card.classList.remove('is-gelato-active');
-                }
-            });
-        }, {
-            root: track,
-            threshold: 0.6, // 60% visibility triggers the "snap" visual
-            rootMargin: '-10% 0px -10% 0px' // Narrow the active area
-        });
-
-        cards.forEach(card => {
-            // Set initial state
-            card.style.transition = 'all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1.2)'; // Springy
-            observer.observe(card);
-        });
+        // On touch devices, avoid extra work and avoid any risk of scroll jank.
+        const isCoarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+        if (isCoarse) return;
 
         // Scroll Interaction for Sound
         let isScrolling;
@@ -116,19 +89,18 @@
 
         track.addEventListener('scroll', () => {
             initAudio();
-            
-            // Detect significant movement for "slide" sound
+
+            // Detect significant movement for optional "slide" sound
             const currentScrollX = track.scrollLeft;
             if (Math.abs(currentScrollX - lastScrollX) > 50) {
-                // playGelatoSlide(); // Maybe too noisy? Let's keep it subtle.
+                // playGelatoSlide(); // Optional; keep disabled to avoid noise.
                 lastScrollX = currentScrollX;
             }
 
             window.clearTimeout(isScrolling);
             isScrolling = setTimeout(() => {
-                // Scroll stopped (snap occurred)
                 playGelatoPop();
-            }, 100);
+            }, 120);
         }, { passive: true });
 
         // Add click feedback to buttons inside cards

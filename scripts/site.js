@@ -2265,37 +2265,6 @@ const gamification = (() => {
   let countdownTicker = null;
   let activePopover = null;
   let popoverHandlersBound = false;
-
-  // On some mobile browsers (notably iOS Safari), `position: fixed` descendants of a
-  // sticky header/backdrop-filter region can render in the wrong place on first paint.
-  // When we are in sheet mode, we portal the panel to <body> on open.
-  const popoverOrigins = new WeakMap();
-
-  function isPopoverSheetMode() {
-    return document.documentElement.classList.contains('use-popover-sheet');
-  }
-
-  function mountPopoverToBody(panel) {
-    if (!panel || panel.parentElement === document.body) return;
-    if (!popoverOrigins.has(panel)) {
-      popoverOrigins.set(panel, { parent: panel.parentElement, next: panel.nextSibling });
-    }
-    document.body.appendChild(panel);
-  }
-
-  function restorePopoverMount(panel) {
-    const origin = popoverOrigins.get(panel);
-    if (!origin?.parent) return;
-    try {
-      if (origin.next && origin.parent.contains(origin.next)) {
-        origin.parent.insertBefore(panel, origin.next);
-      } else {
-        origin.parent.appendChild(panel);
-      }
-    } catch {
-      // If restore fails, keep it in body (still functional).
-    }
-  }
   let infoHandlerBound = false;
   let challengeActive = false;
   let pendingMilestoneCheck = false;
@@ -2615,20 +2584,9 @@ const gamification = (() => {
     }
     closeActivePopover();
     activePopover = { trigger, panel };
-
-    if (isPopoverSheetMode()) {
-      mountPopoverToBody(panel);
-    }
-
     panel.hidden = false;
     panel.classList.add('is-open');
     trigger.setAttribute('aria-expanded', 'true');
-
-    // Force a layout pass to prevent first-frame misplacement on some mobile browsers.
-    if (isPopoverSheetMode()) {
-      void panel.getBoundingClientRect();
-    }
-
     const autoFocus = panel.querySelector('button, [href], input, select, textarea');
     if (autoFocus) {
       requestAnimationFrame(() => autoFocus.focus({ preventScroll: true }));
@@ -2637,14 +2595,9 @@ const gamification = (() => {
 
   function closeActivePopover() {
     if (!activePopover) return;
-    const { panel, trigger } = activePopover;
-    panel.hidden = true;
-    panel.classList.remove('is-open');
-    trigger.setAttribute('aria-expanded', 'false');
-
-    if (isPopoverSheetMode()) {
-      restorePopoverMount(panel);
-    }
+    activePopover.panel.hidden = true;
+    activePopover.panel.classList.remove('is-open');
+    activePopover.trigger.setAttribute('aria-expanded', 'false');
     activePopover = null;
   }
 
