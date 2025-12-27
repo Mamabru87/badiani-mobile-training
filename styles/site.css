@@ -4195,18 +4195,20 @@ button,
 
   .card-modal-crystals {
     grid-area: crystals;
-    padding: 4px 10px;
-    gap: 4px;
+    /* Scale with text: keep the chip compact and proportional. */
+    font-size: 12px;
+    padding: 0.38em 0.62em;
+    gap: 0.4em;
   }
   .card-modal-crystals__icon {
-    font-size: 13px;
+    font-size: 1.1em;
   }
   .card-modal-crystals__value {
-    font-size: 12px;
+    font-size: 1em;
   }
   .card-modal-crystals__suffix {
-    font-size: 10px;
-    letter-spacing: 0.1em;
+    font-size: 0.78em;
+    letter-spacing: 0.14em;
   }
 
   .card-modal-close {
@@ -4351,12 +4353,15 @@ button,
 .card-modal-crystals {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
+  /* Keep the chip sized by its text, not by hard px sizes. */
+  font-size: 14px;
+  line-height: 1;
+  gap: 0.45em;
+  padding: 0.42em 0.7em;
   border-radius: 999px;
   border: 1px solid var(--border);
   background: rgba(33, 64, 152, 0.08);
-  box-shadow: 0 8px 16px rgba(15, 33, 84, 0.08);
+  box-shadow: 0 6px 12px rgba(15, 33, 84, 0.08);
   color: var(--ink);
   font-family: var(--font-medium);
   letter-spacing: 0.02em;
@@ -4364,19 +4369,19 @@ button,
 }
 
 .card-modal-crystals__icon {
-  font-size: 18px;
+  font-size: 1.15em;
   color: var(--brand-rose);
 }
 
 .card-modal-crystals__value {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 1em;
+  font-weight: 650;
 }
 
 .card-modal-crystals__suffix {
-  font-size: 12px;
+  font-size: 0.78em;
   text-transform: uppercase;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.16em;
   color: var(--brand-gray-soft);
 }
 
