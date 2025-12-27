@@ -889,29 +889,44 @@ h4 {
 }
 
 .reward-popover {
-  position: fixed;
-  top: 50vh;
-  left: 50vw;
-  right: auto;
-  bottom: auto;
-  transform: translate(-50%, -50%);
-  width: min(360px, 90vw);
-  max-height: 80vh;
-  overflow-y: auto;
+  position: absolute;
+  top: calc(100% + 14px);
+  right: 0;
+  width: min(280px, 72vw);
   background: var(--card);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-strong);
-  box-shadow: 0 10px 40px rgba(0,0,0,0.2), 0 0 0 100vmax rgba(15, 33, 84, 0.4);
-  padding: 24px;
-  z-index: 2100;
-  margin: 0;
+  box-shadow: 0 30px 80px rgba(15, 33, 84, 0.25);
+  padding: 18px;
+  z-index: 30;
 }
 
 .reward-popover.is-open {
-  animation: popoverFadeInCenter var(--anim-fast) ease;
+  animation: quizSlide var(--anim-fast) ease;
 }
 
-@keyframes popoverFadeInCenter {
+@media (max-width: 600px) {
+  .reward-popover {
+    position: fixed;
+    top: 50vh;
+    left: 50vw;
+    right: auto;
+    bottom: auto;
+    transform: translate(-50%, -50%);
+    width: min(320px, 90vw);
+    max-height: 80vh;
+    overflow-y: auto;
+    z-index: 2100;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2), 0 0 0 100vmax rgba(15, 33, 84, 0.4);
+    margin: 0;
+  }
+
+  .reward-popover.is-open {
+    animation: popoverFadeInMobile var(--anim-fast) ease;
+  }
+}
+
+@keyframes popoverFadeInMobile {
   0% {
     opacity: 0;
     transform: translate(-50%, -45%) scale(0.95);
