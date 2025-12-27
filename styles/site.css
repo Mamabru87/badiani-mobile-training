@@ -3745,7 +3745,12 @@ button,
 
   .carousel-track {
     gap: 18px;
-    padding: 24px 16px 56px;
+    /* IMPORTANT: do not use padding shorthand here, otherwise it overrides
+       the dynamic padding-top that keeps content below the sticky nav/header. */
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 56px;
+    padding-top: calc(var(--nav-height) + var(--nav-gap) + var(--carousel-sticky-offset-mobile));
     scroll-padding-inline: 16px;
     scroll-padding-top: calc(var(--nav-height) + var(--nav-gap) + var(--carousel-sticky-offset-mobile));
   }
