@@ -8723,7 +8723,7 @@ const initCarousels = () => {
       carouselHeader.setAttribute('tabindex', '0');
     }
     carouselHeader.setAttribute('role', 'button');
-    carouselHeader.setAttribute('aria-label', 'Scorri il carosello: clic sinistra per precedente, destra per successivo');
+    carouselHeader.setAttribute('aria-label', 'Scorri il carosello: swipe sinistra/destra oppure clic (sinistra=precedente, destra=successivo)');
 
     // Populate indicators
     let indicators = [];
@@ -9281,7 +9281,105 @@ const initCarousels = () => {
       goToIndex(currentIndex + direction);
     };
 
+    // Touch swipe on the sticky header (counter/indicators area):
+    // - swipe left  => next
+    // - swipe right => previous
+    // Keep vertical page scroll natural via CSS `touch-action: pan-y`.
+    let lastHeaderSwipeAt = 0;
+    const headerSwipe = {
+      active: false,
+      pointerId: null,
+      startX: 0,
+      startY: 0,
+      dx: 0,
+      dy: 0,
+      isSwiping: false,
+    };
+    const HEADER_SWIPE_LOCK_PX = 12;
+    const HEADER_SWIPE_TRIGGER_PX = 34;
+    const HEADER_SWIPE_AXIS_RATIO = 1.15;
+
+    const resetHeaderSwipe = () => {
+      headerSwipe.active = false;
+      headerSwipe.pointerId = null;
+      headerSwipe.startX = 0;
+      headerSwipe.startY = 0;
+      headerSwipe.dx = 0;
+      headerSwipe.dy = 0;
+      headerSwipe.isSwiping = false;
+      carouselHeader.classList.remove('is-swiping');
+    };
+
+    const onHeaderPointerDownForSwipe = (event) => {
+      if (event.pointerType !== 'touch') return;
+      // If the header ever contains interactive controls, don't hijack them.
+      if (event.target && event.target.closest && event.target.closest('a, button, input, select, textarea')) return;
+
+      headerSwipe.active = true;
+      headerSwipe.pointerId = event.pointerId;
+      headerSwipe.startX = event.clientX;
+      headerSwipe.startY = event.clientY;
+      headerSwipe.dx = 0;
+      headerSwipe.dy = 0;
+      headerSwipe.isSwiping = false;
+
+      try {
+        carouselHeader.setPointerCapture(event.pointerId);
+      } catch (e) {
+        /* ignore */
+      }
+    };
+
+    const onHeaderPointerMoveForSwipe = (event) => {
+      if (!headerSwipe.active) return;
+      if (event.pointerType !== 'touch') return;
+      if (headerSwipe.pointerId !== event.pointerId) return;
+
+      headerSwipe.dx = event.clientX - headerSwipe.startX;
+      headerSwipe.dy = event.clientY - headerSwipe.startY;
+
+      if (!headerSwipe.isSwiping) {
+        if (Math.abs(headerSwipe.dx) < HEADER_SWIPE_LOCK_PX) return;
+        if (Math.abs(headerSwipe.dx) <= Math.abs(headerSwipe.dy) * HEADER_SWIPE_AXIS_RATIO) return;
+        headerSwipe.isSwiping = true;
+        carouselHeader.classList.add('is-swiping');
+      }
+
+      // With `touch-action: pan-y` this is mostly redundant, but it helps in some browsers.
+      event.preventDefault();
+    };
+
+    const onHeaderPointerEndForSwipe = (event) => {
+      if (!headerSwipe.active) return;
+      if (event.pointerType !== 'touch') return;
+      if (headerSwipe.pointerId !== event.pointerId) return;
+
+      const dx = headerSwipe.dx;
+      const isSwipe = headerSwipe.isSwiping && Math.abs(dx) >= HEADER_SWIPE_TRIGGER_PX;
+      if (isSwipe) {
+        lastHeaderSwipeAt = performance.now();
+        // Swipe left => next (dx negative), swipe right => previous.
+        headerNavigate(dx < 0 ? 1 : -1);
+      }
+
+      resetHeaderSwipe();
+    };
+
+    carouselHeader.addEventListener('pointerdown', onHeaderPointerDownForSwipe, { passive: true });
+    carouselHeader.addEventListener('pointermove', onHeaderPointerMoveForSwipe, { passive: false });
+    carouselHeader.addEventListener('pointerup', onHeaderPointerEndForSwipe);
+    carouselHeader.addEventListener('pointercancel', onHeaderPointerEndForSwipe);
+
     carouselHeader.addEventListener('click', (event) => {
+      // Suppress the synthetic click that often follows a touch swipe.
+      try {
+        const now = performance.now();
+        if (now - lastHeaderSwipeAt < 450) {
+          event.preventDefault();
+          event.stopPropagation();
+          return;
+        }
+      } catch {}
       if (event.target.closest('[data-carousel-indicators]')) return;
       const rect = carouselHeader.getBoundingClientRect();
       const isLeft = event.clientX < rect.left + rect.width / 2;

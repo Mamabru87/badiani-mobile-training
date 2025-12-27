@@ -3546,6 +3546,7 @@ button,
   cursor: pointer;
   overflow: hidden;
   transition: box-shadow var(--anim-fast) ease, border-color var(--anim-fast) ease, background var(--anim-fast) ease;
+  touch-action: pan-y;
 }
 
 .carousel-header::before {
