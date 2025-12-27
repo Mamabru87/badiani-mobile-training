@@ -91,6 +91,45 @@ body {
 }
 
 /* ========================================================================
+   Mobile: portrait-only guard
+   The product is intended to be used ONLY in portrait on mobile devices.
+   ======================================================================== */
+
+@media (max-width: 860px) and (orientation: landscape) {
+  html,
+  body {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  body::before {
+    content: "Ruota il telefono in verticale per usare Badiani Training Orbit.";
+    position: fixed;
+    inset: 0;
+    z-index: 5000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    text-align: center;
+    color: var(--ink);
+    font-family: var(--font-medium);
+    letter-spacing: 0.06em;
+    background:
+      radial-gradient(circle at 20% 10%, rgba(236, 65, 140, 0.16), transparent 60%),
+      radial-gradient(circle at 80% 90%, rgba(242, 190, 88, 0.18), transparent 62%),
+      rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  /* Hide UI underneath and block interaction in landscape on mobile */
+  body > * {
+    display: none !important;
+  }
+}
+
+/* ========================================================================
    Homepage: modern layout polish (desktop-first)
    ======================================================================== */
 
@@ -893,6 +932,12 @@ h4 {
   top: calc(100% + 14px);
   right: 0;
   width: min(280px, 72vw);
+  /* Prevent clipping when the viewport is short or the nav is crowded.
+     Keeps the popover usable instead of stretching off-screen. */
+  max-height: min(520px, calc(100dvh - 120px));
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   background: var(--card);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-strong);
@@ -903,31 +948,6 @@ h4 {
 
 .reward-popover.is-open {
   animation: quizSlide var(--anim-fast) ease;
-}
-
-@media (max-width: 600px) {
-  .reward-popover {
-    /* Mobile: treat as a bottom-sheet so it never jumps outside the viewport.
-       (Important: avoid translate(-50%, -50%) because later mobile rules may override
-       positioning but NOT transform, causing the sheet to slide off-screen.) */
-    position: fixed;
-    left: calc(12px + env(safe-area-inset-left, 0px));
-    right: calc(12px + env(safe-area-inset-right, 0px));
-    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
-    top: auto;
-    width: auto;
-    max-height: min(62vh, 440px);
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
-    transform: none;
-    z-index: 2100;
-    box-shadow: 0 22px 70px rgba(15, 33, 84, 0.25);
-  }
-
-  .reward-popover.is-open {
-    animation: popoverSheetIn var(--anim-fast) ease;
-  }
 }
 
 @keyframes popoverSheetIn {
@@ -1988,8 +2008,12 @@ h4 {
     justify-self: start;
     padding: 10px 14px;
   }
+}
 
-  /* Popovers as a bottom-sheet to avoid layout jumps/distortion on mobile. */
+/* Touch devices (real mobile): use bottom-sheet popovers to avoid off-screen overflow.
+   IMPORTANT: gate by pointer type so narrowing a desktop window does NOT detach the popover
+   from the icon (user expectation: small popover right under the token). */
+@media (max-width: 860px) and (hover: none) and (pointer: coarse) {
   .reward-popover {
     position: fixed;
     left: calc(12px + env(safe-area-inset-left, 0px));
@@ -2010,10 +2034,11 @@ h4 {
   }
 
   .reward-popover.is-open {
-    /* Override the <=600px animation (which used translate(-50%,-50%)) */
     animation: popoverSheetIn var(--anim-fast) ease;
   }
+}
 
+@media (max-width: 860px) {
   .reward-popover__text {
     font-size: 13px;
   }
@@ -4633,9 +4658,11 @@ button,
   will-change: max-height, opacity, transform, filter;
 }
 
-.guide-card:hover .stat-list.stat-list,
-.guide-card:focus-within .stat-list.stat-list,
-.guide-card.is-focused .stat-list.stat-list {
+/* Reveal inline specs only for cards that do NOT open a modal.
+  (We use `.has-modal` because CSS `:has()` isn't supported on some mobile browsers.) */
+.guide-card:not(.has-modal):hover .stat-list.stat-list,
+.guide-card:not(.has-modal):focus-within .stat-list.stat-list,
+.guide-card:not(.has-modal).is-focused .stat-list.stat-list {
   max-height: 360px;
   opacity: 1;
   transform: translateY(0);
@@ -4644,9 +4671,21 @@ button,
   border-width: 1px;
 }
 
-/* Mobile-only project: never clip "Specifiche" text on small screens. */
+/* Mobile-only project:
+   - Keep cards compact when a modal is available.
+   - Only show inline specs on cards without a modal toggle (rare fallback). */
 @media (max-width: 900px) {
-  .guide-card .stat-list.stat-list {
+  .guide-card.has-modal .stat-list.stat-list {
+    max-height: 0 !important;
+    opacity: 0 !important;
+    overflow: hidden !important;
+    transform: translateY(-6px) !important;
+    filter: blur(2px) !important;
+    padding-block: 0 !important;
+    border-width: 0 !important;
+  }
+
+  .guide-card:not(.has-modal) .stat-list.stat-list {
     max-height: none !important;
     overflow: visible;
   }
@@ -4661,7 +4700,17 @@ button,
 }
 
 @media (hover: none) {
-  .guide-card .stat-list.stat-list {
+  .guide-card.has-modal .stat-list.stat-list {
+    max-height: 0 !important;
+    opacity: 0 !important;
+    overflow: hidden !important;
+    transform: translateY(-6px) !important;
+    filter: blur(2px) !important;
+    padding-block: 0 !important;
+    border-width: 0 !important;
+  }
+
+  .guide-card:not(.has-modal) .stat-list.stat-list {
     max-height: none;
     opacity: 1;
     transform: none;
@@ -4671,9 +4720,25 @@ button,
   }
 }
 
+/* Product cards: keep the page card compact.
+   The full specs/training live inside the modal tabs (min 4, max 5).
+   So never reveal the stat-list “a comparsa” on product cards. */
+.guide-card--product .stat-list.stat-list,
+.guide-card--product:hover .stat-list.stat-list,
+.guide-card--product:focus-within .stat-list.stat-list,
+.guide-card--product.is-focused .stat-list.stat-list {
+  max-height: 0 !important;
+  opacity: 0 !important;
+  overflow: hidden !important;
+  transform: translateY(-6px) !important;
+  filter: blur(2px) !important;
+  padding-block: 0 !important;
+  border-width: 0 !important;
+}
+
 /* Hint chip (desktop): inline (no overlay), disappears when specs are revealed/locked. */
 @media (hover: hover) {
-  .guide-card:has(.stat-list.stat-list) .tag-row::after {
+  .guide-card:not(.has-modal) .tag-row::after {
     content: "SPECIFICHE";
     margin-left: auto;
     align-self: center;
@@ -5118,6 +5183,54 @@ button,
 .accordion-group {
   display: grid;
   gap: 14px;
+}
+
+/* Modal tabs: unify content styling so each tab feels consistent.
+   The tab title already tells the user what they're reading, so we suppress
+   the internal pseudo-headings and normalize the blocks. */
+.card-modal .accordion-body .steps,
+.card-modal .accordion-body .tips {
+  border-radius: 16px;
+  padding: 16px 16px;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(33, 64, 152, 0.14);
+  box-shadow: 0 10px 26px rgba(15, 33, 84, 0.08);
+}
+
+@media (max-width: 600px) {
+  .card-modal .accordion-body .steps,
+  .card-modal .accordion-body .tips {
+    border-radius: 14px;
+    padding: 14px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+}
+
+.card-modal .accordion-body .steps::before,
+.card-modal .accordion-body .tips::before {
+  content: none !important;
+  display: none !important;
+}
+
+.card-modal .accordion-body .steps span {
+  font-size: inherit;
+  padding-left: 14px;
+  border-left: 3px solid rgba(33, 64, 152, 0.35);
+}
+
+.card-modal .accordion-body .steps span:hover {
+  transform: none;
+  border-left-color: rgba(33, 64, 152, 0.55);
+}
+
+.card-modal .accordion-body .tips strong {
+  font-size: inherit;
+  letter-spacing: 0.02em;
+  text-transform: none;
 }
 
 /* In modal accordion, the header already labels the section */

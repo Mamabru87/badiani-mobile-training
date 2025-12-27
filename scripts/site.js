@@ -1410,130 +1410,710 @@ const gamification = (() => {
     twelve: { threshold: 12, hours: 12 },
     thirty: { threshold: 30, hours: 3 },
   };
+  // QUIZ CONTINUO (Test me): banca domande MCQ con motivazioni.
+  // Nota: ogni oggetto può avere `explain` (motivazione) e viene mostrato nella pagina soluzione.
+  // IDs: mantenuti come sequenza stabile (tm-001, tm-002, ...) per evitare collisioni e facilitare aggiornamenti.
   const QUIZ_QUESTIONS = [
-    { id: 'q1', question: 'Il latte fresco ha un odore leggermente acido. Cosa fai?', options: ['Lo uso comunque', 'Lo scarto immediatamente', 'Lo annuso di nuovo'], correct: 1 },
-    { id: 'q2', question: 'Temperatura ideale del latte nel frigo?', options: ['4°C', '8°C', '2°C'], correct: 0 },
-    { id: 'q3', question: 'La crema dell\'espresso è bianca invece che nocciola. Possibile causa?', options: ['Caffè vecchio', 'Grinder pulito', 'Tazza calda'], correct: 0 },
-    { id: 'q4', question: 'Shelf life latte di avena dopo apertura?', options: ['3 giorni', '5 giorni', '7 giorni'], correct: 1 },
-    { id: 'q5', question: 'Cliente chiede cappuccino extra hot (80°C). Come rispondi?', options: ['Lo faccio', 'Spiego che 65°C è ideale', 'Dico di no'], correct: 1 },
-    { id: 'q6', question: 'Rush hour con 20 persone. Priorità operativa?', options: ['Velocità + qualità', 'Solo velocità', 'Solo qualità'], correct: 0 },
-    { id: 'q7', question: 'Il steam wand fischia. Problema?', options: ['Wand ostruito', 'Tutto ok', 'Latte freddo'], correct: 0 },
-    { id: 'q8', question: 'Come distribuisci il caffè nel portafiltro?', options: ['Scuoto', 'Distribution tool', 'Tampo forte'], correct: 1 },
-    { id: 'q9', question: 'Cliente indeciso tra cappuccino e latte. Come guidi?', options: ['Scelgo io', 'Chiedo preferenza foam', 'Propongo caffè'], correct: 1 },
-    { id: 'q10', question: 'Cliente si lamenta del prezzo €4 cappuccino. Response?', options: ['Sconto', 'Spiego qualità', 'Ignoro'], correct: 1 },
-    { id: 'q11', question: 'Studente budget limitato. Come upselli?', options: ['Non upsello', 'Combo risparmio', 'Insisto'], correct: 1 },
-    { id: 'q12', question: 'Cliente dice: "Da Starbucks costa meno". Gestione?', options: ['Abbasso prezzo', 'Spiego differenze', 'Critico Starbucks'], correct: 1 },
-    { id: 'q13', question: 'Cade corrente durante servizio. Priorità?', options: ['Chiudo', 'Continuo a mano', 'Chiamo tecnico'], correct: 1 },
-    { id: 'q14', question: 'Finisci latte intero durante rush. Piano B?', options: ['Chiudo', 'Uso alternative milk', 'Mando qualcuno'], correct: 2 },
-    { id: 'q15', question: 'Cliente ha reazione allergica. Primo step?', options: ['Acqua', 'Chiamo 118', 'Aspetto'], correct: 1 },
-    { id: 'q16', question: 'Cliente dice: "C\'è un capello nel croissant". Gestione?', options: ['Ignoro', 'Mi scuso e sostituisco', 'Dico non è vero'], correct: 1 },
-    { id: 'q17', question: 'Differenza Buontalenti vs gelato normale?', options: ['Stesso', 'Ricetta esclusiva', 'Marketing'], correct: 1 },
-    { id: 'q18', question: 'Blend Badiani è:', options: ['100% Arabica', '80% Arabica 20% Robusta', '50/50'], correct: 1 },
-    { id: 'q19', question: 'Temperatura cottura ideale churros?', options: ['160°C', '180°C', '200°C'], correct: 1 },
-    { id: 'q20', question: 'Perché Flat White ha meno foam?', options: ['Errore', 'Tecnica specifica', 'Risparmio'], correct: 1 },
-    { id: 'q21', question: 'Un sacchetto caffè aperto 3 settimane fa. Procedi?', options: ['Uso', 'Scarto', 'Annuso'], correct: 1 },
-    { id: 'q22', question: 'Noti cristalli nello sciroppo caramel. Azione?', options: ['Uso', 'Butto', 'Scaldo'], correct: 1 },
-    { id: 'q23', question: 'Brownie con macchia verde. Azione?', options: ['Vendo', 'Scarto', 'Taglio parte'], correct: 1 },
-    { id: 'q24', question: 'Caffè gusto bruciato. Causa?', options: ['Temperatura alta', 'Vecchio', 'Entrambi'], correct: 2 },
-    { id: 'q25', question: 'Come verifichi freschezza caffè?', options: ['Gusto', 'Odore + lucido', 'Colore'], correct: 1 },
-    { id: 'q26', question: 'Gelato con cristalli ghiaccio. Significa?', options: ['Ok', 'Scongelato', 'Vecchio'], correct: 1 },
-    { id: 'q27', question: 'Panettone tagliato ieri vendibile oggi?', options: ['Sì', 'No', 'Dipende'], correct: 2 },
-    { id: 'q28', question: 'Macchina mostra 95°C invece 90°C. Problema?', options: ['Sì', 'No', 'Forse'], correct: 0 },
-    { id: 'q29', question: 'Brick latte gonfio. Azione?', options: ['Uso', 'Scarto', 'Apro'], correct: 1 },
-    { id: 'q30', question: 'Churros sera prima riutilizzabili?', options: ['Sì', 'No', 'Riscaldo'], correct: 1 },
-    { id: 'q31', question: 'Tempo max tra estrazione e servizio espresso?', options: ['30 sec', '10 sec', '1 min'], correct: 1 },
-    { id: 'q32', question: 'Latte scaldato oltre 70°C. Come capirlo?', options: ['Gusto', 'Odore bruciato', 'Colore'], correct: 1 },
-    { id: 'q33', question: 'Cliente chiede cappuccino extra foam. Come adatti?', options: ['Monto di più', 'Dico no', 'Spiego'], correct: 0 },
-    { id: 'q34', question: 'Latte urla durante montatura. Stai sbagliando?', options: ['Temperatura', 'Posizione wand', 'Entrambi'], correct: 1 },
-    { id: 'q35', question: 'Come eviti channeling nell\'espresso?', options: ['Tamper uniforme', 'Distribution', 'Entrambi'], correct: 2 },
-    { id: 'q36', question: 'Cliente chiede caffè lungo italiano. Come prepari?', options: ['Americano', 'Estrazione lunga', 'Doppio'], correct: 1 },
-    { id: 'q37', question: 'Brocca latte sporca residui. Impatto?', options: ['Nessuno', 'Sapore alterato', 'Ok'], correct: 1 },
-    { id: 'q38', question: 'Famiglia 2 bambini. Strategia upsell?', options: ['Combo family', 'Singoli', 'Niente'], correct: 0 },
-    { id: 'q39', question: 'Cliente vegano. Prodotti proponi?', options: ['Niente', 'Alternative milk + vegan gelato', 'Solo caffè'], correct: 1 },
-    { id: 'q40', question: 'Studente budget limitato. Upsell senza pressione?', options: ['Combo risparmio', 'Niente', 'Insisto'], correct: 0 },
-    { id: 'q41', question: 'Cliente torna: cappuccino freddo. Procedura?', options: ['Ignoro', 'Rifaccio + scuse', 'Riscaldo'], correct: 1 },
-    { id: 'q42', question: 'Gruppo 8 persone ordina tutto. Come organizzi?', options: ['Sequenziale', 'Batch simili', 'Caos'], correct: 1 },
-    { id: 'q43', question: 'Cliente: non mi piace caffè. Come conquisti?', options: ['Abbandono', 'Alternative dolci', 'Insisto'], correct: 1 },
-    { id: 'q44', question: 'Pendolare fretta. Upsell veloce?', options: ['Niente', 'Extra shot 1 sec', 'Spiego lungo'], correct: 1 },
-    { id: 'q45', question: 'Come presenti loyalty a nuovo cliente?', options: ['Lungo', 'Breve benefici', 'Non presento'], correct: 1 },
-    { id: 'q46', question: 'Cliente: costa meno da Starbucks. Gestione?', options: ['Sconto', 'Spiego qualità', 'Ignoro'], correct: 1 },
-    { id: 'q47', question: 'Perché alternative milk costa di più?', options: ['Costo superiore', 'Marketing', 'Caso'], correct: 0 },
-    { id: 'q48', question: 'Cliente diabetico. Opzioni sugar-free?', options: ['Niente', 'Alternative sweetener', 'Normale'], correct: 1 },
-    { id: 'q49', question: 'Cliente dice: sorprendimi. Come scegli?', options: ['Random', 'Signature + storia', 'Economico'], correct: 1 },
-    { id: 'q50', question: 'Influencer chiede gratis per post. Response?', options: ['Ok', 'No + spiego policy', 'Sconto'], correct: 1 },
-    { id: 'q51', question: 'Espresso esce in 20s con 36g out. Primo intervento?', options: ['Più fine al grinder', 'Dose più bassa', 'Tamp più forte'], correct: 0 },
-    { id: 'q52', question: 'Crema cappuccino con bolle grandi. Problema principale?', options: ['Stretch troppo lungo', 'Latte troppo freddo', 'Tazza fredda'], correct: 0 },
-    { id: 'q53', question: 'Americano: quando versi acqua?', options: ['Dopo shot', 'Prima dello shot', 'Insieme'], correct: 1 },
-    { id: 'q54', question: 'Flat white: latte art fallisce. Causa tipica?', options: ['Latte troppo schiumoso', 'Shot ristretto', 'Tazza calda'], correct: 0 },
-    { id: 'q55', question: 'Macchiato corretto: quanto foam?', options: ['1 cucchiaio', 'Metà tazza', 'Nessuno'], correct: 0 },
-    { id: 'q56', question: 'Cioccolata macchina: prima accensione. Cosa controlli?', options: ['Acqua serbatoio esterno', 'Beccuccio pulito', 'Zucchero'], correct: 0 },
-    { id: 'q57', question: 'Churros: olio a 160°C. Cosa fai?', options: ['Alzi a 180°C', 'Continui', 'Aggiungi sale'], correct: 0 },
-    { id: 'q58', question: 'Gelato con cristalli: azione?', options: ['Rigeli', 'Scarti vaschetta', 'Aggiungi panna'], correct: 1 },
-    { id: 'q59', question: 'Spatolatura Buontalenti: priorità?', options: ['Resta morbida', 'Pressare forte', 'Mescolare aria'], correct: 0 },
-    { id: 'q60', question: 'Story Orbit: come presenti il Buontalenti?', options: ['Solo prezzo', 'Origine Firenze + assaggio', 'Parli di Starbucks'], correct: 1 },
-    { id: 'q61', question: 'Panettone tagliato ieri. Come lo servi oggi?', options: ['Non lo servi', 'Tosti leggermente', 'Aggiungi zucchero'], correct: 1 },
-    { id: 'q62', question: 'Learn bubbles: a cosa serve il trigger?', options: ['Aprire overlay', 'Mostrare prodotti rapidi', 'Cambiare tema'], correct: 1 },
-    { id: 'q63', question: 'Menu drawer: come blocchi lo scroll?', options: ['bodyScrollLock.lock()', 'overflow:hidden sul main', 'position:fixed su nav'], correct: 0 },
-    { id: 'q64', question: 'Cooldown gelato: perché esiste?', options: ['Limitare spam premi', 'Bug sonoro', 'Serve per layout'], correct: 0 },
-    { id: 'q65', question: 'Challenge ogni quante stelline?', options: ['3', '5', '10'], correct: 0 },
-    { id: 'q66', question: 'Quiz perfetto concede?', options: ['1 gelato reale', '5 stelle', 'Cooldown azzerato'], correct: 0 },
-    { id: 'q67', question: 'Come salvi il profilo utente?', options: ['badianiUser.profile.v1', 'localUser', 'sessionStorage'], correct: 0 },
-    { id: 'q68', question: 'Card aperta questa settimana: come viene marcata?', options: ['state.openedToday[id]', 'cookie', 'query string'], correct: 0 },
-    { id: 'q69', question: 'Se il quiz fallisce, cosa succede alle stelline?', options: ['Reset a 0', 'Meno 1', 'Niente'], correct: 0 },
-
-    // --- ORDER TYPE (metti in ordine i passaggi) ---
     {
-      id: 'o1',
-      type: 'order',
-      question: 'Metti in ordine i passaggi per montare il latte (cappuccino) in modo pulito e consistente.',
-      steps: [
-        'Purge steam wand (scarico rapido)',
-        'Posiziona la punta: fase di stretching (aria) per pochi secondi',
-        'Scendi di più: fase di rolling (vortice) per microfoam',
-        'Ferma a circa 65°C',
-        'Pulisci e purge steam wand',
-        'Swirl + tap: texture lucida pronta per latte art',
-      ],
+      id: 'tm-001',
+      question: 'Un collega prepara il mix crepes e lo lascia riposare 1 ora: qual è la correzione giusta?',
+      options: ['Va bene così', 'Aggiungere più farina', 'Portare il riposo minimo a 2 ore', 'Cuocere più a lungo la crepe'],
+      correct: 2,
+      explain: 'Standard impasto crepes = riposo minimo 2 ore in frigo per stabilizzare la miscela.',
     },
     {
-      id: 'o2',
-      type: 'order',
-      question: 'Metti in ordine i passaggi base per un espresso consistente (routine rapida).',
-      steps: [
-        'Pulisci/flush il gruppo e asciuga il portafiltro',
-        'Macinatura nel portafiltro e livellamento (distribution)',
-        'Tamp uniforme e pulizia bordo',
-        'Aggancia e avvia subito l’estrazione',
-        'Controlla tempo/resa e valuta la crema',
-        'Servi immediatamente (entro 10 secondi)',
-      ],
+      id: 'tm-002',
+      question: 'Stai facendo una Buontalenti crepe e il cliente vuole “più salsa sopra”: qual è la quantità standard di salsa top prima di extra?',
+      options: ['10g', '20g', '30g', '60g'],
+      correct: 2,
+      explain: 'La finitura standard prevede 30g di salsa sopra, poi eventuali extra sono un’aggiunta.',
     },
     {
-      id: 'o3',
-      type: 'order',
-      question: 'Churros: metti in ordine i passaggi per una cottura corretta e sicura.',
-      steps: [
-        'Porta l’olio a circa 180°C',
-        'Forma i churros in modo uniforme (attenzione sicurezza)',
-        'Friggi fino a doratura omogenea',
-        'Scola e lascia drenare l’olio in eccesso',
-        'Zucchero/cannella (o topping) solo a fine cottura',
-        'Servi caldo e comunica eventuali allergeni',
-      ],
+      id: 'tm-003',
+      question: 'Vuoi preparare una crepe “Italiana plain base”: quale combinazione è coerente con lo standard?',
+      options: ['Mozzarella + rocket + 3 cherry tomatoes', 'Mozzarella + tonno + olive', 'Prosciutto + funghi', 'Bacon + cheddar'],
+      correct: 0,
+      explain: 'La farcitura standard include mozzarella grattugiata, rocket e 3 pomodorini (poi in quarti).',
     },
     {
-      id: 'o4',
-      type: 'order',
-      question: 'Fine servizio: metti in ordine i passaggi essenziali di pulizia della postazione caffè.',
-      steps: [
-        'Svuota e risciacqua brocche/utensili (subito)',
-        'Pulisci e purge steam wand',
-        'Flush gruppo e pulizia area portafiltro',
-        'Riordina ingredienti e controlla scadenze/shelf life',
-        'Pulisci superfici e pavimento zona lavoro',
-        'Log/brief: note su stock e problemi tecnici',
-      ],
-    }
+      id: 'tm-004',
+      question: 'La crepe salata è pronta ma “molle” al centro: quale step finale è stato probabilmente saltato?',
+      options: ['Spolverata di zucchero a velo', '10 secondi extra di cottura dopo l’ultimo flip', 'Aggiunta della salsa top 30g', 'Riposo mix 2 ore'],
+      correct: 1,
+      explain: 'Dopo la piega si fa un’ulteriore breve cottura (10 sec) per compattare e scaldare l’interno.',
+    },
+    {
+      id: 'tm-005',
+      question: 'Stai preparando la versione beetroot: quale procedura è corretta?',
+      options: ['3g beetroot powder in 250g mix, poi frullare', '30g beetroot powder in 250g mix, poi setacciare', '3g beetroot powder in 1000g mix, poi frullare', '10g beetroot powder direttamente sulla piastra'],
+      correct: 0,
+      explain: 'Standard colore beetroot = 3g su 250g di mix, miscelati con blender.',
+    },
+    {
+      id: 'tm-006',
+      question: 'Waffle: quale combinazione “setup + dose” è corretta?',
+      options: ['Power 2 + 250ml', 'Power 3 + 177ml', 'Power 5 + 100ml', 'Power 3 + 50ml'],
+      correct: 1,
+      explain: 'Standard waffle = power 3 e una scoop di pastella pari a 177ml.',
+    },
+    {
+      id: 'tm-007',
+      question: 'Waffle: cosa evita di “sciupare” la presentazione quando aggiungi topping?',
+      options: ['Togliere subito dal ferro e farcire', 'Riposo 45 secondi prima di topping/gelato', 'Aumentare la power a 5', 'Girare dopo 30 secondi'],
+      correct: 1,
+      explain: 'Lo standard prevede riposo 45 secondi per stabilizzare la struttura prima dei topping.',
+    },
+    {
+      id: 'tm-008',
+      question: 'Se vuoi un ciclo waffle completo, qual è il totale di cottura standard?',
+      options: ['2.5 min', '5 min', '7.5 min', '10 min'],
+      correct: 1,
+      explain: 'Standard = 2.5 minuti, poi giri e fai altri 2.5 minuti (totale 5).',
+    },
+    {
+      id: 'tm-009',
+      question: 'Gelato Burger: quale regola “porzione + salsa” è corretta?',
+      options: ['2 scoops + 2 salse', '1 scoop (70g) + 1 sola salsa', '1 scoop (100g) + salse illimitate', '3 scoops + 1 salsa'],
+      correct: 1,
+      explain: 'Standard prodotto = una sola scoop da 70g e una sola scelta di salsa.',
+    },
+    {
+      id: 'tm-010',
+      question: 'Gelato Burger: quale impostazione macchina è corretta per il tempo di chiusura?',
+      options: ['8 sec', '10 sec', '12 sec', '20 sec'],
+      correct: 2,
+      explain: 'Il ciclo standard è 12 secondi.',
+    },
+    {
+      id: 'tm-011',
+      question: 'Gelato Burger: se trovi briciole sulla macchina, qual è l’azione corretta?',
+      options: ['Sciacquare con acqua', 'Passare blue-roll paper', 'Usare spugna abrasiva', 'Spruzzare olio'],
+      correct: 1,
+      explain: 'La gestione standard delle briciole è rimuoverle con blue-roll paper.',
+    },
+    {
+      id: 'tm-012',
+      question: 'Gelato Croissant: quanta Buontalenti va inserita secondo standard?',
+      options: ['1 scoop da 70g', '2 scoops da 70g', '3 scoops da 50g', '2 scoops da 100g'],
+      correct: 1,
+      explain: 'Standard = 2 scoops con scooper, 2×70g.',
+    },
+    {
+      id: 'tm-013',
+      question: 'Gelato Croissant: scegli l’ordine topping corretto.',
+      options: ['Crumble → pistacchio sauce', 'Pistacchio sauce → crumble', 'Salsa dolcevita → crumble', 'Panna → crumble'],
+      correct: 1,
+      explain: 'Lo standard prevede pistacchio sauce prima e crumble dopo.',
+    },
+    {
+      id: 'tm-014',
+      question: 'Gelato Croissant: quale coppia quantità è corretta?',
+      options: ['Pistacchio sauce ~20g + crumble 7g', 'Pistacchio sauce 7g + crumble 20g', 'Pistacchio sauce 30g + crumble 3g', 'Pistacchio sauce 5g + crumble 14g'],
+      correct: 0,
+      explain: 'Standard topping = circa 20g salsa e 7g crumble.',
+    },
+    {
+      id: 'tm-015',
+      question: 'Pancake: come riconosci il timing giusto per girarli?',
+      options: ['Dopo 10 sec', 'Dopo 30 sec', 'Quando iniziano le bolle (~90 sec)', 'Solo quando diventano scuri'],
+      correct: 2,
+      explain: 'Standard = si gira quando il mix inizia a fare bolle, circa 90 secondi.',
+    },
+    {
+      id: 'tm-016',
+      question: 'Pancake: quanti pancake compongono una porzione completa?',
+      options: ['1', '2', '3', '5'],
+      correct: 2,
+      explain: 'Standard porzione = tre pancake (ripeti la dose tre volte).',
+    },
+    {
+      id: 'tm-017',
+      question: 'Blueberry Pancake: quale set “frutta” è corretto?',
+      options: ['1 fragola (in 4) + 7–8 blueberries', '2 fragole + 3 blueberries', '1 fragola + 12 blueberries', '0 fragole + 7–8 blueberries'],
+      correct: 0,
+      explain: 'La presentazione standard usa 1 fragola tagliata e 7–8 mirtilli.',
+    },
+    {
+      id: 'tm-018',
+      question: 'BYO Pancake: quale abbinamento “dry ingredient” è coerente con standard?',
+      options: ['Chocolate chips 3 tsp', 'Chocolate chips 1 tsp', 'Coconut chips 5 tsp', 'Whole nuts 12 pezzi'],
+      correct: 0,
+      explain: 'Standard BYO = chocolate chips 3 teaspoons (coconut chips 2 tsp, nuts 6–7).',
+    },
+    {
+      id: 'tm-019',
+      question: 'Porridge: qual è la dose latte standard?',
+      options: ['80–90ml', '125–130ml', '175ml', '250ml'],
+      correct: 1,
+      explain: 'La base standard porridge usa 125–130ml di latte.',
+    },
+    {
+      id: 'tm-020',
+      question: 'Porridge: quanti misurini di oats?',
+      options: ['1', '2', '3', '4'],
+      correct: 1,
+      explain: 'Lo standard prevede 2 misurini di porridge oats.',
+    },
+    {
+      id: 'tm-021',
+      question: 'Porridge: quanto tempo lasci “settare” dopo aver mescolato?',
+      options: ['10 sec', '30 sec', '2 min', '5 min'],
+      correct: 1,
+      explain: 'Lo standard prevede 30 secondi di assestamento prima del servizio.',
+    },
+    {
+      id: 'tm-022',
+      question: 'Afternoon Tea Set: quale combinazione è corretta?',
+      options: ['Buontalenti + strawberry jam + 2 teapots', 'Matcha + honey + 1 teapot', 'Lemon + marmellata d’arancia + 3 teapots', 'Strawberry + pistacchio sauce + 1 teapot'],
+      correct: 0,
+      explain: 'Il set standard include Buontalenti con wafer, strawberry jam e servizio tè con 2 teapots.',
+    },
+    {
+      id: 'tm-023',
+      question: 'Gelato cups: un “Medio” può contenere quanti gusti?',
+      options: ['Solo 1', '1–2', '1–3', '1–5'],
+      correct: 1,
+      explain: 'Standard Medio = 1–2 gusti (140g nominali).',
+    },
+    {
+      id: 'tm-024',
+      question: 'Se un Medio cup pesa 170g, come lo valuti rispetto al range standard?',
+      options: ['Dentro range', 'Fuori range perché supera max', 'Fuori range perché sotto min', 'Non esiste un range'],
+      correct: 1,
+      explain: 'Per Medio il massimo standard è 160g, quindi 170g è oltre soglia.',
+    },
+    {
+      id: 'tm-025',
+      question: 'Se un Piccolo cup pesa 115g, come lo valuti?',
+      options: ['Sotto min', 'Dentro range', 'Sopra max', 'Non misurabile'],
+      correct: 1,
+      explain: 'Piccolo ha range 100–120g, quindi 115g è corretto.',
+    },
+    {
+      id: 'tm-026',
+      question: '“Mega” (linea portioning): qual è il massimo standard?',
+      options: ['160g', '200g', '240g', '300g'],
+      correct: 2,
+      explain: 'Nella tabella portioning, Mega ha max 240g.',
+    },
+    {
+      id: 'tm-027',
+      question: 'Coni: quale frase è corretta?',
+      options: ['Il gluten free consente 3 gusti', 'Il choco cone consente 1–2 gusti a 140g', 'Il Piccolo cone è 140g', 'I coni non hanno grammi'],
+      correct: 1,
+      explain: 'Choco cone = 1–2 gusti, 140g.',
+    },
+    {
+      id: 'tm-028',
+      question: 'Take-me-home boxes: quale set “taglia → max gusti” è corretto?',
+      options: ['Piccolo 1–3, Medio 1–4, Grande 1–5', 'Piccolo 1–2, Medio 1–3, Grande 1–4', 'Piccolo 1–5, Medio 1–3, Grande 1–4', 'Piccolo 1–4, Medio 1–5, Grande 1–6'],
+      correct: 0,
+      explain: 'Standard box = 500ml (1–3), 750ml (1–4), 1000ml (1–5).',
+    },
+    {
+      id: 'tm-029',
+      question: 'Box gelato: qual è la priorità per evitare difetti visivi e strutturali?',
+      options: ['Lasciare aria per “morbidezza”', 'Spingere il gelato dentro evitando air bubbles', 'Non pulire i bordi per velocità', 'Mettere subito il nastro prima del coperchio'],
+      correct: 1,
+      explain: 'Lo standard è riempire comprimendo e senza bolle d’aria.',
+    },
+    {
+      id: 'tm-030',
+      question: 'Box gelato: quale azione è corretta per la chiusura?',
+      options: ['Sigillare con Badiani tape sul punto box-lid', 'Avvolgere con alluminio', 'Usare elastico', 'Lasciare aperto e mettere in borsa'],
+      correct: 0,
+      explain: 'Lo standard di sicurezza/tenuta usa Badiani tape sul contatto box-lid.',
+    },
+    {
+      id: 'tm-031',
+      question: 'Box gelato: quale priorità riduce contaminazioni in laboratorio/servizio?',
+      options: ['Servire sempre i gusti cremosi prima dei sorbetti', 'Servire sempre i sorbetti prima', 'Mescolare sorbetto e crema nella stessa paletta senza lavare', 'Non cambiare mai utensili'],
+      correct: 1,
+      explain: 'Lo standard prevede di porzionare sorbetti per primi per minimizzare contaminazione.',
+    },
+    {
+      id: 'tm-032',
+      question: 'Vetrina treats: qual è il requisito minimo temperatura?',
+      options: ['-5°C', '-10°C', '-14°C', '-18°C'],
+      correct: 2,
+      explain: 'La vertical vitrine deve stare almeno a -14°C.',
+    },
+    {
+      id: 'tm-033',
+      question: 'Vetrina treats: come imposti la disposizione “visiva” corretta?',
+      options: ['Cakes in basso, cookies in alto', 'Tutto in alto', 'Cakes in alto, cookies e Pinguinos in basso', 'Cookies in alto, cakes in basso'],
+      correct: 2,
+      explain: 'Standard display = cakes in alto (adult-eye level), cookies/Pinguinos in basso (kids-eye level).',
+    },
+    {
+      id: 'tm-034',
+      question: 'Shelf life treats: quale coppia corretta?',
+      options: ['Cookies 35 giorni', 'Mini cones 21 giorni', 'Mini cakes 14 giorni', 'Pinguinos 21 giorni'],
+      correct: 1,
+      explain: 'Standard shelf life = mini cones 21 giorni (cookies 14, pinguinos 35).',
+    },
+    {
+      id: 'tm-035',
+      question: 'Gelato display morning prep: quale azione viene prima di mettere i gelati a display?',
+      options: ['Mettere i gelati subito', 'Pulire vetrina con acqua calda + sanitiser giallo e far brillare metalli con blue spray/blue roll', 'Solo passare un panno asciutto', 'Togliere le porte e lasciarle off'],
+      correct: 1,
+      explain: 'Lo standard prevede pulizia/sanificazione e finitura “shine” prima dell’esposizione.',
+    },
+    {
+      id: 'tm-036',
+      question: 'Temperatura di esposizione gelato (vetrina): quando inizi a mettere i gelati?',
+      options: ['A 0°C', 'A -5°C', 'A -14/-15°C', 'A -25°C'],
+      correct: 2,
+      explain: 'Lo standard di servizio indica -14/-15°C per l’esposizione.',
+    },
+    {
+      id: 'tm-037',
+      question: 'Scampolo: quale definizione è corretta?',
+      options: ['Quando resta meno di metà vaschetta', 'Quando resta meno di 1/4 di vaschetta', 'Quando resta meno di 1/10', 'Quando il gusto è duro'],
+      correct: 1,
+      explain: 'Scampolo = meno di 1/4 rimasto, quindi va sostituito.',
+    },
+    {
+      id: 'tm-038',
+      question: 'Scampolo: quale tecnica di integrazione è corretta?',
+      options: ['Aggiungere tutto in una volta', 'Aggiungere circa 100g per volta e livellare', 'Aggiungere solo topping', 'Sciogliere e ricongelare'],
+      correct: 1,
+      explain: 'Lo standard prevede aggiunte graduali (~100g) e livellamento finale.',
+    },
+    {
+      id: 'tm-039',
+      question: 'Scampolo: quale limite massimo di “altezza aggiunta” è corretto?',
+      options: ['1–2 cm', '3–4 cm', '5–7 cm', '10–12 cm'],
+      correct: 2,
+      explain: 'Lo standard pone limite massimo 5–7 cm.',
+    },
+    {
+      id: 'tm-040',
+      question: 'Manutenzione vetrina: quale frequenza è corretta?',
+      options: ['Deep clean ogni giorno', 'Deep clean una volta a settimana', 'Deep clean una volta al mese', 'Mai deep clean'],
+      correct: 1,
+      explain: 'Lo standard prevede deep clean settimanale e filtri settimanali.',
+    },
+    {
+      id: 'tm-041',
+      question: 'Manutenzione vetrina: se il negozio è poco trafficato, come gestisci le sliding doors?',
+      options: ['Le lasci aperte', 'Le tieni in posizione per preservare temperatura', 'Le rimuovi', 'Le blocchi con nastro'],
+      correct: 1,
+      explain: 'Lo standard richiede sliding doors in posizione per mantenere temperatura.',
+    },
+    {
+      id: 'tm-042',
+      question: 'Smoothie: qual è il parametro comune a Rosso/Verde/Giallo?',
+      options: ['250ml apple juice', '250ml latte', '100ml acqua', '500ml succo'],
+      correct: 0,
+      explain: 'Lo standard smoothie usa 250ml di apple juice in tutte le varianti.',
+    },
+    {
+      id: 'tm-043',
+      question: 'Smoothie: quale “match colore sticker” è corretto?',
+      options: ['Rosso Berry → green sticker', 'Verde Boost → pink sticker', 'Giallo Passion → yellow sticker', 'Giallo Passion → pink sticker'],
+      correct: 2,
+      explain: 'Standard sticker = Rosso/pink, Verde/green, Giallo/yellow.',
+    },
+    {
+      id: 'tm-044',
+      question: 'Premade matcha big batch: quante porzioni produce?',
+      options: ['1', '5', '10', '20'],
+      correct: 2,
+      explain: 'Lo standard big batch è dichiarato per 10 portions.',
+    },
+    {
+      id: 'tm-045',
+      question: 'Premade matcha: shelf life corretta (incluso giorno di preparazione)?',
+      options: ['1 giorno', '2 giorni', '3 giorni', '7 giorni'],
+      correct: 0,
+      explain: 'Lo standard premade matcha è 1 day includendo il giorno di preparazione.',
+    },
+    {
+      id: 'tm-046',
+      question: 'Premade matcha: qual è l’azione “anti-grumi” più importante?',
+      options: ['Bollire la polvere', 'Setacciare (sift) la matcha', 'Aggiungere ghiaccio', 'Mescolare con cucchiaio'],
+      correct: 1,
+      explain: 'Lo standard prevede setaccio per evitare lumps prima di whiskare.',
+    },
+    {
+      id: 'tm-047',
+      question: 'Matcha Iced Latte: quale combinazione base è corretta?',
+      options: ['200ml milk + 25ml premade matcha', '175ml milk + 50ml premade matcha', '250ml milk + 10ml premade matcha', '100ml milk + 100ml premade matcha'],
+      correct: 0,
+      explain: 'La ricetta standard usa 200ml milk e 25ml premade matcha (ice fino alla linea).',
+    },
+    {
+      id: 'tm-048',
+      question: 'Matcha Iced Latte: qual è l’opzione “su richiesta” (non obbligatoria)?',
+      options: ['Premade matcha', 'Ice', 'Vanilla syrup (1 pump)', 'Milk'],
+      correct: 2,
+      explain: 'La ricetta prevede 1 pump vanilla syrup come optional.',
+    },
+    {
+      id: 'tm-049',
+      question: 'Buontalenti/Strawberry Iced (matcha): qual è la quantità latte principale?',
+      options: ['200ml', '175ml', '150ml', '250ml'],
+      correct: 1,
+      explain: 'La variante con gelato prevede 175ml milk nella cup.',
+    },
+    {
+      id: 'tm-050',
+      question: 'Buontalenti/Strawberry Iced (matcha): come prepari la schiuma topping gelato?',
+      options: ['Blender', 'Forchetta in milkshake cup con 50ml latte', 'Shaker con ghiaccio', 'Microonde'],
+      correct: 1,
+      explain: 'Lo standard è whisk con forchetta e 50ml milk, non blender.',
+    },
+    {
+      id: 'tm-051',
+      question: 'Buontalenti/Strawberry Iced (matcha): qual è il massimo gelato consentito?',
+      options: ['50g', '80g', '120g', '180g'],
+      correct: 1,
+      explain: 'Lo standard impone 80g max per la scoop in questa bevanda.',
+    },
+    {
+      id: 'tm-052',
+      question: 'Dirty Matcha Affogato: cosa lo rende “dirty”?',
+      options: ['Premade matcha', 'Double espresso sopra matcha gelato', 'Latte di cocco', 'Apple juice'],
+      correct: 1,
+      explain: 'Lo standard dirty = matcha gelato + double shot espresso.',
+    },
+    {
+      id: 'tm-053',
+      question: 'Matcha Matcha Affogato: cosa versi sopra la scoop di matcha gelato?',
+      options: ['25ml premade matcha', '50ml acqua', '200ml latte', '1 pump vanilla'],
+      correct: 0,
+      explain: 'Lo standard prevede 25ml di premade matcha.',
+    },
+    {
+      id: 'tm-054',
+      question: 'Buontalenti Matcha Affogato: quale gelato è usato?',
+      options: ['Buontalenti', 'Matcha', 'Strawberry', 'Lemon'],
+      correct: 0,
+      explain: 'Lo standard usa Buontalenti gelato con 25ml premade matcha.',
+    },
+    {
+      id: 'tm-055',
+      question: 'Cocktail pouches: quale formula base è comune?',
+      options: ['50ml alcol + 50ml liquido + 3 scoops + ghiaccio fino alla linea', '25ml alcol + 25ml acqua + 1 scoop', '100ml alcol senza ghiaccio', 'Solo gelato frullato'],
+      correct: 0,
+      explain: 'Lo standard ricette cocktail pouches usa 50ml shot, 50ml water (o coconut milk per Piña Colada), 3 scoops e ghiaccio fino al ridge line.',
+    },
+    {
+      id: 'tm-056',
+      question: 'Strawberry Daiquiri: quale alcol è previsto?',
+      options: ['Vodka', 'White Rum', 'Aperol', 'Gin'],
+      correct: 1,
+      explain: 'Lo standard Strawberry Daiquiri usa 50ml white rum.',
+    },
+    {
+      id: 'tm-057',
+      question: 'Frozen Lemonade: quale alcol è previsto?',
+      options: ['Vodka', 'White Rum', 'Aperol', 'Whisky'],
+      correct: 0,
+      explain: 'Lo standard Frozen Lemonade usa 50ml vodka.',
+    },
+    {
+      id: 'tm-058',
+      question: 'Frozen Aperol: quale ingrediente alcolico compare?',
+      options: ['Aperol', 'Vodka', 'White Rum', 'Gin'],
+      correct: 0,
+      explain: 'Lo standard Frozen Aperol usa 50ml Aperol.',
+    },
+    {
+      id: 'tm-059',
+      question: 'Piña Colada: quale “milk” è previsto al posto dell’acqua?',
+      options: ['Oat milk', 'Coconut milk', 'Whole milk', 'Soy milk'],
+      correct: 1,
+      explain: 'Lo standard Piña Colada usa 50ml coconut milk.',
+    },
+    {
+      id: 'tm-060',
+      question: 'Churros: quale triade è corretta?',
+      options: ['180°C + 6 churros + 5 min', '190°C + 8 churros + 8–9 min', '200°C + 10 churros + 2 min', '170°C + 8 churros + 15 min'],
+      correct: 1,
+      explain: 'Standard churros = 190°C, porzione 8, frittura 8–9 min.',
+    },
+    {
+      id: 'tm-061',
+      question: 'Coating churros: quale rapporto è corretto?',
+      options: ['600g zucchero + 20g cannella', '600g cannella + 20g zucchero', '300g zucchero + 30g cannella', '500g zucchero + 50g cannella'],
+      correct: 0,
+      explain: 'Lo standard coating è 600g white sugar e 20g cinnamon.',
+    },
+    {
+      id: 'tm-062',
+      question: 'Panettone warm slice: qual è la sequenza corretta?',
+      options: ['Olio → 10 sec → flip → 10 sec', '10 sec → flip → 10 sec (senza olio)', '20 sec un lato solo', '5 sec e basta'],
+      correct: 1,
+      explain: 'Lo standard scalda 10 sec per lato e vieta l’olio.',
+    },
+    {
+      id: 'tm-063',
+      question: 'Pandoro: quale finitura “base” è corretta?',
+      options: ['Sale', 'Cacao amaro', 'Zucchero a velo', 'Sciroppo d’acero'],
+      correct: 2,
+      explain: 'Lo standard prevede zucchero a velo sulla fetta.',
+    },
+    {
+      id: 'tm-064',
+      question: 'Mini panettone in-store: quale coppia “azione + quantità salsa” è corretta?',
+      options: ['Prendi dalla vertical vitrina + riempi espresso cup 1/3', 'Prendi dal forno + riempi espresso cup piena', 'Prendi dalla cassa + riempi espresso cup 1/10', 'Prendi dal frigo + riempi espresso cup 2/3'],
+      correct: 0,
+      explain: 'Lo standard prevede prelievo dalla vertical vitrina (con guanti) e salsa 1/3 espresso cup.',
+    },
+    {
+      id: 'tm-065',
+      question: 'Delivery mini panettone: qual è il layout corretto nella treat box?',
+      options: ['Sauce pot in un angolo', 'Panettoni al centro, salsa fuori', 'Un panettone per angolo e sauce pot al centro', 'Tutto mescolato'],
+      correct: 2,
+      explain: 'Lo standard posiziona i mini panettoni negli angoli e la salsa al centro.',
+    },
+    {
+      id: 'tm-066',
+      question: 'Delivery mini panettone: quando va conservata la box in attesa del driver?',
+      options: ['A temperatura ambiente', 'In frigo', 'In freezer', 'Nel forno spento'],
+      correct: 2,
+      explain: 'Lo standard prevede che la box vada in freezer finché arriva il driver.',
+    },
+    {
+      id: 'tm-067',
+      question: 'Mulled wine: quale setup evita errori meccanici?',
+      options: ['Inner container che galleggia', 'Inner container inserito senza acqua', 'Inner container inserito correttamente e non deve galleggiare', 'Nessun inner container'],
+      correct: 2,
+      explain: 'Lo standard specifica che l’inner container non deve “float”.',
+    },
+    {
+      id: 'tm-068',
+      question: 'Mulled wine: quale warm-up è corretto?',
+      options: ['Level 10 per 5 minuti', 'Level 10 per 25–30 minuti', 'Level 5 per 60 minuti', 'Dial 6/7 subito senza warm-up'],
+      correct: 1,
+      explain: 'Lo standard scalda a livello 10 per 25–30 min, poi imposta dial 6/7.',
+    },
+    {
+      id: 'tm-069',
+      question: 'Mulled wine: quale garnish è standard in servizio?',
+      options: ['Cannella in stecca', 'Fetta d’arancia', 'Menta', 'Lime'],
+      correct: 1,
+      explain: 'Lo standard prevede una fetta d’arancia nella cup.',
+    },
+    {
+      id: 'tm-070',
+      question: 'Mulled wine: quale shelf life è corretta?',
+      options: ['Scaldato: 30 giorni; In-box: 3 giorni', 'Scaldato: 3 giorni; In-box: 30 giorni', 'Scaldato: 7 giorni; In-box: 7 giorni', 'Scaldato: 1 giorno; In-box: 14 giorni'],
+      correct: 1,
+      explain: 'Standard = 3 giorni dal primo warm-up (macchina) e 30 giorni dalla prima apertura (box).',
+    },
+    {
+      id: 'tm-071',
+      question: 'Slitti: in che anno nasce come torrefazione?',
+      options: ['1932', '1969', '1988', '1990'],
+      correct: 1,
+      explain: 'La fondazione come coffee roasting company è nel 1969.',
+    },
+    {
+      id: 'tm-072',
+      question: 'Slitti: quando Andrea espande la produzione al cioccolato?',
+      options: ['1988', '1990', '1994', '2008'],
+      correct: 1,
+      explain: 'Lo standard storico indica il passaggio al cioccolato nel 1990.',
+    },
+    {
+      id: 'tm-073',
+      question: 'Slitti: quale premio è associato al 1994?',
+      options: ['Eurochocolate Award', 'Grand Prix International de la Chocolaterie', 'Best chocolatier in Italy', 'Nessuno'],
+      correct: 1,
+      explain: 'Nel 1994 è associato il Grand Prix International de la Chocolaterie.',
+    },
+    {
+      id: 'tm-074',
+      question: 'Slitti: quale pralina contiene alcol e quanto?',
+      options: ['Passion fruit 1.5%', 'Irish Coffee 0.9%', 'Origin 0%', 'Tutte 0.9%'],
+      correct: 1,
+      explain: 'La pralina Irish Coffee contiene 0.9% di alcol.',
+    },
+    {
+      id: 'tm-075',
+      question: 'Slitti Coffee Spoons: in che anno vengono create?',
+      options: ['1969', '1988', '1993', '2008'],
+      correct: 2,
+      explain: 'Le “Coffee Spoons” sono create nel 1993.',
+    },
+    {
+      id: 'tm-076',
+      question: 'Dragee Pistacchi di Bronte: come sono descritti?',
+      options: ['Solo cioccolato fondente', 'Pistacchi tostati coperti da strato di cioccolato bianco e latte, finiti con zucchero a velo', 'Pistacchi salati senza copertura', 'Pistacchi al caramello salato'],
+      correct: 1,
+      explain: 'Lo standard descrive Bronte pistachios tostati con copertura white + milk chocolate e finitura zucchero a velo.',
+    },
+    {
+      id: 'tm-077',
+      question: 'Dragee “Grani di Arabica”: quale copertura è citata?',
+      options: ['64% dark chocolate', '45% milk chocolate', '82% dark chocolate', 'White chocolate'],
+      correct: 0,
+      explain: 'I grani di Arabica sono coperti con un sottile strato di 64% dark chocolate.',
+    },
+    {
+      id: 'tm-078',
+      question: 'Spread Slittosa: percentuale nocciole Langhe?',
+      options: ['37%', '51%', '57%', '64%'],
+      correct: 0,
+      explain: 'Slittosa è descritta con 37% di nocciole delle Langhe.',
+    },
+    {
+      id: 'tm-079',
+      question: 'Spread Riccosa: percentuale nocciole Langhe?',
+      options: ['37%', '51%', '57%', '73%'],
+      correct: 1,
+      explain: 'Riccosa è descritta con 51% di nocciole delle Langhe.',
+    },
+    {
+      id: 'tm-080',
+      question: 'Spread Gianera: percentuale nocciole Langhe?',
+      options: ['37%', '51%', '57%', '82%'],
+      correct: 2,
+      explain: 'Gianera è descritta con 57% di nocciole delle Langhe.',
+    },
+    {
+      id: 'tm-081',
+      question: 'Yo‑Yo: qual è la porzione gelato standard?',
+      options: ['50–60g', '70g', '80–90g', '120g'],
+      correct: 2,
+      explain: 'Lo standard Yo‑Yo è una scoop circa 80/90g tra due wafers.',
+    },
+    {
+      id: 'tm-082',
+      question: 'Yo‑Yo: quale combo è corretta per il servizio?',
+      options: ['Senza guanti, 1 wafer', 'Guanti + tool + 2 wafers', 'Solo spatola gelato', 'Solo coppetta'],
+      correct: 1,
+      explain: 'Lo standard prevede guanti, tool e due wafers per chiusura.',
+    },
+    {
+      id: 'tm-083',
+      question: 'Yo‑Yo: quale pratica evita un risultato “sbordato”?',
+      options: ['Fare due scoops', 'Porzionare con precisione e non far overflow', 'Premere con forza', 'Sciogliere il gelato'],
+      correct: 1,
+      explain: 'La regola è porzionare con precisione evitando overflow.',
+    },
+    {
+      id: 'tm-084',
+      question: 'Gelato box: quale azione migliora l’ordine e la pulizia in consegna?',
+      options: ['Non pulire i bordi', 'Pulire i bordi con blue roll e rimuovere eccessi', 'Mettere topping sui bordi', 'Riempire oltre il bordo'],
+      correct: 1,
+      explain: 'Lo standard prevede pulizia dei bordi del box prima di servire.',
+    },
+    {
+      id: 'tm-085',
+      question: 'Gelato box: quale logica di riempimento è corretta quando hai gusti molto morbidi e gusti più “tenaci”?',
+      options: ['Mettere prima i gusti morbidi', 'Mettere prima i gusti duri', 'Alternare a caso', 'Solo sorbetti'],
+      correct: 0,
+      explain: 'Lo standard suggerisce di “push soft flavours first” nel box.',
+    },
+    {
+      id: 'tm-086',
+      question: 'Coppa gelato: quale strumento è usato per fare le tre palline?',
+      options: ['Scoop spatula', 'Round scooper', 'Mestolo', 'Spatola piatta'],
+      correct: 1,
+      explain: 'La coppa prevede “round scooper” per le tre balls.',
+    },
+    {
+      id: 'tm-087',
+      question: 'Morning prep: prima di riutilizzare spatole “di pulizia” su altri gusti, cosa fai?',
+      options: ['Nulla', 'Lavare e asciugare con blue roll', 'Solo sciacquare', 'Metterle in freezer'],
+      correct: 1,
+      explain: 'Lo standard impone lavaggio dopo ogni uso e asciugatura con blue roll prima di passare ad altri gusti.',
+    },
+    {
+      id: 'tm-088',
+      question: 'Deep clean vetrina: quale step è parte della sequenza?',
+      options: ['Aggiungere olio alle superfici', 'Rimuovere briciole/noci e residui dentro la macchina', 'Mettere ghiaccio', 'Spegnere e non pulire'],
+      correct: 1,
+      explain: 'La deep clean include rimozione di nuts/crumbs e residui, poi sanificazione.',
+    },
+    {
+      id: 'tm-089',
+      question: 'Deep clean vetrina: cosa “brilla” alla fine del ciclo?',
+      options: ['Solo le etichette', 'Le superfici con blue spray e blue roll', 'Il pavimento', 'Le mani'],
+      correct: 1,
+      explain: 'Lo standard prevede finishing con blue spray/blue roll per far brillare le superfici.',
+    },
+    {
+      id: 'tm-090',
+      question: 'Smoothie: tempo minimo di blending indicativo?',
+      options: ['10 sec', '20 sec', '30 sec', '90 sec'],
+      correct: 2,
+      explain: 'Lo standard indica 30 secondi o fino a consistenza smooth.',
+    },
+    {
+      id: 'tm-091',
+      question: 'Matcha iced latte: perché si versa lentamente la premade matcha su latte e ghiaccio?',
+      options: ['Per scaldare la bevanda', 'Per creare un pattern visivo', 'Per sciogliere il gelato', 'Per aumentare lo zucchero'],
+      correct: 1,
+      explain: 'La procedura standard punta a creare un pattern versando lentamente.',
+    },
+    {
+      id: 'tm-092',
+      question: 'Buontalenti/Strawberry iced (matcha): dove deve “sedere” il topping gelato?',
+      options: ['Sul fondo', 'A metà', 'Sopra, come strato superiore', 'Fuori dal bicchiere'],
+      correct: 2,
+      explain: 'Lo standard è versare il topping lentamente così resta sopra la bevanda.',
+    },
+    {
+      id: 'tm-093',
+      question: 'Cocktail pouches: quanti “large ice cubes” sono indicati come riferimento?',
+      options: ['2', '4', '~6', '10'],
+      correct: 2,
+      explain: 'Lo standard indica ghiaccio fino al ridge line, circa 6 cubi grandi.',
+    },
+    {
+      id: 'tm-094',
+      question: 'Mulled wine: dove si conserva la miscela la notte dopo raffreddamento?',
+      options: ['A temperatura ambiente', 'In freezer', 'In frigo', 'In macchina accesa'],
+      correct: 2,
+      explain: 'Lo standard prevede raffreddare, coprire con cling film e conservare in frigo.',
+    },
+    {
+      id: 'tm-095',
+      question: 'Mulled wine: quale pulizia è corretta a fine servizio?',
+      options: ['Solo esterno macchina', 'Lavare inner container e lid con sapone e acqua calda + asciugare', 'Spruzzare profumo', 'Non pulire'],
+      correct: 1,
+      explain: 'Lo standard prevede lavaggio dei componenti interni e pulizia esterna con panno umido.',
+    },
+    {
+      id: 'tm-096',
+      question: 'Panettone/Pandoro: quale azione aumenta l’appeal “al banco”?',
+      options: ['Servire sempre freddo senza opzioni', 'Chiedere se lo vogliono warm e tostare 10 sec per lato', 'Friggerlo', 'Mettere olio sulla piastra'],
+      correct: 1,
+      explain: 'Lo standard prevede opzione warm slice con tostatura 10+10 sec senza olio.',
+    },
+    {
+      id: 'tm-097',
+      question: 'Gelato cups: quale affermazione è coerente con il servizio (tecnica)?',
+      options: ['Si prende la coppetta dal bordo', 'Si pressa delicatamente per togliere air bubbles', 'Non si usa mai wafer', 'Si mescola il gelato con acqua'],
+      correct: 1,
+      explain: 'Lo standard prevede pressare delicatamente per ridurre air bubbles e migliorare resa.',
+    },
+    {
+      id: 'tm-098',
+      question: 'Gelato cones: quale upsell è coerente con lo standard?',
+      options: ['Non proporre nulla', 'Proporre whipped cream o passare al cono chocolate', 'Proporre solo acqua', 'Proporre spezie salate'],
+      correct: 1,
+      explain: 'Lo standard suggerisce upsell con whipped cream o cono chocolate.',
+    },
+    {
+      id: 'tm-099',
+      question: 'Slitti: quale affermazione è corretta sulle coffee spoons?',
+      options: ['Ricetta pubblica e replicabile', 'Ricetta segreta e “first True Spoons”', 'Solo gusto fragola', 'Create nel 2008'],
+      correct: 1,
+      explain: 'Sono descritte come originali, ricetta segreta e prime “True Spoons”.',
+    },
+    {
+      id: 'tm-100',
+      question: 'Slitti: quale combinazione “spalmabile → tipo” è corretta?',
+      options: ['Riccosa = dark chocolate cream', 'Gianera = milk chocolate cream', 'Slittosa = cocoa spread', 'Slittosa = solo latte'],
+      correct: 2,
+      explain: 'Slittosa è descritta come cocoa spread, mentre Riccosa è milk chocolate cream e Gianera dark chocolate cream.',
+    },
   ];
   // NOTE: "Sfida continua" was an experimental extra flow that can pop up on every 3rd star.
   // It contains legacy questions (incl. "Sicurezza") and was confusing users who expect the
@@ -1600,6 +2180,8 @@ const gamification = (() => {
     bonusPoints: 0,
     askedQuestions: [],
     challengeAsked: [],
+    // Shuffle-bag per quiz (evita ripetizioni fino a esaurimento anche quando il quiz pesca N domande a sessione).
+    questionBagByMode: {},
     history: { quiz: [], days: [], totals: { stars: 0, gelati: 0, bonusPoints: 0 } },
     _lastBonusPoints: 0,
   };
@@ -1867,7 +2449,7 @@ const gamification = (() => {
           </p>
           <p class="reward-popover__hint reward-hint" data-crystal-progress>Cristalli: progressi per scheda (0/${CRYSTALS_PER_STAR}). Se i tab sono meno di ${CRYSTALS_PER_STAR}, completiamo la differenza all'apertura della scheda info.</p>
           <button class="reward-popover__cta" type="button" data-quiz-launch hidden>Test me</button>
-          <p class="reward-popover__hint">3 stelline = mini quiz (1 domanda) sulle schede/tab aperti. Se giusto sblocchi “Test me”.</p>
+          <p class="reward-popover__hint">3 stelline = mini quiz (1 domanda). Se giusto sblocchi “Test me”.</p>
           <button class="reward-popover__link" type="button" data-info-launch>Regole complete</button>
         </div>
       </div>
@@ -2502,11 +3084,13 @@ const gamification = (() => {
     const prompt = question?.question || '';
     const correctText = getCorrectAnswerText(question);
     const spec = guessSpecFromPrompt(prompt);
+    const customExplain = (question && (question.explain ?? question.explanation)) ?? '';
+    const customTip = (question && (question.tip ?? question.suggestion)) ?? '';
     return {
       prompt,
       correctText,
-      explanation: autoExplainForQuiz(prompt, correctText),
-      suggestion: autoSuggestionForQuiz(prompt),
+      explanation: String(customExplain || '').trim() || autoExplainForQuiz(prompt, correctText),
+      suggestion: String(customTip || '').trim() || autoSuggestionForQuiz(prompt),
       specHref: spec?.href || 'index.html',
       specLabel: spec?.label || 'Apri specifiche',
     };
@@ -3353,7 +3937,7 @@ const gamification = (() => {
     const text = document.createElement('p');
     text.className = 'reward-modal__text';
     text.textContent = waiting
-      ? 'Puoi fare adesso il mini quiz sulle schede/tab che hai aperto. Se lo passi, sblocchi “Test me”, ma potrai farlo solo quando finisce il countdown del gelato.'
+      ? 'Puoi fare adesso il mini quiz. Se lo passi, sblocchi “Test me”, ma potrai farlo solo quando finisce il countdown del gelato.'
       : 'Fai il mini quiz su ciò che hai aperto: se rispondi giusto, sblocchi “Test me” (il quiz più difficile che assegna il gelato).';
     const actions = document.createElement('div');
     actions.className = 'reward-modal__actions';
@@ -3408,7 +3992,7 @@ const gamification = (() => {
     title.textContent = 'Come funziona il mini game';
     const text1 = document.createElement('p');
     text1.className = 'reward-modal__text';
-    text1.textContent = `Apri i tab dentro una scheda: ogni tab = 1 cristallo di zucchero. ${CRYSTALS_PER_STAR} cristalli si trasformano in 1 stellina (se i tab sono meno di ${CRYSTALS_PER_STAR}, completiamo i cristalli all'ultimo tab). Ogni 3 stelline parte un mini quiz (1 domanda) sulle schede/tab che hai aperto.`;
+    text1.textContent = `Apri i tab dentro una scheda: ogni tab = 1 cristallo di zucchero. ${CRYSTALS_PER_STAR} cristalli si trasformano in 1 stellina (se i tab sono meno di ${CRYSTALS_PER_STAR}, completiamo i cristalli all'ultimo tab). Ogni 3 stelline parte un mini quiz (1 domanda).`;
     const text2 = document.createElement('p');
     text2.className = 'reward-modal__text';
     text2.textContent = 'Mini quiz giusto = sblocchi “Test me” (quiz più difficile). “Test me” perfetto = gelato aggiunto al counter e countdown di 24h (riducibile con 12 e 30 stelline). Mini quiz sbagliato = -3 stelline. Reset automatico: domenica a mezzanotte.';
@@ -3561,6 +4145,70 @@ const gamification = (() => {
       state.askedQuestionsByMode = {};
     }
     return state.askedQuestionsByMode;
+  }
+
+  function getQuestionBagByMode() {
+    if (!state.questionBagByMode || typeof state.questionBagByMode !== 'object') {
+      state.questionBagByMode = {};
+    }
+    return state.questionBagByMode;
+  }
+
+  function buildShuffledIdBag(pool) {
+    return (Array.isArray(pool) ? pool : [])
+      .map((q) => q?.id)
+      .filter(Boolean)
+      .sort(() => Math.random() - 0.5);
+  }
+
+  // Draw questions from a per-mode shuffle bag.
+  // Guarantees: no repeats until the pool is exhausted (bag empty), and no skipped leftovers
+  // when count > remaining (it wraps to a new shuffled bag).
+  function pickQuestionsFromBag(modeKey, pool, count) {
+    if (!modeKey) modeKey = 'classic';
+    const bagByMode = getQuestionBagByMode();
+
+    const poolById = new Map(
+      (Array.isArray(pool) ? pool : [])
+        .filter((q) => q && q.id)
+        .map((q) => [q.id, q])
+    );
+
+    if (!poolById.size) return [];
+
+    const sanitizeBag = (bag) => {
+      if (!Array.isArray(bag)) return [];
+      return bag.filter((id) => poolById.has(id));
+    };
+
+    let bag = sanitizeBag(bagByMode[modeKey]);
+    if (bag.length === 0) {
+      bag = buildShuffledIdBag(Array.from(poolById.values()));
+    }
+
+    const selected = [];
+    const usedThisPick = new Set();
+
+    while (selected.length < count) {
+      if (bag.length === 0) {
+        bag = buildShuffledIdBag(Array.from(poolById.values()));
+      }
+
+      const id = bag.shift();
+      if (!id) continue;
+      if (usedThisPick.has(id)) continue;
+      const q = poolById.get(id);
+      if (!q) continue;
+      selected.push(q);
+      usedThisPick.add(id);
+
+      // Safety: if someone calls with count > pool size, avoid infinite loops.
+      if (usedThisPick.size >= poolById.size) break;
+    }
+
+    bagByMode[modeKey] = bag;
+    saveState();
+    return selected;
   }
 
   function pickFromPool(pool, count) {
@@ -4342,29 +4990,8 @@ const gamification = (() => {
     ensureDailyState();
     if (state.quizTokens < STARS_FOR_QUIZ) return;
 
-    const questions = buildOpenedTabsQuizQuestions(1);
-    if (!questions.length) {
-      const container = document.createElement('div');
-      container.className = 'reward-modal';
-      const title = document.createElement('h3');
-      title.className = 'reward-modal__title';
-      title.textContent = 'Mini quiz: apri prima un tab';
-      const text = document.createElement('p');
-      text.className = 'reward-modal__text';
-      text.textContent = 'Per far partire il mini quiz serve aver aperto almeno 1 tab dentro una scheda (es. “Preparazione”, “Suggerimenti”…).';
-      const actions = document.createElement('div');
-      actions.className = 'reward-modal__actions';
-      const ok = document.createElement('button');
-      ok.type = 'button';
-      ok.className = 'reward-action primary';
-      ok.textContent = 'Ok';
-      ok.dataset.overlayFocus = 'true';
-      ok.addEventListener('click', closeOverlay);
-      actions.appendChild(ok);
-      container.append(title, text, actions);
-      openOverlay(container);
-      return;
-    }
+    const questions = pickQuestionsFromBag('mini', QUIZ_QUESTIONS, 1);
+    if (!questions.length) return;
 
     const handleMiniSuccess = () => {
       state.testMeCredits = Math.max(0, (state.testMeCredits || 0) + 1);
@@ -4425,7 +5052,7 @@ const gamification = (() => {
       title.textContent = 'Mini quiz perso: -3 stelline';
       const text = document.createElement('p');
       text.className = 'reward-modal__text';
-      text.textContent = 'Niente panico: apri nuove schede/tab e riparti. Al prossimo set di 3 stelline ritenti il mini quiz.';
+      text.textContent = 'Niente panico: riparti e ritenta. Al prossimo set di 3 stelline rifai il mini quiz.';
       const actions = document.createElement('div');
       actions.className = 'reward-modal__actions';
       const ok = document.createElement('button');
@@ -4440,9 +5067,9 @@ const gamification = (() => {
     };
 
     startQuizSession({
-      modeKey: 'mini-tabs',
+      modeKey: 'mini',
       title: 'Mini quiz · 1 domanda',
-      introText: 'Domanda semplice su schede/tab che hai aperto. Sbagli = -3 stelline. Giusto = sblocchi “Test me”.',
+      introText: '1 domanda rapida. Sbagli = -3 stelline. Giusto = sblocchi “Test me”.',
       questions,
       theme: 'default',
       onSuccess: handleMiniSuccess,
@@ -4480,7 +5107,7 @@ const gamification = (() => {
       updateUI();
     };
 
-    const picked = pickQuestionsWithAskedTracking('test-me', QUIZ_QUESTIONS, 3);
+    const picked = pickQuestionsFromBag('test-me', QUIZ_QUESTIONS, 3);
     startQuizSession({
       modeKey: 'test-me',
       title: 'Test me · quiz avanzato',
@@ -5776,6 +6403,13 @@ const toggles = document.querySelectorAll('[data-toggle-card]');
 toggles.forEach((button) => {
   button.setAttribute('aria-expanded', 'false');
 
+  // Mark cards that have an interactive modal.
+  // (Avoid relying on CSS :has(), which isn't supported on some mobile browsers.)
+  try {
+    const card = button.closest('.guide-card');
+    if (card) card.classList.add('has-modal');
+  } catch (e) {}
+
   button.addEventListener('click', (event) => {
     const card = button.closest('.guide-card');
     if (!card) return;
@@ -5933,6 +6567,7 @@ toggles.forEach((button) => {
     const intro = card.querySelector('p');
     const tags = card.querySelector('.tag-row');
     const statList = card.querySelector('.stat-list');
+    const isProductCard = !!card.classList?.contains('guide-card--product');
     const sidebarFragment = document.createDocumentFragment();
     const bodyFragment = document.createDocumentFragment();
 
@@ -6515,13 +7150,14 @@ toggles.forEach((button) => {
     });
     const specsWithoutEssentials = applyDisplayLabelsAndDedupe(filteredSpecsRaw);
 
+    let specsPanelForTab = null;
+
     // IMPORTANT: never fallback to a duplicated list.
+    // New rule: "Specifiche" lives inside the accordion (counts as a tab) across all cards.
     if (specsWithoutEssentials.length) {
-      sidebarFragment.appendChild(
-        createSpecsPanel(specsWithoutEssentials, {
-          subtitle: isSafetyCard ? 'Promemoria operativo (da completare se mancano dati).' : 'Parametri chiave (senza prezzi).'
-        })
-      );
+      specsPanelForTab = createSpecsPanel(specsWithoutEssentials, {
+        subtitle: isSafetyCard ? 'Promemoria operativo (da completare se mancano dati).' : 'Parametri chiave (senza prezzi).'
+      });
     }
     const detailsClone = details.cloneNode(true);
     detailsClone.classList.add('details--modal');
@@ -6604,12 +7240,7 @@ toggles.forEach((button) => {
       ? createEssentialsBox(preparationMetaItems, { embedded: true })
       : null;
 
-    if (introClone) {
-      const introBox = document.createElement('div');
-      introBox.className = 'card-modal-primary__intro';
-      introBox.appendChild(introClone);
-      primaryWrap.appendChild(introBox);
-    }
+    // Intro is now rendered in the "Panoramica" accordion tab (across all cards).
 
     // Note: recipeSummary is rendered in its own "Ricetta" accordion tab.
     // preparationMetaSummary is injected inside the "Preparazione" accordion section.
@@ -6633,12 +7264,21 @@ toggles.forEach((button) => {
     const pickTitle = (el) => {
       const strongText = getInlineHeadingText(el);
       if (el.classList.contains('steps')) {
+        const isTakeAwayBlock =
+          strongText.includes('take away') ||
+          strongText.includes('takeaway') ||
+          strongText.includes('tw') ||
+          strongText.includes('🥡');
+        if (isTakeAwayBlock) return 'Take Away';
         const isSalesBlock = strongText.includes('upsell') || strongText.includes('upselling') || strongText.includes('💰') || strongText.includes('vendita');
         if (isSalesBlock) {
           if (strongText.includes('vendita')) return 'Tecniche di vendita';
           return isSafetyCard ? 'Comunicazione al cliente' : 'Upselling';
         }
         return 'Preparazione';
+      }
+      if (strongText.includes('troubleshoot') || strongText.includes('troubleshooting') || strongText.includes('problemi') || strongText.includes('errori')) {
+        return 'Troubleshooting';
       }
       if (strongText.includes('pro tip') || strongText.includes('🛠')) return 'Pro tip';
       return 'Suggerimenti';
@@ -6662,9 +7302,39 @@ toggles.forEach((button) => {
       const accordion = document.createElement('div');
       accordion.className = 'modal-accordion';
       const openers = [];
+      const createdTabTitles = new Set();
+      const MAX_MODAL_TABS = 5;
+      const MIN_MODAL_TABS = 4;
+      const maxTabs = MAX_MODAL_TABS;
+      const minTabs = MIN_MODAL_TABS;
+      let overflowSection = null;
+
+      const ensureOverflowSection = () => {
+        if (overflowSection) return overflowSection;
+        overflowSection = document.createElement('div');
+        overflowSection.className = 'card-modal-overflow';
+        return overflowSection;
+      };
+
+      const pushOverflowGroup = (title, contentEl) => {
+        // Keep extra content reachable without adding more tabs.
+        const wrap = ensureOverflowSection();
+        try {
+          const label = document.createElement('p');
+          label.className = 'card-modal-section__title';
+          label.textContent = String(title || 'Dettagli');
+          wrap.appendChild(label);
+        } catch (e) {}
+        wrap.appendChild(contentEl);
+      };
 
       const createAccordionItem = (title, contentEl, expandByDefault = false) => {
+        if (totalTabsCount >= maxTabs) {
+          pushOverflowGroup(title, contentEl);
+          return;
+        }
         totalTabsCount += 1;
+        createdTabTitles.add(String(title || '').trim());
         const item = document.createElement('article');
         item.className = 'accordion-item';
         const header = document.createElement('button');
@@ -6853,6 +7523,83 @@ toggles.forEach((button) => {
         }
       };
 
+      const createMiniSpecTab = (tabTitle, items) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'card-modal-mini-specs';
+
+        const ul = document.createElement('ul');
+        ul.className = 'modal-specs__bullets';
+
+        (items || []).slice(0, 10).forEach((item) => {
+          const li = document.createElement('li');
+          const label = tidy(item?.label);
+          const detail = tidy(item?.detail);
+          if (!detail) return;
+          if (label && label.toLowerCase() !== 'dettaglio') {
+            const strong = document.createElement('strong');
+            strong.textContent = `${label}:`;
+            li.appendChild(strong);
+            li.appendChild(document.createTextNode(` ${detail}`));
+          } else {
+            li.textContent = detail;
+          }
+          ul.appendChild(li);
+        });
+
+        wrap.appendChild(ul);
+        return wrap;
+      };
+
+      const buildAutoTabsFromStatItems = () => {
+        const groups = new Map();
+        const addTo = (key, item) => {
+          if (!key || !item) return;
+          if (!groups.has(key)) groups.set(key, []);
+          groups.get(key).push(item);
+        };
+
+        (statItemsData || []).forEach((item) => {
+          const label = tidy(item?.label).toLowerCase();
+          const detail = tidy(item?.detail).toLowerCase();
+          const blob = `${label} ${detail}`;
+
+          if (/\b(shelf\s*life|conserv|frigo|defrost|riposo)\b/.test(blob)) {
+            addTo('Conservazione', item);
+            return;
+          }
+          if (/\b(servizio|tazza|cup|piatto|posat|vassoio|tw|take\s*away|takeaway|\boz\b)\b/.test(blob)) {
+            addTo('Servizio', item);
+            return;
+          }
+          if (/\b(pulizia|clean|flush|sanific)\b/.test(blob)) {
+            addTo('Pulizia', item);
+            return;
+          }
+          if (/\b(temperatura|°c|sec|min|dose|shot|g\b|gr\b|kg\b|ml\b|porzion|cottura|estrazion|foam|schium)\b/.test(blob)) {
+            addTo('Parametri', item);
+            return;
+          }
+          addTo('Note', item);
+        });
+
+        const ordered = ['Parametri', 'Servizio', 'Conservazione', 'Pulizia', 'Note'];
+        return ordered
+          .map((title) => ({ title, items: groups.get(title) || [] }))
+          .filter((entry) => entry.items && entry.items.length);
+      };
+
+      // Panoramica (intro) in tab for consistent learning flow.
+      if (introClone) {
+        const overview = document.createElement('div');
+        overview.className = 'card-modal-overview';
+        overview.appendChild(introClone);
+        createAccordionItem('Panoramica', overview, false);
+      }
+
+      if (specsPanelForTab) {
+        createAccordionItem('Specifiche', specsPanelForTab, false);
+      }
+
       const grouped = [];
       const titleMap = new Map();
 
@@ -6879,28 +7626,153 @@ toggles.forEach((button) => {
         prepSummaryInserted = true;
       }
 
-      const orderedGroups = isSafetyCard
-        ? grouped
-        : [
-          ...grouped.filter((g) => g.title === 'Preparazione'),
-          ...grouped.filter((g) => g.title !== 'Preparazione')
-        ];
-
-      orderedGroups.forEach((group) => {
+      // Priority rules (global):
+      // - Keep the most operational tabs inside the 5-tab cap.
+      // - Merge low-priority sections into a single "Approfondimenti" tab when needed.
+      // - Anything beyond the cap is rendered under "Altri dettagli" (outside tabs).
+      const buildGroupWrapper = (group) => {
         const wrapper = document.createElement('div');
         wrapper.className = 'accordion-group';
-
         if (!prepSummaryInserted && !isSafetyCard && preparationMetaSummary && group.title === 'Preparazione') {
           wrapper.appendChild(preparationMetaSummary);
           prepSummaryInserted = true;
         }
-
         group.items.forEach((el) => wrapper.appendChild(el));
-        const shouldOpen = false;
-        createAccordionItem(group.title, wrapper, shouldOpen);
+        return wrapper;
+      };
+
+      const groupByTitle = new Map(grouped.map((g) => [g.title, g]));
+      const titlesPresent = new Set(grouped.map((g) => g.title));
+
+      const HIGH = ['Preparazione', 'Ricetta', 'Take Away', 'Troubleshooting'];
+      const MID = ['Upselling', 'Tecniche di vendita'];
+      const LOW = ['Pro tip', 'Suggerimenti'];
+
+      const allTitlesInPriority = [...HIGH, ...MID, ...LOW];
+      const otherTitles = Array.from(titlesPresent).filter((t) => !allTitlesInPriority.includes(t));
+
+      const slotsLeftForGroups = () => {
+        // Panoramica/Specifiche/others already incremented totalTabsCount.
+        // We only care about what's left for group blocks.
+        return Math.max(0, 5 - totalTabsCount);
+      };
+
+      const selected = [];
+      const lowBucket = [];
+      const overflow = [];
+
+      const takeGroup = (title) => {
+        const g = groupByTitle.get(title);
+        if (!g) return;
+        if (LOW.includes(title) || otherTitles.includes(title)) {
+          lowBucket.push(g);
+        } else {
+          selected.push(g);
+        }
+      };
+
+      // Always try to include high + mid as individual tabs first.
+      HIGH.forEach(takeGroup);
+      MID.forEach(takeGroup);
+
+      // Any remaining groups not explicitly categorized go to low bucket.
+      otherTitles.forEach(takeGroup);
+      // Explicit low groups last.
+      LOW.forEach(takeGroup);
+
+      // Add selected groups as individual tabs as long as we have slots.
+      selected.forEach((group) => {
+        if (slotsLeftForGroups() <= 0) {
+          overflow.push(group);
+          return;
+        }
+        createAccordionItem(group.title, buildGroupWrapper(group), false);
       });
 
+      // Handle low priority groups: either separate, merged, or overflow.
+      if (lowBucket.length) {
+        const free = slotsLeftForGroups();
+        if (free <= 0) {
+          overflow.push(...lowBucket);
+        } else if (lowBucket.length <= free) {
+          lowBucket.forEach((group) => {
+            if (slotsLeftForGroups() <= 0) {
+              overflow.push(group);
+              return;
+            }
+            createAccordionItem(group.title, buildGroupWrapper(group), false);
+          });
+        } else {
+          // Only one slot (or not enough): merge into one tab.
+          if (slotsLeftForGroups() > 0) {
+            const merged = document.createElement('div');
+            merged.className = 'accordion-group';
+            lowBucket.forEach((group) => {
+              try {
+                const label = document.createElement('p');
+                label.className = 'card-modal-section__title';
+                label.textContent = group.title;
+                merged.appendChild(label);
+              } catch (e) {}
+              merged.appendChild(buildGroupWrapper(group));
+            });
+            createAccordionItem('Approfondimenti', merged, false);
+          } else {
+            overflow.push(...lowBucket);
+          }
+        }
+      }
+
+      // Anything that didn't make it becomes overflow content (outside accordion).
+      if (overflow.length) {
+        overflow.forEach((group) => {
+          try {
+            pushOverflowGroup(group.title, buildGroupWrapper(group));
+          } catch (e) {}
+        });
+      }
+
+      // Guarantee enough openable tabs for crystal progression
+      // (use only existing content; do not invent new instructions).
+      const targetTabs = Math.min(maxTabs, Math.max(minTabs, 4));
+      if (totalTabsCount < targetTabs) {
+        const candidates = buildAutoTabsFromStatItems();
+        candidates.forEach((entry) => {
+          if (totalTabsCount >= targetTabs) return;
+          if (totalTabsCount >= maxTabs) return;
+          const title = String(entry.title || '').trim();
+          if (!title) return;
+          if (createdTabTitles.has(title)) return;
+          createAccordionItem(title, createMiniSpecTab(title, entry.items), false);
+        });
+      }
+
+      // If we still miss tabs, add a "Focus" tab using existing tags.
+      if (totalTabsCount < targetTabs && tags) {
+        try {
+          const focus = document.createElement('div');
+          focus.className = 'card-modal-focus';
+          focus.appendChild(tags.cloneNode(true));
+          createAccordionItem('Focus', focus, false);
+        } catch (e) {}
+      }
+
+      // If we had to cap tabs, keep remaining info visible *after* the accordion.
+      if (overflowSection && overflowSection.childElementCount) {
+        try {
+          const title = document.createElement('p');
+          title.className = 'card-modal-section__title';
+          title.textContent = 'Altri dettagli';
+          if (!overflowSection.querySelector(':scope > .card-modal-section__title')) {
+            overflowSection.prepend(title);
+          }
+        } catch (e) {}
+      }
+
       sectionWrap.appendChild(accordion);
+      if (overflowSection && overflowSection.childElementCount) {
+        sectionWrap.appendChild(overflowSection);
+      }
       bodyFragment.appendChild(sectionWrap);
 
       requestAnimationFrame(() => {
@@ -6921,12 +7793,106 @@ toggles.forEach((button) => {
         } catch (e) {}
       });
     } else {
-      if (!isSafetyCard && (recipeSummary || preparationMetaSummary)) {
+      const wantsFallbackAccordion = true;
+
+      if (wantsFallbackAccordion) {
         const accordion = document.createElement('div');
         accordion.className = 'modal-accordion';
+        const createdTabTitles = new Set();
+        const MAX_MODAL_TABS = 5;
+        const MIN_MODAL_TABS = 4;
+        const maxTabs = MAX_MODAL_TABS;
+        const minTabs = MIN_MODAL_TABS;
+        let overflowSection = null;
+
+        const ensureOverflowSection = () => {
+          if (overflowSection) return overflowSection;
+          overflowSection = document.createElement('div');
+          overflowSection.className = 'card-modal-overflow';
+          return overflowSection;
+        };
+
+        const pushOverflowGroup = (title, contentEl) => {
+          // Keep extra content reachable without adding more tabs.
+          const wrap = ensureOverflowSection();
+          try {
+            const label = document.createElement('p');
+            label.className = 'card-modal-section__title';
+            label.textContent = String(title || 'Dettagli');
+            wrap.appendChild(label);
+          } catch (e) {}
+          wrap.appendChild(contentEl);
+        };
+
+        const createMiniSpecTab = (items) => {
+          const wrap = document.createElement('div');
+          wrap.className = 'card-modal-mini-specs';
+          const ul = document.createElement('ul');
+          ul.className = 'modal-specs__bullets';
+          (items || []).slice(0, 10).forEach((item) => {
+            const li = document.createElement('li');
+            const label = tidy(item?.label);
+            const detail = tidy(item?.detail);
+            if (!detail) return;
+            if (label && label.toLowerCase() !== 'dettaglio') {
+              const strong = document.createElement('strong');
+              strong.textContent = `${label}:`;
+              li.appendChild(strong);
+              li.appendChild(document.createTextNode(` ${detail}`));
+            } else {
+              li.textContent = detail;
+            }
+            ul.appendChild(li);
+          });
+          wrap.appendChild(ul);
+          return wrap;
+        };
+
+        const buildAutoTabsFromStatItems = () => {
+          const groups = new Map();
+          const addTo = (key, item) => {
+            if (!key || !item) return;
+            if (!groups.has(key)) groups.set(key, []);
+            groups.get(key).push(item);
+          };
+
+          (statItemsData || []).forEach((item) => {
+            const label = tidy(item?.label).toLowerCase();
+            const detail = tidy(item?.detail).toLowerCase();
+            const blob = `${label} ${detail}`;
+
+            if (/\b(shelf\s*life|conserv|frigo|defrost|riposo)\b/.test(blob)) {
+              addTo('Conservazione', item);
+              return;
+            }
+            if (/\b(servizio|tazza|cup|piatto|posat|vassoio|tw|take\s*away|takeaway|\boz\b)\b/.test(blob)) {
+              addTo('Servizio', item);
+              return;
+            }
+            if (/\b(pulizia|clean|flush|sanific)\b/.test(blob)) {
+              addTo('Pulizia', item);
+              return;
+            }
+            if (/\b(temperatura|°c|sec|min|dose|shot|g\b|gr\b|kg\b|ml\b|porzion|cottura|estrazion|foam|schium)\b/.test(blob)) {
+              addTo('Parametri', item);
+              return;
+            }
+            addTo('Note', item);
+          });
+
+          const ordered = ['Parametri', 'Servizio', 'Conservazione', 'Pulizia', 'Note'];
+          return ordered
+            .map((title) => ({ title, items: groups.get(title) || [] }))
+            .filter((entry) => entry.items && entry.items.length);
+        };
 
         const addFallbackAccordionItem = (titleText, contentEl, openByDefault) => {
+          if (totalTabsCount >= maxTabs) {
+            pushOverflowGroup(titleText, contentEl);
+            return;
+          }
           totalTabsCount += 1;
+          createdTabTitles.add(String(titleText || '').trim());
           const item = document.createElement('article');
           item.className = 'accordion-item';
           const header = document.createElement('button');
@@ -7051,14 +8017,62 @@ toggles.forEach((button) => {
           requestAnimationFrame(() => setOpen(!!openByDefault));
         };
 
-        if (recipeSummary) addFallbackAccordionItem('Ricetta', recipeSummary, false);
-        if (preparationMetaSummary) addFallbackAccordionItem('Preparazione', preparationMetaSummary, false);
+        if (introClone) {
+          const overview = document.createElement('div');
+          overview.className = 'card-modal-overview';
+          overview.appendChild(introClone);
+          addFallbackAccordionItem('Panoramica', overview, false);
+        }
+
+        if (specsPanelForTab) {
+          addFallbackAccordionItem('Specifiche', specsPanelForTab, false);
+        }
+
+        if (!isSafetyCard && recipeSummary) addFallbackAccordionItem('Ricetta', recipeSummary, false);
+        if (!isSafetyCard && preparationMetaSummary) addFallbackAccordionItem('Preparazione', preparationMetaSummary, false);
+
+        // Preserve remaining details as its own tab when we don't have structured blocks.
+        addFallbackAccordionItem('Dettagli', detailsClone, false);
+
+        const targetTabs = Math.min(maxTabs, Math.max(minTabs, 4));
+        if (totalTabsCount < targetTabs) {
+          const candidates = buildAutoTabsFromStatItems();
+          candidates.forEach((entry) => {
+            if (totalTabsCount >= targetTabs) return;
+            if (totalTabsCount >= maxTabs) return;
+            const title = String(entry.title || '').trim();
+            if (!title) return;
+            if (createdTabTitles.has(title)) return;
+            addFallbackAccordionItem(title, createMiniSpecTab(entry.items), false);
+          });
+        }
+
+        if (totalTabsCount < targetTabs && tags) {
+          try {
+            const focus = document.createElement('div');
+            focus.className = 'card-modal-focus';
+            focus.appendChild(tags.cloneNode(true));
+            addFallbackAccordionItem('Focus', focus, false);
+          } catch (e) {}
+        }
+
+        if (overflowSection && overflowSection.childElementCount) {
+          try {
+            const title = document.createElement('p');
+            title.className = 'card-modal-section__title';
+            title.textContent = 'Altri dettagli';
+            if (!overflowSection.querySelector(':scope > .card-modal-section__title')) {
+              overflowSection.prepend(title);
+            }
+          } catch (e) {}
+        }
 
         sectionWrap.appendChild(accordion);
+        if (overflowSection && overflowSection.childElementCount) {
+          sectionWrap.appendChild(overflowSection);
+        }
         bodyFragment.appendChild(sectionWrap);
       }
-
-      bodyFragment.appendChild(detailsClone);
     }
 
     // Give the scroll area some breathing room at the bottom so the last accordion

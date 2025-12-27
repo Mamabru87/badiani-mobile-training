@@ -8,12 +8,12 @@
     <meta http-equiv="Expires" content="0" />
     <title>Badiani Training Orbit</title>
     <link rel="stylesheet" href="styles/site.css?v=20251226_4" />
-    <script defer src="scripts/site.js?v=20251226_4"></script>
+    <script defer src="scripts/site.js?v=20251227_1"></script>
     <script defer src="scripts/gelato-effects.js"></script>
   <!-- COCKPIT_COMPACT_START -->
 <style id="cockpit-compact">
   /* Mobile Dashboard Optimization: "Gelato Flow" Modern Layout */
-  @media (max-width: 860px) {
+  @media (max-width: 860px) and (orientation: portrait) {
     /* 1. Viewport & Base */
     html, body.page-home {
       height: 100%;
@@ -85,6 +85,7 @@
       line-height: 1.1 !important; 
       background: linear-gradient(45deg, var(--brand-blue-deep), var(--brand-blue));
       -webkit-background-clip: text;
+      background-clip: text;
       -webkit-text-fill-color: transparent;
     }
     .hero-lede { 
@@ -244,6 +245,7 @@
       color: var(--brand-blue-deep); 
       background: linear-gradient(135deg, var(--brand-blue-deep), var(--brand-blue));
       -webkit-background-clip: text;
+      background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
