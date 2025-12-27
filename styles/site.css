@@ -2016,31 +2016,32 @@ h4 {
   }
 }
 
-/* Mobile bottom-sheet popovers.
-   Driven by JS (`.use-popover-sheet`) for reliability across browsers/emulation modes.
-   Desktop should remain anchored under the icon (absolute positioning). */
+/* Mobile popovers: keep them *anchored under the token*.
+   We previously used a bottom-sheet (`position: fixed`) when `.use-popover-sheet` is on.
+   On some browsers `backdrop-filter`/filter on the sticky nav can create a containing block,
+   making `position: fixed` behave like it's relative to the nav and pushing the panel
+   off-screen (often "out of the top").
+
+   To keep the experience consistent (and match the training UX request), we force a compact
+   dropdown under the token on mobile too. */
 .use-popover-sheet .reward-popover {
-  position: fixed;
-  left: calc(12px + env(safe-area-inset-left, 0px));
-  right: calc(12px + env(safe-area-inset-right, 0px));
-  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
-  top: auto;
-  width: auto;
-  /* Use dynamic viewport units to prevent iOS/Android address-bar resize from clipping. */
-  max-height: calc(100dvh - (24px + env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px)));
-  overflow: auto;
-  margin-top: 0;
-  z-index: 2100;
-  transform: none;
-  border-radius: 20px;
-  padding: 14px;
-  box-shadow: 0 22px 70px rgba(15, 33, 84, 0.25);
+  position: absolute;
+  top: calc(100% + 14px);
+  right: 0;
+  left: auto;
+  bottom: auto;
+  width: min(260px, calc(100vw - 24px));
+  max-height: min(520px, calc(100dvh - (var(--nav-height, 72px) + 32px)));
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
+  z-index: 2100;
+  border-radius: 18px;
+  padding: 14px;
 }
 
 .use-popover-sheet .reward-popover.is-open {
-  animation: popoverSheetIn var(--anim-fast) ease;
+  animation: quizSlide var(--anim-fast) ease;
 }
 
 @media (max-width: 860px) {
