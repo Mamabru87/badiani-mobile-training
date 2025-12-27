@@ -1,5 +1,49 @@
 document.documentElement.classList.add('has-js');
 
+// ============================================================
+// INPUT MODE / MOBILE UI FLAGS
+// Some mobile browsers (or emulation modes) can report unexpected values for
+// CSS (hover/pointer) media queries. We set a deterministic class so popovers
+// can reliably switch to bottom-sheet on real mobile.
+// ============================================================
+
+(function setupInputModeClasses() {
+  const root = document.documentElement;
+  const mqCoarse = window.matchMedia?.('(hover: none) and (pointer: coarse)');
+  const mqPointerCoarse = window.matchMedia?.('(pointer: coarse)');
+  const supportsTouch = (() => {
+    try {
+      return (
+        'ontouchstart' in window ||
+        (navigator.maxTouchPoints && navigator.maxTouchPoints > 0) ||
+        (navigator.msMaxTouchPoints && navigator.msMaxTouchPoints > 0)
+      );
+    } catch {
+      return false;
+    }
+  })();
+
+  const computeUseSheet = () => {
+    // Prefer the standards-based media query when available.
+    const coarsePrimary = !!mqCoarse?.matches || !!mqPointerCoarse?.matches;
+
+    // Fallback: if touch-capable *and* in a mobile-sized viewport, behave like mobile.
+    // This avoids enabling sheet mode on touch laptops/desktops.
+    const touchNarrow = supportsTouch && window.innerWidth <= 860;
+    return coarsePrimary || touchNarrow;
+  };
+
+  const apply = () => {
+    root.classList.toggle('use-popover-sheet', computeUseSheet());
+  };
+
+  apply();
+  mqCoarse?.addEventListener?.('change', apply);
+  mqPointerCoarse?.addEventListener?.('change', apply);
+  window.addEventListener('resize', apply, { passive: true });
+  window.addEventListener('orientationchange', apply);
+})();
+
 const bodyScrollLock = (() => {
   let locks = 0;
   let scrollPosition = 0;

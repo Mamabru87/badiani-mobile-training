@@ -2016,33 +2016,31 @@ h4 {
   }
 }
 
-/* Touch devices (real mobile/tablet): use bottom-sheet popovers to avoid off-screen overflow.
-  IMPORTANT: gate by pointer type so narrowing a desktop window does NOT detach the popover
-  from the icon (user expectation: small popover right under the token). */
-@media (hover: none) and (pointer: coarse) {
-  .reward-popover {
-    position: fixed;
-    left: calc(12px + env(safe-area-inset-left, 0px));
-    right: calc(12px + env(safe-area-inset-right, 0px));
-    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
-    top: auto;
-    width: auto;
-   /* Use dynamic viewport units to prevent iOS/Android address-bar resize from clipping. */
-   max-height: calc(100dvh - (24px + env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px)));
-    overflow: auto;
-    margin-top: 0;
-    z-index: 1700;
-    transform: none;
-    border-radius: 20px;
-    padding: 14px;
-    box-shadow: 0 22px 70px rgba(15, 33, 84, 0.25);
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
-  }
+/* Mobile bottom-sheet popovers.
+   Driven by JS (`.use-popover-sheet`) for reliability across browsers/emulation modes.
+   Desktop should remain anchored under the icon (absolute positioning). */
+.use-popover-sheet .reward-popover {
+  position: fixed;
+  left: calc(12px + env(safe-area-inset-left, 0px));
+  right: calc(12px + env(safe-area-inset-right, 0px));
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  top: auto;
+  width: auto;
+  /* Use dynamic viewport units to prevent iOS/Android address-bar resize from clipping. */
+  max-height: calc(100dvh - (24px + env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px)));
+  overflow: auto;
+  margin-top: 0;
+  z-index: 2100;
+  transform: none;
+  border-radius: 20px;
+  padding: 14px;
+  box-shadow: 0 22px 70px rgba(15, 33, 84, 0.25);
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
 
-  .reward-popover.is-open {
-    animation: popoverSheetIn var(--anim-fast) ease;
-  }
+.use-popover-sheet .reward-popover.is-open {
+  animation: popoverSheetIn var(--anim-fast) ease;
 }
 
 @media (max-width: 860px) {
