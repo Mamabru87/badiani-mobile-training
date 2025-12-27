@@ -907,33 +907,37 @@ h4 {
 
 @media (max-width: 600px) {
   .reward-popover {
+    /* Mobile: treat as a bottom-sheet so it never jumps outside the viewport.
+       (Important: avoid translate(-50%, -50%) because later mobile rules may override
+       positioning but NOT transform, causing the sheet to slide off-screen.) */
     position: fixed;
-    top: 50vh;
-    left: 50vw;
-    right: auto;
-    bottom: auto;
-    transform: translate(-50%, -50%);
-    width: min(320px, 90vw);
-    max-height: 80vh;
+    left: calc(12px + env(safe-area-inset-left, 0px));
+    right: calc(12px + env(safe-area-inset-right, 0px));
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    top: auto;
+    width: auto;
+    max-height: min(62vh, 440px);
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    transform: none;
     z-index: 2100;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.2), 0 0 0 100vmax rgba(15, 33, 84, 0.4);
-    margin: 0;
+    box-shadow: 0 22px 70px rgba(15, 33, 84, 0.25);
   }
 
   .reward-popover.is-open {
-    animation: popoverFadeInMobile var(--anim-fast) ease;
+    animation: popoverSheetIn var(--anim-fast) ease;
   }
 }
 
-@keyframes popoverFadeInMobile {
+@keyframes popoverSheetIn {
   0% {
     opacity: 0;
-    transform: translate(-50%, -45%) scale(0.95);
+    transform: translateY(14px);
   }
   100% {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+    transform: translateY(0);
   }
 }
 
@@ -1993,10 +1997,37 @@ h4 {
     bottom: calc(12px + env(safe-area-inset-bottom, 0px));
     top: auto;
     width: auto;
-    max-height: min(70vh, 520px);
+    max-height: min(62vh, 440px);
     overflow: auto;
     margin-top: 0;
     z-index: 1700;
+    transform: none;
+    border-radius: 20px;
+    padding: 14px;
+    box-shadow: 0 22px 70px rgba(15, 33, 84, 0.25);
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  .reward-popover.is-open {
+    /* Override the <=600px animation (which used translate(-50%,-50%)) */
+    animation: popoverSheetIn var(--anim-fast) ease;
+  }
+
+  .reward-popover__text {
+    font-size: 13px;
+  }
+
+  .reward-popover__label {
+    font-size: 10px;
+  }
+
+  .reward-popover__link {
+    font-size: 11px;
+  }
+
+  .reward-hint {
+    font-size: 10px;
   }
 }
 
