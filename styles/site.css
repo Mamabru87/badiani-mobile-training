@@ -51,6 +51,12 @@
   --slate: var(--brand-gray-soft);
   --font-regular: "supergroteskc-medlf", "Helvetica Neue", Arial, sans-serif;
   --font-medium: "supergroteskc-medlf", "Helvetica Neue", Arial, sans-serif;
+  /* Sticky stack metrics (updated at runtime by scripts/site.js).
+     Used to prevent the sticky nav from overlapping carousel sticky headers. */
+  --nav-height: 72px;
+  --nav-gap: 12px;
+  --carousel-sticky-offset-desktop: 52px;
+  --carousel-sticky-offset-mobile: 44px;
   font-family: var(--font-regular);
 }
 
@@ -3533,7 +3539,7 @@ button,
   border: 1px solid rgba(33, 64, 152, 0.14);
   border-radius: 18px;
   position: sticky;
-  top: 60px;
+  top: calc(var(--nav-height) + var(--nav-gap));
   z-index: 900;
   gap: 16px;
   margin: 0 24px;
@@ -3696,13 +3702,13 @@ button,
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
   padding: 28px;
-  padding-top: 112px;
+  padding-top: calc(var(--nav-height) + var(--nav-gap) + var(--carousel-sticky-offset-desktop));
   padding-bottom: 64px;
   padding-right: calc(100vw - 100%);
   scrollbar-width: none;
   scrollbar-color: transparent transparent;
   -ms-overflow-style: none;
-  scroll-padding-top: 112px;
+  scroll-padding-top: calc(var(--nav-height) + var(--nav-gap) + var(--carousel-sticky-offset-desktop));
   scroll-padding-inline: 28px;
   transition: padding 240ms ease;
 }
@@ -3721,7 +3727,7 @@ button,
   flex: 0 0 clamp(280px, 90vw, 380px);
   scroll-snap-align: center;
   scroll-snap-stop: always;
-  scroll-margin-top: 112px;
+  scroll-margin-top: calc(var(--nav-height) + var(--nav-gap) + var(--carousel-sticky-offset-desktop));
   transform: scale(0.92);
   opacity: 0.9;
   transition: transform 360ms cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 360ms ease, opacity 240ms ease;
@@ -3743,7 +3749,11 @@ button,
     gap: 18px;
     padding: 24px 16px 56px;
     scroll-padding-inline: 16px;
-    scroll-padding-top: 104px;
+    scroll-padding-top: calc(var(--nav-height) + var(--nav-gap) + var(--carousel-sticky-offset-mobile));
+  }
+
+  .guide-card[data-carousel-item] {
+    scroll-margin-top: calc(var(--nav-height) + var(--nav-gap) + var(--carousel-sticky-offset-mobile));
   }
 }
 

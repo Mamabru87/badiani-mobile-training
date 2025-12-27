@@ -1158,10 +1158,24 @@ scrollButtons.forEach((btn) => {
   const brandImg = nav.querySelector('.brand-avatar');
   const defaultLogo = brandImg ? brandImg.getAttribute('data-default-src') || brandImg.getAttribute('src') : null;
   const altLogo = brandImg ? brandImg.getAttribute('data-alt-src') || 'assets/brand/logo-avatar.svg' : null;
+  const root = document.documentElement;
   let ticking = false;
   let isShrunk = false;
+  let navHeightRaf = 0;
   const shrinkThreshold = 90;
   const expandThreshold = 50; // hysteresis to prevent flicker near top
+
+  const updateNavHeight = () => {
+    if (navHeightRaf) return;
+    navHeightRaf = window.requestAnimationFrame(() => {
+      navHeightRaf = 0;
+      try {
+        const height = nav.getBoundingClientRect().height;
+        if (!height || !Number.isFinite(height)) return;
+        root.style.setProperty('--nav-height', `${Math.ceil(height)}px`);
+      } catch {}
+    });
+  };
 
   const handleScroll = () => {
     const scrollY = window.scrollY || window.pageYOffset;
@@ -1171,12 +1185,14 @@ scrollButtons.forEach((btn) => {
       if (brandImg && altLogo && brandImg.getAttribute('src') !== altLogo) {
         brandImg.setAttribute('src', altLogo);
       }
+      updateNavHeight();
     } else if (isShrunk && scrollY < expandThreshold) {
       isShrunk = false;
       nav.classList.remove('is-shrunk');
       if (brandImg && defaultLogo && brandImg.getAttribute('src') !== defaultLogo) {
         brandImg.setAttribute('src', defaultLogo);
       }
+      updateNavHeight();
     }
     ticking = false;
   };
@@ -1188,8 +1204,19 @@ scrollButtons.forEach((btn) => {
     }
   }, { passive: true });
 
+  window.addEventListener('resize', updateNavHeight, { passive: true });
+  window.addEventListener('orientationchange', updateNavHeight, { passive: true });
+
+  // If fonts load after initial paint, nav height can shift.
+  try {
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(updateNavHeight).catch(() => {});
+    }
+  } catch {}
+
   // Initialize state on load to avoid flash
   handleScroll();
+  updateNavHeight();
 })();
 
 const gamification = (() => {
