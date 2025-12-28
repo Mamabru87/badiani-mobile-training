@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bar & Drinks · Badiani</title>
     <link rel="stylesheet" href="styles/site.css?v=20251228_3" />
+    <script defer src="scripts/i18n.js?v=20251228_3"></script>
     <script defer src="scripts/site.js?v=20251228_3"></script>
   </head>
   <body data-product="caffe">
     <nav class="nav-shell">
-        <a class="brand" href="index.html" aria-label="Torna alla home Badiani">
+        <a class="brand" href="index.html" aria-label="Torna alla home Badiani" data-i18n-attr="aria-label:nav.homeAria">
           <img src="assets/brand/logo-badiani.jpg" data-default-src="assets/brand/logo-badiani.jpg" data-alt-src="assets/brand/logo-b-blue.png" alt="Badiani logo" class="brand-avatar" />
           <div class="brand-text">
             <small>Training</small>
@@ -20,7 +21,7 @@
           <span id="nickname-display"></span>
         </div>
         <button class="menu-trigger" type="button" data-menu-toggle aria-expanded="false" aria-controls="nav-panel">
-          Menu
+          <span data-i18n="nav.menu">Menu</span>
           <span class="menu-icon" aria-hidden="true">
             <span></span>
             <span></span>
@@ -34,10 +35,10 @@
       <div class="menu-drawer__panel">
         <header class="menu-drawer__header">
           <div>
-            <h2 id="menu-drawer-title" class="menu-drawer__title">Categorie</h2>
-            <p class="menu-drawer__mood" data-menu-mood>Brilla: i dettagli fanno la differenza.</p>
+            <h2 id="menu-drawer-title" class="menu-drawer__title" data-i18n="drawer.categories">Categorie</h2>
+            <p class="menu-drawer__mood" data-menu-mood data-i18n="mood.2">Brilla: i dettagli fanno la differenza.</p>
           </div>
-          <button type="button" class="menu-drawer__close" data-menu-close aria-label="Chiudi menu">
+          <button type="button" class="menu-drawer__close" data-menu-close aria-label="Chiudi menu" data-i18n-attr="aria-label:drawer.close">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
               <path d="M18 6L6 18M6 6l12 12"/>
             </svg>
@@ -45,16 +46,31 @@
         </header>
         <nav class="menu-drawer__nav">
           <ul class="menu-categories">
-            <li><a href="story-orbit.html">Story Orbit</a></li>
-            <li><a href="operations.html">Operations &amp; Setup</a></li>
-            <li><a href="caffe.html">Bar & Drinks</a></li>
-            <li><a href="sweet-treats.html">Sweet Treat Atelier</a></li>
-            <li><a href="pastries.html">Pastry Lab</a></li>
-            <li><a href="slitti-yoyo.html">Slitti & Yo-Yo</a></li>
-            <li><a href="gelato-lab.html">Gelato Lab</a></li>
-            <li><a href="festive.html">Festive & Churros</a></li>
+            <li><a href="story-orbit.html" data-i18n="menu.link.storyOrbit">Story Orbit</a></li>
+            <li><a href="operations.html" data-i18n="menu.link.operations">Operations &amp; Setup</a></li>
+            <li><a href="caffe.html" data-i18n="menu.link.caffe">Bar & Drinks</a></li>
+            <li><a href="sweet-treats.html" data-i18n="menu.link.sweetTreats">Sweet Treat Atelier</a></li>
+            <li><a href="pastries.html" data-i18n="menu.link.pastries">Pastry Lab</a></li>
+            <li><a href="slitti-yoyo.html" data-i18n="menu.link.slittiYoyo">Slitti & Yo-Yo</a></li>
+            <li><a href="gelato-lab.html" data-i18n="menu.link.gelatoLab">Gelato Lab</a></li>
+            <li><a href="festive.html" data-i18n="menu.link.festive">Festive & Churros</a></li>
           </ul>
         </nav>
+
+        <div class="menu-drawer__footer">
+          <details class="menu-lang" data-lang-selector>
+            <summary class="menu-lang__summary">
+              <span class="menu-lang__label" data-lang-label>Lingua</span>
+              <span class="menu-lang__current" data-lang-current>Italiano</span>
+            </summary>
+            <div class="menu-lang__options" role="radiogroup" aria-label="Lingua">
+              <button type="button" class="menu-lang__option" role="radio" data-lang-option="it" aria-checked="true">Italiano</button>
+              <button type="button" class="menu-lang__option" role="radio" data-lang-option="en" aria-checked="false">English</button>
+              <button type="button" class="menu-lang__option" role="radio" data-lang-option="es" aria-checked="false">Español</button>
+              <button type="button" class="menu-lang__option" role="radio" data-lang-option="fr" aria-checked="false">Français</button>
+            </div>
+          </details>
+        </div>
       </div>
     </div>
 
@@ -62,12 +78,12 @@
       <section class="hero">
         <div class="hero-card">
           <div class="badge">
-            <span>Bar & Drinks · 2025</span>
-            <span class="page-stars" data-page-stars>⭐ Stelle: 18/18</span>
+            <span data-i18n="caffe.hero.badge">Bar & Drinks · 2025</span>
+            <span class="page-stars" data-page-stars data-i18n="caffe.hero.stars">⭐ Stelle: 18/18</span>
           </div>
           <h1>Bar & Drinks</h1>
-          <p>
-            La guida completa al beverage Badiani: dai classici della caffetteria italiana al nuovo Matcha Bar, 
+          <p data-i18n="caffe.hero.desc">
+            La guida completa al beverage Badiani: dai classici della caffetteria italiana al nuovo Matcha Bar,
             fino agli Smoothies e le bevande fredde. Include procedure per servizio al tavolo e Take Away (TW).
           </p>
           

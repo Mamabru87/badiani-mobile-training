@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sweet Treat Atelier · Badiani</title>
     <link rel="stylesheet" href="styles/site.css?v=20251228_3" />
+    <script defer src="scripts/i18n.js?v=20251228_3"></script>
     <script defer src="scripts/site.js?v=20251228_3"></script>
   </head>
   <body data-product="sweet-treats">
     <nav class="nav-shell">
-        <a class="brand" href="index.html" aria-label="Torna alla home Badiani">
+        <a class="brand" href="index.html" aria-label="Torna alla home Badiani" data-i18n-attr="aria-label:nav.homeAria">
           <img src="assets/brand/logo-badiani.jpg" data-default-src="assets/brand/logo-badiani.jpg" data-alt-src="assets/brand/logo-b-blue.png" alt="Badiani logo" class="brand-avatar" />
           <div class="brand-text">
             <small>Training</small>
@@ -20,7 +21,7 @@
           <span id="nickname-display"></span>
         </div>
         <button class="menu-trigger" type="button" data-menu-toggle aria-expanded="false" aria-controls="nav-panel">
-          Menu
+          <span data-i18n="nav.menu">Menu</span>
           <span class="menu-icon" aria-hidden="true">
             <span></span>
             <span></span>
@@ -34,10 +35,10 @@
       <div class="menu-drawer__panel">
         <header class="menu-drawer__header">
           <div>
-            <h2 id="menu-drawer-title" class="menu-drawer__title">Categorie</h2>
-            <p class="menu-drawer__mood" data-menu-mood>Brilla: i dettagli fanno la differenza.</p>
+            <h2 id="menu-drawer-title" class="menu-drawer__title" data-i18n="drawer.categories">Categorie</h2>
+            <p class="menu-drawer__mood" data-menu-mood data-i18n="mood.2">Brilla: i dettagli fanno la differenza.</p>
           </div>
-          <button type="button" class="menu-drawer__close" data-menu-close aria-label="Chiudi menu">
+          <button type="button" class="menu-drawer__close" data-menu-close aria-label="Chiudi menu" data-i18n-attr="aria-label:drawer.close">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
               <path d="M18 6L6 18M6 6l12 12"/>
             </svg>
@@ -45,16 +46,31 @@
         </header>
         <nav class="menu-drawer__nav">
           <ul class="menu-categories">
-            <li><a href="story-orbit.html">Story Orbit</a></li>
-            <li><a href="operations.html">Operations &amp; Setup</a></li>
-            <li><a href="caffe.html">Bar & Drinks</a></li>
-            <li><a href="sweet-treats.html">Sweet Treat Atelier</a></li>
-            <li><a href="pastries.html">Pastry Lab</a></li>
-            <li><a href="slitti-yoyo.html">Slitti & Yo-Yo</a></li>
-            <li><a href="gelato-lab.html">Gelato Lab</a></li>
-            <li><a href="festive.html">Festive & Churros</a></li>
+            <li><a href="story-orbit.html" data-i18n="menu.link.storyOrbit">Story Orbit</a></li>
+            <li><a href="operations.html" data-i18n="menu.link.operations">Operations &amp; Setup</a></li>
+            <li><a href="caffe.html" data-i18n="menu.link.caffe">Bar & Drinks</a></li>
+            <li><a href="sweet-treats.html" data-i18n="menu.link.sweetTreats">Sweet Treat Atelier</a></li>
+            <li><a href="pastries.html" data-i18n="menu.link.pastries">Pastry Lab</a></li>
+            <li><a href="slitti-yoyo.html" data-i18n="menu.link.slittiYoyo">Slitti &amp; Yo-Yo</a></li>
+            <li><a href="gelato-lab.html" data-i18n="menu.link.gelatoLab">Gelato Lab</a></li>
+            <li><a href="festive.html" data-i18n="menu.link.festive">Festive &amp; Churros</a></li>
           </ul>
         </nav>
+
+        <div class="menu-drawer__footer">
+          <details class="menu-lang" data-lang-selector>
+            <summary class="menu-lang__summary">
+              <span class="menu-lang__label" data-lang-label>Lingua</span>
+              <span class="menu-lang__current" data-lang-current>Italiano</span>
+            </summary>
+            <div class="menu-lang__options" role="radiogroup" aria-label="Lingua">
+              <button type="button" class="menu-lang__option" role="radio" data-lang-option="it" aria-checked="true">Italiano</button>
+              <button type="button" class="menu-lang__option" role="radio" data-lang-option="en" aria-checked="false">English</button>
+              <button type="button" class="menu-lang__option" role="radio" data-lang-option="es" aria-checked="false">Español</button>
+              <button type="button" class="menu-lang__option" role="radio" data-lang-option="fr" aria-checked="false">Français</button>
+            </div>
+          </details>
+        </div>
       </div>
     </div>
 
@@ -62,11 +78,11 @@
       <section class="hero">
         <div class="hero-card">
           <div class="badge">
-            <span>Linea Dessert · 2025</span>
-            <span class="page-stars" data-page-stars>⭐ Stelle: 13/13</span>
+            <span data-i18n="sweetTreats.hero.badge">Linea Dessert · 2025</span>
+            <span class="page-stars" data-page-stars data-i18n="sweetTreats.hero.stars">⭐ Stelle: 13/13</span>
           </div>
           <h1>Sweet Treat Atelier</h1>
-          <p>
+          <p data-i18n="sweetTreats.hero.desc">
             Laboratorio digitale per crepe, waffle, burger di gelato e set da tè. Include grammature, shelf life, ordine di
             assemblaggio e scenografia di servizio per stupire in boutique.
           </p>
@@ -80,8 +96,8 @@
       <section class="carousel" data-carousel="sweet-treats">
         <header class="carousel-header" data-carousel-header>
           <div class="carousel-header__title-block">
-            <h2 class="carousel-title" data-carousel-title>Sweet Crepes & Waffles</h2>
-            <span class="carousel-category" data-carousel-category>Dolci tentazioni</span>
+            <h2 class="carousel-title" data-carousel-title data-i18n="sweetTreats.carousel.main.title">Sweet Crepes & Waffles</h2>
+            <span class="carousel-category" data-carousel-category data-i18n="sweetTreats.carousel.main.category">Dolci tentazioni</span>
           </div>
           <div class="carousel-indicators" data-carousel-indicators></div>
         </header>
@@ -101,17 +117,17 @@
                 <img src="assets/products/sauce crepe.png" alt="Crepe con salsa" loading="lazy" />
               </picture>
             </figure>
-            <p>
+            <p data-i18n="sweetTreats.cards.crepeSauce.desc">
               Crepe classica servita con una delle nostre salse signature (Pistacchio, Nocciola, Cioccolato).
               Base perfetta per ogni aggiunta.
             </p>
-            <ul class="stat-list">
+            <ul class="stat-list" data-i18n-html="sweetTreats.cards.crepeSauce.stats">
               <li><strong>Shelf life mix:</strong> 3 giorni (frigo)</li>
               <li><strong>Riposo:</strong> almeno 2 ore (frigo)</li>
               <li><strong>Cottura:</strong> 20s per lato</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <div class="details" data-i18n-html="sweetTreats.cards.crepeSauce.details">
               <div class="steps">
                 <span>1 · Stendi mix, gira quando dorata.</span>
                 <span>2 · Spalma la salsa su metà, chiudi a mezzaluna poi a ventaglio.</span>
@@ -135,14 +151,14 @@
                 <img src="assets/products/buontalenti crepe.png" alt="Crepe Buontalenti" loading="lazy" />
               </picture>
             </figure>
-            <p>Il nostro best seller: Crepe con salsa a scelta e uno scoop di Buontalenti on top.</p>
-            <ul class="stat-list">
+            <p data-i18n="sweetTreats.cards.buontalentiCrepe.desc">Il nostro best seller: Crepe con salsa a scelta e uno scoop di Buontalenti on top.</p>
+            <ul class="stat-list" data-i18n-html="sweetTreats.cards.buontalentiCrepe.stats">
               <li><strong>Gelato:</strong> 1 scoop Buontalenti (70g)</li>
               <li><strong>Salsa:</strong> 30g interna + decorazione</li>
               <li><strong>Servizio:</strong> Piatto dessert con posate</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <div class="details" data-i18n-html="sweetTreats.cards.buontalentiCrepe.details">
               <div class="steps">
                 <span>1 · Prepara la crepe con salsa come da standard.</span>
                 <span>2 · Piega a ventaglio e spolvera con zucchero a velo.</span>
@@ -165,16 +181,14 @@
                 <img src="assets/products/waffles.png" alt="Waffles" loading="lazy" />
               </picture>
             </figure>
-            <p>
-              Waffle dorato e croccante fuori, soffice dentro. Servito con salse, frutta o gelato.
-            </p>
-            <ul class="stat-list">
+            <p data-i18n="sweetTreats.cards.waffles.desc">Waffle dorato e croccante fuori, soffice dentro. Servito con salse, frutta o gelato.</p>
+            <ul class="stat-list" data-i18n-html="sweetTreats.cards.waffles.stats">
               <li><strong>Cottura:</strong> 2.5 min per lato (5 min tot)</li>
               <li><strong>Riposo:</strong> 45s per croccantezza</li>
               <li><strong>Batter:</strong> 1 scoop (177ml)</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <div class="details" data-i18n-html="sweetTreats.cards.waffles.details">
               <div class="steps">
                 <span>1 · Versa il mix nella piastra calda e chiudi.</span>
                 <span>2 · Cuoci 2.5 min, gira e cuoci altri 2.5 min.</span>
@@ -197,14 +211,14 @@
                 <img src="assets/products/pancake.png" alt="Pancake Stack" loading="lazy" />
               </picture>
             </figure>
-            <p>Torre di 3 pancake soffici. Serviti con sciroppo d'acero, frutta fresca o salse Badiani.</p>
-            <ul class="stat-list">
+            <p data-i18n="sweetTreats.cards.pancake.desc">Torre di 3 pancake soffici. Serviti con sciroppo d'acero, frutta fresca o salse Badiani.</p>
+            <ul class="stat-list" data-i18n-html="sweetTreats.cards.pancake.stats">
               <li><strong>Porzione:</strong> 3 pezzi</li>
               <li><strong>Cottura:</strong> Fino a comparsa bolle</li>
               <li><strong>Topping:</strong> Generoso</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <div class="details" data-i18n-html="sweetTreats.cards.pancake.details">
               <div class="steps">
                 <span>1 · Versa 3 dischi di impasto sulla piastra.</span>
                 <span>2 · Gira quando compaiono le bolle in superficie.</span>
@@ -226,14 +240,14 @@
                 <img src="assets/products/savoury crepe plain base.png" alt="Crepe Italiana Plain" loading="lazy" />
               </picture>
             </figure>
-            <p>Mozzarella, rucola e pomodorini su base classica. Fresca e leggera.</p>
-            <ul class="stat-list">
+            <p data-i18n="sweetTreats.cards.italianaPlain.desc">Mozzarella, rucola e pomodorini su base classica. Fresca e leggera.</p>
+            <ul class="stat-list" data-i18n-html="sweetTreats.cards.italianaPlain.stats">
               <li><strong>Base:</strong> Classica</li>
               <li><strong>Ripieno:</strong> Mozzarella, rucola, pomodorini</li>
               <li><strong>Condimento:</strong> Olio EVO, sale, origano</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <div class="details" data-i18n-html="sweetTreats.cards.italianaPlain.details">
               <div class="steps">
                 <span>1 · Cuoci la crepe e gira.</span>
                 <span>2 · Aggiungi mozzarella e fai sciogliere leggermente.</span>
@@ -254,14 +268,14 @@
                 <img src="assets/products/savourt crepe beetroot base.png" alt="Crepe Italiana Beetroot" loading="lazy" />
               </picture>
             </figure>
-            <p>La variante colorata: impasto alla barbabietola per un look unico e un tocco dolce-terroso.</p>
-            <ul class="stat-list">
+            <p data-i18n="sweetTreats.cards.italianaBeetroot.desc">La variante colorata: impasto alla barbabietola per un look unico e un tocco dolce-terroso.</p>
+            <ul class="stat-list" data-i18n-html="sweetTreats.cards.italianaBeetroot.stats">
               <li><strong>Base:</strong> Beetroot (Barbabietola)</li>
               <li><strong>Ripieno:</strong> Mozzarella, rucola, pomodorini</li>
               <li><strong>Visual:</strong> Colore rosso/viola intenso</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <div class="details" data-i18n-html="sweetTreats.cards.italianaBeetroot.details">
               <div class="steps">
                 <span>1 · Usa il mix beetroot (3g polvere per 250g mix).</span>
                 <span>2 · Procedi come per la classica Italiana.</span>
@@ -282,14 +296,14 @@
                 <img src="assets/products/prosciutto savoury crepe plain base.png" alt="Crepe Prosciutto Plain" loading="lazy" />
               </picture>
             </figure>
-            <p>Classica con Prosciutto Crudo, mozzarella e rucola.</p>
-            <ul class="stat-list">
+            <p data-i18n="sweetTreats.cards.prosciuttoPlain.desc">Classica con Prosciutto Crudo, mozzarella e rucola.</p>
+            <ul class="stat-list" data-i18n-html="sweetTreats.cards.prosciuttoPlain.stats">
               <li><strong>Base:</strong> Classica</li>
               <li><strong>Ripieno:</strong> Crudo, mozzarella, rucola</li>
               <li><strong>Servizio:</strong> Calda e filante</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <div class="details" data-i18n-html="sweetTreats.cards.prosciuttoPlain.details">
               <div class="steps">
                 <span>1 · Sciogli la mozzarella sulla crepe in cottura.</span>
                 <span>2 · Aggiungi il prosciutto a fine cottura per non cuocerlo troppo.</span>
@@ -310,14 +324,14 @@
                 <img src="assets/products/prosciutto savoury beetroot base.png" alt="Crepe Prosciutto Beetroot" loading="lazy" />
               </picture>
             </figure>
-            <p>Prosciutto Crudo su base alla barbabietola. Un twist moderno su un classico.</p>
-            <ul class="stat-list">
+            <p data-i18n="sweetTreats.cards.prosciuttoBeetroot.desc">Prosciutto Crudo su base alla barbabietola. Un twist moderno su un classico.</p>
+            <ul class="stat-list" data-i18n-html="sweetTreats.cards.prosciuttoBeetroot.stats">
               <li><strong>Base:</strong> Beetroot</li>
               <li><strong>Ripieno:</strong> Crudo, mozzarella, rucola</li>
               <li><strong>Gusto:</strong> Sapido + dolce (impasto)</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <div class="details" data-i18n-html="sweetTreats.cards.prosciuttoBeetroot.details">
               <div class="steps">
                 <span>1 · Prepara la base beetroot.</span>
                 <span>2 · Farcisci generosamente.</span>
@@ -339,14 +353,14 @@
                 <img src="assets/products/gelato burger.png" alt="Gelato Burger" loading="lazy" />
               </picture>
             </figure>
-            <p>Una scoop di gelato in una brioche morbida, chiusa a caldo in pochi secondi: effetto “wow” e servizio veloce.</p>
-            <ul class="stat-list">
+            <p data-i18n="sweetTreats.cards.gelatoBurger.desc">Una scoop di gelato in una brioche morbida, chiusa a caldo in pochi secondi: effetto “wow” e servizio veloce.</p>
+            <ul class="stat-list" data-i18n-html="sweetTreats.cards.gelatoBurger.stats">
               <li><strong>Pane:</strong> Brioche bun leggermente scaldato</li>
               <li><strong>Gelato:</strong> 1 scoop (circa 70 g) a scelta</li>
               <li><strong>Sauce:</strong> 1 sola scelta (standard)</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <div class="details" data-i18n-html="sweetTreats.cards.gelatoBurger.details">
               <div class="steps">
                 <span>1 · Scalda leggermente la brioche (non tostare troppo).</span>
                 <span>2 · Inserisci una scoop di gelato (circa 70 g) e rifinisci con una sola salsa a scelta.</span>
@@ -363,8 +377,8 @@
       <section class="carousel" data-carousel="sweet-treats-ops">
         <header class="carousel-header" data-carousel-header>
           <div class="carousel-header__title-block">
-            <h2 class="carousel-title" data-carousel-title>Setup &amp; Conservazione</h2>
-            <span class="carousel-category" data-carousel-category>Apertura · Setting · Dati tecnici · Storage · Chiusura</span>
+            <h2 class="carousel-title" data-carousel-title data-i18n="sweetTreats.ops.title">Setup &amp; Conservazione</h2>
+            <span class="carousel-category" data-carousel-category data-i18n="sweetTreats.ops.category">Apertura · Setting · Dati tecnici · Storage · Chiusura</span>
           </div>
           <div class="carousel-indicators" data-carousel-indicators></div>
         </header>
@@ -376,15 +390,15 @@
               <span class="tag">Crepe / Waffle</span>
               <span class="tag">Gelato Burger</span>
             </div>
-            <h3>Checklist apertura stazioni</h3>
-            <p>Prima del servizio verifica che le macchine siano pronte e che mix/ingredienti siano in ordine. La Gelato Burger Machine va accesa all'apertura e spenta alla chiusura.</p>
-            <ul class="stat-list">
+            <h3 data-i18n="sweetTreats.ops.opening.title">Checklist apertura stazioni</h3>
+            <p data-i18n="sweetTreats.ops.opening.desc">Prima del servizio verifica che le macchine siano pronte e che mix/ingredienti siano in ordine. La Gelato Burger Machine va accesa all'apertura e spenta alla chiusura.</p>
+            <ul class="stat-list" data-i18n-html="sweetTreats.ops.opening.stats">
               <li>Waffle machine: accendi e attendi entrambe le luci verdi (READY + POWER)</li>
               <li>Gelato Burger Machine: ON all'apertura; in genere pronta ~10 min dopo l'accensione</li>
               <li>Crepe mix: deve aver riposato in frigo almeno 2 ore prima dell'uso</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Checklist</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.checklist">Checklist</button>
+            <div class="details" data-i18n-html="sweetTreats.ops.opening.details">
               <div class="steps">
                 <span>1 · Accendi macchine e verifica che siano in temperatura/pronte.</span>
                 <span>2 · Controlla mix e scorte (etichette, FIFO, date).</span>
@@ -400,17 +414,15 @@
               <span class="tag">Power 3</span>
               <span class="tag">Timer 12s</span>
             </div>
-            <h3>Settaggi macchine (standard)</h3>
-            <p>
-              Imposta i parametri base prima del rush: riduce errori, sprechi e prodotti fuori standard.
-            </p>
-            <ul class="stat-list">
+            <h3 data-i18n="sweetTreats.ops.settings.title">Settaggi macchine (standard)</h3>
+            <p data-i18n="sweetTreats.ops.settings.desc">Imposta i parametri base prima del rush: riduce errori, sprechi e prodotti fuori standard.</p>
+            <ul class="stat-list" data-i18n-html="sweetTreats.ops.settings.stats">
               <li>Waffle: olia leggermente con olio di semi; power livello 3; cottura 2,5 min per lato (tot 5 min)</li>
               <li>Waffle: lascia riposare 45s prima di topping/gelato (croccantezza)</li>
               <li>Gelato Burger: timer 12 secondi; non serve oliare le piastre</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Dettagli</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.details">Dettagli</button>
+            <div class="details" data-i18n-html="sweetTreats.ops.settings.details">
               <div class="steps">
                 <span>1 · Waffle: set power 3 e non iniziare finché READY + POWER sono attive.</span>
                 <span>2 · Gelato Burger: set timer 12s e usa solo blue-roll per eventuali gocce/salse.</span>
@@ -426,18 +438,16 @@
               <span class="tag">Frigo</span>
               <span class="tag">Etichette</span>
             </div>
-            <h3>Shelf life &amp; storage rapidi</h3>
-            <p>
-              Questo modulo è “più storage che show”: tieni sempre sotto controllo date e condizioni.
-            </p>
-            <ul class="stat-list">
+            <h3 data-i18n="sweetTreats.ops.storage.title">Shelf life &amp; storage rapidi</h3>
+            <p data-i18n="sweetTreats.ops.storage.desc">Questo modulo è “più storage che show”: tieni sempre sotto controllo date e condizioni.</p>
+            <ul class="stat-list" data-i18n-html="sweetTreats.ops.storage.stats">
               <li>Crepe mix: shelf life 3 giorni (frigo) + riposo minimo 2 ore (frigo)</li>
               <li>Waffle mix (pre-packed): shelf life 2 giorni</li>
               <li>Gelato Burger: bun shelf life quando defrosted = 2 giorni</li>
               <li>Gelato Croissant: plain croissant shelf life = 2 giorni</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Regole</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.rules">Regole</button>
+            <div class="details" data-i18n-html="sweetTreats.ops.storage.details">
               <div class="steps">
                 <span>1 · Applica etichette con data preparazione/apertura e scadenza.</span>
                 <span>2 · FIFO rigoroso: usa prima ciò che scade prima.</span>
@@ -453,16 +463,16 @@
               <span class="tag">177 ml</span>
               <span class="tag">70 g</span>
             </div>
-            <h3>Porzionatura &amp; dosi (quick ref)</h3>
-            <p>Una scheda “da banco”: dosi chiave per velocità e standard.</p>
-            <ul class="stat-list">
+            <h3 data-i18n="sweetTreats.ops.portions.title">Porzionatura &amp; dosi (quick ref)</h3>
+            <p data-i18n="sweetTreats.ops.portions.desc">Una scheda “da banco”: dosi chiave per velocità e standard.</p>
+            <ul class="stat-list" data-i18n-html="sweetTreats.ops.portions.stats">
               <li>Waffle: 1 scoop intero di batter = 177 ml</li>
               <li>Crepe: 1 scoop o 1,5 small ladle scoop di mix</li>
               <li>Signature Buontalenti Crepe: Buontalenti 70 g + sauce top ~30 g</li>
               <li>Gelato Burger: 1 scoop di gelato = 70 g (uno solo) + una sola scelta sauce</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Uso</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.use">Uso</button>
+            <div class="details" data-i18n-html="sweetTreats.ops.portions.details">
               <div class="steps">
                 <span>1 · Usa scoop dedicati: riduci variazioni tra operatori.</span>
                 <span>2 · Se il prodotto esce fuori standard, correggi subito (non “compensare” con extra).</span>
@@ -477,15 +487,15 @@
               <span class="tag">Spegnere</span>
               <span class="tag">Blue-roll</span>
             </div>
-            <h3>Chiusura &amp; pulizia rapida</h3>
-            <p>A fine giornata riduci residui e rischi: sulla Gelato Burger Machine si usa solo blue-roll per gelato/salsa fuoriusciti e per rimuovere le briciole.</p>
-            <ul class="stat-list">
+            <h3 data-i18n="sweetTreats.ops.closing.title">Chiusura &amp; pulizia rapida</h3>
+            <p data-i18n="sweetTreats.ops.closing.desc">A fine giornata riduci residui e rischi: sulla Gelato Burger Machine si usa solo blue-roll per gelato/salsa fuoriusciti e per rimuovere le briciole.</p>
+            <ul class="stat-list" data-i18n-html="sweetTreats.ops.closing.stats">
               <li>Gelato Burger Machine: OFF a chiusura; superficie senza residui/particelle</li>
               <li>Waffle: rimuovi residui e prepara la stazione per il giorno dopo</li>
               <li>Mix: riponi in frigo con etichetta (o elimina se oltre shelf life)</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Checklist</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.checklist">Checklist</button>
+            <div class="details" data-i18n-html="sweetTreats.ops.closing.details">
               <div class="steps">
                 <span>1 · Spegni le macchine e lascia raffreddare in sicurezza.</span>
                 <span>2 · Pulisci con blue-roll: niente olio sulle piastre Gelato Burger.</span>
@@ -500,15 +510,15 @@
       <footer class="category-footer">
         <div class="footer-icon">🥞</div>
         <h3 class="footer-title">Sweet Treat Atelier</h3>
-        <p class="footer-tagline">Crepes, Waffles & More</p>
+        <p class="footer-tagline" data-i18n="sweetTreats.footer.tagline">Crepes, Waffles & More</p>
         <div class="footer-stats">
           <div class="footer-stat">
-            <span class="stat-value">10+ Varianti</span>
-            <span class="stat-label">Menu</span>
+            <span class="stat-value" data-i18n="sweetTreats.footer.stat1.value">10+ Varianti</span>
+            <span class="stat-label" data-i18n="sweetTreats.footer.stat1.label">Menu</span>
           </div>
           <div class="footer-stat">
-            <span class="stat-value">Sweet & Savory</span>
-            <span class="stat-label">Gusti</span>
+            <span class="stat-value" data-i18n="sweetTreats.footer.stat2.value">Sweet & Savory</span>
+            <span class="stat-label" data-i18n="sweetTreats.footer.stat2.label">Gusti</span>
           </div>
         </div>
       </main>

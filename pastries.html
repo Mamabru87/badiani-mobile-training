@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pastry Lab · Badiani</title>
     <link rel="stylesheet" href="styles/site.css?v=20251228_3" />
+    <script defer src="scripts/i18n.js?v=20251228_3"></script>
     <script defer src="scripts/site.js?v=20251228_3"></script>
   </head>
   <body data-product="pastries">
     <nav class="nav-shell">
-        <a class="brand" href="index.html" aria-label="Torna alla home Badiani">
+        <a class="brand" href="index.html" aria-label="Torna alla home Badiani" data-i18n-attr="aria-label:nav.homeAria">
           <img src="assets/brand/logo-badiani.jpg" data-default-src="assets/brand/logo-badiani.jpg" data-alt-src="assets/brand/logo-b-blue.png" alt="Badiani logo" class="brand-avatar" />
           <div class="brand-text">
             <small>Training</small>
@@ -20,7 +21,7 @@
           <span id="nickname-display"></span>
         </div>
         <button class="menu-trigger" type="button" data-menu-toggle aria-expanded="false" aria-controls="nav-panel">
-          Menu
+          <span data-i18n="nav.menu">Menu</span>
           <span class="menu-icon" aria-hidden="true">
             <span></span>
             <span></span>
@@ -34,10 +35,10 @@
       <div class="menu-drawer__panel">
         <header class="menu-drawer__header">
           <div>
-            <h2 id="menu-drawer-title" class="menu-drawer__title">Categorie</h2>
-            <p class="menu-drawer__mood" data-menu-mood>Brilla: i dettagli fanno la differenza.</p>
+            <h2 id="menu-drawer-title" class="menu-drawer__title" data-i18n="drawer.categories">Categorie</h2>
+            <p class="menu-drawer__mood" data-menu-mood data-i18n="mood.2">Brilla: i dettagli fanno la differenza.</p>
           </div>
-          <button type="button" class="menu-drawer__close" data-menu-close aria-label="Chiudi menu">
+          <button type="button" class="menu-drawer__close" data-menu-close aria-label="Chiudi menu" data-i18n-attr="aria-label:drawer.close">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
               <path d="M18 6L6 18M6 6l12 12"/>
             </svg>
@@ -45,16 +46,31 @@
         </header>
         <nav class="menu-drawer__nav">
           <ul class="menu-categories">
-            <li><a href="story-orbit.html">Story Orbit</a></li>
-            <li><a href="operations.html">Operations &amp; Setup</a></li>
-            <li><a href="caffe.html">Bar & Drinks</a></li>
-            <li><a href="sweet-treats.html">Sweet Treat Atelier</a></li>
-            <li><a href="pastries.html">Pastry Lab</a></li>
-            <li><a href="slitti-yoyo.html">Slitti & Yo-Yo</a></li>
-            <li><a href="gelato-lab.html">Gelato Lab</a></li>
-            <li><a href="festive.html">Festive & Churros</a></li>
+            <li><a href="story-orbit.html" data-i18n="menu.link.storyOrbit">Story Orbit</a></li>
+            <li><a href="operations.html" data-i18n="menu.link.operations">Operations &amp; Setup</a></li>
+            <li><a href="caffe.html" data-i18n="menu.link.caffe">Bar & Drinks</a></li>
+            <li><a href="sweet-treats.html" data-i18n="menu.link.sweetTreats">Sweet Treat Atelier</a></li>
+            <li><a href="pastries.html" data-i18n="menu.link.pastries">Pastry Lab</a></li>
+            <li><a href="slitti-yoyo.html" data-i18n="menu.link.slittiYoyo">Slitti & Yo-Yo</a></li>
+            <li><a href="gelato-lab.html" data-i18n="menu.link.gelatoLab">Gelato Lab</a></li>
+            <li><a href="festive.html" data-i18n="menu.link.festive">Festive & Churros</a></li>
           </ul>
         </nav>
+
+        <div class="menu-drawer__footer">
+          <details class="menu-lang" data-lang-selector>
+            <summary class="menu-lang__summary">
+              <span class="menu-lang__label" data-lang-label>Lingua</span>
+              <span class="menu-lang__current" data-lang-current>Italiano</span>
+            </summary>
+            <div class="menu-lang__options" role="radiogroup" aria-label="Lingua">
+              <button type="button" class="menu-lang__option" role="radio" data-lang-option="it" aria-checked="true">Italiano</button>
+              <button type="button" class="menu-lang__option" role="radio" data-lang-option="en" aria-checked="false">English</button>
+              <button type="button" class="menu-lang__option" role="radio" data-lang-option="es" aria-checked="false">Español</button>
+              <button type="button" class="menu-lang__option" role="radio" data-lang-option="fr" aria-checked="false">Français</button>
+            </div>
+          </details>
+        </div>
       </div>
     </div>
 
@@ -62,26 +78,26 @@
       <section class="hero">
         <div class="hero-card">
           <div class="badge">
-            <span>Pasticceria da banco</span>
-            <span class="page-stars" data-page-stars>⭐ Stelle: 6/6</span>
+            <span data-i18n="pastries.hero.badge">Pasticceria da banco</span>
+            <span class="page-stars" data-page-stars data-i18n="pastries.hero.stars">⭐ Stelle: 6/6</span>
           </div>
           <h1>Pastry Lab</h1>
-          <p>
+          <p data-i18n="pastries.hero.desc">
             Tutte le referenze servite al banco: cakes, brownies, loaf, croissant farciti e scones con scoop di Buontalenti.
             Ogni scheda include shelf life, porzioni e script di upselling.
           </p>
           
         </div>
         <div class="hero-card visual">
-          <img src="assets/covers/pastries-cover.webp" alt="Cakes e brownie Badiani" loading="lazy" />
+          <img src="assets/covers/pastries-cover.webp" alt="Cakes e brownie Badiani" loading="lazy" data-i18n-attr="alt:pastries.hero.coverAlt" />
         </div>
       </section>
 
       <section class="carousel" data-carousel="pastries">
         <header class="carousel-header" data-carousel-header>
           <div class="carousel-header__title-block">
-            <h2 class="carousel-title" data-carousel-title>Pastry Lab</h2>
-            <span class="carousel-category" data-carousel-category>Pasticceria da banco</span>
+            <h2 class="carousel-title" data-carousel-title data-i18n="pastries.carousel.main.title">Pastry Lab</h2>
+            <span class="carousel-category" data-carousel-category data-i18n="pastries.carousel.main.category">Pasticceria da banco</span>
           </div>
           <div class="carousel-indicators" data-carousel-indicators></div>
         </header>
@@ -96,17 +112,17 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/cake.png" type="image/png" />
-                <img src="assets/products/cake.png" alt="Fetta di torta Badiani" loading="lazy" />
+                <img src="assets/products/cake.png" alt="Fetta di torta Badiani" loading="lazy" data-i18n-attr="alt:pastries.cards.cakes.alt" />
               </picture>
             </figure>
-            <p>Chocolate (3g), Carrot (2g), Walnut (3g) rispettando 14 fette per torta.</p>
-            <ul class="stat-list">
+            <p data-i18n="pastries.cards.cakes.desc">Chocolate (3g), Carrot (2g), Walnut (3g) rispettando 14 fette per torta.</p>
+            <ul class="stat-list" data-i18n-html="pastries.cards.cakes.stats">
               <li>Usa il cake slicer come guida</li>
               <li>Servi su piatto con posate</li>
               <li>Upsell scoop Buontalenti + sauce</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <div class="details" data-i18n-html="pastries.cards.cakes.details">
               <div class="steps">
                 <span>1 → Posiziona il cutter e incidi le 14 porzioni.</span>
                 <span>2 → Servi la fetta su piatto e racconta pairing con gelato.</span>
@@ -134,17 +150,17 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/brownie.png" type="image/png" />
-                <img src="assets/products/brownie.png" alt="Brownie Badiani" loading="lazy" />
+                <img src="assets/products/brownie.png" alt="Brownie Badiani" loading="lazy" data-i18n-attr="alt:pastries.cards.brownie.alt" />
               </picture>
             </figure>
-            <p>Taglio 4x3 (12 pezzi) e servizio su piatto con cutlery.</p>
-            <ul class="stat-list">
+            <p data-i18n="pastries.cards.brownie.desc">Taglio 4x3 (12 pezzi) e servizio su piatto con cutlery.</p>
+            <ul class="stat-list" data-i18n-html="pastries.cards.brownie.stats">
               <li>Display su tray dedicato</li>
               <li>Upsell gelato + sauce</li>
               <li>Comunicare shelf life</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <div class="details" data-i18n-html="pastries.cards.brownie.details">
               <div class="steps">
                 <span>1 - Taglia 12 pezzi uguali, esponi su vassoio.</span>
                 <span>2 - All'ordine, impiatta e offri scoop Buontalenti.</span>
@@ -163,17 +179,17 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/loaf.png" type="image/png" />
-                <img src="assets/products/loaf.png" alt="Loaf al banane" loading="lazy" />
+                <img src="assets/products/loaf.png" alt="Loaf al banane" loading="lazy" data-i18n-attr="alt:pastries.cards.loaf.alt" />
               </picture>
             </figure>
-            <p>Ogni loaf deve fornire 10 fette. Servizio e upsell identici alle cakes.</p>
-            <ul class="stat-list">
+            <p data-i18n="pastries.cards.loaf.desc">Ogni loaf deve fornire 10 fette. Servizio e upsell identici alle cakes.</p>
+            <ul class="stat-list" data-i18n-html="pastries.cards.loaf.stats">
               <li>Taglia spessori costanti</li>
               <li>Servi con posate</li>
               <li>Proponi sauce preferita</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <div class="details" data-i18n-html="pastries.cards.loaf.details">
               <div class="steps">
                 <span>1 - Taglia 10 slice uguali, esponi la prima.</span>
                 <span>2 - Aggiungi scoop + sauce se il cliente accetta.</span>
@@ -192,22 +208,22 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/croissants pistacchio.png" type="image/png" />
-                <img src="assets/products/croissants pistacchio.png" alt="Croissant farcito" loading="lazy" />
+                <img src="assets/products/croissants pistacchio.png" alt="Croissant farcito" loading="lazy" data-i18n-attr="alt:pastries.cards.croissants.alt" />
               </picture>
             </figure>
-            <p>
+            <p data-i18n="pastries.cards.croissants.desc">
               Croissant gia' sfogliato, da farcire con la sauce richiesta dal cliente. Apri lateralmente, riempi e completa la presentazione su piatto con forchetta e coltello.
               Ricordati di riscaldare leggermente i croissant del giorno prima per ravvivare la fragranza.
             </p>
-            <ul class="stat-list">
+            <ul class="stat-list" data-i18n-html="pastries.cards.croissants.stats">
               <li>Shelf life: 2 giorni dal defrost (controlla data)</li>
               <li>Incisione: usa coltello seghettato, apri il lato in orizzontale</li>
               <li>Riempimento: sac a poche per uniformita' e precisione</li>
               <li>Presentazione: sauce inside + drizzle sopra, piatto pulito, posate sempre</li>
               <li>Riscaldamento (se necessario): 8-10 secondi solo; mai oltre 15s (la farcitura si scioglie)</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <div class="details" data-i18n-html="pastries.cards.croissants.details">
               <div class="steps">
                 <span>1 - Incidi lato con coltello seghettato.</span>
                 <span>2 - Riempie interno e topping esterno con la stessa sauce.</span>
@@ -226,17 +242,17 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/scones.png" type="image/png" />
-                <img src="assets/products/scones.png" alt="Scone ripieno di gelato" loading="lazy" />
+                <img src="assets/products/scones.png" alt="Scone ripieno di gelato" loading="lazy" data-i18n-attr="alt:pastries.cards.scone.alt" />
               </picture>
             </figure>
-            <p>Scalda 15 s nel gelato burger machine, farcisci con scoop Buontalenti e sauce.</p>
-            <ul class="stat-list">
+            <p data-i18n="pastries.cards.scone.desc">Scalda 15 s nel gelato burger machine, farcisci con scoop Buontalenti e sauce.</p>
+            <ul class="stat-list" data-i18n-html="pastries.cards.scone.stats">
               <li>Taglia orizzontalmente</li>
               <li>Usa milkshake scooper</li>
               <li>Finitura pistacchio o cioccolato</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <div class="details" data-i18n-html="pastries.cards.scone.details">
               <div class="steps">
                 <span>1 - Riscalda 15 s.</span>
                 <span>2 - Taglia, inserisci scoop e richiudi.</span>
@@ -252,8 +268,8 @@
       <section class="carousel" data-carousel="pastries-ops">
         <header class="carousel-header" data-carousel-header>
           <div class="carousel-header__title-block">
-            <h2 class="carousel-title" data-carousel-title>Setup &amp; Conservazione</h2>
-            <span class="carousel-category" data-carousel-category>Apertura · Dati tecnici · Shelf life · FIFO · Chiusura</span>
+            <h2 class="carousel-title" data-carousel-title data-i18n="pastries.ops.title">Setup &amp; Conservazione</h2>
+            <span class="carousel-category" data-carousel-category data-i18n="pastries.ops.category">Apertura · Dati tecnici · Shelf life · FIFO · Chiusura</span>
           </div>
           <div class="carousel-indicators" data-carousel-indicators></div>
         </header>
@@ -269,18 +285,18 @@
             <figure class="guide-media tall">
               <picture>
                 <source srcset="assets/products/pastry vetrine.png" type="image/png" />
-                <img src="assets/products/pastry vetrine.png" alt="Vetrina pastry Badiani" loading="lazy" />
+                <img src="assets/products/pastry vetrine.png" alt="Vetrina pastry Badiani" loading="lazy" data-i18n-attr="alt:pastries.ops.display.alt" />
               </picture>
             </figure>
-            <p>Obiettivo apertura: vetrina piena, ordinata e leggibile. Label sempre accanto al tray corretto; le cakes sui cake stand con una fetta rimossa per mostrare l'interno.</p>
-            <ul class="stat-list">
+            <p data-i18n="pastries.ops.display.desc">Obiettivo apertura: vetrina piena, ordinata e leggibile. Label sempre accanto al tray corretto; le cakes sui cake stand con una fetta rimossa per mostrare l'interno.</p>
+            <ul class="stat-list" data-i18n-html="pastries.ops.display.stats">
               <li>CAKES: cake stands + rimuovi 1 slice (visual interno)</li>
               <li>CROISSANTS: su tray dedicati (file pulite)</li>
               <li>BROWNIES/PUDDING/TARTS/SCONES: su tray, allineati</li>
               <li>LOAF: taglia e mostra la prima fetta sul tray</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Checklist</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.checklist">Checklist</button>
+            <div class="details" data-i18n-html="pastries.ops.display.details">
               <div class="steps">
                 <span>1 · Ripristina vetrina “full look” (senza buchi visivi).</span>
                 <span>2 · Metti le label accanto al tray giusto (mai generiche).</span>
@@ -297,14 +313,14 @@
               <span class="tag">Porzioni</span>
             </div>
             <h3>Tagli standard (porzionatura)</h3>
-            <p>Porzioni costanti = qualità costante. Usa sempre gli stessi tagli per controllo food cost e per lavorare “in squadra”.</p>
-            <ul class="stat-list">
+            <p data-i18n="pastries.ops.cuts.desc">Porzioni costanti = qualità costante. Usa sempre gli stessi tagli per controllo food cost e per lavorare “in squadra”.</p>
+            <ul class="stat-list" data-i18n-html="pastries.ops.cuts.stats">
               <li>Cake: usa il cake slicer guida 14 fette</li>
               <li>Brownie tray: taglio 4×3 = 12 pezzi</li>
               <li>Loaf: ricava 10 fette dalla forma intera</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Note</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.notes">Note</button>
+            <div class="details" data-i18n-html="pastries.ops.cuts.details">
               <div class="steps">
                 <span>1 · Usa sempre lo stesso strumento guida (slicer / righello visivo).</span>
                 <span>2 · Se una porzione è fuori standard, correggi subito il taglio successivo.</span>
@@ -320,8 +336,8 @@
               <span class="tag">Controllo</span>
             </div>
             <h3>Shelf life (quick list)</h3>
-            <p>Lista shelf life per controlli quotidiani, rotazione e label corrette.</p>
-            <ul class="stat-list">
+            <p data-i18n="pastries.ops.shelf.desc">Lista shelf life per controlli quotidiani, rotazione e label corrette.</p>
+            <ul class="stat-list" data-i18n-html="pastries.ops.shelf.stats">
               <li>Chocolate Cake: 3 giorni</li>
               <li>Carrot Cake: 2 giorni</li>
               <li>Walnut Cake: 3 giorni</li>
@@ -330,8 +346,8 @@
               <li>Croissants: 2 giorni</li>
               <li>Scones: 2 giorni</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Regole</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.rules">Regole</button>
+            <div class="details" data-i18n-html="pastries.ops.shelf.details">
               <div class="steps">
                 <span>1 · Etichetta sempre: data defrost/apertura + scadenza.</span>
                 <span>2 · FIFO rigoroso (first in, first out).</span>
@@ -347,14 +363,14 @@
               <span class="tag">Label</span>
             </div>
             <h3>Come mantenerla “sempre piena”</h3>
-            <p>Regola vetrina: deve apparire sempre piena e ordinata. Le label stanno accanto al tray corretto, sempre.</p>
-            <ul class="stat-list">
+            <p data-i18n="pastries.ops.full.desc">Regola vetrina: deve apparire sempre piena e ordinata. Le label stanno accanto al tray corretto, sempre.</p>
+            <ul class="stat-list" data-i18n-html="pastries.ops.full.stats">
               <li>Ridisponi i prodotti per chiudere vuoti (senza mescolare referenze)</li>
               <li>Allinea fronti: brownie/loaf/croissant sempre “in squadra”</li>
               <li>Controlla che le label siano leggibili e coerenti con il tray</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Checklist</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.checklist">Checklist</button>
+            <div class="details" data-i18n-html="pastries.ops.full.details">
               <div class="steps">
                 <span>1 · Riempi e riallinea dopo ogni rush.</span>
                 <span>2 · Aggiorna le label quando cambia il tray (mai lasciare “vecchie”).</span>
@@ -371,14 +387,14 @@
               <span class="tag">FIFO</span>
             </div>
             <h3>Chiusura vetrina (routine)</h3>
-            <p>Obiettivo: ripristinare ordine e preparare una partenza veloce domani, senza perdere controllo su shelf life.</p>
-            <ul class="stat-list">
+            <p data-i18n="pastries.ops.close.desc">Obiettivo: ripristinare ordine e preparare una partenza veloce domani, senza perdere controllo su shelf life.</p>
+            <ul class="stat-list" data-i18n-html="pastries.ops.close.stats">
               <li>Rimuovi briciole e residui dai tray (prima che diventino “incollati”)</li>
               <li>Raggruppa per referenza e verifica scadenze (FIFO)</li>
               <li>Controlla che tutte le label siano presenti e corrette</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Checklist</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.checklist">Checklist</button>
+            <div class="details" data-i18n-html="pastries.ops.close.details">
               <div class="steps">
                 <span>1 · Riordina per categoria, controlla date e scarta ciò che è oltre shelf life.</span>
                 <span>2 · Pulisci superfici e tray; asciuga prima di richiudere.</span>
@@ -392,15 +408,15 @@
       <footer class="category-footer">
         <div class="footer-icon">🥐</div>
         <h3 class="footer-title">Pastry Lab</h3>
-        <p class="footer-tagline">Colazione & Merenda</p>
+        <p class="footer-tagline" data-i18n="pastries.footer.tagline">Colazione & Merenda</p>
         <div class="footer-stats">
           <div class="footer-stat">
-            <span class="stat-value">Daily</span>
-            <span class="stat-label">Frequenza</span>
+            <span class="stat-value" data-i18n="pastries.footer.stat1.value">Daily</span>
+            <span class="stat-label" data-i18n="pastries.footer.stat1.label">Frequenza</span>
           </div>
           <div class="footer-stat">
-            <span class="stat-value">Fresh</span>
-            <span class="stat-label">Qualità</span>
+            <span class="stat-value" data-i18n="pastries.footer.stat2.value">Fresh</span>
+            <span class="stat-label" data-i18n="pastries.footer.stat2.label">Qualità</span>
           </div>
         </div>
       </main>

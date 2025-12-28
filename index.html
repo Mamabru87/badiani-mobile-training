@@ -8,6 +8,7 @@
     <meta http-equiv="Expires" content="0" />
     <title>Badiani Training Orbit</title>
     <link rel="stylesheet" href="styles/site.css?v=20251228_3" />
+    <script defer src="scripts/i18n.js?v=20251228_3"></script>
     <script defer src="scripts/site.js?v=20251228_3"></script>
     <script defer src="scripts/gelato-effects.js?v=20251227_1"></script>
   <!-- COCKPIT_COMPACT block removed: styling now lives in styles/site.css -->
@@ -15,20 +16,20 @@
   <body class="page-home">
     <main>
       <nav class="nav-shell">
-        <a class="brand" href="index.html" aria-label="Torna alla home Badiani">
+        <a class="brand" href="index.html" aria-label="Torna alla home Badiani" data-i18n-attr="aria-label:nav.homeAria">
           <img src="assets/brand/logo-badiani.jpg" data-default-src="assets/brand/logo-badiani.jpg" data-alt-src="assets/brand/logo-b-blue.png" alt="Badiani logo" class="brand-avatar" />
           <div class="brand-text">
             <small>Training</small>
           </div>
         </a>
-        <div class="user-nickname-bar" id="user-nickname-bar" aria-label="Profilo utente">
+        <div class="user-nickname-bar" id="user-nickname-bar" aria-label="Profilo utente" data-i18n-attr="aria-label:nav.profileAria">
           <span class="user-nickname-pill">
-            <span class="user-nickname-pill__label">Profilo</span>
+            <span class="user-nickname-pill__label" data-i18n="nav.profileLabel">Profilo</span>
             <span class="user-nickname-pill__value" id="nickname-display"></span>
           </span>
         </div>
         <button class="menu-trigger" type="button" data-menu-toggle aria-expanded="false" aria-controls="nav-panel">
-          Menu
+          <span data-i18n="nav.menu">Menu</span>
           <span class="menu-icon" aria-hidden="true">
             <span></span>
             <span></span>
@@ -39,22 +40,37 @@
           <div class="menu-panel__inner">
             <div class="menu-panel__glow"></div>
             <div class="menu-cluster">
-              <p class="menu-label">Orbit</p>
-              <a href="index.html" aria-current="page">Hub</a>
-              <a href="story-orbit.html">Story Orbit</a>
-              <a href="operations.html">Operations &amp; Setup</a>
+              <p class="menu-label" data-i18n="menu.cluster.orbit">Orbit</p>
+              <a href="index.html" aria-current="page" data-i18n="menu.link.hub">Hub</a>
+              <a href="story-orbit.html" data-i18n="menu.link.storyOrbit">Story Orbit</a>
+              <a href="operations.html" data-i18n="menu.link.operations">Operations &amp; Setup</a>
             </div>
             <div class="menu-cluster">
-              <p class="menu-label">Beverage & Treats</p>
-              <a href="caffe.html">Bar & Drinks</a>
-              <a href="sweet-treats.html">Sweet Treat Atelier</a>
-              <a href="pastries.html">Pastry Lab</a>
+              <p class="menu-label" data-i18n="menu.cluster.beverage">Beverage & Treats</p>
+              <a href="caffe.html" data-i18n="menu.link.caffe">Bar & Drinks</a>
+              <a href="sweet-treats.html" data-i18n="menu.link.sweetTreats">Sweet Treat Atelier</a>
+              <a href="pastries.html" data-i18n="menu.link.pastries">Pastry Lab</a>
             </div>
             <div class="menu-cluster">
-              <p class="menu-label">Gelato & Speciali</p>
-              <a href="slitti-yoyo.html">Slitti & Yo-Yo</a>
-              <a href="gelato-lab.html">Gelato Lab</a>
-              <a href="festive.html">Festive & Churros</a>
+              <p class="menu-label" data-i18n="menu.cluster.gelato">Gelato & Speciali</p>
+              <a href="slitti-yoyo.html" data-i18n="menu.link.slittiYoyo">Slitti & Yo-Yo</a>
+              <a href="gelato-lab.html" data-i18n="menu.link.gelatoLab">Gelato Lab</a>
+              <a href="festive.html" data-i18n="menu.link.festive">Festive & Churros</a>
+            </div>
+
+            <div class="menu-lang menu-lang--panel" data-lang-selector>
+              <details>
+                <summary class="menu-lang__summary">
+                  <span class="menu-lang__label" data-lang-label>Lingua</span>
+                  <span class="menu-lang__current" data-lang-current>Italiano</span>
+                </summary>
+                <div class="menu-lang__options" role="radiogroup" aria-label="Lingua">
+                  <button type="button" class="menu-lang__option" role="radio" data-lang-option="it" aria-checked="true">Italiano</button>
+                  <button type="button" class="menu-lang__option" role="radio" data-lang-option="en" aria-checked="false">English</button>
+                  <button type="button" class="menu-lang__option" role="radio" data-lang-option="es" aria-checked="false">Español</button>
+                  <button type="button" class="menu-lang__option" role="radio" data-lang-option="fr" aria-checked="false">Français</button>
+                </div>
+              </details>
             </div>
           </div>
         </div>
@@ -63,71 +79,70 @@
       <section class="hero hero--orbit">
         <div class="hero-focus">
           <div class="badge">
-            <span>Training Orbit</span>
+            <span data-i18n="hub.badge">Training Orbit</span>
           </div>
-          <p class="hero-eyebrow">Hub operativo · aggiornato ogni giorno</p>
-          <h1>Playbook operativo Badiani 1932</h1>
-          <p class="hero-lede">
-            Tradizione fiorentina, rituali di boutique e procedure digitalizzate in un'unica plancia: consulta, ripassa e chiudi i quiz
-            per riscattare gelati reali.
+          <p class="hero-eyebrow" data-i18n="hub.eyebrow">Hub operativo · aggiornato ogni giorno</p>
+          <h1 data-i18n="hub.title">Playbook operativo Badiani 1932</h1>
+          <p class="hero-lede" data-i18n="hub.lede">
+            Tradizione fiorentina, rituali di boutique e procedure digitalizzate in un'unica plancia: consulta, ripassa e chiudi i quiz per riscattare gelati reali.
           </p>
           <div class="hero-actions">
-            <button class="btn btn-primary" type="button" data-menu-toggle aria-controls="nav-panel">Apri categorie</button>
-            <button class="btn btn-ghost" type="button" data-info-launch>Regolamento</button>
+            <button class="btn btn-primary" type="button" data-menu-toggle aria-controls="nav-panel" data-i18n="hub.openCategories">Apri categorie</button>
+            <button class="btn btn-ghost" type="button" data-info-launch data-i18n="hub.rules">Regolamento</button>
           </div>
           <div class="pill-row hero-pills">
-            <span class="pill">⭐ Stelle oggi: <span data-perf-stars>0</span></span>
-            <span class="pill">🍨 Gelati vinti: <span data-perf-gelati>0</span></span>
-            <span class="pill">🎯 Quiz corretti: <span data-perf-quiz-correct>0</span></span>
+            <span class="pill"><span data-i18n="hub.pill.starsToday">⭐ Stelle oggi:</span> <span data-perf-stars>0</span></span>
+            <span class="pill"><span data-i18n="hub.pill.gelatiWon">🍨 Gelati vinti:</span> <span data-perf-gelati>0</span></span>
+            <span class="pill"><span data-i18n="hub.pill.quizCorrect">🎯 Quiz corretti:</span> <span data-perf-quiz-correct>0</span></span>
           </div>
         </div>
         <aside class="hero-aside">
           <section class="summary summary--revamp summary--compact" data-summary data-carousel="cockpit">
             <header class="summary-head cockpit-head" data-carousel-header>
               <div>
-                <p class="summary-eyebrow">Orbit cockpit</p>
-                <h2 class="summary-title" data-carousel-title>Panoramica live</h2>
-                <p class="summary-sub">Scorri le schede e resta sempre sul pezzo.</p>
+                <p class="summary-eyebrow" data-i18n="cockpit.eyebrow">Orbit cockpit</p>
+                <h2 class="summary-title" data-carousel-title data-i18n="cockpit.title">Panoramica live</h2>
+                <p class="summary-sub" data-i18n="cockpit.sub">Scorri le schede e resta sempre sul pezzo.</p>
               </div>
-              <div class="carousel-indicators cockpit-indicators" data-carousel-indicators aria-label="Indicatori panoramica"></div>
+              <div class="carousel-indicators cockpit-indicators" data-carousel-indicators aria-label="Indicatori panoramica" data-i18n-attr="aria-label:cockpit.indicatorsAria"></div>
             </header>
 
             <div class="cockpit-track" data-carousel-track>
               <article class="summary-card summary-card--daily" data-carousel-item>
                 <div class="summary-card__header">
-                  <p class="summary-card__eyebrow">Training</p>
-                  <span class="pill pill--blue">Live</span>
+                  <p class="summary-card__eyebrow" data-i18n="cockpit.daily.eyebrow">Training</p>
+                  <span class="pill pill--blue" data-i18n="cockpit.daily.badge">Live</span>
                 </div>
-                <h3 class="summary-card__title">Training quotidiano</h3>
-                <p class="summary-card__question" data-daily-question>Caricamento domanda del giorno...</p>
-                <p class="summary-card__hint">Apri una scheda, rispondi e guadagna stelline extra.</p>
+                <h3 class="summary-card__title" data-i18n="cockpit.daily.title">Training quotidiano</h3>
+                <p class="summary-card__question" data-daily-question data-i18n="cockpit.daily.loading">Caricamento domanda del giorno...</p>
+                <p class="summary-card__hint" data-i18n="cockpit.daily.hint">Apri una scheda, rispondi e guadagna stelline extra.</p>
               </article>
 
               <article class="summary-card summary-card--performance" data-carousel-item>
                 <div class="summary-card__header">
-                  <p class="summary-card__eyebrow">Oggi</p>
-                  <span class="pill pill--soft">Aggiornato</span>
+                  <p class="summary-card__eyebrow" data-i18n="cockpit.perf.eyebrow">Oggi</p>
+                  <span class="pill pill--soft" data-i18n="cockpit.perf.badge">Aggiornato</span>
                 </div>
-                <h3 class="summary-card__title">Performance oggi</h3>
+                <h3 class="summary-card__title" data-i18n="cockpit.perf.title">Performance oggi</h3>
                 <div class="summary-stats">
                   <div class="stat">
-                    <span class="stat-label">Stelle</span>
+                    <span class="stat-label" data-i18n="cockpit.stat.stars">Stelle</span>
                     <span class="stat-value" data-perf-stars>0</span>
                   </div>
                   <div class="stat">
-                    <span class="stat-label">Punti Bonus</span>
+                    <span class="stat-label" data-i18n="cockpit.stat.bonusPoints">Punti Bonus</span>
                     <span class="stat-value" data-perf-points>0</span>
                   </div>
                   <div class="stat">
-                    <span class="stat-label">Gelati vinti</span>
+                    <span class="stat-label" data-i18n="cockpit.stat.gelatiWon">Gelati vinti</span>
                     <span class="stat-value" data-perf-gelati>0</span>
                   </div>
                   <div class="stat">
-                    <span class="stat-label">Quiz corretti</span>
+                    <span class="stat-label" data-i18n="cockpit.stat.quizCorrect">Quiz corretti</span>
                     <span class="stat-value" data-perf-quiz-correct>0</span>
                   </div>
                   <div class="stat">
-                    <span class="stat-label">Quiz sbagliati</span>
+                    <span class="stat-label" data-i18n="cockpit.stat.quizWrong">Quiz sbagliati</span>
                     <span class="stat-value" data-perf-quiz-wrong>0</span>
                   </div>
                 </div>
@@ -135,21 +150,21 @@
 
               <article class="summary-card summary-card--totals" data-carousel-item>
                 <div class="summary-card__header">
-                  <p class="summary-card__eyebrow">Storico</p>
-                  <span class="pill pill--soft">Totale</span>
+                  <p class="summary-card__eyebrow" data-i18n="cockpit.totals.eyebrow">Storico</p>
+                  <span class="pill pill--soft" data-i18n="cockpit.totals.badge">Totale</span>
                 </div>
-                <h3 class="summary-card__title">Totali</h3>
+                <h3 class="summary-card__title" data-i18n="cockpit.totals.title">Totali</h3>
                 <div class="summary-stats">
                   <div class="stat">
-                    <span class="stat-label">Stelle totali</span>
+                    <span class="stat-label" data-i18n="cockpit.totals.stars">Stelle totali</span>
                     <span class="stat-value" data-perf-stars-total>0</span>
                   </div>
                   <div class="stat">
-                    <span class="stat-label">Gelati totali</span>
+                    <span class="stat-label" data-i18n="cockpit.totals.gelati">Gelati totali</span>
                     <span class="stat-value" data-perf-gelati-total>0</span>
                   </div>
                   <div class="stat">
-                    <span class="stat-label">Bonus totali</span>
+                    <span class="stat-label" data-i18n="cockpit.totals.bonus">Bonus totali</span>
                     <span class="stat-value" data-perf-bonus-total>0</span>
                   </div>
                 </div>
@@ -157,36 +172,36 @@
 
               <article class="summary-card summary-card--wrong" data-carousel-item>
                 <div class="summary-card__header">
-                  <p class="summary-card__eyebrow">Errori recenti</p>
-                  <span class="pill pill--soft">Ultimi 10</span>
+                  <p class="summary-card__eyebrow" data-i18n="cockpit.wrong.eyebrow">Errori recenti</p>
+                  <span class="pill pill--soft" data-i18n="cockpit.wrong.badge">Ultimi 10</span>
                 </div>
-                <h3 class="summary-card__title">Errori recenti</h3>
+                <h3 class="summary-card__title" data-i18n="cockpit.wrong.title">Errori recenti</h3>
                 <ul class="summary-list" data-wrong-list>
-                  <li class="empty">Nessun errore recente — continua così! ✨</li>
+                  <li class="empty" data-i18n="cockpit.wrong.empty">Nessun errore recente — continua così! ✨</li>
                 </ul>
                 <div class="summary-card__footer">
                   <span class="summary-card__meta" data-wrong-count aria-live="polite"></span>
-                  <button class="btn btn-ghost btn--sm" type="button" data-wrong-view-all>Vedi tutti</button>
+                  <button class="btn btn-ghost btn--sm" type="button" data-wrong-view-all data-i18n="cockpit.wrong.viewAll">Vedi tutti</button>
                 </div>
               </article>
 
               <article class="summary-card summary-card--history" data-carousel-item>
                 <div class="summary-card__header">
-                  <p class="summary-card__eyebrow">Storico giorni</p>
-                  <span class="pill pill--soft">14 giorni</span>
+                  <p class="summary-card__eyebrow" data-i18n="cockpit.history.eyebrow">Storico giorni</p>
+                  <span class="pill pill--soft" data-i18n="cockpit.history.badge">14 giorni</span>
                 </div>
-                <h3 class="summary-card__title">Storico giorni</h3>
+                <h3 class="summary-card__title" data-i18n="cockpit.history.title">Storico giorni</h3>
                 <ul class="summary-list" data-history-days>
-                  <li class="empty">Nessuna cronologia disponibile ancora.</li>
+                  <li class="empty" data-i18n="cockpit.history.empty">Nessuna cronologia disponibile ancora.</li>
                 </ul>
               </article>
 
               <article class="summary-card summary-card--profile" data-carousel-item>
                 <div class="summary-card__header">
-                  <p class="summary-card__eyebrow">Profilo</p>
-                  <span class="pill pill--blue">Tu</span>
+                  <p class="summary-card__eyebrow" data-i18n="cockpit.profile.eyebrow">Profilo</p>
+                  <span class="pill pill--blue" data-i18n="cockpit.profile.badge">Tu</span>
                 </div>
-                <h3 class="summary-card__title">Profilo</h3>
+                <h3 class="summary-card__title" data-i18n="cockpit.profile.title">Profilo</h3>
                 <div class="summary-profile" data-profile>
                   <div class="summary-profile__layout">
                     <div class="summary-profile__avatar" aria-hidden="true">
@@ -203,17 +218,17 @@
                     <div class="summary-profile__main">
                       <div class="summary-stats">
                         <div class="stat">
-                          <span class="stat-label">Nickname</span>
+                          <span class="stat-label" data-i18n="cockpit.profile.nickname">Nickname</span>
                           <span class="stat-value" data-profile-nick>—</span>
                         </div>
                         <div class="stat">
-                          <span class="stat-label">Gusto preferito</span>
+                          <span class="stat-label" data-i18n="cockpit.profile.gelato">Gusto preferito</span>
                           <span class="stat-value" data-profile-gelato>—</span>
                         </div>
                       </div>
                       <div class="profile-actions">
-                        <button class="btn btn-primary" type="button" data-profile-edit>Cambia gusto</button>
-                        <button class="btn btn-ghost" type="button" data-profile-switch>Cambia profilo</button>
+                        <button class="btn btn-primary" type="button" data-profile-edit data-i18n="cockpit.profile.changeGelato">Cambia gusto</button>
+                        <button class="btn btn-ghost" type="button" data-profile-switch data-i18n="cockpit.profile.switchProfile">Cambia profilo</button>
                       </div>
                     </div>
                   </div>
@@ -224,21 +239,21 @@
         </aside>
       </section>
 
-      <section class="hub-assistant" aria-label="Assistente BERNY">
+      <section class="hub-assistant" aria-label="Assistente BERNY" data-i18n-attr="aria-label:assistant.aria">
         <div class="hub-assistant__inner">
           <div class="hub-assistant__glow" aria-hidden="true"></div>
           <header class="hub-assistant__head">
             <div>
-              <p class="hub-assistant__eyebrow">Assistente</p>
-              <h2 class="hub-assistant__title">Parla con BERNY</h2>
-              <p class="hub-assistant__sub">Chiedi procedure, ricette e dove trovare una scheda. Ti porto al punto giusto.</p>
+              <p class="hub-assistant__eyebrow" data-i18n="assistant.eyebrow">Assistente</p>
+              <h2 class="hub-assistant__title" data-i18n="assistant.title">Parla con BERNY</h2>
+              <p class="hub-assistant__sub" data-i18n="assistant.sub">Chiedi procedure, ricette e dove trovare una scheda. Ti porto al punto giusto.</p>
             </div>
           </header>
 
           <div class="menu-search menu-search--hub" data-hub-assistant>
             <div class="menu-search__field">
-              <input type="search" placeholder="Es. Coni: quanti gusti e quanti grammi?" autocomplete="off" aria-label="Parla con BERNY" data-hub-assistant-search />
-              <button class="btn btn-primary btn--sm" type="button" data-hub-assistant-send>Chiedi</button>
+              <input type="search" placeholder="Es. Coni: quanti gusti e quanti grammi?" autocomplete="off" aria-label="Parla con BERNY" data-hub-assistant-search data-i18n-attr="placeholder:assistant.placeholder|aria-label:assistant.ariaInput" />
+              <button class="btn btn-primary btn--sm" type="button" data-hub-assistant-send data-i18n="assistant.send">Chiedi</button>
             </div>
             <div class="menu-search__suggestions" data-hub-assistant-suggestions></div>
           </div>
@@ -251,10 +266,10 @@
       <div class="menu-drawer__panel">
         <header class="menu-drawer__header">
           <div>
-            <h2 id="menu-drawer-title" class="menu-drawer__title">Categorie</h2>
+            <h2 id="menu-drawer-title" class="menu-drawer__title" data-i18n="drawer.categories">Categorie</h2>
             <p class="menu-drawer__mood" data-menu-mood>Brilla: i dettagli fanno la differenza.</p>
           </div>
-          <button type="button" class="menu-drawer__close" data-menu-close aria-label="Chiudi menu">
+          <button type="button" class="menu-drawer__close" data-menu-close aria-label="Chiudi menu" data-i18n-attr="aria-label:drawer.close">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
               <path d="M18 6L6 18M6 6l12 12"/>
             </svg>
@@ -262,16 +277,31 @@
         </header>
         <nav class="menu-drawer__nav">
           <ul class="menu-categories">
-            <li><a href="story-orbit.html">Story Orbit</a></li>
-            <li><a href="operations.html">Operations &amp; Setup</a></li>
-            <li><a href="caffe.html">Bar & Drinks</a></li>
-            <li><a href="sweet-treats.html">Sweet Treat Atelier</a></li>
-            <li><a href="pastries.html">Pastry Lab</a></li>
-            <li><a href="slitti-yoyo.html">Slitti & Yo-Yo</a></li>
-            <li><a href="gelato-lab.html">Gelato Lab</a></li>
-            <li><a href="festive.html">Festive & Churros</a></li>
+            <li><a href="story-orbit.html" data-i18n="menu.link.storyOrbit">Story Orbit</a></li>
+            <li><a href="operations.html" data-i18n="menu.link.operations">Operations &amp; Setup</a></li>
+            <li><a href="caffe.html" data-i18n="menu.link.caffe">Bar & Drinks</a></li>
+            <li><a href="sweet-treats.html" data-i18n="menu.link.sweetTreats">Sweet Treat Atelier</a></li>
+            <li><a href="pastries.html" data-i18n="menu.link.pastries">Pastry Lab</a></li>
+            <li><a href="slitti-yoyo.html" data-i18n="menu.link.slittiYoyo">Slitti & Yo-Yo</a></li>
+            <li><a href="gelato-lab.html" data-i18n="menu.link.gelatoLab">Gelato Lab</a></li>
+            <li><a href="festive.html" data-i18n="menu.link.festive">Festive & Churros</a></li>
           </ul>
         </nav>
+
+        <div class="menu-drawer__footer">
+          <details class="menu-lang" data-lang-selector>
+            <summary class="menu-lang__summary">
+              <span class="menu-lang__label" data-lang-label>Lingua</span>
+              <span class="menu-lang__current" data-lang-current>Italiano</span>
+            </summary>
+            <div class="menu-lang__options" role="radiogroup" aria-label="Lingua">
+              <button type="button" class="menu-lang__option" role="radio" data-lang-option="it" aria-checked="true">Italiano</button>
+              <button type="button" class="menu-lang__option" role="radio" data-lang-option="en" aria-checked="false">English</button>
+              <button type="button" class="menu-lang__option" role="radio" data-lang-option="es" aria-checked="false">Español</button>
+              <button type="button" class="menu-lang__option" role="radio" data-lang-option="fr" aria-checked="false">Français</button>
+            </div>
+          </details>
+        </div>
       </div>
     </div>
   </body>

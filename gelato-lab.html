@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gelato Lab - Badiani</title>
     <link rel="stylesheet" href="styles/site.css?v=20251228_3" />
+    <script defer src="scripts/i18n.js?v=20251228_3"></script>
     <script defer src="scripts/site.js?v=20251228_3"></script>
   </head>
   <body data-product="gelato-lab">
     <nav class="nav-shell">
-        <a class="brand" href="index.html" aria-label="Torna alla home Badiani">
+        <a class="brand" href="index.html" aria-label="Torna alla home Badiani" data-i18n-attr="aria-label:nav.homeAria">
           <img src="assets/brand/logo-badiani.jpg" data-default-src="assets/brand/logo-badiani.jpg" data-alt-src="assets/brand/logo-b-blue.png" alt="Badiani logo" class="brand-avatar" />
           <div class="brand-text">
             <small>Training</small>
@@ -20,7 +21,7 @@
           <span id="nickname-display"></span>
         </div>
         <button class="menu-trigger" type="button" data-menu-toggle aria-expanded="false" aria-controls="nav-panel">
-          Menu
+          <span data-i18n="nav.menu">Menu</span>
           <span class="menu-icon" aria-hidden="true">
             <span></span>
             <span></span>
@@ -34,10 +35,10 @@
       <div class="menu-drawer__panel">
         <header class="menu-drawer__header">
           <div>
-            <h2 id="menu-drawer-title" class="menu-drawer__title">Categorie</h2>
-            <p class="menu-drawer__mood" data-menu-mood>Brilla: i dettagli fanno la differenza.</p>
+            <h2 id="menu-drawer-title" class="menu-drawer__title" data-i18n="drawer.categories">Categorie</h2>
+            <p class="menu-drawer__mood" data-menu-mood data-i18n="mood.2">Brilla: i dettagli fanno la differenza.</p>
           </div>
-          <button type="button" class="menu-drawer__close" data-menu-close aria-label="Chiudi menu">
+          <button type="button" class="menu-drawer__close" data-menu-close aria-label="Chiudi menu" data-i18n-attr="aria-label:drawer.close">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
               <path d="M18 6L6 18M6 6l12 12"/>
             </svg>
@@ -45,16 +46,31 @@
         </header>
         <nav class="menu-drawer__nav">
           <ul class="menu-categories">
-            <li><a href="story-orbit.html">Story Orbit</a></li>
-            <li><a href="operations.html">Operations &amp; Setup</a></li>
-            <li><a href="caffe.html">Bar & Drinks</a></li>
-            <li><a href="sweet-treats.html">Sweet Treat Atelier</a></li>
-            <li><a href="pastries.html">Pastry Lab</a></li>
-            <li><a href="slitti-yoyo.html">Slitti & Yo-Yo</a></li>
-            <li><a href="gelato-lab.html">Gelato Lab</a></li>
-            <li><a href="festive.html">Festive & Churros</a></li>
+            <li><a href="story-orbit.html" data-i18n="menu.link.storyOrbit">Story Orbit</a></li>
+            <li><a href="operations.html" data-i18n="menu.link.operations">Operations &amp; Setup</a></li>
+            <li><a href="caffe.html" data-i18n="menu.link.caffe">Bar & Drinks</a></li>
+            <li><a href="sweet-treats.html" data-i18n="menu.link.sweetTreats">Sweet Treat Atelier</a></li>
+            <li><a href="pastries.html" data-i18n="menu.link.pastries">Pastry Lab</a></li>
+            <li><a href="slitti-yoyo.html" data-i18n="menu.link.slittiYoyo">Slitti & Yo-Yo</a></li>
+            <li><a href="gelato-lab.html" data-i18n="menu.link.gelatoLab">Gelato Lab</a></li>
+            <li><a href="festive.html" data-i18n="menu.link.festive">Festive & Churros</a></li>
           </ul>
         </nav>
+
+        <div class="menu-drawer__footer">
+          <details class="menu-lang" data-lang-selector>
+            <summary class="menu-lang__summary">
+              <span class="menu-lang__label" data-lang-label>Lingua</span>
+              <span class="menu-lang__current" data-lang-current>Italiano</span>
+            </summary>
+            <div class="menu-lang__options" role="radiogroup" aria-label="Lingua">
+              <button type="button" class="menu-lang__option" role="radio" data-lang-option="it" aria-checked="true">Italiano</button>
+              <button type="button" class="menu-lang__option" role="radio" data-lang-option="en" aria-checked="false">English</button>
+              <button type="button" class="menu-lang__option" role="radio" data-lang-option="es" aria-checked="false">Español</button>
+              <button type="button" class="menu-lang__option" role="radio" data-lang-option="fr" aria-checked="false">Français</button>
+            </div>
+          </details>
+        </div>
       </div>
     </div>
 
@@ -62,11 +78,11 @@
       <section class="hero">
         <div class="hero-card">
           <div class="badge">
-            <span>Linea gelato</span>
-            <span class="page-stars" data-page-stars>⭐ Stelle: 8/8</span>
+            <span data-i18n="gelatoLab.hero.badge">Linea gelato</span>
+            <span class="page-stars" data-page-stars data-i18n="gelatoLab.hero.stars">⭐ Stelle: 8/8</span>
           </div>
           <h1>Gelato Lab</h1>
-          <p>
+          <p data-i18n="gelatoLab.hero.desc">
             Manuale per il banco gelato: porzioni, servizio take me home, coppe scenografiche e manutenzione della vetrina
             a -14/-15 °C.
           </p>
@@ -81,7 +97,7 @@
         <header class="carousel-header" data-carousel-header>
           <div class="carousel-header__title-block">
             <h2 class="carousel-title" data-carousel-title>Gelato Lab</h2>
-            <span class="carousel-category" data-carousel-category>Linea gelato</span>
+            <span class="carousel-category" data-carousel-category data-i18n="gelatoLab.carousel.products.category">Linea gelato</span>
           </div>
           <div class="carousel-indicators" data-carousel-indicators></div>
         </header>
@@ -99,11 +115,11 @@
                 <img src="assets/products/gelato cup medio.png" alt="Coppette gelato Badiani" loading="lazy" />
               </picture>
             </figure>
-            <p>
+            <p data-i18n="gelatoLab.cards.cups.desc">
               Coppette in tre misure: Piccolo (1 gusto, 100 g), Medio (1-2 gusti, 140 g), Grande (1-3 gusti, 180 g).
               La chiave è dosare correttamente il gelato e compattarlo bene per eliminare bolle d'aria e dare una presentazione uniforme.
             </p>
-            <ul class="stat-list">
+            <ul class="stat-list" data-i18n-html="gelatoLab.cards.cups.stats">
               <li>Pesatura: Piccolo 100-120g, Medio 160-200g, Grande 200-240g (controlla sempre)</li>
               <li>Tecnica scoop: lineare + ball per look professionale</li>
               <li>Compattamento: spingi il gelato sul lato della coppetta eliminando aria</li>
@@ -111,8 +127,8 @@
               <li>Completamento: offri sempre wafer e panna (upselling)</li>
               <li>Temperatura ideale gelato: -14/-15°C (se più caldo è difficile da dosare)</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Procedura</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.procedure">Procedura</button>
+            <div class="details" data-i18n-html="gelatoLab.cards.cups.details">
               <div class="steps">
                 <span>1 · Scalda spatola passando sul gusto per ammorbidirlo.</span>
                 <span>2 · Spingi gelato sul lato della coppetta eliminando aria.</span>
@@ -143,11 +159,11 @@
                 <img src="assets/products/gelato cone medio.png" alt="Coni gelato Badiani" loading="lazy" />
               </picture>
             </figure>
-            <p>
+            <p data-i18n="gelatoLab.cards.cones.desc">
               Coni in tre varianti: Classico (1 gusto), Cioccolato o Gluten Free (1-2 gusti). Ogni cono va avvolto con tissue per grip e presentazione.
               Mantieni l'area dei coni sempre pulita per evitare contaminazioni di sapori.
             </p>
-            <ul class="stat-list">
+            <ul class="stat-list" data-i18n-html="gelatoLab.cards.cones.stats">
               <li>Avvolgimento: tissue sempre, per grip e look</li>
               <li>Dosaggio: 1 ball per cono piccolo, 1-2 ball per coni speciali (choco/GF)</li>
               <li>Posizionamento: appoggia la ball ruotando il cono per stabilità</li>
@@ -155,8 +171,8 @@
               <li>Stock rotation: FIFO rigoroso (i coni assorbono umidità, usa quelli meno freschi prima)</li>
               <li>Upgrade upsell: cono cioccolato (ricoperto dentro e fuori), panna montata</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Procedura</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.procedure">Procedura</button>
+            <div class="details" data-i18n-html="gelatoLab.cards.cones.details">
               <div class="steps">
                 <span>1 · Avvolgi cono con tissue.</span>
                 <span>2 · Prepara ball e appoggiala ruotando.</span>
@@ -187,11 +203,11 @@
                 <img src="assets/products/gelato box medio.png" alt="Gelato take me home box" loading="lazy" />
               </picture>
             </figure>
-            <p>
+            <p data-i18n="gelatoLab.cards.boxes.desc">
               Gelato da asporto in box termici da 500/750/1000 ml. Ogni box mantiene il gelato al giusto stato per circa 1 ora se messo nella borsa termica.
               Comunica sempre al cliente di mettere subito in freezer a casa: il gelato cambia di consistenza quando si scongela.
             </p>
-            <ul class="stat-list">
+            <ul class="stat-list" data-i18n-html="gelatoLab.cards.boxes.stats">
               <li>Piccolo: 500 ml (1-3 gusti)</li>
               <li>Medio: 750 ml (1-4 gusti)</li>
               <li>Grande: 1000 ml (1-5 gusti)</li>
@@ -200,8 +216,8 @@
               <li>Sigillatura: film + nastro Badiani, consegna in borsa termica</li>
               <li>Autonomia: 1 ora in borsa termica; comunica sempre il freezer a casa per mantenere qualità</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Procedura</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.procedure">Procedura</button>
+            <div class="details" data-i18n-html="gelatoLab.cards.boxes.details">
               <div class="steps">
                 <span>1 · Inserisci gusti iniziando dai più morbidi (sorbet prima per evitare contaminazioni).</span>
                 <span>2 · Compatta eliminando bolle d'aria e pulisci bordi.</span>
@@ -232,19 +248,19 @@
                 <img src="assets/products/coppa gelato.png" alt="Coppa gelato scenografica" loading="lazy" />
               </picture>
             </figure>
-            <p>
+            <p data-i18n="gelatoLab.cards.coppa.desc">
               Tre boules di gelato in coppa di vetro, completate con panna montata, una salsa a scelta, mini cono e wafer Badiani.
               È la proposta “wow”: va costruita con ordine e servita subito per mantenere texture e pulizia del topping.
             </p>
-            <ul class="stat-list">
+            <ul class="stat-list" data-i18n-html="gelatoLab.cards.coppa.stats">
               <li>Base: coppa in vetro</li>
               <li>Porzione: 3 scoops con scooper tondo (anche 3 gusti diversi)</li>
               <li>Top: panna montata + swirl di sauce scelta</li>
               <li>Finitura: mini cono + wafer Badiani</li>
               <li>Servizio: cucchiaio in acciaio, consegna immediata</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Procedura</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.procedure">Procedura</button>
+            <div class="details" data-i18n-html="gelatoLab.cards.coppa.details">
               <div class="steps">
                 <span>1 · Prendi una coppa di vetro e prepara i gusti con lo scooper tondo: 3 boules regolari (anche di gusti diversi).</span>
                 <span>2 · Completa con panna montata e uno swirl della sauce scelta (senza sporcare i bordi).</span>
@@ -269,8 +285,8 @@
       <section class="carousel" data-carousel="gelato-lab-ops">
         <header class="carousel-header" data-carousel-header>
           <div class="carousel-header__title-block">
-            <h2 class="carousel-title" data-carousel-title>Setup &amp; Conservazione</h2>
-            <span class="carousel-category" data-carousel-category>Apertura · Setting · Storage · Scampoli · Chiusura</span>
+            <h2 class="carousel-title" data-carousel-title data-i18n="gelatoLab.ops.title">Setup &amp; Conservazione</h2>
+            <span class="carousel-category" data-carousel-category data-i18n="gelatoLab.ops.category">Apertura · Setting · Storage · Scampoli · Chiusura</span>
           </div>
           <div class="carousel-indicators" data-carousel-indicators></div>
         </header>
@@ -282,16 +298,16 @@
               <span class="tag">Vetrina gelato</span>
               <span class="tag">-14/-15 °C</span>
             </div>
-            <h3>Preparazione vetrina (mattino)</h3>
-            <p>Pulisci, lucida e prepara la vetrina prima di esporre. Esponi solo quando la macchina arriva a -14/-15 °C.</p>
-            <ul class="stat-list">
+            <h3 data-i18n="gelatoLab.ops.displayPrep.title">Preparazione vetrina (mattino)</h3>
+            <p data-i18n="gelatoLab.ops.displayPrep.desc">Pulisci, lucida e prepara la vetrina prima di esporre. Esponi solo quando la macchina arriva a -14/-15 °C.</p>
+            <ul class="stat-list" data-i18n-html="gelatoLab.ops.displayPrep.stats">
               <li>Pulizia: panno umido con acqua calda + sanitiser giallo sulle macchie gelato</li>
               <li>Metalli: blue spray + blue roll per far “shine” le superfici</li>
               <li>Setup: inserisci barre porta-vaschette, accendi, posiziona vaschette e sliding doors</li>
               <li>Esposizione: quando arriva a -14/-15 °C, carica i gusti e chiudi le sliding doors</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Checklist</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.checklist">Checklist</button>
+            <div class="details" data-i18n-html="gelatoLab.ops.displayPrep.details">
               <div class="steps">
                 <span>1 · Pulisci e lucida (soprattutto metalli e sliding doors).</span>
                 <span>2 · Accendi e posiziona barre + vaschette.</span>
@@ -307,18 +323,18 @@
               <span class="tag">Sliding doors</span>
               <span class="tag">HACCP</span>
             </div>
-            <h3>Temperatura &amp; porte (standard)</h3>
-            <p>
+            <h3 data-i18n="gelatoLab.ops.tempDoors.title">Temperatura &amp; porte (standard)</h3>
+            <p data-i18n="gelatoLab.ops.tempDoors.desc">
               Standard chiave: vetrina a -14/-15 °C. Se lo store non è busy, le sliding doors devono essere in posizione
               per preservare la temperatura.
             </p>
-            <ul class="stat-list">
+            <ul class="stat-list" data-i18n-html="gelatoLab.ops.tempDoors.stats">
               <li>Target: -14/-15 °C (registra su log HACCP se previsto in store)</li>
               <li>Porte: in posizione quando non c'è servizio attivo</li>
               <li>Utensili: le spatole usate per pulire vanno lavate e asciugate prima di passare ad altri gusti</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Regole</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.rules">Regole</button>
+            <div class="details" data-i18n-html="gelatoLab.ops.tempDoors.details">
               <div class="steps">
                 <span>1 · Controlla temperatura e annota secondo standard locale.</span>
                 <span>2 · Mantieni le sliding doors chiuse tra un servizio e l'altro.</span>
@@ -333,15 +349,15 @@
               <span class="tag">Treat freezer</span>
               <span class="tag">Shelf life</span>
             </div>
-            <h3>Shelf life treats (dopo esposizione)</h3>
-            <p>Tabella rapida: giorni massimi dopo esposizione nella vetrina treats.</p>
-            <ul class="stat-list">
+            <h3 data-i18n="gelatoLab.ops.treatsShelfLife.title">Shelf life treats (dopo esposizione)</h3>
+            <p data-i18n="gelatoLab.ops.treatsShelfLife.desc">Tabella rapida: giorni massimi dopo esposizione nella vetrina treats.</p>
+            <ul class="stat-list" data-i18n-html="gelatoLab.ops.treatsShelfLife.stats">
               <li>Cakes / Pinguinos / Mini semifreddo: 35 giorni</li>
               <li>Mini cakes / Mini cones: 21 giorni</li>
               <li>Cookies: 14 giorni</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Tabella</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.table">Tabella</button>
+            <div class="details" data-i18n-html="gelatoLab.ops.treatsShelfLife.details">
               <div class="steps">
                 <strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">Shelf life una volta esposti</strong>
                 <span>Cakes / Pinguinos / Mini semifreddo: 35 giorni</span>
@@ -357,14 +373,14 @@
               <span class="tag">Treat freezer</span>
               <span class="tag">-14 °C</span>
             </div>
-            <h3>Gestione treat freezer</h3>
-            <p>Vetrina verticale a -14 °C, defrost weekly, tutto esposto con guanti.</p>
-            <ul class="stat-list">
+            <h3 data-i18n="gelatoLab.ops.treatFreezer.title">Gestione treat freezer</h3>
+            <p data-i18n="gelatoLab.ops.treatFreezer.desc">Vetrina verticale a -14 °C, defrost weekly, tutto esposto con guanti.</p>
+            <ul class="stat-list" data-i18n-html="gelatoLab.ops.treatFreezer.stats">
               <li>Disporre cakes su shelf alto, cookies/pinguini su quello basso (eye level kids)</li>
               <li>Shelf life dopo esposizione: cakes/pinguini 35 giorni, mini semifreddi 35, mini cakes 21, mini cones 21, cookies 14</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Routine</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.routine">Routine</button>
+            <div class="details" data-i18n-html="gelatoLab.ops.treatFreezer.details">
               <div class="steps">
                 <span>1 · Massimizza spazio, FIFO.</span>
                 <span>2 · Ricorda ai clienti che sono prodotti gelato.</span>
@@ -389,15 +405,15 @@
               <span class="tag">Scampoli</span>
               <span class="tag">5–7 cm</span>
             </div>
-            <h3>Regola Scampolo (1/4 pan)</h3>
-            <p>Quando un gusto ha meno di 1/4 di vaschetta è uno scampolo e va sostituito. Puoi integrarlo poco alla volta nella vaschetta nuova, senza superare 5–7 cm.</p>
-            <ul class="stat-list">
+            <h3 data-i18n="gelatoLab.ops.scampolo.title">Regola Scampolo (1/4 pan)</h3>
+            <p data-i18n="gelatoLab.ops.scampolo.desc">Quando un gusto ha meno di 1/4 di vaschetta è uno scampolo e va sostituito. Puoi integrarlo poco alla volta nella vaschetta nuova, senza superare 5–7 cm.</p>
+            <ul class="stat-list" data-i18n-html="gelatoLab.ops.scampolo.stats">
               <li>Definizione: &lt; 1/4 pan = scampolo</li>
               <li>Aggiunta: circa 100 g alla volta (lato di uno scoop)</li>
               <li>Limite: massimo 5–7 cm di scampolo totale</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Procedura</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.procedure">Procedura</button>
+            <div class="details" data-i18n-html="gelatoLab.ops.scampolo.details">
               <div class="steps">
                 <span>1 · Prendi lo scampolo dallo scampoli freezer.</span>
                 <span>2 · Aggiungi piccoli quantitativi e livella (non deve “sembrare aggiunto”).</span>
@@ -413,15 +429,15 @@
               <span class="tag">Deep clean</span>
               <span class="tag">Weekly</span>
             </div>
-            <h3>Chiusura &amp; deep clean vetrina</h3>
-            <p>Routine: vetrina OFF ogni notte. Deep clean completo una volta a settimana, inclusa la pulizia filtri.</p>
-            <ul class="stat-list">
+            <h3 data-i18n="gelatoLab.ops.closeDeepClean.title">Chiusura &amp; deep clean vetrina</h3>
+            <p data-i18n="gelatoLab.ops.closeDeepClean.desc">Routine: vetrina OFF ogni notte. Deep clean completo una volta a settimana, inclusa la pulizia filtri.</p>
+            <ul class="stat-list" data-i18n-html="gelatoLab.ops.closeDeepClean.stats">
               <li>Ogni sera: switch off + pulizia ordinaria</li>
               <li>Weekly: deep clean completo + cleaning filtri</li>
               <li>Focus: rimuovere nuts/crumbs e sanificare tutte le superfici</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Deep clean steps</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.deepCleanSteps">Deep clean steps</button>
+            <div class="details" data-i18n-html="gelatoLab.ops.closeDeepClean.details">
               <div class="steps">
                 <span>1 · Rimuovi pannelli bottom e pulisci macchie gelato.</span>
                 <span>2 · Elimina nuts/crumbs; sanitising spray + panno su tutte le superfici.</span>
@@ -436,15 +452,15 @@
       <footer class="category-footer">
         <div class="footer-icon">🍦</div>
         <h3 class="footer-title">Gelato Lab</h3>
-        <p class="footer-tagline">L'arte del gelato fiorentino</p>
+        <p class="footer-tagline" data-i18n="gelatoLab.footer.tagline">L'arte del gelato fiorentino</p>
         <div class="footer-stats">
           <div class="footer-stat">
             <span class="stat-value">-14°C</span>
-            <span class="stat-label">Temp. Ideale</span>
+            <span class="stat-label" data-i18n="gelatoLab.footer.tempLabel">Temp. Ideale</span>
           </div>
           <div class="footer-stat">
             <span class="stat-value">1932</span>
-            <span class="stat-label">Heritage</span>
+            <span class="stat-label" data-i18n="gelatoLab.footer.heritageLabel">Heritage</span>
           </div>
         </div>
       </footer>

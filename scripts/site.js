@@ -49,68 +49,25 @@ document.documentElement.classList.add('has-js');
     return p;
   };
 
-  const getFrameRect = (imgW, imgH, cfg, frameIndex) => {
-    const cols = Math.max(1, Number(cfg?.cols) || 6);
-    const rows = Math.max(1, Number(cfg?.rows) || 4);
-    const el = cfg?.el;
+  const getFrameRect = (imgW, imgH, cols, rows, frameIndex) => {
     const col = frameIndex % cols;
     const row = Math.floor(frameIndex / cols);
 
-    // Optional explicit sizing & layout controls (useful when the sheet has margins/gaps).
-    const frameWAttr = num(el?.getAttribute?.('data-avatar-frame-w'), NaN);
-    const frameHAttr = num(el?.getAttribute?.('data-avatar-frame-h'), NaN);
-    const gapX = Math.max(0, Math.floor(num(el?.getAttribute?.('data-avatar-gap-x'), 0)));
-    const gapY = Math.max(0, Math.floor(num(el?.getAttribute?.('data-avatar-gap-y'), 0)));
-    const marginX = Math.max(0, Math.floor(num(el?.getAttribute?.('data-avatar-margin-x'), 0)));
-    const marginY = Math.max(0, Math.floor(num(el?.getAttribute?.('data-avatar-margin-y'), 0)));
-    const inset = Math.max(0, Math.floor(num(el?.getAttribute?.('data-avatar-inset'), 0)));
+    // Compute integer rects by distributing remainder pixels across cells.
+    const cellW = imgW / cols;
+    const cellH = imgH / rows;
 
-    // Heuristic:
-    // - When imgW/imgH are not divisible by cols/rows but the remainder is tiny (<=2px),
-    //   it is usually a right/bottom margin, not per-cell fractional pixels. In that case,
-    //   use a fixed integer cell size (floor) to keep every frame aligned.
-    // - Otherwise, distribute remainder by rounding boundaries.
-    const remW = (imgW > 0) ? (imgW % cols) : 0;
-    const remH = (imgH > 0) ? (imgH % rows) : 0;
+    const sx = Math.round(col * cellW);
+    const sx2 = Math.round((col + 1) * cellW);
+    const sy = Math.round(row * cellH);
+    const sy2 = Math.round((row + 1) * cellH);
 
-    const fixedW = Number.isFinite(frameWAttr)
-      ? Math.max(1, Math.floor(frameWAttr))
-      : ((remW > 0 && remW <= 2) ? Math.max(1, Math.floor(imgW / cols)) : null);
-
-    const fixedH = Number.isFinite(frameHAttr)
-      ? Math.max(1, Math.floor(frameHAttr))
-      : ((remH > 0 && remH <= 2) ? Math.max(1, Math.floor(imgH / rows)) : null);
-
-    let sx, sy, sw, sh;
-
-    if (fixedW != null && fixedH != null) {
-      sx = marginX + col * (fixedW + gapX);
-      sy = marginY + row * (fixedH + gapY);
-      sw = fixedW;
-      sh = fixedH;
-    } else {
-      // Compute integer rects by distributing remainder pixels across cells.
-      const cellW = imgW / cols;
-      const cellH = imgH / rows;
-      const sx1 = Math.round(col * cellW);
-      const sx2 = Math.round((col + 1) * cellW);
-      const sy1 = Math.round(row * cellH);
-      const sy2 = Math.round((row + 1) * cellH);
-      sx = sx1;
-      sy = sy1;
-      sw = Math.max(1, sx2 - sx1);
-      sh = Math.max(1, sy2 - sy1);
-    }
-
-    // Optional safety inset (prevents any edge bleed in tightly-packed sheets).
-    if (inset) {
-      sx += inset;
-      sy += inset;
-      sw = Math.max(1, sw - inset * 2);
-      sh = Math.max(1, sh - inset * 2);
-    }
-
-    return { sx, sy, sw, sh };
+    return {
+      sx,
+      sy,
+      sw: Math.max(1, sx2 - sx),
+      sh: Math.max(1, sy2 - sy),
+    };
   };
 
   const all = new Set();
@@ -261,12 +218,7 @@ document.documentElement.classList.add('has-js');
           canvas.height = ch;
         }
 
-        const fr = getFrameRect(
-          img.naturalWidth || img.width || 0,
-          img.naturalHeight || img.height || 0,
-          cfg,
-          abs
-        );
+        const fr = getFrameRect(img.naturalWidth || img.width || 0, img.naturalHeight || img.height || 0, cfg.cols, cfg.rows, abs);
         try {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
           ctx.drawImage(img, fr.sx, fr.sy, fr.sw, fr.sh, 0, 0, canvas.width, canvas.height);
@@ -550,6 +502,28 @@ document.addEventListener('keydown', (e) => {
 const STORAGE_KEY_USER = 'badianiUser.profile.v1';
 const STORAGE_KEY_PROFILES = 'badianiUser.profiles';
 
+// ============================================================
+// I18N HELPERS (loaded via scripts/i18n.js before this file)
+// ============================================================
+const I18N_STORAGE_KEY = 'badianiUILang.v1';
+
+const getUiLang = () => {
+  try {
+    const raw = String(localStorage.getItem(I18N_STORAGE_KEY) || '').trim().toLowerCase();
+    if (raw === 'it' || raw === 'en' || raw === 'es' || raw === 'fr') return raw;
+  } catch {}
+  return 'it';
+};
+
+const tr = (key, vars, fallback) => {
+  try {
+    const api = window.BadianiI18n;
+    if (api && typeof api.t === 'function') return api.t(key, vars);
+  } catch {}
+  if (fallback != null) return String(fallback);
+  return String(key || '');
+};
+
 // Mostra nickname utente nella barra
 window.addEventListener('DOMContentLoaded', function() {
   try {
@@ -650,32 +624,32 @@ window.addEventListener('DOMContentLoaded', function() {
     card.innerHTML = `
       <h2 id="signup-title" style="margin:0 0 16px 0; font-size:24px; font-family: var(--font-medium);">Badiani Training</h2>
       <div style="display:flex; gap:12px; margin-bottom:16px;">
-        <button type="button" data-tab="signup" class="tab-btn is-active" style="flex:1; padding:10px; border-radius:10px; border:2px solid #214098; background:#214098; color:#fff; font-weight:600; cursor:pointer;">Iscrizione</button>
-        <button type="button" data-tab="login" class="tab-btn" style="flex:1; padding:10px; border-radius:10px; border:2px solid #d1d5db; background:transparent; color:#0f2154; font-weight:600; cursor:pointer;">Accedi</button>
+        <button type="button" data-tab="signup" class="tab-btn is-active" style="flex:1; padding:10px; border-radius:10px; border:2px solid #214098; background:#214098; color:#fff; font-weight:600; cursor:pointer;">${tr('profile.gate.signup', null, 'Iscrizione')}</button>
+        <button type="button" data-tab="login" class="tab-btn" style="flex:1; padding:10px; border-radius:10px; border:2px solid #d1d5db; background:transparent; color:#0f2154; font-weight:600; cursor:pointer;">${tr('profile.gate.login', null, 'Accedi')}</button>
       </div>
       <div data-panel="signup" style="display:block;">
-        <p style="margin:0 0 16px 0; color: var(--brand-gray-soft, #6b7280);">Crea un nuovo profilo con il tuo nickname e gusto di gelato preferito.</p>
+        <p style="margin:0 0 16px 0; color: var(--brand-gray-soft, #6b7280);">${tr('profile.gate.signupLead', null, 'Crea un nuovo profilo con il tuo nickname e gusto di gelato preferito.')}</p>
         <form data-form="signup" novalidate>
-          <label style="display:block; font-weight:600; margin-bottom:6px;">Nickname</label>
-          <input type="text" data-input="nickname" name="nickname" placeholder="Es. StellaRosa" required style="width:100%; padding:12px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:16px; margin-bottom:14px;" />
-          <label style="display:block; font-weight:600; margin-bottom:6px;">Gusto gelato preferito</label>
-          <input type="text" data-input="gelato" name="gelato" placeholder="Es. Buontalenti" required style="width:100%; padding:12px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:16px; margin-bottom:18px;" />
+          <label style="display:block; font-weight:600; margin-bottom:6px;">${tr('profile.gate.nickname', null, 'Nickname')}</label>
+          <input type="text" data-input="nickname" name="nickname" placeholder="${tr('profile.gate.nicknamePh', null, 'Es. StellaRosa')}" required style="width:100%; padding:12px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:16px; margin-bottom:14px;" />
+          <label style="display:block; font-weight:600; margin-bottom:6px;">${tr('profile.gate.gelatoLabel', null, 'Gusto gelato preferito')}</label>
+          <input type="text" data-input="gelato" name="gelato" placeholder="${tr('profile.gate.gelatoPh', null, 'Es. Buontalenti')}" required style="width:100%; padding:12px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:16px; margin-bottom:18px;" />
           <p data-error style="margin:0 0 12px 0; color:#b91c1c; display:none; font-size:14px;"></p>
-          <button type="submit" style="padding:10px 14px; border-radius:10px; background:#214098; color:#fff; border:none; font-weight:600; cursor:pointer;">Iscriviti</button>
+          <button type="submit" style="padding:10px 14px; border-radius:10px; background:#214098; color:#fff; border:none; font-weight:600; cursor:pointer;">${tr('profile.gate.signupBtn', null, 'Iscriviti')}</button>
         </form>
       </div>
       <div data-panel="login" style="display:none;">
-        <p style="margin:0 0 16px 0; color: var(--brand-gray-soft, #6b7280);">Accedi con il tuo nickname e gusto di gelato.</p>
+        <p style="margin:0 0 16px 0; color: var(--brand-gray-soft, #6b7280);">${tr('profile.gate.loginLead', null, 'Accedi con il tuo nickname e gusto di gelato.')}</p>
         <form data-form="login" novalidate>
-          <label style="display:block; font-weight:600; margin-bottom:6px;">Nickname</label>
-          <input type="text" data-input="nickname" name="nickname" placeholder="Es. StellaRosa" required style="width:100%; padding:12px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:16px; margin-bottom:14px;" />
-          <label style="display:block; font-weight:600; margin-bottom:6px;">Gusto gelato preferito</label>
-          <input type="text" data-input="gelato" name="gelato" placeholder="Es. Buontalenti" required style="width:100%; padding:12px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:16px; margin-bottom:18px;" />
+          <label style="display:block; font-weight:600; margin-bottom:6px;">${tr('profile.gate.nickname', null, 'Nickname')}</label>
+          <input type="text" data-input="nickname" name="nickname" placeholder="${tr('profile.gate.nicknamePh', null, 'Es. StellaRosa')}" required style="width:100%; padding:12px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:16px; margin-bottom:14px;" />
+          <label style="display:block; font-weight:600; margin-bottom:6px;">${tr('profile.gate.gelatoLabel', null, 'Gusto gelato preferito')}</label>
+          <input type="text" data-input="gelato" name="gelato" placeholder="${tr('profile.gate.gelatoPh', null, 'Es. Buontalenti')}" required style="width:100%; padding:12px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:16px; margin-bottom:18px;" />
           <p data-error style="margin:0 0 12px 0; color:#b91c1c; display:none; font-size:14px;"></p>
-          <button type="submit" style="padding:10px 14px; border-radius:10px; background:#214098; color:#fff; border:none; font-weight:600; cursor:pointer;">Accedi</button>
+          <button type="submit" style="padding:10px 14px; border-radius:10px; background:#214098; color:#fff; border:none; font-weight:600; cursor:pointer;">${tr('profile.gate.loginBtn', null, 'Accedi')}</button>
         </form>
       </div>
-      <p style="margin-top:12px; font-size:12px; color:var(--brand-gray-soft, #6b7280);">I dati sono salvati solo su questo dispositivo.</p>
+      <p style="margin-top:12px; font-size:12px; color:var(--brand-gray-soft, #6b7280);">${tr('profile.gate.deviceNote', null, 'I dati sono salvati solo su questo dispositivo.')}</p>
     `;
 
     const tabBtns = Array.from(card.querySelectorAll('[data-tab]'));
@@ -720,9 +694,9 @@ window.addEventListener('DOMContentLoaded', function() {
         if (nickname.length < 2 || gelato.length < 2) {
           if (error) {
             error.style.display = 'block';
-            error.textContent = 'Compila entrambi i campi (minimo 2 caratteri).';
+            error.textContent = tr('profile.err.fillBothMin2', null, 'Compila entrambi i campi (minimo 2 caratteri).');
           }
-          alert('Errore: Compila entrambi i campi (minimo 2 caratteri).');
+          alert(tr('profile.err.fillBothMin2', null, 'Compila entrambi i campi (minimo 2 caratteri).'));
           return;
         }
         const result = createNewProfile(nickname, gelato);
@@ -730,12 +704,12 @@ window.addEventListener('DOMContentLoaded', function() {
         if (!result) {
           if (error) {
             error.style.display = 'block';
-            error.textContent = 'Questo nickname è già in uso. Scegline un altro.';
+            error.textContent = tr('profile.err.nicknameTaken', null, 'Questo nickname è già in uso. Scegline un altro.');
           }
-          alert('Errore: Questo nickname è già in uso. Scegline un altro.');
+          alert(tr('profile.err.nicknameTaken', null, 'Questo nickname è già in uso. Scegline un altro.'));
           return;
         }
-        alert('Registrazione riuscita! Benvenuto/a ' + nickname + '. Ricarico la pagina...');
+        alert(tr('profile.ok.signup', { name: nickname }, 'Registrazione riuscita! Benvenuto/a {{name}}. Ricarico la pagina...'));
         console.log('User created successfully, reloading...');
         overlay.remove();
         bodyScrollLock.unlock();
@@ -768,9 +742,9 @@ window.addEventListener('DOMContentLoaded', function() {
         if (nickname.length < 2 || gelato.length < 2) {
           if (error) {
             error.style.display = 'block';
-            error.textContent = 'Compila entrambi i campi.';
+            error.textContent = tr('profile.err.fillBoth', null, 'Compila entrambi i campi.');
           }
-          alert('Errore: Compila entrambi i campi.');
+          alert(tr('profile.err.fillBoth', null, 'Compila entrambi i campi.'));
           return;
         }
         const result = loginWithProfile(nickname, gelato);
@@ -778,12 +752,12 @@ window.addEventListener('DOMContentLoaded', function() {
         if (!result) {
           if (error) {
             error.style.display = 'block';
-            error.textContent = 'Profilo non trovato. Controlla nickname e gusto.';
+            error.textContent = tr('profile.err.notFound', null, 'Profilo non trovato. Controlla nickname e gusto.');
           }
-          alert('Errore: Profilo non trovato. Controlla nickname e gusto.');
+          alert(tr('profile.err.notFound', null, 'Profilo non trovato. Controlla nickname e gusto.'));
           return;
         }
-        alert('Login riuscito! Bentornato/a ' + nickname + '. Ricarico la pagina...');
+        alert(tr('profile.ok.login', { name: nickname }, 'Login riuscito! Bentornato/a {{name}}. Ricarico la pagina...'));
         console.log('Login successful, reloading...');
         overlay.remove();
         bodyScrollLock.unlock();
@@ -962,12 +936,12 @@ scrollButtons.forEach((btn) => {
   const COMPLETION_KEY_PREFIX = 'badianiCategoryCompletion.v1';
   const GAMIFICATION_KEY_PREFIX = 'badianiGamification.v3';
   const moods = [
-    'Coraggio: ogni servizio è un racconto.',
-    'Brilla: i dettagli fanno la differenza.',
-    'Energia gentile: sorridi e guida l’esperienza.',
-    'Precisione oggi, eccellenza domani.',
-    'Servi bellezza: cura, ritmo, calore umano.',
-    'Ogni caffè è una promessa mantenuta.',
+    tr('mood.1', null, 'Coraggio: ogni servizio è un racconto.'),
+    tr('mood.2', null, 'Brilla: i dettagli fanno la differenza.'),
+    tr('mood.3', null, 'Energia gentile: sorridi e guida l’esperienza.'),
+    tr('mood.4', null, 'Precisione oggi, eccellenza domani.'),
+    tr('mood.5', null, 'Servi bellezza: cura, ritmo, calore umano.'),
+    tr('mood.6', null, 'Ogni caffè è una promessa mantenuta.'),
   ];
   let lastMood = '';
   let assistantNodes = null;
@@ -4800,57 +4774,57 @@ const gamification = (() => {
         <button class="nav-token__btn" type="button" aria-expanded="false" aria-haspopup="dialog" data-popover-toggle="stars">
           <span class="nav-token__icon" aria-hidden="true">★</span>
           <span class="nav-token__badge">
-            <span class="nav-token__label">Stelline</span>
+            <span class="nav-token__label" data-i18n="tokens.stars">${tr('tokens.stars', null, 'Stelline')}</span>
             <span class="nav-token__value reward-value" data-star-value data-current="0">0</span>
           </span>
         </button>
-        <div class="reward-popover" data-popover-panel="stars" role="dialog" aria-label="Dettagli stelline" hidden>
+        <div class="reward-popover" data-popover-panel="stars" role="dialog" aria-label="Dettagli stelline" data-i18n-attr="aria-label:tokens.stars.detailsAria" hidden>
           <div class="reward-popover__header">
-            <p class="reward-popover__label">Progressi</p>
+            <p class="reward-popover__label" data-i18n="tokens.progress">${tr('tokens.progress', null, 'Progressi')}</p>
             <span class="reward-progress" data-star-progress>0/${MAX_STARS}</span>
           </div>
           <p class="reward-popover__text">
-            Apri i tab dentro una scheda: ogni tab svela 1 cristallo di zucchero. Ogni ${CRYSTALS_PER_STAR} cristalli (per singola scheda info) si fondono in 1 stellina.
+            ${tr('tokens.stars.text', { perStar: CRYSTALS_PER_STAR }, `Apri i tab dentro una scheda: ogni tab svela 1 cristallo di zucchero. Ogni ${CRYSTALS_PER_STAR} cristalli (per singola scheda info) si fondono in 1 stellina.`)}
           </p>
-          <p class="reward-popover__hint reward-hint" data-crystal-progress>Cristalli: progressi per scheda (0/${CRYSTALS_PER_STAR}). Se i tab sono meno di ${CRYSTALS_PER_STAR}, completiamo la differenza all'apertura della scheda info.</p>
-          <button class="reward-popover__cta" type="button" data-quiz-launch hidden>Test me</button>
-          <p class="reward-popover__hint">3 stelline = mini quiz (1 domanda). Se giusto sblocchi “Test me”.</p>
-          <button class="reward-popover__link" type="button" data-info-launch>Regole complete</button>
+          <p class="reward-popover__hint reward-hint" data-crystal-progress>${tr('tokens.stars.crystalsHint', { perStar: CRYSTALS_PER_STAR }, `Cristalli: progressi per scheda (0/${CRYSTALS_PER_STAR}). Se i tab sono meno di ${CRYSTALS_PER_STAR}, completiamo la differenza all'apertura della scheda info.`)}</p>
+          <button class="reward-popover__cta" type="button" data-quiz-launch hidden data-i18n="tokens.testMe">${tr('tokens.testMe', null, 'Test me')}</button>
+          <p class="reward-popover__hint" data-i18n="tokens.stars.miniHint">${tr('tokens.stars.miniHint', null, '3 stelline = mini quiz (1 domanda). Se giusto sblocchi “Test me”.')}</p>
+          <button class="reward-popover__link" type="button" data-info-launch data-i18n="tokens.rulesFull">${tr('tokens.rulesFull', null, 'Regole complete')}</button>
         </div>
       </div>
       <div class="nav-token nav-token--gelato" data-gelato-token>
         <button class="nav-token__btn" type="button" aria-expanded="false" aria-haspopup="dialog" data-popover-toggle="gelato">
           <span class="nav-token__icon" aria-hidden="true">🍨</span>
           <span class="nav-token__badge">
-            <span class="nav-token__label">Gelati</span>
+            <span class="nav-token__label" data-i18n="tokens.gelati">${tr('tokens.gelati', null, 'Gelati')}</span>
             <span class="nav-token__value reward-value" data-gelato-value data-current="0">0</span>
           </span>
         </button>
-        <div class="reward-popover" data-popover-panel="gelato" role="dialog" aria-label="Dettagli gelati" hidden>
+        <div class="reward-popover" data-popover-panel="gelato" role="dialog" aria-label="Dettagli gelati" data-i18n-attr="aria-label:tokens.gelati.detailsAria" hidden>
           <p class="reward-popover__text">
-            Tre quiz perfetti = un gelato reale da riscattare con il trainer. Il timer ti impedisce gli sprint consecutivi.
+            ${tr('tokens.gelati.text', null, 'Tre quiz perfetti = un gelato reale da riscattare con il trainer. Il timer ti impedisce gli sprint consecutivi.')}
           </p>
           <div class="reward-countdown" data-countdown hidden>
-            <span class="countdown-label">Cooldown</span>
+            <span class="countdown-label" data-i18n="tokens.cooldown">${tr('tokens.cooldown', null, 'Cooldown')}</span>
             <span class="countdown-digits" data-countdown-value>24:00:00</span>
           </div>
           <p class="reward-popover__hint reward-hint" data-cooldown-hint hidden></p>
-          <button class="reward-popover__link" type="button" data-info-launch>Vedi regolamento</button>
+          <button class="reward-popover__link" type="button" data-info-launch data-i18n="tokens.seeRules">${tr('tokens.seeRules', null, 'Vedi regolamento')}</button>
         </div>
       </div>
       <div class="nav-token nav-token--bonus" data-bonus-token>
         <button class="nav-token__btn" type="button" aria-expanded="false" aria-haspopup="dialog" data-popover-toggle="bonus">
           <span class="nav-token__icon" aria-hidden="true">⚡</span>
           <span class="nav-token__badge">
-            <span class="nav-token__label">Bonus</span>
+            <span class="nav-token__label" data-i18n="tokens.bonus">${tr('tokens.bonus', null, 'Bonus')}</span>
             <span class="nav-token__value reward-value" data-bonus-value data-current="0">0</span>
           </span>
         </button>
-        <div class="reward-popover" data-popover-panel="bonus" role="dialog" aria-label="Dettagli punti bonus" hidden>
+        <div class="reward-popover" data-popover-panel="bonus" role="dialog" aria-label="Dettagli punti bonus" data-i18n-attr="aria-label:tokens.bonus.detailsAria" hidden>
           <p class="reward-popover__text">
-            65 stelline azzerano il loop e assegnano +${BONUS_POINTS_PER_FULL_SET} punti bonus convertibili in cash o prodotti Badiani.
+            ${tr('tokens.bonus.text', { points: BONUS_POINTS_PER_FULL_SET }, `65 stelline azzerano il loop e assegnano +${BONUS_POINTS_PER_FULL_SET} punti bonus convertibili in cash o prodotti Badiani.`)}
           </p>
-          <button class="reward-popover__link" type="button" data-info-launch>Come si sblocca</button>
+          <button class="reward-popover__link" type="button" data-info-launch data-i18n="tokens.howUnlock">${tr('tokens.howUnlock', null, 'Come si sblocca')}</button>
         </div>
       </div>
     `;
@@ -4937,7 +4911,7 @@ const gamification = (() => {
 
     const eyebrow = document.createElement('p');
     eyebrow.className = 'challenge-card__eyebrow';
-    eyebrow.textContent = 'Sfida continua';
+    eyebrow.textContent = tr('challenge.eyebrow', null, 'Sfida continua');
 
     const topic = document.createElement('p');
     topic.className = 'challenge-card__topic';
@@ -4962,7 +4936,7 @@ const gamification = (() => {
 
     const hint = document.createElement('p');
     hint.className = 'challenge-card__hint';
-    hint.textContent = 'Rispondi subito: errore = -3 stelline.';
+    hint.textContent = tr('challenge.hint', null, 'Rispondi subito: errore = -3 stelline.');
 
     container.append(eyebrow, topic, prompt, optionsWrap, hint);
     openOverlay(container);
@@ -5048,7 +5022,7 @@ const gamification = (() => {
     try {
       unlockOverlayClose();
       closeOverlay({ force: true });
-      if (typeof showToast === 'function') showToast('🧊 Sfida persa: -3 stelline. Rivedi subito la specifica.');
+      if (typeof showToast === 'function') showToast(`🧊 ${tr('challenge.toast.lost', null, 'Sfida persa: -3 stelline. Rivedi subito la specifica.')}`);
       if (lastItem) {
         openWrongReviewModal(lastItem);
         return;
@@ -5071,18 +5045,22 @@ const gamification = (() => {
     burst.textContent = passed ? '⚔️' : '🧊';
     const title = document.createElement('h3');
     title.className = 'reward-modal__title';
-    title.textContent = passed ? 'Sfida superata' : 'Sfida persa: -3 stelline';
+    title.textContent = passed
+      ? tr('challenge.result.winTitle', null, 'Sfida superata')
+      : tr('challenge.result.loseTitle', null, 'Sfida persa: -3 stelline');
     const text = document.createElement('p');
     text.className = 'reward-modal__text';
     text.textContent = passed
-      ? 'Ottimo! Conosci il playbook Badiani: continua a collezionare stelline senza perdere ritmo.'
-      : 'Niente panico: raccogli nuove schede e rientra subito nel giro delle stelline.';
+      ? tr('challenge.result.winText', null, 'Ottimo! Conosci il playbook Badiani: continua a collezionare stelline senza perdere ritmo.')
+      : tr('challenge.result.loseText', null, 'Niente panico: raccogli nuove schede e rientra subito nel giro delle stelline.');
     const actions = document.createElement('div');
     actions.className = 'reward-modal__actions';
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'reward-action primary';
-    btn.textContent = passed ? 'Continua' : 'Ci riprovo';
+    btn.textContent = passed
+      ? tr('challenge.result.winBtn', null, 'Continua')
+      : tr('challenge.result.loseBtn', null, 'Ci riprovo');
     btn.dataset.overlayFocus = 'true';
     btn.addEventListener('click', () => {
       unlockOverlayClose();
@@ -5320,6 +5298,9 @@ const gamification = (() => {
   function renderSummary() {
     const root = document.querySelector('[data-summary]');
     if (!root) return;
+
+    const uiLang = window.BadianiI18n?.getLang?.() || 'it';
+    const uiLocale = ({ it: 'it-IT', en: 'en-GB', es: 'es-ES', fr: 'fr-FR' }[uiLang]) || undefined;
     // Profile info
     try {
       const raw = localStorage.getItem('badianiUser.profile.v1');
@@ -5356,26 +5337,27 @@ const gamification = (() => {
       const wrongItems = wrongAll.slice(-10).reverse();
       if (wrongCountNode) {
         const total = wrongAll.length;
-        wrongCountNode.textContent = total ? `Totale: ${total}` : '';
+        wrongCountNode.textContent = total ? tr('cockpit.wrong.total', { count: total }, `Totale: ${total}`) : '';
         const viewAllBtn = root.querySelector('[data-wrong-view-all]');
         if (viewAllBtn) viewAllBtn.hidden = total === 0;
       }
       if (!wrongItems.length) {
         const li = document.createElement('li');
         li.className = 'empty';
-        li.textContent = 'Nessun errore recente — continua così! ✨';
+        li.textContent = tr('cockpit.wrong.empty', null, 'Nessun errore recente — continua così! ✨');
         list.appendChild(li);
       } else {
         wrongItems.forEach(item => {
           const li = document.createElement('li');
           const when = new Date(item.ts || Date.now());
-          const date = when.toLocaleDateString();
-          const time = when.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          const date = when.toLocaleDateString(uiLocale);
+          const time = when.toLocaleTimeString(uiLocale, { hour: '2-digit', minute: '2-digit' });
           const btn = document.createElement('button');
           btn.type = 'button';
           btn.className = 'summary-list__btn';
-          btn.textContent = `${date} ${time} · ${item.prompt || 'Quiz'}`;
-          btn.setAttribute('aria-label', `Apri revisione errore: ${item.prompt || 'Quiz'}`);
+          const prompt = item.prompt || tr('quiz.generic', null, 'Quiz');
+          btn.textContent = `${date} ${time} · ${prompt}`;
+          btn.setAttribute('aria-label', tr('cockpit.wrong.reviewAria', { title: prompt }, `Apri revisione errore: ${prompt}`));
           btn.addEventListener('click', () => openWrongReviewModal(item));
           li.appendChild(btn);
           list.appendChild(li);
@@ -5391,7 +5373,7 @@ const gamification = (() => {
       if (!days.length) {
         const li = document.createElement('li');
         li.className = 'empty';
-        li.textContent = 'Nessuna cronologia disponibile ancora.';
+        li.textContent = tr('cockpit.history.empty', null, 'Nessuna cronologia disponibile ancora.');
         daysRoot.appendChild(li);
       } else {
         days.forEach(d => {
@@ -5667,7 +5649,11 @@ const gamification = (() => {
 
     const hint = document.createElement('p');
     hint.className = 'wrong-log__hint';
-    hint.textContent = 'Tip: se la lista è lunghissima, usa la ricerca. Gli errori più vecchi oltre il limite (300 eventi) vengono scartati automaticamente.';
+    hint.textContent = tr(
+      'wrongLog.tip',
+      null,
+      'Tip: se la lista è lunghissima, usa la ricerca. Gli errori più vecchi oltre il limite (300 eventi) vengono scartati automaticamente.'
+    );
 
     const actions = document.createElement('div');
     actions.className = 'reward-modal__actions';
@@ -5675,7 +5661,7 @@ const gamification = (() => {
     const closeBtn = document.createElement('button');
     closeBtn.type = 'button';
     closeBtn.className = 'reward-action secondary';
-    closeBtn.textContent = 'Chiudi';
+    closeBtn.textContent = tr('common.close', null, 'Chiudi');
     closeBtn.addEventListener('click', closeOverlay);
 
     actions.appendChild(closeBtn);
@@ -5683,9 +5669,11 @@ const gamification = (() => {
     const safeString = (v) => String(v || '').toLowerCase();
     const formatWhen = (ts) => {
       try {
+        const uiLang = window.BadianiI18n?.getLang?.() || 'it';
+        const uiLocale = ({ it: 'it-IT', en: 'en-GB', es: 'es-ES', fr: 'fr-FR' }[uiLang]) || undefined;
         const when = new Date(ts || Date.now());
-        const date = when.toLocaleDateString();
-        const time = when.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const date = when.toLocaleDateString(uiLocale);
+        const time = when.toLocaleTimeString(uiLocale, { hour: '2-digit', minute: '2-digit' });
         return `${date} ${time}`;
       } catch {
         return '';
@@ -5706,7 +5694,7 @@ const gamification = (() => {
       if (!filtered.length) {
         const li = document.createElement('li');
         li.className = 'empty';
-        li.textContent = 'Nessun risultato per questa ricerca.';
+        li.textContent = tr('wrongLog.searchNoResults', null, 'Nessun risultato per questa ricerca.');
         list.appendChild(li);
         return;
       }
@@ -5716,8 +5704,9 @@ const gamification = (() => {
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'summary-list__btn';
-        btn.textContent = `${formatWhen(item.ts)} · ${item.prompt || 'Quiz'}`;
-        btn.setAttribute('aria-label', `Apri revisione errore: ${item.prompt || 'Quiz'}`);
+        const prompt = item.prompt || tr('quiz.generic', null, 'Quiz');
+        btn.textContent = `${formatWhen(item.ts)} · ${prompt}`;
+        btn.setAttribute('aria-label', tr('cockpit.wrong.reviewAria', { title: prompt }, `Apri revisione errore: ${prompt}`));
         btn.addEventListener('click', () => openWrongReviewModal(item));
         li.appendChild(btn);
         list.appendChild(li);
@@ -5729,7 +5718,7 @@ const gamification = (() => {
         const payload = JSON.stringify(allWrong, null, 2);
         if (navigator.clipboard && navigator.clipboard.writeText) {
           await navigator.clipboard.writeText(payload);
-          showToast('Copiato negli appunti ✅');
+          showToast(tr('toast.copied', null, 'Copiato negli appunti ✅'));
           return;
         }
       } catch (e) {}
@@ -5744,7 +5733,7 @@ const gamification = (() => {
         ta.select();
         document.execCommand('copy');
         ta.remove();
-        showToast('Copiato negli appunti ✅');
+        showToast(tr('toast.copied', null, 'Copiato negli appunti ✅'));
       } catch (e) {
         showToast('Impossibile copiare (browser).');
       }
@@ -6521,7 +6510,7 @@ const gamification = (() => {
     const count = getPageStarCount();
     const total = getTotalPageCards();
     document.querySelectorAll('[data-page-stars]').forEach((el) => {
-      el.textContent = `⭐ Stelle: ${count}/${total}`;
+      el.textContent = tr('page.starsBadge', { count, total }, `⭐ Stelle: ${count}/${total}`);
     });
   }
 
@@ -6538,12 +6527,14 @@ const gamification = (() => {
     burst.textContent = '★ ★ ★';
     const title = document.createElement('h3');
     title.className = 'reward-modal__title';
-    title.textContent = waiting ? 'Tre stelline: mini quiz (poi aspetti il cooldown)' : 'Tre stelline: mini quiz sbloccato!';
+    title.textContent = waiting
+      ? tr('game.milestone.title.waiting', null, 'Tre stelline: mini quiz (poi aspetti il cooldown)')
+      : tr('game.milestone.title.ready', null, 'Tre stelline: mini quiz sbloccato!');
     const text = document.createElement('p');
     text.className = 'reward-modal__text';
     text.textContent = waiting
-      ? 'Puoi fare adesso il mini quiz. Se lo passi, sblocchi “Test me”, ma potrai farlo solo quando finisce il countdown del gelato.'
-      : 'Fai il mini quiz su ciò che hai aperto: se rispondi giusto, sblocchi “Test me” (il quiz più difficile che assegna il gelato).';
+      ? tr('game.milestone.text.waiting', null, 'Puoi fare adesso il mini quiz. Se lo passi, sblocchi “Test me”, ma potrai farlo solo quando finisce il countdown del gelato.')
+      : tr('game.milestone.text.ready', null, 'Fai il mini quiz su ciò che hai aperto: se rispondi giusto, sblocchi “Test me” (il quiz più difficile che assegna il gelato).');
     const actions = document.createElement('div');
     actions.className = 'reward-modal__actions';
 
@@ -6552,7 +6543,7 @@ const gamification = (() => {
     instruction.style.marginTop = '12px';
     instruction.style.fontSize = '14px';
     instruction.style.color = 'var(--brand-gray-soft)';
-    instruction.textContent = 'Chiudi questa notifica per avviare il mini quiz.';
+    instruction.textContent = tr('game.milestone.hint', null, 'Chiudi questa notifica per avviare il mini quiz.');
 
     // Start the MINI quiz as soon as this overlay is dismissed.
     container.dataset.triggerMiniQuizOnClose = 'true';
@@ -6560,14 +6551,14 @@ const gamification = (() => {
     const start = document.createElement('button');
     start.className = 'reward-action primary';
     start.type = 'button';
-    start.textContent = 'Inizia mini quiz';
+    start.textContent = tr('game.milestone.start', null, 'Inizia mini quiz');
     start.dataset.overlayFocus = 'true';
     start.addEventListener('click', () => closeOverlay({ triggerQuiz: true }));
 
     const later = document.createElement('button');
     later.className = 'reward-action secondary';
     later.type = 'button';
-    later.textContent = 'Più tardi';
+    later.textContent = tr('game.milestone.later', null, 'Più tardi');
     later.addEventListener('click', () => {
       // Allow dismissing the milestone without auto-starting the mini quiz.
       try { delete container.dataset.triggerMiniQuizOnClose; } catch (e) {}
@@ -6594,22 +6585,22 @@ const gamification = (() => {
     burst.textContent = 'ⓘ';
     const title = document.createElement('h3');
     title.className = 'reward-modal__title';
-    title.textContent = 'Come funziona il mini game';
+    title.textContent = tr('game.mini.title', null, 'Come funziona il mini game');
     const text1 = document.createElement('p');
     text1.className = 'reward-modal__text';
-    text1.textContent = `Apri i tab dentro una scheda: ogni tab = 1 cristallo di zucchero. ${CRYSTALS_PER_STAR} cristalli si trasformano in 1 stellina (se i tab sono meno di ${CRYSTALS_PER_STAR}, completiamo i cristalli all'ultimo tab). Ogni 3 stelline parte un mini quiz (1 domanda).`;
+    text1.textContent = tr('game.mini.text1', { perStar: CRYSTALS_PER_STAR }, `Apri i tab dentro una scheda: ogni tab = 1 cristallo di zucchero. ${CRYSTALS_PER_STAR} cristalli si trasformano in 1 stellina (se i tab sono meno di ${CRYSTALS_PER_STAR}, completiamo i cristalli all'ultimo tab). Ogni 3 stelline parte un mini quiz (1 domanda).`);
     const text2 = document.createElement('p');
     text2.className = 'reward-modal__text';
-    text2.textContent = 'Mini quiz giusto = sblocchi “Test me” (quiz più difficile). “Test me” perfetto = gelato aggiunto al counter e countdown di 24h (riducibile con 12 e 30 stelline). Mini quiz sbagliato = -3 stelline. Reset automatico: domenica a mezzanotte.';
+    text2.textContent = tr('game.mini.text2', null, 'Mini quiz giusto = sblocchi “Test me” (quiz più difficile). “Test me” perfetto = gelato aggiunto al counter e countdown di 24h (riducibile con 12 e 30 stelline). Mini quiz sbagliato = -3 stelline. Reset automatico: domenica a mezzanotte.');
     const text3 = document.createElement('p');
     text3.className = 'reward-modal__text';
-    text3.textContent = 'Completando tutte e 65 le stelline guadagni punti bonus reali da convertire in cash o prodotti Badiani.';
+    text3.textContent = tr('game.mini.text3', null, 'Completando tutte e 65 le stelline guadagni punti bonus reali da convertire in cash o prodotti Badiani.');
     const actions = document.createElement('div');
     actions.className = 'reward-modal__actions';
     const ok = document.createElement('button');
     ok.type = 'button';
     ok.className = 'reward-action primary';
-    ok.textContent = 'Ok, giochiamo';
+    ok.textContent = tr('game.mini.ok', null, 'Ok, giochiamo');
     ok.dataset.overlayFocus = 'true';
     ok.addEventListener('click', closeOverlay);
     actions.appendChild(ok);
@@ -6625,7 +6616,7 @@ const gamification = (() => {
     burst.textContent = '⚡';
     const title = document.createElement('h3');
     title.className = 'reward-modal__title';
-    title.textContent = '65 stelline completate!';
+    title.textContent = tr('game.bonus.title', null, '65 stelline completate!');
     const text = document.createElement('p');
     text.className = 'reward-modal__text';
     text.textContent = `Hai sbloccato il loop completo: stelline azzerate e +${BONUS_POINTS_PER_FULL_SET} punti bonus da spendere in premi cash o prodotti.`;
@@ -6634,7 +6625,7 @@ const gamification = (() => {
     const ok = document.createElement('button');
     ok.type = 'button';
     ok.className = 'reward-action primary';
-    ok.textContent = 'Riparto da capo';
+    ok.textContent = tr('game.bonus.ok', null, 'Riparto da capo');
     ok.dataset.overlayFocus = 'true';
     ok.addEventListener('click', closeOverlay);
     actions.appendChild(ok);
@@ -11745,7 +11736,14 @@ const initCarousels = () => {
       carouselHeader.setAttribute('tabindex', '0');
     }
     carouselHeader.setAttribute('role', 'button');
-    carouselHeader.setAttribute('aria-label', 'Scorri il carosello: swipe sinistra/destra oppure clic (sinistra=precedente, destra=successivo)');
+    carouselHeader.setAttribute(
+      'aria-label',
+      tr(
+        'carousel.headerAria',
+        null,
+        'Scorri il carosello: swipe sinistra/destra oppure clic (sinistra=precedente, destra=successivo)'
+      )
+    );
 
     // Populate indicators
     let indicators = [];

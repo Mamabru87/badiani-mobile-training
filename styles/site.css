@@ -7372,6 +7372,107 @@ body.page-home {
   color: var(--brand-rose);
 }
 
+/* =========================
+   Language selector (i18n)
+   ========================= */
+
+.menu-drawer__footer {
+  padding: 12px 18px 18px;
+  border-top: 1px solid var(--border-soft);
+}
+
+.menu-lang {
+  width: 100%;
+}
+
+.menu-lang details {
+  width: 100%;
+}
+
+.menu-lang__summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(33, 64, 152, 0.16);
+  background: rgba(33, 64, 152, 0.04);
+  color: var(--brand-blue-deep);
+  cursor: pointer;
+  user-select: none;
+  font-family: var(--font-medium);
+  transition: transform var(--anim-fast) ease, box-shadow var(--anim-fast) ease, border-color var(--anim-fast) ease;
+}
+
+.menu-lang__summary::-webkit-details-marker {
+  display: none;
+}
+
+.menu-lang__summary:hover,
+.menu-lang__summary:focus-visible {
+  border-color: rgba(236, 65, 140, 0.25);
+  box-shadow: 0 12px 30px rgba(15, 33, 84, 0.12);
+  transform: translateY(-1px);
+}
+
+.menu-lang__label {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.menu-lang__current {
+  font-weight: 800;
+  color: var(--brand-blue-deep);
+}
+
+.menu-lang__options {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.menu-lang__option {
+  appearance: none;
+  border: 1px solid rgba(33, 64, 152, 0.16);
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 14px;
+  padding: 10px 12px;
+  font-family: var(--font-medium);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: var(--brand-blue-deep);
+  cursor: pointer;
+  transition: transform var(--anim-fast) ease, box-shadow var(--anim-fast) ease, border-color var(--anim-fast) ease, background var(--anim-fast) ease;
+}
+
+.menu-lang__option:hover,
+.menu-lang__option:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 26px rgba(15, 33, 84, 0.12);
+  border-color: rgba(236, 65, 140, 0.25);
+}
+
+.menu-lang__option.is-active {
+  background: linear-gradient(120deg, rgba(236, 65, 140, 0.10), rgba(33, 64, 152, 0.06));
+  border-color: rgba(236, 65, 140, 0.35);
+}
+
+.menu-lang--panel {
+  margin-top: 14px;
+}
+
+@media (max-width: 420px) {
+  .menu-lang__options {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 860px) {
   .card-modal-overlay {
     /* Keep top/bottom reachable even when mobile browser UI changes viewport height. */
@@ -7647,12 +7748,14 @@ body.page-home {
   }
 
   .page-home [data-carousel="cockpit"] .cockpit-track {
-    scroll-padding-inline: 10px;
-    padding-right: 10px;
+    /* Keep enough right-side space so the last cards can be centered.
+       A too-small padding-right makes the cockpit appear to “stop” mid-way on some viewports. */
+    scroll-padding-inline: max(10px, calc((100% - min(420px, 100% - 20px)) / 2));
+    padding-right: max(10px, calc((100% - min(420px, 100% - 20px)) / 2));
   }
 
   .page-home [data-carousel="cockpit"] .cockpit-track [data-carousel-item] {
-    width: calc(100% - 10px);
+    width: min(420px, calc(100% - 10px));
   }
 }
 
