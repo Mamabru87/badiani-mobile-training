@@ -500,6 +500,7 @@ scrollButtons.forEach((btn) => {
   const moodLine = drawer?.querySelector('[data-menu-mood]');
   const searchInput = drawer?.querySelector('[data-menu-search]');
   const searchSuggestions = drawer?.querySelector('[data-menu-suggestions]');
+  const searchRoot = drawer?.querySelector('.menu-search');
   const COMPLETION_KEY_PREFIX = 'badianiCategoryCompletion.v1';
   const GAMIFICATION_KEY_PREFIX = 'badianiGamification.v3';
   const moods = [
@@ -511,6 +512,8 @@ scrollButtons.forEach((btn) => {
     'Ogni caffè è una promessa mantenuta.',
   ];
   let lastMood = '';
+  let assistantNodes = null;
+  let lastAssistantQuery = '';
   
   if (!drawer) return;
 
@@ -929,85 +932,459 @@ scrollButtons.forEach((btn) => {
 
   let lastFiltered = [];
 
-  const renderSuggestions = (query) => {
-    if (!searchSuggestions) return;
-    const { q, qAlt } = normalizeQuery(query);
-    let filtered = [];
-    
-    if (q) {
-      // Show both products and categories when user types
-      const isGenericCategoryQuery = (() => {
-        const hay = q || '';
-        const hayAlt = qAlt || '';
-        return GENERIC_CATEGORY_KEYWORDS.some((kw) => {
-          if (!kw) return false;
-          return hay.includes(kw) || (hayAlt && hayAlt.includes(kw));
-        });
-      })();
-      const matchesQuery = (haystack) => {
-        const h = normalize(haystack);
-        if (!h) return false;
-        if (h.includes(q)) return true;
-        if (qAlt && h.includes(qAlt)) return true;
-        return false;
+  const ensureAssistantUI = () => {
+    if (!searchRoot) return null;
+    const existing = searchRoot.querySelector('[data-menu-assistant]');
+    if (existing) {
+      return {
+        root: existing,
+        avatar: existing.querySelector('[data-menu-assistant-avatar]'),
+        message: existing.querySelector('[data-menu-assistant-message]'),
+        actions: existing.querySelector('[data-menu-assistant-actions]'),
+        examples: existing.querySelector('[data-menu-assistant-examples]'),
+        clear: existing.querySelector('[data-menu-assistant-clear]'),
       };
-
-      const productMatches = allProducts.filter((item) => {
-        return matchesQuery(item.name) || matchesQuery(item.category);
-      });
-
-      // For broad training keywords (es. sicurezza/chiusura/upselling), show categories too.
-      // This helps the user jump to the right area even when the category name doesn't contain the keyword.
-      const categoryMatches = isGenericCategoryQuery
-        ? menuItems
-        : menuItems.filter((cat) => matchesQuery(cat.name) || matchesQuery(cat.label));
-
-      filtered = [...categoryMatches, ...productMatches];
     }
-    // Don't show anything if query is empty - user must type to see suggestions.
-    searchSuggestions.innerHTML = '';
-    lastFiltered = filtered;
-    if (!q) return;
-    filtered.forEach((item, idx) => {
+
+    const box = document.createElement('div');
+    box.className = 'menu-search__assistant';
+    box.setAttribute('data-menu-assistant', '');
+    box.setAttribute('role', 'status');
+    box.setAttribute('aria-live', 'polite');
+    box.hidden = false;
+
+    const avatar = document.createElement('div');
+    avatar.className = 'menu-search__assistant-avatar';
+    avatar.setAttribute('data-menu-assistant-avatar', '');
+    avatar.setAttribute('aria-hidden', 'true');
+    // Original SVG avatar (3D-cartoon vibe): blue apron, white shirt, black pants.
+    // (No external assets; kept lightweight for a static site.)
+    avatar.innerHTML = `
+      <svg class="gelatiere-svg" viewBox="0 0 96 120" width="56" height="70" role="img" aria-label="Assistente gelatiere" focusable="false">
+        <defs>
+          <linearGradient id="skinGrad" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0" stop-color="#FFE7D0"/>
+            <stop offset="1" stop-color="#FFD0B0"/>
+          </linearGradient>
+          <linearGradient id="apronGrad" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0" stop-color="#2A54C4"/>
+            <stop offset="1" stop-color="#173A8A"/>
+          </linearGradient>
+          <linearGradient id="hairGrad" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0" stop-color="#6B4A2A"/>
+            <stop offset="1" stop-color="#3B2412"/>
+          </linearGradient>
+          <radialGradient id="eyeIris" cx="50%" cy="50%" r="50%">
+            <stop offset="0" stop-color="#6EC6FF"/>
+            <stop offset="1" stop-color="#214098"/>
+          </radialGradient>
+          <radialGradient id="blushGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0" stop-color="rgba(255,150,180,0.55)"/>
+            <stop offset="1" stop-color="rgba(255,150,180,0)"/>
+          </radialGradient>
+          <radialGradient id="shadowGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0" stop-color="rgba(15,33,84,0.22)"/>
+            <stop offset="1" stop-color="rgba(15,33,84,0)"/>
+          </radialGradient>
+        </defs>
+
+        <!-- Ground shadow -->
+        <ellipse cx="48" cy="115" rx="24" ry="6" fill="url(#shadowGrad)"/>
+
+        <!-- Body -->
+        <g class="gelatiere-svg__body">
+          <!-- Legs -->
+          <rect x="35" y="86" width="11" height="24" rx="5.5" fill="#1a1f35"/>
+          <rect x="50" y="86" width="11" height="24" rx="5.5" fill="#0f1426"/>
+          <!-- Shirt -->
+          <path d="M26 50c0-12 10-20 22-20s22 8 22 20v30c0 3-2 6-5 6H31c-3 0-5-3-5-6V50z" fill="#FFFFFF" stroke="rgba(33,64,152,0.08)"/>
+          <!-- Apron -->
+          <path d="M32 56c0-5 5-10 9-10h14c4 0 9 5 9 10v24c0 2-2 4-4 4H36c-2 0-4-2-4-4V56z" fill="url(#apronGrad)"/>
+          <rect x="40" y="66" width="16" height="12" rx="6" fill="rgba(255,255,255,0.2)"/>
+          <circle cx="48" cy="72" r="1.5" fill="rgba(255,255,255,0.3)"/>
+          <!-- Arms (animated) -->
+          <path class="gelatiere-arm-l" d="M26 54c-5 3-9 10-9 16 0 4 2 8 3 10" fill="none" stroke="url(#skinGrad)" stroke-width="7" stroke-linecap="round"/>
+          <path class="gelatiere-arm-r" d="M70 54c5 3 9 10 9 16 0 4-2 8-3 10" fill="none" stroke="url(#skinGrad)" stroke-width="7" stroke-linecap="round"/>
+          <!-- Gelato Cone in hand -->
+          <g class="gelatiere-cone" transform="translate(74, 74) rotate(18)">
+            <path d="M-1 0l5 12 5-12z" fill="#E8A842" stroke="#C78F35" stroke-width="0.5"/>
+            <ellipse cx="4" cy="-1" rx="4.5" ry="4" fill="#FF6BA8"/>
+            <ellipse cx="4" cy="-1" rx="3" ry="2.5" fill="#FF8FBF" opacity="0.6"/>
+            <circle cx="5.5" cy="-2" r="1" fill="rgba(255,255,255,0.7)"/>
+          </g>
+        </g>
+
+        <!-- Head -->
+        <g class="gelatiere-svg__head">
+          <!-- Hair back + ciuffo -->
+          <path d="M28 22c0-14 8-22 20-22s20 8 20 22c0 4-2 8-4 10-2-3-4-6-8-6-3 0-5 2-8 2s-5-2-8-2c-4 0-6 3-8 6-2-2-4-6-4-10z" fill="url(#hairGrad)"/>
+          <path d="M38 10c2-4 6-6 10-6s8 2 10 6" fill="url(#hairGrad)" opacity="0.7"/>
+          <!-- Face base -->
+          <ellipse cx="48" cy="30" rx="20" ry="22" fill="url(#skinGrad)"/>
+          <!-- Neck -->
+          <rect x="43" y="48" width="10" height="6" rx="5" fill="url(#skinGrad)"/>
+          <!-- Cheek blush (animated) -->
+          <ellipse class="gelatiere-blush" cx="35" cy="36" rx="6" ry="4" fill="url(#blushGrad)"/>
+          <ellipse class="gelatiere-blush" cx="61" cy="36" rx="6" ry="4" fill="url(#blushGrad)"/>
+          <!-- Eyes (super Ghibli) -->
+          <g class="gelatiere-svg__eyes">
+            <g class="gelatiere-eye-group-l">
+              <ellipse cx="40" cy="30" rx="7" ry="8" fill="#0A1942"/>
+              <ellipse class="gelatiere-pupil" cx="40" cy="32" rx="4.5" ry="5.5" fill="url(#eyeIris)"/>
+              <ellipse cx="40" cy="30" rx="2.5" ry="3" fill="#fff" opacity="0.7"/>
+              <ellipse cx="38" cy="28" rx="1.2" ry="1.5" fill="#fff" opacity="0.9"/>
+              <ellipse cx="42" cy="33" rx="0.8" ry="1.2" fill="#fff" opacity="0.5"/>
+            </g>
+            <g class="gelatiere-eye-group-r">
+              <ellipse cx="56" cy="30" rx="7" ry="8" fill="#0A1942"/>
+              <ellipse class="gelatiere-pupil" cx="56" cy="32" rx="4.5" ry="5.5" fill="url(#eyeIris)"/>
+              <ellipse cx="56" cy="30" rx="2.5" ry="3" fill="#fff" opacity="0.7"/>
+              <ellipse cx="54" cy="28" rx="1.2" ry="1.5" fill="#fff" opacity="0.9"/>
+              <ellipse cx="58" cy="33" rx="0.8" ry="1.2" fill="#fff" opacity="0.5"/>
+            </g>
+            <!-- Eyelids for blinking -->
+            <path class="gelatiere-blink" d="M34 30c0-4 2.5-7 6-7s6 3 6 7" fill="url(#skinGrad)" opacity="0" stroke="#3B2412" stroke-width="0.5"/>
+            <path class="gelatiere-blink" d="M50 30c0-4 2.5-7 6-7s6 3 6 7" fill="url(#skinGrad)" opacity="0" stroke="#3B2412" stroke-width="0.5"/>
+          </g>
+          <!-- Sopracciglia animate -->
+          <path class="gelatiere-brow-l" d="M35 23c2-2 5-2 7 0" fill="none" stroke="#3B2412" stroke-width="2" stroke-linecap="round"/>
+          <path class="gelatiere-brow-r" d="M54 23c2-2 5-2 7 0" fill="none" stroke="#3B2412" stroke-width="2" stroke-linecap="round"/>
+          <!-- Naso -->
+          <path d="M48 36c0 2-1 3-1 4" fill="none" stroke="rgba(15,33,84,0.15)" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="47" cy="40" r="0.8" fill="rgba(255,150,180,0.3)"/>
+          <!-- Bocca super espressiva -->
+          <path class="gelatiere-mouth" d="M42 42c2 4 4 6 6 6s4-2 6-6" fill="none" stroke="#3B2412" stroke-width="2.2" stroke-linecap="round"/>
+          <ellipse class="gelatiere-mouth--talk" cx="48" cy="46" rx="5" ry="2.5" fill="#FFB8C8" stroke="#3B2412" stroke-width="1.2" opacity="0"/>
+          <!-- Capelli frontali svolazzanti -->
+          <path d="M32 18c3-4 6-6 9-6 2 0 3 2 3 4" fill="url(#hairGrad)" opacity="0.8"/>
+          <path d="M64 18c-3-4-6-6-9-6-2 0-3 2-3 4" fill="url(#hairGrad)" opacity="0.8"/>
+          <path d="M45 14c1-3 2-5 3-5s2 2 3 5" fill="url(#hairGrad)" opacity="0.8"/>
+          <!-- Cappello -->
+          <ellipse cx="48" cy="12" rx="19" ry="6" fill="#FFFFFF" stroke="rgba(33,64,152,0.12)"/>
+          <rect x="29" y="10" width="38" height="7" rx="3.5" fill="#FFFFFF" stroke="rgba(33,64,152,0.1)"/>
+          <ellipse cx="48" cy="13.5" rx="15" ry="2" fill="rgba(42,84,196,0.08)"/>
+        </g>
+
+        <!-- Sparkles & Magic -->
+        <g class="gelatiere-sparkles">
+          <g class="gelatiere-sparkle" transform="translate(16, 28)">
+            <circle r="1.5" fill="#FFD700"/>
+            <path d="M-3 0h6M0-3v6" stroke="#FFF4A3" stroke-width="1" stroke-linecap="round"/>
+          </g>
+          <g class="gelatiere-sparkle" transform="translate(78, 18)">
+            <circle r="1.2" fill="#FFD700"/>
+            <path d="M-2.5 0h5M0-2.5v5" stroke="#FFF4A3" stroke-width="0.8" stroke-linecap="round"/>
+          </g>
+          <g class="gelatiere-sparkle" transform="translate(22, 50)">
+            <circle r="1" fill="#FFE4B3"/>
+            <path d="M-2 0h4M0-2v4" stroke="#FFF4A3" stroke-width="0.6" stroke-linecap="round"/>
+          </g>
+        </g>
+      </svg>
+    `;
+
+    const header = document.createElement('div');
+    header.className = 'menu-search__assistant-header';
+    header.innerHTML = `
+      <p class="menu-search__assistant-title">Assistente</p>
+      <button class="menu-search__assistant-clear" type="button" data-menu-assistant-clear aria-label="Pulisci">×</button>
+    `;
+
+    const msg = document.createElement('p');
+    msg.className = 'menu-search__assistant-message';
+    msg.setAttribute('data-menu-assistant-message', '');
+
+    const actions = document.createElement('div');
+    actions.className = 'menu-search__assistant-actions';
+    actions.setAttribute('data-menu-assistant-actions', '');
+
+    const examples = document.createElement('div');
+    examples.className = 'menu-search__assistant-examples';
+    examples.setAttribute('data-menu-assistant-examples', '');
+
+    const bubble = document.createElement('div');
+    bubble.className = 'menu-search__assistant-bubble';
+    bubble.append(header, msg, actions, examples);
+
+    box.append(avatar, bubble);
+    searchRoot.appendChild(box);
+
+    const clearBtn = box.querySelector('[data-menu-assistant-clear]');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        try { if (searchInput) searchInput.value = ''; } catch {}
+        lastAssistantQuery = '';
+        renderSuggestions('');
+        showAssistantGreeting();
+        try { searchInput?.focus({ preventScroll: true }); } catch {}
+      });
+    }
+
+    return {
+      root: box,
+      avatar,
+      message: msg,
+      actions,
+      examples,
+      clear: clearBtn,
+    };
+  };
+
+  const showAssistantGreeting = () => {
+    setAssistant({
+      message: 'Dimmi cosa ti serve: io sono il tuo gelatiere di fiducia. (Prometto di non giudicare gli errori… troppo.)',
+      actions: [
+        { label: 'Apri Hub', href: 'index.html', kind: 'secondary' },
+      ],
+      examples: [
+        'Coni: quanti gusti e quanti grammi?',
+        'Come preparo un cappuccino?',
+        'Churros: temperatura olio e timing?',
+        'Gelato box: quale formato uso?',
+      ],
+    });
+  };
+
+  const setAssistant = ({ message = '', actions = [], examples = [] } = {}) => {
+    assistantNodes = assistantNodes || ensureAssistantUI();
+    if (!assistantNodes?.root) return;
+
+    assistantNodes.message.textContent = message;
+
+    assistantNodes.actions.innerHTML = '';
+    (Array.isArray(actions) ? actions : []).slice(0, 3).forEach((a) => {
+      if (!a || !a.href) return;
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'menu-search__suggestion';
-      btn.style.setProperty('--i', idx);
-      
-      if (item.isCategory) {
-        btn.textContent = item.label;
-        btn.addEventListener('click', () => navigateTo(item.href));
-      } else {
-        const inner = document.createElement('span');
-        const title = document.createElement('strong');
-        title.textContent = item.label;
-        const cat = document.createElement('small');
-        cat.textContent = item.category;
-        const desc = document.createElement('em');
-        desc.textContent = item.description;
-        inner.appendChild(title);
-        inner.appendChild(document.createElement('br'));
-        inner.appendChild(cat);
-        inner.appendChild(document.createElement('br'));
-        inner.appendChild(desc);
-        btn.appendChild(inner);
-        btn.dataset.href = item.categoryHref;
-        if (item.tab) btn.dataset.tab = item.tab;
-        if (item.card) btn.dataset.card = item.card;
-        btn.addEventListener('click', () => {
-          if (item.card) return navigateToCard(item.categoryHref, item.card);
-          if (item.tab) return navigateToTab(item.categoryHref, item.tab);
-          return navigateTo(item.categoryHref);
-        });
-      }
-      searchSuggestions.appendChild(btn);
+      btn.className = a.kind === 'secondary' ? 'btn btn-ghost btn--sm' : 'btn btn-primary btn--sm';
+      btn.textContent = a.label || 'Apri';
+      btn.addEventListener('click', () => navigateTo(a.href));
+      assistantNodes.actions.appendChild(btn);
     });
-    if (!filtered.length) {
-      const empty = document.createElement('div');
-      empty.className = 'menu-search__empty';
-      empty.textContent = 'Nessun modulo trovato';
-      searchSuggestions.appendChild(empty);
+
+    assistantNodes.examples.innerHTML = '';
+    if (Array.isArray(examples) && examples.length) {
+      const wrap = document.createElement('div');
+      wrap.className = 'menu-search__assistant-chiprow';
+      examples.slice(0, 4).forEach((ex) => {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'menu-search__assistant-chip';
+        chip.textContent = ex;
+        chip.addEventListener('click', () => {
+          if (searchInput) searchInput.value = ex;
+          renderSuggestions(ex);
+          handleAssistantSubmit();
+        });
+        wrap.appendChild(chip);
+      });
+      assistantNodes.examples.appendChild(wrap);
     }
+
+    assistantNodes.root.hidden = false;
+
+    // Tiny "speaking" cue on updates.
+    try {
+      assistantNodes.avatar?.classList.remove('is-speaking');
+      // Force reflow for reliable restart
+      void assistantNodes.avatar?.offsetHeight;
+      assistantNodes.avatar?.classList.add('is-speaking');
+      window.setTimeout(() => assistantNodes.avatar?.classList.remove('is-speaking'), 900);
+    } catch (e) {}
+  };
+
+  const buildHrefFromResult = (item) => {
+    if (!item) return '';
+    if (item.isCategory && item.href) return item.href;
+    const base = item.categoryHref || item.href || '';
+    if (!base) return '';
+    if (item.card) {
+      return `${base}?card=${encodeURIComponent(String(item.card))}&center=1`;
+    }
+    if (item.tab) {
+      return `${base}?tab=${encodeURIComponent(String(item.tab))}&center=1`;
+    }
+    return base;
+  };
+
+  const bestMatch = (query) => {
+    const { q, qAlt } = normalizeQuery(query);
+    if (!q) return null;
+    const hay = (s) => normalize(s);
+    const score = (item) => {
+      const name = hay(item?.name || '');
+      const label = hay(item?.label || '');
+      const category = hay(item?.category || '');
+      const blob = `${name} ${label} ${category}`;
+      const needle = q;
+      const alt = qAlt;
+      let sc = 0;
+      if (label === needle || name === needle) sc += 200;
+      if (blob.startsWith(needle)) sc += 120;
+      if (blob.includes(needle)) sc += 80;
+      if (alt && blob.includes(alt)) sc += 35;
+      // Prefer cards over tabs over category-only
+      if (item?.card) sc += 10;
+      else if (item?.tab) sc += 6;
+      else if (item?.isCategory) sc += 1;
+      return sc;
+    };
+
+    const pool = [...(menuItems || []), ...(allProducts || [])];
+    let top = null;
+    let topScore = 0;
+    pool.forEach((it) => {
+      const sc = score(it);
+      if (sc > topScore) {
+        topScore = sc;
+        top = it;
+      }
+    });
+    return topScore >= 60 ? top : null;
+  };
+
+  const looksLikeQuestion = (query) => {
+    const q = normalize(query);
+    if (!q) return false;
+    if (q.includes('?')) return true;
+    return /^(come|quanto|quale|quali|cosa|perche|perché|quando|dove|posso|devo|si puo|si può|mi dici|mi spieghi|che differenza|qual\s+e|qual\s+è)\b/i.test(q);
+  };
+
+  const assistantRuleAnswer = (query) => {
+    const q = normalize(query);
+    if (!q) return null;
+
+    // High-confidence quick links (deep links to the exact reference card/tab)
+    if (/(\bconi\b|\bcono\b|\bcone\b|choco\s*cone|gluten\s*free|\bgf\b)/i.test(q)) {
+      return {
+        message: 'Coni: ti porto dritto alla scheda con parametri e varianti (così niente “a sensazione”).',
+        actions: [
+          { label: 'Apri Coni classici', href: 'gelato-lab.html?card=coni-classici&tab=parametri&center=1' },
+        ],
+      };
+    }
+    if (/(\bchurros\b|frittura|olio|croccant)/i.test(q)) {
+      return {
+        message: 'Churros: la risposta giusta sta sempre tra temperatura e timing. Apriamo la scheda e via.',
+        actions: [
+          { label: 'Apri Churros', href: 'festive.html?tab=churros&center=1' },
+        ],
+      };
+    }
+    if (/(vin\s*brul|mulled|\bbrul\b)/i.test(q)) {
+      return {
+        message: 'Vin brulé: apriamo la sezione “Mulled” per setup, dosi e servizio.',
+        actions: [
+          { label: 'Apri Mulled Wine', href: 'festive.html?tab=mulled&center=1' },
+        ],
+      };
+    }
+    if (/(cappuccino|flat\s*white|latte|schiuma|foam|montare\s+latte)/i.test(q)) {
+      return {
+        message: 'Latte & schiuma: andiamo nella sezione Milk. Lì trovi tecnica e standard (senza improvvisazioni artistiche… a meno che non siano volute).',
+        actions: [
+          { label: 'Apri Milk (Bar & Drinks)', href: 'caffe.html?tab=milk&center=1' },
+        ],
+      };
+    }
+    if (/(sicurezza|safety|allerg|gluten)/i.test(q)) {
+      return {
+        message: 'Sicurezza e allergeni: apriamo Operations & Setup per procedure e check (meglio 30 secondi qui che 30 minuti dopo).',
+        actions: [
+          { label: 'Apri Operations & Setup', href: 'operations.html?center=1' },
+        ],
+      };
+    }
+
+    return null;
+  };
+
+  const wittyFallback = (query) => {
+    const q = (query || '').trim();
+    const lines = [
+      `Su “${q}” rischio di inventarmi cose… e non vogliamo gelati fantasy.`,
+      `Io sono fortissimo su ricette e procedure Badiani. Su “${q}” invece… mi manca la certificazione.`,
+      `Posso aiutarti con Bar, Gelato, Treats, Operations. Su “${q}” sono in modalità “panna montata”: tanta aria e poca sostanza.`,
+    ];
+    const pick = () => lines[Math.floor(Math.random() * lines.length)];
+    return {
+      message: `${pick()} Prova con una domanda tipo:`,
+      actions: [
+        { label: 'Apri Hub', href: 'index.html', kind: 'secondary' },
+      ],
+      examples: [
+        'Come preparo un cappuccino?',
+        'Coni: quanti gusti e quanti grammi?',
+        'Churros: temperatura olio e timing?',
+        'Gelato box: quale formato usare?',
+      ],
+    };
+  };
+
+  const answerAssistant = (query) => {
+    const raw = String(query || '').trim();
+    const norm = normalize(raw);
+    if (!norm) {
+      return {
+        message: 'Scrivimi una domanda (o il nome di un modulo) e ti porto alla scheda giusta.',
+        actions: [],
+        examples: ['Coni: quale frase è corretta?', 'Come faccio un flat white?', 'Packaging take away: cosa serve?'],
+      };
+    }
+
+    // 1) Rules (high confidence)
+    const ruled = assistantRuleAnswer(raw);
+    if (ruled) {
+      return {
+        ...ruled,
+        examples: ruled.examples || ['Coni: choco cone?', 'Cappuccino: schiuma?', 'Churros: croccante?'],
+      };
+    }
+
+    // 2) Catalog match
+    const match = bestMatch(raw);
+    if (match) {
+      const href = buildHrefFromResult(match);
+      const label = match.isCategory
+        ? `Apri ${match.label}`
+        : `Apri ${match.label}`;
+      const baseMsg = looksLikeQuestion(raw)
+        ? 'Ok — ti porto alla scheda più pertinente. Dentro trovi lo standard completo.'
+        : 'Trovato. Ti porto alla scheda di riferimento.';
+      return {
+        message: `${baseMsg}`,
+        actions: href ? [{ label, href }] : [],
+        examples: ['Mostrami Gelato Boxes', 'Dove trovo upselling?', 'Come si fa l’Afternoon Tea?'],
+      };
+    }
+
+    // 3) No match → witty
+    return wittyFallback(raw);
+  };
+
+  const renderSuggestions = (query) => {
+    // Assistant mode: remove previews entirely.
+    if (!searchSuggestions) return;
+    searchSuggestions.innerHTML = '';
+    searchSuggestions.hidden = true;
+
+    const { q, qAlt } = normalizeQuery(query);
+    if (!q) {
+      lastFiltered = [];
+      return;
+    }
+
+    const matchesQuery = (haystack) => {
+      const h = normalize(haystack);
+      if (!h) return false;
+      if (h.includes(q)) return true;
+      if (qAlt && h.includes(qAlt)) return true;
+      return false;
+    };
+
+    const productMatches = allProducts.filter((item) => matchesQuery(item.name) || matchesQuery(item.category));
+    const categoryMatches = menuItems.filter((cat) => matchesQuery(cat.name) || matchesQuery(cat.label));
+    lastFiltered = [...categoryMatches, ...productMatches].slice(0, 10);
   };
 
   const navigateToTab = (href, tabId) => {
@@ -1044,6 +1421,23 @@ scrollButtons.forEach((btn) => {
     return navigateTo(target.categoryHref);
   };
 
+  const handleAssistantSubmit = () => {
+    if (!searchInput) return;
+    const raw = String(searchInput.value || '');
+    const norm = normalize(raw);
+    if (!norm) {
+      lastAssistantQuery = '';
+      showAssistantGreeting();
+      return;
+    }
+    // Avoid spamming the same answer if the user presses Enter repeatedly.
+    if (norm === lastAssistantQuery) {
+      return;
+    }
+    lastAssistantQuery = norm;
+    setAssistant(answerAssistant(raw));
+  };
+
   const openDrawer = () => {
     if (moodLine) {
       const mood = pickMood();
@@ -1051,6 +1445,7 @@ scrollButtons.forEach((btn) => {
     }
     applyCategoryCompletionStars();
     renderSuggestions(searchInput?.value || '');
+    showAssistantGreeting();
     drawer.setAttribute('aria-hidden', 'false');
     bodyScrollLock.lock();
   };
@@ -1091,12 +1486,18 @@ scrollButtons.forEach((btn) => {
   });
 
   if (searchInput) {
-    searchInput.addEventListener('input', () => renderSuggestions(searchInput.value));
+    searchInput.addEventListener('input', () => {
+      renderSuggestions(searchInput.value);
+      if (!normalize(searchInput.value)) {
+        lastAssistantQuery = '';
+        showAssistantGreeting();
+      }
+    });
     searchInput.addEventListener('focus', () => renderSuggestions(searchInput.value));
     searchInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
-        handleSearchSubmit();
+        handleAssistantSubmit();
       }
     });
   }
@@ -1113,6 +1514,654 @@ scrollButtons.forEach((btn) => {
       applyCategoryCompletionStars();
     }
   });
+})();
+
+// ============================================================
+// HUB ASSISTANT (index.html): assistant + “parla” bar outside drawer
+// ============================================================
+(() => {
+  const searchRoot = document.querySelector('[data-hub-assistant]');
+  if (!searchRoot) return;
+
+  const searchInput = searchRoot.querySelector('[data-hub-assistant-search]');
+  const searchSuggestions = searchRoot.querySelector('[data-hub-assistant-suggestions]');
+  const sendBtn = searchRoot.querySelector('[data-hub-assistant-send]');
+
+  if (!searchInput) return;
+
+  const normalize = (str) => (str || '').toLowerCase().trim();
+
+  const normalizeQuery = (value) => {
+    const q = normalize(value);
+    if (!q) return { q, qAlt: '' };
+    const fixes = {
+      'sicurecca': 'sicurezza',
+      'sicurezze': 'sicurezza',
+      'upsell': 'upselling',
+    };
+    const qAlt = fixes[q] || '';
+    return { q, qAlt };
+  };
+
+  const loadSearchCatalogPages = () => {
+    try {
+      const rawV2 = localStorage.getItem('badianiSearchCatalog.v2');
+      const rawV1 = localStorage.getItem('badianiSearchCatalog.v1');
+      const raw = rawV2 || rawV1;
+      if (!raw) return {};
+      const parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== 'object') return {};
+      return (parsed.pages && typeof parsed.pages === 'object') ? parsed.pages : {};
+    } catch {
+      return {};
+    }
+  };
+
+  const buildCatalogProducts = () => {
+    const pages = loadSearchCatalogPages();
+    const out = [];
+    Object.keys(pages).forEach((pageKey) => {
+      const page = pages[pageKey];
+      const category = (page?.category || '').trim() || pageKey.replace(/\.html$/i, '');
+      const href = (page?.href || pageKey).trim() || pageKey;
+      const cards = Array.isArray(page?.cards) ? page.cards : [];
+      cards.forEach((card) => {
+        const title = (card?.title || '').trim();
+        const cardKey = (card?.cardKey || '').trim();
+        if (!title || !cardKey) return;
+        const s = (card?.signals && typeof card.signals === 'object') ? card.signals : {};
+        const intents = [
+          s.sicurezza ? 'sicurezza' : '',
+          s.chiusura ? 'chiusura' : '',
+          s.upselling ? 'upselling' : '',
+        ].filter(Boolean).join(' ');
+        out.push({
+          name: normalize(`${title} ${category} ${intents}`),
+          label: title,
+          category,
+          categoryHref: href,
+          card: cardKey,
+          description: intents ? `Scheda · ${intents}` : 'Scheda',
+        });
+      });
+    });
+    return out;
+  };
+
+  // Keep parity with drawer assistant: hardcoded fallback for first-run catalog.
+  // (Catalog is populated when a user visits each module page.)
+  const hardcodedProducts = [
+    // Operations & Setup (non-product modules)
+    { name: 'routine apertura apertura checklist', label: 'Routine apertura', category: 'Operations & Setup', categoryHref: 'operations.html', card: 'routine-apertura', description: 'Checklist apertura' },
+    { name: 'set-up giornaliero setup daily', label: 'Set-up giornaliero', category: 'Operations & Setup', categoryHref: 'operations.html', card: 'set-up-giornaliero', description: 'Setup giorno' },
+    { name: 'servizio caldo pandoro piastra 10 secondi', label: 'Servizio Caldo (Pandoro)', category: 'Operations & Setup', categoryHref: 'operations.html', card: 'servizio-caldo-pandoro', description: 'Warm slice' },
+    { name: 'packaging take away treat box delivery', label: 'Packaging take away', category: 'Operations & Setup', categoryHref: 'operations.html', card: 'packaging-take-away', description: 'Delivery' },
+    { name: 'allestimento macchina vin brule setup 600 ml acqua', label: 'Allestimento macchina', category: 'Operations & Setup', categoryHref: 'operations.html', card: 'allestimento-macchina', description: 'Vin Brulé setup' },
+    { name: 'service chiusura vin brule pulizia shelf life', label: 'Service & chiusura', category: 'Operations & Setup', categoryHref: 'operations.html', card: 'service-chiusura', description: 'Fine turno' },
+    // Caffè Rituals - all drinks
+    { name: 'americano', label: 'Americano', category: 'Caffè Rituals', categoryHref: 'caffe.html', tab: 'espresso-core', description: 'Diluito' },
+    { name: 'cappuccino', label: 'Cappuccino', category: 'Caffè Rituals', categoryHref: 'caffe.html', tab: 'milk', description: 'Foam classico' },
+    { name: 'flat white', label: 'Flat White', category: 'Caffè Rituals', categoryHref: 'caffe.html', tab: 'milk', description: 'Latte vellutato' },
+    { name: 'chai latte dirty', label: 'Chai Latte', category: 'Caffè Rituals', categoryHref: 'caffe.html', tab: 'signature', description: 'Speziato (Dirty optional)' },
+    { name: 'mocha cioccolato caffè', label: 'Mocha', category: 'Caffè Rituals', categoryHref: 'caffe.html', tab: 'signature', description: 'Con cioccolato' },
+    { name: 'hot chocolate cioccolata calda', label: 'Hot Chocolate', category: 'Caffè Rituals', categoryHref: 'caffe.html', tab: 'signature', description: 'Cremosa' },
+    { name: 'iced americano freddo', label: 'Iced Americano', category: 'Caffè Rituals', categoryHref: 'caffe.html', tab: 'freddo', description: 'Freddo' },
+    { name: 'iced latte freddo', label: 'Iced Latte', category: 'Caffè Rituals', categoryHref: 'caffe.html', tab: 'freddo', description: 'Ghiacciato' },
+    { name: 'pistachio iced latte pistacchio freddo', label: 'Pistachio Iced Latte', category: 'Caffè Rituals', categoryHref: 'caffe.html', tab: 'freddo', description: 'Signature' },
+    { name: 'cioccolata calda classica', label: 'Cioccolata Calda Classica', category: 'Caffè Rituals', categoryHref: 'caffe.html', tab: 'signature', description: 'Ricetta classica' },
+    { name: 'cioccolata calda pistacchio', label: 'Cioccolata Calda Pistacchio', category: 'Caffè Rituals', categoryHref: 'caffe.html', tab: 'signature', description: 'Variante pistacchio' },
+    { name: 'cioccolata calda pistacchio kids', label: 'Cioccolata Calda Pistacchio Kids', category: 'Caffè Rituals', categoryHref: 'caffe.html', tab: 'signature', description: 'Formato kids' },
+    { name: 'cioccolata classica kids', label: 'Cioccolata Classica Kids', category: 'Caffè Rituals', categoryHref: 'caffe.html', tab: 'signature', description: 'Formato kids' },
+    { name: 'cioccolata calda affogato', label: 'Cioccolata Calda Affogato', category: 'Caffè Rituals', categoryHref: 'caffe.html', tab: 'signature', description: 'Twist caldo/freddo' },
+    { name: 'pistachio hot', label: 'Pistachio Hot', category: 'Caffè Rituals', categoryHref: 'caffe.html', tab: 'signature', description: 'Comfort drink' },
+    { name: 'tea', label: 'Tea', category: 'Caffè Rituals', categoryHref: 'caffe.html', tab: 'signature', description: 'Tè' },
+    { name: 'whipped coffee panna', label: 'Whipped Coffee', category: 'Caffè Rituals', categoryHref: 'caffe.html', tab: 'signature', description: 'Espresso + panna' },
+    { name: 'affogato gelato caffè', label: 'Affogato', category: 'Caffè Rituals', categoryHref: 'caffe.html', tab: 'signature', description: 'Gelato + espresso' },
+    // Sweet Treats
+    { name: 'base crepe dolce', label: 'Base Crepe', category: 'Sweet Treat Atelier', categoryHref: 'sweet-treats.html', tab: 'crepe', description: 'Crepe semplice' },
+    { name: 'signature buontalenti crepe', label: 'Signature Buontalenti Crepe', category: 'Sweet Treat Atelier', categoryHref: 'sweet-treats.html', tab: 'crepe', description: 'Crepe signature' },
+    { name: 'crepe italiana dolce', label: 'Crepe Italiana', category: 'Sweet Treat Atelier', categoryHref: 'sweet-treats.html', tab: 'crepe', description: 'Crepe italiana' },
+    { name: 'crepe prosciutto salata', label: 'Crepe Prosciutto', category: 'Sweet Treat Atelier', categoryHref: 'sweet-treats.html', tab: 'crepe', description: 'Con prosciutto' },
+    { name: 'waffles dolce', label: 'Waffles', category: 'Sweet Treat Atelier', categoryHref: 'sweet-treats.html', tab: 'warm', description: 'Waffle' },
+    { name: 'pancake stack dolce', label: 'Pancake Stack', category: 'Sweet Treat Atelier', categoryHref: 'sweet-treats.html', tab: 'warm', description: 'Pancake' },
+    { name: 'porridge bowl colazione', label: 'Porridge Bowl', category: 'Sweet Treat Atelier', categoryHref: 'sweet-treats.html', tab: 'warm', description: 'Porridge' },
+    { name: 'gelato burger gelato pane', label: 'Gelato Burger', category: 'Sweet Treat Atelier', categoryHref: 'sweet-treats.html', tab: 'gelato-bread', description: 'Gelato in pane' },
+    { name: 'gelato croissant dolce', label: 'Gelato Croissant', category: 'Sweet Treat Atelier', categoryHref: 'sweet-treats.html', tab: 'gelato-bread', description: 'Croissant gelato' },
+    { name: 'afternoon tea signature', label: 'Afternoon Tea Signature', category: 'Sweet Treat Atelier', categoryHref: 'sweet-treats.html', tab: 'ritual', description: 'Tea time' },
+    // Gelato Lab
+    { name: 'coppette gelato coni', label: 'Coppette', category: 'Gelato Lab', categoryHref: 'gelato-lab.html', tab: 'cups', description: 'Coppa gelato' },
+    { name: 'coni classici gelato', label: 'Coni classici', category: 'Gelato Lab', categoryHref: 'gelato-lab.html', tab: 'cups', description: 'Cono gelato' },
+    { name: 'gelato boxes asporto', label: 'Gelato Boxes', category: 'Gelato Lab', categoryHref: 'gelato-lab.html', tab: 'boxes', description: 'Box gelato' },
+    { name: 'coppa gelato dolce', label: 'Coppa Gelato', category: 'Gelato Lab', categoryHref: 'gelato-lab.html', tab: 'treats', description: 'Coppa speciale' },
+    // Pastries
+    { name: 'cakes dolce torta', label: 'Cakes', category: 'Pastry Lab', categoryHref: 'pastries.html', tab: 'cakes', description: 'Dolci' },
+    { name: 'brownie tray dolce', label: 'Brownie Tray', category: 'Pastry Lab', categoryHref: 'pastries.html', tab: 'cakes', description: 'Brownies' },
+    { name: 'banana loaf dolce pane', label: 'Banana / altri loaf', category: 'Pastry Lab', categoryHref: 'pastries.html', tab: 'cakes', description: 'Banana bread' },
+    { name: 'croissant farciti dolce', label: 'Croissant farciti', category: 'Pastry Lab', categoryHref: 'pastries.html', tab: 'croissants', description: 'Croissant riempiti' },
+    { name: 'scone buontalenti dolce', label: 'Scone con Buontalenti', category: 'Pastry Lab', categoryHref: 'pastries.html', tab: 'croissants', description: 'Scone' },
+    // Slitti & Yo-Yo (cards)
+    { name: 'timeline essenziale slitti storia premi', label: 'Timeline essenziale', category: 'Slitti & Yo-Yo', categoryHref: 'slitti-yoyo.html', card: 'timeline-essenziale', description: 'Storia e premi' },
+    { name: 'tavolette lattenero gran cacao cioccolato', label: 'Tavolette LatteNero & Gran Cacao', category: 'Slitti & Yo-Yo', categoryHref: 'slitti-yoyo.html', card: 'tavolette-lattenero-gran-cacao', description: 'Cioccolato Slitti' },
+    { name: 'minicake dolce slitti', label: 'Minicake', category: 'Slitti & Yo-Yo', categoryHref: 'slitti-yoyo.html', card: 'minicake', description: 'Mini torta' },
+    { name: 'praline dragee cioccolato', label: 'Praline & Dragée', category: 'Slitti & Yo-Yo', categoryHref: 'slitti-yoyo.html', card: 'praline-drag-e', description: 'Praline' },
+    { name: 'creme slittosa riccosa gianera dolce', label: 'Creme Slittosa / Riccosa / Gianera', category: 'Slitti & Yo-Yo', categoryHref: 'slitti-yoyo.html', card: 'creme-slittosa-riccosa-gianera', description: 'Creme Slitti' },
+    { name: 'setup stock display fifo yoyo', label: 'Setup & stock', category: 'Slitti & Yo-Yo', categoryHref: 'slitti-yoyo.html', card: 'setup-stock', description: 'Display + FIFO' },
+    { name: 'procedura servizio yoyo wafer tool', label: 'Procedura servizio', category: 'Slitti & Yo-Yo', categoryHref: 'slitti-yoyo.html', card: 'procedura-servizio', description: 'Step operativi' },
+    // Festive
+    { name: 'cottura perfetta churros frittura', label: 'Cottura perfetta', category: 'Festive & Churros', categoryHref: 'festive.html', tab: 'churros', description: 'Frittura' },
+    { name: 'impiattamento upsell dolce', label: 'Impiattamento & upsell', category: 'Festive & Churros', categoryHref: 'festive.html', tab: 'churros', description: 'Presentazione' },
+    { name: 'taglio presentazione panettone', label: 'Taglio & presentazione', category: 'Festive & Churros', categoryHref: 'festive.html', tab: 'mulled', description: 'Panettone' },
+    { name: 'slice calda dolce', label: 'Slice calda', category: 'Festive & Churros', categoryHref: 'festive.html', tab: 'mulled', description: 'Fetta calda' },
+    { name: 'piatto classico festivo', label: 'Piatto classico', category: 'Festive & Churros', categoryHref: 'festive.html', tab: 'mulled', description: 'Piatto' },
+    { name: 'opzione calda festiva', label: 'Opzione calda', category: 'Festive & Churros', categoryHref: 'festive.html', tab: 'mulled', description: 'Opzione calda' },
+    { name: 'mini panettone buontalenti dolce', label: 'Mini panettone con Buontalenti', category: 'Festive & Churros', categoryHref: 'festive.html', tab: 'mulled', description: 'Mini panettone' },
+    { name: 'packaging take away panettone', label: 'Packaging take away', category: 'Festive & Churros', categoryHref: 'festive.html', tab: 'mulled', description: 'Confezione' },
+    { name: 'mulled wine vin brule natale caldo', label: 'Mulled Wine', category: 'Festive & Churros', categoryHref: 'festive.html', tab: 'mulled', description: 'Vin brulé' },
+    { name: 'churros frittura dolce', label: 'Churros', category: 'Festive & Churros', categoryHref: 'festive.html', tab: 'churros', description: 'Frittura' },
+  ];
+
+  const allProducts = (() => {
+    const catalogProducts = buildCatalogProducts();
+    const catalogPages = loadSearchCatalogPages();
+    const out = [];
+    const seen = new Set();
+    const pushUnique = (item) => {
+      if (!item) return;
+      const href = item.categoryHref || '';
+      const keyPart = item.card || item.tab || item.label || item.name || '';
+      const k = `${href}::${keyPart}`;
+      if (seen.has(k)) return;
+      seen.add(k);
+      out.push(item);
+    };
+
+    catalogProducts.forEach(pushUnique);
+
+    hardcodedProducts
+      .filter((item) => {
+        const pageKey = (item?.categoryHref || '').trim();
+        return !(pageKey && catalogPages && catalogPages[pageKey]);
+      })
+      .forEach(pushUnique);
+
+    return out;
+  })();
+
+  const menuLinks = Array.from(document.querySelectorAll('.menu-panel a, .menu-categories a'))
+    .filter((a) => a && a.getAttribute && a.getAttribute('href'));
+
+  const menuItems = menuLinks.map((link) => ({
+    name: normalize(link.textContent),
+    label: (link.textContent || '').trim(),
+    href: link.getAttribute('href'),
+    isCategory: true,
+  }));
+
+  let lastFiltered = [];
+  let assistantNodes = null;
+  let lastAssistantQuery = '';
+
+  const ensureAssistantUI = () => {
+    const existing = searchRoot.querySelector('[data-menu-assistant]');
+    if (existing) {
+      return {
+        root: existing,
+        avatar: existing.querySelector('[data-menu-assistant-avatar]'),
+        message: existing.querySelector('[data-menu-assistant-message]'),
+        actions: existing.querySelector('[data-menu-assistant-actions]'),
+        examples: existing.querySelector('[data-menu-assistant-examples]'),
+        clear: existing.querySelector('[data-menu-assistant-clear]'),
+      };
+    }
+
+    const box = document.createElement('div');
+    box.className = 'menu-search__assistant';
+    box.setAttribute('data-menu-assistant', '');
+    box.setAttribute('role', 'status');
+    box.setAttribute('aria-live', 'polite');
+    box.hidden = false;
+
+    const avatar = document.createElement('div');
+    avatar.className = 'menu-search__assistant-avatar';
+    avatar.setAttribute('data-menu-assistant-avatar', '');
+    avatar.setAttribute('aria-hidden', 'true');
+    avatar.innerHTML = `
+      <svg class="gelatiere-svg" viewBox="0 0 96 120" width="56" height="70" role="img" aria-label="Assistente gelatiere" focusable="false">
+        <defs>
+          <linearGradient id="skinGrad" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0" stop-color="#FFE7D0"/>
+            <stop offset="1" stop-color="#FFD0B0"/>
+          </linearGradient>
+          <linearGradient id="apronGrad" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0" stop-color="#2A54C4"/>
+            <stop offset="1" stop-color="#173A8A"/>
+          </linearGradient>
+          <linearGradient id="hairGrad" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0" stop-color="#6B4A2A"/>
+            <stop offset="1" stop-color="#3B2412"/>
+          </linearGradient>
+          <radialGradient id="eyeIris" cx="50%" cy="50%" r="50%">
+            <stop offset="0" stop-color="#6EC6FF"/>
+            <stop offset="1" stop-color="#214098"/>
+          </radialGradient>
+          <radialGradient id="blushGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0" stop-color="rgba(255,150,180,0.55)"/>
+            <stop offset="1" stop-color="rgba(255,150,180,0)"/>
+          </radialGradient>
+          <radialGradient id="shadowGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0" stop-color="rgba(15,33,84,0.22)"/>
+            <stop offset="1" stop-color="rgba(15,33,84,0)"/>
+          </radialGradient>
+        </defs>
+
+        <ellipse cx="48" cy="115" rx="24" ry="6" fill="url(#shadowGrad)"/>
+
+        <g class="gelatiere-svg__body">
+          <rect x="35" y="86" width="11" height="24" rx="5.5" fill="#1a1f35"/>
+          <rect x="50" y="86" width="11" height="24" rx="5.5" fill="#0f1426"/>
+          <path d="M26 50c0-12 10-20 22-20s22 8 22 20v30c0 3-2 6-5 6H31c-3 0-5-3-5-6V50z" fill="#FFFFFF" stroke="rgba(33,64,152,0.08)"/>
+          <path d="M32 56c0-5 5-10 9-10h14c4 0 9 5 9 10v24c0 2-2 4-4 4H36c-2 0-4-2-4-4V56z" fill="url(#apronGrad)"/>
+          <rect x="40" y="66" width="16" height="12" rx="6" fill="rgba(255,255,255,0.2)"/>
+          <circle cx="48" cy="72" r="1.5" fill="rgba(255,255,255,0.3)"/>
+          <path class="gelatiere-arm-l" d="M26 54c-5 3-9 10-9 16 0 4 2 8 3 10" fill="none" stroke="url(#skinGrad)" stroke-width="7" stroke-linecap="round"/>
+          <path class="gelatiere-arm-r" d="M70 54c5 3 9 10 9 16 0 4-2 8-3 10" fill="none" stroke="url(#skinGrad)" stroke-width="7" stroke-linecap="round"/>
+          <g class="gelatiere-cone" transform="translate(74, 74) rotate(18)">
+            <path d="M-1 0l5 12 5-12z" fill="#E8A842" stroke="#C78F35" stroke-width="0.5"/>
+            <ellipse cx="4" cy="-1" rx="4.5" ry="4" fill="#FF6BA8"/>
+            <ellipse cx="4" cy="-1" rx="3" ry="2.5" fill="#FF8FBF" opacity="0.6"/>
+            <circle cx="5.5" cy="-2" r="1" fill="rgba(255,255,255,0.7)"/>
+          </g>
+        </g>
+
+        <g class="gelatiere-svg__head">
+          <path d="M28 22c0-14 8-22 20-22s20 8 20 22c0 4-2 8-4 10-2-3-4-6-8-6-3 0-5 2-8 2s-5-2-8-2c-4 0-6 3-8 6-2-2-4-6-4-10z" fill="url(#hairGrad)"/>
+          <path d="M38 10c2-4 6-6 10-6s8 2 10 6" fill="url(#hairGrad)" opacity="0.7"/>
+          <ellipse cx="48" cy="30" rx="20" ry="22" fill="url(#skinGrad)"/>
+          <rect x="43" y="48" width="10" height="6" rx="5" fill="url(#skinGrad)"/>
+          <ellipse class="gelatiere-blush" cx="35" cy="36" rx="6" ry="4" fill="url(#blushGrad)"/>
+          <ellipse class="gelatiere-blush" cx="61" cy="36" rx="6" ry="4" fill="url(#blushGrad)"/>
+          <g class="gelatiere-svg__eyes">
+            <g class="gelatiere-eye-group-l">
+              <ellipse cx="40" cy="30" rx="7" ry="8" fill="#0A1942"/>
+              <ellipse class="gelatiere-pupil" cx="40" cy="32" rx="4.5" ry="5.5" fill="url(#eyeIris)"/>
+              <ellipse cx="40" cy="30" rx="2.5" ry="3" fill="#fff" opacity="0.7"/>
+              <ellipse cx="38" cy="28" rx="1.2" ry="1.5" fill="#fff" opacity="0.9"/>
+              <ellipse cx="42" cy="33" rx="0.8" ry="1.2" fill="#fff" opacity="0.5"/>
+            </g>
+            <g class="gelatiere-eye-group-r">
+              <ellipse cx="56" cy="30" rx="7" ry="8" fill="#0A1942"/>
+              <ellipse class="gelatiere-pupil" cx="56" cy="32" rx="4.5" ry="5.5" fill="url(#eyeIris)"/>
+              <ellipse cx="56" cy="30" rx="2.5" ry="3" fill="#fff" opacity="0.7"/>
+              <ellipse cx="54" cy="28" rx="1.2" ry="1.5" fill="#fff" opacity="0.9"/>
+              <ellipse cx="58" cy="33" rx="0.8" ry="1.2" fill="#fff" opacity="0.5"/>
+            </g>
+            <path class="gelatiere-blink" d="M34 30c0-4 2.5-7 6-7s6 3 6 7" fill="url(#skinGrad)" opacity="0" stroke="#3B2412" stroke-width="0.5"/>
+            <path class="gelatiere-blink" d="M50 30c0-4 2.5-7 6-7s6 3 6 7" fill="url(#skinGrad)" opacity="0" stroke="#3B2412" stroke-width="0.5"/>
+          </g>
+          <path class="gelatiere-brow-l" d="M35 23c2-2 5-2 7 0" fill="none" stroke="#3B2412" stroke-width="2" stroke-linecap="round"/>
+          <path class="gelatiere-brow-r" d="M54 23c2-2 5-2 7 0" fill="none" stroke="#3B2412" stroke-width="2" stroke-linecap="round"/>
+          <path d="M48 36c0 2-1 3-1 4" fill="none" stroke="rgba(15,33,84,0.15)" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="47" cy="40" r="0.8" fill="rgba(255,150,180,0.3)"/>
+          <path class="gelatiere-mouth" d="M42 42c2 4 4 6 6 6s4-2 6-6" fill="none" stroke="#3B2412" stroke-width="2.2" stroke-linecap="round"/>
+          <ellipse class="gelatiere-mouth--talk" cx="48" cy="46" rx="5" ry="2.5" fill="#FFB8C8" stroke="#3B2412" stroke-width="1.2" opacity="0"/>
+          <path d="M32 18c3-4 6-6 9-6 2 0 3 2 3 4" fill="url(#hairGrad)" opacity="0.8"/>
+          <path d="M64 18c-3-4-6-6-9-6-2 0-3 2-3 4" fill="url(#hairGrad)" opacity="0.8"/>
+          <path d="M45 14c1-3 2-5 3-5s2 2 3 5" fill="url(#hairGrad)" opacity="0.8"/>
+          <ellipse cx="48" cy="12" rx="19" ry="6" fill="#FFFFFF" stroke="rgba(33,64,152,0.12)"/>
+          <rect x="29" y="10" width="38" height="7" rx="3.5" fill="#FFFFFF" stroke="rgba(33,64,152,0.1)"/>
+          <ellipse cx="48" cy="13.5" rx="15" ry="2" fill="rgba(42,84,196,0.08)"/>
+        </g>
+
+        <g class="gelatiere-sparkles">
+          <g class="gelatiere-sparkle" transform="translate(16, 28)">
+            <circle r="1.5" fill="#FFD700"/>
+            <path d="M-3 0h6M0-3v6" stroke="#FFF4A3" stroke-width="1" stroke-linecap="round"/>
+          </g>
+          <g class="gelatiere-sparkle" transform="translate(78, 18)">
+            <circle r="1.2" fill="#FFD700"/>
+            <path d="M-2.5 0h5M0-2.5v5" stroke="#FFF4A3" stroke-width="0.8" stroke-linecap="round"/>
+          </g>
+          <g class="gelatiere-sparkle" transform="translate(22, 50)">
+            <circle r="1" fill="#FFE4B3"/>
+            <path d="M-2 0h4M0-2v4" stroke="#FFF4A3" stroke-width="0.6" stroke-linecap="round"/>
+          </g>
+        </g>
+      </svg>
+    `;
+
+    const header = document.createElement('div');
+    header.className = 'menu-search__assistant-header';
+    header.innerHTML = `
+      <p class="menu-search__assistant-title">Assistente</p>
+      <button class="menu-search__assistant-clear" type="button" data-menu-assistant-clear aria-label="Pulisci">×</button>
+    `;
+
+    const msg = document.createElement('p');
+    msg.className = 'menu-search__assistant-message';
+    msg.setAttribute('data-menu-assistant-message', '');
+
+    const actions = document.createElement('div');
+    actions.className = 'menu-search__assistant-actions';
+    actions.setAttribute('data-menu-assistant-actions', '');
+
+    const examples = document.createElement('div');
+    examples.className = 'menu-search__assistant-examples';
+    examples.setAttribute('data-menu-assistant-examples', '');
+
+    const bubble = document.createElement('div');
+    bubble.className = 'menu-search__assistant-bubble';
+    bubble.append(header, msg, actions, examples);
+
+    box.append(avatar, bubble);
+    searchRoot.appendChild(box);
+
+    const clearBtn = box.querySelector('[data-menu-assistant-clear]');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        try { searchInput.value = ''; } catch {}
+        lastAssistantQuery = '';
+        renderSuggestions('');
+        showAssistantGreeting();
+        try { searchInput.focus({ preventScroll: true }); } catch {}
+      });
+    }
+
+    return {
+      root: box,
+      avatar,
+      message: msg,
+      actions,
+      examples,
+      clear: clearBtn,
+    };
+  };
+
+  const navigateTo = (href) => {
+    if (!href) return;
+    window.location.href = href;
+  };
+
+  const setAssistant = ({ message = '', actions = [], examples = [] } = {}) => {
+    assistantNodes = assistantNodes || ensureAssistantUI();
+    if (!assistantNodes?.root) return;
+
+    assistantNodes.message.textContent = message;
+
+    assistantNodes.actions.innerHTML = '';
+    (Array.isArray(actions) ? actions : []).slice(0, 3).forEach((a) => {
+      if (!a || !a.href) return;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = a.kind === 'secondary' ? 'btn btn-ghost btn--sm' : 'btn btn-primary btn--sm';
+      btn.textContent = a.label || 'Apri';
+      btn.addEventListener('click', () => navigateTo(a.href));
+      assistantNodes.actions.appendChild(btn);
+    });
+
+    assistantNodes.examples.innerHTML = '';
+    if (Array.isArray(examples) && examples.length) {
+      const wrap = document.createElement('div');
+      wrap.className = 'menu-search__assistant-chiprow';
+      examples.slice(0, 4).forEach((ex) => {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'menu-search__assistant-chip';
+        chip.textContent = ex;
+        chip.addEventListener('click', () => {
+          searchInput.value = ex;
+          renderSuggestions(ex);
+          handleAssistantSubmit();
+        });
+        wrap.appendChild(chip);
+      });
+      assistantNodes.examples.appendChild(wrap);
+    }
+
+    assistantNodes.root.hidden = false;
+
+    try {
+      assistantNodes.avatar?.classList.remove('is-speaking');
+      void assistantNodes.avatar?.offsetHeight;
+      assistantNodes.avatar?.classList.add('is-speaking');
+      window.setTimeout(() => assistantNodes.avatar?.classList.remove('is-speaking'), 900);
+    } catch {}
+  };
+
+  const showAssistantGreeting = () => {
+    setAssistant({
+      message: 'Dimmi cosa ti serve: io sono il tuo gelatiere di fiducia. (Prometto di non giudicare gli errori… troppo.)',
+      actions: [
+        { label: 'Apri Story Orbit', href: 'story-orbit.html', kind: 'secondary' },
+      ],
+      examples: [
+        'Coni: quanti gusti e quanti grammi?',
+        'Come preparo un cappuccino?',
+        'Churros: temperatura olio e timing?',
+        'Gelato box: quale formato uso?',
+      ],
+    });
+  };
+
+  const buildHrefFromResult = (item) => {
+    if (!item) return '';
+    if (item.isCategory && item.href) return item.href;
+    const base = item.categoryHref || item.href || '';
+    if (!base) return '';
+    if (item.card) return `${base}?card=${encodeURIComponent(String(item.card))}&center=1`;
+    if (item.tab) return `${base}?tab=${encodeURIComponent(String(item.tab))}&center=1`;
+    return base;
+  };
+
+  const bestMatch = (query) => {
+    const { q, qAlt } = normalizeQuery(query);
+    if (!q) return null;
+    const hay = (s) => normalize(s);
+    const score = (item) => {
+      const name = hay(item?.name || '');
+      const label = hay(item?.label || '');
+      const category = hay(item?.category || '');
+      const blob = `${name} ${label} ${category}`;
+      const needle = q;
+      const alt = qAlt;
+      let sc = 0;
+      if (label === needle || name === needle) sc += 200;
+      if (blob.startsWith(needle)) sc += 120;
+      if (blob.includes(needle)) sc += 80;
+      if (alt && blob.includes(alt)) sc += 35;
+      if (item?.card) sc += 10;
+      else if (item?.tab) sc += 6;
+      else if (item?.isCategory) sc += 1;
+      return sc;
+    };
+
+    const pool = [...(menuItems || []), ...(allProducts || [])];
+    let top = null;
+    let topScore = 0;
+    pool.forEach((it) => {
+      const sc = score(it);
+      if (sc > topScore) {
+        topScore = sc;
+        top = it;
+      }
+    });
+    return topScore >= 60 ? top : null;
+  };
+
+  const looksLikeQuestion = (query) => {
+    const q = normalize(query);
+    if (!q) return false;
+    if (q.includes('?')) return true;
+    return /^(come|quanto|quale|quali|cosa|perche|perché|quando|dove|posso|devo|si puo|si può|mi dici|mi spieghi|che differenza|qual\s+e|qual\s+è)\b/i.test(q);
+  };
+
+  const assistantRuleAnswer = (query) => {
+    const q = normalize(query);
+    if (!q) return null;
+
+    if (/(\bconi\b|\bcono\b|\bcone\b|choco\s*cone|gluten\s*free|\bgf\b)/i.test(q)) {
+      return {
+        message: 'Coni: ti porto dritto alla scheda con parametri e varianti (così niente “a sensazione”).',
+        actions: [
+          { label: 'Apri Coni classici', href: 'gelato-lab.html?card=coni-classici&tab=parametri&center=1' },
+        ],
+      };
+    }
+    if (/(\bchurros\b|frittura|olio|croccant)/i.test(q)) {
+      return {
+        message: 'Churros: la risposta giusta sta sempre tra temperatura e timing. Apriamo la scheda e via.',
+        actions: [
+          { label: 'Apri Churros', href: 'festive.html?tab=churros&center=1' },
+        ],
+      };
+    }
+    if (/(vin\s*brul|mulled|\bbrul\b)/i.test(q)) {
+      return {
+        message: 'Vin brulé: apriamo la sezione “Mulled” per setup, dosi e servizio.',
+        actions: [
+          { label: 'Apri Mulled Wine', href: 'festive.html?tab=mulled&center=1' },
+        ],
+      };
+    }
+    if (/(cappuccino|flat\s*white|latte|schiuma|foam|montare\s+latte)/i.test(q)) {
+      return {
+        message: 'Latte & schiuma: andiamo nella sezione Milk. Lì trovi tecnica e standard (senza improvvisazioni artistiche… a meno che non siano volute).',
+        actions: [
+          { label: 'Apri Milk (Bar & Drinks)', href: 'caffe.html?tab=milk&center=1' },
+        ],
+      };
+    }
+    if (/(sicurezza|safety|allerg|gluten)/i.test(q)) {
+      return {
+        message: 'Sicurezza e allergeni: apriamo Operations & Setup per procedure e check (meglio 30 secondi qui che 30 minuti dopo).',
+        actions: [
+          { label: 'Apri Operations & Setup', href: 'operations.html?center=1' },
+        ],
+      };
+    }
+
+    return null;
+  };
+
+  const wittyFallback = (query) => {
+    const q = (query || '').trim();
+    const lines = [
+      `Su “${q}” rischio di inventarmi cose… e non vogliamo gelati fantasy.`,
+      `Io sono fortissimo su ricette e procedure Badiani. Su “${q}” invece… mi manca la certificazione.`,
+      `Posso aiutarti con Bar, Gelato, Treats, Operations. Su “${q}” sono in modalità “panna montata”: tanta aria e poca sostanza.`,
+    ];
+    const pick = () => lines[Math.floor(Math.random() * lines.length)];
+    return {
+      message: `${pick()} Prova con una domanda tipo:`,
+      actions: [
+        { label: 'Apri Hub', href: 'index.html', kind: 'secondary' },
+      ],
+      examples: [
+        'Come preparo un cappuccino?',
+        'Coni: quanti gusti e quanti grammi?',
+        'Churros: temperatura olio e timing?',
+        'Gelato box: quale formato usare?',
+      ],
+    };
+  };
+
+  const answerAssistant = (query) => {
+    const raw = String(query || '').trim();
+    const norm = normalize(raw);
+    if (!norm) {
+      return {
+        message: 'Scrivimi una domanda (o il nome di un modulo) e ti porto alla scheda giusta.',
+        actions: [],
+        examples: ['Coni: quale frase è corretta?', 'Come faccio un flat white?', 'Packaging take away: cosa serve?'],
+      };
+    }
+
+    const ruled = assistantRuleAnswer(raw);
+    if (ruled) {
+      return {
+        ...ruled,
+        examples: ruled.examples || ['Coni: choco cone?', 'Cappuccino: schiuma?', 'Churros: croccante?'],
+      };
+    }
+
+    const match = bestMatch(raw);
+    if (match) {
+      const href = buildHrefFromResult(match);
+      const label = `Apri ${match.label}`;
+      const baseMsg = looksLikeQuestion(raw)
+        ? 'Ok — ti porto alla scheda più pertinente. Dentro trovi lo standard completo.'
+        : 'Trovato. Ti porto alla scheda di riferimento.';
+      return {
+        message: `${baseMsg}`,
+        actions: href ? [{ label, href }] : [],
+        examples: ['Mostrami Gelato Boxes', 'Dove trovo upselling?', 'Come si fa l’Afternoon Tea?'],
+      };
+    }
+
+    return wittyFallback(raw);
+  };
+
+  const renderSuggestions = (query) => {
+    if (!searchSuggestions) return;
+    searchSuggestions.innerHTML = '';
+    searchSuggestions.hidden = true;
+
+    const { q, qAlt } = normalizeQuery(query);
+    if (!q) {
+      lastFiltered = [];
+      return;
+    }
+
+    const matchesQuery = (haystack) => {
+      const h = normalize(haystack);
+      if (!h) return false;
+      if (h.includes(q)) return true;
+      if (qAlt && h.includes(qAlt)) return true;
+      return false;
+    };
+
+    const productMatches = allProducts.filter((item) => matchesQuery(item.name) || matchesQuery(item.category));
+    const categoryMatches = menuItems.filter((cat) => matchesQuery(cat.name) || matchesQuery(cat.label));
+    lastFiltered = [...categoryMatches, ...productMatches].slice(0, 10);
+  };
+
+  const handleAssistantSubmit = () => {
+    const raw = String(searchInput.value || '');
+    const norm = normalize(raw);
+    if (!norm) {
+      lastAssistantQuery = '';
+      showAssistantGreeting();
+      return;
+    }
+    if (norm === lastAssistantQuery) return;
+    lastAssistantQuery = norm;
+    setAssistant(answerAssistant(raw));
+  };
+
+  searchInput.addEventListener('input', () => {
+    renderSuggestions(searchInput.value);
+    if (!normalize(searchInput.value)) {
+      lastAssistantQuery = '';
+      showAssistantGreeting();
+    }
+  });
+  searchInput.addEventListener('focus', () => renderSuggestions(searchInput.value));
+  searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleAssistantSubmit();
+    }
+  });
+
+  if (sendBtn) {
+    sendBtn.addEventListener('click', () => {
+      handleAssistantSubmit();
+      try { searchInput.focus({ preventScroll: true }); } catch {}
+    });
+  }
+
+  // Initial state
+  renderSuggestions('');
+  showAssistantGreeting();
 })();
 
 // ============================================================

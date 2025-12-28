@@ -7,8 +7,8 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <title>Badiani Training Orbit</title>
-    <link rel="stylesheet" href="styles/site.css?v=20251228_2" />
-    <script defer src="scripts/site.js?v=20251228_2"></script>
+    <link rel="stylesheet" href="styles/site.css?v=20251228_3" />
+    <script defer src="scripts/site.js?v=20251228_3"></script>
     <script defer src="scripts/gelato-effects.js?v=20251227_1"></script>
   <!-- COCKPIT_COMPACT block removed: styling now lives in styles/site.css -->
 </head>
@@ -207,6 +207,27 @@
             </div>
           </section>
         </aside>
+      </section>
+
+      <section class="hub-assistant" aria-label="Assistente gelatiere">
+        <div class="hub-assistant__inner">
+          <div class="hub-assistant__glow" aria-hidden="true"></div>
+          <header class="hub-assistant__head">
+            <div>
+              <p class="hub-assistant__eyebrow">Assistente</p>
+              <h2 class="hub-assistant__title">Parla col gelatiere</h2>
+              <p class="hub-assistant__sub">Chiedi procedure, ricette e dove trovare una scheda. Ti porto al punto giusto.</p>
+            </div>
+          </header>
+
+          <div class="menu-search menu-search--hub" data-hub-assistant>
+            <div class="menu-search__field">
+              <input type="search" placeholder="Es. Coni: quanti gusti e quanti grammi?" autocomplete="off" aria-label="Parla col gelatiere" data-hub-assistant-search />
+              <button class="btn btn-primary btn--sm" type="button" data-hub-assistant-send>Chiedi</button>
+            </div>
+            <div class="menu-search__suggestions" data-hub-assistant-suggestions></div>
+          </div>
+        </div>
       </section>
     </main>
 
