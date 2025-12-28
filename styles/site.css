@@ -510,9 +510,19 @@ body.page-home {
 
   .page-home .summary-card--wrong .summary-list li,
   .page-home .summary-card--history .summary-list li {
-    white-space: nowrap;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+  }
+
+  .page-home .summary-card--wrong .summary-list__btn,
+  .page-home .summary-card--history .summary-list__btn {
+    /* Keep cockpit compact but readable: clamp to 2 lines instead of cutting mid-word. */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;
+    line-height: 1.3;
   }
 
   .page-home .summary-card--wrong .summary-list li:nth-child(n+3),
@@ -2802,6 +2812,60 @@ h4 {
   color: var(--brand-gray-soft);
 }
 
+.summary-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 2px;
+}
+
+.summary-card__meta {
+  font-size: 12px;
+  color: var(--brand-gray-soft);
+}
+
+.btn--sm {
+  padding: 8px 12px;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* Full error log overlay (Hub) */
+.wrong-log__toolbar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.wrong-log__search {
+  flex: 1 1 260px;
+  min-width: 200px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(33, 64, 152, 0.16);
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--ink);
+  font-family: var(--font-regular);
+}
+
+.wrong-log__list {
+  margin-top: 12px;
+  max-height: min(62vh, 520px);
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.wrong-log__hint {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--brand-gray-soft);
+}
+
 .pill--blue {
   border-color: var(--brand-blue);
   background: rgba(33, 64, 152, 0.08);
@@ -4104,6 +4168,8 @@ button,
     /* On mobile, keep modal anchored to the top so content is reachable; respect safe areas. */
     align-items: flex-start;
     padding: 0; /* Full screen feel */
+    /* Avoid double-scrolling (overlay + modal). The modal is the scroll container on mobile. */
+    overflow-y: hidden;
   }
 
   .card-modal {
@@ -4133,22 +4199,24 @@ button,
     box-shadow: 0 2px 10px rgba(15, 33, 84, 0.05);
     width: 100%;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto auto;
-    align-items: start;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
     column-gap: 10px;
-    row-gap: 8px;
-    /* Always keep title on its own row (so crystals never steal width). */
-    grid-template-areas:
-      "title title title"
-      ". crystals close";
+    row-gap: 0;
+    grid-template-areas: "crystals title close";
   }
 
   .card-modal-header h3 {
     grid-area: title;
     min-width: 0;
     margin: 0;
+    font-size: clamp(22px, 4.8vw, 26px);
+    line-height: 1.15;
+    letter-spacing: 0.03em;
+    font-family: var(--font-medium);
     /* Never truncate titles in the modal header: allow wrapping. */
     display: block;
+    text-align: center;
     overflow: visible;
     text-overflow: clip;
     white-space: normal;
@@ -4160,7 +4228,7 @@ button,
 
   .card-modal-crystals {
     grid-area: crystals;
-    justify-self: end;
+    justify-self: start;
     white-space: nowrap;
   }
 
@@ -4177,20 +4245,17 @@ button,
     padding: calc(10px + env(safe-area-inset-top, 0px)) 12px 10px;
     column-gap: 8px;
     row-gap: 8px;
-    align-items: start;
-    /* Give the title the full first row so it can always wrap completely. */
-    grid-template-columns: minmax(0, 1fr) auto auto;
-    grid-template-areas:
-      "title title title"
-      ". crystals close";
+    align-items: center;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas: "crystals title close";
   }
 
   .card-modal-header h3 {
     grid-area: title;
-    /* Slightly tighter so long names don't feel oversized on small screens. */
-    font-size: 18px;
-    line-height: 1.2;
-    letter-spacing: 0.02em;
+    /* Bigger + more readable on phones, while still respecting long names. */
+    font-size: clamp(20px, 5.6vw, 24px);
+    line-height: 1.16;
+    letter-spacing: 0.025em;
   }
 
   .card-modal-crystals {
@@ -4227,11 +4292,6 @@ button,
     padding-inline: 8px;
   }
 }
-
-  .card-modal-header h3 {
-    font-size: 18px;
-    letter-spacing: 0.03em;
-  }
 
   .card-modal-sidebar {
     flex: 0 0 auto; /* Let it grow to fit content */
@@ -4329,9 +4389,10 @@ button,
 @media (min-width: 901px) {
   .card-modal-header {
     grid-column: 1 / -1;
-    display: flex;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas: "crystals title close";
     align-items: center;
-    justify-content: space-between;
     padding: 28px 32px;
     background: linear-gradient(135deg, rgba(33, 64, 152, 0.03), rgba(236, 65, 140, 0.02));
     border-bottom: 2px solid var(--border);
@@ -4339,14 +4400,25 @@ button,
   }
 
   .card-modal-header h3 {
+    grid-area: title;
     margin: 0;
     font-size: 30px;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     font-family: var(--font-medium);
     color: var(--ink);
-    flex: 1;
+    text-align: center;
     line-height: 1.3;
+  }
+
+  .card-modal-crystals {
+    grid-area: crystals;
+    justify-self: start;
+  }
+
+  .card-modal-close {
+    grid-area: close;
+    justify-self: end;
   }
 }
 
@@ -5229,6 +5301,7 @@ button,
   gap: 14px;
   padding: 14px 16px;
   border: none;
+  border-radius: 0;
   background: transparent;
   font-size: 16px;
   font-family: var(--font-medium);
@@ -5278,7 +5351,7 @@ button,
   overflow: hidden;
   transition: max-height 0.25s ease;
   padding: 0 16px 0 16px;
-  background: linear-gradient(180deg, rgba(33, 64, 152, 0.02), rgba(236, 65, 140, 0.04));
+  background: rgba(255, 255, 255, 0.92);
 }
 
 .accordion-item.is-open .accordion-body {
@@ -5288,6 +5361,406 @@ button,
 .accordion-group {
   display: grid;
   gap: 14px;
+}
+
+/* ========================================================================
+   Modal accordion: topic colors + richer micro-interactions (styling only)
+   Uses data attributes set by JS: `.accordion-item[data-topic="..."]`.
+   ======================================================================== */
+
+.card-modal .modal-accordion .accordion-item {
+  /* Default topic palette (blue → rose) */
+  --tab-accent-rgb: 33, 64, 152;
+  --tab-accent2-rgb: 236, 65, 140;
+  --tab-accent: rgb(var(--tab-accent-rgb));
+  --tab-accent2: rgb(var(--tab-accent2-rgb));
+
+  position: relative;
+  border-color: rgba(var(--tab-accent-rgb), 0.18);
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 16px;
+  box-shadow:
+    0 10px 24px rgba(15, 33, 84, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+/* Left accent rail */
+.card-modal .modal-accordion .accordion-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: rgba(var(--tab-accent-rgb), 0.78);
+  border-radius: 16px 0 0 16px;
+  opacity: 1;
+  pointer-events: none;
+}
+
+/* Topic mapping */
+.card-modal .modal-accordion .accordion-item[data-topic="panoramica"],
+.card-modal .modal-accordion .accordion-item[data-topic="altro"],
+.card-modal .modal-accordion .accordion-item[data-topic="dettagli"],
+.card-modal .modal-accordion .accordion-item[data-topic="approfondimenti"] {
+  --tab-accent-rgb: 33, 64, 152;
+  --tab-accent2-rgb: 236, 65, 140;
+}
+
+.card-modal .modal-accordion .accordion-item[data-topic="procedura"] {
+  --tab-accent-rgb: 236, 65, 140;
+  --tab-accent2-rgb: 242, 190, 88;
+}
+
+.card-modal .modal-accordion .accordion-item[data-topic="ricetta"] {
+  --tab-accent-rgb: 236, 65, 140;
+  --tab-accent2-rgb: 33, 64, 152;
+}
+
+.card-modal .modal-accordion .accordion-item[data-topic="parametri"] {
+  --tab-accent-rgb: 33, 64, 152;
+  --tab-accent2-rgb: 236, 65, 140;
+}
+
+.card-modal .modal-accordion .accordion-item[data-topic="servizio"] {
+  --tab-accent-rgb: 242, 190, 88;
+  --tab-accent2-rgb: 33, 64, 152;
+}
+
+.card-modal .modal-accordion .accordion-item[data-topic="conservazione"] {
+  --tab-accent-rgb: 33, 64, 152;
+  --tab-accent2-rgb: 242, 190, 88;
+}
+
+.card-modal .modal-accordion .accordion-item[data-topic="pulizia"] {
+  --tab-accent-rgb: 236, 65, 140;
+  --tab-accent2-rgb: 33, 64, 152;
+}
+
+.card-modal .modal-accordion .accordion-item[data-topic="note"] {
+  /* Notes should feel “editorial”, not grey/flat: rose + blue */
+  --tab-accent-rgb: 236, 65, 140;
+  --tab-accent2-rgb: 33, 64, 152;
+}
+
+.card-modal .modal-accordion .accordion-item[data-topic="checklist"],
+.card-modal .modal-accordion .accordion-item[data-topic="focus"],
+.card-modal .modal-accordion .accordion-item[data-topic="takeaway"] {
+  --tab-accent-rgb: 242, 190, 88;
+  --tab-accent2-rgb: 236, 65, 140;
+}
+
+.card-modal .modal-accordion .accordion-item[data-topic="troubleshooting"],
+.card-modal .modal-accordion .accordion-item[data-topic="upselling"],
+.card-modal .modal-accordion .accordion-item[data-topic="vendita"] {
+  --tab-accent-rgb: 236, 65, 140;
+  --tab-accent2-rgb: 242, 190, 88;
+}
+
+/* Header: more “premium”, animated, topic-colored */
+.card-modal .modal-accordion .accordion-header {
+  position: relative;
+  background: transparent;
+  transition:
+    background 220ms ease,
+    box-shadow 220ms ease,
+    color 180ms ease;
+}
+
+.card-modal .modal-accordion .accordion-header:hover {
+  background: rgba(var(--tab-accent-rgb), 0.045);
+  box-shadow: inset 0 -1px 0 rgba(var(--tab-accent-rgb), 0.12);
+}
+
+.card-modal .modal-accordion .accordion-header:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(var(--tab-accent-rgb), 0.20),
+    inset 0 -1px 0 rgba(var(--tab-accent-rgb), 0.16);
+}
+
+/* Keep the “opened/starred” state, but let topic accent lead the visual language */
+.card-modal .modal-accordion .accordion-header.tab-opened {
+  background: rgba(var(--tab-accent-rgb), 0.06);
+  box-shadow: inset 0 -1px 0 rgba(var(--tab-accent-rgb), 0.18);
+}
+
+.card-modal .modal-accordion .accordion-header.tab-starred {
+  background: rgba(242, 190, 88, 0.12);
+  box-shadow: inset 0 -1px 0 rgba(242, 190, 88, 0.28);
+}
+
+/* Post-star toolbar: unlock “Mostra tutto” (open all tabs) */
+.card-modal .modal-tabs-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  align-self: flex-end;
+  margin: -4px 0 6px 0;
+}
+
+/* IMPORTANT: do not override the native [hidden] attribute.
+   Without this, author `display` rules can make a disabled (locked) eye icon appear. */
+.card-modal .modal-tabs-toolbar[hidden] {
+  display: none !important;
+}
+
+.card-modal .modal-tabs-toolbar__btn[hidden] {
+  display: none !important;
+}
+
+.card-modal .modal-tabs-toolbar__hint {
+  display: none;
+}
+
+.card-modal .modal-tabs-toolbar__btn.btn-ghost {
+  --eye-color: rgba(107, 112, 130, 0.92);
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid rgba(15, 33, 84, 0.16);
+  background: rgba(15, 33, 84, 0.04);
+  box-shadow: none;
+  display: inline-grid;
+  place-items: center;
+  transition: background 180ms ease, border-color 180ms ease;
+}
+
+.card-modal .modal-tabs-toolbar__btn.btn-ghost::before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  background-color: var(--eye-color);
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2024%2024'%3E%3Cpath%20d%3D'M12%205c-5%200-9%203-11%207%202%204%206%207%2011%207s9-3%2011-7c-2-4-6-7-11-7zm0%2011a4%204%200%201%201%200-8%204%204%200%200%201%200%208z'%20/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2024%2024'%3E%3Cpath%20d%3D'M12%205c-5%200-9%203-11%207%202%204%206%207%2011%207s9-3%2011-7c-2-4-6-7-11-7zm0%2011a4%204%200%201%201%200-8%204%204%200%200%201%200%208z'%20/%3E%3C/svg%3E");
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+.card-modal .modal-tabs-toolbar__btn.btn-ghost:hover {
+  transform: none;
+  box-shadow: none;
+  background: rgba(15, 33, 84, 0.06);
+}
+
+.card-modal .modal-tabs-toolbar__btn.btn-ghost:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(33, 64, 84, 0.14);
+}
+
+.card-modal .modal-tabs-toolbar__btn.btn-ghost[aria-pressed="true"] {
+  --eye-color: var(--brand-gold);
+  background: rgba(242, 190, 88, 0.14);
+  border-color: rgba(242, 190, 88, 0.50);
+}
+
+@media (max-width: 600px) {
+  .card-modal .modal-tabs-toolbar {
+    margin: -2px 0 6px 0;
+  }
+  .card-modal .modal-tabs-toolbar__btn.btn-ghost {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.card-modal .modal-accordion .accordion-title {
+  min-width: 0;
+  /* Keep titles readable (no truncation); allow wrapping when needed. */
+  overflow-wrap: anywhere;
+}
+
+.card-modal .modal-accordion .accordion-chevron {
+  transform-origin: 50% 50%;
+  transition: transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Body: topic-tinted paper + content reveal */
+.card-modal .modal-accordion .accordion-body {
+  transition: max-height 320ms cubic-bezier(0.2, 0.9, 0.2, 1);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: inset 0 1px 0 rgba(var(--tab-accent-rgb), 0.08);
+}
+
+.card-modal .modal-accordion .accordion-body > * {
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 200ms ease, transform 260ms ease;
+}
+
+.card-modal .modal-accordion .accordion-item.is-open .accordion-body > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card-modal .modal-accordion .accordion-item.is-open {
+  box-shadow:
+    0 16px 34px rgba(15, 33, 84, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+/* Make inner blocks pick up topic accent (no copy changes) */
+.card-modal .modal-accordion .accordion-item .modal-specs {
+  border-color: rgba(var(--tab-accent-rgb), 0.18);
+  background: rgba(255, 255, 255, 0.88);
+}
+
+.card-modal .modal-accordion .accordion-item .modal-specs__title {
+  color: rgb(var(--tab-accent-rgb));
+}
+
+.card-modal .modal-accordion .accordion-item .modal-specs__key {
+  color: rgb(var(--tab-accent2-rgb));
+}
+
+/* Replace the “odd gray” labels inside tabs with the current topic accent */
+.card-modal .modal-accordion .accordion-item .modal-specs__subtitle,
+.card-modal .modal-accordion .accordion-item .card-modal-section__title {
+  color: rgba(var(--tab-accent-rgb), 0.78);
+}
+
+/* Specs grid items inside tabs: make them feel like branded “data tiles” */
+.card-modal .modal-accordion .accordion-item .modal-specs__grid {
+  gap: 12px;
+}
+
+.card-modal .modal-accordion .accordion-item .modal-specs__item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  padding: 12px 12px;
+  border: 1px solid rgba(var(--tab-accent-rgb), 0.14);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow:
+    0 10px 20px rgba(15, 33, 84, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  transition:
+    transform 220ms cubic-bezier(0.2, 0.9, 0.2, 1),
+    border-color 220ms ease,
+    box-shadow 260ms ease;
+}
+
+/* Mini accent corner glow (subtle, topic-tinted) */
+.card-modal .modal-accordion .accordion-item .modal-specs__item::after {
+  content: none;
+}
+
+.card-modal .modal-accordion .accordion-item .modal-specs__item:hover {
+  transform: translateY(-1px);
+  border-color: rgba(var(--tab-accent-rgb), 0.24);
+  box-shadow:
+    0 14px 28px rgba(15, 33, 84, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78);
+}
+
+.card-modal .modal-accordion .accordion-item .modal-specs__key {
+  font-family: var(--font-medium);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgb(var(--tab-accent-rgb));
+}
+
+.card-modal .modal-accordion .accordion-item .modal-specs__value {
+  font-family: var(--font-medium);
+  font-size: 16px;
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+@media (max-width: 600px) {
+  .card-modal .modal-accordion .accordion-item .modal-specs__grid {
+    gap: 10px;
+  }
+  .card-modal .modal-accordion .accordion-item .modal-specs__item {
+    padding: 10px 10px;
+    border-radius: 14px;
+  }
+  .card-modal .modal-accordion .accordion-item .modal-specs__key {
+    font-size: 10px;
+    letter-spacing: 0.20em;
+  }
+  .card-modal .modal-accordion .accordion-item .modal-specs__value {
+    font-size: 14px;
+    line-height: 1.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-modal .modal-accordion .accordion-item .modal-specs__item {
+    transition: none !important;
+  }
+}
+
+.card-modal .modal-accordion .accordion-item .steps,
+.card-modal .modal-accordion .accordion-item .tips {
+  border-color: rgba(var(--tab-accent-rgb), 0.16) !important;
+}
+
+.card-modal .modal-accordion .accordion-item .steps span {
+  border-left-color: rgba(var(--tab-accent-rgb), 0.55) !important;
+}
+
+.card-modal .modal-accordion .accordion-item .tips {
+  border-left-color: rgba(var(--tab-accent2-rgb), 0.55) !important;
+}
+
+/* Lightweight tabs (Panoramica / Checklist / Focus): make them feel like premium panels */
+.card-modal .modal-accordion .accordion-item .card-modal-overview,
+.card-modal .modal-accordion .accordion-item .card-modal-mini-specs,
+.card-modal .modal-accordion .accordion-item .card-modal-focus {
+  border: 1px solid rgba(var(--tab-accent-rgb), 0.16);
+  border-radius: 16px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 10px 22px rgba(15, 33, 84, 0.06);
+}
+
+.card-modal .modal-accordion .accordion-item .card-modal-mini-specs .modal-specs__bullets,
+.card-modal .modal-accordion .accordion-item .card-modal-focus .modal-specs__bullets {
+  padding-left: 0;
+  list-style: none;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.card-modal .modal-accordion .accordion-item .card-modal-mini-specs .modal-specs__bullets li,
+.card-modal .modal-accordion .accordion-item .card-modal-focus .modal-specs__bullets li {
+  margin: 0;
+  padding: 12px 12px 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(var(--tab-accent-rgb), 0.12);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 18px rgba(15, 33, 84, 0.05);
+}
+
+.card-modal .modal-accordion .accordion-item .card-modal-mini-specs .modal-specs__bullets li strong,
+.card-modal .modal-accordion .accordion-item .card-modal-focus .modal-specs__bullets li strong {
+  color: rgb(var(--tab-accent-rgb));
+  font-family: var(--font-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-modal .modal-accordion .accordion-header,
+  .card-modal .modal-accordion .accordion-body,
+  .card-modal .modal-accordion .accordion-body > *,
+  .card-modal .modal-accordion .accordion-chevron {
+    transition: none !important;
+  }
 }
 
 /* Modal tabs: unify content styling so each tab feels consistent.

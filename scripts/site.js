@@ -160,21 +160,10 @@ window.addEventListener('DOMContentLoaded', function() {
     profiles.push(profile);
     saveProfiles(profiles);
     saveUser(id, nickname, gelato);
-    // RESET GAMIFICATION STATE per nuovo profilo e rimuovi chiavi residue
-    try {
-      // Rimuovi tutte le chiavi gamification residue
-      Object.keys(localStorage).forEach(k => {
-        if (k.startsWith('badianiGamification.v3')) {
-          localStorage.removeItem(k);
-        }
-      });
-      // Azzera anche le schede aperte
-      localStorage.removeItem('badiani_opened_cards');
-      if (typeof defaultState !== 'undefined') {
-        localStorage.setItem(`badianiGamification.v3:${id}`, JSON.stringify(defaultState));
-      }
-    } catch {}
-    // Reload forzato per caricare solo lo stato nuovo
+    // NOTE: Do NOT wipe other profiles' gamification keys.
+    // Gamification is stored per profile (badianiGamification.v3:<profileId>) and will be
+    // initialized automatically on first load for the new profile.
+    // Reload forzato per caricare lo stato del profilo appena creato.
     setTimeout(() => { window.location.reload(true); }, 100);
     return profile;
   };
@@ -2277,6 +2266,7 @@ const gamification = (() => {
   let activePopover = null;
   let popoverHandlersBound = false;
   let infoHandlerBound = false;
+  let wrongLogHandlerBound = false;
   let challengeActive = false;
   let pendingMilestoneCheck = false;
   let quizOnClose = false;
@@ -2441,10 +2431,23 @@ const gamification = (() => {
     updateUI();
     formatStatListLabels();
     initProfileControls();
+    ensureWrongLogHandler();
     checkStarMilestones();
     if (state.gelati >= GELATO_GOAL) {
       showVictoryMessage();
     }
+  }
+
+  function ensureWrongLogHandler() {
+    if (wrongLogHandlerBound) return;
+    document.addEventListener('click', (event) => {
+      const trigger = event.target.closest('[data-wrong-view-all]');
+      if (!trigger) return;
+      event.preventDefault();
+      event.stopPropagation();
+      openAllWrongLogModal();
+    });
+    wrongLogHandlerBound = true;
   }
 
   if (document.readyState === 'loading') {
@@ -2704,7 +2707,7 @@ const gamification = (() => {
       if (selectedIndex === challenge.correct) {
         showChallengeResult(true);
       } else {
-        applyChallengePenalty();
+        applyChallengePenalty(challenge);
       }
     }, 650);
   }
@@ -2728,7 +2731,31 @@ const gamification = (() => {
     return pick;
   }
 
-  function applyChallengePenalty() {
+  function applyChallengePenalty(challenge = null) {
+    // Log the mistake so it shows up in the Hub “Revisione · errore recente” list.
+    // Also: immediately open the same review modal (like Test me) so the trainee knows exactly what to re-read.
+    let lastItem = null;
+    try {
+      if (!state.history) state.history = { quiz: [] };
+      if (!Array.isArray(state.history.quiz)) state.history.quiz = [];
+      const review = buildChallengeReview(challenge);
+      lastItem = {
+        ts: Date.now(),
+        correct: false,
+        prompt: review.prompt,
+        qid: challenge?.id || null,
+        qtype: 'challenge',
+        correctText: review.correctText,
+        explanation: review.explanation,
+        suggestion: review.suggestion,
+        specHref: review.specHref,
+        specLabel: review.specLabel,
+        topic: challenge?.topic || null,
+      };
+      state.history.quiz.push(lastItem);
+      if (state.history.quiz.length > 300) state.history.quiz = state.history.quiz.slice(-300);
+    } catch (e) {}
+
     state.stars = Math.max(0, state.stars - CHALLENGE_INTERVAL);
     state.quizTokens = Math.max(0, state.quizTokens - CHALLENGE_INTERVAL);
     state.progress = state.stars;
@@ -2736,6 +2763,19 @@ const gamification = (() => {
     saveState();
     updateUI();
 
+    // Close the challenge overlay and show the review right away.
+    // If something goes wrong, fall back to the old result flow.
+    try {
+      unlockOverlayClose();
+      closeOverlay({ force: true });
+      if (typeof showToast === 'function') showToast('🧊 Sfida persa: -3 stelline. Rivedi subito la specifica.');
+      if (lastItem) {
+        openWrongReviewModal(lastItem);
+        return;
+      }
+    } catch (e) {}
+
+    // Fallback (legacy)
     if (state.stars === 0) {
       showZeroStarsMessage();
       return;
@@ -3029,9 +3069,17 @@ const gamification = (() => {
     setText('[data-perf-gelati-total]', totals.gelati || 0);
     setText('[data-perf-bonus-total]', totals.bonusPoints || 0);
     const list = root.querySelector('[data-wrong-list]');
+    const wrongCountNode = root.querySelector('[data-wrong-count]');
     if (list) {
       list.innerHTML = '';
-      const wrongItems = quizHistory.filter(q => q.correct === false).slice(-10).reverse();
+      const wrongAll = quizHistory.filter(q => q.correct === false);
+      const wrongItems = wrongAll.slice(-10).reverse();
+      if (wrongCountNode) {
+        const total = wrongAll.length;
+        wrongCountNode.textContent = total ? `Totale: ${total}` : '';
+        const viewAllBtn = root.querySelector('[data-wrong-view-all]');
+        if (viewAllBtn) viewAllBtn.hidden = total === 0;
+      }
       if (!wrongItems.length) {
         const li = document.createElement('li');
         li.className = 'empty';
@@ -3089,6 +3137,22 @@ const gamification = (() => {
   function guessSpecFromPrompt(prompt = '') {
     const p = String(prompt || '').toLowerCase();
     const has = (...needles) => needles.some(n => p.includes(String(n).toLowerCase()));
+
+    // Deep links (card + tab) for the most common “spec” questions.
+    // These URLs land the trainee directly inside the relevant card modal and section.
+    // NOTE: relies on the existing on-page deep-link handler (?card=...) and the new (?tab=...).
+    if (
+      has('take-me-home', 'take me home', 'gelato boxes', 'box piccolo', 'piccolo box') ||
+      (has('box') && has('500', '500ml', '750', '750ml', '1000', '1000ml'))
+    ) {
+      return { href: 'gelato-lab.html?card=gelato-boxes&tab=parametri&center=1', label: 'Apri Gelato Boxes' };
+    }
+
+    // Cones: land directly on the Coni classici specs.
+    // (Common prompt: "Coni: quale frase è corretta?")
+    if (has('coni', 'cono', 'cone') || (has('choco') && has('cone')) || (has('gluten') && has('cone')) || (has('gf') && has('cone'))) {
+      return { href: 'gelato-lab.html?card=coni-classici&tab=parametri&center=1', label: 'Apri Coni classici' };
+    }
 
     if (has('churro', 'churros', 'panettone', 'pandoro', 'vin brule', 'mulled')) {
       return { href: 'festive.html', label: 'Apri Festive' };
@@ -3178,13 +3242,49 @@ const gamification = (() => {
     };
   }
 
+  function buildChallengeReview(challenge) {
+    const topic = String(challenge?.topic || '').trim();
+    const basePrompt = String(challenge?.question || '').trim();
+    const prompt = topic ? `Sfida continua · ${topic}: ${basePrompt}` : `Sfida continua: ${basePrompt}`;
+    const correctText = getCorrectAnswerText(challenge);
+    return {
+      prompt,
+      correctText,
+      explanation: autoExplainForQuiz(prompt, correctText),
+      suggestion: 'Suggerimento: ripassa Operations & Setup (procedure, sicurezza, qualità) e rifai mentalmente la sequenza in 20 secondi.',
+      specHref: 'operations.html',
+      specLabel: 'Apri Operations & Setup',
+    };
+  }
+
   function openWrongReviewModal(item) {
     const prompt = item?.prompt || 'Quiz';
     const correctText = item?.correctText || '';
     const explanation = item?.explanation || autoExplainForQuiz(prompt, correctText);
     const suggestion = item?.suggestion || autoSuggestionForQuiz(prompt);
-    const specHref = item?.specHref || guessSpecFromPrompt(prompt).href;
-    const specLabel = item?.specLabel || guessSpecFromPrompt(prompt).label;
+    const guessedSpec = guessSpecFromPrompt(prompt);
+    const isChallengeItem = item?.qtype === 'challenge' || String(prompt || '').toLowerCase().includes('sfida continua');
+    const looksLikeHub = (href, label) => {
+      const h = String(href || '').trim();
+      const l = String(label || '').trim();
+      return !h || h === 'index.html' || /(^|\/|\\)index\.html(\?|#|$)/i.test(h) || l === 'Apri Hub';
+    };
+
+    let specHref = item?.specHref || guessedSpec?.href;
+    let specLabel = item?.specLabel || guessedSpec?.label;
+
+    // If older history items were saved before we had a proper mapping (they often fallback to Hub),
+    // upgrade them on the fly *unless* they are continuous-challenge items (which intentionally point to Operations).
+    if (!isChallengeItem && looksLikeHub(specHref, specLabel) && guessedSpec?.href && guessedSpec.href !== 'index.html') {
+      specHref = guessedSpec.href;
+      specLabel = guessedSpec.label;
+      try {
+        // Persist the improved deep link so future opens show the correct CTA label too.
+        item.specHref = specHref;
+        item.specLabel = specLabel;
+        saveState();
+      } catch (e) {}
+    }
 
     const container = document.createElement('div');
     container.className = 'reward-modal';
@@ -3238,6 +3338,147 @@ const gamification = (() => {
     actions.append(openSpec, closeBtn);
     container.append(eyebrow, title, q, answer, expl, tip, actions);
     openOverlay(container);
+  }
+
+  function openAllWrongLogModal() {
+    const quizHistory = Array.isArray(state.history?.quiz) ? state.history.quiz : [];
+    const allWrong = quizHistory
+      .filter((q) => q && q.correct === false)
+      .slice()
+      .sort((a, b) => (Number(b.ts) || 0) - (Number(a.ts) || 0));
+
+    const container = document.createElement('div');
+    container.className = 'reward-modal';
+
+    const eyebrow = document.createElement('p');
+    eyebrow.style.cssText = 'margin:0 0 8px 0; font-size:12px; letter-spacing:0.22em; text-transform:uppercase; color:var(--brand-rose); font-family:var(--font-medium);';
+    eyebrow.textContent = 'Hub · archivio errori';
+
+    const title = document.createElement('h3');
+    title.className = 'reward-modal__title';
+    title.textContent = 'Tutti gli errori';
+
+    const meta = document.createElement('p');
+    meta.className = 'reward-modal__text';
+    meta.style.marginTop = '6px';
+    meta.textContent = allWrong.length
+      ? `Totale errori salvati: ${allWrong.length}. Tocca un item per aprire la revisione.`
+      : 'Nessun errore salvato al momento.';
+
+    const toolbar = document.createElement('div');
+    toolbar.className = 'wrong-log__toolbar';
+
+    const search = document.createElement('input');
+    search.type = 'search';
+    search.className = 'wrong-log__search';
+    search.placeholder = 'Cerca negli errori (es. coni, box, latte, churros…)';
+    search.setAttribute('aria-label', 'Cerca negli errori');
+
+    const copyBtn = document.createElement('button');
+    copyBtn.type = 'button';
+    copyBtn.className = 'btn btn-ghost btn--sm';
+    copyBtn.textContent = 'Copia JSON';
+
+    const listWrap = document.createElement('div');
+    listWrap.className = 'wrong-log__list';
+    const list = document.createElement('ul');
+    list.className = 'summary-list';
+    listWrap.appendChild(list);
+
+    const hint = document.createElement('p');
+    hint.className = 'wrong-log__hint';
+    hint.textContent = 'Tip: se la lista è lunghissima, usa la ricerca. Gli errori più vecchi oltre il limite (300 eventi) vengono scartati automaticamente.';
+
+    const actions = document.createElement('div');
+    actions.className = 'reward-modal__actions';
+
+    const closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className = 'reward-action secondary';
+    closeBtn.textContent = 'Chiudi';
+    closeBtn.addEventListener('click', closeOverlay);
+
+    actions.appendChild(closeBtn);
+
+    const safeString = (v) => String(v || '').toLowerCase();
+    const formatWhen = (ts) => {
+      try {
+        const when = new Date(ts || Date.now());
+        const date = when.toLocaleDateString();
+        const time = when.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        return `${date} ${time}`;
+      } catch {
+        return '';
+      }
+    };
+
+    const renderList = (query = '') => {
+      const q = safeString(query).trim();
+      list.innerHTML = '';
+
+      const filtered = !q
+        ? allWrong
+        : allWrong.filter((item) => {
+            const blob = `${item.prompt || ''} ${item.correctText || ''} ${item.explanation || ''} ${item.topic || ''}`;
+            return safeString(blob).includes(q);
+          });
+
+      if (!filtered.length) {
+        const li = document.createElement('li');
+        li.className = 'empty';
+        li.textContent = 'Nessun risultato per questa ricerca.';
+        list.appendChild(li);
+        return;
+      }
+
+      filtered.forEach((item) => {
+        const li = document.createElement('li');
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'summary-list__btn';
+        btn.textContent = `${formatWhen(item.ts)} · ${item.prompt || 'Quiz'}`;
+        btn.setAttribute('aria-label', `Apri revisione errore: ${item.prompt || 'Quiz'}`);
+        btn.addEventListener('click', () => openWrongReviewModal(item));
+        li.appendChild(btn);
+        list.appendChild(li);
+      });
+    };
+
+    const copyJson = async () => {
+      try {
+        const payload = JSON.stringify(allWrong, null, 2);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(payload);
+          showToast('Copiato negli appunti ✅');
+          return;
+        }
+      } catch (e) {}
+      // Fallback
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = JSON.stringify(allWrong, null, 2);
+        ta.setAttribute('readonly', 'true');
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+        showToast('Copiato negli appunti ✅');
+      } catch (e) {
+        showToast('Impossibile copiare (browser).');
+      }
+    };
+
+    search.addEventListener('input', () => renderList(search.value));
+    copyBtn.addEventListener('click', copyJson);
+
+    toolbar.append(search, copyBtn);
+    container.append(eyebrow, title, meta, toolbar, listWrap, hint, actions);
+
+    openOverlay(container, { fullScreen: true });
+    requestAnimationFrame(() => search.focus({ preventScroll: true }));
+    renderList('');
   }
 
   function showChangeGelatoModal() {
@@ -5127,8 +5368,39 @@ const gamification = (() => {
       openOverlay(container);
     };
 
-    const handleMiniFail = () => {
+    const handleMiniFail = (question) => {
+      // Apply the penalty
       applyMiniQuizPenalty();
+
+      // Log the mistake so it appears under “Errori recenti” in the Hub.
+      // Then open the same review modal used elsewhere (with direct CTA to the right card).
+      try {
+        if (!state.history) state.history = { quiz: [] };
+        if (!Array.isArray(state.history.quiz)) state.history.quiz = [];
+        const review = buildQuizReview(question);
+        const lastItem = {
+          ts: Date.now(),
+          correct: false,
+          prompt: review.prompt,
+          qid: question?.id || null,
+          qtype: 'mini',
+          correctText: review.correctText,
+          explanation: review.explanation,
+          suggestion: review.suggestion,
+          specHref: review.specHref,
+          specLabel: review.specLabel,
+        };
+        state.history.quiz.push(lastItem);
+        if (state.history.quiz.length > 300) state.history.quiz = state.history.quiz.slice(-300);
+        saveState();
+        updateUI();
+
+        // Swap the overlay content to the review (fast learning loop).
+        openWrongReviewModal(lastItem);
+        return;
+      } catch (e) {}
+
+      // Fallback (legacy)
       const container = document.createElement('div');
       container.className = 'reward-modal';
       const title = document.createElement('h3');
@@ -5237,7 +5509,8 @@ const gamification = (() => {
     const explain = encodeURIComponent(review.explanation || '');
     const tip = encodeURIComponent(review.suggestion || '');
     const spec = encodeURIComponent(review.specHref || '');
-    const target = `quiz-solution.html?prompt=${prompt}&answer=${answer}&explain=${explain}&tip=${tip}&spec=${spec}`;
+    const specLabel = encodeURIComponent(review.specLabel || '');
+    const target = `quiz-solution.html?prompt=${prompt}&answer=${answer}&explain=${explain}&tip=${tip}&spec=${spec}&specLabel=${specLabel}`;
     window.location.href = target;
   }
 
@@ -5854,14 +6127,23 @@ sectionMenus.forEach((menu) => {
   }
 });
 
-// Deep-link to a specific guide card (used by menu search results): ?card=<slug>
+// Deep-link to a specific guide card (used by menu search results):
+// - ?card=<slug> opens the card modal
+// - ?tab=<slug> opens a specific accordion tab inside the modal
+// - ?center=1 centers the tab in the modal body (helps learners land exactly where to read)
 (() => {
   let cardKey = '';
+  let tabKey = '';
+  let wantsCenter = false;
   try {
     const params = new URLSearchParams(window.location.search);
     cardKey = (params.get('card') || '').trim().toLowerCase();
+    tabKey = (params.get('tab') || params.get('openTab') || '').trim().toLowerCase();
+    wantsCenter = ['1', 'true', 'yes', 'y'].includes(String(params.get('center') || '').trim().toLowerCase());
   } catch {
     cardKey = '';
+    tabKey = '';
+    wantsCenter = false;
   }
 
   if (!cardKey) return;
@@ -5871,6 +6153,68 @@ sectionMenus.forEach((menu) => {
       .toLowerCase()
       .replace(/[^a-z0-9]+/gi, '-')
       .replace(/^-+|-+$/g, '') || '';
+  };
+
+  const prefersReducedMotion = (() => {
+    try {
+      return !!window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    } catch {
+      return false;
+    }
+  })();
+
+  const centerElementInContainer = (container, element) => {
+    try {
+      if (!container || !element) return;
+      const cRect = container.getBoundingClientRect();
+      const eRect = element.getBoundingClientRect();
+      const currentTop = container.scrollTop;
+      const delta = (eRect.top - cRect.top) - (cRect.height / 2 - eRect.height / 2);
+      const maxTop = Math.max(0, container.scrollHeight - container.clientHeight);
+      const nextTop = Math.max(0, Math.min(maxTop, currentTop + delta));
+      container.scrollTo({ top: nextTop, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+    } catch {
+      /* ignore */
+    }
+  };
+
+  const openTabInLatestModal = () => {
+    if (!tabKey) return;
+    let tries = 0;
+    const maxTries = 90; // ~1.5s at 60fps
+
+    const tick = () => {
+      tries += 1;
+      const overlay = document.querySelector('.card-modal-overlay.is-visible') || document.querySelector('.card-modal-overlay');
+      const modal = overlay ? overlay.querySelector('.card-modal') : null;
+      const accordion = modal ? modal.querySelector('.modal-accordion') : null;
+      if (!modal || !accordion) {
+        if (tries < maxTries) return requestAnimationFrame(tick);
+        return;
+      }
+
+      const headers = Array.from(accordion.querySelectorAll('.accordion-header'));
+      if (!headers.length) return;
+      const targetHeader = headers.find((h) => {
+        const titleText = h.querySelector('.accordion-title')?.textContent?.trim() || h.textContent?.trim() || '';
+        return slugify(titleText) === tabKey;
+      }) || null;
+
+      if (!targetHeader) return;
+
+      try { targetHeader.click(); } catch { /* ignore */ }
+
+      // After opening, center the tab header inside the scrollable modal body.
+      if (wantsCenter) {
+        const body = modal.querySelector('.card-modal-body') || modal;
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => centerElementInContainer(body, targetHeader));
+        });
+        setTimeout(() => centerElementInContainer(body, targetHeader), 180);
+      }
+    };
+
+    requestAnimationFrame(tick);
   };
 
   const focusCard = () => {
@@ -5907,6 +6251,8 @@ sectionMenus.forEach((menu) => {
     const toggle = target.querySelector('[data-toggle-card]');
     if (toggle) {
       try { toggle.click(); } catch {}
+      // If requested, open a specific tab inside the modal for clarity.
+      openTabInLatestModal();
     }
   };
 
@@ -6559,6 +6905,87 @@ toggles.forEach((button) => {
     modalHeader.appendChild(crystalChip);
     modalHeader.appendChild(closeBtn);
 
+    // Post-star UX: allow trainees to reveal ALL tab contents at once.
+    // Hidden until the card is converted to a star.
+    let allowMultiOpenTabs = false;
+    // Guidance toast for the icon-only “study mode” toggle.
+    const allTabsControl = {
+      wrapper: null,
+      button: null,
+      hint: null,
+      accordion: null,
+      apis: [],
+      starred: false
+    };
+
+    const syncAllTabsControlUI = () => {
+      const btn = allTabsControl.button;
+      const wrap = allTabsControl.wrapper;
+      if (!btn || !wrap) return;
+      const unlocked = !!allTabsControl.starred;
+
+      wrap.hidden = !unlocked;
+      btn.hidden = !unlocked;
+      btn.disabled = !unlocked;
+
+      btn.setAttribute('aria-pressed', allowMultiOpenTabs ? 'true' : 'false');
+      const label = allowMultiOpenTabs ? 'Vista singola' : 'Mostra tutto';
+      btn.setAttribute('aria-label', label);
+      try { btn.title = label; } catch (e) {}
+      try {
+        const sr = btn.querySelector('.sr-only');
+        if (sr) sr.textContent = label;
+        else btn.textContent = label;
+      } catch (e) {
+        btn.textContent = label;
+      }
+
+      if (allTabsControl.hint) {
+        allTabsControl.hint.textContent = allowMultiOpenTabs
+          ? 'Modalità studio: tutti i tab sono aperti.'
+          : 'Modalità studio: apri tutti i tab insieme.';
+      }
+    };
+
+    const openAllTabsSilently = () => {
+      try {
+        (allTabsControl.apis || []).forEach((api) => {
+          try { api.openSilently(); } catch (e) {}
+        });
+      } catch (e) {}
+    };
+
+    const collapseToSingleTab = () => {
+      try {
+        const apis = (allTabsControl.apis || []).filter(Boolean);
+        if (!apis.length) return;
+        const openOnes = apis.filter((api) => api.item && api.item.classList.contains('is-open'));
+        const keep = openOnes[0] || apis[0];
+        apis.forEach((api) => {
+          if (!api || api === keep) return;
+          try { api.closeSilently(); } catch (e) {}
+        });
+        try { keep.openSilently(); } catch (e) {}
+      } catch (e) {}
+    };
+
+    const toggleAllTabsMode = () => {
+      if (!allTabsControl.starred) return;
+      allowMultiOpenTabs = !allowMultiOpenTabs;
+      if (allowMultiOpenTabs) openAllTabsSilently();
+      else collapseToSingleTab();
+      syncAllTabsControlUI();
+
+      try {
+        // Use the standard (non-anchored) toast for maximum reliability inside modals.
+        if (allowMultiOpenTabs) {
+          showToast('Modalità studio attiva: scorri per leggere tutta la scheda (tutti i tab sono aperti).');
+        } else {
+          showToast('Vista singola: apri una sezione alla volta toccando il titolo del tab.');
+        }
+      } catch (e) {}
+    };
+
     const modalCrystalValue = crystalChip.querySelector('[data-card-modal-crystals]');
     const refreshCrystalBadge = () => {
       if (!modalCrystalValue) return;
@@ -6572,6 +6999,14 @@ toggles.forEach((button) => {
       if (detail.cardId && cardId && detail.cardId !== cardId) return;
       const next = typeof detail.crystals === 'number' ? detail.crystals : (gamification?.getCrystals ? gamification.getCrystals(cardId) : 0);
       const converted = !!detail.converted;
+
+      // Unlock the “open all tabs” control once the star is obtained.
+      try {
+        allTabsControl.starred = converted;
+        if (!converted && allowMultiOpenTabs) allowMultiOpenTabs = false;
+        syncAllTabsControlUI();
+      } catch (e) {}
+
       const icon = crystalChip.querySelector('.card-modal-crystals__icon');
       const suffix = crystalChip.querySelector('.card-modal-crystals__suffix');
       if (converted) {
@@ -7381,7 +7816,7 @@ toggles.forEach((button) => {
           if (strongText.includes('vendita')) return 'Tecniche di vendita';
           return isSafetyCard ? 'Comunicazione al cliente' : 'Upselling';
         }
-        return 'Preparazione';
+        return 'Procedura';
       }
       if (strongText.includes('troubleshoot') || strongText.includes('troubleshooting') || strongText.includes('problemi') || strongText.includes('errori')) {
         return 'Troubleshooting';
@@ -7407,13 +7842,42 @@ toggles.forEach((button) => {
     if (blocks.length) {
       const accordion = document.createElement('div');
       accordion.className = 'modal-accordion';
+      try { allTabsControl.accordion = accordion; } catch (e) {}
       const openers = [];
       const createdTabTitles = new Set();
+      const seenTabContent = new Set();
       const MAX_MODAL_TABS = 5;
       const MIN_MODAL_TABS = 4;
       const maxTabs = MAX_MODAL_TABS;
       const minTabs = MIN_MODAL_TABS;
       let overflowSection = null;
+
+      // Topic hook (styling-only): expose a stable, low-cardinality topic key so CSS
+      // can color-code tabs by argument without changing any copy.
+      const inferTabTopic = (title) => {
+        const t = tidy(title).toLowerCase();
+        if (!t) return '';
+
+        if (t.includes('panoramica')) return 'panoramica';
+        if (t.includes('ricetta')) return 'ricetta';
+        if (t.includes('procedura') || t.includes('preparazione')) return 'procedura';
+        if (t.includes('parametri')) return 'parametri';
+        if (t.includes('servizio')) return 'servizio';
+        if (t.includes('conserv')) return 'conservazione';
+        if (t.includes('pulizia')) return 'pulizia';
+        if (t.includes('note')) return 'note';
+        if (t.includes('checklist')) return 'checklist';
+        if (t.includes('focus')) return 'focus';
+
+        if (t.includes('take away') || t.includes('takeaway')) return 'takeaway';
+        if (t.includes('troubleshoot')) return 'troubleshooting';
+        if (t.includes('upsell')) return 'upselling';
+        if (t.includes('vendita')) return 'vendita';
+        if (t.includes('approfond')) return 'approfondimenti';
+        if (t.includes('dettagli')) return 'dettagli';
+
+        return 'altro';
+      };
 
       const ensureOverflowSection = () => {
         if (overflowSection) return overflowSection;
@@ -7423,6 +7887,16 @@ toggles.forEach((button) => {
       };
 
       const pushOverflowGroup = (title, contentEl) => {
+        // Skip duplicated content (common when the same text was pasted into multiple blocks).
+        try {
+          const snap = tidy(contentEl?.textContent).toLowerCase().replace(/\s+/g, ' ').trim();
+          const key = snap ? snap.slice(0, 1400) : '';
+          if (key && key.length > 120) {
+            if (seenTabContent.has(key)) return;
+            seenTabContent.add(key);
+          }
+        } catch (e) {}
+
         // Keep extra content reachable without adding more tabs.
         const wrap = ensureOverflowSection();
         try {
@@ -7435,6 +7909,18 @@ toggles.forEach((button) => {
       };
 
       const createAccordionItem = (title, contentEl, expandByDefault = false) => {
+        // Avoid creating tabs that repeat the same information.
+        // (This can happen if a card has duplicated `.steps/.tips` content or if multiple
+        // sources resolve to the same text once normalized.)
+        try {
+          const snap = tidy(contentEl?.textContent).toLowerCase().replace(/\s+/g, ' ').trim();
+          const key = snap ? snap.slice(0, 1400) : '';
+          if (key && key.length > 120) {
+            if (seenTabContent.has(key)) return;
+            seenTabContent.add(key);
+          }
+        } catch (e) {}
+
         if (totalTabsCount >= maxTabs) {
           pushOverflowGroup(title, contentEl);
           return;
@@ -7443,11 +7929,19 @@ toggles.forEach((button) => {
         createdTabTitles.add(String(title || '').trim());
         const item = document.createElement('article');
         item.className = 'accordion-item';
+        try {
+          const topic = inferTabTopic(title);
+          if (topic) item.dataset.topic = topic;
+        } catch (e) {}
         const header = document.createElement('button');
         header.type = 'button';
         header.className = 'accordion-header';
         header.setAttribute('aria-expanded', 'false');
         header.innerHTML = `<span class="accordion-title">${title}</span><span class="accordion-chevron" aria-hidden="true">⌄</span>`;
+        try {
+          const topic = item.dataset.topic;
+          if (topic) header.dataset.topic = topic;
+        } catch (e) {}
         const body = document.createElement('div');
         body.className = 'accordion-body';
         body.appendChild(contentEl);
@@ -7555,11 +8049,22 @@ toggles.forEach((button) => {
           else animateClose();
         };
 
+        // Register for “open all tabs” mode (silent open/close, no gamification triggers).
+        try {
+          allTabsControl.apis.push({
+            item,
+            header,
+            body,
+            openSilently: () => setOpen(true),
+            closeSilently: () => setOpen(false)
+          });
+        } catch (e) {}
+
         header.addEventListener('click', (event) => {
           const willExpand = !item.classList.contains('is-open');
 
           // Accordion behavior: only one tab open at a time.
-          if (willExpand) {
+          if (willExpand && !allowMultiOpenTabs) {
             try { playTabOpenSound(); } catch (e) {}
             try {
               accordion.querySelectorAll('.accordion-item.is-open').forEach((openItem) => {
@@ -7656,7 +8161,7 @@ toggles.forEach((button) => {
         return wrap;
       };
 
-      const buildAutoTabsFromStatItems = () => {
+      const buildSpecGroupsFromItems = (items) => {
         const groups = new Map();
         const addTo = (key, item) => {
           if (!key || !item) return;
@@ -7664,24 +8169,24 @@ toggles.forEach((button) => {
           groups.get(key).push(item);
         };
 
-        (statItemsData || []).forEach((item) => {
+        (items || []).forEach((item) => {
           const label = tidy(item?.label).toLowerCase();
           const detail = tidy(item?.detail).toLowerCase();
           const blob = `${label} ${detail}`;
 
-          if (/\b(shelf\s*life|conserv|frigo|defrost|riposo)\b/.test(blob)) {
+          if (/\b(shelf\s*life|conserv|frigo|freez|defrost|riposo|abbatt)\b/.test(blob)) {
             addTo('Conservazione', item);
             return;
           }
-          if (/\b(servizio|tazza|cup|piatto|posat|vassoio|tw|take\s*away|takeaway|\boz\b)\b/.test(blob)) {
+          if (/\b(servizio|tazza|cup|piatto|posat|vassoio|take\s*away|takeaway|\boz\b|pack)\b/.test(blob)) {
             addTo('Servizio', item);
             return;
           }
-          if (/\b(pulizia|clean|flush|sanific)\b/.test(blob)) {
+          if (/\b(pulizia|clean|flush|sanific|igiene|haccp)\b/.test(blob)) {
             addTo('Pulizia', item);
             return;
           }
-          if (/\b(temperatura|°c|sec|min|dose|shot|g\b|gr\b|kg\b|ml\b|porzion|cottura|estrazion|foam|schium)\b/.test(blob)) {
+          if (/\b(temperatura|°c|sec|min|dose|shot|g\b|gr\b|kg\b|ml\b|porzion|cottura|estrazion|foam|schium|target|stop)\b/.test(blob)) {
             addTo('Parametri', item);
             return;
           }
@@ -7702,9 +8207,9 @@ toggles.forEach((button) => {
         createAccordionItem('Panoramica', overview, false);
       }
 
-      if (specsPanelForTab) {
-        createAccordionItem('Specifiche', specsPanelForTab, false);
-      }
+      // Specs: group into distinct training tabs to avoid repeating the same list in multiple places.
+      // We use the already filtered `specsWithoutEssentials` so we don't duplicate highlights/recipe/prep.
+      const specGroups = buildSpecGroupsFromItems(specsWithoutEssentials);
 
       const grouped = [];
       const titleMap = new Map();
@@ -7719,18 +8224,36 @@ toggles.forEach((button) => {
         titleMap.get(title).items.push(el);
       });
 
-      let prepSummaryInserted = false;
-
       // Product-only: ensure "Ricetta" exists first.
       if (!isSafetyCard && recipeSummary) {
         createAccordionItem('Ricetta', recipeSummary, false);
       }
 
-      const hasPreparazioneGroup = grouped.some((g) => g.title === 'Preparazione');
-      if (!isSafetyCard && preparationMetaSummary && !hasPreparazioneGroup) {
-        createAccordionItem('Preparazione', preparationMetaSummary, false);
-        prepSummaryInserted = true;
+      // Parametri: keep numeric/technical bits separate from step-by-step instructions.
+      // If we have both a preparation meta summary AND a Parametri spec group, merge them into one tab.
+      const parametriGroup = specGroups.find((g) => g.title === 'Parametri');
+      if (!isSafetyCard && preparationMetaSummary) {
+        const paramWrap = document.createElement('div');
+        paramWrap.className = 'accordion-group';
+        paramWrap.appendChild(preparationMetaSummary);
+        if (parametriGroup && parametriGroup.items && parametriGroup.items.length) {
+          try {
+            paramWrap.appendChild(createSpecsPanel(parametriGroup.items, {}));
+          } catch (e) {}
+        }
+        createAccordionItem('Parametri', paramWrap, false);
+      } else if (parametriGroup && parametriGroup.items && parametriGroup.items.length) {
+        createAccordionItem('Parametri', createSpecsPanel(parametriGroup.items, {}), false);
       }
+
+      // Remaining spec groups become their own tabs (excluding Parametri which is handled above).
+      specGroups
+        .filter((g) => g.title !== 'Parametri')
+        .forEach((g) => {
+          try {
+            createAccordionItem(g.title, createSpecsPanel(g.items, {}), false);
+          } catch (e) {}
+        });
 
       // Priority rules (global):
       // - Keep the most operational tabs inside the 5-tab cap.
@@ -7739,10 +8262,6 @@ toggles.forEach((button) => {
       const buildGroupWrapper = (group) => {
         const wrapper = document.createElement('div');
         wrapper.className = 'accordion-group';
-        if (!prepSummaryInserted && !isSafetyCard && preparationMetaSummary && group.title === 'Preparazione') {
-          wrapper.appendChild(preparationMetaSummary);
-          prepSummaryInserted = true;
-        }
         group.items.forEach((el) => wrapper.appendChild(el));
         return wrapper;
       };
@@ -7750,7 +8269,7 @@ toggles.forEach((button) => {
       const groupByTitle = new Map(grouped.map((g) => [g.title, g]));
       const titlesPresent = new Set(grouped.map((g) => g.title));
 
-      const HIGH = ['Preparazione', 'Ricetta', 'Take Away', 'Troubleshooting'];
+      const HIGH = ['Procedura', 'Ricetta', 'Parametri', 'Take Away', 'Troubleshooting'];
       const MID = ['Upselling', 'Tecniche di vendita'];
       const LOW = ['Pro tip', 'Suggerimenti'];
 
@@ -7838,19 +8357,47 @@ toggles.forEach((button) => {
         });
       }
 
-      // Guarantee enough openable tabs for crystal progression
-      // (use only existing content; do not invent new instructions).
+      // Ensure enough useful, non-duplicated tabs for progression.
+      // Instead of generating more tabs from the same specs (which duplicates content),
+      // add a lightweight Checklist tab derived from existing tags/intro.
       const targetTabs = Math.min(maxTabs, Math.max(minTabs, 4));
-      if (totalTabsCount < targetTabs) {
-        const candidates = buildAutoTabsFromStatItems();
-        candidates.forEach((entry) => {
-          if (totalTabsCount >= targetTabs) return;
-          if (totalTabsCount >= maxTabs) return;
-          const title = String(entry.title || '').trim();
-          if (!title) return;
-          if (createdTabTitles.has(title)) return;
-          createAccordionItem(title, createMiniSpecTab(title, entry.items), false);
-        });
+      if (totalTabsCount < targetTabs && !createdTabTitles.has('Checklist')) {
+        try {
+          const checklist = document.createElement('div');
+          checklist.className = 'card-modal-mini-specs';
+          const ul = document.createElement('ul');
+          ul.className = 'modal-specs__bullets';
+
+          const tagsText = Array.from(card.querySelectorAll('.tag-row .tag'))
+            .map((t) => tidy(t.textContent))
+            .filter(Boolean);
+
+          const introText = tidy(intro?.textContent);
+          const firstSentence = (() => {
+            if (!introText) return '';
+            const m = introText.match(/[^.!?]+[.!?]+/);
+            const first = (m && m[0]) ? m[0] : introText;
+            const cleaned = tidy(first).replace(/[\s.]+$/g, '').trim();
+            return cleaned.length >= 18 ? cleaned : '';
+          })();
+
+          const mkLi = (label, value) => {
+            if (!value) return;
+            const li = document.createElement('li');
+            const strong = document.createElement('strong');
+            strong.textContent = `${label}:`;
+            li.appendChild(strong);
+            li.appendChild(document.createTextNode(` ${value}`));
+            ul.appendChild(li);
+          };
+
+          mkLi('Obiettivo', firstSentence);
+          mkLi('Focus', tagsText.length ? tagsText.join(' · ') : '');
+          if (ul.childElementCount) {
+            checklist.appendChild(ul);
+            createAccordionItem('Checklist', checklist, false);
+          }
+        } catch (e) {}
       }
 
       // If we still miss tabs, add a "Focus" tab using existing tags.
@@ -7874,6 +8421,39 @@ toggles.forEach((button) => {
           }
         } catch (e) {}
       }
+
+      // Post-star: toolbar to toggle “open all tabs” mode
+      try {
+        const toolbar = document.createElement('div');
+        toolbar.className = 'modal-tabs-toolbar';
+        toolbar.hidden = true;
+
+        const hint = document.createElement('p');
+        hint.className = 'modal-tabs-toolbar__hint';
+        hint.textContent = 'Modalità studio: apri tutti i tab insieme.';
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn-ghost modal-tabs-toolbar__btn';
+        btn.setAttribute('aria-pressed', 'false');
+        btn.setAttribute('aria-label', 'Mostra tutto');
+        btn.innerHTML = '<span class="sr-only">Mostra tutto</span>';
+        btn.hidden = true;
+        btn.addEventListener('click', (e) => {
+          try { e.preventDefault(); e.stopPropagation(); } catch (err) {}
+          toggleAllTabsMode();
+        });
+
+        toolbar.appendChild(hint);
+        toolbar.appendChild(btn);
+
+        allTabsControl.wrapper = toolbar;
+        allTabsControl.button = btn;
+        allTabsControl.hint = hint;
+        syncAllTabsControlUI();
+
+        sectionWrap.appendChild(toolbar);
+      } catch (e) {}
 
       sectionWrap.appendChild(accordion);
       if (overflowSection && overflowSection.childElementCount) {
@@ -7904,12 +8484,36 @@ toggles.forEach((button) => {
       if (wantsFallbackAccordion) {
         const accordion = document.createElement('div');
         accordion.className = 'modal-accordion';
+        try { allTabsControl.accordion = accordion; } catch (e) {}
         const createdTabTitles = new Set();
         const MAX_MODAL_TABS = 5;
         const MIN_MODAL_TABS = 4;
         const maxTabs = MAX_MODAL_TABS;
         const minTabs = MIN_MODAL_TABS;
         let overflowSection = null;
+
+        // Topic hook (styling-only) for fallback tabs.
+        const inferTabTopic = (title) => {
+          const t = tidy(title).toLowerCase();
+          if (!t) return '';
+          if (t.includes('panoramica')) return 'panoramica';
+          if (t.includes('ricetta')) return 'ricetta';
+          if (t.includes('procedura') || t.includes('preparazione')) return 'procedura';
+          if (t.includes('parametri')) return 'parametri';
+          if (t.includes('servizio')) return 'servizio';
+          if (t.includes('conserv')) return 'conservazione';
+          if (t.includes('pulizia')) return 'pulizia';
+          if (t.includes('note')) return 'note';
+          if (t.includes('checklist')) return 'checklist';
+          if (t.includes('focus')) return 'focus';
+          if (t.includes('take away') || t.includes('takeaway')) return 'takeaway';
+          if (t.includes('troubleshoot')) return 'troubleshooting';
+          if (t.includes('upsell')) return 'upselling';
+          if (t.includes('vendita')) return 'vendita';
+          if (t.includes('approfond')) return 'approfondimenti';
+          if (t.includes('dettagli')) return 'dettagli';
+          return 'altro';
+        };
 
         const ensureOverflowSection = () => {
           if (overflowSection) return overflowSection;
@@ -8001,11 +8605,19 @@ toggles.forEach((button) => {
           createdTabTitles.add(String(titleText || '').trim());
           const item = document.createElement('article');
           item.className = 'accordion-item';
+          try {
+            const topic = inferTabTopic(titleText);
+            if (topic) item.dataset.topic = topic;
+          } catch (e) {}
           const header = document.createElement('button');
           header.type = 'button';
           header.className = 'accordion-header';
           header.setAttribute('aria-expanded', 'false');
           header.innerHTML = `<span class="accordion-title">${titleText}</span><span class="accordion-chevron" aria-hidden="true">⌄</span>`;
+          try {
+            const topic = item.dataset.topic;
+            if (topic) header.dataset.topic = topic;
+          } catch (e) {}
           const body = document.createElement('div');
           body.className = 'accordion-body';
           body.appendChild(contentEl);
@@ -8059,11 +8671,22 @@ toggles.forEach((button) => {
             header.setAttribute('aria-expanded', String(expand));
             body.style.maxHeight = expand ? `${body.scrollHeight}px` : '0px';
           };
+
+          // Register for “open all tabs” mode (silent open/close, no gamification triggers).
+          try {
+            allTabsControl.apis.push({
+              item,
+              header,
+              body,
+              openSilently: () => setOpen(true),
+              closeSilently: () => setOpen(false)
+            });
+          } catch (e) {}
           header.addEventListener('click', (event) => {
             const willExpand = !item.classList.contains('is-open');
 
             // Accordion behavior: only one tab open at a time.
-            if (willExpand) {
+            if (willExpand && !allowMultiOpenTabs) {
               try {
                 accordion.querySelectorAll('.accordion-item.is-open').forEach((openItem) => {
                   if (openItem === item) return;
@@ -8172,6 +8795,39 @@ toggles.forEach((button) => {
             }
           } catch (e) {}
         }
+
+        // Post-star: toolbar to toggle “open all tabs” mode
+        try {
+          const toolbar = document.createElement('div');
+          toolbar.className = 'modal-tabs-toolbar';
+          toolbar.hidden = true;
+
+          const hint = document.createElement('p');
+          hint.className = 'modal-tabs-toolbar__hint';
+          hint.textContent = 'Modalità studio: apri tutti i tab insieme.';
+
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'btn-ghost modal-tabs-toolbar__btn';
+          btn.setAttribute('aria-pressed', 'false');
+          btn.setAttribute('aria-label', 'Mostra tutto');
+          btn.innerHTML = '<span class="sr-only">Mostra tutto</span>';
+          btn.hidden = true;
+          btn.addEventListener('click', (e) => {
+            try { e.preventDefault(); e.stopPropagation(); } catch (err) {}
+            toggleAllTabsMode();
+          });
+
+          toolbar.appendChild(hint);
+          toolbar.appendChild(btn);
+
+          allTabsControl.wrapper = toolbar;
+          allTabsControl.button = btn;
+          allTabsControl.hint = hint;
+          syncAllTabsControlUI();
+
+          sectionWrap.appendChild(toolbar);
+        } catch (e) {}
 
         sectionWrap.appendChild(accordion);
         if (overflowSection && overflowSection.childElementCount) {
