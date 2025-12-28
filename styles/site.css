@@ -6488,6 +6488,131 @@ body.page-home {
   }
 }
 
+/* --- PATCH: Orbit hero 2-column mobile (Dec 2025) --- */
+@media (max-width: 720px) {
+  /* Give ourselves every pixel we can on small screens */
+  .page-home main {
+    width: min(1180px, 98vw);
+    padding-inline: 6px;
+  }
+
+  /* Keep Playbook + Cockpit side-by-side on mobile */
+  .page-home .hero.hero--orbit {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    gap: 10px;
+    padding: 12px 0 10px;
+    padding-inline: 0;
+  }
+
+  .page-home .hero-focus,
+  .page-home .hero-aside {
+    min-width: 0;
+  }
+
+  .page-home .hero-focus {
+    padding: 12px;
+    border-radius: 20px;
+  }
+
+  .page-home .hero-eyebrow {
+    font-size: 11px;
+  }
+
+  .page-home .hero h1 {
+    font-size: 22px;
+    line-height: 1.1;
+  }
+
+  .page-home .hero-lede {
+    font-size: 14px;
+    max-width: none;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .page-home .hero-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin: 8px 0 6px;
+  }
+
+  .page-home .hero-actions .btn,
+  .page-home .hero-actions .btn-ghost {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .page-home .hero-pills {
+    gap: 6px;
+  }
+
+  /* Remove max-width centering that makes the aside look stacked */
+  .page-home .hero-aside {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border-radius: 20px;
+  }
+
+  .page-home [data-carousel="cockpit"] {
+    max-width: none;
+    margin: 0;
+    border-radius: 20px;
+  }
+
+  .page-home .summary--revamp.summary--compact {
+    padding: 10px;
+    border-radius: 18px;
+  }
+
+  .page-home .summary--compact .summary-title {
+    font-size: 16px;
+  }
+
+  .page-home .summary--compact .summary-sub {
+    font-size: 12px;
+  }
+
+  .page-home .summary--compact .summary-card {
+    padding: 10px;
+  }
+
+  .page-home .summary--compact .summary-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .page-home [data-carousel="cockpit"] .cockpit-indicators {
+    padding: 6px 8px;
+  }
+
+  .page-home [data-carousel="cockpit"] .cockpit-track {
+    scroll-padding-inline: 10px;
+    padding-right: 10px;
+  }
+
+  .page-home [data-carousel="cockpit"] .cockpit-track [data-carousel-item] {
+    width: calc(100% - 10px);
+  }
+}
+
+/* Ultra-small fallback: if the columns become unusably narrow, stack again. */
+@media (max-width: 360px) {
+  .page-home .hero.hero--orbit {
+    grid-template-columns: 1fr;
+  }
+
+  .page-home .hero-lede {
+    display: block;
+    -webkit-line-clamp: initial;
+    -webkit-box-orient: initial;
+    overflow: visible;
+  }
+}
+
 
 /* --- PATCH: Hero equal height to Orbit (Dec 2025) --- */
 @media (min-width: 980px){

@@ -681,15 +681,19 @@ scrollButtons.forEach((btn) => {
   const syncCompletionFromGamificationState = () => {
     // Compute completion for all known categories so stars can appear in the drawer even on index.html.
     const totalsBySlug = {
-      'caffe': 18,
-      'sweet-treats': 10,
-      'pastries': 6,
-      'slitti-yoyo': 7,
-      'gelato-lab': 8,
-      'festive': 10,
+      // Totals must match the number of rewardable cards per page (data-carousel-item).
+      // NOTE: story-orbit uses pseudo-cards (steps) and has no carousel items.
+      'operations': 11,
+      'caffe': 29,
+      'sweet-treats': 14,
+      'pastries': 10,
+      'slitti-yoyo': 11,
+      'gelato-lab': 10,
+      'festive': 12,
       'story-orbit': 5,
     };
     const fileBySlug = {
+      'operations': 'operations.html',
       'caffe': 'caffe.html',
       'sweet-treats': 'sweet-treats.html',
       'pastries': 'pastries.html',
@@ -826,6 +830,13 @@ scrollButtons.forEach((btn) => {
   };
 
   const hardcodedProducts = [
+    // Operations & Setup (non-product modules)
+    { name: 'routine apertura apertura checklist', label: 'Routine apertura', category: 'Operations & Setup', categoryHref: 'operations.html', card: 'routine-apertura', description: 'Checklist apertura' },
+    { name: 'set-up giornaliero setup daily', label: 'Set-up giornaliero', category: 'Operations & Setup', categoryHref: 'operations.html', card: 'set-up-giornaliero', description: 'Setup giorno' },
+    { name: 'servizio caldo pandoro piastra 10 secondi', label: 'Servizio Caldo (Pandoro)', category: 'Operations & Setup', categoryHref: 'operations.html', card: 'servizio-caldo-pandoro', description: 'Warm slice' },
+    { name: 'packaging take away treat box delivery', label: 'Packaging take away', category: 'Operations & Setup', categoryHref: 'operations.html', card: 'packaging-take-away', description: 'Delivery' },
+    { name: 'allestimento macchina vin brule setup 600 ml acqua', label: 'Allestimento macchina', category: 'Operations & Setup', categoryHref: 'operations.html', card: 'allestimento-macchina', description: 'Vin Brulé setup' },
+    { name: 'service chiusura vin brule pulizia shelf life', label: 'Service & chiusura', category: 'Operations & Setup', categoryHref: 'operations.html', card: 'service-chiusura', description: 'Fine turno' },
     // Caffè Rituals - all drinks
     { name: 'americano', label: 'Americano', category: 'Caffè Rituals', categoryHref: 'caffe.html', tab: 'espresso-core', description: 'Diluito' },
     { name: 'cappuccino', label: 'Cappuccino', category: 'Caffè Rituals', categoryHref: 'caffe.html', tab: 'milk', description: 'Foam classico' },
@@ -3969,14 +3980,16 @@ const gamification = (() => {
   }
 
   function getTotalPageCards() {
-    // Conta solo le schede prodotto (escluse best practices)
+    // Total rewardable cards per page. Used for the on-page badge: ⭐ Stelle: x/y
+    // Keep in sync with the actual DOM cards (data-carousel-item).
     const totalsMap = {
-      'caffe': 18,
-      'sweet-treats': 10, // 13 totali - 3 best practices
-      'pastries': 6,      // 9 totali - 3 best practices
-      'slitti-yoyo': 7,   // 10 totali - 3 best practices (stima)
-      'gelato-lab': 8,    // 11 totali - 3 best practices
-      'festive': 10,      // 13 totali - 3 best practices (stima)
+      'operations': 11,
+      'caffe': 29,
+      'sweet-treats': 14,
+      'pastries': 10,
+      'slitti-yoyo': 11,
+      'gelato-lab': 10,
+      'festive': 12,
       'story-orbit': 5    // 4 capitoli + 1 bonus (apertura pagina) = 5 step
     };
     const slug = getPageSlug();
@@ -6247,6 +6260,7 @@ const normalizeGuideCardStatLists = () => {
     if (!t) return true;
     // Pasted separators / placeholders that should never become a list item.
     if (/^[·•\-–—.]+$/.test(t)) return true;
+    if (t === 'life') return true;
     if (t === 'niente' || t === 'nulla' || t === 'nessuno') return true;
     if (t === 'da definire') return true;
     return false;
@@ -6277,7 +6291,7 @@ const normalizeGuideCardStatLists = () => {
   const splitMultiSpecsInline = (raw) => {
     const text = normalizeBulletNoise(raw);
     if (!text) return [];
-    const keys = ['Cup', 'Tazza', 'Milk', 'Latte', 'Pulizia', 'Servizio', 'Temperatura', 'Target', 'Mix', 'Warm-up', 'Riposo', 'Shelf life', 'Conservazione', 'Porzioni'];
+    const keys = ['Shelf life mix', 'Cup', 'Tazza', 'Milk', 'Latte', 'Pulizia', 'Servizio', 'Temperatura', 'Target', 'Mix', 'Warm-up', 'Riposo', 'Shelf life', 'Conservazione', 'Porzioni'];
     const keyAlternation = keys
       .map((k) => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
       .sort((a, b) => b.length - a.length)
@@ -6285,7 +6299,16 @@ const normalizeGuideCardStatLists = () => {
     const re = new RegExp(`\\b(${keyAlternation})\\b`, 'gi');
     const matches = [];
     let m;
-    while ((m = re.exec(text))) matches.push({ index: m.index });
+    let lastEnd = -1;
+    while ((m = re.exec(text))) {
+      const start = m.index;
+      const len = (m[0] || '').length;
+      const end = start + len;
+      // Skip matches that sit inside a longer match (e.g. "Mix" inside "Shelf life mix").
+      if (lastEnd >= 0 && start < lastEnd) continue;
+      matches.push({ index: start });
+      lastEnd = end;
+    }
     if (matches.length <= 1) return [text];
 
     const out = [];
@@ -6338,7 +6361,11 @@ const normalizeGuideCardStatLists = () => {
     const l = specTidy(label).toLowerCase();
     const d = specTidy(detail);
     if (!d) return 'Da definire';
-    if (l === 'shelf life' && /^life\s+/i.test(d)) return d.replace(/^life\s+/i, '').trim();
+    if (l === 'shelf life') {
+      const cleaned = d.replace(/^life\b\s*/i, '').trim();
+      if (!cleaned || cleaned.toLowerCase() === 'life') return 'Da definire';
+      return cleaned;
+    }
     if (l === 'servizio' && /multi-ordine/i.test(d) && /ultimo/i.test(d)) return 'In multi-ordine: servilo per ultimo sul vassoio.';
     if (l === 'pulizia' && /flush/i.test(d) && d.includes('+')) {
       const normalized = d
@@ -6687,6 +6714,7 @@ toggles.forEach((button) => {
       // Discard pasted separators / punctuation-only fragments.
       if (/^[·•\-–—.]+$/.test(t)) return false;
       // Discard explicit placeholders.
+      if (t === 'life') return false;
       if (t === 'niente' || t === 'nulla' || t === 'nessuno') return false;
       if (t === 'da definire') return false;
       return true;
@@ -6728,6 +6756,7 @@ toggles.forEach((button) => {
 
       // Some lists are pasted as: "Cup ... Pulizia ... Servizio ..." in a single <li>.
       const keys = [
+        'Shelf life mix',
         'Cup',
         'Tazza',
         'Milk',
@@ -6752,8 +6781,15 @@ toggles.forEach((button) => {
       const re = new RegExp(`\\b(${keyAlternation})\\b`, 'gi');
       const matches = [];
       let m;
+      let lastEnd = -1;
       while ((m = re.exec(text))) {
-        matches.push({ index: m.index });
+        const start = m.index;
+        const len = (m[0] || '').length;
+        const end = start + len;
+        // Skip matches that sit inside a longer match (e.g. "Mix" inside "Shelf life mix").
+        if (lastEnd >= 0 && start < lastEnd) continue;
+        matches.push({ index: start });
+        lastEnd = end;
       }
 
       if (matches.length <= 1) return [text];
@@ -6852,7 +6888,13 @@ toggles.forEach((button) => {
         return /[.!?]$/.test(withColon) ? withColon : `${withColon}.`;
       }
       if (l === 'shelf life') {
-        return d.replace(/^life\s+/i, '').trim();
+        const cleaned = d.replace(/^life\b\s*/i, '').trim();
+        // If the parser captured only the placeholder token "life", drop it.
+        if (!cleaned || cleaned.toLowerCase() === 'life') return '';
+        // Add a short, learner-friendly explanation without changing the factual value.
+        const base = cleaned.replace(/[.\s]+$/g, '').trim();
+        if (!base) return '';
+        return `${base}. Indica fino a quando puoi usarlo mantenendo qualità e sicurezza, se conservato correttamente.`;
       }
       if (l === 'espresso') {
         const cleaned = d.replace(/[.\s]+$/g, '').trim();
@@ -7015,15 +7057,8 @@ toggles.forEach((button) => {
     const createSpecsPanel = (items, opts) => {
       const panel = document.createElement('section');
       panel.className = 'modal-specs';
-      const title = document.createElement('h4');
-      title.className = 'modal-specs__title';
-      title.textContent = 'Specifiche';
-      panel.appendChild(title);
-
-      const subtitle = document.createElement('p');
-      subtitle.className = 'modal-specs__subtitle';
-      subtitle.textContent = opts?.subtitle || 'In sintesi, ciò che serve ricordare.';
-      panel.appendChild(subtitle);
+      // The accordion tab already provides the section title (e.g. "Specifiche").
+      // Avoid repeating headings/subtitles inside the panel.
 
       const grid = document.createElement('div');
       grid.className = 'modal-specs__grid';
@@ -7227,7 +7262,7 @@ toggles.forEach((button) => {
     // New rule: "Specifiche" lives inside the accordion (counts as a tab) across all cards.
     if (specsWithoutEssentials.length) {
       specsPanelForTab = createSpecsPanel(specsWithoutEssentials, {
-        subtitle: isSafetyCard ? 'Promemoria operativo (da completare se mancano dati).' : 'Parametri chiave (senza prezzi).'
+        // keep opts for future use; no generic subtitle text.
       });
     }
     const detailsClone = details.cloneNode(true);

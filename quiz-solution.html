@@ -102,6 +102,7 @@
       const explain = params.get('explain');
       const tip = params.get('tip');
       const spec = params.get('spec');
+      const specLabel = params.get('specLabel');
       const questionEl = document.querySelector('[data-solution-question]');
       const answerEl = document.querySelector('[data-solution-answer]');
       const explainWrap = document.querySelector('[data-solution-explain]');
@@ -125,6 +126,13 @@
           const href = decodeURIComponent(spec);
           if (href) {
             specLink.href = href;
+            if (specLabel) {
+              try {
+                specLink.textContent = `📖 ${decodeURIComponent(specLabel)}`;
+              } catch (e) {
+                specLink.textContent = '📖 Apri scheda consigliata';
+              }
+            }
             specLink.hidden = false;
           }
         }

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Operations & Setup · Badiani</title>
+    <link rel="stylesheet" href="styles/site.css?v=20251227_1" />
+    <script defer src="scripts/site.js?v=20251227_1"></script>
+  </head>
+  <body data-product="operations">
+    <nav class="nav-shell">
+        <a class="brand" href="index.html" aria-label="Torna alla home Badiani">
+          <img src="assets/brand/logo-badiani.jpg" data-default-src="assets/brand/logo-badiani.jpg" data-alt-src="assets/brand/logo-b-blue.png" alt="Badiani logo" class="brand-avatar" />
+          <div class="brand-text">
+            <small>Training</small>
+          </div>
+        </a>
+        <div class="user-nickname-bar" id="user-nickname-bar" style="margin-left:auto; font-weight:600; color:#214098; font-size:1.1em; display:none; align-items:center; gap:0.5em;">
+          <span style="font-size:1.2em;">👤</span>
+          <span id="nickname-display"></span>
+        </div>
+        <button class="menu-trigger" type="button" data-menu-toggle aria-expanded="false" aria-controls="nav-panel">
+          Menu
+          <span class="menu-icon" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </button>
+      </nav>
+
+    <div class="menu-drawer" data-menu-drawer aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="menu-drawer-title">
+      <div class="menu-drawer__overlay" data-menu-close></div>
+      <div class="menu-drawer__panel">
+        <header class="menu-drawer__header">
+          <div>
+            <h2 id="menu-drawer-title" class="menu-drawer__title">Categorie</h2>
+            <p class="menu-drawer__mood" data-menu-mood>Brilla: i dettagli fanno la differenza.</p>
+          </div>
+          <button type="button" class="menu-drawer__close" data-menu-close aria-label="Chiudi menu">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+          </button>
+        </header>
+        <div class="menu-search">
+          <div class="menu-search__field">
+            <input type="search" placeholder="Cerca prodotto o modulo" data-menu-search />
+          </div>
+          <div class="menu-search__suggestions" data-menu-suggestions></div>
+        </div>
+        <nav class="menu-drawer__nav">
+          <ul class="menu-categories">
+            <li><a href="index.html">Hub</a></li>
+            <li><a href="operations.html" aria-current="page">Operations &amp; Setup</a></li>
+            <li><a href="story-orbit.html">Story Orbit</a></li>
+            <li><a href="caffe.html">Bar &amp; Drinks</a></li>
+            <li><a href="sweet-treats.html">Sweet Treat Atelier</a></li>
+            <li><a href="pastries.html">Pastry Lab</a></li>
+            <li><a href="slitti-yoyo.html">Slitti &amp; Yo-Yo</a></li>
+            <li><a href="gelato-lab.html">Gelato Lab</a></li>
+            <li><a href="festive.html">Festive &amp; Churros</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <main class="content-area">
+      <section class="hero">
+        <div class="hero-card">
+          <div class="badge">
+            <span>Playbook operativo</span>
+            <span class="page-stars" data-page-stars>⭐ Stelle: 0/6</span>
+          </div>
+          <h1>Operations &amp; Setup</h1>
+          <p>
+            Una sezione dedicata a tutte le schede che non sono “prodotti”: apertura, set-up vetrine, packaging,
+            procedure di servizio e chiusura. Qui trovi gli standard che tengono il banco pulito, veloce e coerente.
+          </p>
+        </div>
+        <div class="hero-card visual">
+          <img src="assets/covers/gelato-cover.webp" alt="Playbook operativo Badiani" loading="lazy" />
+        </div>
+      </section>
+
+      <section class="carousel" data-carousel="operations">
+        <header class="carousel-header" data-carousel-header>
+          <div class="carousel-header__title-block">
+            <h2 class="carousel-title" data-carousel-title>Standard operativi</h2>
+            <span class="carousel-category" data-carousel-category>Apertura · Setup · Service · Chiusura</span>
+          </div>
+          <div class="carousel-indicators" data-carousel-indicators></div>
+        </header>
+
+        <div class="carousel-track" data-carousel-track>
+          <!-- Gelato Lab / Apertura -->
+          <article class="guide-card guide-card--procedure" data-carousel-item>
+            <div class="tag-row">
+              <span class="tag">Prep mattino</span>
+              <span class="tag">-14 °C</span>
+              <span class="tag">HACCP</span>
+            </div>
+            <h3>Routine apertura</h3>
+            <figure class="guide-media">
+              <picture>
+                <source srcset="assets/products/pastry%20vetrine.png" type="image/png" />
+                <img src="assets/products/pastry%20vetrine.png" alt="Vetrina gelato pronta" loading="lazy" />
+              </picture>
+            </figure>
+            <p>
+              Controllo temperature, pulizia vetri, riordino vaschette (FIFO) e verifica etichette.
+              La vetrina è il primo biglietto da visita: deve essere impeccabile e ordinata.
+            </p>
+            <ul class="stat-list">
+              <li>Temperature: -14/-15°C (registra su log HACCP)</li>
+              <li>Pulizia: vetri interni/esterni con prodotto specifico</li>
+              <li>Vaschette: riordina per colore/gusto, pulisci bordi vaschetta</li>
+              <li>Etichette: tutte presenti, dritte e pulite</li>
+              <li>Utensili: spatole pulite e in acqua corrente (se sistema a flusso continuo) o cambi frequenti</li>
+            </ul>
+            <button class="btn-ghost" data-toggle-card>Checklist</button>
+            <div class="details">
+              <div class="steps">
+                <span>1 · Registra temperature su log HACCP.</span>
+                <span>2 · Pulisci vetri e bordi vaschette.</span>
+                <span>3 · Verifica etichette e utensili pronti.</span>
+              </div>
+              <div class="tips">Se una vaschetta è quasi vuota, sostituiscila subito (non raschiare il fondo davanti al cliente).</div>
+            </div>
+          </article>
+
+          <!-- Pastry Lab / Setup vetrina -->
+          <article class="guide-card guide-card--procedure" data-carousel-item>
+            <div class="tag-row">
+              <span class="tag">Display</span>
+              <span class="tag">FIFO</span>
+              <span class="tag">Visual</span>
+            </div>
+            <h3>Set-up giornaliero</h3>
+            <figure class="guide-media tall">
+              <picture>
+                <source srcset="assets/products/pastry vetrine.png" type="image/png" />
+                <img src="assets/products/pastry vetrine.png" alt="Vetrina pastry Badiani" loading="lazy" />
+              </picture>
+            </figure>
+            <p>Cake stand con slice mancante, croissant su tray dedicati, brownies/puddings allineati.</p>
+            <ul class="stat-list">
+              <li>Vetrina deve sembrare sempre piena</li>
+              <li>Label accanto al prodotto</li>
+              <li>Prima fetta di loaf esposta</li>
+            </ul>
+            <button class="btn-ghost" data-toggle-card>Checklist</button>
+            <div class="details">
+              <div class="steps">
+                <span>1 - Posiziona cakes sui cake stand e rimuovi una fetta per mostrare l'interno.</span>
+                <span>2 - Disponi croissant in base ai gusti disponibili mantenendo le file pulite.</span>
+                <span>3 - Aggiorna etichette, verifica shelf life e riempi all'occorrenza.</span>
+              </div>
+              <div class="tips">Fotografa il set-up ideale e condividilo nel gruppo store per mantenere coerenza.</div>
+            </div>
+          </article>
+
+          <!-- Festive / Servizio e procedure -->
+          <article class="guide-card guide-card--procedure" data-carousel-item>
+            <div class="tag-row">
+              <span class="tag">Warm slice</span>
+              <span class="tag">10'' x lato</span>
+              <span class="tag">Service</span>
+            </div>
+            <h3>Servizio Caldo (Pandoro)</h3>
+            <p>
+              Pandoro scaldato: stessa tecnica del panettone. 10 secondi per lato sulla piastra crepe (senza olio). Toasta leggero per ravvivare la struttura.
+              Servi immediatamente con pairing consigliato (crema mascarpone tiepida, gelato, sauce).
+            </p>
+            <ul class="stat-list">
+              <li><strong>Chiedi preferenza al cliente:</strong> "Vuoi la versione tiepida?"</li>
+              <li><strong>Piastra crepe:</strong> pulita e asciutta, no olio</li>
+              <li><strong>Timing:</strong> 10 secondi per lato (non di piu')</li>
+              <li><strong>Servizio immediato:</strong> impiatta subito per mantenere volume e calore</li>
+              <li><strong>Campioni:</strong> tieni piccoli triangoli per assaggiare durante le ore di punta (storytelling)</li>
+              <li><strong>Abbinamenti tiepidi:</strong> crema mascarpone calda, gelato freddo (contrasto), salsa cioccolato</li>
+            </ul>
+            <button class="btn-ghost" data-toggle-card>Checklist</button>
+            <div class="details">
+              <div class="steps">
+                <span>1 - Chiedi preferenza al cliente.</span>
+                <span>2 - Tosta e impiatta rapidamente per non perdere volume.</span>
+                <span>3 - Servi con pairing consigliato.</span>
+              </div>
+              <div class="tips">Campiona piccoli triangoli per raccontare prodotto nelle ore di traffico.</div>
+              <hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);">
+              <div class="steps">
+                <strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong>
+                <span><strong>Opzione 1:</strong> "Vuoi la versione calda con gelato? Esperienza premium"</span>
+                <span><strong>Opzione 2:</strong> "Aggiungiamo crema mascarpone tiepida?"</span>
+                <span><strong>Opzione 3:</strong> "Chiedi SEMPRE preferenza calda/fredda per guidare upsell"</span>
+              </div>
+              <hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);">
+              <div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> 10 secondi per lato esatti, no di piu' o si secca. Impiatta veloce per non perdere volume soffice. Campiona triangolini nelle ore punta per stimolare ordini.</div>
+            </div>
+          </article>
+
+          <article class="guide-card guide-card--procedure" data-carousel-item>
+            <div class="tag-row">
+              <span class="tag">Delivery</span>
+              <span class="tag">Treat box</span>
+              <span class="tag">Take away</span>
+            </div>
+            <h3>Packaging take away</h3>
+            <p>Per due panettoni: una sauce pot riempita 3/4, quattro angoli del treat box.</p>
+            <button class="btn-ghost" data-toggle-card>Procedura</button>
+            <div class="details">
+              <div class="steps">
+                <span>1 - Inserisci sauce pot al centro, blocca i panettoni agli angoli.</span>
+                <span>2 - Chiudi con lid + tape, etichetta shelf life.</span>
+                <span>3 - Conserva in freezer finche' il rider arriva.</span>
+              </div>
+              <div class="tips">Comunica al cliente autonomia termica e modalita' di servizio.</div>
+              <hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);">
+              <div class="steps">
+                <strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong>
+                <span><strong>Opzione 1:</strong> "Box da 4 mini invece di 2? Perfetto per famiglia"</span>
+                <span><strong>Opzione 2:</strong> "Aggiungiamo doppia salsa per variare gusti?"</span>
+                <span><strong>Opzione 3:</strong> "Con biglietto auguri brandizzato diventa regalo perfetto"</span>
+              </div>
+              <hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);">
+              <div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Sauce pot al centro per stabilita'. Blocca mini negli angoli. Etichetta shelf life e istruzioni servizio. Conserva in freezer fino consegna rider per mantenere qualita'.</div>
+            </div>
+          </article>
+
+          <article class="guide-card guide-card--procedure" data-carousel-item>
+            <div class="tag-row">
+              <span class="tag">Setup</span>
+              <span class="tag">Vin Brulé</span>
+              <span class="tag">Tank</span>
+            </div>
+            <h3>Allestimento macchina</h3>
+            <p>Macchina Vin Brulé: riempire tank esterno con 600 ml d'acqua senza superare il max, inserire contenitore interno.</p>
+            <button class="btn-ghost" data-toggle-card>Procedura</button>
+            <div class="details">
+              <div class="steps">
+                <span>1 - Versa 500/1000 ml di mix nel tank argento.</span>
+                <span>2 - Porta temperatura a livello 10 per 25-30 min; poi mantieni a 6-7.</span>
+                <span>3 - Usa il coperchio durante il mantenimento per evitare evaporazione.</span>
+              </div>
+              <div class="tips">Meglio scaldare piccoli lotti per garantire freschezza e aromi.</div>
+              <hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);">
+              <div class="steps">
+                <strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong>
+                <span><strong>Visual appeal:</strong> "Setup macchina in area visibile per attirare ordini"</span>
+                <span><strong>Sampling:</strong> "Offri mini assaggi nelle ore punta per conversione"</span>
+                <span><strong>Bundle:</strong> "Mulled wine + mini panettone = combo festiva perfetta"</span>
+              </div>
+              <hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);">
+              <div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Tank esterno: 600ml acqua max. Livello 10 per 25-30 min riscaldamento, poi 6-7 mantenimento. Piccoli batch = freschezza. Coperchio evita evaporazione aromi.</div>
+            </div>
+          </article>
+
+          <article class="guide-card guide-card--maintenance" data-carousel-item>
+            <div class="tag-row">
+              <span class="tag">Servizio</span>
+              <span class="tag">Vin Brulé</span>
+              <span class="tag">Chiusura</span>
+            </div>
+            <h3>Service & chiusura</h3>
+            <p>Vin Brulé: servi con mestolo, fetta d'arancia e controllo shelf life.</p>
+            <button class="btn-ghost" data-toggle-card>Steps</button>
+            <div class="details">
+              <div class="steps">
+                <span>1 - Riempire cup con mestolo, aggiungere fetta d'arancia.</span>
+                <span>2 - A fine giornata travasa nel bricco, lascia raffreddare e copri con pellicola.</span>
+                <span>3 - Frigo + label (3 giorni dal primo warm-up; 30 giorni per mix non aperto).</span>
+              </div>
+              <div class="tips">Pulire tank, contenitore e esterno macchina ogni sera con acqua calda e detergente.</div>
+              <hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);">
+              <div class="steps">
+                <strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong>
+                <span><strong>Opzione 1:</strong> "Vuoi aggiungere shot di rum per versione adulta?"</span>
+                <span><strong>Opzione 2:</strong> "Fetta d'arancia fresca + cannella stick = presentazione Instagram"</span>
+                <span><strong>Opzione 3:</strong> "Racconta spezie natalizie e tradizione per valore percepito"</span>
+              </div>
+              <hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);">
+              <div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Servi con mestolo dedicato. Fetta arancia fresca sempre. Shelf life: 3 giorni da primo riscaldamento, 30 giorni mix chiuso. Pulizia tank ogni sera con acqua calda.</div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="carousel" data-carousel="operations-tech">
+        <header class="carousel-header" data-carousel-header>
+          <div class="carousel-header__title-block">
+            <h2 class="carousel-title" data-carousel-title>Dati tecnici &amp; Conservazione</h2>
+            <span class="carousel-category" data-carousel-category>Quick reference · Temperature · Shelf life · FIFO</span>
+          </div>
+          <div class="carousel-indicators" data-carousel-indicators></div>
+        </header>
+
+        <div class="carousel-track" data-carousel-track>
+          <article class="guide-card guide-card--procedure" data-carousel-item>
+            <div class="tag-row">
+              <span class="tag">Setting</span>
+              <span class="tag">Temperature</span>
+              <span class="tag">Quick ref</span>
+            </div>
+            <h3>Temperature chiave (quick map)</h3>
+            <p>Temperature chiave da tenere a mente per evitare prodotti fuori standard.</p>
+            <ul class="stat-list">
+              <li>Gelato vetrina: -14/-15 °C (target)</li>
+              <li>Display freezer treats: almeno -14 e senza ghiaccio (defrost weekly)</li>
+              <li>Thermal storage box (gelato take-away): autonomia max 1 ora prima di tornare in freezer</li>
+            </ul>
+            <button class="btn-ghost" data-toggle-card>Uso</button>
+            <div class="details">
+              <div class="steps">
+                <span>1 · Se la temperatura è fuori range: avvisa subito e non “compensare” con service tricks.</span>
+                <span>2 · Sliding doors in posizione quando non busy per preservare -14/-15.</span>
+                <span>3 · Defrost e pulizia programmata = stabilità temperature.</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="guide-card guide-card--procedure" data-carousel-item>
+            <div class="tag-row">
+              <span class="tag">Conservazione</span>
+              <span class="tag">FIFO</span>
+              <span class="tag">Label</span>
+            </div>
+            <h3>FIFO &amp; etichette (regola d'oro)</h3>
+            <p>Ogni modulo “storage” in questo training ha un punto comune: FIFO + label chiare.</p>
+            <ul class="stat-list">
+              <li>Etichetta sempre: data preparazione/apertura + scadenza</li>
+              <li>First in, first out: usa prima ciò che scade prima</li>
+              <li>Se manca la label: non servire (chiedi al manager)</li>
+            </ul>
+            <button class="btn-ghost" data-toggle-card>Checklist</button>
+            <div class="details">
+              <div class="steps">
+                <span>1 · Controllo label a inizio turno.</span>
+                <span>2 · Controllo FIFO durante i refill.</span>
+                <span>3 · Controllo scadenze in chiusura.</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="guide-card guide-card--procedure" data-carousel-item>
+            <div class="tag-row">
+              <span class="tag">Shelf life</span>
+              <span class="tag">Prep</span>
+              <span class="tag">Frigo</span>
+            </div>
+            <h3>Shelf life rapidi (mix &amp; premade)</h3>
+            <p>Promemoria shelf life per controlli veloci durante apertura, refill e chiusura.</p>
+            <ul class="stat-list">
+              <li>Crepe mix: 3 giorni (frigo) + riposo minimo 2 ore</li>
+              <li>Waffle mix (pre-packed): 2 giorni</li>
+              <li>Premade matcha: 1 giorno (incluso giorno di preparazione) → frigo</li>
+              <li>Mulled wine: 3 giorni dal primo warm-up (mix in macchina)</li>
+            </ul>
+            <button class="btn-ghost" data-toggle-card>Regole</button>
+            <div class="details">
+              <div class="steps">
+                <span>1 · Prepara batch “quanto serve”: meno sprechi, più qualità.</span>
+                <span>2 · Label sempre (data/ora).</span>
+                <span>3 · Oltre shelf life: elimina e rifai.</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="guide-card guide-card--procedure" data-carousel-item>
+            <div class="tag-row">
+              <span class="tag">Packaging</span>
+              <span class="tag">Take away</span>
+              <span class="tag">1h</span>
+            </div>
+            <h3>Take-away: autonomia termica</h3>
+            <p>La thermal storage box ha autonomia massima di 1 ora: poi il prodotto deve tornare in freezer.</p>
+            <ul class="stat-list">
+              <li>Comunicalo sempre al cliente (qualità e sicurezza)</li>
+              <li>Consiglia freezer appena possibile</li>
+              <li>Evita soste “lunghe” fuori controllo (rider/attese)</li>
+            </ul>
+            <button class="btn-ghost" data-toggle-card>Script</button>
+            <div class="details">
+              <div class="steps">
+                <span>1 · “Questa box tiene circa 1 ora: poi freezer.”</span>
+                <span>2 · Offri bag termica se prevista dallo store.</span>
+                <span>3 · Per delivery: conserva in freezer fino al ritiro.</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="guide-card guide-card--procedure" data-carousel-item>
+            <div class="tag-row">
+              <span class="tag">Chiusura</span>
+              <span class="tag">Weekly</span>
+              <span class="tag">Routine</span>
+            </div>
+            <h3>Schedule pulizie (giorno / settimana)</h3>
+            <p>Chiusura e manutenzione programmata = performance costanti e meno imprevisti in servizio.</p>
+            <ul class="stat-list">
+              <li>Gelato vetrina: OFF ogni notte</li>
+              <li>Gelato vetrina: deep clean weekly</li>
+              <li>Filtri: cleaning weekly</li>
+              <li>Display freezer treats: defrost weekly (free of ice)</li>
+            </ul>
+            <button class="btn-ghost" data-toggle-card>Checklist</button>
+            <div class="details">
+              <div class="steps">
+                <span>1 · Segna la giornata di deep clean (non improvvisare).</span>
+                <span>2 · Pulisci prima che si accumuli: è più veloce.</span>
+                <span>3 · Dopo la pulizia: rimonta, sanitizza e lucida.</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <footer class="category-footer">
+        <div class="footer-icon">🧩</div>
+        <h3 class="footer-title">Operations &amp; Setup</h3>
+        <p class="footer-tagline">Standard che rendono il servizio semplice</p>
+        <div class="footer-stats">
+          <div class="footer-stat">
+            <span class="stat-value">6</span>
+            <span class="stat-label">Schede</span>
+          </div>
+          <div class="footer-stat">
+            <span class="stat-value">Daily</span>
+            <span class="stat-label">Uso</span>
+          </div>
+          <div class="footer-stat">
+            <span class="stat-value">Setup</span>
+            <span class="stat-label">Focus</span>
+          </div>
+        </div>
+      </footer>
+    </main>
+  </body>
+</html>
