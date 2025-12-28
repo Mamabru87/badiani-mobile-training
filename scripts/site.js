@@ -49,25 +49,68 @@ document.documentElement.classList.add('has-js');
     return p;
   };
 
-  const getFrameRect = (imgW, imgH, cols, rows, frameIndex) => {
+  const getFrameRect = (imgW, imgH, cfg, frameIndex) => {
+    const cols = Math.max(1, Number(cfg?.cols) || 6);
+    const rows = Math.max(1, Number(cfg?.rows) || 4);
+    const el = cfg?.el;
     const col = frameIndex % cols;
     const row = Math.floor(frameIndex / cols);
 
-    // Compute integer rects by distributing remainder pixels across cells.
-    const cellW = imgW / cols;
-    const cellH = imgH / rows;
+    // Optional explicit sizing & layout controls (useful when the sheet has margins/gaps).
+    const frameWAttr = num(el?.getAttribute?.('data-avatar-frame-w'), NaN);
+    const frameHAttr = num(el?.getAttribute?.('data-avatar-frame-h'), NaN);
+    const gapX = Math.max(0, Math.floor(num(el?.getAttribute?.('data-avatar-gap-x'), 0)));
+    const gapY = Math.max(0, Math.floor(num(el?.getAttribute?.('data-avatar-gap-y'), 0)));
+    const marginX = Math.max(0, Math.floor(num(el?.getAttribute?.('data-avatar-margin-x'), 0)));
+    const marginY = Math.max(0, Math.floor(num(el?.getAttribute?.('data-avatar-margin-y'), 0)));
+    const inset = Math.max(0, Math.floor(num(el?.getAttribute?.('data-avatar-inset'), 0)));
 
-    const sx = Math.round(col * cellW);
-    const sx2 = Math.round((col + 1) * cellW);
-    const sy = Math.round(row * cellH);
-    const sy2 = Math.round((row + 1) * cellH);
+    // Heuristic:
+    // - When imgW/imgH are not divisible by cols/rows but the remainder is tiny (<=2px),
+    //   it is usually a right/bottom margin, not per-cell fractional pixels. In that case,
+    //   use a fixed integer cell size (floor) to keep every frame aligned.
+    // - Otherwise, distribute remainder by rounding boundaries.
+    const remW = (imgW > 0) ? (imgW % cols) : 0;
+    const remH = (imgH > 0) ? (imgH % rows) : 0;
 
-    return {
-      sx,
-      sy,
-      sw: Math.max(1, sx2 - sx),
-      sh: Math.max(1, sy2 - sy),
-    };
+    const fixedW = Number.isFinite(frameWAttr)
+      ? Math.max(1, Math.floor(frameWAttr))
+      : ((remW > 0 && remW <= 2) ? Math.max(1, Math.floor(imgW / cols)) : null);
+
+    const fixedH = Number.isFinite(frameHAttr)
+      ? Math.max(1, Math.floor(frameHAttr))
+      : ((remH > 0 && remH <= 2) ? Math.max(1, Math.floor(imgH / rows)) : null);
+
+    let sx, sy, sw, sh;
+
+    if (fixedW != null && fixedH != null) {
+      sx = marginX + col * (fixedW + gapX);
+      sy = marginY + row * (fixedH + gapY);
+      sw = fixedW;
+      sh = fixedH;
+    } else {
+      // Compute integer rects by distributing remainder pixels across cells.
+      const cellW = imgW / cols;
+      const cellH = imgH / rows;
+      const sx1 = Math.round(col * cellW);
+      const sx2 = Math.round((col + 1) * cellW);
+      const sy1 = Math.round(row * cellH);
+      const sy2 = Math.round((row + 1) * cellH);
+      sx = sx1;
+      sy = sy1;
+      sw = Math.max(1, sx2 - sx1);
+      sh = Math.max(1, sy2 - sy1);
+    }
+
+    // Optional safety inset (prevents any edge bleed in tightly-packed sheets).
+    if (inset) {
+      sx += inset;
+      sy += inset;
+      sw = Math.max(1, sw - inset * 2);
+      sh = Math.max(1, sh - inset * 2);
+    }
+
+    return { sx, sy, sw, sh };
   };
 
   const all = new Set();
@@ -218,7 +261,12 @@ document.documentElement.classList.add('has-js');
           canvas.height = ch;
         }
 
-        const fr = getFrameRect(img.naturalWidth || img.width || 0, img.naturalHeight || img.height || 0, cfg.cols, cfg.rows, abs);
+        const fr = getFrameRect(
+          img.naturalWidth || img.width || 0,
+          img.naturalHeight || img.height || 0,
+          cfg,
+          abs
+        );
         try {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
           ctx.drawImage(img, fr.sx, fr.sy, fr.sw, fr.sh, 0, 0, canvas.width, canvas.height);
