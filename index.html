@@ -188,19 +188,34 @@
                 </div>
                 <h3 class="summary-card__title">Profilo</h3>
                 <div class="summary-profile" data-profile>
-                  <div class="summary-stats">
-                    <div class="stat">
-                      <span class="stat-label">Nickname</span>
-                      <span class="stat-value" data-profile-nick>—</span>
+                  <div class="summary-profile__layout">
+                    <div class="summary-profile__avatar" aria-hidden="true">
+                      <div
+                        class="avatar-sprite"
+                        data-avatar-sprite
+                        data-avatar-src="assets/avatars/berny-sprite.png?v=20251228"
+                        data-avatar-cols="6"
+                        data-avatar-rows="4"
+                        data-avatar-fps="6"
+                        data-avatar-total="24"
+                      ></div>
                     </div>
-                    <div class="stat">
-                      <span class="stat-label">Gusto preferito</span>
-                      <span class="stat-value" data-profile-gelato>—</span>
+                    <div class="summary-profile__main">
+                      <div class="summary-stats">
+                        <div class="stat">
+                          <span class="stat-label">Nickname</span>
+                          <span class="stat-value" data-profile-nick>—</span>
+                        </div>
+                        <div class="stat">
+                          <span class="stat-label">Gusto preferito</span>
+                          <span class="stat-value" data-profile-gelato>—</span>
+                        </div>
+                      </div>
+                      <div class="profile-actions">
+                        <button class="btn btn-primary" type="button" data-profile-edit>Cambia gusto</button>
+                        <button class="btn btn-ghost" type="button" data-profile-switch>Cambia profilo</button>
+                      </div>
                     </div>
-                  </div>
-                  <div class="profile-actions">
-                    <button class="btn btn-primary" type="button" data-profile-edit>Cambia gusto</button>
-                    <button class="btn btn-ghost" type="button" data-profile-switch>Cambia profilo</button>
                   </div>
                 </div>
               </article>
@@ -209,20 +224,20 @@
         </aside>
       </section>
 
-      <section class="hub-assistant" aria-label="Assistente gelatiere">
+      <section class="hub-assistant" aria-label="Assistente BERNY">
         <div class="hub-assistant__inner">
           <div class="hub-assistant__glow" aria-hidden="true"></div>
           <header class="hub-assistant__head">
             <div>
               <p class="hub-assistant__eyebrow">Assistente</p>
-              <h2 class="hub-assistant__title">Parla col gelatiere</h2>
+              <h2 class="hub-assistant__title">Parla con BERNY</h2>
               <p class="hub-assistant__sub">Chiedi procedure, ricette e dove trovare una scheda. Ti porto al punto giusto.</p>
             </div>
           </header>
 
           <div class="menu-search menu-search--hub" data-hub-assistant>
             <div class="menu-search__field">
-              <input type="search" placeholder="Es. Coni: quanti gusti e quanti grammi?" autocomplete="off" aria-label="Parla col gelatiere" data-hub-assistant-search />
+              <input type="search" placeholder="Es. Coni: quanti gusti e quanti grammi?" autocomplete="off" aria-label="Parla con BERNY" data-hub-assistant-search />
               <button class="btn btn-primary btn--sm" type="button" data-hub-assistant-send>Chiedi</button>
             </div>
             <div class="menu-search__suggestions" data-hub-assistant-suggestions></div>
@@ -245,12 +260,6 @@
             </svg>
           </button>
         </header>
-        <div class="menu-search">
-          <div class="menu-search__field">
-            <input type="search" placeholder="Cerca prodotto o modulo" data-menu-search />
-          </div>
-          <div class="menu-search__suggestions" data-menu-suggestions></div>
-        </div>
         <nav class="menu-drawer__nav">
           <ul class="menu-categories">
             <li><a href="story-orbit.html">Story Orbit</a></li>
@@ -267,6 +276,3 @@
     </div>
   </body>
 </html>
-
-
-+

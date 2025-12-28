@@ -268,6 +268,19 @@ body.page-home {
   margin-bottom: 6px;
 }
 
+/*
+  Cockpit header note:
+  scripts/site.js injects a `.carousel-header__meta` wrapper (counter + indicators).
+  On narrow viewports, the default meta styles (flex: 0 0 auto) + cockpit indicators
+  width: 100% can force the header to exceed the container width, visually "stretching"
+  the carousel. Keep the meta shrinkable and let indicators size via flex instead.
+*/
+.page-home [data-carousel="cockpit"] .cockpit-head .carousel-header__meta {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 100%;
+}
+
 @media (max-width: 980px) {
   .page-home [data-carousel="cockpit"] .cockpit-head {
     justify-content: center;
@@ -277,14 +290,20 @@ body.page-home {
   .page-home [data-carousel="cockpit"] .cockpit-head > div {
     width: 100%;
   }
+
+  .page-home [data-carousel="cockpit"] .cockpit-head .carousel-header__meta {
+    width: 100%;
+    justify-content: space-between;
+  }
 }
 
 .page-home [data-carousel="cockpit"] .cockpit-indicators {
-  min-width: auto;
+  min-width: 0;
   justify-content: flex-start; /* Changed from center to allow scrolling */
   flex-wrap: nowrap;
   max-width: 100%;
-  width: 100%;
+  width: auto;
+  flex: 1 1 auto;
   overflow-x: auto;
   overflow-y: hidden;
   padding: 6px 12px; /* Added some side padding */
@@ -2823,6 +2842,68 @@ h4 {
 .summary-card__meta {
   font-size: 12px;
   color: var(--brand-gray-soft);
+}
+
+/* ========================================================================
+   Avatar sprite (Hub profile)
+   ======================================================================== */
+
+.summary-card--profile .summary-profile__layout {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.summary-card--profile .summary-profile__main {
+  min-width: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.summary-card--profile .summary-profile__avatar {
+  display: grid;
+  place-items: start;
+}
+
+.avatar-sprite {
+  --avatar-cols: 6;
+  --avatar-rows: 4;
+  --avatar-x: 0;
+  --avatar-y: 0;
+
+  width: clamp(77px, 12vw, 110px);
+  aspect-ratio: 180 / 361.5;
+  height: auto;
+
+  border-radius: 18px;
+  border: 1px solid rgba(33, 64, 152, 0.14);
+  background-color: rgba(33, 64, 152, 0.04);
+  box-shadow: 0 14px 24px rgba(15, 33, 84, 0.10);
+
+  /* When using canvas rendering, clip to rounded corners */
+  overflow: hidden;
+
+  background-repeat: no-repeat;
+  background-position: calc(var(--avatar-x) * -1px) calc(var(--avatar-y) * -1px);
+  background-size: calc(var(--avatar-cols) * 100%) calc(var(--avatar-rows) * 100%);
+}
+
+.avatar-sprite > canvas[data-avatar-canvas] {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 600px) {
+  .summary-card--profile .summary-profile__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .avatar-sprite {
+    width: 115px;
+    justify-self: center;
+  }
 }
 
 .btn--sm {
@@ -6815,16 +6896,16 @@ body.page-home {
 }
 
 .menu-search__assistant-avatar {
-  width: 112px;
-  flex: 0 0 112px;
+  width: 134px;
+  flex: 0 0 134px;
   display: grid;
   place-items: end center;
 }
 
 @media (max-width: 420px) {
   .menu-search__assistant-avatar {
-    width: 96px;
-    flex: 0 0 96px;
+    width: 115px;
+    flex: 0 0 115px;
   }
 }
 
@@ -7022,6 +7103,31 @@ body.page-home {
   font-size: 14px;
   line-height: 1.45;
   color: var(--ink-strong);
+  white-space: pre-line;
+}
+
+.menu-search__assistant-message .assistant-dots {
+  display: inline-block;
+  overflow: hidden;
+  width: 0;
+  vertical-align: bottom;
+  animation: assistantDots 1.05s steps(4, end) infinite;
+}
+
+.menu-search__assistant-message .assistant-caret {
+  display: inline-block;
+  margin-left: 1px;
+  color: var(--brand-rose);
+  animation: assistantCaretBlink 0.9s steps(1, end) infinite;
+}
+
+@keyframes assistantDots {
+  to { width: 1.25em; }
+}
+
+@keyframes assistantCaretBlink {
+  0%, 40% { opacity: 1; }
+  50%, 100% { opacity: 0; }
 }
 
 /* =========================
@@ -7450,11 +7556,14 @@ body.page-home {
     gap: 10px;
     padding: 12px 0 10px;
     padding-inline: 0;
+    /* Keep both columns compact (no forced equal-height stretch) */
+    align-items: start;
   }
 
   .page-home .hero-focus,
   .page-home .hero-aside {
     min-width: 0;
+    align-self: start;
   }
 
   .page-home .hero-focus {

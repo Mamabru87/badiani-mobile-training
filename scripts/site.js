@@ -1,6 +1,416 @@
 document.documentElement.classList.add('has-js');
 
 // ============================================================
+// AVATAR SPRITE (index.html)
+// Sprite sheet animation helper (no bundler, vanilla JS, IIFE).
+// Renders via <canvas> by default for crisp, pixel-perfect cropping (prevents
+// edge bleeding and frame wrap-around). Background-position mode remains as a
+// fallback.
+// ============================================================
+
+(() => {
+  const num = (value, fallback) => {
+    const n = Number(value);
+    return Number.isFinite(n) ? n : fallback;
+  };
+
+  const prefersReducedMotion = (() => {
+    try {
+      return !!window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+    } catch {
+      return false;
+    }
+  })();
+
+  // Row mapping (6x4 sprite sheet):
+  // row 1 -> idle, row 2 -> tap/click, row 3 -> think (user typing / assistant thinking), row 4 -> type (assistant typing answer)
+  const STATE_ROWS = {
+    idle: 0,
+    tap: 1,
+    think: 2,
+    type: 3,
+  };
+
+  const imageCache = new Map();
+
+  const loadImage = (src) => {
+    const key = String(src || '').trim();
+    if (!key) return Promise.resolve(null);
+    if (imageCache.has(key)) return imageCache.get(key);
+    const p = new Promise((resolve) => {
+      const img = new Image();
+      img.decoding = 'async';
+      img.loading = 'eager';
+      img.onload = () => resolve(img);
+      img.onerror = () => resolve(null);
+      try { img.src = key; } catch { resolve(null); }
+    });
+    imageCache.set(key, p);
+    return p;
+  };
+
+  const getFrameRect = (imgW, imgH, cols, rows, frameIndex) => {
+    const col = frameIndex % cols;
+    const row = Math.floor(frameIndex / cols);
+
+    // Compute integer rects by distributing remainder pixels across cells.
+    const cellW = imgW / cols;
+    const cellH = imgH / rows;
+
+    const sx = Math.round(col * cellW);
+    const sx2 = Math.round((col + 1) * cellW);
+    const sy = Math.round(row * cellH);
+    const sy2 = Math.round((row + 1) * cellH);
+
+    return {
+      sx,
+      sy,
+      sw: Math.max(1, sx2 - sx),
+      sh: Math.max(1, sy2 - sy),
+    };
+  };
+
+  const all = new Set();
+  const animators = new WeakMap();
+
+  const resolveSpriteEl = (target) => {
+    if (!target) return null;
+    if (target instanceof Element) {
+      if (target.matches?.('[data-avatar-sprite]')) return target;
+      return target.querySelector?.('[data-avatar-sprite]') || null;
+    }
+    return null;
+  };
+
+  const readConfig = (el) => {
+    const src = el.getAttribute('data-avatar-src') || '';
+    const cols = Math.max(1, num(el.getAttribute('data-avatar-cols'), 6));
+    const rows = Math.max(1, num(el.getAttribute('data-avatar-rows'), 4));
+    const fps = Math.max(1, Math.min(30, num(el.getAttribute('data-avatar-fps'), 6)));
+    const total = Math.max(1, Math.floor(num(el.getAttribute('data-avatar-total'), cols * rows)));
+    return { src, cols, rows, fps, total };
+  };
+
+  const applyStaticConfig = (el, cfg) => {
+    try {
+      el.style.setProperty('--avatar-cols', String(cfg.cols));
+      el.style.setProperty('--avatar-rows', String(cfg.rows));
+    } catch {}
+
+    if (cfg.src) {
+      try {
+        el.style.backgroundImage = `url("${cfg.src}")`;
+      } catch {}
+    }
+  };
+
+  const clampStateRow = (row, cfg) => {
+    const maxRow = Math.max(0, Math.min(cfg.rows - 1, Math.floor(cfg.total / cfg.cols) - 1));
+    const safe = Number.isFinite(row) ? row : 0;
+    return Math.max(0, Math.min(maxRow, safe));
+  };
+
+  const getStateRow = (state, cfg) => {
+    const key = String(state || '').trim();
+    if (key && key in STATE_ROWS) return clampStateRow(STATE_ROWS[key], cfg);
+    // Allow manual override via data-avatar-row="0..".
+    const manual = num(cfg?.el?.getAttribute?.('data-avatar-row'), NaN);
+    if (Number.isFinite(manual)) return clampStateRow(manual, cfg);
+    return clampStateRow(STATE_ROWS.idle, cfg);
+  };
+
+  const computeRange = (cfg, stateName) => {
+    const row = clampStateRow(STATE_ROWS[String(stateName || 'idle')] ?? 0, cfg);
+    const start = row * cfg.cols;
+    const len = Math.min(cfg.cols, Math.max(1, cfg.total - start));
+    return { row, start, len };
+  };
+
+  const createAnimator = (el) => {
+    const cfg = { ...readConfig(el), el };
+    applyStaticConfig(el, cfg);
+
+    const renderMode = (el.getAttribute('data-avatar-render') || 'canvas').toLowerCase();
+    let canvas = null;
+    let ctx = null;
+    let img = null;
+    let dpr = 1;
+
+    const ensureCanvas = () => {
+      if (renderMode === 'background') return;
+      if (canvas && ctx) return;
+      canvas = el.querySelector('canvas[data-avatar-canvas]');
+      if (!canvas) {
+        canvas = document.createElement('canvas');
+        canvas.setAttribute('data-avatar-canvas', '');
+        canvas.setAttribute('aria-hidden', 'true');
+        canvas.tabIndex = -1;
+        // Keep clicks on the wrapper element.
+        canvas.style.pointerEvents = 'none';
+        el.appendChild(canvas);
+      }
+      try {
+        ctx = canvas.getContext('2d', { alpha: true, desynchronized: true });
+        if (ctx) {
+          ctx.imageSmoothingEnabled = true;
+          try { ctx.imageSmoothingQuality = 'high'; } catch {}
+        }
+      } catch {
+        ctx = null;
+      }
+
+      // If canvas works, disable background image to avoid any bleed artifacts.
+      try {
+        el.style.backgroundImage = 'none';
+      } catch {}
+    };
+
+    // Preload image for canvas mode.
+    if (renderMode !== 'background' && cfg.src) {
+      ensureCanvas();
+      loadImage(cfg.src).then((loaded) => {
+        img = loaded;
+        // First paint after image arrives.
+        try { applyFrame(); } catch {}
+      });
+    }
+
+    const initialState = el.getAttribute('data-avatar-state') || 'idle';
+    let { start: rangeStart, len: rangeLen } = computeRange(cfg, initialState);
+    let state = String(initialState || 'idle');
+
+    // Allow slower idle animation without affecting other states.
+    // Base fps comes from data-avatar-fps; idle can be overridden with data-avatar-fps-idle.
+    const baseFps = Math.max(1, Math.min(30, Number(cfg.fps) || 12));
+    const idleFpsOverride = num(el.getAttribute('data-avatar-fps-idle'), NaN);
+    const idleFps = Math.max(1, Math.min(30,
+      Number.isFinite(idleFpsOverride) ? idleFpsOverride : Math.max(1, Math.round(baseFps * 0.5))
+    ));
+    let activeFps = (state === 'idle') ? idleFps : baseFps;
+
+    let frame = 0;
+    let rafId = 0;
+    let lastT = 0;
+    let acc = 0;
+    let isOnScreen = true;
+    let pulseToken = 0;
+
+    const frameMs = () => 1000 / activeFps;
+
+    const applyFrame = () => {
+      const abs = rangeStart + (frame % rangeLen);
+
+      // Canvas mode (preferred): pixel-perfect crop => no wrap-around / edge bleed.
+      if (renderMode !== 'background') {
+        ensureCanvas();
+        if (!canvas || !ctx || !img) return;
+
+        const rect = el.getBoundingClientRect();
+        const w = el.clientWidth || rect.width || 0;
+        const h = el.clientHeight || rect.height || 0;
+        if (!w || !h) return;
+
+        dpr = Math.max(1, Math.min(3, window.devicePixelRatio || 1));
+        const cw = Math.max(1, Math.round(w * dpr));
+        const ch = Math.max(1, Math.round(h * dpr));
+        if (canvas.width !== cw || canvas.height !== ch) {
+          canvas.width = cw;
+          canvas.height = ch;
+        }
+
+        const fr = getFrameRect(img.naturalWidth || img.width || 0, img.naturalHeight || img.height || 0, cfg.cols, cfg.rows, abs);
+        try {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, fr.sx, fr.sy, fr.sw, fr.sh, 0, 0, canvas.width, canvas.height);
+        } catch {}
+        return;
+      }
+
+      // Background mode (fallback): round offsets to reduce subpixel jitter.
+      const col = abs % cfg.cols;
+      const row = Math.floor(abs / cfg.cols);
+      const rect = el.getBoundingClientRect();
+      // Use padding-box size (client*) so borders don't accumulate into the step size.
+      // Falling back to rect keeps it resilient for edge cases where client* is 0.
+      const w = el.clientWidth || rect.width || 0;
+      const h = el.clientHeight || rect.height || 0;
+      const x = Math.round(col * w);
+      const y = Math.round(row * h);
+      try {
+        el.style.setProperty('--avatar-x', String(x));
+        el.style.setProperty('--avatar-y', String(y));
+      } catch {}
+    };
+
+    const step = (t) => {
+      if (!rafId) return;
+      if (document.hidden || prefersReducedMotion || !isOnScreen) {
+        stop();
+        return;
+      }
+      if (!lastT) lastT = t;
+      const dt = Math.max(0, t - lastT);
+      lastT = t;
+      acc += dt;
+
+      const ms = frameMs();
+      while (acc >= ms) {
+        acc -= ms;
+        frame = (frame + 1) % rangeLen;
+      }
+
+      applyFrame();
+      rafId = window.requestAnimationFrame(step);
+    };
+
+    const start = () => {
+      if (prefersReducedMotion) {
+        frame = 0;
+        applyFrame();
+        return;
+      }
+      if (document.hidden || !isOnScreen) return;
+      if (rafId) return;
+      lastT = 0;
+      acc = 0;
+      rafId = window.requestAnimationFrame(step);
+    };
+
+    const stop = () => {
+      if (!rafId) return;
+      window.cancelAnimationFrame(rafId);
+      rafId = 0;
+    };
+
+    const setState = (nextState) => {
+      const s = String(nextState || 'idle');
+      state = s;
+      try { el.setAttribute('data-avatar-state', s); } catch {}
+      const r = computeRange(cfg, s);
+      rangeStart = r.start;
+      rangeLen = r.len;
+      activeFps = (s === 'idle') ? idleFps : baseFps;
+      frame = 0;
+      applyFrame();
+      if (!prefersReducedMotion) start();
+    };
+
+    const pulseState = (tempState, ms = 900) => {
+      const token = ++pulseToken;
+      const prev = state;
+      setState(tempState);
+      window.setTimeout(() => {
+        if (token !== pulseToken) return;
+        setState(prev);
+      }, Math.max(0, Number(ms) || 0));
+    };
+
+    // Click interaction: tap animation (row 2)
+    if (!el.hasAttribute('data-avatar-click')) {
+      try { el.setAttribute('data-avatar-click', '1'); } catch {}
+      el.addEventListener('click', () => pulseState('tap', 900));
+    }
+
+    // Keep the frame aligned if layout changes.
+    window.addEventListener('resize', applyFrame, { passive: true });
+
+    // Pause if scrolled away.
+    let io = null;
+    if ('IntersectionObserver' in window) {
+      try {
+        io = new IntersectionObserver((entries) => {
+          isOnScreen = entries.some((e) => e.isIntersecting);
+          if (isOnScreen) start();
+          else stop();
+        }, { threshold: 0.12 });
+        io.observe(el);
+      } catch {
+        io = null;
+      }
+    }
+
+    // Initial paint.
+    applyFrame();
+    start();
+
+    return {
+      el,
+      start,
+      stop,
+      applyFrame,
+      setState,
+      pulseState,
+      get state() { return state; },
+      destroy() {
+        stop();
+        try { io?.disconnect?.(); } catch {}
+      },
+    };
+  };
+
+  const ensureAnimator = (el) => {
+    if (!el || !(el instanceof Element)) return null;
+    const existing = animators.get(el);
+    if (existing) return existing;
+    const a = createAnimator(el);
+    animators.set(el, a);
+    all.add(a);
+    return a;
+  };
+
+  const init = (root = document) => {
+    const scope = (root && root.querySelectorAll) ? root : document;
+    const nodes = Array.from(scope.querySelectorAll('[data-avatar-sprite]'));
+    nodes.forEach((n) => ensureAnimator(n));
+    return nodes.length;
+  };
+
+  const setState = (target, state) => {
+    const el = resolveSpriteEl(target);
+    if (!el) return;
+    ensureAnimator(el)?.setState(state);
+  };
+
+  const pulseState = (target, state, ms = 900) => {
+    const el = resolveSpriteEl(target);
+    if (!el) return;
+    ensureAnimator(el)?.pulseState(state, ms);
+  };
+
+  const refresh = (target) => {
+    const el = resolveSpriteEl(target);
+    if (!el) return;
+    ensureAnimator(el)?.applyFrame();
+  };
+
+  // Global visibility hook
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      all.forEach((a) => a.stop());
+      return;
+    }
+    all.forEach((a) => a.start());
+  });
+
+  // Expose API for dynamically inserted avatars (assistant UIs).
+  try {
+    window.BadianiAvatarSprites = {
+      init,
+      setState,
+      pulseState,
+      refresh,
+    };
+  } catch {}
+
+  // Auto-init (safe for pages without sprites).
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => init(document), { once: true });
+  } else {
+    init(document);
+  }
+})();
+
+// ============================================================
 // INPUT MODE / MOBILE UI FLAGS
 // Some mobile browsers (or emulation modes) can report unexpected values for
 // CSS (hover/pointer) media queries. We set a deterministic class so popovers
@@ -514,8 +924,183 @@ scrollButtons.forEach((btn) => {
   let lastMood = '';
   let assistantNodes = null;
   let lastAssistantQuery = '';
+  let typingToken = 0;
+  let typingTimer = 0;
+  let avatarInputTimer = 0;
+  let kbLoadPromise = null;
+  let kbIndex = null;
   
   if (!drawer) return;
+
+  const sleep = (ms) => new Promise((resolve) => window.setTimeout(resolve, Math.max(0, Number(ms) || 0)));
+
+  const stopAssistantTyping = () => {
+    typingToken += 1;
+    if (typingTimer) {
+      window.clearTimeout(typingTimer);
+      typingTimer = 0;
+    }
+  };
+
+  const tokenize = (text) => {
+    const raw = normalize(text)
+      .replace(/[^a-z0-9àèéìòù\s]+/gi, ' ')
+      .split(/\s+/)
+      .filter(Boolean);
+    const stop = new Set([
+      'il', 'lo', 'la', 'i', 'gli', 'le', 'un', 'una', 'uno', 'di', 'del', 'della', 'dei', 'delle', 'da', 'in', 'su',
+      'per', 'con', 'senza', 'e', 'o', 'ma', 'che', 'chi', 'cosa', 'come', 'quanto', 'quale', 'quali', 'quando', 'dove',
+      'mi', 'ti', 'si', 'no', 'ok', 'poi', 'nel', 'nella', 'nei', 'nelle', 'al', 'allo', 'alla', 'agli', 'alle',
+    ]);
+    return raw.filter((t) => t.length >= 3 && !stop.has(t));
+  };
+
+  const KB_SOURCES = [
+    { id: 'gelato', path: 'notes/pdf_text/gelato.txt', defaultHref: 'gelato-lab.html?center=1' },
+    { id: 'sweet', path: 'notes/pdf_text/Sweet Treats.txt', defaultHref: 'sweet-treats.html?center=1' },
+    { id: 'festive', path: 'notes/pdf_text/christmas and churro.txt', defaultHref: 'festive.html?center=1' },
+    { id: 'pastries', path: 'notes/pdf_text/pastries.txt', defaultHref: 'pastries.html?center=1' },
+    { id: 'slitti', path: 'notes/pdf_text/slitti-yoyo.txt', defaultHref: 'slitti-yoyo.html?center=1' },
+    { id: 'freshdrinks', path: 'notes/pdf_text/freshdrink-macha-cocktails.txt', defaultHref: 'caffe.html?center=1' },
+    { id: 'caffe', path: 'notes/pdf_text/caffe.txt', defaultHref: 'caffe.html?center=1' },
+  ];
+
+  const loadKB = async () => {
+    if (kbLoadPromise) return kbLoadPromise;
+    kbLoadPromise = (async () => {
+      const chunks = [];
+      await Promise.all(KB_SOURCES.map(async (src) => {
+        try {
+          const res = await fetch(encodeURI(src.path), { cache: 'no-store' });
+          if (!res || !res.ok) return;
+          const txt = await res.text();
+          if (!txt || txt.length < 50) return;
+          const parts = String(txt)
+            .replace(/\r/g, '')
+            .split(/\n{2,}/g)
+            .map((p) => p.trim())
+            .filter((p) => p.length >= 80);
+          parts.forEach((p) => {
+            chunks.push({
+              sourceId: src.id,
+              defaultHref: src.defaultHref,
+              text: p,
+              tokens: tokenize(p),
+            });
+          });
+        } catch {
+          /* ignore */
+        }
+      }));
+
+      // Precompute token frequency maps (simple overlap scoring)
+      kbIndex = chunks.map((c) => {
+        const freq = Object.create(null);
+        c.tokens.forEach((t) => { freq[t] = (freq[t] || 0) + 1; });
+        return { ...c, freq };
+      });
+      return kbIndex;
+    })();
+    return kbLoadPromise;
+  };
+
+  const pickDefaultCtaHref = (query) => {
+    const q = normalize(query);
+    if (!q) return '';
+    if (/(cono|coni|coppett|vetrina|scampol|treat\s*freezer|gelato\s*box|vaschett|porzion)/i.test(q)) {
+      return 'gelato-lab.html?center=1';
+    }
+    if (/(waffl|crepe|cr[eè]p|pancak|porridge|gelato\s*burger|croissant)/i.test(q)) {
+      return 'sweet-treats.html?center=1';
+    }
+    if (/(churros|vin\s*brul|mulled|panettone|festive)/i.test(q)) {
+      return 'festive.html?center=1';
+    }
+    if (/(cappucc|flat\s*white|americano|latte|schium|espresso|mocha|chai|tea|cioccolat|iced)/i.test(q)) {
+      return 'caffe.html?center=1';
+    }
+    if (/(apertura|chiusura|closing|setup|packaging|sicurezza|allergen|gluten)/i.test(q)) {
+      return 'operations.html?center=1';
+    }
+    return '';
+  };
+
+  const kbRetrieve = async (query) => {
+    const qTokens = tokenize(query);
+    if (!qTokens.length) return null;
+    await loadKB();
+    if (!Array.isArray(kbIndex) || !kbIndex.length) return null;
+
+    let best = null;
+    let bestScore = 0;
+    kbIndex.forEach((chunk) => {
+      let score = 0;
+      qTokens.forEach((t) => {
+        if (chunk.freq[t]) score += 2 + Math.min(3, chunk.freq[t]);
+      });
+      // Small boost for very domain-specific keywords
+      if (/\b(grammi|ml|temperatura|minuti|conservazione|chiusura|apertura)\b/i.test(chunk.text)) score += 1;
+      if (score > bestScore) {
+        bestScore = score;
+        best = chunk;
+      }
+    });
+    if (!best || bestScore < 8) return null;
+    return { ...best, score: bestScore };
+  };
+
+  const summarizeSnippet = (text, maxLen = 220) => {
+    const t = String(text || '').replace(/\s+/g, ' ').trim();
+    if (!t) return '';
+    if (t.length <= maxLen) return t;
+    const cut = t.slice(0, maxLen);
+    const lastStop = Math.max(cut.lastIndexOf('. '), cut.lastIndexOf('; '), cut.lastIndexOf(': '));
+    return (lastStop > 80 ? cut.slice(0, lastStop + 1) : cut).trim() + '…';
+  };
+
+  // Slitti: compute “tavolette/barre” variants by reading the Slitti page.
+  // This avoids hardcoding counts and stays aligned to the actual training file.
+  let slittiTavoletteInfoPromise = null;
+  const getSlittiTavoletteInfo = async () => {
+    if (slittiTavoletteInfoPromise) return slittiTavoletteInfoPromise;
+    slittiTavoletteInfoPromise = (async () => {
+      try {
+        const res = await fetch('slitti-yoyo.html', { cache: 'no-store' });
+        if (!res || !res.ok) return null;
+        const html = await res.text();
+        if (!html) return null;
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        const cards = Array.from(doc.querySelectorAll('.guide-card'));
+        const pick = (card) => {
+          const tagText = (card.querySelector('.tag-row')?.textContent || '').toLowerCase();
+          const title = (card.querySelector('h3')?.textContent || '').toLowerCase();
+          return tagText.includes('tavolette') || title.includes('tavolette');
+        };
+        const card = cards.find(pick);
+        if (!card) return null;
+
+        const text = (card.textContent || '').toLowerCase();
+        const percSet = new Set();
+        for (const m of text.matchAll(/(\d{2,3})\s*%/g)) {
+          const n = Number(m[1]);
+          if (Number.isFinite(n) && n > 0 && n <= 100) percSet.add(n);
+        }
+        const perc = Array.from(percSet).sort((a, b) => a - b);
+        const labels = perc.map((p) => `${p}%`);
+        const hasCaffeLatte = /caff[eè]\s*latte/.test(text);
+        if (hasCaffeLatte) labels.push('Caffè Latte');
+
+        return {
+          count: labels.length,
+          labels,
+          cardKey: 'tavolette-lattenero-gran-cacao',
+        };
+      } catch {
+        return null;
+      }
+    })();
+    return slittiTavoletteInfoPromise;
+  };
 
   const pickMood = () => {
     if (!moods.length) return '';
@@ -957,136 +1542,126 @@ scrollButtons.forEach((btn) => {
     avatar.className = 'menu-search__assistant-avatar';
     avatar.setAttribute('data-menu-assistant-avatar', '');
     avatar.setAttribute('aria-hidden', 'true');
-    // Original SVG avatar (3D-cartoon vibe): blue apron, white shirt, black pants.
-    // (No external assets; kept lightweight for a static site.)
-    avatar.innerHTML = `
-      <svg class="gelatiere-svg" viewBox="0 0 96 120" width="56" height="70" role="img" aria-label="Assistente gelatiere" focusable="false">
-        <defs>
-          <linearGradient id="skinGrad" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0" stop-color="#FFE7D0"/>
-            <stop offset="1" stop-color="#FFD0B0"/>
-          </linearGradient>
-          <linearGradient id="apronGrad" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0" stop-color="#2A54C4"/>
-            <stop offset="1" stop-color="#173A8A"/>
-          </linearGradient>
-          <linearGradient id="hairGrad" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0" stop-color="#6B4A2A"/>
-            <stop offset="1" stop-color="#3B2412"/>
-          </linearGradient>
-          <radialGradient id="eyeIris" cx="50%" cy="50%" r="50%">
-            <stop offset="0" stop-color="#6EC6FF"/>
-            <stop offset="1" stop-color="#214098"/>
-          </radialGradient>
-          <radialGradient id="blushGrad" cx="50%" cy="50%" r="50%">
-            <stop offset="0" stop-color="rgba(255,150,180,0.55)"/>
-            <stop offset="1" stop-color="rgba(255,150,180,0)"/>
-          </radialGradient>
-          <radialGradient id="shadowGrad" cx="50%" cy="50%" r="50%">
-            <stop offset="0" stop-color="rgba(15,33,84,0.22)"/>
-            <stop offset="1" stop-color="rgba(15,33,84,0)"/>
-          </radialGradient>
-        </defs>
-
-        <!-- Ground shadow -->
-        <ellipse cx="48" cy="115" rx="24" ry="6" fill="url(#shadowGrad)"/>
-
-        <!-- Body -->
-        <g class="gelatiere-svg__body">
-          <!-- Legs -->
-          <rect x="35" y="86" width="11" height="24" rx="5.5" fill="#1a1f35"/>
-          <rect x="50" y="86" width="11" height="24" rx="5.5" fill="#0f1426"/>
-          <!-- Shirt -->
-          <path d="M26 50c0-12 10-20 22-20s22 8 22 20v30c0 3-2 6-5 6H31c-3 0-5-3-5-6V50z" fill="#FFFFFF" stroke="rgba(33,64,152,0.08)"/>
-          <!-- Apron -->
-          <path d="M32 56c0-5 5-10 9-10h14c4 0 9 5 9 10v24c0 2-2 4-4 4H36c-2 0-4-2-4-4V56z" fill="url(#apronGrad)"/>
-          <rect x="40" y="66" width="16" height="12" rx="6" fill="rgba(255,255,255,0.2)"/>
-          <circle cx="48" cy="72" r="1.5" fill="rgba(255,255,255,0.3)"/>
-          <!-- Arms (animated) -->
-          <path class="gelatiere-arm-l" d="M26 54c-5 3-9 10-9 16 0 4 2 8 3 10" fill="none" stroke="url(#skinGrad)" stroke-width="7" stroke-linecap="round"/>
-          <path class="gelatiere-arm-r" d="M70 54c5 3 9 10 9 16 0 4-2 8-3 10" fill="none" stroke="url(#skinGrad)" stroke-width="7" stroke-linecap="round"/>
-          <!-- Gelato Cone in hand -->
-          <g class="gelatiere-cone" transform="translate(74, 74) rotate(18)">
-            <path d="M-1 0l5 12 5-12z" fill="#E8A842" stroke="#C78F35" stroke-width="0.5"/>
-            <ellipse cx="4" cy="-1" rx="4.5" ry="4" fill="#FF6BA8"/>
-            <ellipse cx="4" cy="-1" rx="3" ry="2.5" fill="#FF8FBF" opacity="0.6"/>
-            <circle cx="5.5" cy="-2" r="1" fill="rgba(255,255,255,0.7)"/>
-          </g>
-        </g>
-
-        <!-- Head -->
-        <g class="gelatiere-svg__head">
-          <!-- Hair back + ciuffo -->
-          <path d="M28 22c0-14 8-22 20-22s20 8 20 22c0 4-2 8-4 10-2-3-4-6-8-6-3 0-5 2-8 2s-5-2-8-2c-4 0-6 3-8 6-2-2-4-6-4-10z" fill="url(#hairGrad)"/>
-          <path d="M38 10c2-4 6-6 10-6s8 2 10 6" fill="url(#hairGrad)" opacity="0.7"/>
-          <!-- Face base -->
-          <ellipse cx="48" cy="30" rx="20" ry="22" fill="url(#skinGrad)"/>
-          <!-- Neck -->
-          <rect x="43" y="48" width="10" height="6" rx="5" fill="url(#skinGrad)"/>
-          <!-- Cheek blush (animated) -->
-          <ellipse class="gelatiere-blush" cx="35" cy="36" rx="6" ry="4" fill="url(#blushGrad)"/>
-          <ellipse class="gelatiere-blush" cx="61" cy="36" rx="6" ry="4" fill="url(#blushGrad)"/>
-          <!-- Eyes (super Ghibli) -->
-          <g class="gelatiere-svg__eyes">
-            <g class="gelatiere-eye-group-l">
-              <ellipse cx="40" cy="30" rx="7" ry="8" fill="#0A1942"/>
-              <ellipse class="gelatiere-pupil" cx="40" cy="32" rx="4.5" ry="5.5" fill="url(#eyeIris)"/>
-              <ellipse cx="40" cy="30" rx="2.5" ry="3" fill="#fff" opacity="0.7"/>
-              <ellipse cx="38" cy="28" rx="1.2" ry="1.5" fill="#fff" opacity="0.9"/>
-              <ellipse cx="42" cy="33" rx="0.8" ry="1.2" fill="#fff" opacity="0.5"/>
+    // Use sprite avatar if available (same asset as the Hub profile).
+    // Falls back to SVG on any unexpected errors.
+    try {
+      const spr = document.createElement('div');
+      spr.className = 'avatar-sprite avatar-sprite--assistant';
+      spr.setAttribute('data-avatar-sprite', '');
+      spr.setAttribute('data-avatar-src', 'assets/avatars/berny-sprite.png?v=20251228');
+      spr.setAttribute('data-avatar-cols', '6');
+      spr.setAttribute('data-avatar-rows', '4');
+      spr.setAttribute('data-avatar-fps', '6');
+      spr.setAttribute('data-avatar-total', '24');
+      avatar.replaceChildren(spr);
+      window.BadianiAvatarSprites?.init?.();
+    } catch {
+      // Keep legacy SVG avatar (no external assets).
+      avatar.innerHTML = `
+        <svg class="gelatiere-svg" viewBox="0 0 96 120" width="56" height="70" role="img" aria-label="Assistente BERNY" focusable="false">
+          <defs>
+            <linearGradient id="skinGrad" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0" stop-color="#FFE7D0"/>
+              <stop offset="1" stop-color="#FFD0B0"/>
+            </linearGradient>
+            <linearGradient id="apronGrad" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0" stop-color="#2A54C4"/>
+              <stop offset="1" stop-color="#173A8A"/>
+            </linearGradient>
+            <linearGradient id="hairGrad" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0" stop-color="#6B4A2A"/>
+              <stop offset="1" stop-color="#3B2412"/>
+            </linearGradient>
+            <radialGradient id="eyeIris" cx="50%" cy="50%" r="50%">
+              <stop offset="0" stop-color="#6EC6FF"/>
+              <stop offset="1" stop-color="#214098"/>
+            </radialGradient>
+            <radialGradient id="blushGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0" stop-color="rgba(255,150,180,0.55)"/>
+              <stop offset="1" stop-color="rgba(255,150,180,0)"/>
+            </radialGradient>
+            <radialGradient id="shadowGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0" stop-color="rgba(15,33,84,0.22)"/>
+              <stop offset="1" stop-color="rgba(15,33,84,0)"/>
+            </radialGradient>
+          </defs>
+          <ellipse cx="48" cy="115" rx="24" ry="6" fill="url(#shadowGrad)"/>
+          <g class="gelatiere-svg__body">
+            <rect x="35" y="86" width="11" height="24" rx="5.5" fill="#1a1f35"/>
+            <rect x="50" y="86" width="11" height="24" rx="5.5" fill="#0f1426"/>
+            <path d="M26 50c0-12 10-20 22-20s22 8 22 20v30c0 3-2 6-5 6H31c-3 0-5-3-5-6V50z" fill="#FFFFFF" stroke="rgba(33,64,152,0.08)"/>
+            <path d="M32 56c0-5 5-10 9-10h14c4 0 9 5 9 10v24c0 2-2 4-4 4H36c-2 0-4-2-4-4V56z" fill="url(#apronGrad)"/>
+            <rect x="40" y="66" width="16" height="12" rx="6" fill="rgba(255,255,255,0.2)"/>
+            <circle cx="48" cy="72" r="1.5" fill="rgba(255,255,255,0.3)"/>
+            <path class="gelatiere-arm-l" d="M26 54c-5 3-9 10-9 16 0 4 2 8 3 10" fill="none" stroke="url(#skinGrad)" stroke-width="7" stroke-linecap="round"/>
+            <path class="gelatiere-arm-r" d="M70 54c5 3 9 10 9 16 0 4-2 8-3 10" fill="none" stroke="url(#skinGrad)" stroke-width="7" stroke-linecap="round"/>
+            <g class="gelatiere-cone" transform="translate(74, 74) rotate(18)">
+              <path d="M-1 0l5 12 5-12z" fill="#E8A842" stroke="#C78F35" stroke-width="0.5"/>
+              <ellipse cx="4" cy="-1" rx="4.5" ry="4" fill="#FF6BA8"/>
+              <ellipse cx="4" cy="-1" rx="3" ry="2.5" fill="#FF8FBF" opacity="0.6"/>
+              <circle cx="5.5" cy="-2" r="1" fill="rgba(255,255,255,0.7)"/>
             </g>
-            <g class="gelatiere-eye-group-r">
-              <ellipse cx="56" cy="30" rx="7" ry="8" fill="#0A1942"/>
-              <ellipse class="gelatiere-pupil" cx="56" cy="32" rx="4.5" ry="5.5" fill="url(#eyeIris)"/>
-              <ellipse cx="56" cy="30" rx="2.5" ry="3" fill="#fff" opacity="0.7"/>
-              <ellipse cx="54" cy="28" rx="1.2" ry="1.5" fill="#fff" opacity="0.9"/>
-              <ellipse cx="58" cy="33" rx="0.8" ry="1.2" fill="#fff" opacity="0.5"/>
+          </g>
+          <g class="gelatiere-svg__head">
+            <path d="M28 22c0-14 8-22 20-22s20 8 20 22c0 4-2 8-4 10-2-3-4-6-8-6-3 0-5 2-8 2s-5-2-8-2c-4 0-6 3-8 6-2-2-4-6-4-10z" fill="url(#hairGrad)"/>
+            <path d="M38 10c2-4 6-6 10-6s8 2 10 6" fill="url(#hairGrad)" opacity="0.7"/>
+            <ellipse cx="48" cy="30" rx="20" ry="22" fill="url(#skinGrad)"/>
+            <rect x="43" y="48" width="10" height="6" rx="5" fill="url(#skinGrad)"/>
+            <ellipse class="gelatiere-blush" cx="35" cy="36" rx="6" ry="4" fill="url(#blushGrad)"/>
+            <ellipse class="gelatiere-blush" cx="61" cy="36" rx="6" ry="4" fill="url(#blushGrad)"/>
+            <g class="gelatiere-svg__eyes">
+              <g class="gelatiere-eye-group-l">
+                <ellipse cx="40" cy="30" rx="7" ry="8" fill="#0A1942"/>
+                <ellipse class="gelatiere-pupil" cx="40" cy="32" rx="4.5" ry="5.5" fill="url(#eyeIris)"/>
+                <ellipse cx="40" cy="30" rx="2.5" ry="3" fill="#fff" opacity="0.7"/>
+                <ellipse cx="38" cy="28" rx="1.2" ry="1.5" fill="#fff" opacity="0.9"/>
+                <ellipse cx="42" cy="33" rx="0.8" ry="1.2" fill="#fff" opacity="0.5"/>
+              </g>
+              <g class="gelatiere-eye-group-r">
+                <ellipse cx="56" cy="30" rx="7" ry="8" fill="#0A1942"/>
+                <ellipse class="gelatiere-pupil" cx="56" cy="32" rx="4.5" ry="5.5" fill="url(#eyeIris)"/>
+                <ellipse cx="56" cy="30" rx="2.5" ry="3" fill="#fff" opacity="0.7"/>
+                <ellipse cx="54" cy="28" rx="1.2" ry="1.5" fill="#fff" opacity="0.9"/>
+                <ellipse cx="58" cy="33" rx="0.8" ry="1.2" fill="#fff" opacity="0.5"/>
+              </g>
+              <path class="gelatiere-blink" d="M34 30c0-4 2.5-7 6-7s6 3 6 7" fill="url(#skinGrad)" opacity="0" stroke="#3B2412" stroke-width="0.5"/>
+              <path class="gelatiere-blink" d="M50 30c0-4 2.5-7 6-7s6 3 6 7" fill="url(#skinGrad)" opacity="0" stroke="#3B2412" stroke-width="0.5"/>
             </g>
-            <!-- Eyelids for blinking -->
-            <path class="gelatiere-blink" d="M34 30c0-4 2.5-7 6-7s6 3 6 7" fill="url(#skinGrad)" opacity="0" stroke="#3B2412" stroke-width="0.5"/>
-            <path class="gelatiere-blink" d="M50 30c0-4 2.5-7 6-7s6 3 6 7" fill="url(#skinGrad)" opacity="0" stroke="#3B2412" stroke-width="0.5"/>
+            <path class="gelatiere-brow-l" d="M35 23c2-2 5-2 7 0" fill="none" stroke="#3B2412" stroke-width="2" stroke-linecap="round"/>
+            <path class="gelatiere-brow-r" d="M54 23c2-2 5-2 7 0" fill="none" stroke="#3B2412" stroke-width="2" stroke-linecap="round"/>
+            <path d="M48 36c0 2-1 3-1 4" fill="none" stroke="rgba(15,33,84,0.15)" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="47" cy="40" r="0.8" fill="rgba(255,150,180,0.3)"/>
+            <path class="gelatiere-mouth" d="M42 42c2 4 4 6 6 6s4-2 6-6" fill="none" stroke="#3B2412" stroke-width="2.2" stroke-linecap="round"/>
+            <ellipse class="gelatiere-mouth--talk" cx="48" cy="46" rx="5" ry="2.5" fill="#FFB8C8" stroke="#3B2412" stroke-width="1.2" opacity="0"/>
+            <path d="M32 18c3-4 6-6 9-6 2 0 3 2 3 4" fill="url(#hairGrad)" opacity="0.8"/>
+            <path d="M64 18c-3-4-6-6-9-6-2 0-3 2-3 4" fill="url(#hairGrad)" opacity="0.8"/>
+            <path d="M45 14c1-3 2-5 3-5s2 2 3 5" fill="url(#hairGrad)" opacity="0.8"/>
+            <ellipse cx="48" cy="12" rx="19" ry="6" fill="#FFFFFF" stroke="rgba(33,64,152,0.12)"/>
+            <rect x="29" y="10" width="38" height="7" rx="3.5" fill="#FFFFFF" stroke="rgba(33,64,152,0.1)"/>
+            <ellipse cx="48" cy="13.5" rx="15" ry="2" fill="rgba(42,84,196,0.08)"/>
           </g>
-          <!-- Sopracciglia animate -->
-          <path class="gelatiere-brow-l" d="M35 23c2-2 5-2 7 0" fill="none" stroke="#3B2412" stroke-width="2" stroke-linecap="round"/>
-          <path class="gelatiere-brow-r" d="M54 23c2-2 5-2 7 0" fill="none" stroke="#3B2412" stroke-width="2" stroke-linecap="round"/>
-          <!-- Naso -->
-          <path d="M48 36c0 2-1 3-1 4" fill="none" stroke="rgba(15,33,84,0.15)" stroke-width="1.5" stroke-linecap="round"/>
-          <circle cx="47" cy="40" r="0.8" fill="rgba(255,150,180,0.3)"/>
-          <!-- Bocca super espressiva -->
-          <path class="gelatiere-mouth" d="M42 42c2 4 4 6 6 6s4-2 6-6" fill="none" stroke="#3B2412" stroke-width="2.2" stroke-linecap="round"/>
-          <ellipse class="gelatiere-mouth--talk" cx="48" cy="46" rx="5" ry="2.5" fill="#FFB8C8" stroke="#3B2412" stroke-width="1.2" opacity="0"/>
-          <!-- Capelli frontali svolazzanti -->
-          <path d="M32 18c3-4 6-6 9-6 2 0 3 2 3 4" fill="url(#hairGrad)" opacity="0.8"/>
-          <path d="M64 18c-3-4-6-6-9-6-2 0-3 2-3 4" fill="url(#hairGrad)" opacity="0.8"/>
-          <path d="M45 14c1-3 2-5 3-5s2 2 3 5" fill="url(#hairGrad)" opacity="0.8"/>
-          <!-- Cappello -->
-          <ellipse cx="48" cy="12" rx="19" ry="6" fill="#FFFFFF" stroke="rgba(33,64,152,0.12)"/>
-          <rect x="29" y="10" width="38" height="7" rx="3.5" fill="#FFFFFF" stroke="rgba(33,64,152,0.1)"/>
-          <ellipse cx="48" cy="13.5" rx="15" ry="2" fill="rgba(42,84,196,0.08)"/>
-        </g>
-
-        <!-- Sparkles & Magic -->
-        <g class="gelatiere-sparkles">
-          <g class="gelatiere-sparkle" transform="translate(16, 28)">
-            <circle r="1.5" fill="#FFD700"/>
-            <path d="M-3 0h6M0-3v6" stroke="#FFF4A3" stroke-width="1" stroke-linecap="round"/>
+          <g class="gelatiere-sparkles">
+            <g class="gelatiere-sparkle" transform="translate(16, 28)">
+              <circle r="1.5" fill="#FFD700"/>
+              <path d="M-3 0h6M0-3v6" stroke="#FFF4A3" stroke-width="1" stroke-linecap="round"/>
+            </g>
+            <g class="gelatiere-sparkle" transform="translate(78, 18)">
+              <circle r="1.2" fill="#FFD700"/>
+              <path d="M-2.5 0h5M0-2.5v5" stroke="#FFF4A3" stroke-width="0.8" stroke-linecap="round"/>
+            </g>
+            <g class="gelatiere-sparkle" transform="translate(22, 50)">
+              <circle r="1" fill="#FFE4B3"/>
+              <path d="M-2 0h4M0-2v4" stroke="#FFF4A3" stroke-width="0.6" stroke-linecap="round"/>
+            </g>
           </g>
-          <g class="gelatiere-sparkle" transform="translate(78, 18)">
-            <circle r="1.2" fill="#FFD700"/>
-            <path d="M-2.5 0h5M0-2.5v5" stroke="#FFF4A3" stroke-width="0.8" stroke-linecap="round"/>
-          </g>
-          <g class="gelatiere-sparkle" transform="translate(22, 50)">
-            <circle r="1" fill="#FFE4B3"/>
-            <path d="M-2 0h4M0-2v4" stroke="#FFF4A3" stroke-width="0.6" stroke-linecap="round"/>
-          </g>
-        </g>
-      </svg>
-    `;
+        </svg>
+      `;
+    }
 
     const header = document.createElement('div');
     header.className = 'menu-search__assistant-header';
     header.innerHTML = `
-      <p class="menu-search__assistant-title">Assistente</p>
+      <p class="menu-search__assistant-title">BERNY</p>
       <button class="menu-search__assistant-clear" type="button" data-menu-assistant-clear aria-label="Pulisci">×</button>
     `;
 
@@ -1132,7 +1707,7 @@ scrollButtons.forEach((btn) => {
 
   const showAssistantGreeting = () => {
     setAssistant({
-      message: 'Dimmi cosa ti serve: io sono il tuo gelatiere di fiducia. (Prometto di non giudicare gli errori… troppo.)',
+      message: 'Dimmi cosa ti serve: io sono BERNY, il tuo assistente di fiducia. (Prometto di non giudicare gli errori… troppo.)',
       actions: [
         { label: 'Apri Hub', href: 'index.html', kind: 'secondary' },
       ],
@@ -1145,11 +1720,90 @@ scrollButtons.forEach((btn) => {
     });
   };
 
-  const setAssistant = ({ message = '', actions = [], examples = [] } = {}) => {
+  const renderAssistantMessage = async (message, renderMode = 'instant') => {
+    assistantNodes = assistantNodes || ensureAssistantUI();
+    if (!assistantNodes?.root || !assistantNodes?.message) return;
+
+    const msgEl = assistantNodes.message;
+    stopAssistantTyping();
+    const setAvatarState = (state) => {
+      try { window.BadianiAvatarSprites?.setState?.(assistantNodes?.avatar, state); } catch {}
+    };
+
+    const clearMsg = () => {
+      msgEl.classList.remove('is-thinking');
+      msgEl.classList.remove('is-typing');
+      msgEl.innerHTML = '';
+    };
+
+    if (renderMode === 'thinking') {
+      clearMsg();
+      msgEl.classList.add('is-thinking');
+      setAvatarState('think');
+      const textSpan = document.createElement('span');
+      textSpan.textContent = String(message || 'Ok, ci penso');
+      const dots = document.createElement('span');
+      dots.className = 'assistant-dots';
+      dots.setAttribute('aria-hidden', 'true');
+      dots.textContent = '...';
+      msgEl.append(textSpan, ' ', dots);
+      return;
+    }
+
+    if (renderMode !== 'typewriter') {
+      clearMsg();
+      msgEl.textContent = String(message || '');
+      setAvatarState('idle');
+      return;
+    }
+
+    // Typewriter
+    clearMsg();
+    msgEl.classList.add('is-typing');
+    setAvatarState('type');
+    const originalLive = assistantNodes.root.getAttribute('aria-live');
+    try { assistantNodes.root.setAttribute('aria-live', 'off'); } catch {}
+
+    const token = ++typingToken;
+    const fullText = String(message || '');
+    const typed = document.createElement('span');
+    typed.className = 'assistant-typed';
+    const caret = document.createElement('span');
+    caret.className = 'assistant-caret';
+    caret.setAttribute('aria-hidden', 'true');
+    caret.textContent = '▍';
+    msgEl.append(typed, caret);
+
+    await new Promise((resolve) => {
+      let i = 0;
+      const step = () => {
+        if (token !== typingToken) return resolve();
+        typed.textContent = fullText.slice(0, i);
+        i += 1;
+        if (i <= fullText.length) {
+          const jitter = 10 + Math.floor(Math.random() * 18);
+          typingTimer = window.setTimeout(step, jitter);
+        } else {
+          resolve();
+        }
+      };
+      step();
+    });
+
+    if (token !== typingToken) return;
+    msgEl.classList.remove('is-typing');
+    msgEl.textContent = fullText;
+    setAvatarState('idle');
+    try {
+      assistantNodes.root.setAttribute('aria-live', originalLive || 'polite');
+    } catch {}
+  };
+
+  const setAssistant = async ({ message = '', actions = [], examples = [], render = 'instant' } = {}) => {
     assistantNodes = assistantNodes || ensureAssistantUI();
     if (!assistantNodes?.root) return;
 
-    assistantNodes.message.textContent = message;
+    await renderAssistantMessage(message, render);
 
     assistantNodes.actions.innerHTML = '';
     (Array.isArray(actions) ? actions : []).slice(0, 3).forEach((a) => {
@@ -1254,26 +1908,89 @@ scrollButtons.forEach((btn) => {
     const q = normalize(query);
     if (!q) return null;
 
-    // High-confidence quick links (deep links to the exact reference card/tab)
+    if (/(regole|regola|regolamento|mini\s*game|gioco|come\s*funziona|stellin|stelle|cristall|token|mini\s*quiz|test\s*me|cooldown|countdown|gelati\s*vinti|bonus)/i.test(q)) {
+      return {
+        message:
+          'Regole del gioco (in breve):\n'
+          + '• 1 tab aperto = 1 cristallo.\n'
+          + '• 5 cristalli = 1 stellina.\n'
+          + '• Ogni 3 stelline parte un mini quiz (1 domanda).\n'
+          + '• Mini quiz giusto = sblocchi “Test me”. “Test me” perfetto = +1 gelato e cooldown 24h (riducibile a 12/30 stelline).\n'
+          + '• Mini quiz sbagliato = -3 stelline. Reset: domenica 00:00.',
+        actions: [
+          { label: 'Apri Regolamento', href: 'index.html?open=regolamento&center=1' },
+        ],
+      };
+    }
+
+    // High-confidence answers + deep links (keep them short, always include the CTA)
     if (/(\bconi\b|\bcono\b|\bcone\b|choco\s*cone|gluten\s*free|\bgf\b)/i.test(q)) {
       return {
-        message: 'Coni: ti porto dritto alla scheda con parametri e varianti (così niente “a sensazione”).',
+        message: 'Coni (standard): Piccolo 100g (1 gusto). Medio 140g (1–2 gusti). Grande 180g (1–3 gusti). Choco cone / GF: 140g. Per i dettagli, apri la scheda.',
         actions: [
           { label: 'Apri Coni classici', href: 'gelato-lab.html?card=coni-classici&tab=parametri&center=1' },
         ],
       };
     }
+    if (/(\bcoppett|coppa\b|cup\b)/i.test(q) && /(gramm|gust)/i.test(q)) {
+      return {
+        message: 'Coppette (standard): Piccolo 100g (1 gusto). Medio 140g (1–2). Grande 180g (1–3). Se vuoi, ti porto sulla scheda parametri.',
+        actions: [
+          { label: 'Apri Coppette', href: 'gelato-lab.html?card=coppette&tab=parametri&center=1' },
+        ],
+      };
+    }
+    if (/(gelato\s*box|box\b|vaschett|asporto|take\s*away)/i.test(q)) {
+      return {
+        message: 'Gelato Boxes: formati 500 / 750 / 1000 ml. Autonomia termica circa 1 ora (poi meglio freezer). Apriamo la scheda per formato e servizio.',
+        actions: [
+          { label: 'Apri Gelato Boxes', href: 'gelato-lab.html?card=gelato-boxes&center=1' },
+        ],
+      };
+    }
+    if (/(vetrina|banco|temperatura|\-14|\-15)/i.test(q) && /(gelato|conserv|setup|mattin|chiusur)/i.test(q)) {
+      return {
+        message: 'Vetrina gelato: target -14 / -15°C. Lo standard completo (setup, scampoli e pulizie) è nella scheda dedicata.',
+        actions: [
+          { label: 'Apri Setup vetrina', href: 'gelato-lab.html?card=preparazione-vetrina-mattino&center=1' },
+        ],
+      };
+    }
     if (/(\bchurros\b|frittura|olio|croccant)/i.test(q)) {
       return {
-        message: 'Churros: la risposta giusta sta sempre tra temperatura e timing. Apriamo la scheda e via.',
+        message: 'Churros: olio a 190°C, porzione 8 pezzi, frittura 8–9 minuti. Zucchero+cannella: 600g + 20g. Ti apro la scheda per gli step.',
         actions: [
           { label: 'Apri Churros', href: 'festive.html?tab=churros&center=1' },
         ],
       };
     }
+    if (/(waffl)/i.test(q)) {
+      return {
+        message: 'Waffles: macchina leggermente unta, potenza 3. 177ml impasto, 2:30 min per lato + riposo 45s. Mix: shelf-life 2 giorni. Apriamo la scheda.',
+        actions: [
+          { label: 'Apri Waffles', href: 'sweet-treats.html?card=waffles&center=1' },
+        ],
+      };
+    }
+    if (/((\bcrepe\b|\bcrepes\b|cr[eè]p).*(puliz|pulisci|clean|sanific|igien)|((puliz|pulisci|clean|sanific|igien).*(\bcrepe\b|\bcrepes\b|cr[eè]p)))/i.test(q)) {
+      return {
+        message: 'Pulizia macchina crêpe (fine servizio): spegni e lascia raffreddare in sicurezza; rimuovi residui e asciuga con blue-roll. Per la checklist completa di chiusura (macchine + frigo/label mix), apri la scheda “Chiusura & pulizia rapida”.',
+        actions: [
+          { label: 'Apri Chiusura & pulizia rapida', href: 'sweet-treats.html?card=chiusura-pulizia-rapida&center=1' },
+        ],
+      };
+    }
+    if (/(\bcrepe\b|\bcrepes\b|cr[eè]p)/i.test(q)) {
+      return {
+        message: 'Crêpe (standard con salsa): mix riposo ≥2h in frigo (shelf life 3 giorni). Piastra ben calda (non fumante). Cuoci ~20s per lato, spalma la salsa su metà, chiudi a mezzaluna poi a ventaglio; zucchero a velo + drizzle. Ti apro la scheda con gli step.',
+        actions: [
+          { label: 'Apri Crepe con Salsa', href: 'sweet-treats.html?card=crepe-con-salsa&center=1' },
+        ],
+      };
+    }
     if (/(vin\s*brul|mulled|\bbrul\b)/i.test(q)) {
       return {
-        message: 'Vin brulé: apriamo la sezione “Mulled” per setup, dosi e servizio.',
+        message: 'Vin brulé: setup macchina con ~600ml acqua, poi warm-up 25–30 min (livello 10) e servizio a 6/7. Conservazione: raffredda e frigo; warmed ~3 giorni, box 30 giorni dall’apertura. Apriamo “Mulled”.',
         actions: [
           { label: 'Apri Mulled Wine', href: 'festive.html?tab=mulled&center=1' },
         ],
@@ -1321,7 +2038,7 @@ scrollButtons.forEach((btn) => {
     };
   };
 
-  const answerAssistant = (query) => {
+  const answerAssistant = async (query) => {
     const raw = String(query || '').trim();
     const norm = normalize(raw);
     if (!norm) {
@@ -1329,6 +2046,38 @@ scrollButtons.forEach((btn) => {
         message: 'Scrivimi una domanda (o il nome di un modulo) e ti porto alla scheda giusta.',
         actions: [],
         examples: ['Coni: quale frase è corretta?', 'Come faccio un flat white?', 'Packaging take away: cosa serve?'],
+      };
+    }
+
+    // Slitti bars (tavolette): compute from the actual Slitti page.
+    if (/(slitti)/i.test(norm) && /(barre|barra|tavolett|cioccolat)/i.test(norm) && /(quanti|numero|tipi|varian|offri|offerta|shop|negozi)/i.test(norm)) {
+      const info = await getSlittiTavoletteInfo();
+      const href = info?.cardKey
+        ? `slitti-yoyo.html?card=${encodeURIComponent(String(info.cardKey))}&center=1`
+        : 'slitti-yoyo.html?center=1';
+
+      if (info && Number.isFinite(info.count) && info.count > 0) {
+        const perc = (info.labels || []).filter((l) => /%$/.test(l));
+        const hasCaffe = (info.labels || []).some((l) => /caff/i.test(l));
+        const parts = [];
+        if (perc.length) parts.push(`LatteNero ${perc.join(' / ')}`);
+        if (hasCaffe) parts.push('Caffè Latte');
+        const detail = parts.length ? ` (in scheda: ${parts.join(' + ')})` : '';
+        return {
+          message: `Barre Slitti (tavolette): ${info.count} tipologie${detail}. Per sicurezza, apri la scheda e verifica l'assortimento esposto.`,
+          actions: [
+            { label: 'Apri Tavolette Slitti', href },
+          ],
+          examples: ['Quali sono le varianti LatteNero?', 'Come si conserva il cioccolato?', 'Che cos’è Yo-Yo?'],
+        };
+      }
+
+      return {
+        message: 'Per contare le tavolette Slitti devo leggere la scheda (qui sul momento non riesco a recuperare l’elenco). Ti porto direttamente alla sezione giusta.',
+        actions: [
+          { label: 'Apri Slitti & Yo-Yo', href },
+        ],
+        examples: ['Quali percentuali LatteNero abbiamo?', 'Conservazione cioccolato: quanti °C?'],
       };
     }
 
@@ -1341,7 +2090,18 @@ scrollButtons.forEach((btn) => {
       };
     }
 
-    // 2) Catalog match
+    // 2) Local knowledge snippets (best-effort, avoids hallucinating: always paired with a CTA)
+    const kbHit = await kbRetrieve(raw);
+    if (kbHit) {
+      const cta = pickDefaultCtaHref(raw) || kbHit.defaultHref || '';
+      return {
+        message: `${summarizeSnippet(kbHit.text)}\n\nPer sicurezza, verifica i dettagli nella scheda di riferimento.`,
+        actions: cta ? [{ label: 'Apri scheda consigliata', href: cta }] : [],
+        examples: ['Coni: quanti gusti e grammi?', 'Churros: timing?', 'Waffles: potenza e minuti?'],
+      };
+    }
+
+    // 3) Catalog match
     const match = bestMatch(raw);
     if (match) {
       const href = buildHrefFromResult(match);
@@ -1421,7 +2181,7 @@ scrollButtons.forEach((btn) => {
     return navigateTo(target.categoryHref);
   };
 
-  const handleAssistantSubmit = () => {
+  const handleAssistantSubmit = async () => {
     if (!searchInput) return;
     const raw = String(searchInput.value || '');
     const norm = normalize(raw);
@@ -1435,7 +2195,13 @@ scrollButtons.forEach((btn) => {
       return;
     }
     lastAssistantQuery = norm;
-    setAssistant(answerAssistant(raw));
+
+    // Thinking phase (visible)
+    await setAssistant({ message: 'Ok, ci penso', actions: [], examples: [], render: 'thinking' });
+    // Minimum “thinking” time so it reads as intentional.
+    await sleep(420);
+    const answer = await answerAssistant(raw);
+    await setAssistant({ ...answer, render: 'typewriter' });
   };
 
   const openDrawer = () => {
@@ -1445,7 +2211,6 @@ scrollButtons.forEach((btn) => {
     }
     applyCategoryCompletionStars();
     renderSuggestions(searchInput?.value || '');
-    showAssistantGreeting();
     drawer.setAttribute('aria-hidden', 'false');
     bodyScrollLock.lock();
   };
@@ -1488,16 +2253,30 @@ scrollButtons.forEach((btn) => {
   if (searchInput) {
     searchInput.addEventListener('input', () => {
       renderSuggestions(searchInput.value);
-      if (!normalize(searchInput.value)) {
-        lastAssistantQuery = '';
-        showAssistantGreeting();
+
+      // Row 3: Berny "thinking" while the user types.
+      assistantNodes = assistantNodes || ensureAssistantUI();
+      try {
+        const hasText = !!normalize(searchInput.value);
+        window.BadianiAvatarSprites?.setState?.(assistantNodes?.avatar, hasText ? 'think' : 'idle');
+      } catch {}
+
+      if (avatarInputTimer) {
+        window.clearTimeout(avatarInputTimer);
+        avatarInputTimer = 0;
       }
+      avatarInputTimer = window.setTimeout(() => {
+        assistantNodes = assistantNodes || ensureAssistantUI();
+        const msgEl = assistantNodes?.message;
+        if (msgEl?.classList?.contains('is-thinking') || msgEl?.classList?.contains('is-typing')) return;
+        try { window.BadianiAvatarSprites?.setState?.(assistantNodes?.avatar, 'idle'); } catch {}
+      }, 650);
     });
     searchInput.addEventListener('focus', () => renderSuggestions(searchInput.value));
     searchInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
-        handleAssistantSubmit();
+        handleSearchSubmit();
       }
     });
   }
@@ -1700,6 +2479,135 @@ scrollButtons.forEach((btn) => {
   let lastFiltered = [];
   let assistantNodes = null;
   let lastAssistantQuery = '';
+  let typingToken = 0;
+  let typingTimer = 0;
+  let avatarInputTimer = 0;
+  let kbLoadPromise = null;
+  let kbIndex = null;
+
+  const sleep = (ms) => new Promise((resolve) => window.setTimeout(resolve, Math.max(0, Number(ms) || 0)));
+
+  const stopAssistantTyping = () => {
+    typingToken += 1;
+    if (typingTimer) {
+      window.clearTimeout(typingTimer);
+      typingTimer = 0;
+    }
+  };
+
+  const tokenize = (text) => {
+    const raw = normalize(text)
+      .replace(/[^a-z0-9àèéìòù\s]+/gi, ' ')
+      .split(/\s+/)
+      .filter(Boolean);
+    const stop = new Set([
+      'il', 'lo', 'la', 'i', 'gli', 'le', 'un', 'una', 'uno', 'di', 'del', 'della', 'dei', 'delle', 'da', 'in', 'su',
+      'per', 'con', 'senza', 'e', 'o', 'ma', 'che', 'chi', 'cosa', 'come', 'quanto', 'quale', 'quali', 'quando', 'dove',
+      'mi', 'ti', 'si', 'no', 'ok', 'poi', 'nel', 'nella', 'nei', 'nelle', 'al', 'allo', 'alla', 'agli', 'alle',
+    ]);
+    return raw.filter((t) => t.length >= 3 && !stop.has(t));
+  };
+
+  const KB_SOURCES = [
+    { id: 'gelato', path: 'notes/pdf_text/gelato.txt', defaultHref: 'gelato-lab.html?center=1' },
+    { id: 'sweet', path: 'notes/pdf_text/Sweet Treats.txt', defaultHref: 'sweet-treats.html?center=1' },
+    { id: 'festive', path: 'notes/pdf_text/christmas and churro.txt', defaultHref: 'festive.html?center=1' },
+    { id: 'pastries', path: 'notes/pdf_text/pastries.txt', defaultHref: 'pastries.html?center=1' },
+    { id: 'slitti', path: 'notes/pdf_text/slitti-yoyo.txt', defaultHref: 'slitti-yoyo.html?center=1' },
+    { id: 'freshdrinks', path: 'notes/pdf_text/freshdrink-macha-cocktails.txt', defaultHref: 'caffe.html?center=1' },
+    { id: 'caffe', path: 'notes/pdf_text/caffe.txt', defaultHref: 'caffe.html?center=1' },
+  ];
+
+  const loadKB = async () => {
+    if (kbLoadPromise) return kbLoadPromise;
+    kbLoadPromise = (async () => {
+      const chunks = [];
+      await Promise.all(KB_SOURCES.map(async (src) => {
+        try {
+          const res = await fetch(encodeURI(src.path), { cache: 'no-store' });
+          if (!res || !res.ok) return;
+          const txt = await res.text();
+          if (!txt || txt.length < 50) return;
+          const parts = String(txt)
+            .replace(/\r/g, '')
+            .split(/\n{2,}/g)
+            .map((p) => p.trim())
+            .filter((p) => p.length >= 80);
+          parts.forEach((p) => {
+            chunks.push({
+              sourceId: src.id,
+              defaultHref: src.defaultHref,
+              text: p,
+              tokens: tokenize(p),
+            });
+          });
+        } catch {
+          /* ignore */
+        }
+      }));
+
+      kbIndex = chunks.map((c) => {
+        const freq = Object.create(null);
+        c.tokens.forEach((t) => { freq[t] = (freq[t] || 0) + 1; });
+        return { ...c, freq };
+      });
+      return kbIndex;
+    })();
+    return kbLoadPromise;
+  };
+
+  const pickDefaultCtaHref = (query) => {
+    const q = normalize(query);
+    if (!q) return '';
+    if (/(cono|coni|coppett|vetrina|scampol|treat\s*freezer|gelato\s*box|vaschett|porzion)/i.test(q)) {
+      return 'gelato-lab.html?center=1';
+    }
+    if (/(waffl|crepe|cr[eè]p|pancak|porridge|gelato\s*burger|croissant)/i.test(q)) {
+      return 'sweet-treats.html?center=1';
+    }
+    if (/(churros|vin\s*brul|mulled|panettone|festive)/i.test(q)) {
+      return 'festive.html?center=1';
+    }
+    if (/(cappucc|flat\s*white|americano|latte|schium|espresso|mocha|chai|tea|cioccolat|iced)/i.test(q)) {
+      return 'caffe.html?center=1';
+    }
+    if (/(apertura|chiusura|closing|setup|packaging|sicurezza|allergen|gluten)/i.test(q)) {
+      return 'operations.html?center=1';
+    }
+    return '';
+  };
+
+  const kbRetrieve = async (query) => {
+    const qTokens = tokenize(query);
+    if (!qTokens.length) return null;
+    await loadKB();
+    if (!Array.isArray(kbIndex) || !kbIndex.length) return null;
+
+    let best = null;
+    let bestScore = 0;
+    kbIndex.forEach((chunk) => {
+      let score = 0;
+      qTokens.forEach((t) => {
+        if (chunk.freq[t]) score += 2 + Math.min(3, chunk.freq[t]);
+      });
+      if (/\b(grammi|ml|temperatura|minuti|conservazione|chiusura|apertura)\b/i.test(chunk.text)) score += 1;
+      if (score > bestScore) {
+        bestScore = score;
+        best = chunk;
+      }
+    });
+    if (!best || bestScore < 8) return null;
+    return { ...best, score: bestScore };
+  };
+
+  const summarizeSnippet = (text, maxLen = 220) => {
+    const t = String(text || '').replace(/\s+/g, ' ').trim();
+    if (!t) return '';
+    if (t.length <= maxLen) return t;
+    const cut = t.slice(0, maxLen);
+    const lastStop = Math.max(cut.lastIndexOf('. '), cut.lastIndexOf('; '), cut.lastIndexOf(': '));
+    return (lastStop > 80 ? cut.slice(0, lastStop + 1) : cut).trim() + '…';
+  };
 
   const ensureAssistantUI = () => {
     const existing = searchRoot.querySelector('[data-menu-assistant]');
@@ -1725,8 +2633,22 @@ scrollButtons.forEach((btn) => {
     avatar.className = 'menu-search__assistant-avatar';
     avatar.setAttribute('data-menu-assistant-avatar', '');
     avatar.setAttribute('aria-hidden', 'true');
-    avatar.innerHTML = `
-      <svg class="gelatiere-svg" viewBox="0 0 96 120" width="56" height="70" role="img" aria-label="Assistente gelatiere" focusable="false">
+    // Use sprite avatar if available (same asset as the Hub profile).
+    // Falls back to SVG on any unexpected errors.
+    try {
+      const spr = document.createElement('div');
+      spr.className = 'avatar-sprite avatar-sprite--assistant';
+      spr.setAttribute('data-avatar-sprite', '');
+      spr.setAttribute('data-avatar-src', 'assets/avatars/berny-sprite.png?v=20251228');
+      spr.setAttribute('data-avatar-cols', '6');
+      spr.setAttribute('data-avatar-rows', '4');
+      spr.setAttribute('data-avatar-fps', '6');
+      spr.setAttribute('data-avatar-total', '24');
+      avatar.replaceChildren(spr);
+      window.BadianiAvatarSprites?.init?.();
+    } catch {
+      avatar.innerHTML = `
+      <svg class="gelatiere-svg" viewBox="0 0 96 120" width="56" height="70" role="img" aria-label="Assistente BERNY" focusable="false">
         <defs>
           <linearGradient id="skinGrad" x1="0" x2="0" y1="0" y2="1">
             <stop offset="0" stop-color="#FFE7D0"/>
@@ -1828,11 +2750,12 @@ scrollButtons.forEach((btn) => {
         </g>
       </svg>
     `;
+    }
 
     const header = document.createElement('div');
     header.className = 'menu-search__assistant-header';
     header.innerHTML = `
-      <p class="menu-search__assistant-title">Assistente</p>
+      <p class="menu-search__assistant-title">BERNY</p>
       <button class="menu-search__assistant-clear" type="button" data-menu-assistant-clear aria-label="Pulisci">×</button>
     `;
 
@@ -1881,11 +2804,87 @@ scrollButtons.forEach((btn) => {
     window.location.href = href;
   };
 
-  const setAssistant = ({ message = '', actions = [], examples = [] } = {}) => {
+  const renderAssistantMessage = async (message, renderMode = 'instant') => {
+    assistantNodes = assistantNodes || ensureAssistantUI();
+    if (!assistantNodes?.root || !assistantNodes?.message) return;
+
+    const msgEl = assistantNodes.message;
+    stopAssistantTyping();
+    const setAvatarState = (state) => {
+      try { window.BadianiAvatarSprites?.setState?.(assistantNodes?.avatar, state); } catch {}
+    };
+
+    const clearMsg = () => {
+      msgEl.classList.remove('is-thinking');
+      msgEl.classList.remove('is-typing');
+      msgEl.innerHTML = '';
+    };
+
+    if (renderMode === 'thinking') {
+      clearMsg();
+      msgEl.classList.add('is-thinking');
+      setAvatarState('think');
+      const textSpan = document.createElement('span');
+      textSpan.textContent = String(message || 'Ok, ci penso');
+      const dots = document.createElement('span');
+      dots.className = 'assistant-dots';
+      dots.setAttribute('aria-hidden', 'true');
+      dots.textContent = '...';
+      msgEl.append(textSpan, ' ', dots);
+      return;
+    }
+
+    if (renderMode !== 'typewriter') {
+      clearMsg();
+      msgEl.textContent = String(message || '');
+      setAvatarState('idle');
+      return;
+    }
+
+    clearMsg();
+    msgEl.classList.add('is-typing');
+    setAvatarState('type');
+    const originalLive = assistantNodes.root.getAttribute('aria-live');
+    try { assistantNodes.root.setAttribute('aria-live', 'off'); } catch {}
+
+    const token = ++typingToken;
+    const fullText = String(message || '');
+    const typed = document.createElement('span');
+    typed.className = 'assistant-typed';
+    const caret = document.createElement('span');
+    caret.className = 'assistant-caret';
+    caret.setAttribute('aria-hidden', 'true');
+    caret.textContent = '▍';
+    msgEl.append(typed, caret);
+
+    await new Promise((resolve) => {
+      let i = 0;
+      const step = () => {
+        if (token !== typingToken) return resolve();
+        typed.textContent = fullText.slice(0, i);
+        i += 1;
+        if (i <= fullText.length) {
+          const jitter = 10 + Math.floor(Math.random() * 18);
+          typingTimer = window.setTimeout(step, jitter);
+        } else {
+          resolve();
+        }
+      };
+      step();
+    });
+
+    if (token !== typingToken) return;
+    msgEl.classList.remove('is-typing');
+    msgEl.textContent = fullText;
+    setAvatarState('idle');
+    try { assistantNodes.root.setAttribute('aria-live', originalLive || 'polite'); } catch {}
+  };
+
+  const setAssistant = async ({ message = '', actions = [], examples = [], render = 'instant' } = {}) => {
     assistantNodes = assistantNodes || ensureAssistantUI();
     if (!assistantNodes?.root) return;
 
-    assistantNodes.message.textContent = message;
+    await renderAssistantMessage(message, render);
 
     assistantNodes.actions.innerHTML = '';
     (Array.isArray(actions) ? actions : []).slice(0, 3).forEach((a) => {
@@ -1929,7 +2928,7 @@ scrollButtons.forEach((btn) => {
 
   const showAssistantGreeting = () => {
     setAssistant({
-      message: 'Dimmi cosa ti serve: io sono il tuo gelatiere di fiducia. (Prometto di non giudicare gli errori… troppo.)',
+      message: 'Dimmi cosa ti serve: io sono BERNY, il tuo assistente di fiducia. (Prometto di non giudicare gli errori… troppo.)',
       actions: [
         { label: 'Apri Story Orbit', href: 'story-orbit.html', kind: 'secondary' },
       ],
@@ -1998,25 +2997,88 @@ scrollButtons.forEach((btn) => {
     const q = normalize(query);
     if (!q) return null;
 
+    if (/(regole|regola|regolamento|mini\s*game|gioco|come\s*funziona|stellin|stelle|cristall|token|mini\s*quiz|test\s*me|cooldown|countdown|gelati\s*vinti|bonus)/i.test(q)) {
+      return {
+        message:
+          'Regole del gioco (in breve):\n'
+          + '• 1 tab aperto = 1 cristallo.\n'
+          + '• 5 cristalli = 1 stellina.\n'
+          + '• Ogni 3 stelline parte un mini quiz (1 domanda).\n'
+          + '• Mini quiz giusto = sblocchi “Test me”. “Test me” perfetto = +1 gelato e cooldown 24h (riducibile a 12/30 stelline).\n'
+          + '• Mini quiz sbagliato = -3 stelline. Reset: domenica 00:00.',
+        actions: [
+          { label: 'Apri Regolamento', href: 'index.html?open=regolamento&center=1' },
+        ],
+      };
+    }
+
     if (/(\bconi\b|\bcono\b|\bcone\b|choco\s*cone|gluten\s*free|\bgf\b)/i.test(q)) {
       return {
-        message: 'Coni: ti porto dritto alla scheda con parametri e varianti (così niente “a sensazione”).',
+        message: 'Coni (standard): Piccolo 100g (1 gusto). Medio 140g (1–2 gusti). Grande 180g (1–3 gusti). Choco cone / GF: 140g. Per i dettagli, apri la scheda.',
         actions: [
           { label: 'Apri Coni classici', href: 'gelato-lab.html?card=coni-classici&tab=parametri&center=1' },
         ],
       };
     }
+    if (/(\bcoppett|coppa\b|cup\b)/i.test(q) && /(gramm|gust)/i.test(q)) {
+      return {
+        message: 'Coppette (standard): Piccolo 100g (1 gusto). Medio 140g (1–2). Grande 180g (1–3). Se vuoi, ti porto sulla scheda parametri.',
+        actions: [
+          { label: 'Apri Coppette', href: 'gelato-lab.html?card=coppette&tab=parametri&center=1' },
+        ],
+      };
+    }
+    if (/(gelato\s*box|box\b|vaschett|asporto|take\s*away)/i.test(q)) {
+      return {
+        message: 'Gelato Boxes: formati 500 / 750 / 1000 ml. Autonomia termica circa 1 ora (poi meglio freezer). Apriamo la scheda per formato e servizio.',
+        actions: [
+          { label: 'Apri Gelato Boxes', href: 'gelato-lab.html?card=gelato-boxes&center=1' },
+        ],
+      };
+    }
+    if (/(vetrina|banco|temperatura|\-14|\-15)/i.test(q) && /(gelato|conserv|setup|mattin|chiusur)/i.test(q)) {
+      return {
+        message: 'Vetrina gelato: target -14 / -15°C. Lo standard completo (setup, scampoli e pulizie) è nella scheda dedicata.',
+        actions: [
+          { label: 'Apri Setup vetrina', href: 'gelato-lab.html?card=preparazione-vetrina-mattino&center=1' },
+        ],
+      };
+    }
     if (/(\bchurros\b|frittura|olio|croccant)/i.test(q)) {
       return {
-        message: 'Churros: la risposta giusta sta sempre tra temperatura e timing. Apriamo la scheda e via.',
+        message: 'Churros: olio a 190°C, porzione 8 pezzi, frittura 8–9 minuti. Zucchero+cannella: 600g + 20g. Ti apro la scheda per gli step.',
         actions: [
           { label: 'Apri Churros', href: 'festive.html?tab=churros&center=1' },
         ],
       };
     }
+    if (/(waffl)/i.test(q)) {
+      return {
+        message: 'Waffles: macchina leggermente unta, potenza 3. 177ml impasto, 2:30 min per lato + riposo 45s. Mix: shelf-life 2 giorni. Apriamo la scheda.',
+        actions: [
+          { label: 'Apri Waffles', href: 'sweet-treats.html?card=waffles&center=1' },
+        ],
+      };
+    }
+    if (/((\bcrepe\b|\bcrepes\b|cr[eè]p).*(puliz|pulisci|clean|sanific|igien)|((puliz|pulisci|clean|sanific|igien).*(\bcrepe\b|\bcrepes\b|cr[eè]p)))/i.test(q)) {
+      return {
+        message: 'Pulizia macchina crêpe (fine servizio): spegni e lascia raffreddare in sicurezza; rimuovi residui e asciuga con blue-roll. Per la checklist completa di chiusura (macchine + frigo/label mix), apri la scheda “Chiusura & pulizia rapida”.',
+        actions: [
+          { label: 'Apri Chiusura & pulizia rapida', href: 'sweet-treats.html?card=chiusura-pulizia-rapida&center=1' },
+        ],
+      };
+    }
+    if (/(\bcrepe\b|\bcrepes\b|cr[eè]p)/i.test(q)) {
+      return {
+        message: 'Crêpe (standard con salsa): mix riposo ≥2h in frigo (shelf life 3 giorni). Piastra ben calda (non fumante). Cuoci ~20s per lato, spalma la salsa su metà, chiudi a mezzaluna poi a ventaglio; zucchero a velo + drizzle. Ti apro la scheda con gli step.',
+        actions: [
+          { label: 'Apri Crepe con Salsa', href: 'sweet-treats.html?card=crepe-con-salsa&center=1' },
+        ],
+      };
+    }
     if (/(vin\s*brul|mulled|\bbrul\b)/i.test(q)) {
       return {
-        message: 'Vin brulé: apriamo la sezione “Mulled” per setup, dosi e servizio.',
+        message: 'Vin brulé: setup macchina con ~600ml acqua, poi warm-up 25–30 min (livello 10) e servizio a 6/7. Conservazione: raffredda e frigo; warmed ~3 giorni, box 30 giorni dall’apertura. Apriamo “Mulled”.',
         actions: [
           { label: 'Apri Mulled Wine', href: 'festive.html?tab=mulled&center=1' },
         ],
@@ -2064,7 +3126,7 @@ scrollButtons.forEach((btn) => {
     };
   };
 
-  const answerAssistant = (query) => {
+  const answerAssistant = async (query) => {
     const raw = String(query || '').trim();
     const norm = normalize(raw);
     if (!norm) {
@@ -2075,11 +3137,86 @@ scrollButtons.forEach((btn) => {
       };
     }
 
+    // Slitti bars (tavolette): compute from the actual Slitti page.
+    if (/(slitti)/i.test(norm) && /(barre|barra|tavolett|cioccolat)/i.test(norm) && /(quanti|numero|tipi|varian|offri|offerta|shop|negozi)/i.test(norm)) {
+      const info = await (async () => {
+        try {
+          const res = await fetch('slitti-yoyo.html', { cache: 'no-store' });
+          if (!res || !res.ok) return null;
+          const html = await res.text();
+          if (!html) return null;
+          const doc = new DOMParser().parseFromString(html, 'text/html');
+          const cards = Array.from(doc.querySelectorAll('.guide-card'));
+          const card = cards.find((c) => {
+            const tagText = (c.querySelector('.tag-row')?.textContent || '').toLowerCase();
+            const title = (c.querySelector('h3')?.textContent || '').toLowerCase();
+            return tagText.includes('tavolette') || title.includes('tavolette');
+          });
+          if (!card) return null;
+          const text = (card.textContent || '').toLowerCase();
+          const percSet = new Set();
+          for (const m of text.matchAll(/(\d{2,3})\s*%/g)) {
+            const n = Number(m[1]);
+            if (Number.isFinite(n) && n > 0 && n <= 100) percSet.add(n);
+          }
+          const perc = Array.from(percSet).sort((a, b) => a - b);
+          const labels = perc.map((p) => `${p}%`);
+          const hasCaffeLatte = /caff[eè]\s*latte/.test(text);
+          if (hasCaffeLatte) labels.push('Caffè Latte');
+          return {
+            count: labels.length,
+            labels,
+            cardKey: 'tavolette-lattenero-gran-cacao',
+          };
+        } catch {
+          return null;
+        }
+      })();
+
+      const href = info?.cardKey
+        ? `slitti-yoyo.html?card=${encodeURIComponent(String(info.cardKey))}&center=1`
+        : 'slitti-yoyo.html?center=1';
+
+      if (info && Number.isFinite(info.count) && info.count > 0) {
+        const perc = (info.labels || []).filter((l) => /%$/.test(l));
+        const hasCaffe = (info.labels || []).some((l) => /caff/i.test(l));
+        const parts = [];
+        if (perc.length) parts.push(`LatteNero ${perc.join(' / ')}`);
+        if (hasCaffe) parts.push('Caffè Latte');
+        const detail = parts.length ? ` (in scheda: ${parts.join(' + ')})` : '';
+        return {
+          message: `Barre Slitti (tavolette): ${info.count} tipologie${detail}. Per sicurezza, apri la scheda e verifica l'assortimento esposto.`,
+          actions: [
+            { label: 'Apri Tavolette Slitti', href },
+          ],
+          examples: ['Quali sono le varianti LatteNero?', 'Come si conserva il cioccolato?', 'Che cos’è Yo-Yo?'],
+        };
+      }
+
+      return {
+        message: 'Per contare le tavolette Slitti devo leggere la scheda (qui sul momento non riesco a recuperare l’elenco). Ti porto direttamente alla sezione giusta.',
+        actions: [
+          { label: 'Apri Slitti & Yo-Yo', href },
+        ],
+        examples: ['Quali percentuali LatteNero abbiamo?', 'Conservazione cioccolato: quanti °C?'],
+      };
+    }
+
     const ruled = assistantRuleAnswer(raw);
     if (ruled) {
       return {
         ...ruled,
         examples: ruled.examples || ['Coni: choco cone?', 'Cappuccino: schiuma?', 'Churros: croccante?'],
+      };
+    }
+
+    const kbHit = await kbRetrieve(raw);
+    if (kbHit) {
+      const cta = pickDefaultCtaHref(raw) || kbHit.defaultHref || '';
+      return {
+        message: `${summarizeSnippet(kbHit.text)} Per sicurezza, verifica i dettagli nella scheda di riferimento.`,
+        actions: cta ? [{ label: 'Apri scheda consigliata', href: cta }] : [],
+        examples: ['Coni: quanti gusti e grammi?', 'Churros: timing?', 'Waffles: potenza e minuti?'],
       };
     }
 
@@ -2124,7 +3261,7 @@ scrollButtons.forEach((btn) => {
     lastFiltered = [...categoryMatches, ...productMatches].slice(0, 10);
   };
 
-  const handleAssistantSubmit = () => {
+  const handleAssistantSubmit = async () => {
     const raw = String(searchInput.value || '');
     const norm = normalize(raw);
     if (!norm) {
@@ -2134,11 +3271,33 @@ scrollButtons.forEach((btn) => {
     }
     if (norm === lastAssistantQuery) return;
     lastAssistantQuery = norm;
-    setAssistant(answerAssistant(raw));
+    await setAssistant({ message: 'Ok, ci penso', actions: [], examples: [], render: 'thinking' });
+    await sleep(420);
+    const answer = await answerAssistant(raw);
+    await setAssistant({ ...answer, render: 'typewriter' });
   };
 
   searchInput.addEventListener('input', () => {
     renderSuggestions(searchInput.value);
+
+    // Row 3: Berny "thinking" while the user types.
+    assistantNodes = assistantNodes || ensureAssistantUI();
+    try {
+      const hasText = !!normalize(searchInput.value);
+      window.BadianiAvatarSprites?.setState?.(assistantNodes?.avatar, hasText ? 'think' : 'idle');
+    } catch {}
+
+    if (avatarInputTimer) {
+      window.clearTimeout(avatarInputTimer);
+      avatarInputTimer = 0;
+    }
+    avatarInputTimer = window.setTimeout(() => {
+      assistantNodes = assistantNodes || ensureAssistantUI();
+      const msgEl = assistantNodes?.message;
+      if (msgEl?.classList?.contains('is-thinking') || msgEl?.classList?.contains('is-typing')) return;
+      try { window.BadianiAvatarSprites?.setState?.(assistantNodes?.avatar, 'idle'); } catch {}
+    }, 650);
+
     if (!normalize(searchInput.value)) {
       lastAssistantQuery = '';
       showAssistantGreeting();
@@ -3477,6 +4636,7 @@ const gamification = (() => {
     initStoryOrbitRewards();
     buildHub();
     buildOverlay();
+    maybeAutoOpenGameInfoFromUrl();
     updateUI();
     formatStatListLabels();
     initProfileControls();
@@ -3485,6 +4645,29 @@ const gamification = (() => {
     if (state.gelati >= GELATO_GOAL) {
       showVictoryMessage();
     }
+  }
+
+  function maybeAutoOpenGameInfoFromUrl() {
+    try {
+      const params = new URLSearchParams(window.location.search || '');
+      const open = String(params.get('open') || '').trim().toLowerCase();
+      const wantsInfo = open === 'regolamento'
+        || open === 'rules'
+        || open === 'info'
+        || open === 'game'
+        || open === 'gameinfo';
+      if (!wantsInfo) return;
+
+      // Only after overlay is built.
+      showGameInfo();
+
+      // Clean URL (avoid re-opening on refresh / back-forward cache).
+      try {
+        params.delete('open');
+        const next = `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ''}${window.location.hash || ''}`;
+        window.history.replaceState({}, '', next);
+      } catch {}
+    } catch {}
   }
 
   function ensureWrongLogHandler() {
@@ -8547,18 +9730,39 @@ toggles.forEach((button) => {
       const grid = document.createElement('div');
       grid.className = 'modal-specs__grid';
 
-      const safeItems = (items || []).filter((i) => i?.label && i?.detail).slice(0, 8);
+      const isPlaceholderDetail = (value) => {
+        const v = tidy(value).toLowerCase();
+        if (!v) return true;
+        if (v === '-' || v === '—' || v === '–') return true;
+        if (v === 'n/a' || v === 'na') return true;
+        if (v.includes('da definire')) return true;
+        return false;
+      };
+
+      const safeItems = (items || [])
+        .filter((i) => i?.label && i?.detail && !isPlaceholderDetail(i?.detail))
+        .slice(0, 8);
+
       safeItems.forEach((item) => {
+        const parts = splitDetailPoints(item.detail);
+        const hasBullets = parts.length > 1;
+        const hasSingle = parts.length === 1;
+        const valueText = hasSingle ? parts[0] : '';
+
+        // If everything is junk/noise, skip the entire row (no empty tiles).
+        if (!hasBullets && !tidy(valueText)) return;
+
         const row = document.createElement('div');
         row.className = 'modal-specs__item';
+
         const k = document.createElement('span');
         k.className = 'modal-specs__key';
         k.textContent = displayLabel(item.label, item.detail);
+
         const v = document.createElement('div');
         v.className = 'modal-specs__value';
 
-        const parts = splitDetailPoints(item.detail);
-        if (parts.length > 1) {
+        if (hasBullets) {
           const ul = document.createElement('ul');
           ul.className = 'modal-specs__bullets';
           parts.slice(0, 6).forEach((p) => {
@@ -8567,17 +9771,17 @@ toggles.forEach((button) => {
             ul.appendChild(li);
           });
           v.appendChild(ul);
-        } else if (parts.length === 1) {
-          // If we ended up with a single cleaned point, prefer it over the raw detail.
-          v.textContent = parts[0];
         } else {
-          // If everything is junk/noise, don't render misleading content.
-          v.textContent = '';
+          v.textContent = valueText;
         }
+
         row.appendChild(k);
         row.appendChild(v);
         grid.appendChild(row);
       });
+
+      // If nothing meaningful remains, do not render the specs panel.
+      if (!grid.children.length) return null;
 
       panel.appendChild(grid);
       return panel;
@@ -8958,6 +10162,31 @@ toggles.forEach((button) => {
       };
 
       const createAccordionItem = (title, contentEl, expandByDefault = false) => {
+        if (!contentEl) return;
+
+        const hasMeaningfulTabContent = (el) => {
+          try {
+            // Specs-only tabs are considered "meaningful" only if they have enough rows.
+            const specRows = el.querySelectorAll ? el.querySelectorAll('.modal-specs__item') : [];
+            if (specRows && specRows.length >= 2) return true;
+
+            // Bullet lists: require at least 2 bullets to justify a standalone tab.
+            const bullets = el.querySelectorAll ? el.querySelectorAll('li') : [];
+            if (bullets && bullets.length >= 2) return true;
+
+            const text = tidy(el.textContent).replace(/\s+/g, ' ').trim();
+            // Avoid tabs with just a couple of words.
+            if (text.length >= 60) return true;
+            return false;
+          } catch (e) {
+            const text = tidy(el?.textContent).replace(/\s+/g, ' ').trim();
+            return text.length >= 60;
+          }
+        };
+
+        // User requirement: never show tabs with no/too little information.
+        if (!hasMeaningfulTabContent(contentEl)) return;
+
         // Avoid creating tabs that repeat the same information.
         // (This can happen if a card has duplicated `.steps/.tips` content or if multiple
         // sources resolve to the same text once normalized.)
@@ -9245,7 +10474,9 @@ toggles.forEach((button) => {
         const ordered = ['Parametri', 'Servizio', 'Conservazione', 'Pulizia', 'Note'];
         return ordered
           .map((title) => ({ title, items: groups.get(title) || [] }))
-          .filter((entry) => entry.items && entry.items.length);
+          // User requirement: don't create tabs with too little info.
+          // Only keep groups with at least 2 meaningful items.
+          .filter((entry) => entry.items && entry.items.length >= 2);
       };
 
       // Panoramica (intro) in tab for consistent learning flow.
@@ -9287,12 +10518,14 @@ toggles.forEach((button) => {
         paramWrap.appendChild(preparationMetaSummary);
         if (parametriGroup && parametriGroup.items && parametriGroup.items.length) {
           try {
-            paramWrap.appendChild(createSpecsPanel(parametriGroup.items, {}));
+            const panel = createSpecsPanel(parametriGroup.items, {});
+            if (panel) paramWrap.appendChild(panel);
           } catch (e) {}
         }
         createAccordionItem('Parametri', paramWrap, false);
       } else if (parametriGroup && parametriGroup.items && parametriGroup.items.length) {
-        createAccordionItem('Parametri', createSpecsPanel(parametriGroup.items, {}), false);
+        const panel = createSpecsPanel(parametriGroup.items, {});
+        if (panel) createAccordionItem('Parametri', panel, false);
       }
 
       // Remaining spec groups become their own tabs (excluding Parametri which is handled above).
@@ -9300,7 +10533,8 @@ toggles.forEach((button) => {
         .filter((g) => g.title !== 'Parametri')
         .forEach((g) => {
           try {
-            createAccordionItem(g.title, createSpecsPanel(g.items, {}), false);
+            const panel = createSpecsPanel(g.items, {});
+            if (panel) createAccordionItem(g.title, panel, false);
           } catch (e) {}
         });
 
