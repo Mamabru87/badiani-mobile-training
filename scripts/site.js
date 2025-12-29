@@ -199,7 +199,6 @@ document.documentElement.classList.add('has-js');
 
     const applyFrame = () => {
       const abs = rangeStart + (frame % rangeLen);
-
       // Canvas mode (preferred): pixel-perfect crop => no wrap-around / edge bleed.
       if (renderMode !== 'background') {
         ensureCanvas();
@@ -1950,105 +1949,99 @@ scrollButtons.forEach((btn) => {
 
     if (/(regole|regola|regolamento|mini\s*game|gioco|come\s*funziona|stellin|stelle|cristall|token|mini\s*quiz|test\s*me|cooldown|countdown|gelati\s*vinti|bonus)/i.test(q)) {
       return {
-        message:
-          'Regole del gioco (in breve):\n'
-          + '• 1 tab aperto = 1 cristallo.\n'
-          + '• 5 cristalli = 1 stellina.\n'
-          + '• Ogni 3 stelline parte un mini quiz (1 domanda).\n'
-          + '• Mini quiz giusto = sblocchi “Test me”. “Test me” perfetto = +1 gelato e cooldown 24h (riducibile a 12/30 stelline).\n'
-          + '• Mini quiz sbagliato = -3 stelline. Reset: domenica 00:00.',
+        message: tr('assistant.rules.message', null, 'Regole del gioco (in breve):\n• 1 tab aperto = 1 cristallo.\n• 5 cristalli = 1 stellina.\n• Ogni 3 stelline parte un mini quiz (1 domanda).\n• Mini quiz giusto = sblocchi “Test me”. “Test me” perfetto = +1 gelato e cooldown 24h (riducibile a 12/30 stelline).\n• Mini quiz sbagliato = -3 stelline. Reset: domenica 00:00.'),
         actions: [
-          { label: 'Apri Regolamento', href: 'index.html?open=regolamento&center=1' },
+          { label: tr('assistant.rules.cta', null, 'Apri Regolamento'), href: 'index.html?open=regolamento&center=1' },
         ],
       };
     }
 
     // High-confidence answers + deep links (keep them short, always include the CTA)
-    if (/(\bconi\b|\bcono\b|\bcone\b|choco\s*cone|gluten\s*free|\bgf\b)/i.test(q)) {
+    if (/(\bconi\b|\bcono\b|\bcone[s]?\b|choco\s*cone|gluten\s*free|\bgf\b)/i.test(q)) {
       return {
-        message: 'Coni (standard): Piccolo 100g (1 gusto). Medio 140g (1–2 gusti). Grande 180g (1–3 gusti). Choco cone / GF: 140g. Per i dettagli, apri la scheda.',
+        message: tr('assistant.cones.message', null, 'Coni (standard): Piccolo 100g (1 gusto). Medio 140g (1–2 gusti). Grande 180g (1–3 gusti). Choco cone / GF: 140g. Per i dettagli, apri la scheda.'),
         actions: [
-          { label: 'Apri Coni classici', href: 'gelato-lab.html?card=coni-classici&tab=parametri&center=1' },
+          { label: tr('assistant.cones.cta', null, 'Apri Coni classici'), href: 'gelato-lab.html?card=coni-classici&tab=parametri&center=1' },
         ],
       };
     }
     if (/(\bcoppett|coppa\b|cup\b)/i.test(q) && /(gramm|gust)/i.test(q)) {
       return {
-        message: 'Coppette (standard): Piccolo 100g (1 gusto). Medio 140g (1–2). Grande 180g (1–3). Se vuoi, ti porto sulla scheda parametri.',
+        message: tr('assistant.cups.message', null, 'Coppette (standard): Piccolo 100g (1 gusto). Medio 140g (1–2). Grande 180g (1–3). Se vuoi, ti porto sulla scheda parametri.'),
         actions: [
-          { label: 'Apri Coppette', href: 'gelato-lab.html?card=coppette&tab=parametri&center=1' },
+          { label: tr('assistant.cups.cta', null, 'Apri Coppette'), href: 'gelato-lab.html?card=coppette&tab=parametri&center=1' },
         ],
       };
     }
     if (/(gelato\s*box|box\b|vaschett|asporto|take\s*away)/i.test(q)) {
       return {
-        message: 'Gelato Boxes: formati 500 / 750 / 1000 ml. Autonomia termica circa 1 ora (poi meglio freezer). Apriamo la scheda per formato e servizio.',
+        message: tr('assistant.gelatoBox.message', null, 'Gelato Boxes: formati 500 / 750 / 1000 ml. Autonomia termica circa 1 ora (poi meglio freezer). Apriamo la scheda per formato e servizio.'),
         actions: [
-          { label: 'Apri Gelato Boxes', href: 'gelato-lab.html?card=gelato-boxes&center=1' },
+          { label: tr('assistant.gelatoBox.cta', null, 'Apri Gelato Boxes'), href: 'gelato-lab.html?card=gelato-boxes&center=1' },
         ],
       };
     }
     if (/(vetrina|banco|temperatura|\-14|\-15)/i.test(q) && /(gelato|conserv|setup|mattin|chiusur)/i.test(q)) {
       return {
-        message: 'Vetrina gelato: target -14 / -15°C. Lo standard completo (setup, scampoli e pulizie) è nella scheda dedicata.',
+        message: tr('assistant.display.message', null, 'Vetrina gelato: target -14 / -15°C. Lo standard completo (setup, scampoli e pulizie) è nella scheda dedicata.'),
         actions: [
-          { label: 'Apri Setup vetrina', href: 'gelato-lab.html?card=preparazione-vetrina-mattino&center=1' },
+          { label: tr('assistant.display.cta', null, 'Apri Setup vetrina'), href: 'gelato-lab.html?card=preparazione-vetrina-mattino&center=1' },
         ],
       };
     }
     if (/(\bchurros\b|frittura|olio|croccant)/i.test(q)) {
       return {
-        message: 'Churros: olio a 190°C, porzione 8 pezzi, frittura 8–9 minuti. Zucchero+cannella: 600g + 20g. Ti apro la scheda per gli step.',
+        message: tr('assistant.churros.message', null, 'Churros: olio a 190°C, porzione 8 pezzi, frittura 8–9 minuti. Zucchero+cannella: 600g + 20g. Ti apro la scheda per gli step.'),
         actions: [
-          { label: 'Apri Churros', href: 'festive.html?tab=churros&center=1' },
+          { label: tr('assistant.churros.cta', null, 'Apri Churros'), href: 'festive.html?tab=churros&center=1' },
         ],
       };
     }
     if (/(waffl)/i.test(q)) {
       return {
-        message: 'Waffles: macchina leggermente unta, potenza 3. 177ml impasto, 2:30 min per lato + riposo 45s. Mix: shelf-life 2 giorni. Apriamo la scheda.',
+        message: tr('assistant.waffles.message', null, 'Waffles: macchina leggermente unta, potenza 3. 177ml impasto, 2:30 min per lato + riposo 45s. Mix: shelf-life 2 giorni. Apriamo la scheda.'),
         actions: [
-          { label: 'Apri Waffles', href: 'sweet-treats.html?card=waffles&center=1' },
+          { label: tr('assistant.waffles.cta', null, 'Apri Waffles'), href: 'sweet-treats.html?card=waffles&center=1' },
         ],
       };
     }
     if (/((\bcrepe\b|\bcrepes\b|cr[eè]p).*(puliz|pulisci|clean|sanific|igien)|((puliz|pulisci|clean|sanific|igien).*(\bcrepe\b|\bcrepes\b|cr[eè]p)))/i.test(q)) {
       return {
-        message: 'Pulizia macchina crêpe (fine servizio): spegni e lascia raffreddare in sicurezza; rimuovi residui e asciuga con blue-roll. Per la checklist completa di chiusura (macchine + frigo/label mix), apri la scheda “Chiusura & pulizia rapida”.',
+        message: tr('assistant.crepeClean.message', null, 'Pulizia macchina crêpe (fine servizio): spegni e lascia raffreddare in sicurezza; rimuovi residui e asciuga con blue-roll. Per la checklist completa di chiusura (macchine + frigo/label mix), apri la scheda “Chiusura & pulizia rapida”.'),
         actions: [
-          { label: 'Apri Chiusura & pulizia rapida', href: 'sweet-treats.html?card=chiusura-pulizia-rapida&center=1' },
+          { label: tr('assistant.crepeClean.cta', null, 'Apri Chiusura & pulizia rapida'), href: 'sweet-treats.html?card=chiusura-pulizia-rapida&center=1' },
         ],
       };
     }
     if (/(\bcrepe\b|\bcrepes\b|cr[eè]p)/i.test(q)) {
       return {
-        message: 'Crêpe (standard con salsa): mix riposo ≥2h in frigo (shelf life 3 giorni). Piastra ben calda (non fumante). Cuoci ~20s per lato, spalma la salsa su metà, chiudi a mezzaluna poi a ventaglio; zucchero a velo + drizzle. Ti apro la scheda con gli step.',
+        message: tr('assistant.crepeStd.message', null, 'Crêpe (standard con salsa): mix riposo ≥2h in frigo (shelf life 3 giorni). Piastra ben calda (non fumante). Cuoci ~20s per lato, spalma la salsa su metà, chiudi a mezzaluna poi a ventaglio; zucchero a velo + drizzle. Ti apro la scheda con gli step.'),
         actions: [
-          { label: 'Apri Crepe con Salsa', href: 'sweet-treats.html?card=crepe-con-salsa&center=1' },
+          { label: tr('assistant.crepeStd.cta', null, 'Apri Crepe con Salsa'), href: 'sweet-treats.html?card=crepe-con-salsa&center=1' },
         ],
       };
     }
     if (/(vin\s*brul|mulled|\bbrul\b)/i.test(q)) {
       return {
-        message: 'Vin brulé: setup macchina con ~600ml acqua, poi warm-up 25–30 min (livello 10) e servizio a 6/7. Conservazione: raffredda e frigo; warmed ~3 giorni, box 30 giorni dall’apertura. Apriamo “Mulled”.',
+        message: tr('assistant.mulled.message', null, 'Vin brulé: setup macchina con ~600ml acqua, poi warm-up 25–30 min (livello 10) e servizio a 6/7. Conservazione: raffredda e frigo; warmed ~3 giorni, box 30 giorni dall’apertura. Apriamo “Mulled”.'),
         actions: [
-          { label: 'Apri Mulled Wine', href: 'festive.html?tab=mulled&center=1' },
+          { label: tr('assistant.mulled.cta', null, 'Apri Mulled Wine'), href: 'festive.html?tab=mulled&center=1' },
         ],
       };
     }
     if (/(cappuccino|flat\s*white|latte|schiuma|foam|montare\s+latte)/i.test(q)) {
       return {
-        message: 'Latte & schiuma: andiamo nella sezione Milk. Lì trovi tecnica e standard (senza improvvisazioni artistiche… a meno che non siano volute).',
+        message: tr('assistant.milk.message', null, 'Latte & schiuma: andiamo nella sezione Milk. Lì trovi tecnica e standard (senza improvvisazioni artistiche… a meno che non siano volute).'),
         actions: [
-          { label: 'Apri Milk (Bar & Drinks)', href: 'caffe.html?tab=milk&center=1' },
+          { label: tr('assistant.milk.cta', null, 'Apri Milk (Bar & Drinks)'), href: 'caffe.html?tab=milk&center=1' },
         ],
       };
     }
     if (/(sicurezza|safety|allerg|gluten)/i.test(q)) {
       return {
-        message: 'Sicurezza e allergeni: apriamo Operations & Setup per procedure e check (meglio 30 secondi qui che 30 minuti dopo).',
+        message: tr('assistant.safety.message', null, 'Sicurezza e allergeni: apriamo Operations & Setup per procedure e check (meglio 30 secondi qui che 30 minuti dopo).'),
         actions: [
-          { label: 'Apri Operations & Setup', href: 'operations.html?center=1' },
+          { label: tr('assistant.safety.cta', null, 'Apri Operations & Setup'), href: 'operations.html?center=1' },
         ],
       };
     }
@@ -2059,21 +2052,21 @@ scrollButtons.forEach((btn) => {
   const wittyFallback = (query) => {
     const q = (query || '').trim();
     const lines = [
-      `Su “${q}” rischio di inventarmi cose… e non vogliamo gelati fantasy.`,
-      `Io sono fortissimo su ricette e procedure Badiani. Su “${q}” invece… mi manca la certificazione.`,
-      `Posso aiutarti con Bar, Gelato, Treats, Operations. Su “${q}” sono in modalità “panna montata”: tanta aria e poca sostanza.`,
+      tr('assistant.witty.line1', { q }, `Su “${q}” rischio di inventarmi cose… e non vogliamo gelati fantasy.`),
+      tr('assistant.witty.line2', { q }, `Io sono fortissimo su ricette e procedure Badiani. Su “${q}” invece… mi manca la certificazione.`),
+      tr('assistant.witty.line3', { q }, `Posso aiutarti con Bar, Gelato, Treats, Operations. Su “${q}” sono in modalità “panna montata”: tanta aria e poca sostanza.`),
     ];
     const pick = () => lines[Math.floor(Math.random() * lines.length)];
     return {
-      message: `${pick()} Prova con una domanda tipo:`,
+      message: tr('assistant.witty.heading', { line: pick() }, `${pick()} Prova con una domanda tipo:`),
       actions: [
-        { label: 'Apri Hub', href: 'index.html', kind: 'secondary' },
+        { label: tr('assistant.witty.cta', null, 'Apri Hub'), href: 'index.html', kind: 'secondary' },
       ],
       examples: [
-        'Come preparo un cappuccino?',
-        'Coni: quanti gusti e quanti grammi?',
-        'Churros: temperatura olio e timing?',
-        'Gelato box: quale formato usare?',
+        tr('assistant.witty.example1', null, 'Come preparo un cappuccino?'),
+        tr('assistant.witty.example2', null, 'Coni: quanti gusti e quanti grammi?'),
+        tr('assistant.witty.example3', null, 'Churros: temperatura olio e timing?'),
+        tr('assistant.witty.example4', null, 'Gelato box: quale formato usare?'),
       ],
     };
   };
@@ -3043,112 +3036,176 @@ scrollButtons.forEach((btn) => {
     return /^(come|quanto|quale|quali|cosa|perche|perché|quando|dove|posso|devo|si puo|si può|mi dici|mi spieghi|che differenza|qual\s+e|qual\s+è)\b/i.test(q);
   };
 
+  const detectLanguage = (text) => {
+    const t = (text || '').toLowerCase();
+    const itWords = /(come|quanti|quale|cosa|perch[eé]|dove|quando|grazie|aiuto)/i;
+    const enWords = /(how|many|what|where|why|when|please|help|thank|type)/i;
+    const esWords = /(cómo|cuántos|cuál|qué|dónde|por qué|cuándo|gracias|ayuda)/i;
+    const frWords = /(comment|combien|quel|quoi|où|pourquoi|quand|merci|aide)/i;
+    
+    let scores = { it: 0, en: 0, es: 0, fr: 0 };
+    if (itWords.test(t)) scores.it += 10;
+    if (enWords.test(t)) scores.en += 10;
+    if (esWords.test(t)) scores.es += 10;
+    if (frWords.test(t)) scores.fr += 10;
+    
+    if (/\b(coni|cono|coppett|churros|crêpe|vin\s*brul|cioccolat|cappuccino|gelato|scheda|quando|come\s*si|quanti\s+grammi)\b/i.test(t)) scores.it += 15;
+    if (/\b(cones?|cups?|churros|crêpes?|mulled|cappuccino|chocolate|how|many|type|flavor)\b/i.test(t)) scores.en += 15;
+    if (/\b(conos?|copas?|churros|crêpes?|vino|chocolate|gelato|cuánt|cómo|tipo)\b/i.test(t)) scores.es += 15;
+    if (/\b(cornets?|coupes?|churros|crêpes?|vin|chocolat|gelato|combien|comment|type)\b/i.test(t)) scores.fr += 15;
+    
+    const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+    return sorted[0]?.[1] > 0 ? sorted[0][0] : 'it';
+  };
+
   const assistantRuleAnswer = (query) => {
     const q = normalize(query);
     if (!q) return null;
-
-    if (/(regole|regola|regolamento|mini\s*game|gioco|come\s*funziona|stellin|stelle|cristall|token|mini\s*quiz|test\s*me|cooldown|countdown|gelati\s*vinti|bonus)/i.test(q)) {
-      return {
-        message:
-          'Regole del gioco (in breve):\n'
-          + '• 1 tab aperto = 1 cristallo.\n'
-          + '• 5 cristalli = 1 stellina.\n'
-          + '• Ogni 3 stelline parte un mini quiz (1 domanda).\n'
-          + '• Mini quiz giusto = sblocchi “Test me”. “Test me” perfetto = +1 gelato e cooldown 24h (riducibile a 12/30 stelline).\n'
-          + '• Mini quiz sbagliato = -3 stelline. Reset: domenica 00:00.',
-        actions: [
-          { label: 'Apri Regolamento', href: 'index.html?open=regolamento&center=1' },
-        ],
+    
+    const lang = detectLanguage(query);
+    
+    // Rules
+    if (/(regole|regola|regolamento|mini\s*game|gioco|come\s*funziona|stellin|stelle|cristall|token|mini\s*quiz|test\s*me|cooldown|countdown|rules?|game|how\s*works?|stars?|crystals?|quiz|reglas?|juego|cómo\s*funciona|estrellas?|cristales?|règles?|jeu|comment\s*ça\s*marche|étoiles?|cristaux?)/i.test(q)) {
+      const ruleMsgs = {
+        it: 'Regole del gioco (in breve):\n• 1 tab aperto = 1 cristallo.\n• 5 cristalli = 1 stellina.\n• Ogni 3 stelline parte un mini quiz (1 domanda).\n• Mini quiz giusto = sblocchi "Test me". "Test me" perfetto = +1 gelato e cooldown 24h (riducibile a 12/30 stelline).\n• Mini quiz sbagliato = -3 stelline. Reset: domenica 00:00.',
+        en: 'Rules (quick recap):\n• 1 opened tab = 1 crystal.\n• 5 crystals = 1 star.\n• Every 3 stars triggers a mini quiz (1 question).\n• Mini quiz correct = unlock "Test me". Perfect "Test me" = +1 gelato and 24h cooldown (can drop to 12h at 30 stars).\n• Mini quiz wrong = -3 stars. Reset: Sunday 00:00.',
+        es: 'Reglas (resumen rápido):\n• 1 pestaña abierta = 1 cristal.\n• 5 cristales = 1 estrella.\n• Cada 3 estrellas empieza un mini quiz (1 pregunta).\n• Mini quiz correcto = desbloqueas "Test me". "Test me" perfecto = +1 gelato y cooldown 24h (bajable a 12h con 30 estrellas).\n• Mini quiz fallado = -3 estrellas. Reset: domingo 00:00.',
+        fr: 'Règles (récap rapide) :\n• 1 onglet ouvert = 1 cristal.\n• 5 cristaux = 1 étoile.\n• Toutes les 3 étoiles : mini quiz (1 question).\n• Mini quiz juste = tu débloques "Test me". "Test me" parfait = +1 gelato et cooldown 24h (réductible à 12h avec 30 étoiles).\n• Mini quiz raté = -3 étoiles. Reset : dimanche 00:00.',
       };
+      const rulesCtas = { it: 'Apri Regolamento', en: 'Open Rules', es: 'Abrir Reglas', fr: 'Ouvrir Règles' };
+      return { message: ruleMsgs[lang] || ruleMsgs.it, actions: [{ label: rulesCtas[lang] || rulesCtas.it, href: 'index.html?open=regolamento&center=1' }] };
     }
 
-    if (/(\bconi\b|\bcono\b|\bcone\b|choco\s*cone|gluten\s*free|\bgf\b)/i.test(q)) {
-      return {
-        message: 'Coni (standard): Piccolo 100g (1 gusto). Medio 140g (1–2 gusti). Grande 180g (1–3 gusti). Choco cone / GF: 140g. Per i dettagli, apri la scheda.',
-        actions: [
-          { label: 'Apri Coni classici', href: 'gelato-lab.html?card=coni-classici&tab=parametri&center=1' },
-        ],
+    // Cones
+    if (/(\bconi\b|\bcono\b|\bcone[s]?\b|choco\s*cone|gluten\s*free|\bgf\b|flavor[s]?|type[s]?|conos?|cono|sin\s*gluten|sabores?|cornets?|cornet|sans\s*gluten|parfums?)/i.test(q)) {
+      const conesMsgs = {
+        it: 'Coni (standard): Piccolo 100g (1 gusto). Medio 140g (1–2 gusti). Grande 180g (1–3 gusti). Choco cone / GF: 140g. Per i dettagli, apri la scheda.',
+        en: 'Cones (standard): Small 100g (1 flavor). Medium 140g (1–2). Large 180g (1–3). Choco cone / GF: 140g. For details, open the sheet.',
+        es: 'Conos (estándar): Pequeño 100g (1 sabor). Mediano 140g (1–2). Grande 180g (1–3). Choco cone / GF: 140g. Para los detalles, abre la ficha.',
+        fr: 'Cornets (standard) : Petit 100g (1 parfum). Moyen 140g (1–2). Grand 180g (1–3). Choco cone / GF : 140g. Pour les détails, ouvre la fiche.',
       };
+      const conesCtas = { it: 'Apri Coni classici', en: 'Open Classic Cones', es: 'Abrir Conos clásicos', fr: 'Ouvrir Cornets classiques' };
+      return { message: conesMsgs[lang] || conesMsgs.it, actions: [{ label: conesCtas[lang] || conesCtas.it, href: 'gelato-lab.html?card=coni-classici&tab=parametri&center=1' }] };
     }
-    if (/(\bcoppett|coppa\b|cup\b)/i.test(q) && /(gramm|gust)/i.test(q)) {
-      return {
-        message: 'Coppette (standard): Piccolo 100g (1 gusto). Medio 140g (1–2). Grande 180g (1–3). Se vuoi, ti porto sulla scheda parametri.',
-        actions: [
-          { label: 'Apri Coppette', href: 'gelato-lab.html?card=coppette&tab=parametri&center=1' },
-        ],
+
+    // Cups
+    if (/(\bcoppett|coppa\b|cup[s]?|copas?|copa|coupes?|coupe)/i.test(q) && /(gramm|gust|portion|porción|grammes|gramos|flavor)/i.test(q)) {
+      const cupsMsgs = {
+        it: 'Coppette (standard): Piccolo 100g (1 gusto). Medio 140g (1–2). Grande 180g (1–3). Se vuoi, ti porto sulla scheda parametri.',
+        en: 'Cups (standard): Small 100g (1 flavor). Medium 140g (1–2). Large 180g (1–3). Want the parameter sheet?',
+        es: 'Coppas (estándar): Pequeña 100g (1 sabor). Mediana 140g (1–2). Grande 180g (1–3). ¿Quieres la ficha de parámetros?',
+        fr: 'Coupes (standard) : Petite 100g (1 parfum). Moyenne 140g (1–2). Grande 180g (1–3). Tu veux la fiche paramètres ?',
       };
+      const cupsCtas = { it: 'Apri Coppette', en: 'Open Cups', es: 'Abrir Coppas', fr: 'Ouvrir Coupes' };
+      return { message: cupsMsgs[lang] || cupsMsgs.it, actions: [{ label: cupsCtas[lang] || cupsCtas.it, href: 'gelato-lab.html?card=coppette&tab=parametri&center=1' }] };
     }
-    if (/(gelato\s*box|box\b|vaschett|asporto|take\s*away)/i.test(q)) {
-      return {
-        message: 'Gelato Boxes: formati 500 / 750 / 1000 ml. Autonomia termica circa 1 ora (poi meglio freezer). Apriamo la scheda per formato e servizio.',
-        actions: [
-          { label: 'Apri Gelato Boxes', href: 'gelato-lab.html?card=gelato-boxes&center=1' },
-        ],
+
+    // Gelato Box
+    if (/(gelato\s*box|box\b|vaschett|asporto|take\s*away|takeaway|tamaño|formato|taille|format)/i.test(q)) {
+      const boxMsgs = {
+        it: 'Gelato Boxes: formati 500 / 750 / 1000 ml. Autonomia termica circa 1 ora (poi meglio freezer). Apriamo la scheda per formato e servizio.',
+        en: 'Gelato Boxes: sizes 500 / 750 / 1000 ml. Thermal autonomy ~1 hour (then freezer is best). Let\'s open the sheet for format and service.',
+        es: 'Gelato Boxes: formatos 500 / 750 / 1000 ml. Autonomía térmica ~1 hora (mejor congelador después). Abrimos la ficha para formato y servicio.',
+        fr: 'Gelato Boxes : formats 500 / 750 / 1000 ml. Autonomie thermique ~1h (ensuite mieux vaut le congélateur). On ouvre la fiche pour format et service.',
       };
+      const boxCtas = { it: 'Apri Gelato Boxes', en: 'Open Gelato Boxes', es: 'Abrir Gelato Boxes', fr: 'Ouvrir Gelato Boxes' };
+      return { message: boxMsgs[lang] || boxMsgs.it, actions: [{ label: boxCtas[lang] || boxCtas.it, href: 'gelato-lab.html?card=gelato-boxes&center=1' }] };
     }
-    if (/(vetrina|banco|temperatura|\-14|\-15)/i.test(q) && /(gelato|conserv|setup|mattin|chiusur)/i.test(q)) {
-      return {
-        message: 'Vetrina gelato: target -14 / -15°C. Lo standard completo (setup, scampoli e pulizie) è nella scheda dedicata.',
-        actions: [
-          { label: 'Apri Setup vetrina', href: 'gelato-lab.html?card=preparazione-vetrina-mattino&center=1' },
-        ],
+
+    // Display
+    if (/(vetrina|banco|temperatura|\-14|\-15|display|case|setup|temperature|vitrina|mostrador|vitrine|comptoir)/i.test(q) && /(gelato|conserv|setup|mattin|chiusur|display|case)/i.test(q)) {
+      const dispMsgs = {
+        it: 'Vetrina gelato: target -14 / -15°C. Lo standard completo (setup, scampoli e pulizie) è nella scheda dedicata.',
+        en: 'Gelato display: target -14 / -15°C. The full standard (setup, trimming, cleaning) is in the dedicated sheet.',
+        es: 'Vitrina de gelato: target -14 / -15°C. El estándar completo (setup, recortes, limpieza) está en la ficha dedicada.',
+        fr: 'Vitrine gelato : cible -14 / -15°C. Le standard complet (setup, coupes, nettoyage) est dans la fiche dédiée.',
       };
+      const dispCtas = { it: 'Apri Setup vetrina', en: 'Open Display Setup', es: 'Abrir Setup vitrina', fr: 'Ouvrir Setup vitrine' };
+      return { message: dispMsgs[lang] || dispMsgs.it, actions: [{ label: dispCtas[lang] || dispCtas.it, href: 'gelato-lab.html?card=preparazione-vetrina-mattino&center=1' }] };
     }
-    if (/(\bchurros\b|frittura|olio|croccant)/i.test(q)) {
-      return {
-        message: 'Churros: olio a 190°C, porzione 8 pezzi, frittura 8–9 minuti. Zucchero+cannella: 600g + 20g. Ti apro la scheda per gli step.',
-        actions: [
-          { label: 'Apri Churros', href: 'festive.html?tab=churros&center=1' },
-        ],
+
+    // Churros
+    if (/(\bchurros\b|frittura|olio|croccant|frying|oil|crispy|fritura|aceite|crujiente|friture|huile|croustillant)/i.test(q)) {
+      const churrMsgs = {
+        it: 'Churros: olio a 190°C, porzione 8 pezzi, frittura 8–9 minuti. Zucchero+cannella: 600g + 20g. Ti apro la scheda per gli step.',
+        en: 'Churros: oil at 190°C, serving 8 pieces, fry 8–9 minutes. Sugar+cinnamon: 600g + 20g. I\'ll open the sheet for steps.',
+        es: 'Churros: aceite a 190°C, ración 8 piezas, fritura 8–9 minutos. Azúcar+canela: 600g + 20g. Abro la ficha con los pasos.',
+        fr: 'Churros : huile à 190°C, portion 8 pièces, friture 8–9 minutes. Sucre+cannelle : 600g + 20g. J\'ouvre la fiche avec les étapes.',
       };
+      const churrCtas = { it: 'Apri Churros', en: 'Open Churros', es: 'Abrir Churros', fr: 'Ouvrir Churros' };
+      return { message: churrMsgs[lang] || churrMsgs.it, actions: [{ label: churrCtas[lang] || churrCtas.it, href: 'festive.html?tab=churros&center=1' }] };
     }
+
+    // Waffles
     if (/(waffl)/i.test(q)) {
-      return {
-        message: 'Waffles: macchina leggermente unta, potenza 3. 177ml impasto, 2:30 min per lato + riposo 45s. Mix: shelf-life 2 giorni. Apriamo la scheda.',
-        actions: [
-          { label: 'Apri Waffles', href: 'sweet-treats.html?card=waffles&center=1' },
-        ],
+      const waffMsgs = {
+        it: 'Waffles: macchina leggermente unta, potenza 3. 177ml impasto, 2:30 min per lato + riposo 45s. Mix: shelf-life 2 giorni. Apriamo la scheda.',
+        en: 'Waffles: machine lightly greased, power 3. 177ml batter, 2:30 min per side + 45s rest. Batter mix: shelf life 2 days. Opening the sheet.',
+        es: 'Waffles: máquina ligeramente engrasada, potencia 3. 177ml de masa, 2:30 min por lado + 45s reposo. Mix: shelf life 2 días. Abrimos la ficha.',
+        fr: 'Waffles : machine légèrement graissée, puissance 3. 177ml de pâte, 2:30 min par face + repos 45s. Mix : shelf life 2 jours. On ouvre la fiche.',
       };
+      const waffCtas = { it: 'Apri Waffles', en: 'Open Waffles', es: 'Abrir Waffles', fr: 'Ouvrir Waffles' };
+      return { message: waffMsgs[lang] || waffMsgs.it, actions: [{ label: waffCtas[lang] || waffCtas.it, href: 'sweet-treats.html?card=waffles&center=1' }] };
     }
-    if (/((\bcrepe\b|\bcrepes\b|cr[eè]p).*(puliz|pulisci|clean|sanific|igien)|((puliz|pulisci|clean|sanific|igien).*(\bcrepe\b|\bcrepes\b|cr[eè]p)))/i.test(q)) {
-      return {
-        message: 'Pulizia macchina crêpe (fine servizio): spegni e lascia raffreddare in sicurezza; rimuovi residui e asciuga con blue-roll. Per la checklist completa di chiusura (macchine + frigo/label mix), apri la scheda “Chiusura & pulizia rapida”.',
-        actions: [
-          { label: 'Apri Chiusura & pulizia rapida', href: 'sweet-treats.html?card=chiusura-pulizia-rapida&center=1' },
-        ],
+
+    // Crepe - Clean
+    if (/((crepe|crepes|cr[eè]p).*(puliz|pulisci|clean|sanific|igien|limpiar|limpie|lavar|sanificar|nettoyer|nettoyage|laver|nettoie)|((puliz|pulisci|clean|sanific|igien|limpiar|limpie|lavar|sanificar|nettoyer|nettoyage|laver|nettoie).*(crepe|crepes|cr[eè]p)))/i.test(q)) {
+      const cCleanMsgs = {
+        it: 'Pulizia macchina crêpe (fine servizio): spegni e lascia raffreddare in sicurezza; rimuovi residui e asciuga con blue-roll. Per la checklist completa di chiusura (macchine + frigo/label mix), apri la scheda "Chiusura & pulizia rapida".',
+        en: 'Crêpe machine cleaning (end of service): switch off and cool safely; remove residue and dry with blue-roll. For the full closing checklist (machines + fridge/labels), open "Closing & quick clean".',
+        es: 'Limpieza máquina de crêpe (fin de servicio): apaga y deja enfriar con seguridad; retira residuos y seca con blue-roll. Para el checklist completo de cierre (máquinas + nevera/etiquetas), abre "Cierre & limpieza rápida".',
+        fr: 'Nettoyage machine à crêpe (fin de service) : éteins et laisse refroidir en sécurité ; retire les résidus et sèche avec blue-roll. Pour la checklist complète de fermeture (machines + frigo/étiquettes), ouvre "Fermeture & nettoyage rapide".',
       };
+      const cCleanCtas = { it: 'Apri Chiusura & pulizia rapida', en: 'Open Closing & quick clean', es: 'Abrir Cierre & limpieza rápida', fr: 'Ouvrir Fermeture & nettoyage rapide' };
+      return { message: cCleanMsgs[lang] || cCleanMsgs.it, actions: [{ label: cCleanCtas[lang] || cCleanCtas.it, href: 'sweet-treats.html?card=chiusura-pulizia-rapida&center=1' }] };
     }
-    if (/(\bcrepe\b|\bcrepes\b|cr[eè]p)/i.test(q)) {
-      return {
-        message: 'Crêpe (standard con salsa): mix riposo ≥2h in frigo (shelf life 3 giorni). Piastra ben calda (non fumante). Cuoci ~20s per lato, spalma la salsa su metà, chiudi a mezzaluna poi a ventaglio; zucchero a velo + drizzle. Ti apro la scheda con gli step.',
-        actions: [
-          { label: 'Apri Crepe con Salsa', href: 'sweet-treats.html?card=crepe-con-salsa&center=1' },
-        ],
+
+    // Crepe - Standard
+    if (/(\bcrepe\b|\bcrepes\b|cr[eè]p|recipe|sauce|receta|salsa|recette|sauce)/i.test(q)) {
+      const cStdMsgs = {
+        it: 'Crêpe (standard con salsa): mix riposo ≥2h in frigo (shelf life 3 giorni). Piastra ben calda (non fumante). Cuoci ~20s per lato, spalma la salsa su metà, chiudi a mezzaluna poi a ventaglio; zucchero a velo + drizzle. Ti apro la scheda con gli step.',
+        en: 'Crêpe (standard with sauce): batter rests ≥2h in fridge (shelf life 3 days). Plate hot (not smoking). Cook ~20s per side, spread sauce on half, fold to half-moon then fan; icing sugar + drizzle. Opening the step-by-step sheet.',
+        es: 'Crêpe (estándar con salsa): mix reposo ≥2h en nevera (shelf life 3 días). Plancha caliente (no humeante). Cocina ~20s por lado, unta salsa en la mitad, dobla a media luna y luego en abanico; azúcar glas + drizzle. Abro la ficha paso a paso.',
+        fr: 'Crêpe (standard avec sauce) : pâte repos ≥2h au frigo (shelf life 3 jours). Plaque bien chaude (sans fumée). Cuire ~20s par face, étaler la sauce sur la moitié, plier en demi-lune puis en éventail ; sucre glace + drizzle. J\'ouvre la fiche pas à pas.',
       };
+      const cStdCtas = { it: 'Apri Crepe con Salsa', en: 'Open Crepe with Sauce', es: 'Abrir Crepe con Salsa', fr: 'Ouvrir Crêpe avec Sauce' };
+      return { message: cStdMsgs[lang] || cStdMsgs.it, actions: [{ label: cStdCtas[lang] || cStdCtas.it, href: 'sweet-treats.html?card=crepe-con-salsa&center=1' }] };
     }
-    if (/(vin\s*brul|mulled|\bbrul\b)/i.test(q)) {
-      return {
-        message: 'Vin brulé: setup macchina con ~600ml acqua, poi warm-up 25–30 min (livello 10) e servizio a 6/7. Conservazione: raffredda e frigo; warmed ~3 giorni, box 30 giorni dall’apertura. Apriamo “Mulled”.',
-        actions: [
-          { label: 'Apri Mulled Wine', href: 'festive.html?tab=mulled&center=1' },
-        ],
+
+    // Mulled Wine
+    if (/(vin\s*brul|mulled|wine|brûlé|vino|brûlé|mulled)/i.test(q)) {
+      const mulledMsgs = {
+        it: 'Vin brulé: setup macchina con ~600ml acqua, poi warm-up 25–30 min (livello 10) e servizio a 6/7. Conservazione: raffredda e frigo; warmed ~3 giorni, box 30 giorni dall\'apertura. Apriamo "Mulled".',
+        en: 'Mulled wine: set machine with ~600ml water, warm-up 25–30 min (level 10) then serve at 6/7. Storage: cool then fridge; warmed batch ~3 days, box 30 days after opening. Let\'s open "Mulled".',
+        es: 'Mulled wine: prepara la máquina con ~600ml agua, luego warm-up 25–30 min (nivel 10) y servicio a 6/7. Conservación: enfría y nevera; batch caliente ~3 días, box 30 días tras abrir. Abrimos "Mulled".',
+        fr: 'Mulled wine : prépare la machine avec ~600ml d\'eau, warm-up 25–30 min (niveau 10) puis service à 6/7. Conservation : refroidir puis frigo ; batch chauffé ~3 jours, box 30 jours après ouverture. On ouvre "Mulled".',
       };
+      const mulledCtas = { it: 'Apri Mulled Wine', en: 'Open Mulled Wine', es: 'Abrir Mulled Wine', fr: 'Ouvrir Mulled Wine' };
+      return { message: mulledMsgs[lang] || mulledMsgs.it, actions: [{ label: mulledCtas[lang] || mulledCtas.it, href: 'festive.html?tab=mulled&center=1' }] };
     }
-    if (/(cappuccino|flat\s*white|latte|schiuma|foam|montare\s+latte)/i.test(q)) {
-      return {
-        message: 'Latte & schiuma: andiamo nella sezione Milk. Lì trovi tecnica e standard (senza improvvisazioni artistiche… a meno che non siano volute).',
-        actions: [
-          { label: 'Apri Milk (Bar & Drinks)', href: 'caffe.html?tab=milk&center=1' },
-        ],
+
+    // Milk & Foam
+    if (/(cappuccino|flat\s*white|latte|schiuma|foam|montare\s+latte|milk|coffee|leche|espuma|café|bebida|lait|mousse|boisson)/i.test(q)) {
+      const milkMsgs = {
+        it: 'Latte & schiuma: andiamo nella sezione Milk. Lì trovi tecnica e standard (senza improvvisazioni artistiche… a meno che non siano volute).',
+        en: 'Milk & foam: jump to the Milk section. You\'ll get technique and standards (no freestyle latte art—unless intended).',
+        es: 'Leche & espuma: vamos a la sección Milk. Allí tienes técnica y estándares (sin latte art freestyle… salvo que se busque).',
+        fr: 'Lait & mousse : allons dans la section Milk. Tu trouveras la technique et les standards (pas de latte art freestyle… sauf si voulu).',
       };
+      const milkCtas = { it: 'Apri Milk (Bar & Drinks)', en: 'Open Milk (Bar & Drinks)', es: 'Abrir Milk (Bar & Drinks)', fr: 'Ouvrir Milk (Bar & Drinks)' };
+      return { message: milkMsgs[lang] || milkMsgs.it, actions: [{ label: milkCtas[lang] || milkCtas.it, href: 'caffe.html?tab=milk&center=1' }] };
     }
-    if (/(sicurezza|safety|allerg|gluten)/i.test(q)) {
-      return {
-        message: 'Sicurezza e allergeni: apriamo Operations & Setup per procedure e check (meglio 30 secondi qui che 30 minuti dopo).',
-        actions: [
-          { label: 'Apri Operations & Setup', href: 'operations.html?center=1' },
-        ],
+
+    // Safety
+    if (/(sicurezza|safety|allerg|gluten|seguridad|alérgeno|alergia|alérgico|sécurité|allergène|allergie|allergique)/i.test(q)) {
+      const safetyMsgs = {
+        it: 'Sicurezza e allergeni: apriamo Operations & Setup per procedure e check (meglio 30 secondi qui che 30 minuti dopo).',
+        en: 'Safety & allergens: let\'s open Operations & Setup for procedures and checks (30 seconds here saves 30 minutes later).',
+        es: 'Seguridad y alérgenos: abrimos Operations & Setup para procedimientos y checks (mejor 30 segundos ahora que 30 minutos después).',
+        fr: 'Sécurité et allergènes : on ouvre Operations & Setup pour procédures et checks (30 secondes ici évitent 30 minutes plus tard).',
       };
+      const safetyCtas = { it: 'Apri Operations & Setup', en: 'Open Operations & Setup', es: 'Abrir Operations & Setup', fr: 'Ouvrir Operations & Setup' };
+      return { message: safetyMsgs[lang] || safetyMsgs.it, actions: [{ label: safetyCtas[lang] || safetyCtas.it, href: 'operations.html?center=1' }] };
     }
 
     return null;
@@ -4529,6 +4586,25 @@ const gamification = (() => {
   let pendingMilestoneCheck = false;
   let quizOnClose = false;
 
+  const sanitizeQuizHistory = (list) => {
+    if (!Array.isArray(list)) return [];
+    return list
+      .filter((item) => item && typeof item === 'object')
+      .map((item) => ({
+        ts: typeof item.ts === 'number' ? item.ts : Date.now(),
+        prompt: typeof item.prompt === 'string' ? item.prompt : '',
+        qid: item.qid || null,
+        qtype: item.qtype || item.type || 'mcq',
+        correct: item.correct === true,
+        correctText: typeof item.correctText === 'string' ? item.correctText : '',
+        explanation: typeof item.explanation === 'string' ? item.explanation : '',
+        suggestion: typeof item.suggestion === 'string' ? item.suggestion : '',
+        specHref: typeof item.specHref === 'string' ? item.specHref : undefined,
+        specLabel: typeof item.specLabel === 'string' ? item.specLabel : undefined,
+        topic: typeof item.topic === 'string' ? item.topic : undefined,
+      }));
+  };
+
   // NOTE: Despite the name, this returns the *weekly* stamp used for resets.
   // A new stamp starts at local Sunday 00:00.
   function getDayStamp(date = new Date()) {
@@ -4584,7 +4660,7 @@ const gamification = (() => {
         challengeAsked: parsed.challengeAsked || [],
         testMeCredits: typeof parsed.testMeCredits === 'number' ? parsed.testMeCredits : 0,
         history: {
-          quiz: parsed.history?.quiz || [],
+          quiz: sanitizeQuizHistory(parsed.history?.quiz),
           days: parsed.history?.days || [],
           totals: {
             stars: parsed.history?.totals?.stars || 0,
@@ -4771,7 +4847,6 @@ const gamification = (() => {
       starValue: shell.querySelector('[data-star-value]'),
       starCounter: shell.querySelector('[data-star-token]'),
       progress: shell.querySelector('[data-star-progress]'),
-      crystalProgress: shell.querySelector('[data-crystal-progress]'),
       gelatoValue: shell.querySelector('[data-gelato-value]'),
       gelatoCounter: shell.querySelector('[data-gelato-token]'),
       bonusValue: shell.querySelector('[data-bonus-value]'),
@@ -4814,7 +4889,6 @@ const gamification = (() => {
           <p class="reward-popover__text">
             ${tr('tokens.stars.text', { perStar: CRYSTALS_PER_STAR }, `Apri i tab dentro una scheda: ogni tab svela 1 cristallo di zucchero. Ogni ${CRYSTALS_PER_STAR} cristalli (per singola scheda info) si fondono in 1 stellina.`)}
           </p>
-          <p class="reward-popover__hint reward-hint" data-crystal-progress>${tr('tokens.stars.crystalsHint', { perStar: CRYSTALS_PER_STAR }, `Cristalli: progressi per scheda (0/${CRYSTALS_PER_STAR}). Se i tab sono meno di ${CRYSTALS_PER_STAR}, completiamo la differenza all'apertura della scheda info.`)}</p>
           <button class="reward-popover__cta" type="button" data-quiz-launch hidden data-i18n="tokens.testMe">${tr('tokens.testMe', null, 'Test me')}</button>
           <p class="reward-popover__hint" data-i18n="tokens.stars.miniHint">${tr('tokens.stars.miniHint', null, '3 stelline = mini quiz (1 domanda). Se giusto sblocchi “Test me”.')}</p>
           <button class="reward-popover__link" type="button" data-info-launch data-i18n="tokens.rulesFull">${tr('tokens.rulesFull', null, 'Regole complete')}</button>
@@ -5244,9 +5318,6 @@ const gamification = (() => {
     if (hubNodes.progress) {
       hubNodes.progress.textContent = `${Math.min(state.stars, MAX_STARS)}/${MAX_STARS}`;
     }
-    if (hubNodes.crystalProgress) {
-      hubNodes.crystalProgress.textContent = `Cristalli: progressi per scheda (0/${CRYSTALS_PER_STAR})`;
-    }
     if (hubNodes.quizBtn) {
       const canAttempt = state.quizTokens >= STARS_FOR_QUIZ;
       const hasAccess = (state.testMeCredits || 0) > 0;
@@ -5343,7 +5414,7 @@ const gamification = (() => {
     const stars = state.stars || 0;
     const points = state.bonusPoints || 0;
     const gelati = state.gelati || 0;
-    const quizHistory = Array.isArray(state.history?.quiz) ? state.history.quiz : [];
+    const quizHistory = sanitizeQuizHistory(state.history?.quiz);
     const correct = quizHistory.filter(q => q.correct).length;
     const wrong = quizHistory.filter(q => q.correct === false).length;
     const setText = (sel, val) => { const el = root.querySelector(sel); if (el) el.textContent = String(val); };
@@ -5376,6 +5447,7 @@ const gamification = (() => {
         list.appendChild(li);
       } else {
         wrongItems.forEach(item => {
+          const localizedItem = localizeHistoryItem(item) || item;
           const li = document.createElement('li');
           const when = new Date(item.ts || Date.now());
           const date = when.toLocaleDateString(uiLocale);
@@ -5383,10 +5455,10 @@ const gamification = (() => {
           const btn = document.createElement('button');
           btn.type = 'button';
           btn.className = 'summary-list__btn';
-          const prompt = item.prompt || tr('quiz.generic', null, 'Quiz');
+          const prompt = localizedItem?.prompt || tr('quiz.generic', null, 'Quiz');
           btn.textContent = `${date} ${time} · ${prompt}`;
           btn.setAttribute('aria-label', tr('cockpit.wrong.reviewAria', { title: prompt }, `Apri revisione errore: ${prompt}`));
-          btn.addEventListener('click', () => openWrongReviewModal(item));
+          btn.addEventListener('click', () => openWrongReviewModal(localizedItem));
           li.appendChild(btn);
           list.appendChild(li);
         });
@@ -5474,24 +5546,24 @@ const gamification = (() => {
     const has = (...needles) => needles.some(n => p.includes(String(n).toLowerCase()));
 
     if (has('shelf life', 'dopo apertura', 'scadenza', 'brick', 'gonfio', 'cristalli', 'macchia')) {
-      return `La risposta corretta è "${c}" perché qui conta prima di tutto la sicurezza alimentare: se un prodotto è fuori standard, non si rischia.`;
+      return tr('quiz.auto.explain.foodSafety', { answer: c }, `La risposta corretta è "${c}" perché qui conta prima di tutto la sicurezza alimentare: se un prodotto è fuori standard, non si rischia.`);
     }
     if (has('temperatura', '°c') && has('latte', 'cappuccino', 'steam')) {
-      return `La risposta corretta è "${c}" perché la temperatura e la tecnica di montatura determinano microfoam e gusto (oltre una soglia il latte perde dolcezza e qualità).`;
+      return tr('quiz.auto.explain.steam', { answer: c }, `La risposta corretta è "${c}" perché la temperatura e la tecnica di montatura determinano microfoam e gusto (oltre una soglia il latte perde dolcezza e qualità).`);
     }
     if (has('espresso', 'estrazione', 'channeling', 'grinder', 'portafiltro', 'tamper', 'distribution')) {
-      return `La risposta corretta è "${c}" perché la consistenza dell’espresso dipende da distribuzione, tamp e parametri: piccoli errori qui cambiano subito crema e resa.`;
+      return tr('quiz.auto.explain.espresso', { answer: c }, `La risposta corretta è "${c}" perché la consistenza dell’espresso dipende da distribuzione, tamp e parametri: piccoli errori qui cambiano subito crema e resa.`);
     }
     if (has('cliente', 'prezzo', 'upsell', 'obiezione', 'starbucks', 'influencer')) {
-      return `La risposta corretta è "${c}" perché in servizio conta guidare con una risposta breve, professionale e orientata al valore (senza essere aggressivi).`;
+      return tr('quiz.auto.explain.customer', { answer: c }, `La risposta corretta è "${c}" perché in servizio conta guidare con una risposta breve, professionale e orientata al valore (senza essere aggressivi).`);
     }
     if (has('churro', 'olio', 'frigg')) {
-      return `La risposta corretta è "${c}" perché tempi/temperatura dell’olio impattano croccantezza e sicurezza: lo standard evita churros unti o crudi.`;
+      return tr('quiz.auto.explain.fry', { answer: c }, `La risposta corretta è "${c}" perché tempi/temperatura dell’olio impattano croccantezza e sicurezza: lo standard evita churros unti o crudi.`);
     }
     if (has('metti in ordine', 'ordine i passaggi') || has('metti in ordine')) {
-      return 'L’ordine corretto serve a ridurre errori e sprechi: la routine standard rende la qualità replicabile anche in rush.';
+      return tr('quiz.auto.explain.order', { answer: c }, 'L’ordine corretto serve a ridurre errori e sprechi: la routine standard rende la qualità replicabile anche in rush.');
     }
-    return `La risposta corretta è "${c}" perché è lo standard operativo previsto dal training.`;
+    return tr('quiz.auto.explain.default', { answer: c }, `La risposta corretta è "${c}" perché è lo standard operativo previsto dal training.`);
   }
 
   function autoSuggestionForQuiz(prompt = '') {
@@ -5499,69 +5571,122 @@ const gamification = (() => {
     const has = (...needles) => needles.some(n => p.includes(String(n).toLowerCase()));
 
     if (has('shelf life', 'dopo apertura', 'scadenza')) {
-      return 'Suggerimento: etichetta sempre data/ora apertura e applica FIFO. Se hai dubbi, non servire e chiedi conferma al responsabile.';
+      return tr('quiz.auto.suggest.foodSafety', null, 'Suggerimento: etichetta sempre data/ora apertura e applica FIFO. Se hai dubbi, non servire e chiedi conferma al responsabile.');
     }
     if (has('latte', 'steam', 'wand')) {
-      return 'Suggerimento: fai purge, aria solo 2–3s, poi rolling fino a ~65°C. Microfoam lucida = niente urla e niente bolle grandi.';
+      return tr('quiz.auto.suggest.steam', null, 'Suggerimento: fai purge, aria solo 2–3s, poi rolling fino a ~65°C. Microfoam lucida = niente urla e niente bolle grandi.');
     }
     if (has('espresso', 'estrazione', 'grinder', 'channeling')) {
-      return 'Suggerimento: controlla dose, distribuzione e tamp uniforme. Se la resa/tempo è fuori target, correggi prima la macinatura (un click alla volta).';
+      return tr('quiz.auto.suggest.espresso', null, 'Suggerimento: controlla dose, distribuzione e tamp uniforme. Se la resa/tempo è fuori target, correggi prima la macinatura (un click alla volta).');
     }
     if (has('cliente', 'prezzo', 'starbucks')) {
-      return 'Suggerimento: usa una frase di valore (ingredienti, cura, esperienza) + una domanda chiusa (“Preferisci più intenso o più cremoso?”) per guidare la scelta.';
+      return tr('quiz.auto.suggest.customer', null, 'Suggerimento: usa una frase di valore (ingredienti, cura, esperienza) + una domanda chiusa (“Preferisci più intenso o più cremoso?”) per guidare la scelta.');
     }
     if (has('churro', 'olio', 'frigg')) {
-      return 'Suggerimento: verifica temperatura con termometro, friggi in batch coerenti e scola bene. Servi subito: è lì che si vince la qualità.';
+      return tr('quiz.auto.suggest.fry', null, 'Suggerimento: verifica temperatura con termometro, friggi in batch coerenti e scola bene. Servi subito: è lì che si vince la qualità.');
     }
-    return 'Suggerimento: apri la scheda della categoria collegata e ripassa i 3 punti chiave. Poi rifai il quiz a mente in 20 secondi.';
+    return tr('quiz.auto.suggest.default', null, 'Suggerimento: apri la scheda della categoria collegata e ripassa i 3 punti chiave. Poi rifai il quiz a mente in 20 secondi.');
   }
 
+  function localizeQuizQuestion(question) {
+    if (!question) return question;
+    const prefix = question.id ? `quiz.q.${question.id}` : null;
+    const localizedQuestion = prefix ? tr(`${prefix}.question`, null, question.question) : question.question;
+    const localizedOptions = Array.isArray(question.options)
+      ? question.options.map((opt, idx) => (prefix ? tr(`${prefix}.option.${idx}`, null, opt) : opt))
+      : question.options;
+    const localizedSteps = Array.isArray(question.steps)
+      ? question.steps.map((step, idx) => (prefix ? tr(`${prefix}.step.${idx}`, null, step) : step))
+      : question.steps;
+    const explainBase = question.explain ?? question.explanation;
+    const localizedExplain = prefix ? tr(`${prefix}.explain`, null, explainBase) : explainBase;
+    const tipBase = question.tip ?? question.suggestion;
+    const localizedTip = prefix ? tr(`${prefix}.tip`, null, tipBase) : tipBase;
+
+    return {
+      ...question,
+      question: localizedQuestion,
+      options: localizedOptions,
+      steps: localizedSteps,
+      explain: localizedExplain,
+      explanation: localizedExplain ?? explainBase,
+      tip: localizedTip,
+      suggestion: localizedTip ?? tipBase,
+    };
+  }
+
+  const findQuizById = (qid) => {
+    if (!qid) return null;
+    return QUIZ_QUESTIONS.find(q => q.id === qid)
+      || CHALLENGE_QUESTIONS.find(q => q.id === qid)
+      || null;
+  };
+
+  const localizeHistoryItem = (item) => {
+    if (!item || !item.qid) return item;
+    const q = findQuizById(item.qid);
+    if (!q) return item;
+    const review = buildQuizReview(q);
+    return {
+      ...item,
+      prompt: review.prompt,
+      correctText: review.correctText,
+      explanation: review.explanation,
+      suggestion: review.suggestion,
+      specHref: item.specHref || review.specHref,
+      specLabel: item.specLabel || review.specLabel,
+    };
+  };
+
   function buildQuizReview(question) {
-    const prompt = question?.question || '';
-    const correctText = getCorrectAnswerText(question);
+    const localizedQuestion = localizeQuizQuestion(question);
+    const prompt = localizedQuestion?.question || '';
+    const correctText = getCorrectAnswerText(localizedQuestion);
     const spec = guessSpecFromPrompt(prompt);
-    const customExplain = (question && (question.explain ?? question.explanation)) ?? '';
-    const customTip = (question && (question.tip ?? question.suggestion)) ?? '';
+    const customExplain = (localizedQuestion && (localizedQuestion.explain ?? localizedQuestion.explanation)) ?? '';
+    const customTip = (localizedQuestion && (localizedQuestion.tip ?? localizedQuestion.suggestion)) ?? '';
     return {
       prompt,
       correctText,
       explanation: String(customExplain || '').trim() || autoExplainForQuiz(prompt, correctText),
       suggestion: String(customTip || '').trim() || autoSuggestionForQuiz(prompt),
       specHref: spec?.href || 'index.html',
-      specLabel: spec?.label || 'Apri specifiche',
+      specLabel: spec?.label || tr('review.openSpec', null, 'Apri specifiche'),
     };
   }
 
   function buildChallengeReview(challenge) {
-    const topic = String(challenge?.topic || '').trim();
-    const basePrompt = String(challenge?.question || '').trim();
+    const localized = localizeQuizQuestion(challenge);
+    const topic = String(localized?.topic || challenge?.topic || '').trim();
+    const basePrompt = String(localized?.question || localized?.prompt || challenge?.question || '').trim();
     const prompt = topic ? `Sfida continua · ${topic}: ${basePrompt}` : `Sfida continua: ${basePrompt}`;
-    const correctText = getCorrectAnswerText(challenge);
+    const correctText = getCorrectAnswerText(localized);
     return {
       prompt,
       correctText,
       explanation: autoExplainForQuiz(prompt, correctText),
-      suggestion: 'Suggerimento: ripassa Operations & Setup (procedure, sicurezza, qualità) e rifai mentalmente la sequenza in 20 secondi.',
+      suggestion: tr('quiz.challenge.suggestion', null, 'Suggerimento: ripassa Operations & Setup (procedure, sicurezza, qualità) e rifai mentalmente la sequenza in 20 secondi.'),
       specHref: 'operations.html',
-      specLabel: 'Apri Operations & Setup',
+      specLabel: tr('review.operationsCta', null, 'Apri Operations & Setup'),
     };
   }
 
   function openWrongReviewModal(item) {
-    const prompt = item?.prompt || 'Quiz';
-    const correctText = item?.correctText || '';
-    const explanation = item?.explanation || autoExplainForQuiz(prompt, correctText);
-    const suggestion = item?.suggestion || autoSuggestionForQuiz(prompt);
+    const localizedItem = localizeHistoryItem(item) || item || {};
+    const prompt = localizedItem?.prompt || 'Quiz';
+    const correctText = localizedItem?.correctText || '';
+    const explanation = localizedItem?.explanation || autoExplainForQuiz(prompt, correctText);
+    const suggestion = autoSuggestionForQuiz(prompt) || localizedItem?.suggestion || '';
     const guessedSpec = guessSpecFromPrompt(prompt);
-    const isChallengeItem = item?.qtype === 'challenge' || String(prompt || '').toLowerCase().includes('sfida continua');
+    const isChallengeItem = localizedItem?.qtype === 'challenge' || String(prompt || '').toLowerCase().includes('sfida continua');
     const looksLikeHub = (href, label) => {
       const h = String(href || '').trim();
       const l = String(label || '').trim();
       return !h || h === 'index.html' || /(^|\/|\\)index\.html(\?|#|$)/i.test(h) || l === 'Apri Hub';
     };
 
-    let specHref = item?.specHref || guessedSpec?.href;
-    let specLabel = item?.specLabel || guessedSpec?.label;
+    let specHref = localizedItem?.specHref || guessedSpec?.href;
+    let specLabel = localizedItem?.specLabel || guessedSpec?.label;
 
     // If older history items were saved before we had a proper mapping (they often fallback to Hub),
     // upgrade them on the fly *unless* they are continuous-challenge items (which intentionally point to Operations).
@@ -5581,11 +5706,11 @@ const gamification = (() => {
 
     const eyebrow = document.createElement('p');
     eyebrow.style.cssText = 'margin:0 0 8px 0; font-size:12px; letter-spacing:0.22em; text-transform:uppercase; color:var(--brand-rose); font-family:var(--font-medium);';
-    eyebrow.textContent = 'Revisione · errore recente';
+    eyebrow.textContent = tr('review.eyebrow', null, 'Revisione · errore recente');
 
     const title = document.createElement('h3');
     title.className = 'reward-modal__title';
-    title.textContent = 'Rivedi la specifica';
+    title.textContent = tr('review.title', null, 'Rivedi la specifica');
 
     const q = document.createElement('p');
     q.className = 'reward-modal__text';
@@ -5594,17 +5719,19 @@ const gamification = (() => {
 
     const answer = document.createElement('div');
     answer.style.cssText = 'margin-top:12px; padding:14px 14px; border-radius:14px; background: rgba(236, 65, 140, 0.06); border: 1px solid rgba(236, 65, 140, 0.18); color: var(--ink); line-height:1.55;';
-    answer.textContent = correctText ? `Risposta corretta: ${correctText}` : 'Risposta corretta: (non disponibile)';
+    answer.textContent = correctText
+      ? tr('review.correct', { answer: correctText }, `Risposta corretta: ${correctText}`)
+      : tr('review.correct.missing', null, 'Risposta corretta: (non disponibile)');
 
     const expl = document.createElement('p');
     expl.className = 'reward-modal__text';
     expl.style.marginTop = '12px';
-    expl.textContent = `Spiegazione: ${explanation}`;
+    expl.textContent = tr('review.explanation', { text: explanation }, `Spiegazione: ${explanation}`);
 
     const tip = document.createElement('p');
     tip.className = 'reward-modal__text';
     tip.style.marginTop = '10px';
-    tip.textContent = suggestion;
+    tip.textContent = tr('review.suggestion', { text: suggestion }, suggestion);
 
     const actions = document.createElement('div');
     actions.className = 'reward-modal__actions';
@@ -5612,7 +5739,7 @@ const gamification = (() => {
     const openSpec = document.createElement('button');
     openSpec.type = 'button';
     openSpec.className = 'reward-action primary';
-    openSpec.textContent = specLabel || 'Apri specifiche';
+    openSpec.textContent = specLabel || tr('review.openSpec', null, 'Apri specifiche');
     openSpec.dataset.overlayFocus = 'true';
     openSpec.addEventListener('click', () => {
       closeOverlay();
@@ -5622,7 +5749,7 @@ const gamification = (() => {
     const closeBtn = document.createElement('button');
     closeBtn.type = 'button';
     closeBtn.className = 'reward-action secondary';
-    closeBtn.textContent = 'Chiudi';
+    closeBtn.textContent = tr('common.close', null, 'Chiudi');
     closeBtn.addEventListener('click', closeOverlay);
 
     actions.append(openSpec, closeBtn);
@@ -5631,29 +5758,30 @@ const gamification = (() => {
   }
 
   function openAllWrongLogModal() {
-    const quizHistory = Array.isArray(state.history?.quiz) ? state.history.quiz : [];
+    const quizHistory = sanitizeQuizHistory(state.history?.quiz);
     const allWrong = quizHistory
       .filter((q) => q && q.correct === false)
       .slice()
       .sort((a, b) => (Number(b.ts) || 0) - (Number(a.ts) || 0));
+    const localizedAll = allWrong.map((item) => localizeHistoryItem(item) || item);
 
     const container = document.createElement('div');
     container.className = 'reward-modal';
 
     const eyebrow = document.createElement('p');
     eyebrow.style.cssText = 'margin:0 0 8px 0; font-size:12px; letter-spacing:0.22em; text-transform:uppercase; color:var(--brand-rose); font-family:var(--font-medium);';
-    eyebrow.textContent = 'Hub · archivio errori';
+    eyebrow.textContent = tr('review.hubEyebrow', null, 'Hub · archivio errori');
 
     const title = document.createElement('h3');
     title.className = 'reward-modal__title';
-    title.textContent = 'Tutti gli errori';
+    title.textContent = tr('review.hubTitle', null, 'Tutti gli errori');
 
     const meta = document.createElement('p');
     meta.className = 'reward-modal__text';
     meta.style.marginTop = '6px';
     meta.textContent = allWrong.length
-      ? `Totale errori salvati: ${allWrong.length}. Tocca un item per aprire la revisione.`
-      : 'Nessun errore salvato al momento.';
+      ? tr('review.hub.meta', { count: allWrong.length }, `Totale errori salvati: ${allWrong.length}. Tocca un item per aprire la revisione.`)
+      : tr('review.hub.empty', null, 'Nessun errore salvato al momento.');
 
     const toolbar = document.createElement('div');
     toolbar.className = 'wrong-log__toolbar';
@@ -5661,13 +5789,13 @@ const gamification = (() => {
     const search = document.createElement('input');
     search.type = 'search';
     search.className = 'wrong-log__search';
-    search.placeholder = 'Cerca negli errori (es. coni, box, latte, churros…)';
-    search.setAttribute('aria-label', 'Cerca negli errori');
+    search.placeholder = tr('wrongLog.searchPlaceholder', null, 'Cerca negli errori (es. coni, box, latte, churros…)');
+    search.setAttribute('aria-label', tr('wrongLog.searchAria', null, 'Cerca negli errori'));
 
     const copyBtn = document.createElement('button');
     copyBtn.type = 'button';
     copyBtn.className = 'btn btn-ghost btn--sm';
-    copyBtn.textContent = 'Copia JSON';
+    copyBtn.textContent = tr('wrongLog.copyJson', null, 'Copia JSON');
 
     const listWrap = document.createElement('div');
     listWrap.className = 'wrong-log__list';
@@ -5713,8 +5841,8 @@ const gamification = (() => {
       list.innerHTML = '';
 
       const filtered = !q
-        ? allWrong
-        : allWrong.filter((item) => {
+        ? localizedAll
+        : localizedAll.filter((item) => {
             const blob = `${item.prompt || ''} ${item.correctText || ''} ${item.explanation || ''} ${item.topic || ''}`;
             return safeString(blob).includes(q);
           });
@@ -5743,7 +5871,7 @@ const gamification = (() => {
 
     const copyJson = async () => {
       try {
-        const payload = JSON.stringify(allWrong, null, 2);
+        const payload = JSON.stringify(localizedAll, null, 2);
         if (navigator.clipboard && navigator.clipboard.writeText) {
           await navigator.clipboard.writeText(payload);
           showToast(tr('toast.copied', null, 'Copiato negli appunti ✅'));
@@ -6842,7 +6970,7 @@ const gamification = (() => {
       const correct = options.indexOf(item.label);
       return {
         id: `pg-${item.id}`,
-        question: 'Indovina il prodotto dalla foto:',
+        question: tr('quiz.productGuess.prompt', null, 'Indovina il prodotto dalla foto:'),
         image: item.image,
         options,
         correct,
@@ -7584,7 +7712,7 @@ const gamification = (() => {
     ensureDailyState();
     if (state.quizTokens < STARS_FOR_QUIZ) return;
 
-    const questions = pickQuestionsFromBag('mini', QUIZ_QUESTIONS, 1);
+    const questions = pickQuestionsFromBag('mini', QUIZ_QUESTIONS, 1).map(localizeQuizQuestion);
     if (!questions.length) return;
 
     const handleMiniSuccess = () => {
@@ -7596,19 +7724,19 @@ const gamification = (() => {
       container.className = 'reward-modal';
       const title = document.createElement('h3');
       title.className = 'reward-modal__title';
-      title.textContent = 'Mini quiz superato!';
+      title.textContent = tr('quiz.mini.success.title', null, 'Mini quiz superato!');
       const text = document.createElement('p');
       text.className = 'reward-modal__text';
       text.textContent = isCooldownActive()
-        ? `Hai sbloccato “Test me”, ma hai già un gelato in cooldown. Torna tra ${formatDuration(getCooldownRemaining())} per provarci.`
-        : 'Hai sbloccato “Test me”: è il quiz più difficile che assegna il gelato.';
+        ? tr('quiz.mini.success.text.cooldown', { time: formatDuration(getCooldownRemaining()) }, `Hai sbloccato “Test me”, ma hai già un gelato in cooldown. Torna tra ${formatDuration(getCooldownRemaining())} per provarci.`)
+        : tr('quiz.mini.success.text.ready', null, 'Hai sbloccato “Test me”: è il quiz più difficile che assegna il gelato.');
       const actions = document.createElement('div');
       actions.className = 'reward-modal__actions';
 
       const later = document.createElement('button');
       later.type = 'button';
       later.className = 'reward-action secondary';
-      later.textContent = 'Più tardi';
+      later.textContent = tr('quiz.mini.success.cta.later', null, 'Più tardi');
       later.addEventListener('click', closeOverlay);
       actions.appendChild(later);
 
@@ -7616,7 +7744,7 @@ const gamification = (() => {
         const go = document.createElement('button');
         go.type = 'button';
         go.className = 'reward-action primary';
-        go.textContent = 'Inizia Test me';
+        go.textContent = tr('quiz.mini.success.cta.start', null, 'Inizia Test me');
         go.dataset.overlayFocus = 'true';
         go.addEventListener('click', () => {
           closeOverlay({ force: true });
@@ -7627,7 +7755,7 @@ const gamification = (() => {
         const ok = document.createElement('button');
         ok.type = 'button';
         ok.className = 'reward-action primary';
-        ok.textContent = 'Ok';
+        ok.textContent = tr('quiz.mini.success.cta.ok', null, 'Ok');
         ok.dataset.overlayFocus = 'true';
         ok.addEventListener('click', closeOverlay);
         actions.appendChild(ok);
@@ -7674,16 +7802,16 @@ const gamification = (() => {
       container.className = 'reward-modal';
       const title = document.createElement('h3');
       title.className = 'reward-modal__title';
-      title.textContent = 'Mini quiz perso: -3 stelline';
+      title.textContent = tr('quiz.mini.fail.title', null, 'Mini quiz perso: -3 stelline');
       const text = document.createElement('p');
       text.className = 'reward-modal__text';
-      text.textContent = 'Niente panico: riparti e ritenta. Al prossimo set di 3 stelline rifai il mini quiz.';
+      text.textContent = tr('quiz.mini.fail.text', null, 'Niente panico: riparti e ritenta. Al prossimo set di 3 stelline rifai il mini quiz.');
       const actions = document.createElement('div');
       actions.className = 'reward-modal__actions';
       const ok = document.createElement('button');
       ok.type = 'button';
       ok.className = 'reward-action primary';
-      ok.textContent = 'Ok';
+      ok.textContent = tr('quiz.mini.fail.cta', null, 'Ok');
       ok.dataset.overlayFocus = 'true';
       ok.addEventListener('click', closeOverlay);
       actions.appendChild(ok);
@@ -7693,8 +7821,8 @@ const gamification = (() => {
 
     startQuizSession({
       modeKey: 'mini',
-      title: 'Mini quiz · 1 domanda',
-      introText: '1 domanda rapida. Sbagli = -3 stelline. Giusto = sblocchi “Test me”.',
+      title: tr('quiz.mini.title', null, 'Mini quiz · 1 domanda'),
+      introText: tr('quiz.mini.intro', null, '1 domanda rapida. Sbagli = -3 stelline. Giusto = sblocchi “Test me”.'),
       questions,
       theme: 'default',
       onSuccess: handleMiniSuccess,
@@ -7732,11 +7860,11 @@ const gamification = (() => {
       updateUI();
     };
 
-    const picked = pickQuestionsFromBag('test-me', QUIZ_QUESTIONS, 3);
+    const picked = pickQuestionsFromBag('test-me', QUIZ_QUESTIONS, 3).map(localizeQuizQuestion);
     startQuizSession({
       modeKey: 'test-me',
-      title: 'Test me · quiz avanzato',
-      introText: '3 domande. Perfetto = gelato. Sbagli = vai alla soluzione e riparti.',
+      title: tr('quiz.testme.title', null, 'Test me · quiz avanzato'),
+      introText: tr('quiz.testme.intro', null, '3 domande. Perfetto = gelato. Sbagli = vai alla soluzione e riparti.'),
       questions: picked,
       theme: 'default',
       // default handlers => handleQuizSuccess / handleQuizWrong
@@ -7796,16 +7924,16 @@ const gamification = (() => {
     container.className = 'reward-modal';
     const title = document.createElement('h3');
     title.className = 'reward-modal__title';
-    title.textContent = 'Stelline perse!';
+    title.textContent = tr('quiz.failure.title', null, 'Stelline perse!');
     const text = document.createElement('p');
     text.className = 'reward-modal__text';
-    text.textContent = 'Il quiz ha trollato: le stelline sono tornate a zero. Apri nuove specifiche oppure aspetta il reset automatico (domenica a mezzanotte).';
+    text.textContent = tr('quiz.failure.text', null, 'Il quiz ha trollato: le stelline sono tornate a zero. Apri nuove specifiche oppure aspetta il reset automatico (domenica a mezzanotte).');
     const actions = document.createElement('div');
     actions.className = 'reward-modal__actions';
     const ok = document.createElement('button');
     ok.type = 'button';
     ok.className = 'reward-action primary';
-    ok.textContent = 'Ci riprovo';
+    ok.textContent = tr('quiz.failure.cta', null, 'Ci riprovo');
     ok.dataset.overlayFocus = 'true';
     ok.addEventListener('click', closeOverlay);
     actions.appendChild(ok);
@@ -7847,16 +7975,16 @@ const gamification = (() => {
     burst.textContent = '🍨';
     const title = document.createElement('h3');
     title.className = 'reward-modal__title';
-    title.textContent = 'Bravo! Hai vinto un gelato';
+    title.textContent = tr('quiz.gelato.title', null, 'Bravo! Hai vinto un gelato');
     const text = document.createElement('p');
     text.className = 'reward-modal__text';
-    text.textContent = 'Il gelato vola verso il counter e parte il timer di 24 ore. Conserva il mood vincente!';
+    text.textContent = tr('quiz.gelato.text', null, 'Il gelato vola verso il counter e parte il timer di 24 ore. Conserva il mood vincente!');
     const actions = document.createElement('div');
     actions.className = 'reward-modal__actions';
     const ok = document.createElement('button');
     ok.type = 'button';
     ok.className = 'reward-action primary';
-    ok.textContent = 'Grande!';
+    ok.textContent = tr('quiz.gelato.cta', null, 'Grande!');
     ok.dataset.overlayFocus = 'true';
     ok.addEventListener('click', () => {
       closeOverlay({ force: true });
@@ -7874,16 +8002,16 @@ const gamification = (() => {
     container.className = 'reward-modal';
     const title = document.createElement('h3');
     title.className = 'reward-modal__title';
-    title.textContent = 'Complimenti hai vinto un gelato!';
+    title.textContent = tr('quiz.victory.title', null, 'Complimenti hai vinto un gelato!');
     const text = document.createElement('p');
     text.className = 'reward-modal__text';
-    text.textContent = 'Tre quiz perfetti di fila. Avvisa il trainer e ricomincia la corsa al prossimo cono.';
+    text.textContent = tr('quiz.victory.text', null, 'Tre quiz perfetti di fila. Avvisa il trainer e ricomincia la corsa al prossimo cono.');
     const actions = document.createElement('div');
     actions.className = 'reward-modal__actions';
     const ok = document.createElement('button');
     ok.type = 'button';
     ok.className = 'reward-action primary';
-    ok.textContent = 'Ok';
+    ok.textContent = tr('quiz.victory.cta', null, 'Ok');
     ok.dataset.overlayFocus = 'true';
     ok.addEventListener('click', () => {
       closeOverlay();
@@ -11680,35 +11808,93 @@ const dailyQuestions = (() => {
     "Shelf life di una tavoletta Slitti non aperta?",
   ];
 
-  const getUsedQuestions = () => {
+  const questionsByLang = {
+    it: questions,
+    en: [
+      "Milk smells slightly sour—what's your move?",
+      "Customer says cappuccino tastes like cardboard. First check?",
+      "Opened oat milk 6 days ago—still OK?",
+      "Coffee bag opened 3 weeks ago—how to proceed?",
+      "Espresso crema is pale. Three possible causes?",
+      "Customer asks: 'Is this gelato made today?' How do you answer?",
+      "Crystals in caramel syrup. What now?",
+      "Milk won't foam even when cold. What do you inspect?",
+      "Brownie has a green spot. Immediate action?",
+      "Espresso tastes burnt/bitter. Likely reasons?",
+      "Ideal fridge temperature for milk?",
+      "After how many days is a filled croissant expired?",
+      "Shelf life for alt-milk after opening?",
+      "How do you check coffee bean freshness?",
+      "Gelato shows ice crystals on top. Meaning?",
+      "Panettone cut yesterday—sellable today?",
+      "How do you store Slitti pralines/tablets?",
+      "Espresso machine reads 95°C instead of 90°C. Problem?",
+      "Customer says milk tastes like onion. Possible cause?",
+      "How many shots from 1kg of coffee?",
+    ],
+  };
+
+  const resolveLang = () => {
+    const normalize = (value) => {
+      const v = String(value || '').trim().toLowerCase();
+      if (v.startsWith('it')) return 'it';
+      if (v.startsWith('en')) return 'en';
+      if (v.startsWith('es')) return 'es';
+      if (v.startsWith('fr')) return 'fr';
+      return '';
+    };
+
+    const fromI18n = normalize(window.BadianiI18n?.getLang?.());
+    if (fromI18n) return fromI18n;
+
+    const fromHtml = normalize(document.documentElement?.getAttribute?.('lang'));
+    if (fromHtml) return fromHtml;
+
+    const fromNav = normalize(navigator.language || navigator.userLanguage);
+    if (fromNav) return fromNav;
+
+    return 'it';
+  };
+
+  const getLangQuestions = () => {
+    const lang = resolveLang();
+    const list = questionsByLang[lang] || questionsByLang.it || [];
+    return { lang: questionsByLang[lang] ? lang : 'it', list };
+  };
+
+  const usedStorageKey = (lang = 'it') => `badiani_used_questions:${lang}`;
+
+  const getUsedQuestions = (lang = 'it') => {
     try {
-      return JSON.parse(localStorage.getItem('badiani_used_questions') || '[]');
+      return JSON.parse(localStorage.getItem(usedStorageKey(lang)) || '[]');
     } catch {
       return [];
     }
   };
 
-  const saveUsedQuestions = (used) => {
-    localStorage.setItem('badiani_used_questions', JSON.stringify(used));
+  const saveUsedQuestions = (lang = 'it', used = []) => {
+    localStorage.setItem(usedStorageKey(lang), JSON.stringify(used));
   };
 
   const getNextQuestion = () => {
+    const { lang, list } = getLangQuestions();
+    if (!list || !list.length) return '';
     // Generate a new question each time (no "same all day" cache).
-    let usedQuestions = getUsedQuestions();
+    let usedQuestions = getUsedQuestions(lang);
     
     // Reset if all used
-    if (usedQuestions.length >= questions.length) {
+    if (usedQuestions.length >= list.length) {
       usedQuestions = [];
-      saveUsedQuestions([]);
+      saveUsedQuestions(lang, []);
     }
 
     // Find unused question
-    const availableQuestions = questions.filter(q => !usedQuestions.includes(q));
+    const availableQuestions = list.filter(q => !usedQuestions.includes(q));
     const randomQuestion = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
 
     // Mark as used
     usedQuestions.push(randomQuestion);
-    saveUsedQuestions(usedQuestions);
+    saveUsedQuestions(lang, usedQuestions);
     return randomQuestion;
   };
 
