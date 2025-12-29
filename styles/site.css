@@ -368,6 +368,20 @@ body.page-home {
   overscroll-behavior-x: contain;
 }
 
+/* Ensure cockpit rules also apply to the actual track class used in markup */
+.page-home [data-carousel="cockpit"] .carousel-track {
+  overflow-y: visible;
+}
+
+.page-home [data-carousel="cockpit"] .carousel-track [data-carousel-item] {
+  flex: 0 0 auto;
+  width: min(420px, calc(100% - 20px));
+  max-width: none;
+  min-width: 0;
+  scroll-snap-align: center;
+  scroll-snap-stop: normal;
+}
+
 .page-home [data-carousel="cockpit"] .cockpit-track::-webkit-scrollbar {
   display: none;
 }
@@ -385,6 +399,7 @@ body.page-home {
 
 .page-home [data-carousel="cockpit"] .summary-card {
   min-height: 140px;
+  max-height: max-content;
   aspect-ratio: auto;
 }
 
@@ -411,7 +426,7 @@ body.page-home {
 @media (min-width: 980px) {
   .page-home .hero {
     grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-    align-items: stretch;
+    align-items: start;
   }
 
   .page-home .hero-aside {
@@ -2567,6 +2582,7 @@ h4 {
   padding: 0;
   display: grid;
   gap: 8px;
+  height: fit-content;
 }
 
 .summary-list__btn {
@@ -2601,6 +2617,7 @@ h4 {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 12px;
+  height: fit-content;
 }
 
 .summary-stats .stat {
@@ -2791,6 +2808,7 @@ h4 {
   padding: 16px 18px;
   display: grid;
   gap: 10px;
+  align-content: start;
 }
 
 /* Homepage: make hero/cockpit cards flatter and tighter */
@@ -3861,7 +3879,7 @@ button,
 .carousel-track {
   display: flex;
   flex-wrap: nowrap;
-  align-items: flex-start;
+  align-items: start;
   gap: 24px;
   overflow-x: auto;
   overflow-y: hidden;
@@ -6661,9 +6679,8 @@ body.page-home {
    ========================= */
 .hub-assistant {
   width: min(1160px, calc(100% - 40px));
-  margin: -18px auto 28px;
+  margin: 8px auto 28px;
   position: relative;
-  z-index: 1;
 }
 
 .hub-assistant__inner {
@@ -7500,8 +7517,6 @@ body.page-home {
   .menu-drawer__panel {
     width: 280px;
   }
-    width: 100%;
-    max-height: calc(100dvh - 24px);
 
   .menu-categories a {
     padding: 14px 20px;
