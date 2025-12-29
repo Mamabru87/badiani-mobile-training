@@ -6535,7 +6535,11 @@ body.page-home {
 
 .page-home .hero {
   gap: 14px;
-  align-items: stretch;
+  /* On mid-size viewports the hero is often 2-column; equal-height stretching makes
+     the cockpit column grow to the height of the Playbook column, leaving large
+     empty space that reads as “cards stretching”. We only enable equal-height
+     hero on wide screens (see the >=980px patch later in the file). */
+  align-items: start;
   overflow-x: hidden;
   overflow-y: visible;
   padding-inline: 6px;
@@ -7933,6 +7937,11 @@ body.page-home {
   background: var(--card);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
+}
+
+/* Cockpit cards: keep stats compact on narrow viewports (avoid tall single-column stacks). */
+.page-home .carousel--cockpit .summary-stats {
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
 }
 
 /* ==========================================================================
