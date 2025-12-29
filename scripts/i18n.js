@@ -940,7 +940,7 @@
 
       'game.milestone.title.ready': 'Tre stelline: mini quiz sbloccato!',
       'game.milestone.title.waiting': 'Tre stelline: mini quiz (poi aspetti il cooldown)',
-      'game.milestone.text.ready': 'Fai il mini quiz su ciò che hai aperto: se rispondi giusto, sblocchi “Test me” (il quiz più difficile che assegna il gelato).',
+      'game.milestone.text.ready': 'Fai il mini quiz su ciò che hai aperto: se rispondi giusto, sblocchi “Test me”. È il quiz più difficile che assegna il gelato.',
       'game.milestone.text.waiting': 'Puoi fare adesso il mini quiz. Se lo passi, sblocchi “Test me”, ma potrai farlo solo quando finisce il countdown del gelato.',
       'game.milestone.hint': 'Chiudi questa notifica per avviare il mini quiz.',
       'game.milestone.start': 'Inizia mini quiz',
@@ -1932,7 +1932,7 @@
 
       'game.milestone.title.ready': 'Three stars: mini quiz unlocked!',
       'game.milestone.title.waiting': 'Three stars: mini quiz (then wait for cooldown)',
-      'game.milestone.text.ready': 'Take the mini quiz on what you opened: if you answer correctly, you unlock “Test me” (the harder quiz that awards the gelato).',
+      'game.milestone.text.ready': 'Take the mini quiz on what you opened: if you answer correctly, you unlock “Test me”. It’s the harder quiz that awards the gelato.',
       'game.milestone.text.waiting': 'You can take the mini quiz now. If you pass, you unlock “Test me”, but you can only play it once the gelato countdown ends.',
       'game.milestone.hint': 'Close this notice to start the mini quiz.',
       'game.milestone.start': 'Start mini quiz',
@@ -4994,7 +4994,7 @@
 
       'game.milestone.title.ready': 'Tres estrellas: ¡mini quiz desbloqueado!',
       'game.milestone.title.waiting': 'Tres estrellas: mini quiz (luego espera el cooldown)',
-      'game.milestone.text.ready': 'Haz el mini quiz sobre lo que abriste: si respondes bien, desbloqueas “Test me” (el quiz difícil que asigna el gelato).',
+      'game.milestone.text.ready': 'Haz el mini quiz sobre lo que abriste: si respondes bien, desbloqueas “Test me”. Es el quiz difícil que asigna el gelato.',
       'game.milestone.text.waiting': 'Puedes hacer el mini quiz ahora. Si lo apruebas, desbloqueas “Test me”, pero podrás hacerlo solo cuando termine la cuenta atrás del gelato.',
       'game.milestone.hint': 'Cierra este aviso para iniciar el mini quiz.',
       'game.milestone.start': 'Iniciar mini quiz',
@@ -7356,7 +7356,7 @@
 
       'game.milestone.title.ready': 'Trois étoiles : mini quiz débloqué !',
       'game.milestone.title.waiting': 'Trois étoiles : mini quiz (puis attendre le cooldown)',
-      'game.milestone.text.ready': 'Fais le mini quiz sur ce que tu as ouvert : si tu réponds juste, tu débloques “Test me” (le quiz difficile qui attribue le gelato).',
+      'game.milestone.text.ready': 'Fais le mini quiz sur ce que tu as ouvert : si tu réponds juste, tu débloques “Test me”. C’est le quiz difficile qui attribue le gelato.',
       'game.milestone.text.waiting': 'Tu peux faire le mini quiz maintenant. Si tu réussis, tu débloques “Test me”, mais tu ne pourras le faire qu’à la fin du compte à rebours gelato.',
       'game.milestone.hint': 'Ferme cette notification pour lancer le mini quiz.',
       'game.milestone.start': 'Démarrer le mini quiz',

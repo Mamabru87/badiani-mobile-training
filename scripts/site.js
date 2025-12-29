@@ -5811,10 +5811,85 @@ const gamification = (() => {
     if (question.type === 'order' && Array.isArray(question.steps)) {
       return question.steps.filter(Boolean).join(' → ');
     }
-    if (Array.isArray(question.options) && Number.isInteger(question.correct)) {
-      return question.options[question.correct] || '';
+    const correctIdx = getCorrectIndex(question);
+    if (Array.isArray(question.options) && Number.isInteger(correctIdx)) {
+      return question.options[correctIdx] || '';
     }
     return '';
+  }
+
+  function getCorrectIndex(question) {
+    if (!question) return null;
+    if (Number.isInteger(question.correct)) return question.correct;
+    if (!Array.isArray(question.options) || question.options.length === 0) return null;
+
+    // Heuristic fallback for questions that intentionally keep base text empty (e.g. sm-* where i18n provides text)
+    // or legacy/experimental questions missing a `correct` index.
+    const explain = String(question.explain ?? question.explanation ?? '').trim();
+    const prompt = String(question.question ?? '').trim();
+
+    const pick = inferCorrectIndexFromText(question.options, `${prompt} ${explain}`);
+    if (Number.isInteger(pick)) {
+      // Cache so grading/highlighting/review all stay consistent within the session.
+      question.correct = pick;
+      return pick;
+    }
+    return null;
+  }
+
+  function inferCorrectIndexFromText(options, blob) {
+    if (!Array.isArray(options) || options.length === 0) return null;
+    const text = String(blob || '').toLowerCase();
+    if (!text) return null;
+
+    // Pull high-signal numeric tokens: integers, decimals, fractions like 1/3, and ranges like 7–8.
+    const numbers = new Set();
+    const numMatches = text.match(/\b\d+(?:[\.,]\d+)?\b/g) || [];
+    numMatches.forEach(n => numbers.add(n.replace(',', '.')));
+    const fracMatches = text.match(/\b\d+\s*\/\s*\d+\b/g) || [];
+    fracMatches.forEach(f => numbers.add(f.replace(/\s+/g, '')));
+    const rangeMatches = text.match(/\b\d+\s*[–-]\s*\d+\b/g) || [];
+    rangeMatches.forEach(r => numbers.add(r.replace(/\s+/g, '')));
+
+    const norm = (s) => String(s || '').toLowerCase();
+    let bestIdx = null;
+    let bestScore = -1;
+
+    options.forEach((opt, idx) => {
+      const o = norm(opt);
+      if (!o) return;
+
+      let score = 0;
+
+      // Strong signal: option string appears in the blob.
+      if (o.length >= 6 && text.includes(o)) score += 6;
+
+      // Numeric overlap
+      numbers.forEach((n) => {
+        if (!n) return;
+        // try direct and a few common unit variants
+        if (o.includes(n)) score += 5;
+        if (o.includes(`${n}g`) || o.includes(`${n} g`)) score += 2;
+        if (o.includes(`${n}ml`) || o.includes(`${n} ml`)) score += 2;
+        if (o.includes(`${n}°c`) || o.includes(`${n} °c`)) score += 2;
+        if (o.includes(`${n}s`) || o.includes(`${n} s`) || o.includes(`${n}sec`) || o.includes(`${n} sec`)) score += 1;
+        if (o.includes(`${n}min`) || o.includes(`${n} min`)) score += 1;
+      });
+
+      // Mild signal: shared “standard-ish” keywords.
+      const keywords = ['standard', 'min', 'minimum', 'repose', 'repos', 'power', 'ml', 'g', 'scoop', 'sec', 'minutes', 'minute', 'temp', '°c', 'fridge', 'frigo'];
+      keywords.forEach((k) => {
+        if (text.includes(k) && o.includes(k)) score += 1;
+      });
+
+      if (score > bestScore) {
+        bestScore = score;
+        bestIdx = idx;
+      }
+    });
+
+    // Require a minimum confidence so we don't guess randomly.
+    return bestScore >= 5 ? bestIdx : null;
   }
 
   function guessSpecFromPrompt(prompt = '') {
@@ -5943,14 +6018,12 @@ const gamification = (() => {
     };
   }
 
-  const findQuizById = (qid) => {
+  function findQuizById(qid) {
     if (!qid) return null;
-    return QUIZ_QUESTIONS.find(q => q.id === qid)
-      || CHALLENGE_QUESTIONS.find(q => q.id === qid)
-      || null;
-  };
+    return QUIZ_QUESTIONS.find((q) => q.id === qid) || CHALLENGE_QUESTIONS.find((q) => q.id === qid) || null;
+  }
 
-  const localizeHistoryItem = (item) => {
+  function localizeHistoryItem(item) {
     if (!item || !item.qid) return item;
     const q = findQuizById(item.qid);
     if (!q) return item;
@@ -5964,7 +6037,7 @@ const gamification = (() => {
       specHref: item.specHref || review.specHref,
       specLabel: item.specLabel || review.specLabel,
     };
-  };
+  }
 
   function buildQuizReview(question) {
     const localizedQuestion = localizeQuizQuestion(question);
@@ -7915,6 +7988,9 @@ const gamification = (() => {
     const renderClassicStep = () => {
       const question = questions[currentIndex];
 
+      // Ensure we have a correct index even for i18n-driven pools (e.g. sm-*).
+      const correctIndex = getCorrectIndex(question);
+
       if (question && question.type === 'order') {
         renderOrderStep(question);
         return;
@@ -7958,7 +8034,7 @@ const gamification = (() => {
         btn.addEventListener('click', () => {
           if (!sessionActive) return;
           disableAll();
-          const isCorrect = optionIndex === question.correct;
+          const isCorrect = Number.isInteger(correctIndex) && optionIndex === correctIndex;
           btn.classList.add(isCorrect ? 'is-correct' : 'is-wrong');
           if (!isCorrect) {
             setTimeout(() => fail(question), 400);
@@ -7984,6 +8060,7 @@ const gamification = (() => {
 
     const renderFlashStep = () => {
       const question = questions[currentIndex];
+      const correctIndex = getCorrectIndex(question);
       stage.innerHTML = '';
       cleanupTimers();
 
@@ -8020,14 +8097,16 @@ const gamification = (() => {
       const evaluate = () => {
         disableAll();
         const picks = Array.from(selected);
-        const hitCorrect = picks.includes(question.correct);
+        const hitCorrect = Number.isInteger(correctIndex) && picks.includes(correctIndex);
         if (hitCorrect || picks.length !== 2) {
           // mark picks
           picks.forEach((idx) => {
             const btn = options.querySelector(`[data-option-index="${idx}"]`);
             if (btn) btn.classList.add('is-wrong');
           });
-          const correctBtn = options.querySelector(`[data-option-index="${question.correct}"]`);
+          const correctBtn = Number.isInteger(correctIndex)
+            ? options.querySelector(`[data-option-index="${correctIndex}"]`)
+            : null;
           if (correctBtn) correctBtn.classList.add('is-correct');
           setTimeout(() => fail(question), 450);
           return;
@@ -8037,7 +8116,9 @@ const gamification = (() => {
           const btn = options.querySelector(`[data-option-index="${idx}"]`);
           if (btn) btn.classList.add('is-correct');
         });
-        const correctBtn = options.querySelector(`[data-option-index="${question.correct}"]`);
+        const correctBtn = Number.isInteger(correctIndex)
+          ? options.querySelector(`[data-option-index="${correctIndex}"]`)
+          : null;
         if (correctBtn) correctBtn.classList.add('is-neutral');
 
         if (currentIndex === questions.length - 1) {
