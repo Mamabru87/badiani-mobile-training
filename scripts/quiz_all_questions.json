@@ -1,0 +1,1314 @@
+{
+  "instructions": "Translate all 'it' values to English (en), Spanish (es), and French (fr). Keep the structure identical. After translation, use the companion script to convert back to i18n.js format.",
+  "info": {
+    "total_questions": 100,
+    "translations_needed": 2100,
+    "languages": [
+      "en",
+      "es",
+      "fr"
+    ]
+  },
+  "questions": [
+    {
+      "id": "tm-001",
+      "it": {
+        "question": "Un collega prepara il mix crepes e lo lascia riposare 1 ora: qual è la correzione giusta?",
+        "options": [
+          "Va bene così",
+          "Aggiungere più farina",
+          "Portare il riposo minimo a 2 ore",
+          "Cuocere più a lungo la crepe"
+        ],
+        "explain": "Standard impasto crepes = riposo minimo 2 ore in frigo per stabilizzare la miscela."
+      }
+    },
+    {
+      "id": "tm-002",
+      "it": {
+        "question": "Stai facendo una Buontalenti crepe e il cliente vuole “più salsa sopra”: qual è la quantità standard di salsa top prima di extra?",
+        "options": [
+          "10g",
+          "20g",
+          "30g",
+          "60g"
+        ],
+        "explain": "La finitura standard prevede 30g di salsa sopra, poi eventuali extra sono un’aggiunta."
+      }
+    },
+    {
+      "id": "tm-003",
+      "it": {
+        "question": "Vuoi preparare una crepe “Italiana plain base”: quale combinazione è coerente con lo standard?",
+        "options": [
+          "Mozzarella + rocket + 3 cherry tomatoes",
+          "Mozzarella + tonno + olive",
+          "Prosciutto + funghi",
+          "Bacon + cheddar"
+        ],
+        "explain": "La farcitura standard include mozzarella grattugiata, rocket e 3 pomodorini (poi in quarti)."
+      }
+    },
+    {
+      "id": "tm-004",
+      "it": {
+        "question": "La crepe salata è pronta ma “molle” al centro: quale step finale è stato probabilmente saltato?",
+        "options": [
+          "Spolverata di zucchero a velo",
+          "10 secondi extra di cottura dopo l’ultimo flip",
+          "Aggiunta della salsa top 30g",
+          "Riposo mix 2 ore"
+        ],
+        "explain": "Dopo la piega si fa un’ulteriore breve cottura (10 sec) per compattare e scaldare l’interno."
+      }
+    },
+    {
+      "id": "tm-005",
+      "it": {
+        "question": "Stai preparando la versione beetroot: quale procedura è corretta?",
+        "options": [
+          "3g beetroot powder in 250g mix, poi frullare",
+          "30g beetroot powder in 250g mix, poi setacciare",
+          "3g beetroot powder in 1000g mix, poi frullare",
+          "10g beetroot powder direttamente sulla piastra"
+        ],
+        "explain": "Standard colore beetroot = 3g su 250g di mix, miscelati con blender."
+      }
+    },
+    {
+      "id": "tm-006",
+      "it": {
+        "question": "Waffle: quale combinazione “setup + dose” è corretta?",
+        "options": [
+          "Power 2 + 250ml",
+          "Power 3 + 177ml",
+          "Power 5 + 100ml",
+          "Power 3 + 50ml"
+        ],
+        "explain": "Standard waffle = power 3 e una scoop di pastella pari a 177ml."
+      }
+    },
+    {
+      "id": "tm-007",
+      "it": {
+        "question": "Waffle: cosa evita di “sciupare” la presentazione quando aggiungi topping?",
+        "options": [
+          "Togliere subito dal ferro e farcire",
+          "Riposo 45 secondi prima di topping/gelato",
+          "Aumentare la power a 5",
+          "Girare dopo 30 secondi"
+        ],
+        "explain": "Lo standard prevede riposo 45 secondi per stabilizzare la struttura prima dei topping."
+      }
+    },
+    {
+      "id": "tm-008",
+      "it": {
+        "question": "Se vuoi un ciclo waffle completo, qual è il totale di cottura standard?",
+        "options": [
+          "2.5 min",
+          "5 min",
+          "7.5 min",
+          "10 min"
+        ],
+        "explain": "Standard = 2.5 minuti, poi giri e fai altri 2.5 minuti (totale 5)."
+      }
+    },
+    {
+      "id": "tm-009",
+      "it": {
+        "question": "Gelato Burger: quale regola “porzione + salsa” è corretta?",
+        "options": [
+          "2 scoops + 2 salse",
+          "1 scoop (70g) + 1 sola salsa",
+          "1 scoop (100g) + salse illimitate",
+          "3 scoops + 1 salsa"
+        ],
+        "explain": "Standard prodotto = una sola scoop da 70g e una sola scelta di salsa."
+      }
+    },
+    {
+      "id": "tm-010",
+      "it": {
+        "question": "Gelato Burger: quale impostazione macchina è corretta per il tempo di chiusura?",
+        "options": [
+          "8 sec",
+          "10 sec",
+          "12 sec",
+          "20 sec"
+        ],
+        "explain": "Il ciclo standard è 12 secondi."
+      }
+    },
+    {
+      "id": "tm-011",
+      "it": {
+        "question": "Gelato Burger: se trovi briciole sulla macchina, qual è l’azione corretta?",
+        "options": [
+          "Sciacquare con acqua",
+          "Passare blue-roll paper",
+          "Usare spugna abrasiva",
+          "Spruzzare olio"
+        ],
+        "explain": "La gestione standard delle briciole è rimuoverle con blue-roll paper."
+      }
+    },
+    {
+      "id": "tm-012",
+      "it": {
+        "question": "Gelato Croissant: quanta Buontalenti va inserita secondo standard?",
+        "options": [
+          "1 scoop da 70g",
+          "2 scoops da 70g",
+          "3 scoops da 50g",
+          "2 scoops da 100g"
+        ],
+        "explain": "Standard = 2 scoops con scooper, 2×70g."
+      }
+    },
+    {
+      "id": "tm-013",
+      "it": {
+        "question": "Gelato Croissant: scegli l’ordine topping corretto.",
+        "options": [
+          "Crumble → pistacchio sauce",
+          "Pistacchio sauce → crumble",
+          "Salsa dolcevita → crumble",
+          "Panna → crumble"
+        ],
+        "explain": "Lo standard prevede pistacchio sauce prima e crumble dopo."
+      }
+    },
+    {
+      "id": "tm-014",
+      "it": {
+        "question": "Gelato Croissant: quale coppia quantità è corretta?",
+        "options": [
+          "Pistacchio sauce ~20g + crumble 7g",
+          "Pistacchio sauce 7g + crumble 20g",
+          "Pistacchio sauce 30g + crumble 3g",
+          "Pistacchio sauce 5g + crumble 14g"
+        ],
+        "explain": "Standard topping = circa 20g salsa e 7g crumble."
+      }
+    },
+    {
+      "id": "tm-015",
+      "it": {
+        "question": "Pancake: come riconosci il timing giusto per girarli?",
+        "options": [
+          "Dopo 10 sec",
+          "Dopo 30 sec",
+          "Quando iniziano le bolle (~90 sec)",
+          "Solo quando diventano scuri"
+        ],
+        "explain": "Standard = si gira quando il mix inizia a fare bolle, circa 90 secondi."
+      }
+    },
+    {
+      "id": "tm-016",
+      "it": {
+        "question": "Pancake: quanti pancake compongono una porzione completa?",
+        "options": [
+          "1",
+          "2",
+          "3",
+          "5"
+        ],
+        "explain": "Standard porzione = tre pancake (ripeti la dose tre volte)."
+      }
+    },
+    {
+      "id": "tm-017",
+      "it": {
+        "question": "Blueberry Pancake: quale set “frutta” è corretto?",
+        "options": [
+          "1 fragola (in 4) + 7–8 blueberries",
+          "2 fragole + 3 blueberries",
+          "1 fragola + 12 blueberries",
+          "0 fragole + 7–8 blueberries"
+        ],
+        "explain": "La presentazione standard usa 1 fragola tagliata e 7–8 mirtilli."
+      }
+    },
+    {
+      "id": "tm-018",
+      "it": {
+        "question": "BYO Pancake: quale abbinamento “dry ingredient” è coerente con standard?",
+        "options": [
+          "Chocolate chips 3 tsp",
+          "Chocolate chips 1 tsp",
+          "Coconut chips 5 tsp",
+          "Whole nuts 12 pezzi"
+        ],
+        "explain": "Standard BYO = chocolate chips 3 teaspoons (coconut chips 2 tsp, nuts 6–7)."
+      }
+    },
+    {
+      "id": "tm-019",
+      "it": {
+        "question": "Porridge: qual è la dose latte standard?",
+        "options": [
+          "80–90ml",
+          "125–130ml",
+          "175ml",
+          "250ml"
+        ],
+        "explain": "La base standard porridge usa 125–130ml di latte."
+      }
+    },
+    {
+      "id": "tm-020",
+      "it": {
+        "question": "Porridge: quanti misurini di oats?",
+        "options": [
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "explain": "Lo standard prevede 2 misurini di porridge oats."
+      }
+    },
+    {
+      "id": "tm-021",
+      "it": {
+        "question": "Porridge: quanto tempo lasci “settare” dopo aver mescolato?",
+        "options": [
+          "10 sec",
+          "30 sec",
+          "2 min",
+          "5 min"
+        ],
+        "explain": "Lo standard prevede 30 secondi di assestamento prima del servizio."
+      }
+    },
+    {
+      "id": "tm-022",
+      "it": {
+        "question": "Afternoon Tea Set: quale combinazione è corretta?",
+        "options": [
+          "Buontalenti + strawberry jam + 2 teapots",
+          "Matcha + honey + 1 teapot",
+          "Lemon + marmellata d’arancia + 3 teapots",
+          "Strawberry + pistacchio sauce + 1 teapot"
+        ],
+        "explain": "Il set standard include Buontalenti con wafer, strawberry jam e servizio tè con 2 teapots."
+      }
+    },
+    {
+      "id": "tm-023",
+      "it": {
+        "question": "Gelato cups: un “Medio” può contenere quanti gusti?",
+        "options": [
+          "Solo 1",
+          "1–2",
+          "1–3",
+          "1–5"
+        ],
+        "explain": "Standard Medio = 1–2 gusti (140g nominali)."
+      }
+    },
+    {
+      "id": "tm-024",
+      "it": {
+        "question": "Se un Medio cup pesa 170g, come lo valuti rispetto al range standard?",
+        "options": [
+          "Dentro range",
+          "Fuori range perché supera max",
+          "Fuori range perché sotto min",
+          "Non esiste un range"
+        ],
+        "explain": "Per Medio il massimo standard è 160g, quindi 170g è oltre soglia."
+      }
+    },
+    {
+      "id": "tm-025",
+      "it": {
+        "question": "Se un Piccolo cup pesa 115g, come lo valuti?",
+        "options": [
+          "Sotto min",
+          "Dentro range",
+          "Sopra max",
+          "Non misurabile"
+        ],
+        "explain": "Piccolo ha range 100–120g, quindi 115g è corretto."
+      }
+    },
+    {
+      "id": "tm-026",
+      "it": {
+        "question": "“Mega” (linea portioning): qual è il massimo standard?",
+        "options": [
+          "160g",
+          "200g",
+          "240g",
+          "300g"
+        ],
+        "explain": "Nella tabella portioning, Mega ha max 240g."
+      }
+    },
+    {
+      "id": "tm-027",
+      "it": {
+        "question": "Coni: quale frase è corretta?",
+        "options": [
+          "Il gluten free consente 3 gusti",
+          "Il choco cone consente 1–2 gusti a 140g",
+          "Il Piccolo cone è 140g",
+          "I coni non hanno grammi"
+        ],
+        "explain": "Choco cone = 1–2 gusti, 140g."
+      }
+    },
+    {
+      "id": "tm-028",
+      "it": {
+        "question": "Take-me-home boxes: quale set “taglia → max gusti” è corretto?",
+        "options": [
+          "Piccolo 1–3, Medio 1–4, Grande 1–5",
+          "Piccolo 1–2, Medio 1–3, Grande 1–4",
+          "Piccolo 1–5, Medio 1–3, Grande 1–4",
+          "Piccolo 1–4, Medio 1–5, Grande 1–6"
+        ],
+        "explain": "Standard box = 500ml (1–3), 750ml (1–4), 1000ml (1–5)."
+      }
+    },
+    {
+      "id": "tm-029",
+      "it": {
+        "question": "Box gelato: qual è la priorità per evitare difetti visivi e strutturali?",
+        "options": [
+          "Lasciare aria per “morbidezza”",
+          "Spingere il gelato dentro evitando air bubbles",
+          "Non pulire i bordi per velocità",
+          "Mettere subito il nastro prima del coperchio"
+        ],
+        "explain": "Lo standard è riempire comprimendo e senza bolle d’aria."
+      }
+    },
+    {
+      "id": "tm-030",
+      "it": {
+        "question": "Box gelato: quale azione è corretta per la chiusura?",
+        "options": [
+          "Sigillare con Badiani tape sul punto box-lid",
+          "Avvolgere con alluminio",
+          "Usare elastico",
+          "Lasciare aperto e mettere in borsa"
+        ],
+        "explain": "Lo standard di sicurezza/tenuta usa Badiani tape sul contatto box-lid."
+      }
+    },
+    {
+      "id": "tm-031",
+      "it": {
+        "question": "Box gelato: quale priorità riduce contaminazioni in laboratorio/servizio?",
+        "options": [
+          "Servire sempre i gusti cremosi prima dei sorbetti",
+          "Servire sempre i sorbetti prima",
+          "Mescolare sorbetto e crema nella stessa paletta senza lavare",
+          "Non cambiare mai utensili"
+        ],
+        "explain": "Lo standard prevede di porzionare sorbetti per primi per minimizzare contaminazione."
+      }
+    },
+    {
+      "id": "tm-032",
+      "it": {
+        "question": "Vetrina treats: qual è il requisito minimo temperatura?",
+        "options": [
+          "-5°C",
+          "-10°C",
+          "-14°C",
+          "-18°C"
+        ],
+        "explain": "La vertical vitrine deve stare almeno a -14°C."
+      }
+    },
+    {
+      "id": "tm-033",
+      "it": {
+        "question": "Vetrina treats: come imposti la disposizione “visiva” corretta?",
+        "options": [
+          "Cakes in basso, cookies in alto",
+          "Tutto in alto",
+          "Cakes in alto, cookies e Pinguinos in basso",
+          "Cookies in alto, cakes in basso"
+        ],
+        "explain": "Standard display = cakes in alto (adult-eye level), cookies/Pinguinos in basso (kids-eye level)."
+      }
+    },
+    {
+      "id": "tm-034",
+      "it": {
+        "question": "Shelf life treats: quale coppia corretta?",
+        "options": [
+          "Cookies 35 giorni",
+          "Mini cones 21 giorni",
+          "Mini cakes 14 giorni",
+          "Pinguinos 21 giorni"
+        ],
+        "explain": "Standard shelf life = mini cones 21 giorni (cookies 14, pinguinos 35)."
+      }
+    },
+    {
+      "id": "tm-035",
+      "it": {
+        "question": "Gelato display morning prep: quale azione viene prima di mettere i gelati a display?",
+        "options": [
+          "Mettere i gelati subito",
+          "Pulire vetrina con acqua calda + sanitiser giallo e far brillare metalli con blue spray/blue roll",
+          "Solo passare un panno asciutto",
+          "Togliere le porte e lasciarle off"
+        ],
+        "explain": "Lo standard prevede pulizia/sanificazione e finitura “shine” prima dell’esposizione."
+      }
+    },
+    {
+      "id": "tm-036",
+      "it": {
+        "question": "Temperatura di esposizione gelato (vetrina): quando inizi a mettere i gelati?",
+        "options": [
+          "A 0°C",
+          "A -5°C",
+          "A -14/-15°C",
+          "A -25°C"
+        ],
+        "explain": "Lo standard di servizio indica -14/-15°C per l’esposizione."
+      }
+    },
+    {
+      "id": "tm-037",
+      "it": {
+        "question": "Scampolo: quale definizione è corretta?",
+        "options": [
+          "Quando resta meno di metà vaschetta",
+          "Quando resta meno di 1/4 di vaschetta",
+          "Quando resta meno di 1/10",
+          "Quando il gusto è duro"
+        ],
+        "explain": "Scampolo = meno di 1/4 rimasto, quindi va sostituito."
+      }
+    },
+    {
+      "id": "tm-038",
+      "it": {
+        "question": "Scampolo: quale tecnica di integrazione è corretta?",
+        "options": [
+          "Aggiungere tutto in una volta",
+          "Aggiungere circa 100g per volta e livellare",
+          "Aggiungere solo topping",
+          "Sciogliere e ricongelare"
+        ],
+        "explain": "Lo standard prevede aggiunte graduali (~100g) e livellamento finale."
+      }
+    },
+    {
+      "id": "tm-039",
+      "it": {
+        "question": "Scampolo: quale limite massimo di “altezza aggiunta” è corretto?",
+        "options": [
+          "1–2 cm",
+          "3–4 cm",
+          "5–7 cm",
+          "10–12 cm"
+        ],
+        "explain": "Lo standard pone limite massimo 5–7 cm."
+      }
+    },
+    {
+      "id": "tm-040",
+      "it": {
+        "question": "Manutenzione vetrina: quale frequenza è corretta?",
+        "options": [
+          "Deep clean ogni giorno",
+          "Deep clean una volta a settimana",
+          "Deep clean una volta al mese",
+          "Mai deep clean"
+        ],
+        "explain": "Lo standard prevede deep clean settimanale e filtri settimanali."
+      }
+    },
+    {
+      "id": "tm-041",
+      "it": {
+        "question": "Manutenzione vetrina: se il negozio è poco trafficato, come gestisci le sliding doors?",
+        "options": [
+          "Le lasci aperte",
+          "Le tieni in posizione per preservare temperatura",
+          "Le rimuovi",
+          "Le blocchi con nastro"
+        ],
+        "explain": "Lo standard richiede sliding doors in posizione per mantenere temperatura."
+      }
+    },
+    {
+      "id": "tm-042",
+      "it": {
+        "question": "Smoothie: qual è il parametro comune a Rosso/Verde/Giallo?",
+        "options": [
+          "250ml apple juice",
+          "250ml latte",
+          "100ml acqua",
+          "500ml succo"
+        ],
+        "explain": "Lo standard smoothie usa 250ml di apple juice in tutte le varianti."
+      }
+    },
+    {
+      "id": "tm-043",
+      "it": {
+        "question": "Smoothie: quale “match colore sticker” è corretto?",
+        "options": [
+          "Rosso Berry → green sticker",
+          "Verde Boost → pink sticker",
+          "Giallo Passion → yellow sticker",
+          "Giallo Passion → pink sticker"
+        ],
+        "explain": "Standard sticker = Rosso/pink, Verde/green, Giallo/yellow."
+      }
+    },
+    {
+      "id": "tm-044",
+      "it": {
+        "question": "Premade matcha big batch: quante porzioni produce?",
+        "options": [
+          "1",
+          "5",
+          "10",
+          "20"
+        ],
+        "explain": "Lo standard big batch è dichiarato per 10 portions."
+      }
+    },
+    {
+      "id": "tm-045",
+      "it": {
+        "question": "Premade matcha: shelf life corretta (incluso giorno di preparazione)?",
+        "options": [
+          "1 giorno",
+          "2 giorni",
+          "3 giorni",
+          "7 giorni"
+        ],
+        "explain": "Lo standard premade matcha è 1 day includendo il giorno di preparazione."
+      }
+    },
+    {
+      "id": "tm-046",
+      "it": {
+        "question": "Premade matcha: qual è l’azione “anti-grumi” più importante?",
+        "options": [
+          "Bollire la polvere",
+          "Setacciare (sift) la matcha",
+          "Aggiungere ghiaccio",
+          "Mescolare con cucchiaio"
+        ],
+        "explain": "Lo standard prevede setaccio per evitare lumps prima di whiskare."
+      }
+    },
+    {
+      "id": "tm-047",
+      "it": {
+        "question": "Matcha Iced Latte: quale combinazione base è corretta?",
+        "options": [
+          "200ml milk + 25ml premade matcha",
+          "175ml milk + 50ml premade matcha",
+          "250ml milk + 10ml premade matcha",
+          "100ml milk + 100ml premade matcha"
+        ],
+        "explain": "La ricetta standard usa 200ml milk e 25ml premade matcha (ice fino alla linea)."
+      }
+    },
+    {
+      "id": "tm-048",
+      "it": {
+        "question": "Matcha Iced Latte: qual è l’opzione “su richiesta” (non obbligatoria)?",
+        "options": [
+          "Premade matcha",
+          "Ice",
+          "Vanilla syrup (1 pump)",
+          "Milk"
+        ],
+        "explain": "La ricetta prevede 1 pump vanilla syrup come optional."
+      }
+    },
+    {
+      "id": "tm-049",
+      "it": {
+        "question": "Buontalenti/Strawberry Iced (matcha): qual è la quantità latte principale?",
+        "options": [
+          "200ml",
+          "175ml",
+          "150ml",
+          "250ml"
+        ],
+        "explain": "La variante con gelato prevede 175ml milk nella cup."
+      }
+    },
+    {
+      "id": "tm-050",
+      "it": {
+        "question": "Buontalenti/Strawberry Iced (matcha): come prepari la schiuma topping gelato?",
+        "options": [
+          "Blender",
+          "Forchetta in milkshake cup con 50ml latte",
+          "Shaker con ghiaccio",
+          "Microonde"
+        ],
+        "explain": "Lo standard è whisk con forchetta e 50ml milk, non blender."
+      }
+    },
+    {
+      "id": "tm-051",
+      "it": {
+        "question": "Buontalenti/Strawberry Iced (matcha): qual è il massimo gelato consentito?",
+        "options": [
+          "50g",
+          "80g",
+          "120g",
+          "180g"
+        ],
+        "explain": "Lo standard impone 80g max per la scoop in questa bevanda."
+      }
+    },
+    {
+      "id": "tm-052",
+      "it": {
+        "question": "Dirty Matcha Affogato: cosa lo rende “dirty”?",
+        "options": [
+          "Premade matcha",
+          "Double espresso sopra matcha gelato",
+          "Latte di cocco",
+          "Apple juice"
+        ],
+        "explain": "Lo standard dirty = matcha gelato + double shot espresso."
+      }
+    },
+    {
+      "id": "tm-053",
+      "it": {
+        "question": "Matcha Matcha Affogato: cosa versi sopra la scoop di matcha gelato?",
+        "options": [
+          "25ml premade matcha",
+          "50ml acqua",
+          "200ml latte",
+          "1 pump vanilla"
+        ],
+        "explain": "Lo standard prevede 25ml di premade matcha."
+      }
+    },
+    {
+      "id": "tm-054",
+      "it": {
+        "question": "Buontalenti Matcha Affogato: quale gelato è usato?",
+        "options": [
+          "Buontalenti",
+          "Matcha",
+          "Strawberry",
+          "Lemon"
+        ],
+        "explain": "Lo standard usa Buontalenti gelato con 25ml premade matcha."
+      }
+    },
+    {
+      "id": "tm-055",
+      "it": {
+        "question": "Cocktail pouches: quale formula base è comune?",
+        "options": [
+          "50ml alcol + 50ml liquido + 3 scoops + ghiaccio fino alla linea",
+          "25ml alcol + 25ml acqua + 1 scoop",
+          "100ml alcol senza ghiaccio",
+          "Solo gelato frullato"
+        ],
+        "explain": "Lo standard ricette cocktail pouches usa 50ml shot, 50ml water (o coconut milk per Piña Colada), 3 scoops e ghiaccio fino al ridge line."
+      }
+    },
+    {
+      "id": "tm-056",
+      "it": {
+        "question": "Strawberry Daiquiri: quale alcol è previsto?",
+        "options": [
+          "Vodka",
+          "White Rum",
+          "Aperol",
+          "Gin"
+        ],
+        "explain": "Lo standard Strawberry Daiquiri usa 50ml white rum."
+      }
+    },
+    {
+      "id": "tm-057",
+      "it": {
+        "question": "Frozen Lemonade: quale alcol è previsto?",
+        "options": [
+          "Vodka",
+          "White Rum",
+          "Aperol",
+          "Whisky"
+        ],
+        "explain": "Lo standard Frozen Lemonade usa 50ml vodka."
+      }
+    },
+    {
+      "id": "tm-058",
+      "it": {
+        "question": "Frozen Aperol: quale ingrediente alcolico compare?",
+        "options": [
+          "Aperol",
+          "Vodka",
+          "White Rum",
+          "Gin"
+        ],
+        "explain": "Lo standard Frozen Aperol usa 50ml Aperol."
+      }
+    },
+    {
+      "id": "tm-059",
+      "it": {
+        "question": "Piña Colada: quale “milk” è previsto al posto dell’acqua?",
+        "options": [
+          "Oat milk",
+          "Coconut milk",
+          "Whole milk",
+          "Soy milk"
+        ],
+        "explain": "Lo standard Piña Colada usa 50ml coconut milk."
+      }
+    },
+    {
+      "id": "tm-060",
+      "it": {
+        "question": "Churros: quale triade è corretta?",
+        "options": [
+          "180°C + 6 churros + 5 min",
+          "190°C + 8 churros + 8–9 min",
+          "200°C + 10 churros + 2 min",
+          "170°C + 8 churros + 15 min"
+        ],
+        "explain": "Standard churros = 190°C, porzione 8, frittura 8–9 min."
+      }
+    },
+    {
+      "id": "tm-061",
+      "it": {
+        "question": "Coating churros: quale rapporto è corretto?",
+        "options": [
+          "600g zucchero + 20g cannella",
+          "600g cannella + 20g zucchero",
+          "300g zucchero + 30g cannella",
+          "500g zucchero + 50g cannella"
+        ],
+        "explain": "Lo standard coating è 600g white sugar e 20g cinnamon."
+      }
+    },
+    {
+      "id": "tm-062",
+      "it": {
+        "question": "Panettone warm slice: qual è la sequenza corretta?",
+        "options": [
+          "Olio → 10 sec → flip → 10 sec",
+          "10 sec → flip → 10 sec (senza olio)",
+          "20 sec un lato solo",
+          "5 sec e basta"
+        ],
+        "explain": "Lo standard scalda 10 sec per lato e vieta l’olio."
+      }
+    },
+    {
+      "id": "tm-063",
+      "it": {
+        "question": "Pandoro: quale finitura “base” è corretta?",
+        "options": [
+          "Sale",
+          "Cacao amaro",
+          "Zucchero a velo",
+          "Sciroppo d’acero"
+        ],
+        "explain": "Lo standard prevede zucchero a velo sulla fetta."
+      }
+    },
+    {
+      "id": "tm-064",
+      "it": {
+        "question": "Mini panettone in-store: quale coppia “azione + quantità salsa” è corretta?",
+        "options": [
+          "Prendi dalla vertical vitrina + riempi espresso cup 1/3",
+          "Prendi dal forno + riempi espresso cup piena",
+          "Prendi dalla cassa + riempi espresso cup 1/10",
+          "Prendi dal frigo + riempi espresso cup 2/3"
+        ],
+        "explain": "Lo standard prevede prelievo dalla vertical vitrina (con guanti) e salsa 1/3 espresso cup."
+      }
+    },
+    {
+      "id": "tm-065",
+      "it": {
+        "question": "Delivery mini panettone: qual è il layout corretto nella treat box?",
+        "options": [
+          "Sauce pot in un angolo",
+          "Panettoni al centro, salsa fuori",
+          "Un panettone per angolo e sauce pot al centro",
+          "Tutto mescolato"
+        ],
+        "explain": "Lo standard posiziona i mini panettoni negli angoli e la salsa al centro."
+      }
+    },
+    {
+      "id": "tm-066",
+      "it": {
+        "question": "Delivery mini panettone: quando va conservata la box in attesa del driver?",
+        "options": [
+          "A temperatura ambiente",
+          "In frigo",
+          "In freezer",
+          "Nel forno spento"
+        ],
+        "explain": "Lo standard prevede che la box vada in freezer finché arriva il driver."
+      }
+    },
+    {
+      "id": "tm-067",
+      "it": {
+        "question": "Mulled wine: quale setup evita errori meccanici?",
+        "options": [
+          "Inner container che galleggia",
+          "Inner container inserito senza acqua",
+          "Inner container inserito correttamente e non deve galleggiare",
+          "Nessun inner container"
+        ],
+        "explain": "Lo standard specifica che l’inner container non deve “float”."
+      }
+    },
+    {
+      "id": "tm-068",
+      "it": {
+        "question": "Mulled wine: quale warm-up è corretto?",
+        "options": [
+          "Level 10 per 5 minuti",
+          "Level 10 per 25–30 minuti",
+          "Level 5 per 60 minuti",
+          "Dial 6/7 subito senza warm-up"
+        ],
+        "explain": "Lo standard scalda a livello 10 per 25–30 min, poi imposta dial 6/7."
+      }
+    },
+    {
+      "id": "tm-069",
+      "it": {
+        "question": "Mulled wine: quale garnish è standard in servizio?",
+        "options": [
+          "Cannella in stecca",
+          "Fetta d’arancia",
+          "Menta",
+          "Lime"
+        ],
+        "explain": "Lo standard prevede una fetta d’arancia nella cup."
+      }
+    },
+    {
+      "id": "tm-070",
+      "it": {
+        "question": "Mulled wine: quale shelf life è corretta?",
+        "options": [
+          "Scaldato: 30 giorni; In-box: 3 giorni",
+          "Scaldato: 3 giorni; In-box: 30 giorni",
+          "Scaldato: 7 giorni; In-box: 7 giorni",
+          "Scaldato: 1 giorno; In-box: 14 giorni"
+        ],
+        "explain": "Standard = 3 giorni dal primo warm-up (macchina) e 30 giorni dalla prima apertura (box)."
+      }
+    },
+    {
+      "id": "tm-071",
+      "it": {
+        "question": "Slitti: in che anno nasce come torrefazione?",
+        "options": [
+          "1932",
+          "1969",
+          "1988",
+          "1990"
+        ],
+        "explain": "La fondazione come coffee roasting company è nel 1969."
+      }
+    },
+    {
+      "id": "tm-072",
+      "it": {
+        "question": "Slitti: quando Andrea espande la produzione al cioccolato?",
+        "options": [
+          "1988",
+          "1990",
+          "1994",
+          "2008"
+        ],
+        "explain": "Lo standard storico indica il passaggio al cioccolato nel 1990."
+      }
+    },
+    {
+      "id": "tm-073",
+      "it": {
+        "question": "Slitti: quale premio è associato al 1994?",
+        "options": [
+          "Eurochocolate Award",
+          "Grand Prix International de la Chocolaterie",
+          "Best chocolatier in Italy",
+          "Nessuno"
+        ],
+        "explain": "Nel 1994 è associato il Grand Prix International de la Chocolaterie."
+      }
+    },
+    {
+      "id": "tm-074",
+      "it": {
+        "question": "Slitti: quale pralina contiene alcol e quanto?",
+        "options": [
+          "Passion fruit 1.5%",
+          "Irish Coffee 0.9%",
+          "Origin 0%",
+          "Tutte 0.9%"
+        ],
+        "explain": "La pralina Irish Coffee contiene 0.9% di alcol."
+      }
+    },
+    {
+      "id": "tm-075",
+      "it": {
+        "question": "Slitti Coffee Spoons: in che anno vengono create?",
+        "options": [
+          "1969",
+          "1988",
+          "1993",
+          "2008"
+        ],
+        "explain": "Le “Coffee Spoons” sono create nel 1993."
+      }
+    },
+    {
+      "id": "tm-076",
+      "it": {
+        "question": "Dragee Pistacchi di Bronte: come sono descritti?",
+        "options": [
+          "Solo cioccolato fondente",
+          "Pistacchi tostati coperti da strato di cioccolato bianco e latte, finiti con zucchero a velo",
+          "Pistacchi salati senza copertura",
+          "Pistacchi al caramello salato"
+        ],
+        "explain": "Lo standard descrive Bronte pistachios tostati con copertura white + milk chocolate e finitura zucchero a velo."
+      }
+    },
+    {
+      "id": "tm-077",
+      "it": {
+        "question": "Dragee “Grani di Arabica”: quale copertura è citata?",
+        "options": [
+          "64% dark chocolate",
+          "45% milk chocolate",
+          "82% dark chocolate",
+          "White chocolate"
+        ],
+        "explain": "I grani di Arabica sono coperti con un sottile strato di 64% dark chocolate."
+      }
+    },
+    {
+      "id": "tm-078",
+      "it": {
+        "question": "Spread Slittosa: percentuale nocciole Langhe?",
+        "options": [
+          "37%",
+          "51%",
+          "57%",
+          "64%"
+        ],
+        "explain": "Slittosa è descritta con 37% di nocciole delle Langhe."
+      }
+    },
+    {
+      "id": "tm-079",
+      "it": {
+        "question": "Spread Riccosa: percentuale nocciole Langhe?",
+        "options": [
+          "37%",
+          "51%",
+          "57%",
+          "73%"
+        ],
+        "explain": "Riccosa è descritta con 51% di nocciole delle Langhe."
+      }
+    },
+    {
+      "id": "tm-080",
+      "it": {
+        "question": "Spread Gianera: percentuale nocciole Langhe?",
+        "options": [
+          "37%",
+          "51%",
+          "57%",
+          "82%"
+        ],
+        "explain": "Gianera è descritta con 57% di nocciole delle Langhe."
+      }
+    },
+    {
+      "id": "tm-081",
+      "it": {
+        "question": "Yo‑Yo: qual è la porzione gelato standard?",
+        "options": [
+          "50–60g",
+          "70g",
+          "80–90g",
+          "120g"
+        ],
+        "explain": "Lo standard Yo‑Yo è una scoop circa 80/90g tra due wafers."
+      }
+    },
+    {
+      "id": "tm-082",
+      "it": {
+        "question": "Yo‑Yo: quale combo è corretta per il servizio?",
+        "options": [
+          "Senza guanti, 1 wafer",
+          "Guanti + tool + 2 wafers",
+          "Solo spatola gelato",
+          "Solo coppetta"
+        ],
+        "explain": "Lo standard prevede guanti, tool e due wafers per chiusura."
+      }
+    },
+    {
+      "id": "tm-083",
+      "it": {
+        "question": "Yo‑Yo: quale pratica evita un risultato “sbordato”?",
+        "options": [
+          "Fare due scoops",
+          "Porzionare con precisione e non far overflow",
+          "Premere con forza",
+          "Sciogliere il gelato"
+        ],
+        "explain": "La regola è porzionare con precisione evitando overflow."
+      }
+    },
+    {
+      "id": "tm-084",
+      "it": {
+        "question": "Gelato box: quale azione migliora l’ordine e la pulizia in consegna?",
+        "options": [
+          "Non pulire i bordi",
+          "Pulire i bordi con blue roll e rimuovere eccessi",
+          "Mettere topping sui bordi",
+          "Riempire oltre il bordo"
+        ],
+        "explain": "Lo standard prevede pulizia dei bordi del box prima di servire."
+      }
+    },
+    {
+      "id": "tm-085",
+      "it": {
+        "question": "Gelato box: quale logica di riempimento è corretta quando hai gusti molto morbidi e gusti più “tenaci”?",
+        "options": [
+          "Mettere prima i gusti morbidi",
+          "Mettere prima i gusti duri",
+          "Alternare a caso",
+          "Solo sorbetti"
+        ],
+        "explain": "Lo standard suggerisce di “push soft flavours first” nel box."
+      }
+    },
+    {
+      "id": "tm-086",
+      "it": {
+        "question": "Coppa gelato: quale strumento è usato per fare le tre palline?",
+        "options": [
+          "Scoop spatula",
+          "Round scooper",
+          "Mestolo",
+          "Spatola piatta"
+        ],
+        "explain": "La coppa prevede “round scooper” per le tre balls."
+      }
+    },
+    {
+      "id": "tm-087",
+      "it": {
+        "question": "Morning prep: prima di riutilizzare spatole “di pulizia” su altri gusti, cosa fai?",
+        "options": [
+          "Nulla",
+          "Lavare e asciugare con blue roll",
+          "Solo sciacquare",
+          "Metterle in freezer"
+        ],
+        "explain": "Lo standard impone lavaggio dopo ogni uso e asciugatura con blue roll prima di passare ad altri gusti."
+      }
+    },
+    {
+      "id": "tm-088",
+      "it": {
+        "question": "Deep clean vetrina: quale step è parte della sequenza?",
+        "options": [
+          "Aggiungere olio alle superfici",
+          "Rimuovere briciole/noci e residui dentro la macchina",
+          "Mettere ghiaccio",
+          "Spegnere e non pulire"
+        ],
+        "explain": "La deep clean include rimozione di nuts/crumbs e residui, poi sanificazione."
+      }
+    },
+    {
+      "id": "tm-089",
+      "it": {
+        "question": "Deep clean vetrina: cosa “brilla” alla fine del ciclo?",
+        "options": [
+          "Solo le etichette",
+          "Le superfici con blue spray e blue roll",
+          "Il pavimento",
+          "Le mani"
+        ],
+        "explain": "Lo standard prevede finishing con blue spray/blue roll per far brillare le superfici."
+      }
+    },
+    {
+      "id": "tm-090",
+      "it": {
+        "question": "Smoothie: tempo minimo di blending indicativo?",
+        "options": [
+          "10 sec",
+          "20 sec",
+          "30 sec",
+          "90 sec"
+        ],
+        "explain": "Lo standard indica 30 secondi o fino a consistenza smooth."
+      }
+    },
+    {
+      "id": "tm-091",
+      "it": {
+        "question": "Matcha iced latte: perché si versa lentamente la premade matcha su latte e ghiaccio?",
+        "options": [
+          "Per scaldare la bevanda",
+          "Per creare un pattern visivo",
+          "Per sciogliere il gelato",
+          "Per aumentare lo zucchero"
+        ],
+        "explain": "La procedura standard punta a creare un pattern versando lentamente."
+      }
+    },
+    {
+      "id": "tm-092",
+      "it": {
+        "question": "Buontalenti/Strawberry iced (matcha): dove deve “sedere” il topping gelato?",
+        "options": [
+          "Sul fondo",
+          "A metà",
+          "Sopra, come strato superiore",
+          "Fuori dal bicchiere"
+        ],
+        "explain": "Lo standard è versare il topping lentamente così resta sopra la bevanda."
+      }
+    },
+    {
+      "id": "tm-093",
+      "it": {
+        "question": "Cocktail pouches: quanti “large ice cubes” sono indicati come riferimento?",
+        "options": [
+          "2",
+          "4",
+          "~6",
+          "10"
+        ],
+        "explain": "Lo standard indica ghiaccio fino al ridge line, circa 6 cubi grandi."
+      }
+    },
+    {
+      "id": "tm-094",
+      "it": {
+        "question": "Mulled wine: dove si conserva la miscela la notte dopo raffreddamento?",
+        "options": [
+          "A temperatura ambiente",
+          "In freezer",
+          "In frigo",
+          "In macchina accesa"
+        ],
+        "explain": "Lo standard prevede raffreddare, coprire con cling film e conservare in frigo."
+      }
+    },
+    {
+      "id": "tm-095",
+      "it": {
+        "question": "Mulled wine: quale pulizia è corretta a fine servizio?",
+        "options": [
+          "Solo esterno macchina",
+          "Lavare inner container e lid con sapone e acqua calda + asciugare",
+          "Spruzzare profumo",
+          "Non pulire"
+        ],
+        "explain": "Lo standard prevede lavaggio dei componenti interni e pulizia esterna con panno umido."
+      }
+    },
+    {
+      "id": "tm-096",
+      "it": {
+        "question": "Panettone/Pandoro: quale azione aumenta l’appeal “al banco”?",
+        "options": [
+          "Servire sempre freddo senza opzioni",
+          "Chiedere se lo vogliono warm e tostare 10 sec per lato",
+          "Friggerlo",
+          "Mettere olio sulla piastra"
+        ],
+        "explain": "Lo standard prevede opzione warm slice con tostatura 10+10 sec senza olio."
+      }
+    },
+    {
+      "id": "tm-097",
+      "it": {
+        "question": "Gelato cups: quale affermazione è coerente con il servizio (tecnica)?",
+        "options": [
+          "Si prende la coppetta dal bordo",
+          "Si pressa delicatamente per togliere air bubbles",
+          "Non si usa mai wafer",
+          "Si mescola il gelato con acqua"
+        ],
+        "explain": "Lo standard prevede pressare delicatamente per ridurre air bubbles e migliorare resa."
+      }
+    },
+    {
+      "id": "tm-098",
+      "it": {
+        "question": "Gelato cones: quale upsell è coerente con lo standard?",
+        "options": [
+          "Non proporre nulla",
+          "Proporre whipped cream o passare al cono chocolate",
+          "Proporre solo acqua",
+          "Proporre spezie salate"
+        ],
+        "explain": "Lo standard suggerisce upsell con whipped cream o cono chocolate."
+      }
+    },
+    {
+      "id": "tm-099",
+      "it": {
+        "question": "Slitti: quale affermazione è corretta sulle coffee spoons?",
+        "options": [
+          "Ricetta pubblica e replicabile",
+          "Ricetta segreta e “first True Spoons”",
+          "Solo gusto fragola",
+          "Create nel 2008"
+        ],
+        "explain": "Sono descritte come originali, ricetta segreta e prime “True Spoons”."
+      }
+    },
+    {
+      "id": "tm-100",
+      "it": {
+        "question": "Slitti: quale combinazione “spalmabile → tipo” è corretta?",
+        "options": [
+          "Riccosa = dark chocolate cream",
+          "Gianera = milk chocolate cream",
+          "Slittosa = cocoa spread",
+          "Slittosa = solo latte"
+        ],
+        "explain": "Slittosa è descritta come cocoa spread, mentre Riccosa è milk chocolate cream e Gianera dark chocolate cream."
+      }
+    }
+  ]
+}

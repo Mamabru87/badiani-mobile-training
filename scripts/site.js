@@ -1,4 +1,4 @@
-document.documentElement.classList.add('has-js');
+﻿document.documentElement.classList.add('has-js');
 
 // ============================================================
 // AVATAR SPRITE (index.html)
@@ -517,9 +517,13 @@ const getUiLang = () => {
 const tr = (key, vars, fallback) => {
   try {
     const api = window.BadianiI18n;
-    if (api && typeof api.t === 'function') return api.t(key, vars);
+    if (api && typeof api.t === 'function') {
+      const translated = api.t(key, vars);
+      // If the translation is missing (api returns the key), fall back gracefully.
+      if (translated !== key) return translated;
+    }
   } catch {}
-  if (fallback != null) return String(fallback);
+  if (fallback != null && fallback !== undefined) return String(fallback);
   return String(key || '');
 };
 
@@ -959,8 +963,9 @@ scrollButtons.forEach((btn) => {
   let typingToken = 0;
   let typingTimer = 0;
   let avatarInputTimer = 0;
-  let kbLoadPromise = null;
-  let kbIndex = null;
+  const KB_LANGS = ['it', 'en', 'es', 'fr'];
+  const kbLoadPromises = new Map();
+  const kbIndexByLang = new Map();
   
   if (!drawer) return;
 
@@ -988,22 +993,46 @@ scrollButtons.forEach((btn) => {
   };
 
   const KB_SOURCES = [
-    { id: 'gelato', path: 'notes/pdf_text/gelato.txt', defaultHref: 'gelato-lab.html?center=1' },
-    { id: 'sweet', path: 'notes/pdf_text/Sweet Treats.txt', defaultHref: 'sweet-treats.html?center=1' },
-    { id: 'festive', path: 'notes/pdf_text/christmas and churro.txt', defaultHref: 'festive.html?center=1' },
-    { id: 'pastries', path: 'notes/pdf_text/pastries.txt', defaultHref: 'pastries.html?center=1' },
-    { id: 'slitti', path: 'notes/pdf_text/slitti-yoyo.txt', defaultHref: 'slitti-yoyo.html?center=1' },
-    { id: 'freshdrinks', path: 'notes/pdf_text/freshdrink-macha-cocktails.txt', defaultHref: 'caffe.html?center=1' },
-    { id: 'caffe', path: 'notes/pdf_text/caffe.txt', defaultHref: 'caffe.html?center=1' },
+    { id: 'gelato', file: 'gelato.txt', defaultHref: 'gelato-lab.html?center=1' },
+    { id: 'sweet', file: 'sweet-treats.txt', defaultHref: 'sweet-treats.html?center=1' },
+    { id: 'festive', file: 'churros-christmas.txt', defaultHref: 'festive.html?center=1' },
+    { id: 'pastries', file: 'pastries.txt', defaultHref: 'pastries.html?center=1' },
+    { id: 'slitti', file: 'slitti-yoyo.txt', defaultHref: 'slitti-yoyo.html?center=1' },
+    { id: 'freshdrinks', file: 'drinks.txt', defaultHref: 'caffe.html?center=1' },
+    { id: 'caffe', file: 'caffe.txt', defaultHref: 'caffe.html?center=1' },
   ];
 
-  const loadKB = async () => {
-    if (kbLoadPromise) return kbLoadPromise;
-    kbLoadPromise = (async () => {
+  const detectKbLanguage = (text) => {
+    const t = (text || '').toLowerCase();
+    const fallback = getUiLang();
+    const itWords = /(come|quanti|quale|cosa|perch[eé]|dove|quando|grazie|aiuto)/i;
+    const enWords = /(how|many|what|where|why|when|please|help|thank|type)/i;
+    const esWords = /(cómo|cuántos|cuál|qué|dónde|por qué|cuándo|gracias|ayuda)/i;
+    const frWords = /(comment|combien|quel|quoi|où|pourquoi|quand|merci|aide)/i;
+    const scores = { it: 0, en: 0, es: 0, fr: 0 };
+    if (itWords.test(t)) scores.it += 10;
+    if (enWords.test(t)) scores.en += 10;
+    if (esWords.test(t)) scores.es += 10;
+    if (frWords.test(t)) scores.fr += 10;
+    if (/\b(coni|cono|coppett|churros|cr[eè]pe|vin\s*brul|cioccolat|cappuccino|gelato|scheda|quando|come\s*si|quanti\s+grammi)\b/i.test(t)) scores.it += 15;
+    if (/\b(cones?|cups?|churros|cr[eè]pes?|mulled|cappuccino|chocolate|how|many|type|flavor)\b/i.test(t)) scores.en += 15;
+    if (/\b(conos?|copas?|churros|cr[eè]pes?|vino|chocolate|gelato|cuánt|cómo|tipo)\b/i.test(t)) scores.es += 15;
+    if (/\b(cornets?|coupes?|churros|cr[eè]pes?|vin|chocolat|gelato|combien|comment|type)\b/i.test(t)) scores.fr += 15;
+    const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+    const top = sorted[0];
+    const lang = (top && top[1] > 0 && top[0]) || fallback || 'it';
+    return KB_LANGS.includes(lang) ? lang : 'it';
+  };
+
+  const loadKB = async (lang = getUiLang()) => {
+    const safeLang = KB_LANGS.includes(lang) ? lang : 'it';
+    if (kbLoadPromises.has(safeLang)) return kbLoadPromises.get(safeLang);
+    const promise = (async () => {
       const chunks = [];
       await Promise.all(KB_SOURCES.map(async (src) => {
+        const path = `notes/kb/${safeLang}/${src.file}`;
         try {
-          const res = await fetch(encodeURI(src.path), { cache: 'no-store' });
+          const res = await fetch(encodeURI(path), { cache: 'no-store' });
           if (!res || !res.ok) return;
           const txt = await res.text();
           if (!txt || txt.length < 50) return;
@@ -1025,15 +1054,16 @@ scrollButtons.forEach((btn) => {
         }
       }));
 
-      // Precompute token frequency maps (simple overlap scoring)
-      kbIndex = chunks.map((c) => {
+      const index = chunks.map((c) => {
         const freq = Object.create(null);
         c.tokens.forEach((t) => { freq[t] = (freq[t] || 0) + 1; });
         return { ...c, freq };
       });
-      return kbIndex;
+      kbIndexByLang.set(safeLang, index);
+      return index;
     })();
-    return kbLoadPromise;
+    kbLoadPromises.set(safeLang, promise);
+    return promise;
   };
 
   const pickDefaultCtaHref = (query) => {
@@ -1060,7 +1090,11 @@ scrollButtons.forEach((btn) => {
   const kbRetrieve = async (query) => {
     const qTokens = tokenize(query);
     if (!qTokens.length) return null;
-    await loadKB();
+    const lang = detectKbLanguage(query);
+    let kbIndex = await loadKB(lang);
+    if (!Array.isArray(kbIndex) || !kbIndex.length) {
+      kbIndex = await loadKB('it');
+    }
     if (!Array.isArray(kbIndex) || !kbIndex.length) return null;
 
     let best = null;
@@ -2525,8 +2559,9 @@ scrollButtons.forEach((btn) => {
   let typingToken = 0;
   let typingTimer = 0;
   let avatarInputTimer = 0;
-  let kbLoadPromise = null;
-  let kbIndex = null;
+  const KB_LANGS = ['it', 'en', 'es', 'fr'];
+  const kbLoadPromises = new Map();
+  const kbIndexByLang = new Map();
 
   const sleep = (ms) => new Promise((resolve) => window.setTimeout(resolve, Math.max(0, Number(ms) || 0)));
 
@@ -2552,22 +2587,24 @@ scrollButtons.forEach((btn) => {
   };
 
   const KB_SOURCES = [
-    { id: 'gelato', path: 'notes/pdf_text/gelato.txt', defaultHref: 'gelato-lab.html?center=1' },
-    { id: 'sweet', path: 'notes/pdf_text/Sweet Treats.txt', defaultHref: 'sweet-treats.html?center=1' },
-    { id: 'festive', path: 'notes/pdf_text/christmas and churro.txt', defaultHref: 'festive.html?center=1' },
-    { id: 'pastries', path: 'notes/pdf_text/pastries.txt', defaultHref: 'pastries.html?center=1' },
-    { id: 'slitti', path: 'notes/pdf_text/slitti-yoyo.txt', defaultHref: 'slitti-yoyo.html?center=1' },
-    { id: 'freshdrinks', path: 'notes/pdf_text/freshdrink-macha-cocktails.txt', defaultHref: 'caffe.html?center=1' },
-    { id: 'caffe', path: 'notes/pdf_text/caffe.txt', defaultHref: 'caffe.html?center=1' },
+    { id: 'gelato', file: 'gelato.txt', defaultHref: 'gelato-lab.html?center=1' },
+    { id: 'sweet', file: 'sweet-treats.txt', defaultHref: 'sweet-treats.html?center=1' },
+    { id: 'festive', file: 'churros-christmas.txt', defaultHref: 'festive.html?center=1' },
+    { id: 'pastries', file: 'pastries.txt', defaultHref: 'pastries.html?center=1' },
+    { id: 'slitti', file: 'slitti-yoyo.txt', defaultHref: 'slitti-yoyo.html?center=1' },
+    { id: 'freshdrinks', file: 'drinks.txt', defaultHref: 'caffe.html?center=1' },
+    { id: 'caffe', file: 'caffe.txt', defaultHref: 'caffe.html?center=1' },
   ];
 
-  const loadKB = async () => {
-    if (kbLoadPromise) return kbLoadPromise;
-    kbLoadPromise = (async () => {
+  const loadKB = async (lang = getUiLang()) => {
+    const safeLang = KB_LANGS.includes(lang) ? lang : 'it';
+    if (kbLoadPromises.has(safeLang)) return kbLoadPromises.get(safeLang);
+    const promise = (async () => {
       const chunks = [];
       await Promise.all(KB_SOURCES.map(async (src) => {
+        const path = `notes/kb/${safeLang}/${src.file}`;
         try {
-          const res = await fetch(encodeURI(src.path), { cache: 'no-store' });
+          const res = await fetch(encodeURI(path), { cache: 'no-store' });
           if (!res || !res.ok) return;
           const txt = await res.text();
           if (!txt || txt.length < 50) return;
@@ -2589,14 +2626,16 @@ scrollButtons.forEach((btn) => {
         }
       }));
 
-      kbIndex = chunks.map((c) => {
+      const index = chunks.map((c) => {
         const freq = Object.create(null);
         c.tokens.forEach((t) => { freq[t] = (freq[t] || 0) + 1; });
         return { ...c, freq };
       });
-      return kbIndex;
+      kbIndexByLang.set(safeLang, index);
+      return index;
     })();
-    return kbLoadPromise;
+    kbLoadPromises.set(safeLang, promise);
+    return promise;
   };
 
   const pickDefaultCtaHref = (query) => {
@@ -2623,7 +2662,11 @@ scrollButtons.forEach((btn) => {
   const kbRetrieve = async (query) => {
     const qTokens = tokenize(query);
     if (!qTokens.length) return null;
-    await loadKB();
+    const lang = (typeof detectLanguage === 'function' ? detectLanguage(query) : getUiLang());
+    let kbIndex = await loadKB(lang);
+    if (!Array.isArray(kbIndex) || !kbIndex.length) {
+      kbIndex = await loadKB('it');
+    }
     if (!Array.isArray(kbIndex) || !kbIndex.length) return null;
 
     let best = null;
@@ -3036,12 +3079,13 @@ scrollButtons.forEach((btn) => {
     return /^(come|quanto|quale|quali|cosa|perche|perché|quando|dove|posso|devo|si puo|si può|mi dici|mi spieghi|che differenza|qual\s+e|qual\s+è)\b/i.test(q);
   };
 
-  const detectLanguage = (text) => {
+  const detectLanguage = (text, fallbackLang = getUiLang()) => {
     const t = (text || '').toLowerCase();
     const itWords = /(come|quanti|quale|cosa|perch[eé]|dove|quando|grazie|aiuto)/i;
     const enWords = /(how|many|what|where|why|when|please|help|thank|type)/i;
     const esWords = /(cómo|cuántos|cuál|qué|dónde|por qué|cuándo|gracias|ayuda)/i;
     const frWords = /(comment|combien|quel|quoi|où|pourquoi|quand|merci|aide)/i;
+    const supported = ['it', 'en', 'es', 'fr'];
     
     let scores = { it: 0, en: 0, es: 0, fr: 0 };
     if (itWords.test(t)) scores.it += 10;
@@ -3055,7 +3099,8 @@ scrollButtons.forEach((btn) => {
     if (/\b(cornets?|coupes?|churros|crêpes?|vin|chocolat|gelato|combien|comment|type)\b/i.test(t)) scores.fr += 15;
     
     const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-    return sorted[0]?.[1] > 0 ? sorted[0][0] : 'it';
+    const fallback = supported.includes(fallbackLang) ? fallbackLang : 'it';
+    return sorted[0]?.[1] > 0 ? sorted[0][0] : fallback;
   };
 
   const assistantRuleAnswer = (query) => {
@@ -3587,6 +3632,30 @@ const gamification = (() => {
   })();
   const STORAGE_KEY_PREFIX = 'badianiGamification.v3';
   const GLOBAL_KEY = 'badianiGamification.v3';
+  const SESSION_KEY_PREFIX = 'badianiGamification.session.v1';
+  const WINDOW_NAME_PREFIX = '__badianiGam__:';
+  
+  // Test storage availability once
+  let storageAvailable = null;
+  const testStorage = () => {
+    if (storageAvailable !== null) return storageAvailable;
+    try {
+      const testKey = '__badiani_test__';
+      localStorage.setItem(testKey, '1');
+      const retrieved = localStorage.getItem(testKey);
+      localStorage.removeItem(testKey);
+      storageAvailable = retrieved === '1';
+      if (!storageAvailable) {
+        console.warn('⚠️ localStorage write/read test failed');
+      }
+      return storageAvailable;
+    } catch (e) {
+      console.warn('⚠️ localStorage blocked or unavailable:', e.message);
+      storageAvailable = false;
+      return false;
+    }
+  };
+
   const getActiveProfile = () => {
     try {
       const raw = localStorage.getItem('badianiUser.profile.v1');
@@ -3599,6 +3668,32 @@ const gamification = (() => {
     const prof = getActiveProfile();
     const id = prof?.id || 'guest';
     return `${STORAGE_KEY_PREFIX}:${id}`;
+  };
+  const sessionKey = () => {
+    const prof = getActiveProfile();
+    const id = prof?.id || 'guest';
+    return `${SESSION_KEY_PREFIX}:${id}`;
+  };
+
+  const readWindowNameState = () => {
+    try {
+      const raw = String(window.name || '');
+      if (!raw.startsWith(WINDOW_NAME_PREFIX)) return null;
+      const payload = raw.slice(WINDOW_NAME_PREFIX.length);
+      if (!payload) return null;
+      return JSON.parse(payload);
+    } catch {
+      return null;
+    }
+  };
+
+  const writeWindowNameState = (value) => {
+    try {
+      const payload = JSON.stringify(pruneStateForStorage(value));
+      window.name = `${WINDOW_NAME_PREFIX}${payload}`;
+    } catch {
+      /* ignore window.name errors */
+    }
   };
   const STARS_FOR_QUIZ = 3;
   const CRYSTALS_PER_STAR = 5;
@@ -3799,6 +3894,38 @@ const gamification = (() => {
   // QUIZ CONTINUO (Test me): banca domande MCQ con motivazioni.
   // Nota: ogni oggetto può avere `explain` (motivazione) e viene mostrato nella pagina soluzione.
   // IDs: mantenuti come sequenza stabile (tm-001, tm-002, ...) per evitare collisioni e facilitare aggiornamenti.
+  // ============================================
+  // QUIZ QUESTIONS BY TOPIC (for adaptive mini quiz)
+  // These questions are categorized by menu section to enable topic-based filtering
+  // ============================================
+  const QUIZ_TOPIC_MAPPING = {
+    // Crepes, Waffles, Pancakes, Porridge (sweet-treats)
+    'sweet-treats': ['tm-001', 'tm-002', 'tm-003', 'tm-004', 'tm-005', 'tm-006', 'tm-007', 'tm-008'],
+    
+    // Gelato Products (Burger, Croissant, Pancake, Porridge) + Display & Service
+    'gelato-lab': ['tm-009', 'tm-010', 'tm-011', 'tm-012', 'tm-013', 'tm-014', 'tm-015', 'tm-016', 
+                   'tm-017', 'tm-018', 'tm-019', 'tm-020', 'tm-021', 'tm-022', 'tm-023', 'tm-024', 
+                   'tm-025', 'tm-026', 'tm-027', 'tm-028', 'tm-029', 'tm-030', 'tm-031', 'tm-032',
+                   'tm-033', 'tm-034', 'tm-035', 'tm-036', 'tm-037', 'tm-038', 'tm-039', 'tm-040',
+                   'tm-041'],
+    
+    // Drinks (Smoothie, Matcha, Cocktails, Mulled Wine)
+    'caffe': ['tm-042', 'tm-043', 'tm-044', 'tm-045', 'tm-046', 'tm-047', 'tm-048', 'tm-049', 
+              'tm-050', 'tm-051', 'tm-052', 'tm-053', 'tm-054', 'tm-055', 'tm-056', 'tm-057',
+              'tm-058', 'tm-059'],
+    
+    // Sweet Treats & Festive (Churros, Panettone, Pandoro, Mulled Wine)
+    'pastries': ['tm-060', 'tm-061', 'tm-062', 'tm-063', 'tm-064', 'tm-065', 'tm-066', 'tm-067',
+                 'tm-068', 'tm-069', 'tm-070'],
+    
+    // Slitti History, Products, Yo-Yo & Advanced Gelato Service
+    'slitti-yoyo': ['tm-071', 'tm-072', 'tm-073', 'tm-074', 'tm-075', 'tm-076', 'tm-077', 'tm-078',
+                    'tm-079', 'tm-080', 'tm-081', 'tm-082', 'tm-083', 'tm-084', 'tm-085', 'tm-086',
+                    'tm-087', 'tm-088', 'tm-089', 'tm-090', 'tm-091', 'tm-092', 'tm-093', 'tm-094',
+                    'tm-095', 'tm-096', 'tm-097', 'tm-098', 'tm-099', 'tm-100'],
+  };
+
+  // Legacy structure: keep QUIZ_QUESTIONS flat
   const QUIZ_QUESTIONS = [
     {
       id: 'tm-001',
@@ -4572,20 +4699,7 @@ const gamification = (() => {
     _lastBonusPoints: 0,
   };
 
-  let state = loadState();
-  let cardSerial = 0;
-  let hubNodes = {};
-  let overlayNodes = {};
-  let lastFocus = null;
-  let countdownTicker = null;
-  let activePopover = null;
-  let popoverHandlersBound = false;
-  let infoHandlerBound = false;
-  let wrongLogHandlerBound = false;
-  let challengeActive = false;
-  let pendingMilestoneCheck = false;
-  let quizOnClose = false;
-
+  // Helper functions (must be declared before state initialization)
   const sanitizeQuizHistory = (list) => {
     if (!Array.isArray(list)) return [];
     return list
@@ -4622,21 +4736,74 @@ const gamification = (() => {
     }
   }
 
+  let state = loadState();
+  let cardSerial = 0;
+  let hubNodes = {};
+  let overlayNodes = {};
+  let lastFocus = null;
+  let countdownTicker = null;
+  let activePopover = null;
+  let popoverHandlersBound = false;
+  let infoHandlerBound = false;
+  let wrongLogHandlerBound = false;
+  let challengeActive = false;
+  let pendingMilestoneCheck = false;
+  let quizOnClose = false;
+
   function loadState() {
+    const key = storageKey();
+    const freshState = () => {
+      const fresh = { ...defaultState };
+      try {
+        localStorage.setItem(key, JSON.stringify(fresh));
+      } catch {
+        /* ignore persist errors here; caller will keep in-memory fallback */
+      }
+      return fresh;
+    };
     try {
       // Prefer per-profile storage
-      let raw = localStorage.getItem(storageKey());
+      let raw = localStorage.getItem(key);
       // Migrate from global key if present and no user state yet
       if (!raw) {
         const globalRaw = localStorage.getItem(GLOBAL_KEY);
         if (globalRaw) {
-          localStorage.setItem(storageKey(), globalRaw);
+          localStorage.setItem(key, globalRaw);
           localStorage.removeItem(GLOBAL_KEY);
           raw = globalRaw;
         }
       }
-      if (!raw) return { ...defaultState };
-      const parsed = JSON.parse(raw);
+      // Fallback to sessionStorage if localStorage blocked/quota
+      if (!raw) {
+        try {
+          raw = sessionStorage.getItem(sessionKey());
+        } catch {}
+      }
+
+      // Fallback to same-tab navigation via window.name (useful on file:// where origins differ per page)
+      if (!raw) {
+        const fromWindow = readWindowNameState();
+        if (fromWindow) {
+          try {
+            const serialized = JSON.stringify(fromWindow);
+            raw = serialized;
+            // Persist to local/session if possible for next loads on the same origin
+            try { localStorage.setItem(key, serialized); } catch {}
+            try { sessionStorage.setItem(sessionKey(), serialized); } catch {}
+          } catch {}
+        }
+      }
+      if (!raw) return freshState();
+
+      let parsed;
+      try {
+        parsed = JSON.parse(raw);
+      } catch (error) {
+        console.warn('Gamification state parse error, resetting', error);
+        try { localStorage.removeItem(key); } catch {}
+        try { sessionStorage.removeItem(sessionKey()); } catch {}
+        return freshState();
+      }
       const parsedVersion = typeof parsed.version === 'number' ? parsed.version : 0;
       const merged = {
         ...defaultState,
@@ -4692,15 +4859,111 @@ const gamification = (() => {
       return merged;
     } catch (error) {
       console.warn('Gamification state reset', error);
-      return { ...defaultState };
+      try { localStorage.removeItem(key); } catch {}
+      try { sessionStorage.removeItem(sessionKey()); } catch {}
+      return freshState();
     }
   }
 
+  const MAX_QUIZ_HISTORY = 300;
+  const MAX_OPENED_TABS = 520;
+  const MAX_TAB_CONTEXT = 220;
+  const MAX_TAB_CONTEXT_CONTENT = 240;
+
+  const trimArrayTail = (arr, max) => (Array.isArray(arr) ? arr.slice(-max) : []);
+  const clampText = (value, max) => {
+    const s = String(value || '');
+    if (s.length <= max) return s;
+    return `${s.slice(0, max - 1)}…`;
+  };
+
+  const trimObjectByRecentTs = (obj, max) => {
+    if (!obj || typeof obj !== 'object') return {};
+    const entries = Object.entries(obj);
+    if (entries.length <= max) return obj;
+    // Keep most recent based on ts if present, otherwise keep tail order.
+    const sorted = entries.sort((a, b) => {
+      const tsA = typeof a[1]?.ts === 'number' ? a[1].ts : 0;
+      const tsB = typeof b[1]?.ts === 'number' ? b[1].ts : 0;
+      return tsA - tsB;
+    });
+    const trimmed = sorted.slice(-max);
+    const next = {};
+    trimmed.forEach(([k, v]) => { next[k] = v; });
+    return next;
+  };
+
+  const pruneStateForStorage = (value) => {
+    const next = { ...value };
+
+    // Trim quiz history (keep most recent)
+    if (next.history) {
+      if (Array.isArray(next.history.quiz)) {
+        next.history = { ...next.history, quiz: trimArrayTail(next.history.quiz, MAX_QUIZ_HISTORY) };
+      }
+      if (Array.isArray(next.history.days)) {
+        next.history = { ...next.history, days: trimArrayTail(next.history.days, 90) };
+      }
+    }
+
+    // Trim openedTabsToday and tab context to avoid quota errors
+    if (next.openedTabsToday && typeof next.openedTabsToday === 'object') {
+      next.openedTabsToday = trimObjectByRecentTs(next.openedTabsToday, MAX_OPENED_TABS);
+    }
+    if (next.openedTabContextToday && typeof next.openedTabContextToday === 'object') {
+      const trimmed = trimObjectByRecentTs(next.openedTabContextToday, MAX_TAB_CONTEXT);
+      Object.keys(trimmed).forEach((k) => {
+        const entry = trimmed[k];
+        if (entry && typeof entry === 'object') {
+          trimmed[k] = {
+            ...entry,
+            content: clampText(entry.content, MAX_TAB_CONTEXT_CONTENT),
+            tabTitle: clampText(entry.tabTitle, 120),
+            cardTitle: clampText(entry.cardTitle, 120),
+          };
+        }
+      });
+      next.openedTabContextToday = trimmed;
+    }
+
+    return next;
+  };
+
   function saveState() {
+    const key = storageKey();
+    
+    // Verify storage works before trying to save
+    if (!testStorage()) {
+      console.warn('⚠️ Storage unavailable, state saved only to window.name');
+      writeWindowNameState(state);
+      return;
+    }
+    
+    console.log('💾 Saving state:', { stars: state.stars, gelati: state.gelati, quizTokens: state.quizTokens });
+    
     try {
-      localStorage.setItem(storageKey(), JSON.stringify(state));
+      const serialized = JSON.stringify(state);
+      localStorage.setItem(key, serialized);
+      try { sessionStorage.setItem(sessionKey(), serialized); } catch {}
+      writeWindowNameState(state);
+      console.log('✅ State saved successfully to all stores');
+      return;
     } catch (error) {
-      console.warn('Gamification state not persisted', error);
+      console.warn('⚠️ Gamification state not persisted, attempting prune', error);
+    }
+
+    try {
+      const pruned = pruneStateForStorage(state);
+      const serialized = JSON.stringify(pruned);
+      localStorage.setItem(key, serialized);
+      try { sessionStorage.setItem(sessionKey(), serialized); } catch {}
+      writeWindowNameState(pruned);
+      state = pruned;
+      console.log('✅ State saved after pruning');
+    } catch (error) {
+      console.warn('❌ Gamification state not persisted after pruning', error);
+      try { sessionStorage.setItem(sessionKey(), JSON.stringify(state)); } catch {}
+      writeWindowNameState(state);
     }
   }
 
@@ -4758,6 +5021,16 @@ const gamification = (() => {
   }
 
   function init() {
+    // Test storage and show warning if unavailable
+    const hasStorage = testStorage();
+    if (!hasStorage) {
+      console.error('❌ localStorage is not available or blocked');
+      console.error('💡 Please open this site via http://localhost or a web server, not file://');
+      showStorageWarning();
+    } else {
+      console.log('✅ localStorage is available');
+    }
+    
     ensureDailyState();
     initStoryOrbitRewards();
     buildHub();
@@ -4771,6 +5044,19 @@ const gamification = (() => {
     if (state.gelati >= GELATO_GOAL) {
       showVictoryMessage();
     }
+  }
+  
+  function showStorageWarning() {
+    try {
+      const banner = document.createElement('div');
+      banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:999999;background:#b91c1c;color:#fff;padding:12px 16px;text-align:center;font-size:14px;line-height:1.5;';
+      banner.innerHTML = `
+        <strong>⚠️ Storage Unavailable</strong><br>
+        Progress will reset on navigation. Please open via http://localhost or a web server.
+        <button onclick="this.parentElement.remove()" style="margin-left:16px;padding:4px 12px;background:#fff;color:#b91c1c;border:none;border-radius:4px;cursor:pointer;font-weight:600;">Dismiss</button>
+      `;
+      document.body.appendChild(banner);
+    } catch {}
   }
 
   function maybeAutoOpenGameInfoFromUrl() {
@@ -6876,6 +7162,53 @@ const gamification = (() => {
     return state.questionBagByMode;
   }
 
+  // Get questions pool based on visited tabs in current week
+  // Filters QUIZ_QUESTIONS to only include questions from topics the user visited
+  function getQuestionsForVisitedTabs() {
+    const visitedTopics = new Set();
+    
+    // Extract unique page slugs from opened tabs today
+    const tabContextToday = state.openedTabContextToday || {};
+    const pageSlugsSeen = new Set();
+    
+    Object.values(tabContextToday).forEach(entry => {
+      if (entry?.pageSlug) pageSlugsSeen.add(entry.pageSlug);
+    });
+    
+    // Map page slugs to quiz topics
+    const pageToTopic = {
+      'caffe': 'caffe',
+      'sweet-treats': 'sweet-treats',
+      'pastries': 'pastries',
+      'slitti-yoyo': 'slitti-yoyo',
+      'gelato-lab': 'gelato-lab',
+      'festive': 'pastries',  // Festive maps to pastries (panettone/mulled wine)
+    };
+    
+    // Collect topics from visited pages
+    pageSlugsSeen.forEach(slug => {
+      const topic = pageToTopic[slug];
+      if (topic) visitedTopics.add(topic);
+    });
+    
+    // If no tabs visited, return all questions (safety fallback)
+    if (visitedTopics.size === 0) {
+      console.log('📚 No visited tabs today; returning all questions for mini quiz');
+      return QUIZ_QUESTIONS;
+    }
+    
+    // Filter questions by visited topics
+    const questionIds = new Set();
+    visitedTopics.forEach(topic => {
+      (QUIZ_TOPIC_MAPPING[topic] || []).forEach(id => questionIds.add(id));
+    });
+    
+    const poolForTopics = QUIZ_QUESTIONS.filter(q => questionIds.has(q.id));
+    console.log(`🎯 Mini quiz: found ${poolForTopics.length} questions from visited topics: ${Array.from(visitedTopics).join(', ')}`);
+    
+    return poolForTopics.length > 0 ? poolForTopics : QUIZ_QUESTIONS;  // Fallback if empty
+  }
+
   function buildShuffledIdBag(pool) {
     return (Array.isArray(pool) ? pool : [])
       .map((q) => q?.id)
@@ -7282,7 +7615,7 @@ const gamification = (() => {
 
       const stepLabel = document.createElement('p');
       stepLabel.className = 'quiz-step';
-      stepLabel.textContent = `Domanda ${currentIndex + 1}/${questions.length}`;
+      stepLabel.textContent = `${tr('quiz.question')} ${currentIndex + 1}/${questions.length}`;
 
       const prompt = document.createElement('p');
       prompt.className = 'quiz-prompt';
@@ -7290,7 +7623,7 @@ const gamification = (() => {
 
       const hint = document.createElement('p');
       hint.className = 'quiz-hint';
-      hint.textContent = 'Tocca i passaggi nell’ordine corretto. Poi conferma.';
+      hint.textContent = tr('quiz.orderHint');
 
       const steps = Array.isArray(question.steps) ? question.steps.filter(Boolean) : [];
       const shuffled = [...steps].sort(() => Math.random() - 0.5);
@@ -7509,7 +7842,7 @@ const gamification = (() => {
       card.className = 'quiz-card';
       const stepLabel = document.createElement('p');
       stepLabel.className = 'quiz-step';
-      stepLabel.textContent = `Domanda ${currentIndex + 1}/${questions.length}`;
+      stepLabel.textContent = `${tr('quiz.question')} ${currentIndex + 1}/${questions.length}`;
       const prompt = document.createElement('p');
       prompt.className = 'quiz-prompt';
       prompt.textContent = question.question;
@@ -7519,7 +7852,7 @@ const gamification = (() => {
         media.className = 'quiz-media';
         const img = document.createElement('img');
         img.loading = 'lazy';
-        img.alt = 'Immagine prodotto del quiz';
+        img.alt = tr('quiz.productImageAlt');
         img.src = question.image;
         media.appendChild(img);
         card.appendChild(media);
@@ -7712,7 +8045,9 @@ const gamification = (() => {
     ensureDailyState();
     if (state.quizTokens < STARS_FOR_QUIZ) return;
 
-    const questions = pickQuestionsFromBag('mini', QUIZ_QUESTIONS, 1).map(localizeQuizQuestion);
+    // Get questions filtered by visited tabs (adaptive mini quiz)
+    const topicQuestions = getQuestionsForVisitedTabs();
+    const questions = pickQuestionsFromBag('mini', topicQuestions, 1).map(localizeQuizQuestion);
     if (!questions.length) return;
 
     const handleMiniSuccess = () => {
@@ -7860,7 +8195,9 @@ const gamification = (() => {
       updateUI();
     };
 
-    const picked = pickQuestionsFromBag('test-me', QUIZ_QUESTIONS, 3).map(localizeQuizQuestion);
+    // Get questions filtered by visited tabs (adaptive hard quiz)
+    const topicQuestions = getQuestionsForVisitedTabs();
+    const picked = pickQuestionsFromBag('test-me', topicQuestions, 3).map(localizeQuizQuestion);
     startQuizSession({
       modeKey: 'test-me',
       title: tr('quiz.testme.title', null, 'Test me · quiz avanzato'),

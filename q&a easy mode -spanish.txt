@@ -1,0 +1,799 @@
+Estás preparando el mix de crepes "BIG BATCH": ¿qué ingrediente es de 1500 ml?
+A) Agua
+B) Leche entera
+C) Clara de huevo
+D) Sirope de arce
+Solución: B
+Explicación: En el estándar BIG BATCH, los 1500 ml corresponden a la leche entera, mientras que el agua es 300 ml.
+
+"BIG BATCH": ¿cuántos huevos lleva la receta?
+A) 6
+B) 8
+C) 9
+D) 12
+Solución: C
+Explicación: El estándar BIG BATCH prevé 9 huevos.
+
+"SMALL BATCH": ¿cuánta agua se necesita?
+A) 100 ml
+B) 200 ml
+C) 300 ml
+D) 500 ml
+Solución: B
+Explicación: El estándar SMALL BATCH prevé 200 ml de agua.
+
+Después de preparar el mix de crepes, ¿cuál es el tiempo mínimo de reposo en la nevera?
+A) 30 min
+B) 1 hora
+C) 2 horas
+D) 1 noche
+Solución: C
+Explicación: El reposo operativo mínimo es de 2 horas para estabilizar la masa.
+
+Shelf life del mix de crepes:
+A) 1 día
+B) 2 días
+C) 3 días
+D) 7 días
+Solución: C
+Explicación: El estándar de conservación del mix de crepes es de 3 días.
+
+Signature Buontalenti Crepe: ¿cuándo es el momento correcto para girarla por primera vez?
+A) Cuando está negra
+B) Cuando está verde
+C) Cuando se vuelve light brown
+D) Cuando echa humo
+Solución: C
+Explicación: La señal visual correcta es el color light brown después de unos 20 segundos.
+
+Signature Buontalenti Crepe: ¿cuántos gramos de Buontalenti hay que añadir?
+A) 40 g
+B) 70 g
+C) 100 g
+D) 140 g
+Solución: B
+Explicación: La ración estándar prevista es una scoop de 70 g.
+
+Signature Buontalenti Crepe: ¿cuánta salsa va por encima (top)?
+A) 10 g
+B) 20 g
+C) 30 g
+D) 60 g
+Solución: C
+Explicación: La cantidad estándar de salsa top es de 30 g.
+
+Signature Sauce Crepe: ¿qué nunca falta en el acabado?
+A) Icing sugar (azúcar glas)
+B) Sal gruesa
+C) Albahaca
+D) Pimienta
+Solución: A
+Explicación: El acabado estándar incluye icing sugar junto con la salsa.
+
+Crepe salada "Italiana" (plain base): ¿qué ingrediente está previsto?
+A) Rocket (rúcula)
+B) Atún
+C) Patatas
+D) Champiñones
+Solución: A
+Explicación: El relleno estándar incluye rocket (rúcula).
+
+Crepe salada "Italiana": ¿cuántos tomatitos cherry enteros se prevén (luego en cuartos)?
+A) 1
+B) 2
+C) 3
+D) 6
+Solución: C
+Explicación: El estándar prevé 3 tomatitos enteros (12 cuartos).
+
+Crepe salada "Prosciutto" (plain base): ¿cuántas lonchas de jamón (ham)?
+A) 1
+B) 2
+C) 3
+D) 4
+Solución: B
+Explicación: El relleno estándar prevé 2 lonchas de ham.
+
+Base beetroot: ¿cuánta beetroot powder añades a 250 g de mix?
+A) 1 g
+B) 3 g
+C) 6 g
+D) 10 g
+Solución: B
+Explicación: La coloración estándar se obtiene con 3 g por 250 g de mix.
+
+Crepes saladas: después del pliegue y el último flip, ¿cuánto más se cocinan?
+A) 2 sec
+B) 10 sec
+C) 30 sec
+D) 2 min
+Solución: B
+Explicación: El acabado prevé 10 segundos extra para compactar y calentar el relleno.
+
+Waffle: ¿qué ajuste de "power" es correcto?
+A) 1
+B) 2
+C) 3
+D) 5
+Solución: C
+Explicación: El ajuste estándar de cocción es power 3.
+
+Waffle: ¿cuánto tiempo de cocción antes de girar la máquina?
+A) 1 min
+B) 2.5 min
+C) 4 min
+D) 6 min
+Solución: B
+Explicación: La cocción es de 2.5 minutos antes del giro.
+
+Waffle: ¿cuánto tiempo después del giro?
+A) 1 min
+B) 2.5 min
+C) 4 min
+D) 8 min
+Solución: B
+Explicación: También después del giro la cocción estándar es de 2.5 minutos.
+
+Waffle: ¿cuánta masa corresponde a "one entire scoopful"?
+A) 120 ml
+B) 150 ml
+C) 177 ml
+D) 250 ml
+Solución: C
+Explicación: La dosis estándar para waffle es de 177 ml.
+
+Waffle: ¿cuánto debe reposar antes del topping/gelato?
+A) 10 sec
+B) 20 sec
+C) 45 sec
+D) 90 sec
+Solución: C
+Explicación: El reposo estándar es de 45 segundos para estabilizar la estructura antes del relleno.
+
+Mix de waffle preconfeccionado: shelf life correcta:
+A) 1 día
+B) 2 días
+C) 3 días
+D) 7 días
+Solución: B
+Explicación: La shelf life operativa del mix de waffle es de 2 días.
+
+Gelato Burger: ¿cuántas scoops de gelato se permiten?
+A) 1
+B) 2
+C) 3
+D) Depende del cliente
+Solución: A
+Explicación: El estándar del producto prevé solo una scoop.
+
+Gelato Burger: peso de la scoop:
+A) 50 g
+B) 70 g
+C) 90 g
+D) 120 g
+Solución: B
+Explicación: La porción estándar es de 70 g.
+
+Gelato Burger: ¿cuántas salsas puedes ofrecer en el mismo burger?
+A) 0
+B) 1
+C) 2
+D) 3
+Solución: B
+Explicación: La regla del producto permite una sola elección de salsa.
+
+Gelato Burger: ¿cuál es el timer correcto de la máquina?
+A) 8 sec
+B) 10 sec
+C) 12 sec
+D) 20 sec
+Solución: C
+Explicación: El ciclo estándar está ajustado a 12 segundos.
+
+Gelato Burger: para limpiar posibles derrames de gelato/salsa se usa sobre todo:
+A) Esponja abrasiva
+B) Blue-roll paper
+C) Chorro de agua
+D) Detergente espumoso
+Solución: B
+Explicación: La limpieza operativa prevista es con blue-roll paper.
+
+Gelato Croissant: ¿cuántas scoops de Buontalenti se prevén?
+A) 1
+B) 2
+C) 3
+D) 4
+Solución: B
+Explicación: El relleno estándar usa 2 scoops (2 × 70 g).
+
+Gelato Croissant: ¿qué topping se aplica "primero"?
+A) Miel
+B) Pistacchio sauce
+C) Dolcevita sauce
+D) Nata montada
+Solución: B
+Explicación: El orden estándar prevé pistacchio sauce como primer topping.
+
+Gelato Croissant: cantidad indicativa de pistacchio sauce:
+A) 5 g
+B) 10 g
+C) 20 g
+D) 50 g
+Solución: C
+Explicación: La dosis indicativa estándar es de unos 20 g.
+
+Gelato Croissant: ¿cuántos gramos de pistacchio crumble?
+A) 3 g
+B) 5 g
+C) 7 g
+D) 14 g
+Solución: C
+Explicación: La granella estándar prevista es de 7 g.
+
+Pancake: una ración completa está compuesta por:
+A) 1 pancake
+B) 2 pancakes
+C) 3 pancakes
+D) 4 pancakes
+Solución: C
+Explicación: La ración estándar prevé tres pancakes (una dosis de masa por pancake repetida tres veces).
+
+Pancake: cuando empiezas a ver las burbujas (aprox.), ¿después de cuánto giras?
+A) 30 sec
+B) 60 sec
+C) 90 sec
+D) 180 sec
+Solución: C
+Explicación: La ventana estándar de bubbling para girar es de unos 90 segundos.
+
+Pancake: después de girarlos, ¿cuánto esperas antes de retirarlos?
+A) 10 sec
+B) 30 sec
+C) 60 sec
+D) 120 sec
+Solución: B
+Explicación: La cocción final estándar después del flip es de unos 30 segundos.
+
+Blueberry Pancake: ¿cuántas fresas se prevén (luego en 4 trozos)?
+A) 1
+B) 2
+C) 3
+D) 4
+Solución: A
+Explicación: La presentación estándar usa 1 fresa cortada en 4.
+
+Blueberry Pancake: ¿aproximadamente cuántas blueberries encima?
+A) 3–4
+B) 5–6
+C) 7–8
+D) 12–14
+Solución: C
+Explicación: La presentación estándar prevé 7–8 blueberries.
+
+Blueberry Pancake: ¿con qué se sirve el sirope?
+A) En un bol
+B) En un milk jug
+C) En la cuchara
+D) Dentro de la nata
+Solución: B
+Explicación: La presentación estándar usa un pequeño milk jug lleno de maple syrup.
+
+BYO Pancake: ¿cuántas teaspoons de chocolate chips (ingrediente seco)?
+A) 1
+B) 2
+C) 3
+D) 5
+Solución: C
+Explicación: El estándar para chocolate chips es de 3 teaspoons.
+
+BYO Pancake: ¿cuántas teaspoons de coconut chips (ingrediente seco)?
+A) 1
+B) 2
+C) 3
+D) 4
+Solución: B
+Explicación: El estándar para coconut chips es de 2 teaspoons.
+
+BYO Pancake: ¿cuántas "whole nuts" (aprox.)?
+A) 2–3
+B) 4–5
+C) 6–7
+D) 9–10
+Solución: C
+Explicación: El estándar indica 6–7 piezas.
+
+Porridge: ¿cuánta leche se mide (aprox.)?
+A) 80–90 ml
+B) 125–130 ml
+C) 175–180 ml
+D) 250 ml
+Solución: B
+Explicación: La base estándar usa 125–130 ml de leche.
+
+Porridge: ¿cuántas "measuring cups" de porridge oats?
+A) 1
+B) 2
+C) 3
+D) 4
+Solución: B
+Explicación: La dosis estándar prevé 2 medidores de oats.
+
+Afternoon Tea Set: ¿qué gelato está incluido?
+A) Pistacchio
+B) Buontalenti
+C) Matcha
+D) Lemon
+Solución: B
+Explicación: El set prevé 1 scoop de Buontalenti servida con wafer.
+
+Gelato cup: ¿cuántas tallas existen?
+A) 2
+B) 3
+C) 4
+D) 5
+Solución: B
+Explicación: El estándar de cup prevé Piccolo, Medio y Grande.
+
+Piccolo cup: ¿cuál es la combinación correcta?
+A) 1 sabor, 100 g
+B) 2 sabores, 140 g
+C) 3 sabores, 180 g
+D) 1 sabor, 180 g
+Solución: A
+Explicación: Piccolo equivale a 1 sabor y 100 g.
+
+Medio cup: ¿cuál es la combinación correcta?
+A) 1 sabor, 100 g
+B) 1–2 sabores, 140 g
+C) 1–3 sabores, 180 g
+D) 1–4 sabores, 240 g
+Solución: B
+Explicación: Medio equivale a 1–2 sabores y 140 g.
+
+Grande cup: ¿cuál es la combinación correcta?
+A) 1 sabor, 100 g
+B) 1–2 sabores, 140 g
+C) 1–3 sabores, 180 g
+D) 2 sabores, 240 g
+Solución: C
+Explicación: Grande equivale a 1–3 sabores y 180 g.
+
+Servicio cup: ¿cómo se sujeta correctamente la coppetta?
+A) Por el borde
+B) Por el fondo
+C) Por la tapa
+D) Por la cucharita
+Solución: B
+Explicación: El agarre estándar es por el fondo para estabilidad e higiene visual.
+
+Preparación de gelato en cup: ¿cómo "ablandas" el gelato en la vaschetta antes de porcionar?
+A) Línea recta de un lado al otro
+B) Mezcla circular rápida
+C) Aplastando con la mano
+D) Cortando en cubos
+Solución: A
+Explicación: El gesto estándar es una pasada en línea recta para dejar el gelato listo para el servicio.
+
+Antes de formar la bola, ¿dónde se limpia el exceso de gelato del utensilio?
+A) En el fregadero
+B) En la esquina de la vaschetta
+C) En la servilleta del cliente
+D) En el mostrador
+Solución: B
+Explicación: La eliminación del exceso se hace en la esquina del pan para precisión de la porción.
+
+En cup: ¿cómo reduces las burbujas de aire en el producto servido?
+A) Agitas la cup
+B) Presionas delicadamente el gelato
+C) Añades agua
+D) Lo derrites y lo vuelves a congelar
+Solución: B
+Explicación: La técnica estándar es presionar delicadamente el gelato para eliminar air bubbles.
+
+Si el cliente lo desea, ¿qué se puede añadir encima del gelato?
+A) Wafer
+B) Rodaja de naranja
+C) Pimienta negra
+D) Sal
+Solución: A
+Explicación: El añadido previsto como extra sencillo es el wafer.
+
+Regla "niños": en una small cup, ¿cuántos sabores se permiten?
+A) 1
+B) 2
+C) 3
+D) 4
+Solución: B
+Explicación: El estándar permite 2 sabores en una small cup para los niños.
+
+Conos: antes de servir, ¿cómo se sujeta correctamente el cono?
+A) Con un tissue alrededor
+B) Con las manos desnudas, sin nada
+C) Con pinzas metálicas
+D) Con un guante mojado
+Solución: A
+Explicación: El agarre estándar prevé un tissue alrededor del cono.
+
+Conos: ¿cuántas tallas se prevén (considerando Piccolo y Medio)?
+A) 1
+B) 2
+C) 3
+D) 4
+Solución: B
+Explicación: El estándar base del cono prevé Piccolo y Medio.
+
+Choco Cone (vanilla flakes): ¿qué rango sabor/peso es correcto?
+A) 1 sabor 100 g
+B) 1–2 sabores 140 g
+C) 1–3 sabores 180 g
+D) 3 sabores 240 g
+Solución: B
+Explicación: Choco Cone admite 1–2 sabores a 140 g.
+
+Gluten Free Cone: ¿qué rango sabor/peso es correcto?
+A) 1 sabor 100 g
+B) 1–2 sabores 140 g
+C) 1–3 sabores 180 g
+D) 1–5 sabores 1000 ml
+Solución: B
+Explicación: También el Gluten Free Cone admite 1–2 sabores a 140 g.
+
+Gelato Boxes "Take Me Home": ¿cuántas tallas de box existen?
+A) 2
+B) 3
+C) 4
+D) 5
+Solución: B
+Explicación: El estándar de box prevé Piccolo, Medio y Grande.
+
+Box Piccolo: capacidad correcta:
+A) 250 ml
+B) 500 ml
+C) 750 ml
+D) 1000 ml
+Solución: B
+Explicación: Box Piccolo corresponde a 500 ml.
+
+Box Medio: capacidad correcta:
+A) 500 ml
+B) 650 ml
+C) 750 ml
+D) 1000 ml
+Solución: C
+Explicación: Box Medio corresponde a 750 ml.
+
+Box Grande: capacidad correcta:
+A) 750 ml
+B) 900 ml
+C) 1000 ml
+D) 1500 ml
+Solución: C
+Explicación: Box Grande corresponde a 1000 ml.
+
+Autonomía térmica máxima del box (antes de volver al congelador):
+A) 15 min
+B) 30 min
+C) 1 hora
+D) 3 horas
+Solución: C
+Explicación: El estándar operativo permite hasta 1 hora.
+
+Relleno del box: ¿cuál es el objetivo clave durante la prensado del gelato?
+A) Dejar espacio
+B) Eliminar air bubbles
+C) Añadir topping
+D) Mezclar los sabores
+Solución: B
+Explicación: El prensado correcto evita burbujas de aire y estabiliza el corte/servicio.
+
+Cobertura interna del box: ¿qué se usa encima del gelato antes de la tapa?
+A) Papel absorbente
+B) White sleeve protection film
+C) Papel de aluminio
+D) Film negro
+Solución: B
+Explicación: El cierre estándar prevé la white sleeve protection film.
+
+Sello del box: ¿qué asegura el cierre entre box y lid?
+A) Cuerda
+B) Badiani tape
+C) Cola blanca
+D) Goma elástica
+Solución: B
+Explicación: El sello estándar se realiza con Badiani tape en el punto de contacto box–lid.
+
+Coppa Gelato: ¿cuántas scoops se sirven?
+A) 1
+B) 2
+C) 3
+D) 4
+Solución: C
+Explicación: La coppa estándar está compuesta por tres scoops.
+
+Coppa Gelato: ¿qué elemento se incluye además de nata y salsa?
+A) Mini cone
+B) Menta
+C) Naranja
+D) Galleta salada
+Solución: A
+Explicación: La composición estándar incluye un mini cone y un wafer.
+
+Conservación de treats: temperatura mínima de la vertical vitrine:
+A) -5 °C
+B) -10 °C
+C) -14 °C
+D) -25 °C
+Solución: C
+Explicación: La vertical vitrine debe estar al menos a -14 °C y sin hielo.
+
+Exposición de treats: ¿dónde se colocan las cakes?
+A) Abajo (kid-eye level)
+B) Arriba (adult-eye level)
+C) Detrás de la caja
+D) En la vitrina de gelato horizontal
+Solución: B
+Explicación: Las cakes se exponen arriba para visibilidad a adult-eye level.
+
+Exposición de treats: ¿dónde van cookies y Pinguinos?
+A) Arriba
+B) Abajo
+C) Solo en almacén
+D) Solo bajo petición
+Solución: B
+Explicación: Cookies y Pinguinos se exponen abajo, a kids-eye level.
+
+Shelf life de treats: una vez expuestos, los cookies duran:
+A) 7 días
+B) 14 días
+C) 21 días
+D) 35 días
+Solución: B
+Explicación: La duración estándar en display para los cookies es de 14 días.
+
+Shelf life de treats: una vez expuestas, las mini cakes duran:
+A) 14 días
+B) 21 días
+C) 35 días
+D) 60 días
+Solución: B
+Explicación: La duración estándar en display para las mini cakes es de 21 días.
+
+Morning prep vitrina: ¿qué color está asociado al sanitiser usado con agua caliente?
+A) Azul
+B) Amarillo
+C) Rojo
+D) Negro
+Solución: B
+Explicación: La rutina estándar prevé agua caliente y sanitiser amarillo.
+
+Morning prep vitrina: para hacer brillar las superficies metálicas se usa:
+A) Blue spray + blue roll
+B) Solo agua
+C) Solo jabón
+D) Vinagre
+Solución: A
+Explicación: La combinación estándar para "shine" es blue spray y blue roll.
+
+Temperatura de trabajo vitrina de gelato: cuando el gelato se pone en display, la máquina debe llegar a:
+A) -2/-3
+B) -8/-9
+C) -14/-15
+D) -20/-21
+Solución: C
+Explicación: La ventana estándar de servicio es -14/-15.
+
+Scampolo: ¿cuándo un sabor se convierte en scampolo?
+A) Por debajo de media vaschetta
+B) Por debajo de 1/4 de vaschetta
+C) Por debajo de 1/10 de vaschetta
+D) Cuando está duro
+Solución: B
+Explicación: Scampolo significa menos de 1/4 de la vaschetta restante.
+
+Scampolo: ¿cuánto gelato añades cada vez al nuevo pan (aprox.)?
+A) 20 g
+B) 50 g
+C) 100 g
+D) 200 g
+Solución: C
+Explicación: La cantidad estándar por añadido es de unos 100 g (el lado de una scoop).
+
+Churros: ¿a qué temperatura ajustas la freidora?
+A) 170 °C
+B) 180 °C
+C) 190 °C
+D) 200 °C
+Solución: C
+Explicación: La fritura estándar de los churros se hace a 190 °C.
+
+Churros: "one portion" corresponde a:
+A) 4
+B) 6
+C) 8
+D) 10
+Solución: C
+Explicación: La ración estándar está compuesta por 8 churros.
+
+Churros: tiempo de fritura para llegar a "golden"?
+A) 2–3 min
+B) 5–6 min
+C) 8–9 min
+D) 12–13 min
+Solución: C
+Explicación: El estándar de cocción es de 8–9 minutos hasta dorar.
+
+Mix coating churros: ¿cuál es la combinación correcta?
+A) 600 g azúcar + 20 g canela
+B) 600 g canela + 20 g azúcar
+C) 300 g azúcar + 30 g canela
+D) Solo azúcar
+Solución: A
+Explicación: El coating estándar es 600 g de azúcar blanco con 20 g de canela.
+
+Presentación churros: ¿dónde se pone la salsa elegida?
+A) En una coppetta de 1 oz
+B) Directamente sobre los churros
+C) En una taza mug
+D) En una botella
+Solución: A
+Explicación: La porción estándar de salsa va en un recipiente de 1 oz.
+
+Panettone "warm slice": ¿cuánto tuestas por lado en la crepe machine?
+A) 5 sec
+B) 10 sec
+C) 20 sec
+D) 30 sec
+Solución: B
+Explicación: El tostado estándar es de 10 segundos por lado.
+
+Panettone "warm slice": ¿qué está prohibido añadir durante el calentamiento?
+A) Aceite (o similares)
+B) Cubiertos
+C) Gelato al lado
+D) Salsa aparte
+Solución: A
+Explicación: La regla operativa excluye el uso de aceite durante el warm.
+
+Pandoro: ¿qué acabado está previsto en la rebanada?
+A) Azúcar glas
+B) Cacao amargo
+C) Granella
+D) Miel
+Solución: A
+Explicación: El acabado estándar del pandoro prevé azúcar glas.
+
+Mini panettone relleno: ¿de dónde lo coges en tienda?
+A) Vertical vitrine
+B) Mostrador caja
+C) Horno
+D) Vitrina de bebidas
+Solución: A
+Explicación: El flujo estándar prevé cogerlo de la vertical vitrine con guantes.
+
+Mini panettone relleno: ¿hasta dónde llenas la espresso cup de salsa?
+A) 1/4
+B) 1/3
+C) 1/2
+D) Llena
+Solución: B
+Explicación: La porción estándar de salsa es 1/3 de espresso cup.
+
+Delivery mini panettone: ¿hasta cuánto llenas la sauce pot?
+A) 1/4
+B) 1/2
+C) 3/4
+D) 100 %
+Solución: C
+Explicación: El estándar de delivery prevé llenado hasta 3/4.
+
+Delivery mini panettone: una sauce pot cubre cuántas mini unidades?
+A) 1
+B) 2
+C) 3
+D) 4
+Solución: B
+Explicación: La cantidad estándar en una pot está pensada para dos mini panettoni.
+
+Mulled wine machine: ¿cuánta agua va en el outer tank (aprox.)?
+A) 200 ml
+B) 400 ml
+C) 600 ml
+D) 1000 ml
+Solución: C
+Explicación: El setup estándar prevé unos 600 ml de agua en el outer tank sin superar el máximo.
+
+Mulled wine: tiempo de warm-up a nivel 10 (aprox.)?
+A) 5–10 min
+B) 15–20 min
+C) 25–30 min
+D) 45–60 min
+Solución: C
+Explicación: El warm-up estándar es de 25–30 minutos para llevar la mezcla a caliente.
+
+Servicio de mulled wine: ¿qué garnish es obligatorio en el vaso?
+A) Lima
+B) Menta
+C) Rodaja de naranja
+D) Nata
+Solución: C
+Explicación: La presentación estándar prevé una rodaja de naranja en la cup.
+
+Mulled wine: shelf life del vino calentado en máquina (desde el primer warm-up)?
+A) 1 día
+B) 3 días
+C) 7 días
+D) 30 días
+Solución: B
+Explicación: La conservación operativa del producto "warmed up" es de 3 días desde el primer calentamiento.
+
+Smoothie Rosso Berry: ¿qué pareja "sticker + sabor" es correcta?
+A) Pink + Rosso Berry
+B) Green + Rosso Berry
+C) Yellow + Rosso Berry
+D) Black + Rosso Berry
+Solución: A
+Explicación: La identificación estándar de Rosso Berry usa el sticker pink.
+
+Smoothie Verde Boost: ¿qué sticker es correcto?
+A) Pink
+B) Green
+C) Yellow
+D) White
+Solución: B
+Explicación: La identificación estándar de Verde Boost usa el sticker green.
+
+Smoothie Giallo Passion: ¿qué sticker es correcto?
+A) Pink
+B) Green
+C) Yellow
+D) Blue
+Solución: C
+Explicación: La identificación estándar de Giallo Passion usa el sticker yellow.
+
+Smoothies: ¿cuánta apple juice va en el mixer?
+A) 150 ml
+B) 200 ml
+C) 250 ml
+D) 300 ml
+Solución: C
+Explicación: La dosis estándar para los smoothies es de 250 ml de apple juice.
+
+Smoothies: ¿cuánto tiempo de mix (indicador base)?
+A) 10 sec
+B) 20 sec
+C) 30 sec
+D) 60 sec
+Solución: C
+Explicación: La mezcla estándar es de 30 segundos o hasta consistencia smooth.
+
+Premade matcha (small batch): ¿cuál es la pareja correcta?
+A) 3 g matcha + 25 ml agua fría
+B) 3 g matcha + 250 ml agua
+C) 20 g matcha + 25 ml agua
+D) 30 g matcha + 25 ml agua
+Solución: A
+Explicación: La porción estándar small batch es 3 g de matcha con 25 ml de agua fría.
+
+Matcha Iced Latte: ¿cuánta premade matcha va en el vaso?
+A) 10 ml
+B) 25 ml
+C) 50 ml
+D) 75 ml
+Solución: B
+Explicación: El montaje estándar prevé 25 ml de premade matcha.
+
+Dirty Matcha Affogato: ¿qué se vierte encima de una scoop de gelato de matcha?
+A) Double espresso
+B) Apple juice
+C) Leche fría
+D) Vanilla syrup
+Solución: A
+Explicación: La versión "dirty" se completa con double espresso encima de la scoop de matcha gelato.
+
+Yo-Yo: ¿cuál es la construcción correcta?
+A) 2 wafers + 1 scoop (aprox. 80–90 g) en medio
+B) 1 wafer + 2 scoops
+C) 3 wafers + nata
+D) Cono + wafer
+Solución: A
+Explicación: El formato estándar prevé dos wafers y una scoop central de unos 80–90 g, cerrada sin que salga el gelato.

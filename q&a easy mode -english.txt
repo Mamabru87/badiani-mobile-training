@@ -1,0 +1,799 @@
+You are preparing the "BIG BATCH" crepe mix: which ingredient is 1500 ml?
+A) Water
+B) Whole milk
+C) Egg white
+D) Maple syrup
+Solution: B
+Explanation: In the BIG BATCH standard, the 1500 ml correspond to whole milk, while the water is 300 ml.
+
+"BIG BATCH": how many eggs go into the recipe?
+A) 6
+B) 8
+C) 9
+D) 12
+Solution: C
+Explanation: The BIG BATCH standard calls for 9 eggs.
+
+"SMALL BATCH": how much water is needed?
+A) 100 ml
+B) 200 ml
+C) 300 ml
+D) 500 ml
+Solution: B
+Explanation: The SMALL BATCH standard calls for 200 ml of water.
+
+After preparing the crepe mix, what is the minimum resting time in the fridge?
+A) 30 min
+B) 1 hour
+C) 2 hours
+D) 1 night
+Solution: C
+Explanation: The minimum operational resting time is 2 hours to stabilise the batter.
+
+Shelf life of the crepe mix:
+A) 1 day
+B) 2 days
+C) 3 days
+D) 7 days
+Solution: C
+Explanation: The standard shelf life of the crepe mix is 3 days.
+
+Signature Buontalenti Crepe: when is the right moment to flip it for the first time?
+A) When it is black
+B) When it is green
+C) When it becomes light brown
+D) When it smokes
+Solution: C
+Explanation: The correct visual signal is a light brown colour after about 20 seconds.
+
+Signature Buontalenti Crepe: how many grams of Buontalenti must be added?
+A) 40 g
+B) 70 g
+C) 100 g
+D) 140 g
+Solution: B
+Explanation: The standard serving is one scoop of 70 g.
+
+Signature Buontalenti Crepe: how much sauce goes on top?
+A) 10 g
+B) 20 g
+C) 30 g
+D) 60 g
+Solution: C
+Explanation: The standard amount of topping sauce is 30 g.
+
+Signature Sauce Crepe: what is never missing in the finish?
+A) Icing sugar
+B) Coarse salt
+C) Basil
+D) Pepper
+Solution: A
+Explanation: The standard finish includes icing sugar together with the sauce.
+
+Savoury crepe "Italiana" (plain base): which ingredient is included?
+A) Rocket (rucola)
+B) Tuna
+C) Potatoes
+D) Mushrooms
+Solution: A
+Explanation: The standard filling includes rocket (rucola).
+
+Savoury crepe "Italiana": how many whole cherry tomatoes are included (then cut into quarters)?
+A) 1
+B) 2
+C) 3
+D) 6
+Solution: C
+Explanation: The standard calls for 3 whole cherry tomatoes (12 quarters).
+
+Savoury crepe "Prosciutto" (plain base): how many slices of ham?
+A) 1
+B) 2
+C) 3
+D) 4
+Solution: B
+Explanation: The standard filling includes 2 slices of ham.
+
+Beetroot base: how much beetroot powder do you add to 250 g of mix?
+A) 1 g
+B) 3 g
+C) 6 g
+D) 10 g
+Solution: B
+Explanation: The standard colour is obtained with 3 g per 250 g of mix.
+
+Savoury crepes: after folding and the final flip, how much longer do they cook?
+A) 2 sec
+B) 10 sec
+C) 30 sec
+D) 2 min
+Solution: B
+Explanation: The finishing step calls for 10 extra seconds to compact and warm the filling.
+
+Waffle: which "power" setting is correct?
+A) 1
+B) 2
+C) 3
+D) 5
+Solution: C
+Explanation: The standard cooking setting is power 3.
+
+Waffle: how long is the cooking time before turning the machine?
+A) 1 min
+B) 2.5 min
+C) 4 min
+D) 6 min
+Solution: B
+Explanation: Cooking time is 2.5 minutes before turning.
+
+Waffle: how long after the turn?
+A) 1 min
+B) 2.5 min
+C) 4 min
+D) 8 min
+Solution: B
+Explanation: After turning, the standard cooking time is also 2.5 minutes.
+
+Waffle: how much batter corresponds to "one entire scoopful"?
+A) 120 ml
+B) 150 ml
+C) 177 ml
+D) 250 ml
+Solution: C
+Explanation: The standard waffle dose is 177 ml.
+
+Waffle: how long should it rest before topping/adding gelato?
+A) 10 sec
+B) 20 sec
+C) 45 sec
+D) 90 sec
+Solution: C
+Explanation: The standard resting time is 45 seconds to stabilise the structure before filling.
+
+Pre-made waffle mix: correct shelf life?
+A) 1 day
+B) 2 days
+C) 3 days
+D) 7 days
+Solution: B
+Explanation: The operational shelf life of the waffle mix is 2 days.
+
+Gelato Burger: how many scoops of gelato are allowed?
+A) 1
+B) 2
+C) 3
+D) It depends on the customer
+Solution: A
+Explanation: The product standard calls for one scoop only.
+
+Gelato Burger: weight of the scoop?
+A) 50 g
+B) 70 g
+C) 90 g
+D) 120 g
+Solution: B
+Explanation: The standard portion is 70 g.
+
+Gelato Burger: how many sauces can you offer in the same burger?
+A) 0
+B) 1
+C) 2
+D) 3
+Solution: B
+Explanation: The product rule allows only one choice of sauce.
+
+Gelato Burger: correct timer for the machine?
+A) 8 sec
+B) 10 sec
+C) 12 sec
+D) 20 sec
+Solution: C
+Explanation: The standard cycle is set to 12 seconds.
+
+Gelato Burger: to clean any spills of gelato/sauce, what is mainly used?
+A) Abrasive sponge
+B) Blue-roll paper
+C) Water jet
+D) Foaming detergent
+Solution: B
+Explanation: The operational cleaning method uses blue-roll paper.
+
+Gelato Croissant: how many scoops of Buontalenti are included?
+A) 1
+B) 2
+C) 3
+D) 4
+Solution: B
+Explanation: The standard filling uses 2 scoops (2 × 70 g).
+
+Gelato Croissant: which topping is applied first?
+A) Honey
+B) Pistacchio sauce
+C) Dolcevita sauce
+D) Whipped cream
+Solution: B
+Explanation: The standard order applies pistacchio sauce as the first topping.
+
+Gelato Croissant: indicative quantity of pistacchio sauce?
+A) 5 g
+B) 10 g
+C) 20 g
+D) 50 g
+Solution: C
+Explanation: The indicative standard dose is about 20 g.
+
+Gelato Croissant: how many grams of pistacchio crumble?
+A) 3 g
+B) 5 g
+C) 7 g
+D) 14 g
+Solution: C
+Explanation: The standard amount of crumble is 7 g.
+
+Pancake: a full portion is made of:
+A) 1 pancake
+B) 2 pancakes
+C) 3 pancakes
+D) 4 pancakes
+Solution: C
+Explanation: The standard portion is three pancakes (one batter dose per pancake, repeated three times).
+
+Pancake: when you start seeing the bubbles (approximately), how long before you flip?
+A) 30 sec
+B) 60 sec
+C) 90 sec
+D) 180 sec
+Solution: C
+Explanation: The standard bubbling window to flip is about 90 seconds.
+
+Pancake: after flipping, how long do you wait before removing them?
+A) 10 sec
+B) 30 sec
+C) 60 sec
+D) 120 sec
+Solution: B
+Explanation: The final standard cooking time after the flip is about 30 seconds.
+
+Blueberry Pancake: how many strawberries are used (then cut into 4 pieces)?
+A) 1
+B) 2
+C) 3
+D) 4
+Solution: A
+Explanation: The standard presentation uses 1 strawberry cut into 4 pieces.
+
+Blueberry Pancake: roughly how many blueberries on top?
+A) 3–4
+B) 5–6
+C) 7–8
+D) 12–14
+Solution: C
+Explanation: The standard presentation includes 7–8 blueberries.
+
+Blueberry Pancake: how is the syrup served?
+A) In a bowl
+B) In a milk jug
+C) On a spoon
+D) Inside the cream
+Solution: B
+Explanation: The standard presentation uses a small milk jug filled with maple syrup.
+
+BYO Pancake: how many teaspoons of chocolate chips (dry ingredient)?
+A) 1
+B) 2
+C) 3
+D) 5
+Solution: C
+Explanation: The standard for chocolate chips is 3 teaspoons.
+
+BYO Pancake: how many teaspoons of coconut chips (dry ingredient)?
+A) 1
+B) 2
+C) 3
+D) 4
+Solution: B
+Explanation: The standard for coconut chips is 2 teaspoons.
+
+BYO Pancake: approximately how many "whole nuts"?
+A) 2–3
+B) 4–5
+C) 6–7
+D) 9–10
+Solution: C
+Explanation: The standard indicates 6–7 pieces.
+
+Porridge: roughly how much milk is measured?
+A) 80–90 ml
+B) 125–130 ml
+C) 175–180 ml
+D) 250 ml
+Solution: B
+Explanation: The standard base uses 125–130 ml of milk.
+
+Porridge: how many "measuring cups" of porridge oats?
+A) 1
+B) 2
+C) 3
+D) 4
+Solution: B
+Explanation: The standard dose is 2 measuring cups of oats.
+
+Afternoon Tea Set: which gelato is included?
+A) Pistacchio
+B) Buontalenti
+C) Matcha
+D) Lemon
+Solution: B
+Explanation: The set includes 1 scoop of Buontalenti served with a wafer.
+
+Gelato cup: how many sizes exist?
+A) 2
+B) 3
+C) 4
+D) 5
+Solution: B
+Explanation: The standard cup sizes are Piccolo, Medio and Grande.
+
+Piccolo cup: which combination is correct?
+A) 1 flavour, 100 g
+B) 2 flavours, 140 g
+C) 3 flavours, 180 g
+D) 1 flavour, 180 g
+Solution: A
+Explanation: Piccolo equals 1 flavour and 100 g.
+
+Medio cup: which combination is correct?
+A) 1 flavour, 100 g
+B) 1–2 flavours, 140 g
+C) 1–3 flavours, 180 g
+D) 1–4 flavours, 240 g
+Solution: B
+Explanation: Medio equals 1–2 flavours and 140 g.
+
+Grande cup: which combination is correct?
+A) 1 flavour, 100 g
+B) 1–2 flavours, 140 g
+C) 1–3 flavours, 180 g
+D) 2 flavours, 240 g
+Solution: C
+Explanation: Grande equals 1–3 flavours and 180 g.
+
+Cup service: how should the cup be held correctly?
+A) By the rim
+B) By the bottom
+C) By the lid
+D) By the spoon
+Solution: B
+Explanation: The standard grip is by the bottom for stability and visual hygiene.
+
+Preparing gelato in a cup: how do you "soften" the gelato in the pan before portioning?
+A) Straight line from one side to the other
+B) Quick circular stir
+C) Pressing down with your hand
+D) Cutting into cubes
+Solution: A
+Explanation: The standard gesture is one straight pass to make the gelato ready for service.
+
+Before forming the scoop, where is the excess gelato removed from the tool?
+A) In the sink
+B) On the corner of the pan
+C) On the customer's napkin
+D) On the counter
+Solution: B
+Explanation: Excess is removed on the corner of the pan to keep the portion precise.
+
+In a cup: how do you reduce air bubbles in the served product?
+A) Shake the cup
+B) Gently press the gelato
+C) Add water
+D) Melt and refreeze
+Solution: B
+Explanation: The standard technique is to gently press the gelato to remove air bubbles.
+
+If the customer wishes, what can be added on top of the gelato?
+A) Wafer
+B) Orange slice
+C) Black pepper
+D) Salt
+Solution: A
+Explanation: The simple extra provided is a wafer.
+
+"Children rule": in a small cup, how many flavours are allowed?
+A) 1
+B) 2
+C) 3
+D) 4
+Solution: B
+Explanation: The standard allows 2 flavours in a small cup for children.
+
+Cones: before serving, how should the cone be held correctly?
+A) With a tissue wrapped around it
+B) With bare hands, without anything
+C) With metal tongs
+D) With a wet glove
+Solution: A
+Explanation: The standard grip uses a tissue around the cone.
+
+Cones: how many sizes are available (considering Piccolo and Medio)?
+A) 1
+B) 2
+C) 3
+D) 4
+Solution: B
+Explanation: The basic cone standard provides Piccolo and Medio.
+
+Choco Cone (vanilla flakes): which flavour/weight range is correct?
+A) 1 flavour 100 g
+B) 1–2 flavours 140 g
+C) 1–3 flavours 180 g
+D) 3 flavours 240 g
+Solution: B
+Explanation: Choco Cone supports 1–2 flavours at 140 g.
+
+Gluten Free Cone: which flavour/weight range is correct?
+A) 1 flavour 100 g
+B) 1–2 flavours 140 g
+C) 1–3 flavours 180 g
+D) 1–5 flavours 1000 ml
+Solution: B
+Explanation: The Gluten Free Cone also supports 1–2 flavours at 140 g.
+
+Gelato Boxes "Take Me Home": how many box sizes are there?
+A) 2
+B) 3
+C) 4
+D) 5
+Solution: B
+Explanation: The standard boxes are Piccolo, Medio and Grande.
+
+Piccolo box: correct capacity?
+A) 250 ml
+B) 500 ml
+C) 750 ml
+D) 1000 ml
+Solution: B
+Explanation: Piccolo box corresponds to 500 ml.
+
+Medio box: correct capacity?
+A) 500 ml
+B) 650 ml
+C) 750 ml
+D) 1000 ml
+Solution: C
+Explanation: Medio box corresponds to 750 ml.
+
+Grande box: correct capacity?
+A) 750 ml
+B) 900 ml
+C) 1000 ml
+D) 1500 ml
+Solution: C
+Explanation: Grande box corresponds to 1000 ml.
+
+Maximum thermal autonomy of the box (before going back into the freezer):
+A) 15 min
+B) 30 min
+C) 1 hour
+D) 3 hours
+Solution: C
+Explanation: The operational standard allows up to 1 hour.
+
+Filling the box: what is the key objective while pressing the gelato?
+A) Leave space
+B) Eliminate air bubbles
+C) Add toppings
+D) Mix flavours
+Solution: B
+Explanation: Correct pressing avoids air bubbles and stabilises slicing/serving.
+
+Internal box cover: what is used on top of the gelato before the lid?
+A) Absorbent paper
+B) White sleeve protection film
+C) Aluminium foil
+D) Black film
+Solution: B
+Explanation: The standard closure uses the white sleeve protection film.
+
+Box seal: what ensures the closure between box and lid?
+A) String
+B) Badiani tape
+C) White glue
+D) Elastic band
+Solution: B
+Explanation: The standard seal is made with Badiani tape at the box–lid contact point.
+
+Coppa Gelato (gelato sundae): how many scoops are served?
+A) 1
+B) 2
+C) 3
+D) 4
+Solution: C
+Explanation: The standard coppa is made of three scoops.
+
+Coppa Gelato: which extra element is included besides cream and sauce?
+A) Mini cone
+B) Mint
+C) Orange
+D) Savoury biscuit
+Solution: A
+Explanation: The standard composition includes a mini cone and a wafer.
+
+Treats storage: minimum temperature for the vertical vitrine?
+A) -5 °C
+B) -10 °C
+C) -14 °C
+D) -25 °C
+Solution: C
+Explanation: The vertical vitrine must be at least -14 °C and free of ice.
+
+Treats display: where should cakes be placed?
+A) On the lower shelf (kid-eye level)
+B) On the upper shelf (adult-eye level)
+C) Behind the till
+D) In the horizontal gelato display
+Solution: B
+Explanation: Cakes are displayed high, at adult-eye level, for visibility.
+
+Treats display: where do cookies and Pinguinos go?
+A) On the upper shelf
+B) On the lower shelf
+C) Only in storage
+D) Only on request
+Solution: B
+Explanation: Cookies and Pinguinos are displayed low, at kids-eye level.
+
+Treats shelf life: once displayed, cookies last:
+A) 7 days
+B) 14 days
+C) 21 days
+D) 35 days
+Solution: B
+Explanation: The standard display life for cookies is 14 days.
+
+Treats shelf life: once displayed, mini cakes last:
+A) 14 days
+B) 21 days
+C) 35 days
+D) 60 days
+Solution: B
+Explanation: The standard display life for mini cakes is 21 days.
+
+Morning prep – display: which colour is associated with the sanitiser used with hot water?
+A) Blue
+B) Yellow
+C) Red
+D) Black
+Solution: B
+Explanation: The standard routine uses hot water and yellow sanitiser.
+
+Morning prep – display: to make metal surfaces shine, you use:
+A) Blue spray + blue roll
+B) Only water
+C) Only soap
+D) Vinegar
+Solution: A
+Explanation: The standard combination for shine is blue spray and blue roll.
+
+Working temperature – gelato display: when the gelato is put on display, the machine must reach:
+A) -2/-3
+B) -8/-9
+C) -14/-15
+D) -20/-21
+Solution: C
+Explanation: The standard serving window is -14/-15.
+
+Scampolo: when does a flavour become a "scampolo"?
+A) Below half a pan
+B) Below 1/4 of a pan
+C) Below 1/10 of a pan
+D) When it is hard
+Solution: B
+Explanation: "Scampolo" means less than 1/4 of the pan remaining.
+
+Scampolo: how much gelato do you add at a time to the new pan (approximately)?
+A) 20 g
+B) 50 g
+C) 100 g
+D) 200 g
+Solution: C
+Explanation: The standard addition is about 100 g (one side of a scoop).
+
+Churros: what temperature do you set the fryer to?
+A) 170 °C
+B) 180 °C
+C) 190 °C
+D) 200 °C
+Solution: C
+Explanation: Standard frying temperature for churros is 190 °C.
+
+Churros: "one portion" corresponds to:
+A) 4
+B) 6
+C) 8
+D) 10
+Solution: C
+Explanation: The standard portion is 8 churros.
+
+Churros: frying time to reach "golden"?
+A) 2–3 min
+B) 5–6 min
+C) 8–9 min
+D) 12–13 min
+Solution: C
+Explanation: Standard cooking is 8–9 minutes until golden.
+
+Churros coating mix: which combination is correct?
+A) 600 g sugar + 20 g cinnamon
+B) 600 g cinnamon + 20 g sugar
+C) 300 g sugar + 30 g cinnamon
+D) Only sugar
+Solution: A
+Explanation: The standard coating is 600 g white sugar with 20 g cinnamon.
+
+Churros presentation: where is the chosen sauce placed?
+A) In a 1 oz cup
+B) Directly on the churros
+C) In a mug
+D) In a bottle
+Solution: A
+Explanation: The standard sauce portion is in a 1 oz container.
+
+Panettone "warm slice": how long do you toast each side on the crepe machine?
+A) 5 sec
+B) 10 sec
+C) 20 sec
+D) 30 sec
+Solution: B
+Explanation: The standard toasting is 10 seconds per side.
+
+Panettone "warm slice": what is forbidden to add during heating?
+A) Oil (or similar)
+B) Cutlery
+C) Gelato on the side
+D) Sauce on the side
+Solution: A
+Explanation: The operational rule excludes the use of oil during warming.
+
+Pandoro: what finish is applied to the slice?
+A) Icing sugar
+B) Bitter cocoa
+C) Crumble
+D) Honey
+Solution: A
+Explanation: The standard finish for pandoro is icing sugar.
+
+Mini stuffed panettone: where do you take it from in store?
+A) Vertical vitrine
+B) Till counter
+C) Oven
+D) Drinks display
+Solution: A
+Explanation: The standard flow takes it from the vertical vitrine using gloves.
+
+Mini stuffed panettone: how full do you fill the espresso cup with sauce?
+A) 1/4
+B) 1/3
+C) 1/2
+D) Full
+Solution: B
+Explanation: The standard sauce portion is 1/3 of an espresso cup.
+
+Mini panettone – delivery: to what level do you fill the sauce pot?
+A) 1/4
+B) 1/2
+C) 3/4
+D) 100 %
+Solution: C
+Explanation: The delivery standard fills to 3/4.
+
+Mini panettone – delivery: one sauce pot covers how many mini units?
+A) 1
+B) 2
+C) 3
+D) 4
+Solution: B
+Explanation: The standard quantity in one pot is designed for two mini panettoni.
+
+Mulled wine machine: roughly how much water goes into the outer tank?
+A) 200 ml
+B) 400 ml
+C) 600 ml
+D) 1000 ml
+Solution: C
+Explanation: The standard setup uses about 600 ml of water in the outer tank without exceeding the max.
+
+Mulled wine: warm-up time at level 10 (approximately)?
+A) 5–10 min
+B) 15–20 min
+C) 25–30 min
+D) 45–60 min
+Solution: C
+Explanation: The standard warm-up is 25–30 minutes to bring the mix to serving temperature.
+
+Mulled wine service: which garnish is mandatory in the glass?
+A) Lime
+B) Mint
+C) Orange slice
+D) Cream
+Solution: C
+Explanation: The standard presentation includes one orange slice in the cup.
+
+Mulled wine: shelf life of wine kept warm in the machine (from the first warm-up)?
+A) 1 day
+B) 3 days
+C) 7 days
+D) 30 days
+Solution: B
+Explanation: The operational shelf life of the "warmed up" product is 3 days from the first heating.
+
+Smoothie Rosso Berry: which "sticker + flavour" pair is correct?
+A) Pink + Rosso Berry
+B) Green + Rosso Berry
+C) Yellow + Rosso Berry
+D) Black + Rosso Berry
+Solution: A
+Explanation: The standard identification for Rosso Berry uses the pink sticker.
+
+Smoothie Verde Boost: which sticker is correct?
+A) Pink
+B) Green
+C) Yellow
+D) White
+Solution: B
+Explanation: The standard identification for Verde Boost uses the green sticker.
+
+Smoothie Giallo Passion: which sticker is correct?
+A) Pink
+B) Green
+C) Yellow
+D) Blue
+Solution: C
+Explanation: The standard identification for Giallo Passion uses the yellow sticker.
+
+Smoothies: how much apple juice goes in the blender?
+A) 150 ml
+B) 200 ml
+C) 250 ml
+D) 300 ml
+Solution: C
+Explanation: The standard dose for smoothies is 250 ml of apple juice.
+
+Smoothies: basic indication for mixing time?
+A) 10 sec
+B) 20 sec
+C) 30 sec
+D) 60 sec
+Solution: C
+Explanation: Standard blending is 30 seconds or until smooth.
+
+Premade matcha (small batch): which pair is correct?
+A) 3 g matcha + 25 ml cold water
+B) 3 g matcha + 250 ml water
+C) 20 g matcha + 25 ml water
+D) 30 g matcha + 25 ml water
+Solution: A
+Explanation: The standard small batch is 3 g of matcha with 25 ml of cold water.
+
+Matcha Iced Latte: how much premade matcha goes into the glass?
+A) 10 ml
+B) 25 ml
+C) 50 ml
+D) 75 ml
+Solution: B
+Explanation: The standard build uses 25 ml of premade matcha.
+
+Dirty Matcha Affogato: what is poured over one scoop of matcha gelato?
+A) Double espresso
+B) Apple juice
+C) Cold milk
+D) Vanilla syrup
+Solution: A
+Explanation: The "dirty" version is completed with a double espresso over the matcha scoop.
+
+Yo-Yo: what is the correct build?
+A) 2 wafers + 1 scoop (about 80–90 g) in the middle
+B) 1 wafer + 2 scoops
+C) 3 wafers + cream
+D) Cone + wafer
+Solution: A
+Explanation: The standard format is two wafers and one central scoop of about 80–90 g, closed so the gelato does not spill out.
