@@ -2142,7 +2142,30 @@ h4 {
   position: relative;
   display: grid;
   gap: 28px;
-  overflow: hidden;
+  /* Mobile UX: panel must scroll internally (body is scroll-locked while open).
+     `overflow: hidden` made the language list impossible to reach/click on short viewports. */
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 100dvh;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
+}
+
+@media (max-width: 600px) {
+  .menu-panel__inner {
+    width: min(440px, 92vw);
+    padding: 20px;
+    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    border-radius: 26px 0 0 26px;
+    gap: 18px;
+  }
+}
+
+/* Ensure the language selector inside the menu panel stays tappable above decorative layers. */
+.menu-panel__inner .menu-lang {
+  position: relative;
+  z-index: 3;
 }
 
 .menu-panel__inner::before {
@@ -3882,7 +3905,8 @@ button,
   align-items: start;
   gap: 24px;
   overflow-x: auto;
-  overflow-y: hidden;
+  /* Cards scale/float slightly; keep their top shadows/transform from being clipped. */
+  overflow-y: visible;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
   padding: 28px;
@@ -3912,18 +3936,23 @@ button,
   scroll-snap-align: center;
   scroll-snap-stop: always;
   scroll-margin-top: calc(var(--nav-height) + var(--nav-gap) + var(--carousel-sticky-offset-desktop));
-  transform: scale(0.92);
-  opacity: 0.9;
+  transform: scale(0.96);
+  opacity: 0.96;
   transition: transform 360ms cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 360ms ease, opacity 240ms ease;
 }
 
 .guide-card[data-carousel-item].is-focused {
-  transform: translateY(-4px) scale(1.04);
+  transform: translateY(-3px) scale(1.02);
   opacity: 1;
   box-shadow: none;
 }
 
 @media (max-width: 720px) {
+  .carousel {
+    /* Let focused cards breathe on mobile; avoids “deformed/clipped” edges. */
+    overflow: visible;
+  }
+
   .carousel-header {
     margin: 0 12px;
     padding: 12px 14px;
@@ -3943,6 +3972,13 @@ button,
 
   .guide-card[data-carousel-item] {
     scroll-margin-top: calc(var(--nav-height) + var(--nav-gap) + var(--carousel-sticky-offset-mobile));
+    /* On phones, keep cards closer to 1:1 scale for crisp typography and less visual wobble. */
+    transform: scale(0.985);
+    opacity: 1;
+  }
+
+  .guide-card[data-carousel-item].is-focused {
+    transform: translateY(-2px) scale(1);
   }
 }
 
@@ -7515,12 +7551,20 @@ body.page-home {
   }
 
   .menu-drawer__panel {
-    width: 280px;
+    /* Sheet on small tablets / big phones. */
+    width: min(360px, 92vw);
   }
 
   .menu-categories a {
     padding: 14px 20px;
     font-size: 14px;
+  }
+}
+
+/* Phones: the drawer should be full-width for easy tapping. (Overrides the 860px sheet rule above.) */
+@media (max-width: 600px) {
+  .menu-drawer__panel {
+    width: 100%;
   }
 }
 
