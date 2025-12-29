@@ -595,8 +595,6 @@ window.addEventListener('DOMContentLoaded', function() {
     // NOTE: Do NOT wipe other profiles' gamification keys.
     // Gamification is stored per profile (badianiGamification.v3:<profileId>) and will be
     // initialized automatically on first load for the new profile.
-    // Reload forzato per caricare lo stato del profilo appena creato.
-    setTimeout(() => { window.location.reload(true); }, 100);
     return profile;
   };
 
@@ -679,6 +677,15 @@ window.addEventListener('DOMContentLoaded', function() {
 
     if (signupForm) {
       const submitBtn = signupForm.querySelector('button[type="submit"]');
+      const error = signupForm.querySelector('[data-error]');
+      const inputs = signupForm.querySelectorAll('input');
+      
+      // Nascondi errori quando l'utente inizia a digitare
+      inputs.forEach(input => {
+        input.addEventListener('input', () => {
+          if (error) error.style.display = 'none';
+        });
+      });
       
       signupForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -696,7 +703,6 @@ window.addEventListener('DOMContentLoaded', function() {
             error.style.display = 'block';
             error.textContent = tr('profile.err.fillBothMin2', null, 'Compila entrambi i campi (minimo 2 caratteri).');
           }
-          alert(tr('profile.err.fillBothMin2', null, 'Compila entrambi i campi (minimo 2 caratteri).'));
           return;
         }
         const result = createNewProfile(nickname, gelato);
@@ -706,14 +712,16 @@ window.addEventListener('DOMContentLoaded', function() {
             error.style.display = 'block';
             error.textContent = tr('profile.err.nicknameTaken', null, 'Questo nickname è già in uso. Scegline un altro.');
           }
-          alert(tr('profile.err.nicknameTaken', null, 'Questo nickname è già in uso. Scegline un altro.'));
           return;
         }
-        alert(tr('profile.ok.signup', { name: nickname }, 'Registrazione riuscita! Benvenuto/a {{name}}. Ricarico la pagina...'));
         console.log('User created successfully, reloading...');
+        // Chiudi overlay prima del reload per evitare problemi
         overlay.remove();
         bodyScrollLock.unlock();
-        try { window.location.reload(); } catch {}
+        // Breve delay per permettere la chiusura dell'overlay
+        setTimeout(() => {
+          try { window.location.reload(); } catch {}
+        }, 50);
       });
 
       if (submitBtn) {
@@ -727,6 +735,15 @@ window.addEventListener('DOMContentLoaded', function() {
 
     if (loginForm) {
       const submitBtn = loginForm.querySelector('button[type="submit"]');
+      const error = loginForm.querySelector('[data-error]');
+      const inputs = loginForm.querySelectorAll('input');
+      
+      // Nascondi errori quando l'utente inizia a digitare
+      inputs.forEach(input => {
+        input.addEventListener('input', () => {
+          if (error) error.style.display = 'none';
+        });
+      });
       
       loginForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -744,7 +761,6 @@ window.addEventListener('DOMContentLoaded', function() {
             error.style.display = 'block';
             error.textContent = tr('profile.err.fillBoth', null, 'Compila entrambi i campi.');
           }
-          alert(tr('profile.err.fillBoth', null, 'Compila entrambi i campi.'));
           return;
         }
         const result = loginWithProfile(nickname, gelato);
@@ -754,14 +770,16 @@ window.addEventListener('DOMContentLoaded', function() {
             error.style.display = 'block';
             error.textContent = tr('profile.err.notFound', null, 'Profilo non trovato. Controlla nickname e gusto.');
           }
-          alert(tr('profile.err.notFound', null, 'Profilo non trovato. Controlla nickname e gusto.'));
           return;
         }
-        alert(tr('profile.ok.login', { name: nickname }, 'Login riuscito! Bentornato/a {{name}}. Ricarico la pagina...'));
         console.log('Login successful, reloading...');
+        // Chiudi overlay prima del reload per evitare problemi
         overlay.remove();
         bodyScrollLock.unlock();
-        try { window.location.reload(); } catch {}
+        // Breve delay per permettere la chiusura dell'overlay
+        setTimeout(() => {
+          try { window.location.reload(); } catch {}
+        }, 50);
       });
 
       if (submitBtn) {
@@ -935,15 +953,8 @@ scrollButtons.forEach((btn) => {
   const searchRoot = drawer?.querySelector('.menu-search');
   const COMPLETION_KEY_PREFIX = 'badianiCategoryCompletion.v1';
   const GAMIFICATION_KEY_PREFIX = 'badianiGamification.v3';
-  const moods = [
-    tr('mood.1', null, 'Coraggio: ogni servizio è un racconto.'),
-    tr('mood.2', null, 'Brilla: i dettagli fanno la differenza.'),
-    tr('mood.3', null, 'Energia gentile: sorridi e guida l’esperienza.'),
-    tr('mood.4', null, 'Precisione oggi, eccellenza domani.'),
-    tr('mood.5', null, 'Servi bellezza: cura, ritmo, calore umano.'),
-    tr('mood.6', null, 'Ogni caffè è una promessa mantenuta.'),
-  ];
-  let lastMood = '';
+  const moodKeys = ['mood.1', 'mood.2', 'mood.3', 'mood.4', 'mood.5', 'mood.6'];
+  let lastMoodKey = '';
   let assistantNodes = null;
   let lastAssistantQuery = '';
   let typingToken = 0;
@@ -1124,14 +1135,21 @@ scrollButtons.forEach((btn) => {
     return slittiTavoletteInfoPromise;
   };
 
-  const pickMood = () => {
-    if (!moods.length) return '';
-    let next = moods[Math.floor(Math.random() * moods.length)];
-    if (moods.length > 1 && next === lastMood) {
-      next = moods[(Math.floor(Math.random() * (moods.length - 1)) + 1) % moods.length];
+  const pickMoodKey = () => {
+    if (!moodKeys.length) return '';
+    let next = moodKeys[Math.floor(Math.random() * moodKeys.length)];
+    if (moodKeys.length > 1 && next === lastMoodKey) {
+      next = moodKeys[(Math.floor(Math.random() * (moodKeys.length - 1)) + 1) % moodKeys.length];
     }
-    lastMood = next;
+    lastMoodKey = next;
     return next;
+  };
+
+  const applyMoodLine = (key) => {
+    if (!moodLine) return;
+    const k = String(key || moodLine.dataset.moodKey || 'mood.2');
+    moodLine.dataset.moodKey = k;
+    moodLine.textContent = tr(k, null, moodLine.textContent || '');
   };
 
   const normalize = (str) => (str || '').toLowerCase().trim();
@@ -1684,7 +1702,7 @@ scrollButtons.forEach((btn) => {
     header.className = 'menu-search__assistant-header';
     header.innerHTML = `
       <p class="menu-search__assistant-title">BERNY</p>
-      <button class="menu-search__assistant-clear" type="button" data-menu-assistant-clear aria-label="Pulisci">×</button>
+      <button class="menu-search__assistant-clear" type="button" data-menu-assistant-clear aria-label="Pulisci" data-i18n-attr="aria-label:assistant.clearAria">×</button>
     `;
 
     const msg = document.createElement('p');
@@ -1729,15 +1747,15 @@ scrollButtons.forEach((btn) => {
 
   const showAssistantGreeting = () => {
     setAssistant({
-      message: 'Dimmi cosa ti serve: io sono BERNY, il tuo assistente di fiducia. (Prometto di non giudicare gli errori… troppo.)',
+      message: tr('assistant.greeting', null, 'Dimmi cosa ti serve: io sono BERNY, il tuo assistente di fiducia. (Prometto di non giudicare gli errori… troppo.)'),
       actions: [
-        { label: 'Apri Hub', href: 'index.html', kind: 'secondary' },
+        { label: tr('assistant.action.openHub', null, 'Apri Hub'), href: 'index.html', kind: 'secondary' },
       ],
       examples: [
-        'Coni: quanti gusti e quanti grammi?',
-        'Come preparo un cappuccino?',
-        'Churros: temperatura olio e timing?',
-        'Gelato box: quale formato uso?',
+        tr('assistant.example.cones', null, 'Coni: quanti gusti e quanti grammi?'),
+        tr('assistant.example.cappuccino', null, 'Come preparo un cappuccino?'),
+        tr('assistant.example.churros', null, 'Churros: temperatura olio e timing?'),
+        tr('assistant.example.gelatoBox', null, 'Gelato box: quale formato uso?'),
       ],
     });
   };
@@ -1763,7 +1781,7 @@ scrollButtons.forEach((btn) => {
       msgEl.classList.add('is-thinking');
       setAvatarState('think');
       const textSpan = document.createElement('span');
-      textSpan.textContent = String(message || 'Ok, ci penso');
+      textSpan.textContent = String(message || tr('assistant.thinking', null, 'Ok, ci penso'));
       const dots = document.createElement('span');
       dots.className = 'assistant-dots';
       dots.setAttribute('aria-hidden', 'true');
@@ -1833,7 +1851,7 @@ scrollButtons.forEach((btn) => {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = a.kind === 'secondary' ? 'btn btn-ghost btn--sm' : 'btn btn-primary btn--sm';
-      btn.textContent = a.label || 'Apri';
+      btn.textContent = a.label || tr('assistant.action.open', null, 'Apri');
       btn.addEventListener('click', () => navigateTo(a.href));
       assistantNodes.actions.appendChild(btn);
     });
@@ -2219,7 +2237,7 @@ scrollButtons.forEach((btn) => {
     lastAssistantQuery = norm;
 
     // Thinking phase (visible)
-    await setAssistant({ message: 'Ok, ci penso', actions: [], examples: [], render: 'thinking' });
+    await setAssistant({ message: tr('assistant.thinking', null, 'Ok, ci penso'), actions: [], examples: [], render: 'thinking' });
     // Minimum “thinking” time so it reads as intentional.
     await sleep(420);
     const answer = await answerAssistant(raw);
@@ -2227,15 +2245,25 @@ scrollButtons.forEach((btn) => {
   };
 
   const openDrawer = () => {
-    if (moodLine) {
-      const mood = pickMood();
-      if (mood) moodLine.textContent = mood;
-    }
+    applyMoodLine(pickMoodKey());
     applyCategoryCompletionStars();
     renderSuggestions(searchInput?.value || '');
     drawer.setAttribute('aria-hidden', 'false');
     bodyScrollLock.lock();
   };
+
+  // Keep mood line aligned when UI language changes.
+  document.addEventListener('badiani:lang-changed', () => {
+    applyMoodLine();
+    // If the assistant is in its idle/greeting state, refresh strings.
+    try {
+      const current = normalize(searchInput?.value || '');
+      if (!current) {
+        lastAssistantQuery = '';
+        showAssistantGreeting();
+      }
+    } catch {}
+  });
 
   const closeDrawer = () => {
     drawer.setAttribute('aria-hidden', 'true');
@@ -2847,7 +2875,7 @@ scrollButtons.forEach((btn) => {
       msgEl.classList.add('is-thinking');
       setAvatarState('think');
       const textSpan = document.createElement('span');
-      textSpan.textContent = String(message || 'Ok, ci penso');
+      textSpan.textContent = String(message || tr('assistant.thinking', null, 'Ok, ci penso'));
       const dots = document.createElement('span');
       dots.className = 'assistant-dots';
       dots.setAttribute('aria-hidden', 'true');
@@ -2950,15 +2978,15 @@ scrollButtons.forEach((btn) => {
 
   const showAssistantGreeting = () => {
     setAssistant({
-      message: 'Dimmi cosa ti serve: io sono BERNY, il tuo assistente di fiducia. (Prometto di non giudicare gli errori… troppo.)',
+      message: tr('assistant.greeting', null, 'Dimmi cosa ti serve: io sono BERNY, il tuo assistente di fiducia. (Prometto di non giudicare gli errori… troppo.)'),
       actions: [
-        { label: 'Apri Story Orbit', href: 'story-orbit.html', kind: 'secondary' },
+        { label: tr('assistant.action.openStoryOrbit', null, 'Apri Story Orbit'), href: 'story-orbit.html', kind: 'secondary' },
       ],
       examples: [
-        'Coni: quanti gusti e quanti grammi?',
-        'Come preparo un cappuccino?',
-        'Churros: temperatura olio e timing?',
-        'Gelato box: quale formato uso?',
+        tr('assistant.example.cones', null, 'Coni: quanti gusti e quanti grammi?'),
+        tr('assistant.example.cappuccino', null, 'Come preparo un cappuccino?'),
+        tr('assistant.example.churros', null, 'Churros: temperatura olio e timing?'),
+        tr('assistant.example.gelatoBox', null, 'Gelato box: quale formato uso?'),
       ],
     });
   };
@@ -3293,7 +3321,7 @@ scrollButtons.forEach((btn) => {
     }
     if (norm === lastAssistantQuery) return;
     lastAssistantQuery = norm;
-    await setAssistant({ message: 'Ok, ci penso', actions: [], examples: [], render: 'thinking' });
+    await setAssistant({ message: tr('assistant.thinking', null, 'Ok, ci penso'), actions: [], examples: [], render: 'thinking' });
     await sleep(420);
     const answer = await answerAssistant(raw);
     await setAssistant({ ...answer, render: 'typewriter' });
@@ -5751,6 +5779,7 @@ const gamification = (() => {
   }
 
   function showChangeGelatoModal() {
+    console.log('showChangeGelatoModal called');
     const getUser = () => {
       try { return JSON.parse(localStorage.getItem('badianiUser.profile.v1') || 'null'); } catch { return null; }
     };
@@ -5809,6 +5838,7 @@ const gamification = (() => {
   }
 
   function showChangeProfileModal() {
+    console.log('showChangeProfileModal called');
     const container = document.createElement('div');
     container.className = 'reward-modal';
     container.innerHTML = `
@@ -5836,75 +5866,43 @@ const gamification = (() => {
   }
 
   function initProfileControls() {
-    const profileRoot = document.querySelector('[data-summary] [data-profile]');
-    if (!profileRoot) return;
-
-    // Ensure toolbar and buttons exist
-    let toolbar = profileRoot.querySelector('[data-profile-toolbar]');
-    if (!toolbar) {
-      toolbar = document.createElement('div');
-      toolbar.className = 'profile-toolbar';
-      toolbar.setAttribute('data-profile-toolbar', '');
-      toolbar.style.cssText = 'display:flex; gap:8px; justify-content:flex-end; margin-top:4px; margin-bottom:8px;';
-      const stats = profileRoot.querySelector('.summary-stats');
-      if (stats) profileRoot.insertBefore(toolbar, stats);
+    console.log('Initializing profile controls...');
+    
+    // Usa delegazione eventi sul document per catturare tutti i click sui pulsanti profilo
+    // Questo funziona anche se i pulsanti vengono creati dinamicamente o sono dentro carousel
+    
+    // Rimuovi vecchi listener se esistono
+    if (window.__badianiProfileHandlersAttached) {
+      console.log('Profile handlers already attached, skipping...');
+      return;
     }
-
-    let editBtnNode = profileRoot.querySelector('[data-profile-edit]');
-    if (!editBtnNode) {
-      editBtnNode = document.createElement('button');
-      editBtnNode.type = 'button';
-      editBtnNode.setAttribute('data-profile-edit', '');
-      editBtnNode.textContent = 'Cambia gusto';
-      editBtnNode.style.cssText = 'padding:8px 12px; border-radius:10px; background:#214098; color:#fff; border:none; font-weight:600;';
-      toolbar.appendChild(editBtnNode);
-    }
-
-    let switchBtnNode = profileRoot.querySelector('[data-profile-switch]');
-    if (!switchBtnNode) {
-      switchBtnNode = document.createElement('button');
-      switchBtnNode.type = 'button';
-      switchBtnNode.setAttribute('data-profile-switch', '');
-      switchBtnNode.textContent = 'Cambia profilo';
-      switchBtnNode.style.cssText = 'padding:8px 12px; border-radius:10px; background:#e11d48; color:#fff; border:none; font-weight:600;';
-      toolbar.appendChild(switchBtnNode);
-    }
-
-    // Direct bindings on the buttons to avoid carousel capture from eating clicks.
-    // Keep stable handler references so re-initialising doesn't stack multiple listeners.
-    if (!editBtnNode.__badianiHandleEdit) {
-      editBtnNode.__badianiHandleEdit = (event) => {
+    
+    // Handler per "Cambia gusto"
+    document.addEventListener('click', (event) => {
+      const editBtn = event.target.closest('[data-profile-edit]');
+      if (editBtn) {
+        console.log('Cambia gusto clicked');
         event.preventDefault();
         event.stopPropagation();
+        event.stopImmediatePropagation();
         showChangeGelatoModal();
-      };
-    }
-    if (!switchBtnNode.__badianiHandleSwitch) {
-      switchBtnNode.__badianiHandleSwitch = (event) => {
+      }
+    }, true); // useCapture = true per catturare prima del carousel
+
+    // Handler per "Cambia profilo"
+    document.addEventListener('click', (event) => {
+      const switchBtn = event.target.closest('[data-profile-switch]');
+      if (switchBtn) {
+        console.log('Cambia profilo clicked');
         event.preventDefault();
         event.stopPropagation();
+        event.stopImmediatePropagation();
         showChangeProfileModal();
-      };
-    }
+      }
+    }, true); // useCapture = true per catturare prima del carousel
 
-    editBtnNode.removeEventListener('click', editBtnNode.__badianiHandleEdit);
-    switchBtnNode.removeEventListener('click', switchBtnNode.__badianiHandleSwitch);
-    editBtnNode.addEventListener('click', editBtnNode.__badianiHandleEdit);
-    switchBtnNode.addEventListener('click', switchBtnNode.__badianiHandleSwitch);
-
-    // Keep delegation for any dynamically injected buttons inside the profile area.
-    if (!profileRoot.hasAttribute('data-profile-delegation-bound')) {
-      profileRoot.setAttribute('data-profile-delegation-bound', 'true');
-      profileRoot.addEventListener('click', (e) => {
-        if (e.target.closest('[data-profile-edit]')) {
-          e.preventDefault();
-          showChangeGelatoModal();
-        } else if (e.target.closest('[data-profile-switch]')) {
-          e.preventDefault();
-          showChangeProfileModal();
-        }
-      });
-    }
+    window.__badianiProfileHandlersAttached = true;
+    console.log('Profile controls initialized successfully');
   }
 
   function syncCountdown() {
@@ -10178,6 +10176,33 @@ toggles.forEach((button) => {
         return overflowSection;
       };
 
+      const getModalTitleI18nKey = (rawTitle) => {
+        const t = tidy(rawTitle).toLowerCase();
+        if (!t) return '';
+        if (t.includes('panoramica')) return 'modal.tab.overview';
+        if (t.includes('specifiche')) return 'modal.tab.specs';
+        if (t.includes('ricetta')) return 'modal.tab.recipe';
+        if (t.includes('preparaz')) return 'modal.tab.preparation';
+        if (t.includes('procedura')) return 'modal.tab.procedure';
+        if (t.includes('parametri')) return 'modal.tab.parameters';
+        if (t.includes('servizio')) return 'modal.tab.service';
+        if (t.includes('conserv')) return 'modal.tab.storage';
+        if (t.includes('pulizia')) return 'modal.tab.cleaning';
+        if (t.includes('take away') || t.includes('takeaway')) return 'modal.tab.takeAway';
+        if (t.includes('troubleshoot')) return 'modal.tab.troubleshooting';
+        if (t.includes('upsell')) return 'modal.tab.upselling';
+        if (t.includes('tecniche di vendita') || t.includes('vendita')) return 'modal.tab.salesTechniques';
+        if (t.includes('pro tip')) return 'modal.tab.proTip';
+        if (t.includes('sugger')) return 'modal.tab.tips';
+        if (t.includes('approfond')) return 'modal.tab.insights';
+        if (t.includes('checklist')) return 'modal.tab.checklist';
+        if (t.includes('focus')) return 'modal.tab.focus';
+        if (t.includes('altri dettagli')) return 'modal.section.moreDetails';
+        if (t.includes('dettagli')) return 'modal.label.details';
+        if (t.includes('note')) return 'modal.tab.notes';
+        return '';
+      };
+
       const pushOverflowGroup = (title, contentEl) => {
         // Skip duplicated content (common when the same text was pasted into multiple blocks).
         try {
@@ -10194,7 +10219,10 @@ toggles.forEach((button) => {
         try {
           const label = document.createElement('p');
           label.className = 'card-modal-section__title';
-          label.textContent = String(title || 'Dettagli');
+          const raw = String(title || 'Dettagli');
+          const k = getModalTitleI18nKey(raw);
+          if (k) label.setAttribute('data-i18n', k);
+          label.textContent = k ? tr(k, null, raw) : raw;
           wrap.appendChild(label);
         } catch (e) {}
         wrap.appendChild(contentEl);
@@ -10254,7 +10282,16 @@ toggles.forEach((button) => {
         header.type = 'button';
         header.className = 'accordion-header';
         header.setAttribute('aria-expanded', 'false');
-        header.innerHTML = `<span class="accordion-title">${title}</span><span class="accordion-chevron" aria-hidden="true">⌄</span>`;
+        header.innerHTML = `<span class="accordion-title"></span><span class="accordion-chevron" aria-hidden="true">⌄</span>`;
+        try {
+          const titleSpan = header.querySelector('.accordion-title');
+          const raw = String(title || '').trim();
+          const k = getModalTitleI18nKey(raw);
+          if (titleSpan) {
+            if (k) titleSpan.setAttribute('data-i18n', k);
+            titleSpan.textContent = k ? tr(k, null, raw) : raw;
+          }
+        } catch (e) {}
         try {
           const topic = item.dataset.topic;
           if (topic) header.dataset.topic = topic;
@@ -10658,7 +10695,10 @@ toggles.forEach((button) => {
               try {
                 const label = document.createElement('p');
                 label.className = 'card-modal-section__title';
-                label.textContent = group.title;
+                const raw = String(group.title || '').trim();
+                const k = getModalTitleI18nKey(raw);
+                if (k) label.setAttribute('data-i18n', k);
+                label.textContent = k ? tr(k, null, raw) : raw;
                 merged.appendChild(label);
               } catch (e) {}
               merged.appendChild(buildGroupWrapper(group));
@@ -10703,18 +10743,22 @@ toggles.forEach((button) => {
             return cleaned.length >= 18 ? cleaned : '';
           })();
 
-          const mkLi = (label, value) => {
+          const mkLi = (labelKey, fallbackLabel, value) => {
             if (!value) return;
             const li = document.createElement('li');
             const strong = document.createElement('strong');
-            strong.textContent = `${label}:`;
+            const span = document.createElement('span');
+            if (labelKey) span.setAttribute('data-i18n', labelKey);
+            span.textContent = labelKey ? tr(labelKey, null, fallbackLabel) : String(fallbackLabel || '');
+            strong.appendChild(span);
+            strong.appendChild(document.createTextNode(':'));
             li.appendChild(strong);
             li.appendChild(document.createTextNode(` ${value}`));
             ul.appendChild(li);
           };
 
-          mkLi('Obiettivo', firstSentence);
-          mkLi('Focus', tagsText.length ? tagsText.join(' · ') : '');
+          mkLi('modal.checklist.goal', 'Obiettivo', firstSentence);
+          mkLi('modal.checklist.focus', 'Focus', tagsText.length ? tagsText.join(' · ') : '');
           if (ul.childElementCount) {
             checklist.appendChild(ul);
             createAccordionItem('Checklist', checklist, false);
@@ -10737,7 +10781,8 @@ toggles.forEach((button) => {
         try {
           const title = document.createElement('p');
           title.className = 'card-modal-section__title';
-          title.textContent = 'Altri dettagli';
+          title.setAttribute('data-i18n', 'modal.section.moreDetails');
+          title.textContent = tr('modal.section.moreDetails', null, 'Altri dettagli');
           if (!overflowSection.querySelector(':scope > .card-modal-section__title')) {
             overflowSection.prepend(title);
           }
@@ -10752,14 +10797,16 @@ toggles.forEach((button) => {
 
         const hint = document.createElement('p');
         hint.className = 'modal-tabs-toolbar__hint';
-        hint.textContent = 'Modalità studio: apri tutti i tab insieme.';
+        hint.setAttribute('data-i18n', 'modal.studyMode.hint');
+        hint.textContent = tr('modal.studyMode.hint', null, 'Modalità studio: apri tutti i tab insieme.');
 
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'btn-ghost modal-tabs-toolbar__btn';
         btn.setAttribute('aria-pressed', 'false');
-        btn.setAttribute('aria-label', 'Mostra tutto');
-        btn.innerHTML = '<span class="sr-only">Mostra tutto</span>';
+        btn.setAttribute('data-i18n-attr', 'aria-label:modal.studyMode.showAllAria');
+        btn.setAttribute('aria-label', tr('modal.studyMode.showAllAria', null, 'Mostra tutto'));
+        btn.innerHTML = '<span class="sr-only" data-i18n="modal.studyMode.showAll">Mostra tutto</span>';
         btn.hidden = true;
         btn.addEventListener('click', (e) => {
           try { e.preventDefault(); e.stopPropagation(); } catch (err) {}
@@ -10844,13 +10891,43 @@ toggles.forEach((button) => {
           return overflowSection;
         };
 
+        const getModalTitleI18nKey = (rawTitle) => {
+          const t = tidy(rawTitle).toLowerCase();
+          if (!t) return '';
+          if (t.includes('panoramica')) return 'modal.tab.overview';
+          if (t.includes('specifiche')) return 'modal.tab.specs';
+          if (t.includes('ricetta')) return 'modal.tab.recipe';
+          if (t.includes('preparaz')) return 'modal.tab.preparation';
+          if (t.includes('procedura')) return 'modal.tab.procedure';
+          if (t.includes('parametri')) return 'modal.tab.parameters';
+          if (t.includes('servizio')) return 'modal.tab.service';
+          if (t.includes('conserv')) return 'modal.tab.storage';
+          if (t.includes('pulizia')) return 'modal.tab.cleaning';
+          if (t.includes('take away') || t.includes('takeaway') || t.includes('tw')) return 'modal.tab.takeAway';
+          if (t.includes('troubleshoot')) return 'modal.tab.troubleshooting';
+          if (t.includes('upsell')) return 'modal.tab.upselling';
+          if (t.includes('tecniche di vendita') || t.includes('vendita')) return 'modal.tab.salesTechniques';
+          if (t.includes('pro tip')) return 'modal.tab.proTip';
+          if (t.includes('sugger')) return 'modal.tab.tips';
+          if (t.includes('approfond')) return 'modal.tab.insights';
+          if (t.includes('checklist')) return 'modal.tab.checklist';
+          if (t.includes('focus')) return 'modal.tab.focus';
+          if (t.includes('altri dettagli')) return 'modal.section.moreDetails';
+          if (t.includes('dettagli')) return 'modal.label.details';
+          if (t.includes('note')) return 'modal.tab.notes';
+          return '';
+        };
+
         const pushOverflowGroup = (title, contentEl) => {
           // Keep extra content reachable without adding more tabs.
           const wrap = ensureOverflowSection();
           try {
             const label = document.createElement('p');
             label.className = 'card-modal-section__title';
-            label.textContent = String(title || 'Dettagli');
+            const raw = String(title || 'Dettagli');
+            const k = getModalTitleI18nKey(raw);
+            if (k) label.setAttribute('data-i18n', k);
+            label.textContent = k ? tr(k, null, raw) : raw;
             wrap.appendChild(label);
           } catch (e) {}
           wrap.appendChild(contentEl);
@@ -10935,7 +11012,16 @@ toggles.forEach((button) => {
           header.type = 'button';
           header.className = 'accordion-header';
           header.setAttribute('aria-expanded', 'false');
-          header.innerHTML = `<span class="accordion-title">${titleText}</span><span class="accordion-chevron" aria-hidden="true">⌄</span>`;
+          header.innerHTML = `<span class="accordion-title"></span><span class="accordion-chevron" aria-hidden="true">⌄</span>`;
+          try {
+            const titleSpan = header.querySelector('.accordion-title');
+            const raw = String(titleText || '').trim();
+            const k = getModalTitleI18nKey(raw);
+            if (titleSpan) {
+              if (k) titleSpan.setAttribute('data-i18n', k);
+              titleSpan.textContent = k ? tr(k, null, raw) : raw;
+            }
+          } catch (e) {}
           try {
             const topic = item.dataset.topic;
             if (topic) header.dataset.topic = topic;
@@ -11111,7 +11197,8 @@ toggles.forEach((button) => {
           try {
             const title = document.createElement('p');
             title.className = 'card-modal-section__title';
-            title.textContent = 'Altri dettagli';
+            title.setAttribute('data-i18n', 'modal.section.moreDetails');
+            title.textContent = tr('modal.section.moreDetails', null, 'Altri dettagli');
             if (!overflowSection.querySelector(':scope > .card-modal-section__title')) {
               overflowSection.prepend(title);
             }
@@ -11126,14 +11213,16 @@ toggles.forEach((button) => {
 
           const hint = document.createElement('p');
           hint.className = 'modal-tabs-toolbar__hint';
-          hint.textContent = 'Modalità studio: apri tutti i tab insieme.';
+          hint.setAttribute('data-i18n', 'modal.studyMode.hint');
+          hint.textContent = tr('modal.studyMode.hint', null, 'Modalità studio: apri tutti i tab insieme.');
 
           const btn = document.createElement('button');
           btn.type = 'button';
           btn.className = 'btn-ghost modal-tabs-toolbar__btn';
           btn.setAttribute('aria-pressed', 'false');
-          btn.setAttribute('aria-label', 'Mostra tutto');
-          btn.innerHTML = '<span class="sr-only">Mostra tutto</span>';
+          btn.setAttribute('data-i18n-attr', 'aria-label:modal.studyMode.showAllAria');
+          btn.setAttribute('aria-label', tr('modal.studyMode.showAllAria', null, 'Mostra tutto'));
+          btn.innerHTML = '<span class="sr-only" data-i18n="modal.studyMode.showAll">Mostra tutto</span>';
           btn.hidden = true;
           btn.addEventListener('click', (e) => {
             try { e.preventDefault(); e.stopPropagation(); } catch (err) {}
@@ -11848,7 +11937,14 @@ const initCarousels = () => {
       const MOMENTUM_DECAY_BASE = 0.982; // closer to 1 => longer glide
 
       const isInteractiveTarget = (target) => {
-        return target && target.closest('button, a, input, select, textarea, [role="button"], [data-profile]');
+        if (!target || !target.closest) return false;
+        // IMPORTANT (Hub cockpit): the profile card uses a large `[data-profile]` wrapper.
+        // Treating that wrapper as "interactive" blocks drag-to-scroll when the user tries
+        // to swipe/drag from inside the profile card.
+        if (isCockpit) {
+          return !!target.closest('button, a, input, select, textarea, [role="button"]');
+        }
+        return !!target.closest('button, a, input, select, textarea, [role="button"], [data-profile]');
       };
 
       const stopMomentum = () => {

@@ -256,8 +256,7 @@ body.page-home {
 
 /* Homepage cockpit carousel (uses existing carousel JS + indicators) */
 .page-home [data-carousel="cockpit"] {
-  overflow-x: hidden;
-  overflow-y: visible;
+  overflow: visible; /* FIXED: was overflow-x: hidden */
   min-width: 0;
   max-width: 100%;
 }
@@ -352,21 +351,21 @@ body.page-home {
   flex: 1 1 auto;
   scroll-behavior: smooth;
   scroll-snap-type: x proximity;
-  /* Keep centering margin for snap, but use tight real padding to avoid a leading gap. */
-  scroll-padding-inline: max(12px, calc((100% - min(420px, 100% - 20px)) / 2));
-  padding: 6px 4px 4px; /* Add top air so focused tabs are not clipped */
   /*
-    IMPORTANT: the cockpit carousel uses JS to center cards.
-    Without enough *real* space on the right, the last cards can't be centered and the
-    carousel appears to "stop" (often around the 4th card) because scrollLeft clamps.
-    Keep the start tight (no leading gap) but add right-side space for end-centering.
+    Cockpit centering (Windows-safe):
+    JS centers cards by computing a target scrollLeft, but scrollLeft clamps to
+    [0, scrollWidth - clientWidth]. If we don't provide enough *real* padding on BOTH
+    sides, the first/last cards can't fully center and the carousel can feel “stuck”.
   */
-  padding-right: max(12px, calc((100% - min(420px, 100% - 20px)) / 2));
+  --cockpit-side-pad: max(12px, calc((100% - min(420px, 100% - 20px)) / 2 + 10px));
+  scroll-padding-inline: var(--cockpit-side-pad);
+  padding: 6px var(--cockpit-side-pad) 4px; /* top air so focused cards are not clipped */
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
   cursor: grab;
   user-select: none;
   touch-action: pan-x pan-y; /* Allow both, or just pan-x if we want to be specific */
+  overscroll-behavior-x: contain;
 }
 
 .page-home [data-carousel="cockpit"] .cockpit-track::-webkit-scrollbar {
@@ -419,7 +418,8 @@ body.page-home {
     max-width: 520px;
     align-self: start;
     min-width: 0;
-    overflow-x: hidden;
+    overflow-x: visible; /* FIXED: was hidden, blocking cockpit scroll */
+    overflow-y: visible;
   }
 
   .page-home .nav-shell {
@@ -842,7 +842,9 @@ h4 {
   background: rgba(10, 14, 44, 0.35);
   opacity: 0;
   visibility: hidden;
-  transition: opacity var(--anim-fast) ease, visibility var(--anim-fast) ease;
+  /* IMPORTANT: avoid invisible overlays capturing clicks/drags while fading out */
+  pointer-events: none;
+  transition: opacity var(--anim-fast) ease, visibility 0s linear var(--anim-fast);
   display: flex;
   justify-content: flex-end;
   z-index: 1800;
@@ -1246,7 +1248,8 @@ h4 {
   background: rgba(10, 14, 44, 0.65);
   opacity: 0;
   visibility: hidden;
-  transition: opacity var(--anim-fast) ease;
+  pointer-events: none;
+  transition: opacity var(--anim-fast) ease, visibility 0s linear var(--anim-fast);
   z-index: 1400;
   display: grid;
   place-items: center;
@@ -1256,6 +1259,8 @@ h4 {
 .reward-overlay.is-visible {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
+  transition: opacity var(--anim-fast) ease, visibility 0s linear 0s;
 }
 
 .reward-overlay__panel {
@@ -2108,6 +2113,8 @@ h4 {
 .menu-panel.is-open {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
+  transition: opacity var(--anim-fast) ease, visibility 0s linear 0s;
 }
 
 .menu-panel__inner {
@@ -4216,11 +4223,16 @@ button,
   padding: 20px;
   overflow-y: auto;
   opacity: 0;
-  transition: opacity 300ms ease;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 300ms ease, visibility 0s linear 300ms;
 }
 
 .card-modal-overlay.is-visible {
   opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 300ms ease;
 }
 
 .card-modal {
@@ -6473,6 +6485,8 @@ body.page-home {
   overflow-x: hidden;
   overflow-y: visible;
   padding-inline: 6px;
+  /* Keep the cockpit carousel reliably above the assistant section if margins overlap. */
+  z-index: 2;
 }
 
 .page-home .hero-focus {
@@ -6648,6 +6662,8 @@ body.page-home {
 .hub-assistant {
   width: min(1160px, calc(100% - 40px));
   margin: -18px auto 28px;
+  position: relative;
+  z-index: 1;
 }
 
 .hub-assistant__inner {
@@ -7784,4 +7800,274 @@ body.page-home {
 
   /* Undo earlier 'align-self: start' on the cockpit so it participates in stretching */
   .page-home [data-carousel="cockpit"]{ align-self: stretch; }
+}
+
+/* ==========================================================================
+   COCKPIT CAROUSEL FIX - FORCED SCROLLING (Dec 28 2025)
+   ========================================================================== */
+.page-home [data-carousel="cockpit"] {
+  overflow: visible !important;
+}
+
+.page-home [data-carousel="cockpit"] .cockpit-track {
+  overflow-x: scroll !important;
+  overflow-y: visible !important;
+  scroll-behavior: auto !important;
+  touch-action: pan-x !important;
+  position: relative !important;
+  z-index: 5 !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+.page-home .hero-aside {
+  overflow: visible !important;
+}
+
+.page-home .hero--orbit {
+  overflow: visible !important;
+}
+
+/* ==========================================================================
+   COCKPIT CAROUSEL - USING STANDARD CAROUSEL STRUCTURE (Dec 28 2025)
+   Now uses .carousel and .carousel-track instead of .summary/.cockpit-track
+   ========================================================================== */
+.page-home .carousel--cockpit {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 16px;
+}
+
+.page-home .carousel--cockpit .carousel-header {
+  display: none !important; /* Hub: mostra solo le schede scorribili */
+}
+
+.page-home .carousel--cockpit .carousel-indicators,
+.page-home .carousel--cockpit .carousel-counter,
+.page-home .carousel--cockpit .carousel-header__meta {
+  display: none !important;
+}
+
+/* Header removed; keep track paddings compact */
+
+.page-home .carousel--cockpit .carousel-title {
+  font-size: 15px;
+  letter-spacing: 0.06em;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  line-height: 1.2;
+}
+
+.page-home .carousel--cockpit .carousel-track {
+  gap: 12px;
+}
+
+.page-home .carousel--cockpit .carousel-track [data-carousel-item] {
+  flex: 0 0 auto;
+  width: min(380px, calc(100% - 24px));
+  min-width: 280px;
+}
+
+.page-home .carousel--cockpit .summary-card {
+  min-height: 140px;
+  padding: 16px;
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+}
+
+/* ==========================================================================
+   COCKPIT MOBILE COMPACT LAYOUT (Dec 28 2025)
+   ========================================================================== */
+@media (max-width: 768px) {
+  .page-home .carousel--cockpit {
+    padding: 10px;
+    border-radius: 16px;
+  }
+
+  .page-home .carousel--cockpit .carousel-header {
+    margin-bottom: 8px;
+    padding: 0 4px;
+  }
+
+  .page-home .carousel--cockpit .carousel-header__title-block {
+    gap: 2px;
+  }
+
+  .page-home .carousel--cockpit .summary-eyebrow {
+    font-size: 11px;
+    margin: 0;
+  }
+
+  .page-home .carousel--cockpit .carousel-title {
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    line-height: 1.2;
+    margin: 0;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+  }
+
+  .page-home .carousel--cockpit .carousel-category {
+    font-size: 12px;
+    display: none;
+  }
+
+  .page-home .carousel--cockpit .carousel-track {
+    gap: 8px;
+    padding: 4px 8px;
+  }
+
+  .page-home .carousel--cockpit .carousel-track [data-carousel-item] {
+    width: min(280px, calc(100vw - 60px));
+    min-width: 240px;
+  }
+
+  .page-home .carousel--cockpit .summary-card {
+    min-height: auto;
+    padding: 12px;
+    border-radius: 14px;
+  }
+
+  .page-home .carousel--cockpit .summary-card__header {
+    margin-bottom: 6px;
+  }
+
+  .page-home .carousel--cockpit .summary-card__eyebrow {
+    font-size: 10px;
+    margin: 0;
+  }
+
+  .page-home .carousel--cockpit .summary-card__title {
+    font-size: 14px;
+    margin: 4px 0;
+  }
+
+  .page-home .carousel--cockpit .summary-card__question,
+  .page-home .carousel--cockpit .summary-card__hint {
+    font-size: 12px;
+    line-height: 1.4;
+    margin: 4px 0;
+  }
+
+  .page-home .carousel--cockpit .summary-stats {
+    gap: 6px;
+  }
+
+  .page-home .carousel--cockpit .stat {
+    padding: 6px 8px;
+  }
+
+  .page-home .carousel--cockpit .stat-label {
+    font-size: 10px;
+  }
+
+  .page-home .carousel--cockpit .stat-value {
+    font-size: 18px;
+  }
+
+  .page-home .carousel--cockpit .summary-list {
+    font-size: 12px;
+    max-height: 120px;
+    overflow-y: auto;
+  }
+
+  .page-home .carousel--cockpit .pill {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+
+  .page-home .carousel--cockpit .summary-profile__avatar {
+    width: 48px;
+    height: 48px;
+  }
+
+  .page-home .carousel--cockpit .profile-actions {
+    gap: 6px;
+  }
+
+  .page-home .carousel--cockpit .profile-actions .btn {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  /* Carousel indicators compact */
+  .page-home .carousel--cockpit .carousel-indicators {
+    gap: 4px;
+  }
+
+  .page-home .carousel--cockpit .carousel-indicator {
+    width: 6px;
+    height: 6px;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 380px) {
+  .page-home .carousel--cockpit .carousel-track [data-carousel-item] {
+    width: calc(100vw - 50px);
+    min-width: 200px;
+  }
+
+  .page-home .carousel--cockpit .summary-card {
+    padding: 10px;
+  }
+
+  .page-home .carousel--cockpit .stat-value {
+    font-size: 16px;
+  }
+}
+
+/* Placeholder avatar for cockpit profile (replaces animated sprite) */
+.page-home .carousel--cockpit .summary-profile__avatar--placeholder {
+  width: 82px;
+  height: 82px;
+  border-radius: 20px;
+  background: linear-gradient(145deg, rgba(33, 64, 152, 0.08), rgba(236, 65, 140, 0.08));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed rgba(33, 64, 152, 0.18);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.page-home .carousel--cockpit .avatar-placeholder {
+  font-size: 28px;
+  line-height: 1;
+  color: var(--brand-blue);
+}
+
+/* ========================================================================== 
+   COCKPIT CAROUSEL CONTAINMENT + OVERLAY FIXES (Dec 29 2025)
+   Keeps the hub carousel aligned inside the page width and under overlays.
+   ========================================================================== */
+.page-home .carousel--cockpit {
+  position: relative;
+  isolation: isolate;
+}
+
+.page-home .carousel--cockpit .carousel-track {
+  padding: 8px 12px 16px !important;
+  scroll-padding-inline: 12px;
+  scroll-padding-top: 0;
+  max-width: 100%;
+  margin: 0;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  z-index: 1 !important; /* allow drawers/overlays to sit above the cards */
+}
+
+@media (min-width: 980px) {
+  .page-home .carousel--cockpit .carousel-track {
+    padding: 10px 14px 18px !important;
+    gap: 12px;
+  }
+}
+
+@media (min-width: 769px) {
+  .page-home .carousel--cockpit .carousel-track [data-carousel-item] {
+    width: min(360px, calc(100% - 24px));
+    min-width: 280px;
+  }
 }

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Debug Carousel</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; }
+    body { font-family: sans-serif; padding: 20px; background: #f0f0f0; }
+    
+    .carousel-wrapper {
+      max-width: 600px;
+      margin: 20px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+    }
+    
+    .carousel-track {
+      display: flex;
+      gap: 16px;
+      overflow-x: scroll;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding: 10px;
+    }
+    
+    .carousel-track::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .card {
+      flex: 0 0 300px;
+      min-height: 200px;
+      background: linear-gradient(135deg, #214098, #ec418c);
+      border-radius: 12px;
+      padding: 20px;
+      color: white;
+      scroll-snap-align: center;
+    }
+    
+    h2 { margin-bottom: 10px; }
+    
+    .status {
+      margin-top: 20px;
+      padding: 10px;
+      background: #e0e0e0;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Test Carousel Puro</h1>
+  <p>Se questo scorre, il problema è nel CSS del sito principale.</p>
+  
+  <div class="carousel-wrapper">
+    <div class="carousel-track" id="track">
+      <div class="card"><h2>Card 1</h2><p>Prima scheda</p></div>
+      <div class="card"><h2>Card 2</h2><p>Seconda scheda</p></div>
+      <div class="card"><h2>Card 3</h2><p>Terza scheda</p></div>
+      <div class="card"><h2>Card 4</h2><p>Quarta scheda</p></div>
+      <div class="card"><h2>Card 5</h2><p>Quinta scheda</p></div>
+    </div>
+  </div>
+  
+  <div class="status" id="status">Scroll position: 0</div>
+  
+  <script>
+    const track = document.getElementById('track');
+    const status = document.getElementById('status');
+    
+    track.addEventListener('scroll', () => {
+      status.textContent = 'Scroll position: ' + Math.round(track.scrollLeft);
+    });
+    
+    // Log any errors
+    window.onerror = function(msg, url, line) {
+      status.textContent = 'ERROR: ' + msg;
+      return false;
+    };
+  </script>
+</body>
+</html>

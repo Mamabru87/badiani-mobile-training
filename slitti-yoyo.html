@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Slitti & Yo-Yo - Badiani</title>
-    <link rel="stylesheet" href="styles/site.css?v=20251228_3" />
-    <script defer src="scripts/i18n.js?v=20251228_3"></script>
-    <script defer src="scripts/site.js?v=20251228_3"></script>
+    <link rel="stylesheet" href="styles/site.css?v=20251228_6" />
+    <script defer src="scripts/i18n.js?v=20251228_4"></script>
+    <script defer src="scripts/site.js?v=20251228_4"></script>
   </head>
   <body data-product="slitti-yoyo">
       <nav class="nav-shell">
@@ -37,7 +37,7 @@
         <header class="menu-drawer__header">
           <div>
             <h2 id="menu-drawer-title" class="menu-drawer__title" data-i18n="drawer.categories">Categorie</h2>
-            <p class="menu-drawer__mood" data-menu-mood>Brilla: i dettagli fanno la differenza.</p>
+            <p class="menu-drawer__mood" data-menu-mood data-i18n="mood.2">Brilla: i dettagli fanno la differenza.</p>
           </div>
           <button type="button" class="menu-drawer__close" data-menu-close aria-label="Chiudi menu" data-i18n-attr="aria-label:drawer.close">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -79,26 +79,26 @@
       <section class="hero">
         <div class="hero-card">
           <div class="badge">
-            <span>Cioccolato & snack</span>
-            <span class="page-stars" data-page-stars>⭐ Stelle: 7/7</span>
+            <span data-i18n="slittiYoyo.hero.badge">Cioccolato & snack</span>
+            <span class="page-stars" data-page-stars data-i18n="slittiYoyo.hero.stars">⭐ Stelle: 7/7</span>
           </div>
-          <h1>Slitti & Yo-Yo</h1>
-          <p>
+          <h1 data-i18n="slittiYoyo.hero.title">Slitti & Yo-Yo</h1>
+          <p data-i18n="slittiYoyo.hero.desc">
             Storytelling sul brand toscano Slitti, gamma premium (tavolette, mini cakes, praline, dragée, creme) e la
             procedura Yo-Yo per servire il biscotto farcito con gelato.
           </p>
           
         </div>
         <div class="hero-card visual">
-           <img src="assets/covers/slitti-cover.webp" alt="Prodotti Slitti" loading="lazy" />
+            <img src="assets/covers/slitti-cover.webp" alt="Prodotti Slitti" loading="lazy" data-i18n-attr="alt:slittiYoyo.hero.coverAlt" />
         </div>
       </section>
 
       <section class="carousel" data-carousel="slitti-yoyo">
         <header class="carousel-header" data-carousel-header>
           <div class="carousel-header__title-block">
-            <h2 class="carousel-title" data-carousel-title>Slitti & Yo-Yo</h2>
-            <span class="carousel-category" data-carousel-category>Cioccolato & snack</span>
+            <h2 class="carousel-title" data-carousel-title data-i18n="slittiYoyo.carousel.products.title">Slitti & Yo-Yo</h2>
+            <span class="carousel-category" data-carousel-category data-i18n="slittiYoyo.carousel.products.category">Cioccolato & snack</span>
           </div>
           <div class="carousel-indicators" data-carousel-indicators></div>
         </header>
@@ -109,19 +109,19 @@
               <span class="tag">Montecatini Terme</span>
               <span class="tag">Since 1969</span>
             </div>
-            <h3>Timeline essenziale</h3>
+            <h3 data-i18n="slittiYoyo.cards.timeline.title">Timeline essenziale</h3>
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/slitti%20pralines%20box.png" type="image/png" />
                 <img src="assets/products/slitti%20pralines%20box.png" alt="Slitti Pralines Box" loading="lazy" />
               </picture>
             </figure>
-            <p>
+            <p data-i18n="slittiYoyo.cards.timeline.desc">
               Luciano Slitti apre come torrefazione nel 1969. Nel 1990 Andrea introduce il cioccolato e, insieme al fratello
               Daniele, conquista premi internazionali (Grand Prix 1994, Eurochocolate 1996, miglior chocolatier italiano 2008).
             </p>
-            <button class="btn-ghost" data-toggle-card>Key message</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.keyMessage">Key message</button>
+            <div class="details" data-i18n-html="slittiYoyo.cards.timeline.details">
               <div class="steps">
                 <span>1. Valorizza la selezione rigorosa di materie prime.</span>
                 <span>2. Racconta premi e heritage toscano per giustificare il posizionamento premium.</span>
@@ -136,24 +136,24 @@
               <span class="tag">Tavolette</span>
               <span class="tag">Gran Cacao</span>
             </div>
-            <h3>Tavolette LatteNero & Gran Cacao</h3>
+            <h3 data-i18n="slittiYoyo.cards.tablets.title">Tavolette LatteNero & Gran Cacao</h3>
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/slitti-tavoletta-100.png" type="image/png" />
                 <img src="assets/products/slitti-tavoletta-100.png" alt="Tavoletta Slitti 100%" loading="lazy" />
               </picture>
             </figure>
-            <p>
+            <p data-i18n="slittiYoyo.cards.tablets.desc">
               Tavolette Slitti in diversi profili di cacao (45%, 51%, 73%, 82%, 100%) + Caffè Latte aromatizzata con arabica tostata.
               Spiega il blend: cacao + cacao butter per morbidezza, equilibrio tra zuccheri e latte (nei profili più dolci).
             </p>
-            <ul class="stat-list">
+            <ul class="stat-list" data-i18n-html="slittiYoyo.cards.tablets.stats">
               <li>Profili disponibili: LatteNero (45%, 51%, 73%, 82%, 100%), Caffè Latte con arabica</li>
               <li>Composizione: cacao selezionato + cacao butter + latte (nei profili LatteNero)</li>
               <li>Conservazione: 16-18°C, lontano da luce diretta e odori forti</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Pitch</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.pitch">Pitch</button>
+            <div class="details" data-i18n-html="slittiYoyo.cards.tablets.details">
               <div class="steps">
                 <span>1. Chiedi preferenza cliente (latte/dark).</span>
                 <span>2. Suggerisci pairing con espresso o cappuccino.</span>
@@ -168,24 +168,24 @@
               <span class="tag">Mini cakes</span>
               <span class="tag">Hazelnut / Almond</span>
             </div>
-            <h3>Minicake</h3>
+            <h3 data-i18n="slittiYoyo.cards.minicake.title">Minicake</h3>
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/slitti%20minicake%20fondente%20mandorle.png" type="image/png" />
                 <img src="assets/products/slitti%20minicake%20fondente%20mandorle.png" alt="Minicake Slitti" loading="lazy" />
               </picture>
             </figure>
-            <p>
+            <p data-i18n="slittiYoyo.cards.minicake.desc">
               Mini cake Slitti con materie prime d'eccellenza: nocciole Tonda Gentile (Langhe) e mandorle Avola (Sicilia).
               Tre varianti: latte nocciole, fondente mix fruit, fondente mandorle. Servi a temperatura ambiente o leggermente tiepida.
             </p>
-            <ul class="stat-list">
+            <ul class="stat-list" data-i18n-html="slittiYoyo.cards.minicake.stats">
               <li>Varianti: latte nocciole Langhe, fondente mix fruit, fondente mandorle Avola</li>
               <li>Materie prime: Tonda Gentile Langhe DOP, mandorla Avola DOP (comunica origine)</li>
               <li>Servizio: temperatura ambiente oppure 10 secondi microonde per esaltare profumi</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Notes</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.notes">Notes</button>
+            <div class="details" data-i18n-html="slittiYoyo.cards.minicake.details">
               <div class="steps">
                 <span>1. Spiega differenza ingredienti (Tonda Gentile, mandorla Avola).</span>
                 <span>2. Servi a temperatura ambiente o leggermente tiepida.</span>
@@ -199,24 +199,24 @@
               <span class="tag">Praline</span>
               <span class="tag">Dragée</span>
             </div>
-            <h3>Praline & Dragée</h3>
+            <h3 data-i18n="slittiYoyo.cards.pralines.title">Praline & Dragée</h3>
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/slitti%20dragee%20pistacchi%20di%20bronte.png" type="image/png" />
                 <img src="assets/products/slitti%20dragee%20pistacchi%20di%20bronte.png" alt="Dragée Slitti" loading="lazy" />
               </picture>
             </figure>
-            <p>
+            <p data-i18n="slittiYoyo.cards.pralines.desc">
               Praline Origin e Irish Coffee (0,9% alc) + dragée su base di pistacchio, mandorla, nocciola, cranberry, arachidi caramel, amarene e arabica.
               Ogni dragée racconta la propria provenienza: Bronte, Avola, Langhe. Mantieni sempre temperatura fresca e luce bassa.
             </p>
-            <ul class="stat-list">
+            <ul class="stat-list" data-i18n-html="slittiYoyo.cards.pralines.stats">
               <li>Praline: Origin, Irish Coffee (0,9% alcol), Passion Fruit</li>
               <li>Dragée: pistacchio Bronte, mandorla Avola DOP, nocciola Langhe, cranberry, arachidi caramel, amarene, arabica, zenzero</li>
               <li>Provenienza: evidenzia su lavagnette (Bronte, Avola, Langhe) per valore</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Display tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tips">Display tips</button>
+            <div class="details" data-i18n-html="slittiYoyo.cards.pralines.details">
               <div class="steps">
                 <span>1 · Mantieni temperatura fresca e luce bassa.</span>
                 <span>2 · Offri assaggio se apri una confezione campione.</span>
@@ -230,21 +230,21 @@
               <span class="tag">Spalmabili</span>
               <span class="tag">37-57% nocciole</span>
             </div>
-            <h3>Creme Slittosa / Riccosa / Gianera</h3>
+            <h3 data-i18n="slittiYoyo.cards.spreads.title">Creme Slittosa / Riccosa / Gianera</h3>
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/slitti%20crema%20spalmabile%20riccosa.png" type="image/png" />
                 <img src="assets/products/slitti%20crema%20spalmabile%20riccosa.png" alt="Creme Slitti" loading="lazy" />
               </picture>
             </figure>
-            <p>Solo nocciole Tonda Gentile + cacao selezionato. Nocciola %: 37 (Slittosa), 51 (Riccosa), 57 (Gianera).</p>
-            <ul class="stat-list">
+            <p data-i18n="slittiYoyo.cards.spreads.desc">Solo nocciole Tonda Gentile + cacao selezionato. Nocciola %: 37 (Slittosa), 51 (Riccosa), 57 (Gianera).</p>
+            <ul class="stat-list" data-i18n-html="slittiYoyo.cards.spreads.stats">
               <li>Composizione: solo nocciole Tonda Gentile + cacao (zero olio di palma)</li>
               <li>Profili: Slittosa 37% (dolce), Riccosa 51% (equilibrio), Gianera 57% (intensa)</li>
               <li>Display: mostra texture con spatola monouso per igiene</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Vendita</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.pitch">Vendita</button>
+            <div class="details" data-i18n-html="slittiYoyo.cards.spreads.details">
               <div class="steps">
                 <span>1 · Mostra texture con spatola monouso per igiene.</span>
                 <span>2 · Suggerisci su crepe, waffle, panettone o gelato.</span>
@@ -258,21 +258,21 @@
               <span class="tag">Yo-Yo</span>
               <span class="tag">Gelato Sandwich</span>
             </div>
-            <h3>Yo-Yo</h3>
+            <h3 data-i18n="slittiYoyo.cards.yoyo.title">Yo-Yo</h3>
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/yo-yo.png" type="image/png" />
                 <img src="assets/products/yo-yo.png" alt="Yo-Yo" loading="lazy" />
               </picture>
             </figure>
-            <p>Due biscotti morbidi che racchiudono uno strato di gelato. Disponibile in vari gusti.</p>
-            <ul class="stat-list">
+            <p data-i18n="slittiYoyo.cards.yoyo.desc">Due biscotti morbidi che racchiudono uno strato di gelato. Disponibile in vari gusti.</p>
+            <ul class="stat-list" data-i18n-html="slittiYoyo.cards.yoyo.stats">
               <li>Conservazione: -18°C (freezer)</li>
               <li>Servizio: Tovagliolino o piattino</li>
               <li>Varianti: Classico, Pistacchio, Cioccolato</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <div class="details" data-i18n-html="slittiYoyo.cards.yoyo.details">
               <div class="steps">
                 <span>1 · Preleva dal freezer al momento dell'ordine.</span>
                 <span>2 · Servi immediatamente per evitare che il gelato si sciolga.</span>
@@ -287,8 +287,8 @@
       <section class="carousel" data-carousel="slitti-yoyo-ops">
         <header class="carousel-header" data-carousel-header>
           <div class="carousel-header__title-block">
-            <h2 class="carousel-title" data-carousel-title>Setup &amp; Conservazione</h2>
-            <span class="carousel-category" data-carousel-category>Apertura · Display · Dati tecnici · Storage · Chiusura</span>
+            <h2 class="carousel-title" data-carousel-title data-i18n="slittiYoyo.carousel.ops.title">Setup &amp; Conservazione</h2>
+            <span class="carousel-category" data-carousel-category data-i18n="slittiYoyo.carousel.ops.category">Apertura · Display · Dati tecnici · Storage · Chiusura</span>
           </div>
           <div class="carousel-indicators" data-carousel-indicators></div>
         </header>
@@ -300,15 +300,15 @@
               <span class="tag">Display</span>
               <span class="tag">Yo-Yo</span>
             </div>
-            <h3>Allestimento Yo-Yo (banco)</h3>
-            <p>Posiziona il Yo‑Yo in punto centrale sopra la vetrina gelato. L'area deve restare senza briciole e va rifornita ogni volta: mai “vuoto” visivo.</p>
-            <ul class="stat-list">
+            <h3 data-i18n="slittiYoyo.ops.setupStation.title">Allestimento Yo-Yo (banco)</h3>
+            <p data-i18n="slittiYoyo.ops.setupStation.desc">Posiziona il Yo‑Yo in punto centrale sopra la vetrina gelato. L'area deve restare senza briciole e va rifornita ogni volta: mai “vuoto” visivo.</p>
+            <ul class="stat-list" data-i18n-html="slittiYoyo.ops.setupStation.stats">
               <li>Posizionamento: centrale, sopra la gelato vetrina</li>
               <li>Hygiene: superficie sempre free of crumbles</li>
               <li>Replenish: riempi/rifornisci ogni volta (mai “vuoto” visivo)</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Checklist</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.checklist">Checklist</button>
+            <div class="details" data-i18n-html="slittiYoyo.ops.setupStation.details">
               <div class="steps">
                 <span>1 · Pulisci l'area (zero briciole).</span>
                 <span>2 · Posiziona la stazione Yo-Yo in punto visibile e centrale.</span>
@@ -324,15 +324,15 @@
               <span class="tag">Tool</span>
               <span class="tag">Gloves</span>
             </div>
-            <h3>Stazione e strumenti (standard)</h3>
-            <p>Setup rapido per evitare rallentamenti e contaminazioni durante il rush.</p>
-            <ul class="stat-list">
+            <h3 data-i18n="slittiYoyo.ops.stationTools.title">Stazione e strumenti (standard)</h3>
+            <p data-i18n="slittiYoyo.ops.stationTools.desc">Setup rapido per evitare rallentamenti e contaminazioni durante il rush.</p>
+            <ul class="stat-list" data-i18n-html="slittiYoyo.ops.stationTools.stats">
               <li>Guanti: indossali prima di maneggiare wafer/Yo-Yo tool</li>
               <li>Tool: appoggia Yo-Yo tool su un piatto con 2 wafer pronti</li>
               <li>Flow: prepara wafer → gelato → chiusura, senza “giri” inutili</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Procedura</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.procedure">Procedura</button>
+            <div class="details" data-i18n-html="slittiYoyo.ops.stationTools.details">
               <div class="steps">
                 <span>1 · Guanti on.</span>
                 <span>2 · Wafer sul tool, una base pronta.</span>
@@ -348,15 +348,15 @@
               <span class="tag">80/90 g</span>
               <span class="tag">Precisione</span>
             </div>
-            <h3>Porzionatura gelato Yo-Yo</h3>
-            <p>Target porzione: 80–90 g. Il gelato deve restare dentro i wafer: niente overflow.</p>
-            <ul class="stat-list">
+            <h3 data-i18n="slittiYoyo.ops.portioning.title">Porzionatura gelato Yo-Yo</h3>
+            <p data-i18n="slittiYoyo.ops.portioning.desc">Target porzione: 80–90 g. Il gelato deve restare dentro i wafer: niente overflow.</p>
+            <ul class="stat-list" data-i18n-html="slittiYoyo.ops.portioning.stats">
               <li>Porzione target: 80–90 g</li>
               <li>Scoop: usa il gelato con ice-cream scooper</li>
               <li>Controllo: non overflow (è un difetto visivo + sporca la stazione)</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tips">Tips</button>
+            <div class="details" data-i18n-html="slittiYoyo.ops.portioning.details">
               <div class="steps">
                 <span>1 · Posiziona il gelato centralmente.</span>
                 <span>2 · Chiudi con il secondo wafer e verifica bordo pulito.</span>
@@ -372,18 +372,18 @@
               <span class="tag">Pan method</span>
               <span class="tag">Label</span>
             </div>
-            <h3>Pan storage method (etichettatura)</h3>
-            <p>
+            <h3 data-i18n="slittiYoyo.ops.panStorage.title">Pan storage method (etichettatura)</h3>
+            <p data-i18n="slittiYoyo.ops.panStorage.desc">
               Se usi il “pan storage method”, il manuale richiede che sia sempre etichettato.
               Label chiare = meno errori e più controllo.
             </p>
-            <ul class="stat-list">
+            <ul class="stat-list" data-i18n-html="slittiYoyo.ops.panStorage.stats">
               <li>Etichetta: data + contenuto + responsabile (secondo standard store)</li>
               <li>Non miscelare wafer diversi nello stesso contenitore</li>
               <li>Controllo briciole: ogni refill = quick wipe</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Checklist</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.checklist">Checklist</button>
+            <div class="details" data-i18n-html="slittiYoyo.ops.panStorage.details">
               <div class="steps">
                 <span>1 · Applica label sempre prima di mettere in posizione.</span>
                 <span>2 · Controlla integrità wafer (no rotti in vista).</span>
@@ -398,15 +398,15 @@
               <span class="tag">Pulizia</span>
               <span class="tag">Riordino</span>
             </div>
-            <h3>Chiusura stazione Yo-Yo</h3>
-            <p>Ripristina una stazione pulita e pronta: riduce tempi in apertura e previene contaminazioni.</p>
-            <ul class="stat-list">
+            <h3 data-i18n="slittiYoyo.ops.closing.title">Chiusura stazione Yo-Yo</h3>
+            <p data-i18n="slittiYoyo.ops.closing.desc">Ripristina una stazione pulita e pronta: riduce tempi in apertura e previene contaminazioni.</p>
+            <ul class="stat-list" data-i18n-html="slittiYoyo.ops.closing.stats">
               <li>Rimuovi crumbles e residui dalla superficie e dagli strumenti</li>
               <li>Riponi wafer e tool secondo procedura (con label se usi pan storage)</li>
               <li>Check rapido: stazione “apertura-ready”</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Checklist</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.checklist">Checklist</button>
+            <div class="details" data-i18n-html="slittiYoyo.ops.closing.details">
               <div class="steps">
                 <span>1 · Pulisci e asciuga strumenti e area.</span>
                 <span>2 · Riponi stock con label corrette.</span>
@@ -419,16 +419,16 @@
 
       <footer class="category-footer">
         <div class="footer-icon">🍫</div>
-        <h3 class="footer-title">Slitti & Yo-Yo</h3>
-        <p class="footer-tagline">Cioccolato d'autore & Snack</p>
+        <h3 class="footer-title" data-i18n="slittiYoyo.footer.title">Slitti & Yo-Yo</h3>
+        <p class="footer-tagline" data-i18n="slittiYoyo.footer.tagline">Cioccolato d'autore & Snack</p>
         <div class="footer-stats">
           <div class="footer-stat">
             <span class="stat-value">Premium</span>
-            <span class="stat-label">Qualità</span>
+            <span class="stat-label" data-i18n="slittiYoyo.footer.stats.quality">Qualità</span>
           </div>
           <div class="footer-stat">
             <span class="stat-value">Toscana</span>
-            <span class="stat-label">Origine</span>
+            <span class="stat-label" data-i18n="slittiYoyo.footer.stats.origin">Origine</span>
           </div>
         </div>
       </main>

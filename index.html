@@ -7,9 +7,9 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <title>Badiani Training Orbit</title>
-    <link rel="stylesheet" href="styles/site.css?v=20251228_3" />
-    <script defer src="scripts/i18n.js?v=20251228_3"></script>
-    <script defer src="scripts/site.js?v=20251228_3"></script>
+    <link rel="stylesheet" href="styles/site.css?v=20251228_13" />
+    <script defer src="scripts/i18n.js?v=20251228_4"></script>
+    <script defer src="scripts/site.js?v=20251229_2"></script>
     <script defer src="scripts/gelato-effects.js?v=20251227_1"></script>
   <!-- COCKPIT_COMPACT block removed: styling now lives in styles/site.css -->
 </head>
@@ -97,17 +97,17 @@
           </div>
         </div>
         <aside class="hero-aside">
-          <section class="summary summary--revamp summary--compact" data-summary data-carousel="cockpit">
-            <header class="summary-head cockpit-head" data-carousel-header>
-              <div>
+          <section class="carousel carousel--cockpit" data-carousel="cockpit" data-summary>
+            <header class="carousel-header" data-carousel-header>
+              <div class="carousel-header__title-block">
                 <p class="summary-eyebrow" data-i18n="cockpit.eyebrow">Orbit cockpit</p>
-                <h2 class="summary-title" data-carousel-title data-i18n="cockpit.title">Panoramica live</h2>
-                <p class="summary-sub" data-i18n="cockpit.sub">Scorri le schede e resta sempre sul pezzo.</p>
+                <h2 class="carousel-title" data-carousel-title data-i18n="cockpit.title">Panoramica live</h2>
+                <span class="carousel-category" data-i18n="cockpit.sub">Scorri le schede e resta sempre sul pezzo.</span>
               </div>
-              <div class="carousel-indicators cockpit-indicators" data-carousel-indicators aria-label="Indicatori panoramica" data-i18n-attr="aria-label:cockpit.indicatorsAria"></div>
+              <div class="carousel-indicators" data-carousel-indicators aria-label="Indicatori panoramica" data-i18n-attr="aria-label:cockpit.indicatorsAria"></div>
             </header>
 
-            <div class="cockpit-track" data-carousel-track>
+            <div class="carousel-track" data-carousel-track>
               <article class="summary-card summary-card--daily" data-carousel-item>
                 <div class="summary-card__header">
                   <p class="summary-card__eyebrow" data-i18n="cockpit.daily.eyebrow">Training</p>
@@ -204,16 +204,8 @@
                 <h3 class="summary-card__title" data-i18n="cockpit.profile.title">Profilo</h3>
                 <div class="summary-profile" data-profile>
                   <div class="summary-profile__layout">
-                    <div class="summary-profile__avatar" aria-hidden="true">
-                      <div
-                        class="avatar-sprite"
-                        data-avatar-sprite
-                        data-avatar-src="assets/avatars/berny-sprite.png?v=20251228"
-                        data-avatar-cols="6"
-                        data-avatar-rows="4"
-                        data-avatar-fps="6"
-                        data-avatar-total="24"
-                      ></div>
+                    <div class="summary-profile__avatar summary-profile__avatar--placeholder" aria-hidden="true">
+                      <span class="avatar-placeholder" role="img" aria-label="Profilo">👤</span>
                     </div>
                     <div class="summary-profile__main">
                       <div class="summary-stats">
@@ -267,7 +259,7 @@
         <header class="menu-drawer__header">
           <div>
             <h2 id="menu-drawer-title" class="menu-drawer__title" data-i18n="drawer.categories">Categorie</h2>
-            <p class="menu-drawer__mood" data-menu-mood>Brilla: i dettagli fanno la differenza.</p>
+            <p class="menu-drawer__mood" data-menu-mood data-i18n="mood.2">Brilla: i dettagli fanno la differenza.</p>
           </div>
           <button type="button" class="menu-drawer__close" data-menu-close aria-label="Chiudi menu" data-i18n-attr="aria-label:drawer.close">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">

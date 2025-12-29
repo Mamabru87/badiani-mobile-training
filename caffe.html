@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bar & Drinks · Badiani</title>
-    <link rel="stylesheet" href="styles/site.css?v=20251228_3" />
-    <script defer src="scripts/i18n.js?v=20251228_3"></script>
-    <script defer src="scripts/site.js?v=20251228_3"></script>
+    <link rel="stylesheet" href="styles/site.css?v=20251228_6" />
+    <script defer src="scripts/i18n.js?v=20251228_4"></script>
+    <script defer src="scripts/site.js?v=20251228_4"></script>
   </head>
   <body data-product="caffe">
     <nav class="nav-shell">
@@ -81,7 +81,7 @@
             <span data-i18n="caffe.hero.badge">Bar & Drinks · 2025</span>
             <span class="page-stars" data-page-stars data-i18n="caffe.hero.stars">⭐ Stelle: 18/18</span>
           </div>
-          <h1>Bar & Drinks</h1>
+          <h1 data-i18n="caffe.hero.title">Bar & Drinks</h1>
           <p data-i18n="caffe.hero.desc">
             La guida completa al beverage Badiani: dai classici della caffetteria italiana al nuovo Matcha Bar,
             fino agli Smoothies e le bevande fredde. Include procedure per servizio al tavolo e Take Away (TW).
@@ -89,15 +89,15 @@
           
         </div>
         <div class="hero-card visual">
-          <img src="assets/covers/caffe-cover.webp" alt="Setup linea bar Badiani" loading="lazy" />
+          <img src="assets/covers/caffe-cover.webp" alt="Setup linea bar Badiani" loading="lazy" data-i18n-attr="alt:caffe.hero.coverAlt" />
         </div>
       </section>
 
       <section class="carousel" data-carousel="caffe">
         <header class="carousel-header" data-carousel-header>
           <div class="carousel-header__title-block">
-            <h2 class="carousel-title" data-carousel-title>Classics</h2>
-            <span class="carousel-category" data-carousel-category>Caffetteria Italiana</span>
+            <h2 class="carousel-title" data-carousel-title data-i18n="caffe.carousel.classics.title">Classics</h2>
+            <span class="carousel-category" data-carousel-category data-i18n="caffe.carousel.classics.category">Caffetteria Italiana</span>
           </div>
           <div class="carousel-indicators" data-carousel-indicators></div>
         </header>
@@ -116,14 +116,14 @@
                 <img src="assets/products/espresso.png" alt="Espresso Single" loading="lazy" />
               </picture>
             </figure>
-            <p>L'essenza del caffè. Estrazione perfetta per un gusto intenso, corpo rotondo e crema persistente.</p>
-            <ul class="stat-list">
+            <p data-i18n="caffe.cards.espressoSingle.desc">L'essenza del caffè. Estrazione perfetta per un gusto intenso, corpo rotondo e crema persistente.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.espressoSingle.stats">
               <li><strong>Dose:</strong> 1 shot in tazzina piccola</li>
               <li><strong>Estrazione:</strong> 25-30 secondi</li>
               <li><strong>Crema:</strong> Color nocciola, tigrata, elastica</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & TW</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTw">Step & TW</button>
+            <div class="details" data-i18n-html="caffe.cards.espressoSingle.details">
               <div class="steps">
                 <span>1 · Pulisci e asciuga il portafiltro. Macina la dose al momento.</span>
                 <span>2 · Livella e pressa (tamping) in modo uniforme.</span>
@@ -153,14 +153,14 @@
                 <img src="assets/products/espresso double.png" alt="Espresso Double" loading="lazy" />
               </picture>
             </figure>
-            <p>Doppia dose di energia. Due shot estratti nello stesso tempo per un gusto più ricco.</p>
-            <ul class="stat-list">
+            <p data-i18n="caffe.cards.espressoDouble.desc">Doppia dose di energia. Due shot estratti nello stesso tempo per un gusto più ricco.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.espressoDouble.stats">
               <li><strong>Dose:</strong> 2 shot in tazzina grande o bicchierino</li>
               <li><strong>Estrazione:</strong> 25-30 secondi (flusso costante)</li>
               <li><strong>Crema:</strong> Spessa e persistente</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & TW</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTw">Step & TW</button>
+            <div class="details" data-i18n-html="caffe.cards.espressoDouble.details">
               <div class="steps">
                 <span>1 · Usa il filtro doppio. Macina dose doppia.</span>
                 <span>2 · Tamping deciso e uniforme.</span>
@@ -188,14 +188,14 @@
                 <img src="assets/products/espresso macchiato single.png" alt="Espresso Macchiato" loading="lazy" />
               </picture>
             </figure>
-            <p>Espresso "macchiato" con una piccola quantità di schiuma di latte calda.</p>
-            <ul class="stat-list">
+            <p data-i18n="caffe.cards.espressoMacchiato.desc">Espresso "macchiato" con una piccola quantità di schiuma di latte calda.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.espressoMacchiato.stats">
               <li><strong>Base:</strong> 1 shot espresso</li>
               <li><strong>Top:</strong> 1-2 cucchiaini di schiuma di latte</li>
               <li><strong>Servizio:</strong> Tazzina espresso</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & TW</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTw">Step & TW</button>
+            <div class="details" data-i18n-html="caffe.cards.espressoMacchiato.details">
               <div class="steps">
                 <span>1 · Prepara un espresso singolo.</span>
                 <span>2 · Monta una piccola quantità di latte (microfoam).</span>
@@ -223,14 +223,14 @@
                 <img src="assets/products/espresso macchiato double.png" alt="Double Macchiato" loading="lazy" />
               </picture>
             </figure>
-            <p>Doppio espresso con una macchia di latte schiumato. Più intenso, stesso tocco di latte.</p>
-            <ul class="stat-list">
+            <p data-i18n="caffe.cards.doubleMacchiato.desc">Doppio espresso con una macchia di latte schiumato. Più intenso, stesso tocco di latte.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.doubleMacchiato.stats">
               <li><strong>Base:</strong> 2 shot espresso</li>
               <li><strong>Top:</strong> Schiuma di latte (microfoam)</li>
               <li><strong>Servizio:</strong> Tazza grande o bicchierino</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & TW</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTw">Step & TW</button>
+            <div class="details" data-i18n-html="caffe.cards.doubleMacchiato.details">
               <div class="steps">
                 <span>1 · Prepara un doppio espresso.</span>
                 <span>2 · Aggiungi la schiuma di latte al centro.</span>
@@ -258,14 +258,14 @@
                 <img src="assets/products/americano.png" alt="Americano" loading="lazy" />
               </picture>
             </figure>
-            <p>Acqua calda + espresso estratto direttamente in tazza. Disponibile in versione Take Away.</p>
-            <ul class="stat-list">
+            <p data-i18n="caffe.cards.americano.desc">Acqua calda + espresso estratto direttamente in tazza. Disponibile in versione Take Away.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.americano.stats">
               <li>Ricetta single: 8 oz acqua calda</li>
               <li>Ricetta double: 12 oz acqua calda</li>
               <li>Spazio di sicurezza: lascia 2 cm dalla sommità</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & TW</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTw">Step & TW</button>
+            <div class="details" data-i18n-html="caffe.cards.americano.details">
               <div class="steps">
                 <span>1 · Riempi la tazza con acqua calda lasciando 2 cm.</span>
                 <span>2 · Estrai espresso direttamente in tazza o in beaker separato.</span>
@@ -294,14 +294,14 @@
                 <img src="assets/products/cappuccino.png" alt="Cappuccino" loading="lazy" />
               </picture>
             </figure>
-            <p>Espresso, latte caldo e schiuma fine. Texture vellutata senza bolle grandi.</p>
-            <ul class="stat-list">
+            <p data-i18n="caffe.cards.cappuccino.desc">Espresso, latte caldo e schiuma fine. Texture vellutata senza bolle grandi.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.cappuccino.stats">
               <li>Formato: 8 oz (regular) / 12 oz (large)</li>
               <li>Foam: circa 1/3 del volume</li>
               <li>Temperatura: 65°C (sweet spot)</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & TW</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTw">Step & TW</button>
+            <div class="details" data-i18n-html="caffe.cards.cappuccino.details">
               <div class="steps">
                 <span>1 · Espresso in tazza.</span>
                 <span>2 · Stretch 3-5s (aria), poi rolling (vortice) fino a microfoam.</span>
@@ -331,14 +331,14 @@
                 <img src="assets/products/flat white .png" alt="Flat white" loading="lazy" />
               </picture>
             </figure>
-            <p>Doppio espresso + latte con microfoam sottilissima. Texture setosa.</p>
-            <ul class="stat-list">
+            <p data-i18n="caffe.cards.flatWhite.desc">Doppio espresso + latte con microfoam sottilissima. Texture setosa.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.flatWhite.stats">
               <li>Latte: stretch 3 secondi, poi whirlpool.</li>
               <li>Temperatura: 65°C.</li>
               <li>Versata: inizia alta, poi abbassa per latte art.</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & TW</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTw">Step & TW</button>
+            <div class="details" data-i18n-html="caffe.cards.flatWhite.details">
               <div class="steps">
                 <span>1 · Doppio espresso in 8 oz.</span>
                 <span>2 · Monta latte evitando eccesso di aria (microfoam).</span>
@@ -366,14 +366,14 @@
                 <img src="assets/products/mocha.png" alt="Mocha" loading="lazy" />
               </picture>
             </figure>
-            <p>Espresso + cacao + latte. Sciogli prima il cacao nell’espresso.</p>
-            <ul class="stat-list">
+            <p data-i18n="caffe.cards.mocha.desc">Espresso + cacao + latte. Sciogli prima il cacao nell’espresso.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.mocha.stats">
               <li>Shot single</li>
               <li>Milk: stretch leggero</li>
               <li>Vaso 8 oz</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & TW</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTw">Step & TW</button>
+            <div class="details" data-i18n-html="caffe.cards.mocha.details">
               <div class="steps">
                 <span>1 · Miscelare espresso e cacao nella tazza.</span>
                 <span>2 · Montare latte come per latte classico.</span>
@@ -401,14 +401,14 @@
                 <img src="assets/products/hot chocolate.png" alt="Hot chocolate" loading="lazy" />
               </picture>
             </figure>
-            <p>Cioccolata calda cremosa: consistenza liscia, servizio caldo.</p>
-            <ul class="stat-list">
+            <p data-i18n="caffe.cards.hotChocolate.desc">Cioccolata calda cremosa: consistenza liscia, servizio caldo.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.hotChocolate.stats">
               <li>Temperatura: 65°C</li>
               <li>Texture: setosa (zero grumi)</li>
               <li>Servizio: cucchiaino + piattino</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & TW</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTw">Step & TW</button>
+            <div class="details" data-i18n-html="caffe.cards.hotChocolate.details">
               <div class="steps">
                 <span>1 · Scalda la base fino a temperatura di servizio.</span>
                 <span>2 · Mescola/omogeneizza prima di versare.</span>
@@ -436,14 +436,14 @@
                 <img src="assets/products/chai latte.png" alt="Chai latte" loading="lazy" />
               </picture>
             </figure>
-            <p>2 pump di sciroppo chai, latte montato lucido e cannella.</p>
-            <ul class="stat-list">
+            <p data-i18n="caffe.cards.chaiLatte.desc">2 pump di sciroppo chai, latte montato lucido e cannella.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.chaiLatte.stats">
               <li>Sciroppo: 2 pump</li>
               <li>Temperatura latte: 65°C</li>
               <li>Finish: cannella (dust leggero)</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <div class="details" data-i18n-html="caffe.cards.chaiLatte.details">
               <div class="steps">
                 <span>1 · Eroga lo sciroppo chai in tazza.</span>
                 <span>2 · (Dirty) Estrai 1 shot e mescola con lo sciroppo.</span>
@@ -466,14 +466,14 @@
                 <img src="assets/products/tea.png" alt="Tea Selection" loading="lazy" />
               </picture>
             </figure>
-            <p>Selezione di tè premium. Servito con teiera e clessidra per infusione perfetta.</p>
-            <ul class="stat-list">
+            <p data-i18n="caffe.cards.teaSelection.desc">Selezione di tè premium. Servito con teiera e clessidra per infusione perfetta.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.teaSelection.stats">
               <li>Acqua: 90-95°C (Black/Herbal), 80°C (Green)</li>
               <li>Infusione: 3-5 minuti</li>
               <li>Servizio: Teiera + tazza + latte/limone a parte</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & TW</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTw">Step & TW</button>
+            <div class="details" data-i18n-html="caffe.cards.teaSelection.details">
               <div class="steps">
                 <span>1 · Scalda la teiera, inserisci la bustina/filtro.</span>
                 <span>2 · Riempi con acqua alla temperatura corretta.</span>
@@ -501,14 +501,14 @@
                 <img src="assets/products/afternoon tea set.png" alt="Afternoon Tea Set" loading="lazy" />
               </picture>
             </figure>
-            <p>Selezione di mini dolci, scones e sandwich per l'esperienza del tè pomeridiano.</p>
-            <ul class="stat-list">
+            <p data-i18n="caffe.cards.afternoonTeaSet.desc">Selezione di mini dolci, scones e sandwich per l'esperienza del tè pomeridiano.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.afternoonTeaSet.stats">
               <li><strong>Include:</strong> Scones, finger sandwiches, mini pastries</li>
               <li><strong>Bevanda:</strong> Tè o Prosecco</li>
               <li><strong>Servizio:</strong> Alzatina a 3 piani</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <div class="details" data-i18n-html="caffe.cards.afternoonTeaSet.details">
               <div class="steps">
                 <span>1 · Prepara l'alzatina: salato sotto, scones in mezzo, dolci sopra.</span>
                 <span>2 · Servi il tè o la bevanda scelta.</span>
@@ -530,14 +530,14 @@
                 <img src="assets/products/affogato.png" alt="Affogato" loading="lazy" />
               </picture>
             </figure>
-            <p>Gelato “annegato” con espresso: servi 1 scoop di Buontalenti e versa un doppio espresso davanti al cliente.</p>
-            <ul class="stat-list">
+            <p data-i18n="caffe.cards.affogato.desc">Gelato “annegato” con espresso: servi 1 scoop di Buontalenti e versa un doppio espresso davanti al cliente.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.affogato.stats">
               <li>Bicchiere 8 oz raffreddato</li>
               <li>Espresso doppio</li>
               <li>Servire subito</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & TW</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTw">Step & TW</button>
+            <div class="details" data-i18n-html="caffe.cards.affogato.details">
               <div class="steps">
                 <span>1 · Pre-raffredda la tazza.</span>
                 <span>2 · Dosare 70 g di Buontalenti.</span>
@@ -565,14 +565,14 @@
                 <img src="assets/products/wipped coffee.png" alt="Whipped coffee" loading="lazy" />
               </picture>
             </figure>
-            <p>Espresso singolo sormontato da panna montata fresca.</p>
-            <ul class="stat-list">
+            <p data-i18n="caffe.cards.whippedCoffee.desc">Espresso singolo sormontato da panna montata fresca.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.whippedCoffee.stats">
               <li>Tazzina 2 oz preriscaldata</li>
               <li>Panna montata al momento</li>
               <li>Servire con cucchiaino</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <div class="details" data-i18n-html="caffe.cards.whippedCoffee.details">
               <div class="steps">
                 <span>1 · Prepara espresso singolo.</span>
                 <span>2 · Spruzza panna montata formando una cupola compatta.</span>
@@ -594,14 +594,14 @@
                 <img src="assets/products/matcha buontalenti latte.png" alt="Matcha Latte" loading="lazy" />
               </picture>
             </figure>
-            <p>Tè verde Matcha cerimoniale con latte montato. Colore verde brillante e gusto umami.</p>
-            <ul class="stat-list">
+            <p data-i18n="caffe.cards.matchaLatte.desc">Tè verde Matcha cerimoniale con latte montato. Colore verde brillante e gusto umami.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.matchaLatte.stats">
               <li>Dose Matcha: 2g (o misurino dedicato)</li>
               <li>Acqua: 30ml calda (80°C) per sciogliere</li>
               <li>Latte: montato come cappuccino</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <div class="details" data-i18n-html="caffe.cards.matchaLatte.details">
               <div class="steps">
                 <span>1 · Sciogli il matcha in poca acqua calda con il frustino (chasen) o mixer.</span>
                 <span>2 · Monta il latte per ottenere una crema setosa.</span>
@@ -623,14 +623,14 @@
                 <img src="assets/products/matcha iced latte.png" alt="Iced Matcha Latte" loading="lazy" />
               </picture>
             </figure>
-            <p>Versione fredda rinfrescante. Matcha versato su latte e ghiaccio per effetto bicolor.</p>
-            <ul class="stat-list">
+            <p data-i18n="caffe.cards.icedMatchaLatte.desc">Versione fredda rinfrescante. Matcha versato su latte e ghiaccio per effetto bicolor.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.icedMatchaLatte.stats">
               <li>Ghiaccio: riempire il bicchiere</li>
               <li>Latte freddo: 3/4 bicchiere</li>
               <li>Top: base matcha concentrata</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <div class="details" data-i18n-html="caffe.cards.icedMatchaLatte.details">
               <div class="steps">
                 <span>1 · Riempi il bicchiere di ghiaccio e latte freddo.</span>
                 <span>2 · Prepara il matcha concentrato con acqua calda.</span>
@@ -651,14 +651,14 @@
                 <img src="assets/products/matcha matcha affogato.png" alt="Matcha Affogato" loading="lazy" />
               </picture>
             </figure>
-            <p>Scoop di gelato Buontalenti affogato con una dose di Matcha cerimoniale caldo.</p>
-            <ul class="stat-list">
+            <p data-i18n="caffe.cards.matchaAffogato.desc">Scoop di gelato Buontalenti affogato con una dose di Matcha cerimoniale caldo.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.matchaAffogato.stats">
               <li>Gelato: 1 scoop Buontalenti</li>
               <li>Matcha: dose standard concentrata</li>
               <li>Servizio: versare al tavolo</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <div class="details" data-i18n-html="caffe.cards.matchaAffogato.details">
               <div class="steps">
                 <span>1 · Prepara la coppetta con lo scoop di gelato.</span>
                 <span>2 · Prepara il matcha caldo in un bricchetto.</span>
@@ -679,14 +679,14 @@
                 <img src="assets/products/dirty macha affogato.png" alt="Dirty Matcha" loading="lazy" />
               </picture>
             </figure>
-            <p>L'incontro tra Oriente e Occidente: Matcha Latte con l'aggiunta di uno shot di espresso.</p>
-            <ul class="stat-list">
+            <p data-i18n="caffe.cards.dirtyMatcha.desc">L'incontro tra Oriente e Occidente: Matcha Latte con l'aggiunta di uno shot di espresso.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.dirtyMatcha.stats">
               <li>Base: Matcha Latte (caldo o freddo)</li>
               <li>Aggiunta: 1 shot espresso</li>
               <li>Profilo: Energizzante e complesso</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <div class="details" data-i18n-html="caffe.cards.dirtyMatcha.details">
               <div class="steps">
                 <span>1 · Prepara un Matcha Latte standard.</span>
                 <span>2 · Estrai uno shot di espresso.</span>
@@ -708,14 +708,14 @@
                 <img src="assets/products/iced americano.png" alt="Iced Americano" loading="lazy" />
               </picture>
             </figure>
-            <p>3 cubi grandi di ghiaccio, acqua fredda e doppio espresso versato lentamente.</p>
-            <ul class="stat-list">
+            <p data-i18n="caffe.cards.icedAmericano.desc">3 cubi grandi di ghiaccio, acqua fredda e doppio espresso versato lentamente.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.icedAmericano.stats">
               <li>12 oz cup</li>
               <li>Lascia 1/4 spazio</li>
               <li>Mix zucchero nello shot</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <div class="details" data-i18n-html="caffe.cards.icedAmericano.details">
               <div class="steps">
                 <span>1 · Aggiungi ghiaccio e acqua lasciando spazio.</span>
                 <span>2 · Esegui doppio espresso in tazzina separata.</span>
@@ -736,14 +736,14 @@
                 <img src="assets/products/iced latte.png" alt="Iced Latte" loading="lazy" />
               </picture>
             </figure>
-            <p>Ghiaccio + latte freddo, doppio espresso versato direttamente sopra creando layering.</p>
-            <ul class="stat-list">
+            <p data-i18n="caffe.cards.icedLatte.desc">Ghiaccio + latte freddo, doppio espresso versato direttamente sopra creando layering.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.icedLatte.stats">
               <li>3 cubi grandi o 9 piccoli</li>
               <li>Latte fino a 3/4</li>
               <li>Sciroppi: mixare con espresso</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <div class="details" data-i18n-html="caffe.cards.icedLatte.details">
               <div class="steps">
                 <span>1 · Aggiungi ghiaccio e latte lasciando spazio.</span>
                 <span>2 · Estrai doppio espresso.</span>
@@ -764,14 +764,14 @@
                 <img src="assets/products/pistacho iced latte.png" alt="Pistachio iced latte" loading="lazy" />
               </picture>
             </figure>
-            <p>Iced latte al pistacchio: salsa/sciroppo + latte freddo + espresso per effetto cascade.</p>
-            <ul class="stat-list">
+            <p data-i18n="caffe.cards.pistachioIcedLatte.desc">Iced latte al pistacchio: salsa/sciroppo + latte freddo + espresso per effetto cascade.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.pistachioIcedLatte.stats">
               <li>Formato: 12 oz</li>
               <li>Ghiaccio: 3 cubi grandi</li>
               <li>Syrup/salsa: prima del latte</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <div class="details" data-i18n-html="caffe.cards.pistachioIcedLatte.details">
               <div class="steps">
                 <span>1 · Metti sauce/sciroppo nel bicchiere (swirl interno).</span>
                 <span>2 · Aggiungi ghiaccio e latte.</span>
@@ -793,14 +793,14 @@
                 <img src="assets/products/smoothie giallo passion.png" alt="Smoothie Giallo" loading="lazy" />
               </picture>
             </figure>
-            <p>Mix tropicale con mango, ananas e frutto della passione. Colore giallo vibrante.</p>
-            <ul class="stat-list">
+            <p data-i18n="caffe.cards.smoothieGialloPassion.desc">Mix tropicale con mango, ananas e frutto della passione. Colore giallo vibrante.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.smoothieGialloPassion.stats">
               <li>Base: Succo mela/arancia o acqua cocco</li>
               <li>Mix frutta: Giallo pack</li>
               <li>Blend: 30 secondi</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <div class="details" data-i18n-html="caffe.cards.smoothieGialloPassion.details">
               <div class="steps">
                 <span>1 · Versa la base liquida nel blender.</span>
                 <span>2 · Aggiungi il contenuto del pack frutta congelata.</span>
@@ -821,14 +821,14 @@
                 <img src="assets/products/smoothie rosso berry.png" alt="Smoothie Rosso" loading="lazy" />
               </picture>
             </figure>
-            <p>Esplosione di frutti di bosco: fragole, lamponi, mirtilli. Dolce e acidulo.</p>
-            <ul class="stat-list">
+            <p data-i18n="caffe.cards.smoothieRossoBerry.desc">Esplosione di frutti di bosco: fragole, lamponi, mirtilli. Dolce e acidulo.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.smoothieRossoBerry.stats">
               <li>Base: Succo mela o latte (se richiesto)</li>
               <li>Mix frutta: Rosso pack</li>
               <li>Blend: 30 secondi</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <div class="details" data-i18n-html="caffe.cards.smoothieRossoBerry.details">
               <div class="steps">
                 <span>1 · Versa la base liquida nel blender.</span>
                 <span>2 · Aggiungi il contenuto del pack frutta congelata.</span>
@@ -849,14 +849,14 @@
                 <img src="assets/products/smoothie verde boost.png" alt="Smoothie Verde" loading="lazy" />
               </picture>
             </figure>
-            <p>Mix salutare con spinaci, mela verde, cetriolo e zenzero. Fresco e dissetante.</p>
-            <ul class="stat-list">
+            <p data-i18n="caffe.cards.smoothieVerdeBoost.desc">Mix salutare con spinaci, mela verde, cetriolo e zenzero. Fresco e dissetante.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.smoothieVerdeBoost.stats">
               <li>Base: Acqua o succo mela</li>
               <li>Mix frutta/verdura: Verde pack</li>
               <li>Blend: 30 secondi</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Step & tips</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <div class="details" data-i18n-html="caffe.cards.smoothieVerdeBoost.details">
               <div class="steps">
                 <span>1 · Versa la base liquida nel blender.</span>
                 <span>2 · Aggiungi il contenuto del pack verde.</span>
@@ -871,8 +871,8 @@
       <section class="carousel" data-carousel="caffe-ops">
         <header class="carousel-header" data-carousel-header>
           <div class="carousel-header__title-block">
-            <h2 class="carousel-title" data-carousel-title>Setup &amp; Conservazione</h2>
-            <span class="carousel-category" data-carousel-category>Apertura · Setting · Dati tecnici · Storage · Chiusura</span>
+            <h2 class="carousel-title" data-carousel-title data-i18n="caffe.carousel.ops.title">Setup &amp; Conservazione</h2>
+            <span class="carousel-category" data-carousel-category data-i18n="caffe.carousel.ops.category">Apertura · Setting · Dati tecnici · Storage · Chiusura</span>
           </div>
           <div class="carousel-indicators" data-carousel-indicators></div>
         </header>
@@ -885,14 +885,14 @@
               <span class="tag">Daily batch</span>
             </div>
             <h3>Prep Matcha premade (una volta al giorno)</h3>
-            <p>Prepara il premade matcha una volta al giorno e conservalo in frigo con etichetta. Shelf life: 1 giorno (incluso il giorno di preparazione).</p>
-            <ul class="stat-list">
+            <p data-i18n="caffe.ops.prepMatchaPremade.desc">Prepara il premade matcha una volta al giorno e conservalo in frigo con etichetta. Shelf life: 1 giorno (incluso il giorno di preparazione).</p>
+            <ul class="stat-list" data-i18n-html="caffe.ops.prepMatchaPremade.stats">
               <li>Big batch: acqua fredda + matcha setacciato (no grumi) e whisk fino a liscio</li>
               <li>Trasferisci in squeeze bottle di plastica dedicata</li>
               <li>Conserva in frigo fino all'uso</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Procedura</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.procedure">Procedura</button>
+            <div class="details" data-i18n-html="caffe.ops.prepMatchaPremade.details">
               <div class="steps">
                 <span>1 · Aggiungi acqua fredda nella jug e setaccia il matcha (no lumps).</span>
                 <span>2 · Whisk (manuale o elettrico) finché completamente disciolto.</span>
@@ -909,14 +909,14 @@
               <span class="tag">25 ml</span>
             </div>
             <h3>Setting Iced Matcha Latte (standard)</h3>
-            <p>Standard di montaggio: ghiaccio → latte → matcha (versata lenta). Così ottieni sempre lo stesso effetto e riduci gli errori.</p>
-            <ul class="stat-list">
+            <p data-i18n="caffe.ops.settingIcedMatcha.desc">Standard di montaggio: ghiaccio → latte → matcha (versata lenta). Così ottieni sempre lo stesso effetto e riduci gli errori.</p>
+            <ul class="stat-list" data-i18n-html="caffe.ops.settingIcedMatcha.stats">
               <li>Ice: riempi fino alla linea indicata sul bicchiere</li>
               <li>Milk: circa 200 ml (fino alla linea sotto il bordo)</li>
               <li>Premade matcha: 25 ml (versato lentamente per creare pattern)</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Note</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.notes">Note</button>
+            <div class="details" data-i18n-html="caffe.ops.settingIcedMatcha.details">
               <div class="steps">
                 <span>1 · Ice → milk → matcha (slow pour).</span>
                 <span>2 · Lid + straw; lascia al cliente la mescolata.</span>
@@ -933,14 +933,14 @@
               <span class="tag">30s</span>
             </div>
             <h3>Smoothies: parametri di produzione</h3>
-            <p>Smoothie standard: frozen fruit bag + 250 ml di apple juice, blend veloce, poi sticker colore corretto prima del servizio.</p>
-            <ul class="stat-list">
+            <p data-i18n="caffe.ops.smoothiesParameters.desc">Smoothie standard: frozen fruit bag + 250 ml di apple juice, blend veloce, poi sticker colore corretto prima del servizio.</p>
+            <ul class="stat-list" data-i18n-html="caffe.ops.smoothiesParameters.stats">
               <li>Base: 250 ml apple juice (no added sugars) + frozen fruit bag</li>
               <li>Blender: 30 secondi (o finché smooth)</li>
               <li>Finish: cup corretta + cannuccia + sticker (pink/green/yellow)</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Checklist</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.checklist">Checklist</button>
+            <div class="details" data-i18n-html="caffe.ops.smoothiesParameters.details">
               <div class="steps">
                 <span>1 · Apri bag frutta, aggiungi nel mixer.</span>
                 <span>2 · Versa 250 ml apple juice e frulla 30s.</span>
@@ -957,16 +957,16 @@
               <span class="tag">1 giorno</span>
             </div>
             <h3>Storage Matcha premade (HACCP)</h3>
-            <p>
+            <p data-i18n="caffe.ops.storageMatchaPremade.desc">
               Il premade matcha ha shelf life 1 giorno (incluso il giorno di preparazione). Conserva sempre in frigo e con label.
             </p>
-            <ul class="stat-list">
+            <ul class="stat-list" data-i18n-html="caffe.ops.storageMatchaPremade.stats">
               <li>Contenitore: squeeze bottle pulita e dedicata</li>
               <li>Frigo: sempre (mai banco)</li>
               <li>Label: data/ora preparazione + scadenza</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Regole</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.rules">Regole</button>
+            <div class="details" data-i18n-html="caffe.ops.storageMatchaPremade.details">
               <div class="steps">
                 <span>1 · Se manca la label: non usare.</span>
                 <span>2 · Se oltre shelf life: elimina e rifai batch.</span>
@@ -982,16 +982,16 @@
               <span class="tag">Pulizia</span>
             </div>
             <h3>Chiusura stazione Matcha / Blender</h3>
-            <p>
+            <p data-i18n="caffe.ops.closingMatchaBlender.desc">
               Routine di fine giornata per ripartire veloci domani: elimina i premade fuori shelf life e lascia strumenti pronti.
             </p>
-            <ul class="stat-list">
+            <ul class="stat-list" data-i18n-html="caffe.ops.closingMatchaBlender.stats">
               <li>Matcha premade: verifica label e scarta se oltre 1 giorno</li>
               <li>Blender: rimuovi residui frutta e lava/igienizza secondo standard store</li>
               <li>Postazione: wipe e riordino (bottiglie, straw, sticker)</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Checklist</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.checklist">Checklist</button>
+            <div class="details" data-i18n-html="caffe.ops.closingMatchaBlender.details">
               <div class="steps">
                 <span>1 · Controlla scadenze e riponi tutto in frigo/freezer corretti.</span>
                 <span>2 · Pulisci e asciuga blender e utensili (niente residui appiccicati).</span>
@@ -1005,20 +1005,20 @@
 
       <footer class="category-footer">
         <div class="footer-icon">☕</div>
-        <h3 class="footer-title">Bar & Drinks</h3>
-        <p class="footer-tagline">Caffetteria, Matcha & Smoothies</p>
+        <h3 class="footer-title" data-i18n="caffe.footer.title">Bar & Drinks</h3>
+        <p class="footer-tagline" data-i18n="caffe.footer.tagline">Caffetteria, Matcha & Smoothies</p>
         <div class="footer-stats">
           <div class="footer-stat">
-            <span class="stat-value">18 Prodotti</span>
-            <span class="stat-label">Prodotti</span>
+            <span class="stat-value" data-i18n="caffe.footer.stats.value.products">18 Prodotti</span>
+            <span class="stat-label" data-i18n="caffe.footer.stats.label.products">Prodotti</span>
           </div>
           <div class="footer-stat">
-            <span class="stat-value">Listino locale</span>
-            <span class="stat-label">Range</span>
+            <span class="stat-value" data-i18n="caffe.footer.stats.value.range">Listino locale</span>
+            <span class="stat-label" data-i18n="caffe.footer.stats.label.range">Range</span>
           </div>
           <div class="footer-stat">
-            <span class="stat-value">Tutto l'anno</span>
-            <span class="stat-label">Stagione</span>
+            <span class="stat-value" data-i18n="caffe.footer.stats.value.season">Tutto l'anno</span>
+            <span class="stat-label" data-i18n="caffe.footer.stats.label.season">Stagione</span>
           </div>
         </div>
       </main>

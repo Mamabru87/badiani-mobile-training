@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Operations &amp; Setup · Badiani</title>
-    <link rel="stylesheet" href="styles/site.css?v=20251228_3" />
-    <script defer src="scripts/i18n.js?v=20251228_3"></script>
-    <script defer src="scripts/site.js?v=20251228_3"></script>
+    <link rel="stylesheet" href="styles/site.css?v=20251228_6" />
+    <script defer src="scripts/i18n.js?v=20251228_4"></script>
+    <script defer src="scripts/site.js?v=20251228_4"></script>
   </head>
   <body data-product="operations">
     <nav class="nav-shell">
@@ -36,7 +36,7 @@
         <header class="menu-drawer__header">
           <div>
             <h2 id="menu-drawer-title" class="menu-drawer__title" data-i18n="drawer.categories">Categorie</h2>
-            <p class="menu-drawer__mood" data-menu-mood>Brilla: i dettagli fanno la differenza.</p>
+            <p class="menu-drawer__mood" data-menu-mood data-i18n="mood.2">Brilla: i dettagli fanno la differenza.</p>
           </div>
           <button type="button" class="menu-drawer__close" data-menu-close aria-label="Chiudi menu" data-i18n-attr="aria-label:drawer.close">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -79,25 +79,25 @@
       <section class="hero">
         <div class="hero-card">
           <div class="badge">
-            <span>Playbook operativo</span>
-            <span class="page-stars" data-page-stars>⭐ Stelle: 0/6</span>
+            <span data-i18n="operations.hero.badge">Playbook operativo</span>
+            <span class="page-stars" data-page-stars data-i18n="operations.hero.stars">⭐ Stelle: 0/6</span>
           </div>
           <h1>Operations &amp; Setup</h1>
-          <p>
+          <p data-i18n="operations.hero.desc">
             Una sezione dedicata a tutte le schede che non sono “prodotti”: apertura, set-up vetrine, packaging,
             procedure di servizio e chiusura. Qui trovi gli standard che tengono il banco pulito, veloce e coerente.
           </p>
         </div>
         <div class="hero-card visual">
-          <img src="assets/covers/gelato-cover.webp" alt="Playbook operativo Badiani" loading="lazy" />
+          <img src="assets/covers/gelato-cover.webp" alt="Playbook operativo Badiani" loading="lazy" data-i18n-attr="alt:operations.hero.coverAlt" />
         </div>
       </section>
 
       <section class="carousel" data-carousel="operations">
         <header class="carousel-header" data-carousel-header>
           <div class="carousel-header__title-block">
-            <h2 class="carousel-title" data-carousel-title>Standard operativi</h2>
-            <span class="carousel-category" data-carousel-category>Apertura · Setup · Service · Chiusura</span>
+            <h2 class="carousel-title" data-carousel-title data-i18n="operations.carousel.standards.title">Standard operativi</h2>
+            <span class="carousel-category" data-carousel-category data-i18n="operations.carousel.standards.category">Apertura · Setup · Service · Chiusura</span>
           </div>
           <div class="carousel-indicators" data-carousel-indicators></div>
         </header>
@@ -106,30 +106,30 @@
           <!-- Gelato Lab / Apertura -->
           <article class="guide-card guide-card--procedure" data-carousel-item>
             <div class="tag-row">
-              <span class="tag">Prep mattino</span>
+              <span class="tag" data-i18n="operations.cards.openingRoutine.tag1">Prep mattino</span>
               <span class="tag">-14 °C</span>
               <span class="tag">HACCP</span>
             </div>
-            <h3>Routine apertura</h3>
+            <h3 data-i18n="operations.cards.openingRoutine.title">Routine apertura</h3>
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/pastry%20vetrine.png" type="image/png" />
                 <img src="assets/products/pastry%20vetrine.png" alt="Vetrina gelato pronta" loading="lazy" />
               </picture>
             </figure>
-            <p>
+            <p data-i18n="operations.cards.openingRoutine.desc">
               Controllo temperature, pulizia vetri, riordino vaschette (FIFO) e verifica etichette.
               La vetrina è il primo biglietto da visita: deve essere impeccabile e ordinata.
             </p>
-            <ul class="stat-list">
+            <ul class="stat-list" data-i18n-html="operations.cards.openingRoutine.stats">
               <li>Temperature: -14/-15°C (registra su log HACCP)</li>
               <li>Pulizia: vetri interni/esterni con prodotto specifico</li>
               <li>Vaschette: riordina per colore/gusto, pulisci bordi vaschetta</li>
               <li>Etichette: tutte presenti, dritte e pulite</li>
               <li>Utensili: spatole pulite e in acqua corrente (se sistema a flusso continuo) o cambi frequenti</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Checklist</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.checklist">Checklist</button>
+            <div class="details" data-i18n-html="operations.cards.openingRoutine.details">
               <div class="steps">
                 <span>1 · Registra temperature su log HACCP.</span>
                 <span>2 · Pulisci vetri e bordi vaschette.</span>
@@ -142,25 +142,25 @@
           <!-- Pastry Lab / Setup vetrina -->
           <article class="guide-card guide-card--procedure" data-carousel-item>
             <div class="tag-row">
-              <span class="tag">Display</span>
+              <span class="tag" data-i18n="operations.cards.dailySetup.tag1">Display</span>
               <span class="tag">FIFO</span>
-              <span class="tag">Visual</span>
+              <span class="tag" data-i18n="operations.cards.dailySetup.tag3">Visual</span>
             </div>
-            <h3>Set-up giornaliero</h3>
+            <h3 data-i18n="operations.cards.dailySetup.title">Set-up giornaliero</h3>
             <figure class="guide-media tall">
               <picture>
                 <source srcset="assets/products/pastry vetrine.png" type="image/png" />
                 <img src="assets/products/pastry vetrine.png" alt="Vetrina pastry Badiani" loading="lazy" />
               </picture>
             </figure>
-            <p>Cake stand con slice mancante, croissant su tray dedicati, brownies/puddings allineati.</p>
-            <ul class="stat-list">
+            <p data-i18n="operations.cards.dailySetup.desc">Cake stand con slice mancante, croissant su tray dedicati, brownies/puddings allineati.</p>
+            <ul class="stat-list" data-i18n-html="operations.cards.dailySetup.stats">
               <li>Vetrina deve sembrare sempre piena</li>
               <li>Label accanto al prodotto</li>
               <li>Prima fetta di loaf esposta</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Checklist</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.checklist">Checklist</button>
+            <div class="details" data-i18n-html="operations.cards.dailySetup.details">
               <div class="steps">
                 <span>1 - Posiziona cakes sui cake stand e rimuovi una fetta per mostrare l'interno.</span>
                 <span>2 - Disponi croissant in base ai gusti disponibili mantenendo le file pulite.</span>
@@ -173,16 +173,16 @@
           <!-- Festive / Servizio e procedure -->
           <article class="guide-card guide-card--procedure" data-carousel-item>
             <div class="tag-row">
-              <span class="tag">Warm slice</span>
-              <span class="tag">10'' x lato</span>
-              <span class="tag">Service</span>
+              <span class="tag" data-i18n="operations.cards.warmPandoro.tag1">Warm slice</span>
+              <span class="tag" data-i18n="operations.cards.warmPandoro.tag2">10'' x lato</span>
+              <span class="tag" data-i18n="operations.cards.warmPandoro.tag3">Service</span>
             </div>
-            <h3>Servizio Caldo (Pandoro)</h3>
-            <p>
+            <h3 data-i18n="operations.cards.warmPandoro.title">Servizio Caldo (Pandoro)</h3>
+            <p data-i18n="operations.cards.warmPandoro.desc">
               Pandoro scaldato: stessa tecnica del panettone. 10 secondi per lato sulla piastra crepe (senza olio). Toasta leggero per ravvivare la struttura.
               Servi immediatamente con pairing consigliato (crema mascarpone tiepida, gelato, sauce).
             </p>
-            <ul class="stat-list">
+            <ul class="stat-list" data-i18n-html="operations.cards.warmPandoro.stats">
               <li><strong>Chiedi preferenza al cliente:</strong> "Vuoi la versione tiepida?"</li>
               <li><strong>Piastra crepe:</strong> pulita e asciutta, no olio</li>
               <li><strong>Timing:</strong> 10 secondi per lato (non di piu')</li>
@@ -190,8 +190,8 @@
               <li><strong>Campioni:</strong> tieni piccoli triangoli per assaggiare durante le ore di punta (storytelling)</li>
               <li><strong>Abbinamenti tiepidi:</strong> crema mascarpone calda, gelato freddo (contrasto), salsa cioccolato</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Checklist</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.checklist">Checklist</button>
+            <div class="details" data-i18n-html="operations.cards.warmPandoro.details">
               <div class="steps">
                 <span>1 - Chiedi preferenza al cliente.</span>
                 <span>2 - Tosta e impiatta rapidamente per non perdere volume.</span>
@@ -212,14 +212,14 @@
 
           <article class="guide-card guide-card--procedure" data-carousel-item>
             <div class="tag-row">
-              <span class="tag">Delivery</span>
-              <span class="tag">Treat box</span>
-              <span class="tag">Take away</span>
+              <span class="tag" data-i18n="operations.cards.packagingTakeAway.tag1">Delivery</span>
+              <span class="tag" data-i18n="operations.cards.packagingTakeAway.tag2">Treat box</span>
+              <span class="tag" data-i18n="operations.cards.packagingTakeAway.tag3">Take away</span>
             </div>
-            <h3>Packaging take away</h3>
-            <p>Per due panettoni: una sauce pot riempita 3/4, quattro angoli del treat box.</p>
-            <button class="btn-ghost" data-toggle-card>Procedura</button>
-            <div class="details">
+            <h3 data-i18n="operations.cards.packagingTakeAway.title">Packaging take away</h3>
+            <p data-i18n="operations.cards.packagingTakeAway.desc">Per due panettoni: una sauce pot riempita 3/4, quattro angoli del treat box.</p>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.procedure">Procedura</button>
+            <div class="details" data-i18n-html="operations.cards.packagingTakeAway.details">
               <div class="steps">
                 <span>1 - Inserisci sauce pot al centro, blocca i panettoni agli angoli.</span>
                 <span>2 - Chiudi con lid + tape, etichetta shelf life.</span>
@@ -240,14 +240,14 @@
 
           <article class="guide-card guide-card--procedure" data-carousel-item>
             <div class="tag-row">
-              <span class="tag">Setup</span>
+              <span class="tag" data-i18n="operations.cards.vinMachineSetup.tag1">Setup</span>
               <span class="tag">Vin Brulé</span>
-              <span class="tag">Tank</span>
+              <span class="tag" data-i18n="operations.cards.vinMachineSetup.tag3">Tank</span>
             </div>
-            <h3>Allestimento macchina</h3>
-            <p>Macchina Vin Brulé: riempire tank esterno con 600 ml d'acqua senza superare il max, inserire contenitore interno.</p>
-            <button class="btn-ghost" data-toggle-card>Procedura</button>
-            <div class="details">
+            <h3 data-i18n="operations.cards.vinMachineSetup.title">Allestimento macchina</h3>
+            <p data-i18n="operations.cards.vinMachineSetup.desc">Macchina Vin Brulé: riempire tank esterno con 600 ml d'acqua senza superare il max, inserire contenitore interno.</p>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.procedure">Procedura</button>
+            <div class="details" data-i18n-html="operations.cards.vinMachineSetup.details">
               <div class="steps">
                 <span>1 - Versa 500/1000 ml di mix nel tank argento.</span>
                 <span>2 - Porta temperatura a livello 10 per 25-30 min; poi mantieni a 6-7.</span>
@@ -268,14 +268,14 @@
 
           <article class="guide-card guide-card--maintenance" data-carousel-item>
             <div class="tag-row">
-              <span class="tag">Servizio</span>
+              <span class="tag" data-i18n="operations.cards.vinServiceClosing.tag1">Servizio</span>
               <span class="tag">Vin Brulé</span>
-              <span class="tag">Chiusura</span>
+              <span class="tag" data-i18n="operations.cards.vinServiceClosing.tag3">Chiusura</span>
             </div>
-            <h3>Service & chiusura</h3>
-            <p>Vin Brulé: servi con mestolo, fetta d'arancia e controllo shelf life.</p>
-            <button class="btn-ghost" data-toggle-card>Steps</button>
-            <div class="details">
+            <h3 data-i18n="operations.cards.vinServiceClosing.title">Service & chiusura</h3>
+            <p data-i18n="operations.cards.vinServiceClosing.desc">Vin Brulé: servi con mestolo, fetta d'arancia e controllo shelf life.</p>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.procedure">Procedura</button>
+            <div class="details" data-i18n-html="operations.cards.vinServiceClosing.details">
               <div class="steps">
                 <span>1 - Riempire cup con mestolo, aggiungere fetta d'arancia.</span>
                 <span>2 - A fine giornata travasa nel bricco, lascia raffreddare e copri con pellicola.</span>
@@ -299,8 +299,8 @@
       <section class="carousel" data-carousel="operations-tech">
         <header class="carousel-header" data-carousel-header>
           <div class="carousel-header__title-block">
-            <h2 class="carousel-title" data-carousel-title>Dati tecnici &amp; Conservazione</h2>
-            <span class="carousel-category" data-carousel-category>Quick reference · Temperature · Shelf life · FIFO</span>
+            <h2 class="carousel-title" data-carousel-title data-i18n="operations.carousel.tech.title">Dati tecnici &amp; Conservazione</h2>
+            <span class="carousel-category" data-carousel-category data-i18n="operations.carousel.tech.category">Quick reference · Temperature · Shelf life · FIFO</span>
           </div>
           <div class="carousel-indicators" data-carousel-indicators></div>
         </header>
@@ -308,19 +308,19 @@
         <div class="carousel-track" data-carousel-track>
           <article class="guide-card guide-card--procedure" data-carousel-item>
             <div class="tag-row">
-              <span class="tag">Setting</span>
-              <span class="tag">Temperature</span>
-              <span class="tag">Quick ref</span>
+              <span class="tag" data-i18n="operations.cards.tempKeyMap.tag1">Setting</span>
+              <span class="tag" data-i18n="operations.cards.tempKeyMap.tag2">Temperature</span>
+              <span class="tag" data-i18n="operations.cards.tempKeyMap.tag3">Quick ref</span>
             </div>
-            <h3>Temperature chiave (quick map)</h3>
-            <p>Temperature chiave da tenere a mente per evitare prodotti fuori standard.</p>
-            <ul class="stat-list">
+            <h3 data-i18n="operations.cards.tempKeyMap.title">Temperature chiave (quick map)</h3>
+            <p data-i18n="operations.cards.tempKeyMap.desc">Temperature chiave da tenere a mente per evitare prodotti fuori standard.</p>
+            <ul class="stat-list" data-i18n-html="operations.cards.tempKeyMap.stats">
               <li>Gelato vetrina: -14/-15 °C (target)</li>
               <li>Display freezer treats: almeno -14 e senza ghiaccio (defrost weekly)</li>
               <li>Thermal storage box (gelato take-away): autonomia max 1 ora prima di tornare in freezer</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Uso</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.use">Uso</button>
+            <div class="details" data-i18n-html="operations.cards.tempKeyMap.details">
               <div class="steps">
                 <span>1 · Se la temperatura è fuori range: avvisa subito e non “compensare” con service tricks.</span>
                 <span>2 · Sliding doors in posizione quando non busy per preservare -14/-15.</span>
@@ -331,19 +331,19 @@
 
           <article class="guide-card guide-card--procedure" data-carousel-item>
             <div class="tag-row">
-              <span class="tag">Conservazione</span>
+              <span class="tag" data-i18n="operations.cards.fifoLabels.tag1">Conservazione</span>
               <span class="tag">FIFO</span>
-              <span class="tag">Label</span>
+              <span class="tag" data-i18n="operations.cards.fifoLabels.tag3">Label</span>
             </div>
-            <h3>FIFO &amp; etichette (regola d'oro)</h3>
-            <p>Ogni modulo “storage” in questo training ha un punto comune: FIFO + label chiare.</p>
-            <ul class="stat-list">
+            <h3 data-i18n="operations.cards.fifoLabels.title">FIFO &amp; etichette (regola d'oro)</h3>
+            <p data-i18n="operations.cards.fifoLabels.desc">Ogni modulo “storage” in questo training ha un punto comune: FIFO + label chiare.</p>
+            <ul class="stat-list" data-i18n-html="operations.cards.fifoLabels.stats">
               <li>Etichetta sempre: data preparazione/apertura + scadenza</li>
               <li>First in, first out: usa prima ciò che scade prima</li>
               <li>Se manca la label: non servire (chiedi al manager)</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Checklist</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.checklist">Checklist</button>
+            <div class="details" data-i18n-html="operations.cards.fifoLabels.details">
               <div class="steps">
                 <span>1 · Controllo label a inizio turno.</span>
                 <span>2 · Controllo FIFO durante i refill.</span>
@@ -354,20 +354,20 @@
 
           <article class="guide-card guide-card--procedure" data-carousel-item>
             <div class="tag-row">
-              <span class="tag">Shelf life</span>
-              <span class="tag">Prep</span>
-              <span class="tag">Frigo</span>
+              <span class="tag" data-i18n="operations.cards.shelfLifeQuick.tag1">Shelf life</span>
+              <span class="tag" data-i18n="operations.cards.shelfLifeQuick.tag2">Prep</span>
+              <span class="tag" data-i18n="operations.cards.shelfLifeQuick.tag3">Frigo</span>
             </div>
-            <h3>Shelf life rapidi (mix &amp; premade)</h3>
-            <p>Promemoria shelf life per controlli veloci durante apertura, refill e chiusura.</p>
-            <ul class="stat-list">
+            <h3 data-i18n="operations.cards.shelfLifeQuick.title">Shelf life rapidi (mix &amp; premade)</h3>
+            <p data-i18n="operations.cards.shelfLifeQuick.desc">Promemoria shelf life per controlli veloci durante apertura, refill e chiusura.</p>
+            <ul class="stat-list" data-i18n-html="operations.cards.shelfLifeQuick.stats">
               <li>Crepe mix: 3 giorni (frigo) + riposo minimo 2 ore</li>
               <li>Waffle mix (pre-packed): 2 giorni</li>
               <li>Premade matcha: 1 giorno (incluso giorno di preparazione) → frigo</li>
               <li>Mulled wine: 3 giorni dal primo warm-up (mix in macchina)</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Regole</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.rules">Regole</button>
+            <div class="details" data-i18n-html="operations.cards.shelfLifeQuick.details">
               <div class="steps">
                 <span>1 · Prepara batch “quanto serve”: meno sprechi, più qualità.</span>
                 <span>2 · Label sempre (data/ora).</span>
@@ -378,19 +378,19 @@
 
           <article class="guide-card guide-card--procedure" data-carousel-item>
             <div class="tag-row">
-              <span class="tag">Packaging</span>
-              <span class="tag">Take away</span>
+              <span class="tag" data-i18n="operations.cards.takeAwayThermal.tag1">Packaging</span>
+              <span class="tag" data-i18n="operations.cards.takeAwayThermal.tag2">Take away</span>
               <span class="tag">1h</span>
             </div>
-            <h3>Take-away: autonomia termica</h3>
-            <p>La thermal storage box ha autonomia massima di 1 ora: poi il prodotto deve tornare in freezer.</p>
-            <ul class="stat-list">
+            <h3 data-i18n="operations.cards.takeAwayThermal.title">Take-away: autonomia termica</h3>
+            <p data-i18n="operations.cards.takeAwayThermal.desc">La thermal storage box ha autonomia massima di 1 ora: poi il prodotto deve tornare in freezer.</p>
+            <ul class="stat-list" data-i18n-html="operations.cards.takeAwayThermal.stats">
               <li>Comunicalo sempre al cliente (qualità e sicurezza)</li>
               <li>Consiglia freezer appena possibile</li>
               <li>Evita soste “lunghe” fuori controllo (rider/attese)</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Script</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.script">Script</button>
+            <div class="details" data-i18n-html="operations.cards.takeAwayThermal.details">
               <div class="steps">
                 <span>1 · “Questa box tiene circa 1 ora: poi freezer.”</span>
                 <span>2 · Offri bag termica se prevista dallo store.</span>
@@ -401,20 +401,20 @@
 
           <article class="guide-card guide-card--procedure" data-carousel-item>
             <div class="tag-row">
-              <span class="tag">Chiusura</span>
-              <span class="tag">Weekly</span>
-              <span class="tag">Routine</span>
+              <span class="tag" data-i18n="operations.cards.cleaningSchedule.tag1">Chiusura</span>
+              <span class="tag" data-i18n="operations.cards.cleaningSchedule.tag2">Weekly</span>
+              <span class="tag" data-i18n="operations.cards.cleaningSchedule.tag3">Routine</span>
             </div>
-            <h3>Schedule pulizie (giorno / settimana)</h3>
-            <p>Chiusura e manutenzione programmata = performance costanti e meno imprevisti in servizio.</p>
-            <ul class="stat-list">
+            <h3 data-i18n="operations.cards.cleaningSchedule.title">Schedule pulizie (giorno / settimana)</h3>
+            <p data-i18n="operations.cards.cleaningSchedule.desc">Chiusura e manutenzione programmata = performance costanti e meno imprevisti in servizio.</p>
+            <ul class="stat-list" data-i18n-html="operations.cards.cleaningSchedule.stats">
               <li>Gelato vetrina: OFF ogni notte</li>
               <li>Gelato vetrina: deep clean weekly</li>
               <li>Filtri: cleaning weekly</li>
               <li>Display freezer treats: defrost weekly (free of ice)</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Checklist</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.checklist">Checklist</button>
+            <div class="details" data-i18n-html="operations.cards.cleaningSchedule.details">
               <div class="steps">
                 <span>1 · Segna la giornata di deep clean (non improvvisare).</span>
                 <span>2 · Pulisci prima che si accumuli: è più veloce.</span>
@@ -427,20 +427,20 @@
 
       <footer class="category-footer">
         <div class="footer-icon">🧩</div>
-        <h3 class="footer-title">Operations &amp; Setup</h3>
-        <p class="footer-tagline">Standard che rendono il servizio semplice</p>
+        <h3 class="footer-title" data-i18n="operations.footer.title">Operations &amp; Setup</h3>
+        <p class="footer-tagline" data-i18n="operations.footer.tagline">Standard che rendono il servizio semplice</p>
         <div class="footer-stats">
           <div class="footer-stat">
             <span class="stat-value">6</span>
-            <span class="stat-label">Schede</span>
+            <span class="stat-label" data-i18n="operations.footer.stats.cards">Schede</span>
           </div>
           <div class="footer-stat">
             <span class="stat-value">Daily</span>
-            <span class="stat-label">Uso</span>
+            <span class="stat-label" data-i18n="operations.footer.stats.usage">Uso</span>
           </div>
           <div class="footer-stat">
             <span class="stat-value">Setup</span>
-            <span class="stat-label">Focus</span>
+            <span class="stat-label" data-i18n="operations.footer.stats.focus">Focus</span>
           </div>
         </div>
       </footer>

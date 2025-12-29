@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Festive - Badiani</title>
-    <link rel="stylesheet" href="styles/site.css?v=20251228_3" />
-    <script defer src="scripts/i18n.js?v=20251228_3"></script>
-    <script defer src="scripts/site.js?v=20251228_3"></script>
+    <link rel="stylesheet" href="styles/site.css?v=20251228_6" />
+    <script defer src="scripts/i18n.js?v=20251228_4"></script>
+    <script defer src="scripts/site.js?v=20251228_4"></script>
   </head>
   <body data-product="festive">
     <nav class="nav-shell">
@@ -36,7 +36,7 @@
         <header class="menu-drawer__header">
           <div>
             <h2 id="menu-drawer-title" class="menu-drawer__title" data-i18n="drawer.categories">Categorie</h2>
-            <p class="menu-drawer__mood" data-menu-mood>Brilla: i dettagli fanno la differenza.</p>
+            <p class="menu-drawer__mood" data-menu-mood data-i18n="mood.2">Brilla: i dettagli fanno la differenza.</p>
           </div>
           <button type="button" class="menu-drawer__close" data-menu-close aria-label="Chiudi menu" data-i18n-attr="aria-label:drawer.close">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -78,26 +78,26 @@
       <section class="hero">
         <div class="hero-card">
           <div class="badge">
-            <span>Linea Festiva</span>
-            <span class="page-stars" data-page-stars>⭐ Stelle: 10/10</span>
+            <span data-i18n="festive.hero.badge">Linea Festiva</span>
+            <span class="page-stars" data-page-stars data-i18n="festive.hero.stars">⭐ Stelle: 10/10</span>
           </div>
           <h1>Churros, Panettoni & Vin Brule'</h1>
-          <p>
+          <p data-i18n="festive.hero.desc">
             Procedura ufficiale per i prodotti delle feste: frittura churros, servizio Panettone/Pandoro con upsell
             Buontalenti, mini gift e gestione mulled wine.
           </p>
           
         </div>
         <div class="hero-card visual">
-          <img src="assets/covers/churro-cover.webp" alt="Churros con salsa" loading="lazy" />
+          <img src="assets/covers/churro-cover.webp" alt="Churros con salsa" loading="lazy" data-i18n-attr="alt:festive.hero.coverAlt" />
         </div>
       </section>
 
       <section class="carousel" data-carousel="festive-products">
         <header class="carousel-header" data-carousel-header>
           <div class="carousel-header__title-block">
-            <h2 class="carousel-title" data-carousel-title>Prodotti Festivi</h2>
-            <span class="carousel-category" data-carousel-category>Churros · Panettoni · Vin Brulé</span>
+            <h2 class="carousel-title" data-carousel-title data-i18n="festive.carousel.products.title">Prodotti Festivi</h2>
+            <span class="carousel-category" data-carousel-category data-i18n="festive.carousel.products.category">Churros · Panettoni · Vin Brulé</span>
           </div>
           <div class="carousel-indicators" data-carousel-indicators></div>
         </header>
@@ -105,8 +105,8 @@
         <div class="carousel-track" data-carousel-track>
           <article class="guide-card guide-card--product" data-carousel-item>
             <div class="tag-row">
-              <span class="tag">Fryer 190 °C</span>
-              <span class="tag">8 pezzi/porzione</span>
+              <span class="tag" data-i18n="festive.cards.churros.tag1">Fryer 190 °C</span>
+              <span class="tag" data-i18n="festive.cards.churros.tag2">8 pezzi/porzione</span>
             </div>
             <h3>Churros</h3>
             <figure class="guide-media">
@@ -115,12 +115,12 @@
                 <img src="assets/products/churros.png" alt="Churros" loading="lazy" />
               </picture>
             </figure>
-            <p>
+            <p data-i18n="festive.cards.churros.desc">
               Bastoncini di pastella fritta, croccanti fuori e morbidi dentro.
               Serviti caldi (8 pezzi) con zucchero e cannella.
             </p>
-            <button class="btn-ghost" data-toggle-card>Steps</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step &amp; tips</button>
+            <div class="details" data-i18n-html="festive.cards.churros.details">
               <div class="steps">
                 <span>1 - Prepara il mix zucchero/cannella in una teglia larga.</span>
                 <span>2 - Preleva 8 churros dal freezer, friggi 8-9 min finche' dorati.</span>
@@ -142,8 +142,8 @@
 
           <article class="guide-card guide-card--product" data-carousel-item>
             <div class="tag-row">
-              <span class="tag">Slice service</span>
-              <span class="tag">8 porzioni</span>
+              <span class="tag" data-i18n="festive.cards.panettoneClassic.tag1">Slice service</span>
+              <span class="tag" data-i18n="festive.cards.panettoneClassic.tag2">8 porzioni</span>
             </div>
             <h3>Panettone Classico</h3>
             <figure class="guide-media">
@@ -152,19 +152,19 @@
                 <img src="assets/products/panettone classico.png" alt="Panettone Classico" loading="lazy" />
               </picture>
             </figure>
-            <p>
+            <p data-i18n="festive.cards.panettoneClassic.desc">
               Il re delle feste. Ricetta tradizionale con uvetta e canditi, lievitazione naturale.
               Servito a fetta (1/8) su piatto dessert con posate.
             </p>
-            <ul class="stat-list">
+            <ul class="stat-list" data-i18n-html="festive.cards.panettoneClassic.stats">
               <li>Taglio: verticale seguendo le 8 linee guida, coltello seghettato lungo</li>
               <li>Porzioni: 8 spicchi uniformi per coerenza</li>
               <li>Presentazione: piatto dessert + cutlery sempre</li>
               <li>Campione visivo: tieni una fetta visibile al banco per stimolare ordini (storytelling visivo)</li>
               <li>Abbinamenti suggeriti: gelato Buontalenti, salsa pistacchio, cioccolata calda</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Procedura</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.procedure">Procedura</button>
+            <div class="details" data-i18n-html="festive.cards.panettoneClassic.details">
               <div class="steps">
                 <span>1 - Taglia verticale seguendo le linee guida.</span>
                 <span>2 - Disponi sul piatto con cutlery.</span>
@@ -185,8 +185,8 @@
 
           <article class="guide-card guide-card--product" data-carousel-item>
             <div class="tag-row">
-              <span class="tag">Warm option</span>
-              <span class="tag">Crepe plate</span>
+              <span class="tag" data-i18n="festive.cards.panettoneDark.tag1">Warm option</span>
+              <span class="tag" data-i18n="festive.cards.panettoneDark.tag2">Crepe plate</span>
             </div>
             <h3>Panettone Dark Chocolate</h3>
             <figure class="guide-media">
@@ -195,19 +195,19 @@
                 <img src="assets/products/panettone dark chocolate.png" alt="Panettone Dark Chocolate" loading="lazy" />
               </picture>
             </figure>
-            <p>
+            <p data-i18n="festive.cards.panettoneDark.desc">
               Variante golosa con gocce di cioccolato fondente nell'impasto.
               Ottimo servito tiepido (10'' su piastra) per sciogliere il cioccolato.
             </p>
-            <ul class="stat-list">
+            <ul class="stat-list" data-i18n-html="festive.cards.panettoneDark.stats">
               <li>Piastra crepe: pulita e asciutta (no olio)</li>
               <li>Timing: 10 secondi per lato esatti (non di piu' o perde croccantezza)</li>
               <li>Servizio immediato: servi subito dopo cottura</li>
               <li>Abbinamenti: Dark Chocolate + salsa pistacchio (contrasto gourmet)</li>
               <li>Upsell: gelato freddo + panettone caldo = contrasto di temperatura sensazionale</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Steps</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step &amp; tips</button>
+            <div class="details" data-i18n-html="festive.cards.panettoneDark.details">
               <div class="steps">
                 <span>1 - Posiziona la fetta sulla piastra crepe.</span>
                 <span>2 - Tosta 10 secondi per lato (no olio).</span>
@@ -227,7 +227,7 @@
           </article>
           <article class="guide-card guide-card--product" data-carousel-item data-reward-id="festive-piatto-classico-5">
             <div class="tag-row">
-              <span class="tag">Powder sugar</span>
+              <span class="tag" data-i18n="festive.cards.pandoroClassic.tag1">Powder sugar</span>
             </div>
             <h3>Pandoro Classico</h3>
             <figure class="guide-media">
@@ -236,11 +236,11 @@
                 <img src="assets/products/pandoro.png" alt="Pandoro Classico" loading="lazy" />
               </picture>
             </figure>
-            <p>
+            <p data-i18n="festive.cards.pandoroClassic.desc">
               Soffice, burroso, a forma di stella a 8 punte.
               Servito con spolverata di zucchero a velo al momento.
             </p>
-            <ul class="stat-list">
+            <ul class="stat-list" data-i18n-html="festive.cards.pandoroClassic.stats">
               <li><strong>Taglio:</strong> seguendo la guida a stella per 8 spicchi uniformi (effetto presentazione professionale)</li>
               <li><strong>Zucchero a velo:</strong> SEMPRE al momento del servizio, non prima (effetto neve fresca visivamente)</li>
               <li><strong>Piatto dessert + cutlery:</strong> sempre</li>
@@ -248,8 +248,8 @@
               <li><strong>Storytelling:</strong> "Lievitazione 36 ore con ingredienti premium" (giustifica valore)</li>
               <li><strong>Abbinamenti suggeriti:</strong> gelato Buontalenti, salsa mascarpone o pistacchio</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Steps</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step &amp; tips</button>
+            <div class="details" data-i18n-html="festive.cards.pandoroClassic.details">
               <div class="steps">
                 <span>1 - Taglia seguendo la guida (A) per ottenere spicchi regolari.</span>
                 <span>2 - Disponi su piatto con cutlery.</span>
@@ -270,24 +270,24 @@
 
           <article class="guide-card guide-card--product" data-carousel-item>
             <div class="tag-row">
-              <span class="tag">Hot drink</span>
-              <span class="tag">Spezie</span>
-              <span class="tag">Arancia</span>
+              <span class="tag" data-i18n="festive.cards.mulledWine.tag1">Hot drink</span>
+              <span class="tag" data-i18n="festive.cards.mulledWine.tag2">Spezie</span>
+              <span class="tag" data-i18n="festive.cards.mulledWine.tag3">Arancia</span>
             </div>
-            <h3>Mulled Wine (Vin Brulé)</h3>
+            <h3 data-i18n="festive.cards.mulledWine.title">Mulled Wine (Vin Brulé)</h3>
             <!-- Image removed -->
-            <p>
+            <p data-i18n="festive.cards.mulledWine.desc">
               Bevanda calda speziata, servita con fetta d'arancia. È la proposta “comfort” della stagione:
               racconta profumo e rituale, poi guida l'upsell (mini panettone / churros / shot opzionali secondo store).
             </p>
-            <ul class="stat-list">
+            <ul class="stat-list" data-i18n-html="festive.cards.mulledWine.stats">
               <li>Servizio: cup + mestolo dedicato</li>
               <li>Garnish: fetta d'arancia (sempre)</li>
               <li>Timing: servi caldo, non bollente</li>
               <li>Script: "È il nostro Vin Brulé speziato, perfetto da abbinare a un mini panettone"</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Pitch</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.pitch">Pitch</button>
+            <div class="details" data-i18n-html="festive.cards.mulledWine.details">
               <div class="steps">
                 <span>1 - Presenta: profumo, spezie, fetta d'arancia (rituale).</span>
                 <span>2 - Servi con mestolo dedicato e garnish.</span>
@@ -306,19 +306,19 @@
 
           <article class="guide-card guide-card--product" data-carousel-item>
             <div class="tag-row">
-              <span class="tag">Warm slice</span>
-              <span class="tag">10" x lato</span>
-              <span class="tag">No oil</span>
+              <span class="tag" data-i18n="festive.cards.warmServicePandoro.tag1">Warm slice</span>
+              <span class="tag" data-i18n="festive.cards.warmServicePandoro.tag2">10" x lato</span>
+              <span class="tag" data-i18n="festive.cards.warmServicePandoro.tag3">No oil</span>
             </div>
-            <h3>Servizio Caldo (Pandoro)</h3>
-            <p>Chiedi sempre se la fetta la vuole tiepida. Tosta 10 secondi per lato sulla piastra crepe (senza olio) e servi immediatamente.</p>
-            <ul class="stat-list">
+            <h3 data-i18n="festive.cards.warmServicePandoro.title">Servizio Caldo (Pandoro)</h3>
+            <p data-i18n="festive.cards.warmServicePandoro.desc">Chiedi sempre se la fetta la vuole tiepida. Tosta 10 secondi per lato sulla piastra crepe (senza olio) e servi immediatamente.</p>
+            <ul class="stat-list" data-i18n-html="festive.cards.warmServicePandoro.stats">
               <li>Piastra crepe: pulita e asciutta (mai olio)</li>
               <li>Timing: 10 secondi per lato</li>
               <li>Servizio immediato: impiatta subito per mantenere volume e calore</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Checklist</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.checklist">Checklist</button>
+            <div class="details" data-i18n-html="festive.cards.warmServicePandoro.details">
               <div class="steps">
                 <span>1 · Chiedi preferenza calda/fredda.</span>
                 <span>2 · Tosta 10" + 10" (no oil).</span>
@@ -333,8 +333,8 @@
       <section class="carousel" data-carousel="festive-ops">
         <header class="carousel-header" data-carousel-header>
           <div class="carousel-header__title-block">
-            <h2 class="carousel-title" data-carousel-title>Operazioni &amp; Conservazione</h2>
-            <span class="carousel-category" data-carousel-category>Setup · Dati tecnici · Storage · Shelf life · Chiusura</span>
+            <h2 class="carousel-title" data-carousel-title data-i18n="festive.carousel.ops.title">Operazioni &amp; Conservazione</h2>
+            <span class="carousel-category" data-carousel-category data-i18n="festive.carousel.ops.category">Setup · Dati tecnici · Storage · Shelf life · Chiusura</span>
           </div>
           <div class="carousel-indicators" data-carousel-indicators></div>
         </header>
@@ -342,19 +342,19 @@
         <div class="carousel-track" data-carousel-track>
           <article class="guide-card guide-card--procedure" data-carousel-item>
             <div class="tag-row">
-              <span class="tag">Setup</span>
+              <span class="tag" data-i18n="festive.ops.setupMachine.tag1">Setup</span>
               <span class="tag">Vin Brulé</span>
               <span class="tag">600 ml</span>
             </div>
-            <h3>Setup macchina Vin Brulé</h3>
-            <p>Setup corretto: outer tank con ~600 ml di acqua (senza raggiungere il max) e inner container inserito bene (non deve galleggiare).</p>
-            <ul class="stat-list">
+            <h3 data-i18n="festive.ops.setupMachine.title">Setup macchina Vin Brulé</h3>
+            <p data-i18n="festive.ops.setupMachine.desc">Setup corretto: outer tank con ~600 ml di acqua (senza raggiungere il max) e inner container inserito bene (non deve galleggiare).</p>
+            <ul class="stat-list" data-i18n-html="festive.ops.setupMachine.stats">
               <li>Outer tank: ~600 ml acqua, non oltre max</li>
               <li>Inner container: inserire correttamente (non float)</li>
               <li>Lid: sempre in posizione durante il mantenimento</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Procedura</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.procedure">Procedura</button>
+            <div class="details" data-i18n-html="festive.ops.setupMachine.details">
               <div class="steps">
                 <span>1 · Acqua nel tank esterno (~600 ml, no max).</span>
                 <span>2 · Inserisci il contenitore interno e chiudi con lid.</span>
@@ -365,19 +365,19 @@
 
           <article class="guide-card guide-card--procedure" data-carousel-item>
             <div class="tag-row">
-              <span class="tag">Setting</span>
-              <span class="tag">Level 10</span>
-              <span class="tag">25/30 min</span>
+              <span class="tag" data-i18n="festive.ops.warmup.tag1">Setting</span>
+              <span class="tag" data-i18n="festive.ops.warmup.tag2">Level 10</span>
+              <span class="tag" data-i18n="festive.ops.warmup.tag3">25/30 min</span>
             </div>
-            <h3>Warm-up &amp; mantenimento (Vin Brulé)</h3>
-            <p>Warm-up e mantenimento: livello 10 per 25–30 minuti, poi livello 6–7.</p>
-            <ul class="stat-list">
+            <h3 data-i18n="festive.ops.warmup.title">Warm-up &amp; mantenimento (Vin Brulé)</h3>
+            <p data-i18n="festive.ops.warmup.desc">Warm-up e mantenimento: livello 10 per 25–30 minuti, poi livello 6–7.</p>
+            <ul class="stat-list" data-i18n-html="festive.ops.warmup.stats">
               <li>Versare 500/1000 ml (meglio meno che troppo, in base alle vendite)</li>
               <li>Warm-up: livello 10 per 25–30 min</li>
               <li>Hold: livello 6–7</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Checklist</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.checklist">Checklist</button>
+            <div class="details" data-i18n-html="festive.ops.warmup.details">
               <div class="steps">
                 <span>1 · Versa il mix e porta a livello 10 (25–30 min).</span>
                 <span>2 · Quando è caldo, setta 6–7 per mantenimento.</span>
@@ -388,19 +388,19 @@
 
           <article class="guide-card guide-card--procedure" data-carousel-item>
             <div class="tag-row">
-              <span class="tag">Conservazione</span>
-              <span class="tag">Night</span>
-              <span class="tag">Frigo</span>
+              <span class="tag" data-i18n="festive.ops.nightStorage.tag1">Conservazione</span>
+              <span class="tag" data-i18n="festive.ops.nightStorage.tag2">Night</span>
+              <span class="tag" data-i18n="festive.ops.nightStorage.tag3">Frigo</span>
             </div>
-            <h3>Come conservarlo di notte</h3>
-            <p>Fine servizio: travasa in una jug, lascia raffreddare, copri con cling film e conserva in frigo con label.</p>
-            <ul class="stat-list">
+            <h3 data-i18n="festive.ops.nightStorage.title">Come conservarlo di notte</h3>
+            <p data-i18n="festive.ops.nightStorage.desc">Fine servizio: travasa in una jug, lascia raffreddare, copri con cling film e conserva in frigo con label.</p>
+            <ul class="stat-list" data-i18n-html="festive.ops.nightStorage.stats">
               <li>Jug: travaso a fine servizio</li>
               <li>Cool down: prima di coprire</li>
               <li>Frigo + shelf life label</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Procedura</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.procedure">Procedura</button>
+            <div class="details" data-i18n-html="festive.ops.nightStorage.details">
               <div class="steps">
                 <span>1 · Travasa in jug e lascia raffreddare.</span>
                 <span>2 · Cling film una volta freddo.</span>
@@ -411,19 +411,19 @@
 
           <article class="guide-card guide-card--procedure" data-carousel-item>
             <div class="tag-row">
-              <span class="tag">Dati tecnici</span>
-              <span class="tag">Shelf life</span>
+              <span class="tag" data-i18n="festive.ops.shelfLife.tag1">Dati tecnici</span>
+              <span class="tag" data-i18n="festive.ops.shelfLife.tag2">Shelf life</span>
               <span class="tag">3 / 30</span>
             </div>
-            <h3>Shelf life Vin Brulé (quick)</h3>
-            <p>Regola shelf life: in macchina 3 giorni dal primo warm-up; in box 30 giorni dal primo opening. Label obbligatoria.</p>
-            <ul class="stat-list">
+            <h3 data-i18n="festive.ops.shelfLife.title">Shelf life Vin Brulé (quick)</h3>
+            <p data-i18n="festive.ops.shelfLife.desc">Regola shelf life: in macchina 3 giorni dal primo warm-up; in box 30 giorni dal primo opening. Label obbligatoria.</p>
+            <ul class="stat-list" data-i18n-html="festive.ops.shelfLife.stats">
               <li>In macchina (warm): 3 giorni dal primo warm-up</li>
               <li>In box (mix): 30 giorni dal primo opening</li>
               <li>Label obbligatoria per entrambi</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Note</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.notes">Note</button>
+            <div class="details" data-i18n-html="festive.ops.shelfLife.details">
               <div class="steps">
                 <span>1 · Segna la data del primo warm-up.</span>
                 <span>2 · Applica label visibile in frigo.</span>
@@ -434,19 +434,19 @@
 
           <article class="guide-card guide-card--procedure" data-carousel-item>
             <div class="tag-row">
-              <span class="tag">Chiusura</span>
-              <span class="tag">Pulizia</span>
-              <span class="tag">Soap + hot water</span>
+              <span class="tag" data-i18n="festive.ops.cleaning.tag1">Chiusura</span>
+              <span class="tag" data-i18n="festive.ops.cleaning.tag2">Pulizia</span>
+              <span class="tag" data-i18n="festive.ops.cleaning.tag3">Soap + hot water</span>
             </div>
-            <h3>Pulizia macchina (fine giornata)</h3>
-            <p>Dopo il travaso: lava inner container + lid con sapone e acqua calda, svuota/asciuga il tank acqua e pulisci l'esterno con panno umido.</p>
-            <ul class="stat-list">
+            <h3 data-i18n="festive.ops.cleaning.title">Pulizia macchina (fine giornata)</h3>
+            <p data-i18n="festive.ops.cleaning.desc">Dopo il travaso: lava inner container + lid con sapone e acqua calda, svuota/asciuga il tank acqua e pulisci l'esterno con panno umido.</p>
+            <ul class="stat-list" data-i18n-html="festive.ops.cleaning.stats">
               <li>Inner container + lid: lavare con sapone e acqua calda</li>
               <li>Tank acqua: svuotare e asciugare</li>
               <li>Esterno: panno umido</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Checklist</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.checklist">Checklist</button>
+            <div class="details" data-i18n-html="festive.ops.cleaning.details">
               <div class="steps">
                 <span>1 · Lava e asciuga i pezzi interni.</span>
                 <span>2 · Svuota e asciuga il tank esterno.</span>
@@ -457,19 +457,19 @@
 
           <article class="guide-card guide-card--procedure" data-carousel-item>
             <div class="tag-row">
-              <span class="tag">Packaging</span>
-              <span class="tag">Delivery</span>
-              <span class="tag">Freezer hold</span>
+              <span class="tag" data-i18n="festive.ops.packaging.tag1">Packaging</span>
+              <span class="tag" data-i18n="festive.ops.packaging.tag2">Delivery</span>
+              <span class="tag" data-i18n="festive.ops.packaging.tag3">Freezer hold</span>
             </div>
-            <h3>Packaging mini panettone (delivery)</h3>
-            <p>Delivery standard: sauce pot 3/4 (1 pot per 2), panettoni agli angoli del treat box, lid + tape e freezer fino al ritiro rider.</p>
-            <ul class="stat-list">
+            <h3 data-i18n="festive.ops.packaging.title">Packaging mini panettone (delivery)</h3>
+            <p data-i18n="festive.ops.packaging.desc">Delivery standard: sauce pot 3/4 (1 pot per 2), panettoni agli angoli del treat box, lid + tape e freezer fino al ritiro rider.</p>
+            <ul class="stat-list" data-i18n-html="festive.ops.packaging.stats">
               <li>Sauce pot: 3/4 (quantità per due)</li>
               <li>Posizionamento: panettoni ai quattro angoli, sauce al centro</li>
               <li>Freezer: conserva in bag fino al pick-up driver</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card>Procedura</button>
-            <div class="details">
+            <button class="btn-ghost" data-toggle-card data-i18n="card.procedure">Procedura</button>
+            <div class="details" data-i18n-html="festive.ops.packaging.details">
               <div class="steps">
                 <span>1 · Sauce pot 3/4 e posiziona al centro.</span>
                 <span>2 · Mini panettoni agli angoli del box, chiudi lid + tape.</span>
@@ -482,20 +482,20 @@
 
       <footer class="category-footer">
         <div class="footer-icon">🎉</div>
-        <h3 class="footer-title">Linea Festiva</h3>
-        <p class="footer-tagline">Tradizione e calore nelle feste</p>
+        <h3 class="footer-title" data-i18n="festive.footer.title">Linea Festiva</h3>
+        <p class="footer-tagline" data-i18n="festive.footer.tagline">Tradizione e calore nelle feste</p>
         <div class="footer-stats">
           <div class="footer-stat">
             <span class="stat-value">6</span>
-            <span class="stat-label">Prodotti</span>
+            <span class="stat-label" data-i18n="festive.footer.stats.products">Prodotti</span>
           </div>
           <div class="footer-stat">
             <span class="stat-value">4</span>
-            <span class="stat-label">Procedure</span>
+            <span class="stat-label" data-i18n="festive.footer.stats.procedures">Procedure</span>
           </div>
           <div class="footer-stat">
             <span class="stat-value">Nov-Gen</span>
-            <span class="stat-label">Stagione</span>
+            <span class="stat-label" data-i18n="festive.footer.stats.season">Stagione</span>
           </div>
         </div>
       </footer>
