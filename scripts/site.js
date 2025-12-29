@@ -3925,6 +3925,33 @@ const gamification = (() => {
                     'tm-095', 'tm-096', 'tm-097', 'tm-098', 'tm-099', 'tm-100'],
   };
 
+  // Super-easy mode (sm-) questions: distributed across 5 topics (sm-001 to sm-100)
+  const SUPER_EASY_QUESTIONS_MAPPING = {
+    // Crepes, Waffles, Pancakes basics
+    'sweet-treats': ['sm-001', 'sm-002', 'sm-003', 'sm-004', 'sm-005', 'sm-006', 'sm-007', 'sm-008'],
+    
+    // Gelato service basics
+    'gelato-lab': ['sm-009', 'sm-010', 'sm-011', 'sm-012', 'sm-013', 'sm-014', 'sm-015', 'sm-016',
+                   'sm-017', 'sm-018', 'sm-019', 'sm-020', 'sm-021', 'sm-022', 'sm-023', 'sm-024',
+                   'sm-025', 'sm-026', 'sm-027', 'sm-028', 'sm-029', 'sm-030', 'sm-031'],
+    
+    // Drinks & Matcha
+    'caffe': ['sm-032', 'sm-033', 'sm-034', 'sm-035', 'sm-036', 'sm-037', 'sm-038', 'sm-039',
+              'sm-040', 'sm-041', 'sm-042', 'sm-043'],
+    
+    // Treats & Festive
+    'pastries': ['sm-044', 'sm-045', 'sm-046', 'sm-047', 'sm-048', 'sm-049', 'sm-050', 'sm-051',
+                 'sm-052', 'sm-053'],
+    
+    // Slitti Yo-Yo & Advanced
+    'slitti-yoyo': ['sm-054', 'sm-055', 'sm-056', 'sm-057', 'sm-058', 'sm-059', 'sm-060', 'sm-061',
+                    'sm-062', 'sm-063', 'sm-064', 'sm-065', 'sm-066', 'sm-067', 'sm-068', 'sm-069',
+                    'sm-070', 'sm-071', 'sm-072', 'sm-073', 'sm-074', 'sm-075', 'sm-076', 'sm-077',
+                    'sm-078', 'sm-079', 'sm-080', 'sm-081', 'sm-082', 'sm-083', 'sm-084', 'sm-085',
+                    'sm-086', 'sm-087', 'sm-088', 'sm-089', 'sm-090', 'sm-091', 'sm-092', 'sm-093',
+                    'sm-094', 'sm-095', 'sm-096', 'sm-097', 'sm-098', 'sm-099', 'sm-100'],
+  };
+
   // Legacy structure: keep QUIZ_QUESTIONS flat
   const QUIZ_QUESTIONS = [
     {
@@ -4628,6 +4655,14 @@ const gamification = (() => {
       explain: 'Slittosa è descritta come cocoa spread, mentre Riccosa è milk chocolate cream e Gianera dark chocolate cream.',
     },
   ];
+
+  // Super-easy pool (sm-001 .. sm-100). Base text is intentionally minimal; UI will pull i18n.
+  const SUPER_EASY_QUESTIONS = Array.from({ length: 100 }, (_, idx) => ({
+    id: `sm-${String(idx + 1).padStart(3, '0')}`,
+    question: '',
+    options: ['', '', '', ''],
+    explain: '',
+  }));
   // NOTE: "Sfida continua" was an experimental extra flow that can pop up on every 3rd star.
   // It contains legacy questions (incl. "Sicurezza") and was confusing users who expect the
   // 3-star moment to be the tab-based Quiz Slot.
@@ -5877,9 +5912,16 @@ const gamification = (() => {
   function localizeQuizQuestion(question) {
     if (!question) return question;
     const prefix = question.id ? `quiz.q.${question.id}` : null;
-    const localizedQuestion = prefix ? tr(`${prefix}.question`, null, question.question) : question.question;
+    const baseQuestion = question.question;
+    const localizedQuestion = prefix
+      ? tr(`${prefix}.question`, null, baseQuestion || `Quiz ${question.id || ''}`.trim())
+      : baseQuestion;
     const localizedOptions = Array.isArray(question.options)
-      ? question.options.map((opt, idx) => (prefix ? tr(`${prefix}.option.${idx}`, null, opt) : opt))
+      ? question.options.map((opt, idx) => {
+          const baseOpt = opt;
+          const fallbackOpt = baseOpt || `Option ${idx + 1}`;
+          return prefix ? tr(`${prefix}.option.${idx}`, null, fallbackOpt) : baseOpt;
+        })
       : question.options;
     const localizedSteps = Array.isArray(question.steps)
       ? question.steps.map((step, idx) => (prefix ? tr(`${prefix}.step.${idx}`, null, step) : step))
@@ -7209,6 +7251,47 @@ const gamification = (() => {
     return poolForTopics.length > 0 ? poolForTopics : QUIZ_QUESTIONS;  // Fallback if empty
   }
 
+  // Super-easy variant: same visited topics logic but uses SUPER_EASY_QUESTIONS and mapping.
+  function getSuperEasyQuestionsForVisitedTabs() {
+    const visitedTopics = new Set();
+
+    const tabContextToday = state.openedTabContextToday || {};
+    const pageSlugsSeen = new Set();
+
+    Object.values(tabContextToday).forEach(entry => {
+      if (entry?.pageSlug) pageSlugsSeen.add(entry.pageSlug);
+    });
+
+    const pageToTopic = {
+      'caffe': 'caffe',
+      'sweet-treats': 'sweet-treats',
+      'pastries': 'pastries',
+      'slitti-yoyo': 'slitti-yoyo',
+      'gelato-lab': 'gelato-lab',
+      'festive': 'pastries',
+    };
+
+    pageSlugsSeen.forEach(slug => {
+      const topic = pageToTopic[slug];
+      if (topic) visitedTopics.add(topic);
+    });
+
+    if (visitedTopics.size === 0) {
+      console.log('📚 No visited tabs today; returning all super-easy questions for mini quiz');
+      return SUPER_EASY_QUESTIONS;
+    }
+
+    const questionIds = new Set();
+    visitedTopics.forEach(topic => {
+      (SUPER_EASY_QUESTIONS_MAPPING[topic] || []).forEach(id => questionIds.add(id));
+    });
+
+    const poolForTopics = SUPER_EASY_QUESTIONS.filter(q => questionIds.has(q.id));
+    console.log(`🎯 Mini quiz (super-easy): found ${poolForTopics.length} questions from visited topics: ${Array.from(visitedTopics).join(', ')}`);
+
+    return poolForTopics.length > 0 ? poolForTopics : SUPER_EASY_QUESTIONS;
+  }
+
   function buildShuffledIdBag(pool) {
     return (Array.isArray(pool) ? pool : [])
       .map((q) => q?.id)
@@ -8045,9 +8128,9 @@ const gamification = (() => {
     ensureDailyState();
     if (state.quizTokens < STARS_FOR_QUIZ) return;
 
-    // Get questions filtered by visited tabs (adaptive mini quiz)
-    const topicQuestions = getQuestionsForVisitedTabs();
-    const questions = pickQuestionsFromBag('mini', topicQuestions, 1).map(localizeQuizQuestion);
+    // Get super-easy questions filtered by visited tabs (adaptive mini quiz)
+    const topicQuestions = getSuperEasyQuestionsForVisitedTabs();
+    const questions = pickQuestionsFromBag('mini-sm', topicQuestions, 1).map(localizeQuizQuestion);
     if (!questions.length) return;
 
     const handleMiniSuccess = () => {
@@ -8195,9 +8278,13 @@ const gamification = (() => {
       updateUI();
     };
 
-    // Get questions filtered by visited tabs (adaptive hard quiz)
-    const topicQuestions = getQuestionsForVisitedTabs();
-    const picked = pickQuestionsFromBag('test-me', topicQuestions, 3).map(localizeQuizQuestion);
+    // Get pools filtered by visited tabs (adaptive hard quiz)
+    const easyPool = getQuestionsForVisitedTabs();
+    const superEasyPool = getSuperEasyQuestionsForVisitedTabs();
+
+    const superEasyPicked = pickQuestionsFromBag('test-me-sm', superEasyPool, 2).map(localizeQuizQuestion);
+    const easyPicked = pickQuestionsFromBag('test-me', easyPool, 1).map(localizeQuizQuestion);
+    const picked = [...superEasyPicked, ...easyPicked];
     startQuizSession({
       modeKey: 'test-me',
       title: tr('quiz.testme.title', null, 'Test me · quiz avanzato'),
