@@ -8086,3 +8086,69 @@ body.page-home {
     min-width: 280px;
   }
 }
+
+/* ================================================================
+   HUB 3-PANEL VIEWPORT (Mobile) — no vertical scroll on the hub
+   Shows: (1) Playbook panel  (2) Cockpit carousel  (3) Assistant
+   The navbar remains sticky; hero and assistant share the viewport.
+   ================================================================ */
+@media (max-width: 600px) {
+  /* Use the viewport height for the main shell so the three blocks
+     fit without requiring page scroll. */
+  body.page-home main {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto; /* nav · hero · assistant */
+    height: 100dvh;
+    overflow: hidden; /* prevent page scroll; overlays use fixed on body */
+  }
+
+  /* Keep hero in two columns but cap its total height to the grid row */
+  .page-home .hero.hero--orbit {
+    height: 100%;
+    min-height: 0;
+    align-items: start;
+    padding: 8px 0 6px;
+  }
+
+  .page-home .hero.hero--orbit > .hero-focus,
+  .page-home .hero.hero--orbit > .hero-aside {
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* actions and content always visible */
+    overflow: hidden; /* avoid pushing the layout taller than the row */
+  }
+
+  /* Clamp copy so the Playbook panel stays compact */
+  .page-home .hero.hero--orbit .hero-lede {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Cockpit: keep only horizontal scroll of cards */
+  .page-home .carousel--cockpit .carousel-track {
+    max-height: none;
+    overflow-y: visible !important;
+  }
+
+  /* Assistant anchored at the bottom, always visible */
+  .page-home .hub-assistant {
+    position: sticky;
+    bottom: 0;
+    z-index: 900; /* below nav popovers */
+    width: min(1160px, calc(100% - 12px));
+    margin: 6px auto; /* tighter spacing in compact mode */
+  }
+
+  .page-home .hub-assistant__inner {
+    padding: 10px 12px;
+    border-radius: 16px;
+  }
+
+  .page-home .menu-search__field { padding: 8px 10px; }
+  .page-home .menu-search__field input { font-size: 14px; }
+  .page-home .menu-search.menu-search--hub .btn { padding: 8px 12px; font-size: 12px; }
+}

@@ -17,6 +17,7 @@
       'lang.en': 'English',
       'lang.es': 'Español',
       'lang.fr': 'Français',
+      'lang.loading': 'Aggiornamento lingua in corso...',
 
       'common.close': 'Chiudi',
       'toast.copied': 'Copiato negli appunti ✅',
@@ -990,6 +991,7 @@
       'lang.en': 'English',
       'lang.es': 'Español',
       'lang.fr': 'Français',
+      'lang.loading': 'Updating language...',
 
       'common.close': 'Close',
       'toast.copied': 'Copied to clipboard ✅',
@@ -4082,6 +4084,7 @@
       'lang.en': 'English',
       'lang.es': 'Español',
       'lang.fr': 'Français',
+      'lang.loading': 'Actualizando idioma...',
 
       'common.close': 'Cerrar',
       'toast.copied': 'Copiado al portapapeles ✅',
@@ -5744,6 +5747,7 @@
       'lang.en': 'English',
       'lang.es': 'Español',
       'lang.fr': 'Français',
+      'lang.loading': 'Mise à jour de la langue...',
 
       'common.close': 'Fermer',
       'toast.copied': 'Copié dans le presse-papiers ✅',
@@ -8111,6 +8115,90 @@
     return out;
   };
 
+  // --- Runtime import for missing Italian quiz translations (super-easy sm-*** and easy tm-***) ---
+  let italianQuizLoaded = false;
+
+  const parseItalianQuizFile = (content, prefix) => {
+    const entries = {};
+    const blocks = String(content || '')
+      .split(/\n\s*\n/)
+      .map((b) => b.trim())
+      .filter(Boolean);
+
+    blocks.forEach((block, idx) => {
+      const qid = `${prefix}-${String(idx + 1).padStart(3, '0')}`;
+      const lines = block.split(/\n/).map((l) => l.trim()).filter(Boolean);
+      if (!lines.length) return;
+
+      const question = lines[0] || '';
+      const options = [];
+      let answerIdx = null;
+      let explain = '';
+
+      lines.slice(1).forEach((line) => {
+        const optMatch = line.match(/^([A-D])\)\s*(.*)$/);
+        if (optMatch) {
+          const letter = optMatch[1];
+          const text = optMatch[2] || '';
+          const pos = { A: 0, B: 1, C: 2, D: 3 }[letter];
+          if (pos != null) options[pos] = text;
+          return;
+        }
+
+        const solMatch = line.match(/^Soluzione:\s*([A-D])\b/i);
+        if (solMatch) {
+          const letter = solMatch[1].toUpperCase();
+          answerIdx = { A: 0, B: 1, C: 2, D: 3 }[letter];
+          return;
+        }
+
+        const motMatch = line.match(/^Motivazione:\s*(.+)$/i);
+        if (motMatch) {
+          explain = motMatch[1] || '';
+        }
+      });
+
+      for (let i = 0; i < 4; i += 1) {
+        if (options[i] == null) options[i] = '';
+      }
+
+      entries[`quiz.q.${qid}.question`] = question;
+      options.forEach((opt, i) => {
+        entries[`quiz.q.${qid}.option.${i}`] = opt;
+      });
+      entries[`quiz.q.${qid}.explain`] = explain;
+      if (answerIdx != null) entries[`quiz.q.${qid}.correct`] = answerIdx;
+    });
+
+    return entries;
+  };
+
+  const loadItalianQuizTranslations = async () => {
+    if (italianQuizLoaded) return;
+    try {
+      const [veryEasyRes, easyRes] = await Promise.allSettled([
+        fetch('q&a very-easy mode -italiano.txt'),
+        fetch('q&a easy mode -italiano.txt'),
+      ]);
+
+      const dictIt = dict.it || (dict.it = {});
+
+      if (veryEasyRes.status === 'fulfilled' && veryEasyRes.value.ok) {
+        const txt = await veryEasyRes.value.text();
+        Object.assign(dictIt, parseItalianQuizFile(txt, 'sm'));
+      }
+
+      if (easyRes.status === 'fulfilled' && easyRes.value.ok) {
+        const txt = await easyRes.value.text();
+        Object.assign(dictIt, parseItalianQuizFile(txt, 'tm'));
+      }
+
+      italianQuizLoaded = true;
+    } catch (err) {
+      console.error('Italian quiz import failed', err);
+    }
+  };
+
   const normalizeLang = (value) => {
     const v = String(value || '').trim().toLowerCase();
     if (SUPPORTED.includes(v)) return v;
@@ -8209,6 +8297,10 @@
 
   const setLang = (nextLang) => {
     const lang = normalizeLang(nextLang) || DEFAULT_LANG;
+    
+    // Show loading spinner
+    showLanguageLoadingSpinner();
+    
     try { localStorage.setItem(STORAGE_KEY, lang); } catch {}
 
     try {
@@ -8216,11 +8308,75 @@
       document.documentElement.dataset.lang = lang;
     } catch {}
 
-    applyTranslations(document);
+    // Apply translations after a brief delay to show loading state
+    setTimeout(() => {
+      const maybeLoad = lang === 'it' ? loadItalianQuizTranslations() : Promise.resolve();
+      Promise.resolve(maybeLoad)
+        .catch(() => {})
+        .finally(() => {
+          applyTranslations(document);
+          
+          try {
+            document.dispatchEvent(new CustomEvent('badiani:lang-changed', { detail: { lang } }));
+          } catch {}
+          
+          // Hide loading spinner after translations are applied
+          setTimeout(hideLanguageLoadingSpinner, 300);
+        });
+    }, 200);
+  };
 
-    try {
-      document.dispatchEvent(new CustomEvent('badiani:lang-changed', { detail: { lang } }));
-    } catch {}
+  const showLanguageLoadingSpinner = () => {
+    let spinner = document.getElementById('lang-loading-spinner');
+    if (!spinner) {
+      spinner = document.createElement('div');
+      spinner.id = 'lang-loading-spinner';
+      spinner.innerHTML = `
+        <div style="
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(23, 35, 68, 0.95);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          z-index: 99999;
+          backdrop-filter: blur(4px);
+        ">
+          <div style="
+            width: 48px;
+            height: 48px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--brand-gold, #d4af37);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+          "></div>
+          <p style="
+            margin-top: 20px;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+          " data-i18n="lang.loading">Aggiornamento lingua...</p>
+          <style>
+            @keyframes spin {
+              to { transform: rotate(360deg); }
+            }
+          </style>
+        </div>
+      `;
+      document.body.appendChild(spinner);
+    }
+    spinner.style.display = 'flex';
+  };
+
+  const hideLanguageLoadingSpinner = () => {
+    const spinner = document.getElementById('lang-loading-spinner');
+    if (spinner) {
+      spinner.style.display = 'none';
+    }
   };
 
   const bindLanguageControls = (root = document) => {

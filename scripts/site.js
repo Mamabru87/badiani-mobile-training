@@ -519,8 +519,15 @@ const tr = (key, vars, fallback) => {
     const api = window.BadianiI18n;
     if (api && typeof api.t === 'function') {
       const translated = api.t(key, vars);
-      // If the translation is missing (api returns the key), fall back gracefully.
+      // If the translation is missing (api returns the key), check for EN fallback for sm- quiz questions
       if (translated !== key) return translated;
+      
+      // Special fallback: use EN for sm-XXX questions when IT doesn't have them
+      if (api.getLang() === 'it' && key && key.startsWith('quiz.q.sm-')) {
+        const enTable = api.dict?.en || {};
+        const enTranslated = enTable[key];
+        if (enTranslated != null) return String(enTranslated);
+      }
     }
   } catch {}
   if (fallback != null && fallback !== undefined) return String(fallback);
@@ -969,6 +976,24 @@ scrollButtons.forEach((btn) => {
   
   if (!drawer) return;
 
+  // Listen for language changes and reload KB
+  document.addEventListener('badiani:lang-changed', async (e) => {
+    const newLang = e.detail?.lang || 'it';
+    console.log(`[Assistant] Language changed to ${newLang}, reloading KB...`);
+    
+    // Clear existing KB cache for all languages to force reload
+    kbLoadPromises.clear();
+    kbIndexByLang.clear();
+    
+    // Preload KB for new language
+    try {
+      await loadKB(newLang);
+      console.log(`[Assistant] KB loaded for ${newLang}`);
+    } catch (err) {
+      console.error(`[Assistant] Failed to load KB for ${newLang}:`, err);
+    }
+  });
+
   const sleep = (ms) => new Promise((resolve) => window.setTimeout(resolve, Math.max(0, Number(ms) || 0)));
 
   const stopAssistantTyping = () => {
@@ -1003,25 +1028,10 @@ scrollButtons.forEach((btn) => {
   ];
 
   const detectKbLanguage = (text) => {
-    const t = (text || '').toLowerCase();
-    const fallback = getUiLang();
-    const itWords = /(come|quanti|quale|cosa|perch[eé]|dove|quando|grazie|aiuto)/i;
-    const enWords = /(how|many|what|where|why|when|please|help|thank|type)/i;
-    const esWords = /(cómo|cuántos|cuál|qué|dónde|por qué|cuándo|gracias|ayuda)/i;
-    const frWords = /(comment|combien|quel|quoi|où|pourquoi|quand|merci|aide)/i;
-    const scores = { it: 0, en: 0, es: 0, fr: 0 };
-    if (itWords.test(t)) scores.it += 10;
-    if (enWords.test(t)) scores.en += 10;
-    if (esWords.test(t)) scores.es += 10;
-    if (frWords.test(t)) scores.fr += 10;
-    if (/\b(coni|cono|coppett|churros|cr[eè]pe|vin\s*brul|cioccolat|cappuccino|gelato|scheda|quando|come\s*si|quanti\s+grammi)\b/i.test(t)) scores.it += 15;
-    if (/\b(cones?|cups?|churros|cr[eè]pes?|mulled|cappuccino|chocolate|how|many|type|flavor)\b/i.test(t)) scores.en += 15;
-    if (/\b(conos?|copas?|churros|cr[eè]pes?|vino|chocolate|gelato|cuánt|cómo|tipo)\b/i.test(t)) scores.es += 15;
-    if (/\b(cornets?|coupes?|churros|cr[eè]pes?|vin|chocolat|gelato|combien|comment|type)\b/i.test(t)) scores.fr += 15;
-    const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-    const top = sorted[0];
-    const lang = (top && top[1] > 0 && top[0]) || fallback || 'it';
-    return KB_LANGS.includes(lang) ? lang : 'it';
+    // ALWAYS use UI language selection instead of auto-detecting from query text.
+    // This ensures the assistant responds ONLY in the selected language.
+    const selectedLang = getUiLang();
+    return KB_LANGS.includes(selectedLang) ? selectedLang : 'it';
   };
 
   const loadKB = async (lang = getUiLang()) => {
@@ -1734,7 +1744,7 @@ scrollButtons.forEach((btn) => {
     const header = document.createElement('div');
     header.className = 'menu-search__assistant-header';
     header.innerHTML = `
-      <p class="menu-search__assistant-title">BERNY</p>
+      <p class="menu-search__assistant-title" data-i18n="assistant.title">BERNY</p>
       <button class="menu-search__assistant-clear" type="button" data-menu-assistant-clear aria-label="Pulisci" data-i18n-attr="aria-label:assistant.clearAria">×</button>
     `;
 
@@ -1756,6 +1766,11 @@ scrollButtons.forEach((btn) => {
 
     box.append(avatar, bubble);
     searchRoot.appendChild(box);
+
+    // Apply translations to dynamically created UI
+    if (typeof window.BadianiI18n?.applyTranslations === 'function') {
+      try { window.BadianiI18n.applyTranslations(box); } catch {}
+    }
 
     const clearBtn = box.querySelector('[data-menu-assistant-clear]');
     if (clearBtn) {
@@ -2161,10 +2176,34 @@ scrollButtons.forEach((btn) => {
     const kbHit = await kbRetrieve(raw);
     if (kbHit) {
       const cta = pickDefaultCtaHref(raw) || kbHit.defaultHref || '';
+      const currentLang = getUiLang();
+      
+      // Build language-specific messages
+      const verifyMessages = {
+        'it': '\n\nPer sicurezza, verifica i dettagli nella scheda di riferimento.',
+        'en': '\n\nFor safety, verify the details in the reference card.',
+        'es': '\n\nPor seguridad, verifica los detalles en la ficha de referencia.',
+        'fr': '\n\nPour plus de sûreté, vérifiez les détails dans la fiche de référence.'
+      };
+      
+      const ctaLabels = {
+        'it': 'Apri scheda consigliata',
+        'en': 'Open recommended card',
+        'es': 'Abrir ficha recomendada',
+        'fr': 'Ouvrir la fiche recommandée'
+      };
+      
+      const examplesByLang = {
+        'it': ['Coni: quanti gusti e grammi?', 'Churros: timing?', 'Waffles: potenza e minuti?'],
+        'en': ['Cones: how many flavors and grams?', 'Churros: timing?', 'Waffles: power and minutes?'],
+        'es': ['Conos: ¿cuántos sabores y gramos?', 'Churros: ¿tiempo?', 'Waffles: ¿potencia y minutos?'],
+        'fr': ['Cornets: combien de parfums et grammes?', 'Churros: timing?', 'Gaufres: puissance et minutes?']
+      };
+      
       return {
-        message: `${summarizeSnippet(kbHit.text)}\n\nPer sicurezza, verifica i dettagli nella scheda di riferimento.`,
-        actions: cta ? [{ label: 'Apri scheda consigliata', href: cta }] : [],
-        examples: ['Coni: quanti gusti e grammi?', 'Churros: timing?', 'Waffles: potenza e minuti?'],
+        message: `${summarizeSnippet(kbHit.text)}${verifyMessages[currentLang] || verifyMessages['it']}`,
+        actions: cta ? [{ label: ctaLabels[currentLang] || ctaLabels['it'], href: cta }] : [],
+        examples: examplesByLang[currentLang] || examplesByLang['it'],
       };
     }
 
@@ -2172,16 +2211,52 @@ scrollButtons.forEach((btn) => {
     const match = bestMatch(raw);
     if (match) {
       const href = buildHrefFromResult(match);
+      const currentLang = getUiLang();
+      
+      const openLabels = {
+        'it': 'Apri',
+        'en': 'Open',
+        'es': 'Abrir',
+        'fr': 'Ouvrir'
+      };
+      
       const label = match.isCategory
-        ? `Apri ${match.label}`
-        : `Apri ${match.label}`;
-      const baseMsg = looksLikeQuestion(raw)
-        ? 'Ok — ti porto alla scheda più pertinente. Dentro trovi lo standard completo.'
-        : 'Trovato. Ti porto alla scheda di riferimento.';
+        ? `${openLabels[currentLang] || 'Apri'} ${match.label}`
+        : `${openLabels[currentLang] || 'Apri'} ${match.label}`;
+      
+      const messages = {
+        'it': {
+          question: 'Ok — ti porto alla scheda più pertinente. Dentro trovi lo standard completo.',
+          found: 'Trovato. Ti porto alla scheda di riferimento.'
+        },
+        'en': {
+          question: 'OK — I\'ll take you to the most relevant card. Inside you\'ll find the complete standard.',
+          found: 'Found. I\'ll take you to the reference card.'
+        },
+        'es': {
+          question: 'OK — te llevo a la ficha más relevante. Dentro encontrarás el estándar completo.',
+          found: 'Encontrado. Te llevo a la ficha de referencia.'
+        },
+        'fr': {
+          question: 'OK — je vous emmène à la fiche la plus pertinente. À l\'intérieur, vous trouverez le standard complet.',
+          found: 'Trouvé. Je vous emmène à la fiche de référence.'
+        }
+      };
+      
+      const examplesByLang = {
+        'it': ['Mostrami Gelato Boxes', 'Dove trovo upselling?', 'Come si fa l\'Afternoon Tea?'],
+        'en': ['Show me Gelato Boxes', 'Where do I find upselling?', 'How do I make Afternoon Tea?'],
+        'es': ['Muéstrame Gelato Boxes', '¿Dónde encuentro upselling?', '¿Cómo se hace Afternoon Tea?'],
+        'fr': ['Montrez-moi Gelato Boxes', 'Où trouver l\'upselling?', 'Comment faire l\'Afternoon Tea?']
+      };
+      
+      const langMessages = messages[currentLang] || messages['it'];
+      const baseMsg = looksLikeQuestion(raw) ? langMessages.question : langMessages.found;
+      
       return {
         message: `${baseMsg}`,
         actions: href ? [{ label, href }] : [],
-        examples: ['Mostrami Gelato Boxes', 'Dove trovo upselling?', 'Come si fa l’Afternoon Tea?'],
+        examples: examplesByLang[currentLang] || examplesByLang['it'],
       };
     }
 
@@ -2282,12 +2357,26 @@ scrollButtons.forEach((btn) => {
   // Keep mood line aligned when UI language changes.
   document.addEventListener('badiani:lang-changed', () => {
     applyMoodLine();
-    // If the assistant is in its idle/greeting state, refresh strings.
+    
+    // Re-apply translations to assistant UI (title, labels, etc.)
+    if (typeof window.BadianiI18n?.applyTranslations === 'function') {
+      try {
+        const assistantRoot = searchRoot?.querySelector('[data-menu-assistant]');
+        if (assistantRoot) window.BadianiI18n.applyTranslations(assistantRoot);
+      } catch {}
+    }
+    
+    // ALWAYS refresh the assistant greeting and examples when language changes
     try {
       const current = normalize(searchInput?.value || '');
       if (!current) {
+        // If no query, show greeting in new language
         lastAssistantQuery = '';
         showAssistantGreeting();
+      } else {
+        // If there's a query, re-run the assistant to get new language
+        lastAssistantQuery = ''; // Force refresh
+        handleAssistantSubmit();
       }
     } catch {}
   });
@@ -2841,8 +2930,8 @@ scrollButtons.forEach((btn) => {
     const header = document.createElement('div');
     header.className = 'menu-search__assistant-header';
     header.innerHTML = `
-      <p class="menu-search__assistant-title">BERNY</p>
-      <button class="menu-search__assistant-clear" type="button" data-menu-assistant-clear aria-label="Pulisci">×</button>
+      <p class="menu-search__assistant-title" data-i18n="assistant.title">BERNY</p>
+      <button class="menu-search__assistant-clear" type="button" data-menu-assistant-clear aria-label="Pulisci" data-i18n-attr="aria-label:assistant.clearAria">×</button>
     `;
 
     const msg = document.createElement('p');
@@ -2863,6 +2952,11 @@ scrollButtons.forEach((btn) => {
 
     box.append(avatar, bubble);
     searchRoot.appendChild(box);
+
+    // Apply translations to dynamically created UI
+    if (typeof window.BadianiI18n?.applyTranslations === 'function') {
+      try { window.BadianiI18n.applyTranslations(box); } catch {}
+    }
 
     const clearBtn = box.querySelector('[data-menu-assistant-clear]');
     if (clearBtn) {
@@ -3469,6 +3563,29 @@ scrollButtons.forEach((btn) => {
       try { searchInput.focus({ preventScroll: true }); } catch {}
     });
   }
+
+  // Listen for language changes and refresh assistant UI
+  document.addEventListener('badiani:lang-changed', () => {
+    // Re-apply translations to assistant UI (title, labels, etc.)
+    if (typeof window.BadianiI18n?.applyTranslations === 'function') {
+      try {
+        const assistantRoot = searchRoot?.querySelector('[data-menu-assistant]');
+        if (assistantRoot) window.BadianiI18n.applyTranslations(assistantRoot);
+      } catch {}
+    }
+    
+    // Refresh the assistant greeting and examples in new language
+    try {
+      const current = normalize(searchInput?.value || '');
+      if (!current) {
+        lastAssistantQuery = '';
+        showAssistantGreeting();
+      } else {
+        lastAssistantQuery = '';
+        handleAssistantSubmit();
+      }
+    } catch {}
+  });
 
   // Initial state
   renderSuggestions('');
@@ -4657,11 +4774,14 @@ const gamification = (() => {
   ];
 
   // Super-easy pool (sm-001 .. sm-100). Base text is intentionally minimal; UI will pull i18n.
+  const SM_CORRECT_ANSWERS = [2, 0, 0, 1, 0, 1, 1, 0, 1, 2, 1, 1, 1, 2, 2, 0, 2, 1, 0, 2, 1, 2, 1, 2, 1, 1, 1, 0, 0, 1, 2, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 2, 2, 2, 1, 1, 1, 2, 0, 2, 1, 0, 1, 1, 0, 0, 2, 1, 2, 2, 2, 2, 0, 0, 1, 0, 0, 1, 2, 0, 2, 2, 2, 1, 0, 0, 0, 2, 2, 0, 1, 0, 0, 1, 1, 0, 2, 3, 0, 1, 2, 0, 2, 2, 0, 1, 0, 0];
+
   const SUPER_EASY_QUESTIONS = Array.from({ length: 100 }, (_, idx) => ({
     id: `sm-${String(idx + 1).padStart(3, '0')}`,
     question: '',
     options: ['', '', '', ''],
     explain: '',
+    correct: SM_CORRECT_ANSWERS[idx],
   }));
   // NOTE: "Sfida continua" was an experimental extra flow that can pop up on every 3rd star.
   // It contains legacy questions (incl. "Sicurezza") and was confusing users who expect the
@@ -5927,6 +6047,10 @@ const gamification = (() => {
     if (has('slitti', 'yo-yo', 'yoyo')) {
       return { href: 'slitti-yoyo.html', label: 'Apri Slitti & Yo-Yo' };
     }
+    // Affogati/affogato (es. Dirty Matcha Affogato) vivono in Bar & Drinks, non in Gelato Lab
+    if (has('affogato', 'affogati', 'dirty matcha')) {
+      return { href: 'caffe.html', label: 'Apri Bar & Drinks' };
+    }
     if (has('gelato', 'buontalenti', 'vetrina', 'vaschetta', 'cristalli', 'spatol')) {
       return { href: 'gelato-lab.html', label: 'Apri Gelato Lab' };
     }
@@ -6020,7 +6144,10 @@ const gamification = (() => {
 
   function findQuizById(qid) {
     if (!qid) return null;
-    return QUIZ_QUESTIONS.find((q) => q.id === qid) || CHALLENGE_QUESTIONS.find((q) => q.id === qid) || null;
+    return QUIZ_QUESTIONS.find((q) => q.id === qid) || 
+           SUPER_EASY_QUESTIONS.find((q) => q.id === qid) || 
+           CHALLENGE_QUESTIONS.find((q) => q.id === qid) || 
+           null;
   }
 
   function localizeHistoryItem(item) {
@@ -6034,8 +6161,9 @@ const gamification = (() => {
       correctText: review.correctText,
       explanation: review.explanation,
       suggestion: review.suggestion,
-      specHref: item.specHref || review.specHref,
-      specLabel: item.specLabel || review.specLabel,
+      // Always prefer freshly derived spec links/labels to avoid stale links after content changes
+      specHref: review.specHref || item.specHref,
+      specLabel: review.specLabel || item.specLabel,
     };
   }
 
