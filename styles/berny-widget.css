@@ -1,0 +1,505 @@
+/* FILE: styles/berny-widget.css - FLOATING CHAT WIDGET */
+
+/* Widget Container */
+.berny-widget {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  font-family: inherit;
+}
+
+/* Floating Action Button */
+.berny-fab {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0066cc 0%, #0099ff 100%);
+  border: none;
+  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: visible;
+}
+
+.berny-fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 12px 32px rgba(0, 102, 204, 0.5);
+}
+
+.berny-fab:active {
+  transform: scale(0.95);
+}
+
+.berny-fab__icon,
+.berny-fab__close {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.berny-fab__close {
+  color: white;
+}
+
+.berny-fab__icon[hidden],
+.berny-fab__close[hidden] {
+  opacity: 0;
+  transform: rotate(90deg) scale(0);
+}
+
+/* Badge notifiche */
+.berny-fab__badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  background: #ff4444;
+  color: white;
+  border-radius: 11px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(255, 68, 68, 0.4);
+  animation: badgePulse 2s infinite;
+}
+
+@keyframes badgePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+/* Pulse animation (used on first visit to attract attention) */
+@keyframes welcomePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); box-shadow: 0 12px 48px rgba(0, 102, 204, 0.6); }
+}
+
+/* Chat Window */
+.berny-chat-window {
+  position: absolute;
+  bottom: 80px;
+  right: 0;
+  width: 380px;
+  height: 520px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.berny-chat-window:not([hidden]) {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: all;
+}
+
+/* Header */
+.berny-chat-header {
+  padding: 16px;
+  background: linear-gradient(135deg, #0066cc 0%, #004499 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.berny-chat-header__content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.berny-avatar-live {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.berny-chat-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.berny-chat-status {
+  margin: 2px 0 0;
+  font-size: 0.75rem;
+  opacity: 0.9;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 8px rgba(74, 222, 128, 0.6);
+  animation: statusPulse 2s infinite;
+}
+
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.berny-minimize-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.berny-minimize-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Chat Body */
+.berny-chat-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px;
+  background: #f8f9fa;
+  scroll-behavior: smooth;
+}
+
+/* Messages */
+.chat-message {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  opacity: 0;
+  animation: messageSlideUp 0.3s ease forwards;
+}
+
+@keyframes messageSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.chat-message--user {
+  flex-direction: row-reverse;
+}
+
+.message-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #0066cc 0%, #0099ff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.message-bubble {
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  max-width: 75%;
+  word-wrap: break-word;
+}
+
+.chat-message--berny .message-bubble {
+  background: white;
+  color: #1a1a1a;
+  border-top-left-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.chat-message--user .message-bubble {
+  background: #0066cc;
+  color: white;
+  border-top-right-radius: 4px;
+}
+
+.message-time {
+  display: block;
+  font-size: 0.7rem;
+  opacity: 0.6;
+  margin-top: 4px;
+}
+
+/* Typing indicator */
+.typing-indicator {
+  display: flex;
+  gap: 4px;
+  padding: 12px;
+}
+
+.typing-indicator span {
+  width: 6px;
+  height: 6px;
+  background: #0066cc;
+  border-radius: 50%;
+  animation: typingBounce 1.4s infinite ease-in-out;
+}
+
+.typing-indicator span:nth-child(1) { animation-delay: 0s; }
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingBounce {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
+  30% {
+    transform: translateY(-8px);
+    opacity: 1;
+  }
+}
+
+/* Footer */
+.berny-chat-footer {
+  padding: 12px;
+  background: white;
+  border-top: 1px solid #e0e0e0;
+  flex-shrink: 0;
+}
+
+.berny-input-wrapper {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.berny-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 2px solid #e0e0e0;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.berny-input:focus {
+  outline: none;
+  border-color: #0066cc;
+}
+
+.berny-send-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0066cc 0%, #0099ff 100%);
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.berny-send-btn:hover:not(:disabled) {
+  transform: scale(1.1);
+}
+
+.berny-send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Suggestions */
+.berny-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.suggestion-chip {
+  padding: 6px 12px;
+  background: #f0f7ff;
+  border: 1px solid #0066cc;
+  border-radius: 16px;
+  font-size: 0.75rem;
+  color: #0066cc;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.suggestion-chip:hover {
+  background: #0066cc;
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+  .berny-widget {
+    bottom: 16px;
+    right: 16px;
+  }
+
+  .berny-fab {
+    width: 56px;
+    height: 56px;
+  }
+
+  .berny-chat-window {
+    width: calc(100vw - 32px);
+    height: calc(100vh - 120px);
+    max-height: 600px;
+    bottom: 76px;
+    right: -8px;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .berny-chat-window {
+    background: #1a1a1a;
+  }
+
+  .berny-chat-body {
+    background: #0d0d0d;
+  }
+
+  .berny-chat-footer {
+    background: #1a1a1a;
+    border-top-color: #333;
+  }
+
+  .message-bubble {
+    background: #2d2d2d;
+    color: #ffffff;
+  }
+
+  .chat-message--user .message-bubble {
+    background: #0066cc;
+  }
+
+  .berny-input {
+    background: #2d2d2d;
+    border-color: #404040;
+    color: #ffffff;
+  }
+}
+
+/* ------------------------------------------------------------------------- */
+/* Compatibility layer for current berny-ui.js markup                          */
+/*
+  berny-ui.js currently renders:
+  - .user-message > .user-bubble
+  - .berny-message > .message-bubble
+  - typing: .berny-message--typing > .message-bubble--typing > .typing-dots
+  - streaming: .berny-message--streaming
+
+  The rules below map those classes onto the visual language above.
+*/
+
+.berny-chat-body .user-message,
+.berny-chat-body .berny-message {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  opacity: 0;
+  animation: messageSlideUp 0.3s ease forwards;
+}
+
+.berny-chat-body .user-message {
+  justify-content: flex-end;
+}
+
+.berny-chat-body .berny-message {
+  justify-content: flex-start;
+}
+
+.berny-chat-body .user-bubble {
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  max-width: 75%;
+  word-wrap: break-word;
+  background: #0066cc;
+  color: white;
+  border-top-right-radius: 4px;
+}
+
+.berny-chat-body .berny-message .message-bubble {
+  background: white;
+  color: #1a1a1a;
+  border-top-left-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.berny-chat-body .berny-message--typing .message-bubble--typing {
+  padding: 12px;
+}
+
+.berny-chat-body .typing-dots {
+  display: flex;
+  gap: 4px;
+  padding: 0;
+  align-items: center;
+}
+
+.berny-chat-body .typing-dots span {
+  width: 6px;
+  height: 6px;
+  background: #0066cc;
+  border-radius: 50%;
+  animation: typingBounce 1.4s infinite ease-in-out;
+}
+
+.berny-chat-body .typing-dots span:nth-child(1) { animation-delay: 0s; }
+.berny-chat-body .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.berny-chat-body .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+.berny-chat-body .berny-message--streaming .message-bubble::after {
+  content: '▊';
+  display: inline-block;
+  margin-left: 2px;
+  animation: bernyStreamingBlink 0.8s infinite;
+}
+
+@keyframes bernyStreamingBlink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}

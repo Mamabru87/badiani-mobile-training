@@ -6,16 +6,69 @@
     <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
+    <link rel="preconnect" href="https://unpkg.com" />
+    <link rel="dns-prefetch" href="https://unpkg.com" />
     <title>Badiani Training Orbit</title>
     <link rel="stylesheet" href="styles/site.css?v=20251229_1" />
+    <!-- Storage Manager - Sistema centralizzato dati -->
+    <script src="scripts/storage-manager.js?v=20251230_5"></script>
     <script defer src="scripts/i18n.js?v=20251228_4"></script>
-    <script defer src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <script defer src="https://unpkg.com/@lottiefiles/lottie-player@2.0.2/dist/lottie-player.js" integrity="sha384-6nNC/3GtcCDYvwICSu7S4cRYhH0K27ldVvFKPklU4TmJJBlXj7czbf4ne8tj+I6Q" crossorigin="anonymous"></script>
     <script defer src="scripts/site.js?v=20251229_2"></script>
     <script defer src="scripts/gelato-effects.js?v=20251227_1"></script>
+    <link rel="preload" href="styles/site.css?v=20251229_1" as="style" />
+    <link rel="preload" href="scripts/i18n.js?v=20251228_4" as="script" />
   <!-- COCKPIT_COMPACT block removed: styling now lives in styles/site.css -->
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Course",
+        "name": "Badiani Training Orbit - Playbook Operativo",
+        "description": "Corso di formazione interattivo per team Badiani 1932 su tradizione fiorentina, gelato artigianale e procedure operative",
+        "provider": {
+          "@type": "Organization",
+          "name": "Badiani 1932",
+          "url": "https://www.badiani1932.it"
+        },
+        "courseMode": "online",
+        "educationalLevel": "Beginner to Advanced",
+        "inLanguage": ["it", "en", "es", "fr"],
+        "hasCourseInstance": [
+          {
+            "@type": "CourseInstance",
+            "courseMode": "online",
+            "courseWorkload": "PT2H"
+          }
+        ]
+      }
+    </script>
 </head>
   <body class="page-home">
     <main>
+
+      <!-- Loading overlay -->
+      <div class="loading-overlay" data-loading hidden>
+        <div class="loading-spinner" role="status">
+          <span class="sr-only" data-i18n="loading.message">Caricamento in corso...</span>
+        </div>
+      </div>
+
+      <!-- Error toast -->
+      <div class="error-toast" data-error-toast hidden role="alert" aria-live="polite">
+        <div class="error-toast__content">
+          <svg class="error-toast__icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9 9a1 1 0 012 0v4a1 1 0 11-2 0V9zm1-4a1 1 0 100 2 1 1 0 000-2z" />
+          </svg>
+          <p class="error-toast__message" data-error-message></p>
+        </div>
+        <button type="button" class="error-toast__close" data-error-close aria-label="Chiudi notifica">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 4L4 12M4 4l8 8" />
+          </svg>
+        </button>
+      </div>
+
       <nav class="nav-shell">
         <a class="brand" href="index.html" aria-label="Torna alla home Badiani" data-i18n-attr="aria-label:nav.homeAria">
           <img src="assets/brand/logo-badiani.jpg" data-default-src="assets/brand/logo-badiani.jpg" data-alt-src="assets/brand/logo-b-blue.png" alt="Badiani logo" class="brand-avatar" />
@@ -77,200 +130,301 @@
         </div>
       </nav>
 
-      <section class="hero hero--orbit">
-        <div class="hero-focus">
-          <div class="badge">
-            <span data-i18n="hub.badge">Training Orbit</span>
+      <section class="hero hero--dashboard">
+        <div class="hero-header">
+          <div class="hero-header__content">
+            <div class="badge badge--glow">
+              <span data-i18n="hub.badge">Training Orbit</span>
+            </div>
+            <h1 class="hero-title" data-i18n="hub.title">Playbook operativo Badiani 1932</h1>
+            <p class="hero-subtitle" data-i18n="hub.lede">
+              Tradizione fiorentina, rituali di boutique e procedure digitalizzate in un'unica plancia
+            </p>
           </div>
-          <p class="hero-eyebrow" data-i18n="hub.eyebrow">Hub operativo · aggiornato ogni giorno</p>
-          <h1 data-i18n="hub.title">Playbook operativo Badiani 1932</h1>
-          <p class="hero-lede" data-i18n="hub.lede">
-            Tradizione fiorentina, rituali di boutique e procedure digitalizzate in un'unica plancia: consulta, ripassa e chiudi i quiz per riscattare gelati reali.
-          </p>
+
           <div class="hero-actions">
-            <button class="btn btn-primary" type="button" data-menu-toggle aria-controls="nav-panel" data-i18n="hub.openCategories">Apri categorie</button>
-            <button class="btn btn-ghost" type="button" data-info-launch data-i18n="hub.rules">Regolamento</button>
+            <button class="btn btn--primary" type="button" data-menu-toggle aria-controls="nav-panel" data-i18n="hub.openCategories">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="3" y="3" width="7" height="7" rx="1" />
+                <rect x="14" y="3" width="7" height="7" rx="1" />
+                <rect x="14" y="14" width="7" height="7" rx="1" />
+                <rect x="3" y="14" width="7" height="7" rx="1" />
+              </svg>
+              Categorie
+            </button>
+            <button class="btn btn--ghost" type="button" data-info-launch data-i18n="hub.rules">
+              Regolamento
+            </button>
           </div>
         </div>
-        <aside class="hero-aside">
-          <section class="carousel carousel--cockpit" data-carousel="cockpit" data-summary>
-            <header class="carousel-header" data-carousel-header>
-              <div class="carousel-header__title-block">
-                <p class="summary-eyebrow" data-i18n="cockpit.eyebrow">Orbit cockpit</p>
-                <h2 class="carousel-title" data-carousel-title data-i18n="cockpit.title">Panoramica live</h2>
-                <span class="carousel-category" data-i18n="cockpit.sub">Scorri le schede e resta sempre sul pezzo.</span>
+
+        <div class="dashboard-grid" data-summary data-carousel="cockpit">
+          <article class="dash-card dash-card--daily dash-card--featured" data-carousel-item>
+            <div class="dash-card__header">
+              <div class="dash-card__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 16v-4M12 8h.01" />
+                </svg>
               </div>
-              <div class="carousel-indicators" data-carousel-indicators aria-label="Indicatori panoramica" data-i18n-attr="aria-label:cockpit.indicatorsAria"></div>
-            </header>
-
-            <div class="carousel-track" data-carousel-track>
-              <article class="summary-card summary-card--daily" data-carousel-item>
-                <div class="summary-card__header">
-                  <p class="summary-card__eyebrow" data-i18n="cockpit.daily.eyebrow">Training</p>
-                  <span class="pill pill--blue" data-i18n="cockpit.daily.badge">Live</span>
-                </div>
-                <h3 class="summary-card__title" data-i18n="cockpit.daily.title">Training quotidiano</h3>
-                <p class="summary-card__question" data-daily-question data-i18n="cockpit.daily.loading">Caricamento domanda del giorno...</p>
-                <p class="summary-card__hint" data-i18n="cockpit.daily.hint">Apri una scheda, rispondi e guadagna stelline extra.</p>
-              </article>
-
-              <article class="summary-card summary-card--performance" data-carousel-item>
-                <div class="summary-card__header">
-                  <p class="summary-card__eyebrow" data-i18n="cockpit.perf.eyebrow">Oggi</p>
-                  <span class="pill pill--soft" data-i18n="cockpit.perf.badge">Aggiornato</span>
-                </div>
-                <h3 class="summary-card__title" data-i18n="cockpit.perf.title">Performance oggi</h3>
-                <div class="summary-stats">
-                  <div class="stat">
-                    <span class="stat-label" data-i18n="cockpit.stat.stars">Stelle</span>
-                    <span class="stat-value" data-perf-stars>0</span>
-                  </div>
-                  <div class="stat">
-                    <span class="stat-label" data-i18n="cockpit.stat.bonusPoints">Punti Bonus</span>
-                    <span class="stat-value" data-perf-points>0</span>
-                  </div>
-                  <div class="stat">
-                    <span class="stat-label" data-i18n="cockpit.stat.gelatiWon">Gelati vinti</span>
-                    <span class="stat-value" data-perf-gelati>0</span>
-                  </div>
-                  <div class="stat">
-                    <span class="stat-label" data-i18n="cockpit.stat.quizCorrect">Quiz corretti</span>
-                    <span class="stat-value" data-perf-quiz-correct>0</span>
-                  </div>
-                  <div class="stat">
-                    <span class="stat-label" data-i18n="cockpit.stat.quizWrong">Quiz sbagliati</span>
-                    <span class="stat-value" data-perf-quiz-wrong>0</span>
-                  </div>
-                </div>
-              </article>
-
-              <article class="summary-card summary-card--totals" data-carousel-item>
-                <div class="summary-card__header">
-                  <p class="summary-card__eyebrow" data-i18n="cockpit.totals.eyebrow">Storico</p>
-                  <span class="pill pill--soft" data-i18n="cockpit.totals.badge">Totale</span>
-                </div>
-                <h3 class="summary-card__title" data-i18n="cockpit.totals.title">Totali</h3>
-                <div class="summary-stats">
-                  <div class="stat">
-                    <span class="stat-label" data-i18n="cockpit.totals.stars">Stelle totali</span>
-                    <span class="stat-value" data-perf-stars-total>0</span>
-                  </div>
-                  <div class="stat">
-                    <span class="stat-label" data-i18n="cockpit.totals.gelati">Gelati totali</span>
-                    <span class="stat-value" data-perf-gelati-total>0</span>
-                  </div>
-                  <div class="stat">
-                    <span class="stat-label" data-i18n="cockpit.totals.bonus">Bonus totali</span>
-                    <span class="stat-value" data-perf-bonus-total>0</span>
-                  </div>
-                </div>
-              </article>
-
-              <article class="summary-card summary-card--wrong" data-carousel-item>
-                <div class="summary-card__header">
-                  <p class="summary-card__eyebrow" data-i18n="cockpit.wrong.eyebrow">Errori recenti</p>
-                  <span class="pill pill--soft" data-i18n="cockpit.wrong.badge">Ultimi 10</span>
-                </div>
-                <h3 class="summary-card__title" data-i18n="cockpit.wrong.title">Errori recenti</h3>
-                <ul class="summary-list" data-wrong-list>
-                  <li class="empty" data-i18n="cockpit.wrong.empty">Nessun errore recente — continua così! ✨</li>
-                </ul>
-                <div class="summary-card__footer">
-                  <span class="summary-card__meta" data-wrong-count aria-live="polite"></span>
-                  <button class="btn btn-ghost btn--sm" type="button" data-wrong-view-all data-i18n="cockpit.wrong.viewAll">Vedi tutti</button>
-                </div>
-              </article>
-
-              <article class="summary-card summary-card--history" data-carousel-item>
-                <div class="summary-card__header">
-                  <p class="summary-card__eyebrow" data-i18n="cockpit.history.eyebrow">Storico giorni</p>
-                  <span class="pill pill--soft" data-i18n="cockpit.history.badge">14 giorni</span>
-                </div>
-                <h3 class="summary-card__title" data-i18n="cockpit.history.title">Storico giorni</h3>
-                <ul class="summary-list" data-history-days>
-                  <li class="empty" data-i18n="cockpit.history.empty">Nessuna cronologia disponibile ancora.</li>
-                </ul>
-              </article>
-
-              <article class="summary-card summary-card--profile" data-carousel-item>
-                <div class="summary-card__header">
-                  <p class="summary-card__eyebrow" data-i18n="cockpit.profile.eyebrow">Profilo</p>
-                  <span class="pill pill--blue" data-i18n="cockpit.profile.badge">Tu</span>
-                </div>
-                <h3 class="summary-card__title" data-i18n="cockpit.profile.title">Profilo</h3>
-                <div class="summary-profile" data-profile>
-                  <div class="summary-profile__layout">
-                    <div class="summary-profile__avatar summary-profile__avatar--placeholder" aria-hidden="true">
-                      <span class="avatar-placeholder" role="img" aria-label="Profilo">👤</span>
-                    </div>
-                    <div class="summary-profile__main">
-                      <div class="summary-stats">
-                        <div class="stat">
-                          <span class="stat-label" data-i18n="cockpit.profile.nickname">Nickname</span>
-                          <span class="stat-value" data-profile-nick>—</span>
-                        </div>
-                        <div class="stat">
-                          <span class="stat-label" data-i18n="cockpit.profile.gelato">Gusto preferito</span>
-                          <span class="stat-value" data-profile-gelato>—</span>
-                        </div>
-                      </div>
-                      <div class="profile-actions">
-                        <button class="btn btn-primary" type="button" data-profile-edit data-i18n="cockpit.profile.changeGelato">Cambia gusto</button>
-                        <button class="btn btn-ghost" type="button" data-profile-switch data-i18n="cockpit.profile.switchProfile">Cambia profilo</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </article>
+              <span class="badge badge--pulse badge--live" data-i18n="cockpit.daily.badge">Live</span>
             </div>
-          </section>
-        </aside>
+
+            <div class="dash-card__content">
+              <h3 class="dash-card__title" data-i18n="cockpit.daily.title">Training quotidiano</h3>
+              <p class="dash-card__question" data-daily-question data-i18n="cockpit.daily.loading">Caricamento domanda del giorno...</p>
+            </div>
+
+            <div class="dash-card__footer">
+              <span class="dash-card__hint" data-i18n="cockpit.daily.hint">Rispondi per stelle extra</span>
+            </div>
+          </article>
+
+          <article class="dash-card dash-card--performance" data-carousel-item>
+            <div class="dash-card__header">
+              <div class="dash-card__icon dash-card__icon--gradient">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                </svg>
+              </div>
+              <h3 class="dash-card__title" data-i18n="cockpit.perf.eyebrow">Oggi</h3>
+            </div>
+
+            <div class="dash-card__content">
+              <div class="stats-grid">
+                <div class="stat-mini">
+                  <div class="stat-mini__icon" aria-hidden="true">⭐</div>
+                  <div class="stat-mini__value" data-perf-stars>0</div>
+                  <div class="stat-mini__label" data-i18n="cockpit.stat.stars">Stelle</div>
+                </div>
+
+                <div class="stat-mini">
+                  <div class="stat-mini__icon" aria-hidden="true">✅</div>
+                  <div class="stat-mini__value" data-perf-quiz-correct>0</div>
+                  <div class="stat-mini__label" data-i18n="cockpit.stat.quizCorrect">Quiz corretti</div>
+                </div>
+
+                <div class="stat-mini">
+                  <div class="stat-mini__icon" aria-hidden="true">❌</div>
+                  <div class="stat-mini__value" data-perf-quiz-wrong>0</div>
+                  <div class="stat-mini__label" data-i18n="cockpit.stat.quizWrong">Quiz sbagliati</div>
+                </div>
+
+                <div class="stat-mini">
+                  <div class="stat-mini__icon" aria-hidden="true">🍦</div>
+                  <div class="stat-mini__value" data-perf-gelati>0</div>
+                  <div class="stat-mini__label" data-i18n="cockpit.stat.gelati">Gelati</div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="dash-card dash-card--totals" data-carousel-item>
+            <div class="dash-card__header">
+              <div class="dash-card__icon dash-card__icon--gold">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+                </svg>
+              </div>
+              <h3 class="dash-card__title" data-i18n="cockpit.totals.title">Totali</h3>
+            </div>
+
+            <div class="dash-card__content">
+              <div class="progress-ring-container">
+                <svg class="progress-ring" width="120" height="120" aria-hidden="true">
+                  <circle class="progress-ring__bg" cx="60" cy="60" r="50" fill="none" stroke="#e0e0e0" stroke-width="8" />
+                  <circle class="progress-ring__fill" cx="60" cy="60" r="50" fill="none" stroke="url(#gradientStars)" stroke-width="8" stroke-linecap="round" data-progress-circle />
+                  <defs>
+                    <linearGradient id="gradientStars" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+                      <stop offset="100%" style="stop-color:#FFA500;stop-opacity:1" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <div class="progress-ring__center">
+                  <div class="progress-ring__value" data-perf-stars-total>0</div>
+                  <div class="progress-ring__label" aria-hidden="true">⭐</div>
+                </div>
+              </div>
+
+              <div class="totals-list">
+                <div class="total-item">
+                  <span data-i18n="cockpit.stat.bonusPoints">Bonus</span>
+                  <strong data-perf-bonus-total>0</strong>
+                </div>
+                <div class="total-item">
+                  <span data-i18n="cockpit.totals.gelati">Gelati totali</span>
+                  <strong data-perf-gelati-total>0</strong>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="dash-card dash-card--wrong" data-carousel-item>
+            <div class="dash-card__header">
+              <div class="dash-card__icon dash-card__icon--alert">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 8v4M12 16h.01" />
+                </svg>
+              </div>
+              <h3 class="dash-card__title" data-i18n="cockpit.wrong.title">Da rivedere</h3>
+            </div>
+
+            <div class="dash-card__content">
+              <div class="wrong-summary">
+                <div class="wrong-count-big" data-wrong-count>0</div>
+                <p class="wrong-label" data-i18n="cockpit.wrong.subtitle">domande sbagliate</p>
+              </div>
+
+              <div class="wrong-preview" data-wrong-list></div>
+            </div>
+
+            <div class="dash-card__footer">
+              <button class="btn-text" type="button" data-wrong-view-all data-i18n="cockpit.wrong.viewAll">Vedi tutte →</button>
+            </div>
+          </article>
+
+          <article class="dash-card dash-card--history" data-carousel-item>
+            <div class="dash-card__header">
+              <div class="dash-card__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M3 3v18h18" />
+                  <path d="M18 17V9M13 17v-6M8 17v-3" />
+                </svg>
+              </div>
+              <h3 class="dash-card__title" data-i18n="cockpit.history.title">Cronologia</h3>
+            </div>
+
+            <div class="dash-card__content">
+              <div class="history-stat">
+                <div class="history-days" data-history-days>0</div>
+                <p class="history-label" data-i18n="cockpit.history.subtitle">giorni di training</p>
+              </div>
+
+              <div class="activity-chart" data-activity-chart aria-hidden="true">
+                <div class="activity-bar" style="--height: 40%"><span>L</span></div>
+                <div class="activity-bar" style="--height: 60%"><span>M</span></div>
+                <div class="activity-bar" style="--height: 80%"><span>M</span></div>
+                <div class="activity-bar" style="--height: 100%"><span>G</span></div>
+                <div class="activity-bar" style="--height: 70%"><span>V</span></div>
+                <div class="activity-bar" style="--height: 50%"><span>S</span></div>
+                <div class="activity-bar" style="--height: 30%"><span>D</span></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="dash-card dash-card--profile" data-carousel-item data-profile>
+            <div class="dash-card__header">
+              <div class="profile-avatar" data-profile-switch>
+                <span class="profile-avatar__emoji" aria-hidden="true">🍦</span>
+              </div>
+              <h3 class="dash-card__title" data-profile-nick>Utente</h3>
+              <span class="sr-only" data-profile-gelato>—</span>
+            </div>
+
+            <div class="dash-card__content">
+              <div class="profile-stats">
+                <div class="profile-stat">
+                  <div class="profile-stat__label" data-i18n="cockpit.profile.level">Livello</div>
+                  <div class="profile-stat__value" data-i18n="cockpit.profile.level.value">Apprendista</div>
+                </div>
+                <div class="profile-stat">
+                  <div class="profile-stat__label" data-i18n="cockpit.profile.progress">Completamento</div>
+                  <div class="profile-stat__value">
+                    <div class="progress-bar" aria-hidden="true">
+                      <div class="progress-bar__fill" style="width: 35%"></div>
+                    </div>
+                    <span class="progress-percent" aria-hidden="true">35%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="dash-card__footer">
+              <button class="btn-text" type="button" data-profile-edit data-i18n="cockpit.profile.edit">Modifica profilo →</button>
+            </div>
+          </article>
+        </div>
       </section>
 
-      <!-- CHAT ASSISTANT - Messenger-style (Berny) -->
-      <section class="chat-container chat-berny" aria-label="Chat con BERNY" data-i18n-attr="aria-label:assistant.aria">
-        <header class="chat-header chat-header--compact">
-          <div class="chat-header-text">
-            <h2 class="chat-title" data-i18n="assistant.title">Parla con BERNY</h2>
-            <p class="chat-subtitle" data-i18n="assistant.eyebrow">Assistente</p>
+      <!-- BERNY FLOATING CHAT WIDGET -->
+      <div class="berny-widget" data-berny-widget>
+        <!-- Floating Button (collapsed state) -->
+        <button class="berny-fab" data-berny-toggle aria-label="Apri chat BERNY">
+          <div class="berny-fab__icon" data-fab-icon>
+            <lottie-player
+              src="public/berny-avatar.json"
+              background="transparent"
+              speed="1"
+              style="width: 48px; height: 48px;"
+              loop
+              autoplay
+            ></lottie-player>
           </div>
-        </header>
-
-        <div class="chat-body">
-          <div class="chat-avatar-sticky" aria-hidden="true">
-            <div class="avatar-container" data-chat-avatar>
-              <lottie-player
-                src="public/berny-avatar.json"
-                background="transparent"
-                speed="1"
-                style="width: 50px; height: 50px;"
-                loop
-                autoplay
-              ></lottie-player>
-            </div>
-          </div>
-
-          <div class="messages-area chat-thread" data-messages-area>
-            <div class="chat-placeholder" data-i18n="assistant.placeholder">Es. Coni: quanti gusti e quanti grammi?</div>
-          </div>
-        </div>
-
-        <div class="chat-input-container">
-          <input
-            type="text"
-            class="chat-input"
-            placeholder="Chiedi a BERNY…"
-            data-chat-input
-            data-i18n-attr="placeholder:assistant.inputPlaceholder"
-            aria-label="Scrivi messaggio"
-          />
-          <button class="chat-send-btn" type="button" data-chat-send aria-label="Invia">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+          <div class="berny-fab__close" data-fab-close hidden>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M18 6L6 18M6 6l12 12"/>
             </svg>
-          </button>
+          </div>
+          <div class="berny-fab__badge" data-unread-badge hidden>1</div>
+        </button>
+
+        <!-- Chat Window (expanded state) -->
+        <div class="berny-chat-window" data-chat-window hidden>
+          <header class="berny-chat-header">
+            <div class="berny-chat-header__content">
+              <div class="berny-avatar-live">
+                <lottie-player
+                  src="public/berny-avatar.json"
+                  background="transparent"
+                  speed="1"
+                  style="width: 36px; height: 36px;"
+                  loop
+                  autoplay
+                ></lottie-player>
+              </div>
+              <div class="berny-chat-header__text">
+                <h3 class="berny-chat-title" data-i18n="assistant.title">BERNY</h3>
+                <p class="berny-chat-status">
+                  <span class="status-dot"></span>
+                  <span data-i18n="assistant.status">Sempre disponibile</span>
+                </p>
+              </div>
+            </div>
+            <button class="berny-minimize-btn" data-berny-toggle aria-label="Minimizza chat">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+          </header>
+
+          <div class="berny-chat-body" data-messages-area>
+            <!-- Messages will be injected here by berny-ui.js -->
+          </div>
+
+          <div class="berny-chat-footer">
+            <div class="berny-input-wrapper">
+              <input
+                type="text"
+                class="berny-input"
+                placeholder="Chiedi a BERNY…"
+                data-chat-input
+                data-i18n-attr="placeholder:assistant.inputPlaceholder"
+                aria-label="Scrivi messaggio"
+              />
+              <button class="berny-send-btn" type="button" data-chat-send aria-label="Invia">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+                </svg>
+              </button>
+            </div>
+            <div class="berny-suggestions" data-suggestions-area>
+              <!-- Suggestions will be injected here -->
+            </div>
+          </div>
         </div>
-      </section>
+      </div>
     </main>
 
     <div class="menu-drawer" data-menu-drawer aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="menu-drawer-title">
@@ -316,5 +470,18 @@
         </div>
       </div>
     </div>
+
+    <!-- Dashboard + BERNY (requested bottom includes) -->
+    <link rel="stylesheet" href="styles/dashboard.css?v=20251230_4" />
+    <link rel="stylesheet" href="styles/berny-widget.css?v=20251230_3" />
+
+    <script src="scripts/dashboard-animations.js?v=20251230_4"></script>
+    <script src="scripts/berny-widget-controller.js?v=20251230_3"></script>
+
+    <!-- BERNY Brain (local, self-contained) -->
+    <script src="scripts/berny-knowledge.js?v=20251230_2"></script>
+    <script src="scripts/berny-nlp.js?v=20251230_2"></script>
+    <script src="scripts/berny-brain-local.js?v=20251230_2"></script>
+    <script defer src="scripts/berny-ui.js?v=20251230_1"></script>
   </body>
 </html>

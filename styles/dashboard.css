@@ -1,0 +1,10 @@
+/* FILE: styles/dashboard.css
+   Dashboard-specific overrides.
+   Note: The main dashboard layout/styles live in styles/site.css.
+   Keep this file small and focused (animations/experiments) to avoid duplication.
+*/
+
+/* Optional: smooth card reveal when JS applies inline transforms */
+.page-home .dash-card {
+  will-change: transform, opacity;
+}
