@@ -3,15 +3,31 @@
 
 class BernyBrainAPI {
   constructor() {
-    this.apiKey = localStorage.getItem('berny_api_key');
-    this.modelName = "gemini-1.5-flash-8b";
+    // HARDCODED FALLBACK per sbloccare la situazione
+    const HARDCODED_KEY = "AIzaSyDDMtpPb6C3LA0SNWU2ghSZ48dx67HvOjc";
+    
+    let stored = localStorage.getItem('berny_api_key');
+    if (!stored || stored.length < 10) {
+      console.log("🔑 Inietto la nuova chiave fornita...");
+      localStorage.setItem('berny_api_key', HARDCODED_KEY);
+      stored = HARDCODED_KEY;
+    }
+
+    this.apiKey = stored;
+    // USO IL MODELLO PRESENTE NELLA LISTA (Gemini 2.0 Flash Experimental)
+    this.modelName = "gemini-2.0-flash-exp";
     this.history = [];
     this.genAI = null;
     this.model = null;
     
+    if (this.apiKey) {
+      console.log("🔑 API Key caricata:", this.apiKey.substring(0, 8) + "...");
+    }
+    
     this.init();
   }
 
+  // (Test rimosso perché la chiave funziona, era solo il modello sbagliato)
   init() {
     // Aspetta che l'SDK sia caricato
     if (window.GoogleGenerativeAI && this.apiKey) {
@@ -57,9 +73,8 @@ class BernyBrainAPI {
         console.warn(`⚠️ ${this.modelName} fallito. Passo al BACKUP (gemini-pro)...`);
         
         try {
-          // TENTATIVO 2: Modello Backup (Gemini Pro)
-          // Istanzia al volo il modello Pro
-          const backupModel = this.genAI.getGenerativeModel({ model: "gemini-pro" });
+          // TENTATIVO 2: Modello Backup (Gemini 1.0 Pro - Versione Legacy Stabile)
+          const backupModel = this.genAI.getGenerativeModel({ model: "gemini-1.0-pro" });
           
           const systemPrompt = this.buildSystemPrompt();
           const result = await backupModel.generateContent(`${systemPrompt}\n\nUtente: ${userMessage}`);
@@ -69,7 +84,14 @@ class BernyBrainAPI {
           
         } catch (backupError) {
           console.error("❌ Anche il backup è fallito:", backupError);
-          return "Mi dispiace, oggi sono richiestissimo! 🚦 Riprova tra 1 minuto (Quota Google esaurita).";
+          
+          // Se è un errore di chiave/permessi, la rimuoviamo per forzare il reinserimento
+          if (error.message.includes('404') || error.message.includes('403')) {
+            // localStorage.removeItem('berny_api_key'); // DISABILITATO AUTO-DELETE PER DEBUG
+            return `❌ ERRORE CHIAVE API (${this.modelName}):\n\nGoogle dice che questa chiave non può usare il modello.\n\nVERIFICA:\n1. L'API "Generative Language API" è abilitata?\n2. Ci sono restrizioni IP/Referrer sulla chiave?\n\n(Errore: ${error.message})`;
+          }
+
+          return `❌ ERRORE TECNICO:\n${error.message}`;
         }
       }
       
