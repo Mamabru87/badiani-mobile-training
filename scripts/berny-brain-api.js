@@ -62,19 +62,30 @@ class BernyBrainAPI {
       
       // TENTATIVO 1: Modello Veloce (Flash)
       console.log(`Tentativo 1 con ${this.modelName}...`);
-      const result = await this.model.generateContent(fullPrompt);
+      
+      // Timeout di 8 secondi per evitare blocchi infiniti
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error("Timeout - Il modello ci sta mettendo troppo")), 8000)
+      );
+
+      const result = await Promise.race([
+        this.model.generateContent(fullPrompt),
+        timeoutPromise
+      ]);
+
       const response = await result.response;
       return response.text();
 
     } catch (error) {
-      // Se fallisce per limiti (429) o errore tecnico
-      if (error.message.includes('429') || error.message.includes('quota') || error.message.includes('404')) {
-        
-        console.warn(`⚠️ ${this.modelName} fallito. Passo al BACKUP (gemini-pro)...`);
+      console.warn(`⚠️ Errore o Timeout (${error.message}). Passo al BACKUP...`);
+
+      // Se fallisce per limiti (429), errore tecnico o TIMEOUT
+      if (true) { // Entra sempre nel backup se il primo fallisce
         
         try {
-          // TENTATIVO 2: Modello Backup (Gemini 1.0 Pro - Versione Legacy Stabile)
-          const backupModel = this.genAI.getGenerativeModel({ model: "gemini-1.0-pro" });
+          // TENTATIVO 2: Modello Backup (Gemini 1.5 Flash - Più stabile)
+          // Nota: gemini-1.0-pro è deprecato, meglio usare 1.5-flash come backup solido
+          const backupModel = this.genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
           
           const systemPrompt = this.buildSystemPrompt();
           const result = await backupModel.generateContent(`${systemPrompt}\n\nUtente: ${userMessage}`);
@@ -107,7 +118,6 @@ class BernyBrainAPI {
     const appContext = window.FULL_APP_CONTEXT || "";
     
     // Rileva lingua utente (default IT)
-    // FIX: Usa getLang() se disponibile, altrimenti fallback su currentLang o 'it'
     const userLangCode = (window.BadianiI18n?.getLang?.() || window.BadianiI18n?.currentLang || 'it').toLowerCase();
     
     const langMap = {
@@ -118,7 +128,7 @@ class BernyBrainAPI {
     };
     const userLang = langMap[userLangCode] || 'Italiano';
     
-    let info = `Sei Berny, l'assistente esperto di gelato Badiani. Rispondi in ${userLang}.\n\n`;
+    let info = "";
     
     // 1. Inietta info dai prodotti (Legacy KB)
     if (kb.products) {
@@ -141,7 +151,34 @@ class BernyBrainAPI {
       // ... (resto della logica esistente)
     }
 
-    return info;
+    return `
+      SEI BERNY, ASSISTENTE DI BADIANI 1932. 🍦
+      RISPONDI IN: ${userLang}
+
+      IL TUO OBIETTIVO:
+      Dare risposte "flash" (max 2 frasi) che invitano l'utente ad aprire la scheda tecnica.
+      
+      REGOLE DI RISPOSTA:
+      1. Sii brevissimo. Riassumi i punti chiave.
+      2. NON fare elenchi puntati lunghi.
+      3. Chiudi SEMPRE invitando ad aprire la scheda (es: "Apri la scheda qui sotto per i dettagli!").
+      4. Usa emoji ma non esagerare.
+
+      REGOLE LINK SCHEDE:
+      Se la tua risposta riguarda uno di questi argomenti, AGGIUNGI ALLA FINE del messaggio il tag corrispondente (invisibile all'utente):
+      - Gelato/Gusti -> [[LINK:gelato-lab.html]]
+      - Caffè/Bar -> [[LINK:caffe.html]]
+      - Churros/Crepes/Waffle -> [[LINK:sweet-treats.html]] (o pastries.html se specifico)
+      - Storia/Azienda -> [[LINK:story-orbit.html]]
+      - Procedure/Operazioni -> [[LINK:operations.html]]
+
+      CONOSCENZA ATTUALE:
+      ${info}
+      
+      ESEMPIO:
+      Utente: "Come si fanno i churros?"
+      Tu: "I churros vanno fritti a 190°C. 🥨 Apri la scheda per i dettagli!" [[LINK:sweet-treats.html]]
+    `;
   }
 }
 

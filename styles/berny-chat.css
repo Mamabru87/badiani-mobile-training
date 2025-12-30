@@ -339,6 +339,43 @@
   transform: translateY(0);
 }
 
+/* --- NEW STYLES FOR FORMATTED BOT MESSAGES --- */
+
+/* Stile messaggi bot formattati */
+.berny-widget .berny-message .message-bubble {
+  white-space: pre-wrap; /* Mantiene i ritorni a capo se il parser fallisce */
+  line-height: 1.4;
+}
+
+.berny-widget .berny-message .message-bubble b,
+.berny-widget .berny-message .message-bubble strong {
+  color: #E30613; /* Rosso Badiani per i concetti chiave */
+  font-weight: 700;
+}
+
+/* Pulsante Link */
+.berny-link-btn:hover {
+  background-color: #E30613 !important; /* Hover Rosso */
+  transform: translateY(-1px);
+  transition: all 0.2s;
+}
+
+/* Typing Animation Dots */
+.typing-dots span {
+  animation: blink 1.4s infinite both;
+  font-size: 20px;
+  margin: 0 1px;
+  display: inline-block;
+}
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes blink {
+  0% { opacity: 0.2; }
+  20% { opacity: 1; }
+  100% { opacity: 0.2; }
+}
+
 /* Dark mode */
 @media (prefers-color-scheme: dark) {
   .berny-widget .berny-chat-window {

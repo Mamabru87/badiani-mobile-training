@@ -23,6 +23,13 @@
     return fallback != null ? String(fallback) : String(key || '');
   };
 
+  const BERNY_GREETINGS = {
+    it: "Ciao! Sono BERNY 👋🍦 Il tuo assistente per il training Badiani. Chiedimi qualsiasi cosa!",
+    en: "Hi! I'm BERNY 👋🍦 Your Badiani training assistant. Ask me anything!",
+    es: "¡Hola! Soy BERNY 👋🍦 Tu asistente de formación Badiani. ¡Pregúntame lo que quieras!",
+    fr: "Salut! Je suis BERNY 👋🍦 Ton assistant de formation Badiani. Demande-moi n'importe quoi!"
+  };
+
   const sanitize = (value) => String(value ?? '').trim();
 
   class BernyUI {
@@ -77,11 +84,14 @@
       } catch {}
 
       // Welcome message
+      const currentLang = (window.BadianiI18n?.getLang?.() || 'it').toLowerCase();
+      const fallbackGreeting = BERNY_GREETINGS[currentLang] || BERNY_GREETINGS['it'];
+
       const greetingEl = this.addMessage(
         tr(
           'assistant.greeting',
           null,
-          'Ciao! Sono BERNY 👋🍦 Il tuo assistente per il training Badiani. Chiedimi qualsiasi cosa!'
+          fallbackGreeting
         ),
         'berny',
         false
@@ -92,10 +102,13 @@
       window.addEventListener('i18nUpdated', () => {
          const el = this.messagesArea.querySelector('[data-greeting="true"] .message-bubble');
          if (el) {
+             const newLang = (window.BadianiI18n?.getLang?.() || 'it').toLowerCase();
+             const newFallback = BERNY_GREETINGS[newLang] || BERNY_GREETINGS['it'];
+             
              el.textContent = tr(
                 'assistant.greeting',
                 null,
-                'Ciao! Sono BERNY 👋🍦 Il tuo assistente per il training Badiani. Chiedimi qualsiasi cosa!'
+                newFallback
              );
          }
       });
@@ -138,6 +151,7 @@
       this.addMessage(message, 'user');
       this.chatInput.value = '';
       this.autoResizeInput();
+      this.playSynthSound('sent');
 
       this.showTypingIndicator();
       this.animateAvatar('thinking');
@@ -219,7 +233,11 @@
 
       if (this.currentStreamingBubble) {
         const finalText = sanitize(fullResponse || this.currentStreamingText);
-        this.currentStreamingBubble.textContent = finalText || this.currentStreamingText;
+        
+        // Apply Markdown parsing and Smart Links to the final result
+        this.currentStreamingBubble.innerHTML = this.parseMarkdown(finalText);
+        this.detectAndAddLink(finalText, this.currentStreamingBubble);
+
         try {
           this.currentStreamingBubble
             ?.closest?.('.berny-message')
@@ -228,9 +246,12 @@
 
         this.currentStreamingBubble = null;
         this.currentStreamingText = '';
+        this.playSynthSound('received');
       } else {
         this.hideTypingIndicator();
-        this.addMessage(fullResponse, 'berny');
+        // Use typeWriterEffect for non-streamed responses (e.g. fallback)
+        this.typeWriterEffect(fullResponse);
+        this.playSynthSound('received');
       }
 
       this.animateAvatar('idle');
@@ -244,6 +265,110 @@
       try {
         if ('vibrate' in navigator) navigator.vibrate(50);
       } catch {}
+    }
+
+    // --- EFFETTO MACCHINA DA SCRIVERE (Adapted) ---
+    typeWriterEffect(fullText) {
+      // 1. Cerca il tag [[LINK:...]]
+      let linkUrl = null;
+      let cleanText = fullText;
+      
+      const linkMatch = fullText.match(/\[\[LINK:(.*?)\]\]/);
+      if (linkMatch) {
+        linkUrl = linkMatch[1]; 
+        cleanText = fullText.replace(linkMatch[0], '').trim(); // Rimuovi il tag dal testo visibile
+      }
+
+      this.playSynthSound('received');
+
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'berny-message';
+      const bubble = document.createElement('div');
+      bubble.className = 'message-bubble';
+      msgDiv.appendChild(bubble);
+      this.messagesArea.appendChild(msgDiv);
+      
+      let i = 0;
+      const speed = 40; 
+
+      const type = () => {
+        if (i < cleanText.length) {
+          bubble.textContent += cleanText.charAt(i);
+          i++;
+          this.scrollToBottom(false);
+          setTimeout(type, speed);
+        } else {
+          bubble.innerHTML = this.parseMarkdown(cleanText);
+          
+          if (linkUrl) {
+            this.createLinkButton(linkUrl, bubble);
+          } else {
+            // Fallback se nessun link esplicito è stato trovato
+            this.detectAndAddLink(cleanText, bubble);
+          }
+        }
+      };
+      
+      type();
+    }
+
+    createLinkButton(url, container) {
+      const btn = document.createElement('a');
+      btn.href = url;
+      btn.className = 'berny-link-btn';
+      btn.innerHTML = '📖 <b>Apri Scheda Correlata</b>';
+      
+      // Inline styles (preserved for compatibility)
+      btn.style.display = 'inline-block';
+      btn.style.marginTop = '10px';
+      btn.style.padding = '5px 10px';
+      btn.style.backgroundColor = '#002B5C';
+      btn.style.color = 'white';
+      btn.style.borderRadius = '15px';
+      btn.style.textDecoration = 'none';
+      btn.style.fontSize = '0.8rem';
+      
+      container.appendChild(document.createElement('br'));
+      container.appendChild(btn);
+    }
+
+    // --- FORMATTAZIONE MARKDOWN ---
+    parseMarkdown(text) {
+      let html = text
+        // Grassetto **text** -> <b>text</b>
+        .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+        // Liste * item -> <br>• item
+        .replace(/^\* (.*$)/gm, '<br>• $1')
+        // Newlines -> <br>
+        .replace(/\n/g, '<br>');
+        
+      return html;
+    }
+
+    // --- PULSANTE LINK INTELLIGENTE ---
+    detectAndAddLink(text, container) {
+      let link = null;
+      let cleanText = text;
+
+      // 1. Cerca tag esplicito [[LINK:url]] (per casi non-typewriter)
+      const tagMatch = text.match(/\[\[LINK:(.*?)\]\]/);
+      if (tagMatch) {
+        link = tagMatch[1];
+        cleanText = text.replace(tagMatch[0], '').trim();
+        container.innerHTML = this.parseMarkdown(cleanText);
+      } 
+      // 2. Fallback: Mappa argomenti -> link
+      else {
+        const lower = text.toLowerCase();
+        if (lower.includes('churro')) link = 'pastries.html';
+        else if (lower.includes('gelato') || lower.includes('gusti')) link = 'gelato-lab.html';
+        else if (lower.includes('caffè') || lower.includes('espresso')) link = 'caffe.html';
+        else if (lower.includes('crepes') || lower.includes('waffle')) link = 'sweet-treats.html';
+      }
+
+      if (link) {
+        this.createLinkButton(link, container);
+      }
     }
 
     addMessage(text, sender, scroll = true) {
@@ -298,9 +423,66 @@
 
     setOpen(_open) {}
 
-    toggleWindow() {}
+    toggleWindow() {
+      this.playSynthSound('open');
+    }
 
     bumpUnread() {}
+
+    playSynthSound(type) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+
+      const ctx = new AudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      const now = ctx.currentTime;
+
+      if (type === 'open') {
+        // Suono "POP" (Frequenza che sale veloce)
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(400, now);
+        osc.frequency.exponentialRampToValueAtTime(800, now + 0.1);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+        osc.start(now);
+        osc.stop(now + 0.1);
+      } 
+      else if (type === 'sent') {
+        // Suono "SWOOSH/CLICK" (Rumore bianco breve o tono basso)
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(300, now);
+        osc.frequency.linearRampToValueAtTime(100, now + 0.1);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.1);
+        osc.start(now);
+        osc.stop(now + 0.1);
+      } 
+      else if (type === 'received') {
+        // Suono "DING" (Campanella armonica)
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, now); // La5
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+        osc.start(now);
+        osc.stop(now + 0.5);
+        
+        // Armonica (opzionale, per renderlo più dolce)
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+        osc2.frequency.setValueAtTime(1760, now);
+        gain2.gain.setValueAtTime(0.05, now);
+        gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+        osc2.start(now);
+        osc2.stop(now + 0.4);
+      }
+    }
 
     animateAvatar(_state) {
       // site.js avatar handles its own thinking state; noop here.
@@ -309,9 +491,19 @@
 
   window.BernyUI = BernyUI;
 
-  // Auto-init
-  try {
-    if (window.bernyUI) return;
-    window.bernyUI = new BernyUI();
-  } catch {}
+  // Auto-init (Wait for DOM & i18n)
+  const startBerny = () => {
+    try {
+      if (window.bernyUI) return;
+      window.bernyUI = new BernyUI();
+    } catch (e) {
+      console.error("BernyUI init failed:", e);
+    }
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', startBerny);
+  } else {
+    startBerny();
+  }
 })();
