@@ -6,65 +6,94 @@
     <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
+    <title>Badiani Training Orbit</title>
+    <link rel="stylesheet" href="styles/site.css?v=20251229_1" />
 
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="Piattaforma di training interattiva Badiani 1932: formazione certificata su gelato artigianale, caffetteria e pasticceria fiorentina con quiz e gamification" />
-    <meta property="og:title" content="Badiani Training Orbit - Hub Formazione" />
-    <meta property="og:description" content="Tradizione fiorentina, rituali di boutique e procedure digitalizzate in un'unica plancia per il team Badiani" />
-    <meta property="og:type" content="website" />
-
-    <title>Training Orbit - Hub Formazione Badiani 1932</title>
-
-    <!-- Preconnect for external resources -->
-    <link rel="preconnect" href="https://unpkg.com" />
-    <link rel="dns-prefetch" href="https://unpkg.com" />
-
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="styles/site.css?v=20251230_1" />
-    <link rel="stylesheet" href="styles/dashboard.css?v=20251230_4" />
-    <link rel="stylesheet" href="styles/berny-widget.css?v=20251230_3" />
-
-    <!-- Core Scripts - NON DEFER, caricati subito per inizializzazione -->
-    <script src="scripts/storage-manager.js?v=20251230_5"></script>
-    <script src="scripts/i18n-manager.js?v=20251230_6"></script>
-
-    <!-- Structured Data -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Course",
-      "name": "Badiani Training Orbit - Playbook Operativo",
-      "description": "Corso di formazione interattivo per team Badiani 1932 su tradizione fiorentina, gelato artigianale e procedure operative",
-      "provider": {
-        "@type": "Organization",
-        "name": "Badiani 1932",
-        "url": "https://www.badiani1932.it"
-      },
-      "courseMode": "online",
-      "educationalLevel": "Beginner to Advanced",
-      "inLanguage": ["it", "en", "es", "fr"]
-    }
+    <!-- Importa SDK Ufficiale Google (Modul type="importmap" è il modo moderno) -->
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/generative-ai": "https://esm.run/@google/generative-ai@0.21.0"
+        }
+      }
     </script>
-  </head>
+    <script type="module">
+      import { GoogleGenerativeAI } from "@google/generative-ai";
+      window.GoogleGenerativeAI = GoogleGenerativeAI; // Rendilo globale per berny-brain-api.js
+    </script>
 
+    <script src="scripts/berny-knowledge.js?v=3"></script>
+    <script src="scripts/berny-brain-api.js?v=Google1"></script>
+    <script src="scripts/berny-widget-controller.js?v=3"></script>
+    <script defer src="scripts/berny-ui.js?v=1"></script>
+    <script defer src="scripts/i18n.js?v=20251228_4"></script>
+    <script defer src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <script defer src="scripts/site.js?v=20251229_2"></script>
+    <script defer src="scripts/gelato-effects.js?v=20251227_1"></script>
+  <!-- COCKPIT_COMPACT block removed: styling now lives in styles/site.css -->
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Course",
+        "name": "Badiani Training Orbit - Playbook Operativo",
+        "description": "Corso di formazione interattivo per team Badiani 1932 su tradizione fiorentina, gelato artigianale e procedure operative",
+        "provider": {
+          "@type": "Organization",
+          "name": "Badiani 1932",
+          "url": "https://www.badiani1932.it"
+        },
+        "courseMode": "online",
+        "educationalLevel": "Beginner to Advanced",
+        "inLanguage": ["it", "en", "es", "fr"],
+        "hasCourseInstance": [
+          {
+            "@type": "CourseInstance",
+            "courseMode": "online",
+            "courseWorkload": "PT2H"
+          }
+        ]
+      }
+    </script>
+</head>
   <body class="page-home">
     <main>
-      <!-- Navigation -->
+
+      <!-- Loading overlay -->
+      <div class="loading-overlay" data-loading hidden>
+        <div class="loading-spinner" role="status">
+          <span class="sr-only" data-i18n="loading.message">Caricamento in corso...</span>
+        </div>
+      </div>
+
+      <!-- Error toast -->
+      <div class="error-toast" data-error-toast hidden role="alert" aria-live="polite">
+        <div class="error-toast__content">
+          <svg class="error-toast__icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9 9a1 1 0 012 0v4a1 1 0 11-2 0V9zm1-4a1 1 0 100 2 1 1 0 000-2z" />
+          </svg>
+          <p class="error-toast__message" data-error-message></p>
+        </div>
+        <button type="button" class="error-toast__close" data-error-close aria-label="Chiudi notifica">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 4L4 12M4 4l8 8" />
+          </svg>
+        </button>
+      </div>
+
       <nav class="nav-shell">
         <a class="brand" href="index.html" aria-label="Torna alla home Badiani" data-i18n-attr="aria-label:nav.homeAria">
-          <img src="assets/brand/logo-badiani.jpg" alt="Badiani logo" class="brand-avatar" />
+          <img src="assets/brand/logo-badiani.jpg" data-default-src="assets/brand/logo-badiani.jpg" data-alt-src="assets/brand/logo-b-blue.png" alt="Badiani logo" class="brand-avatar" />
           <div class="brand-text">
             <small>Training</small>
           </div>
         </a>
-
         <div class="user-nickname-bar" id="user-nickname-bar" aria-label="Profilo utente" data-i18n-attr="aria-label:nav.profileAria">
           <span class="user-nickname-pill">
             <span class="user-nickname-pill__label" data-i18n="nav.profileLabel">Profilo</span>
             <span class="user-nickname-pill__value" id="nickname-display"></span>
           </span>
         </div>
-
         <button class="menu-trigger" type="button" data-menu-toggle aria-expanded="false" aria-controls="nav-panel">
           <span data-i18n="nav.menu">Menu</span>
           <span class="menu-icon" aria-hidden="true">
@@ -73,14 +102,14 @@
             <span></span>
           </span>
         </button>
-
         <div class="menu-panel" id="nav-panel" data-menu-panel>
           <div class="menu-panel__inner">
+            <div class="menu-panel__glow"></div>
             <div class="menu-cluster">
               <p class="menu-label" data-i18n="menu.cluster.orbit">Orbit</p>
               <a href="index.html" aria-current="page" data-i18n="menu.link.hub">Hub</a>
               <a href="story-orbit.html" data-i18n="menu.link.storyOrbit">Story Orbit</a>
-              <a href="operations.html" data-i18n="menu.link.operations">Operations & Setup</a>
+              <a href="operations.html" data-i18n="menu.link.operations">Operations &amp; Setup</a>
             </div>
             <div class="menu-cluster">
               <p class="menu-label" data-i18n="menu.cluster.beverage">Beverage & Treats</p>
@@ -98,7 +127,7 @@
             <div class="menu-lang menu-lang--panel" data-lang-selector>
               <details>
                 <summary class="menu-lang__summary">
-                  <span class="menu-lang__label">Lingua</span>
+                  <span class="menu-lang__label" data-lang-label>Lingua</span>
                   <span class="menu-lang__current" data-lang-current>Italiano</span>
                 </summary>
                 <div class="menu-lang__options" role="radiogroup" aria-label="Lingua">
@@ -113,10 +142,11 @@
         </div>
       </nav>
 
-      <!-- Hero Section with Dashboard -->
       <section class="hero hero--orbit">
         <div class="hero-focus">
-          <div class="badge" data-i18n="hub.badge">Training Orbit</div>
+          <div class="badge">
+            <span data-i18n="hub.badge">Training Orbit</span>
+          </div>
           <p class="hero-eyebrow" data-i18n="hub.eyebrow">Hub operativo · aggiornato ogni giorno</p>
           <h1 data-i18n="hub.title">Playbook operativo Badiani 1932</h1>
           <p class="hero-lede" data-i18n="hub.lede">
@@ -127,8 +157,6 @@
             <button class="btn btn-ghost" type="button" data-info-launch data-i18n="hub.rules">Regolamento</button>
           </div>
         </div>
-
-        <!-- Cockpit Dashboard (struttura esistente mantenuta per compatibilità) -->
         <aside class="hero-aside">
           <section class="carousel carousel--cockpit carousel--cockpit-grid" data-carousel="cockpit" data-summary>
             <header class="carousel-header" data-carousel-header>
@@ -141,7 +169,6 @@
             </header>
 
             <div class="carousel-track" data-carousel-track>
-              <!-- Card 1: Daily Question -->
               <article class="summary-card summary-card--daily" data-carousel-item>
                 <div class="summary-card__header">
                   <p class="summary-card__eyebrow" data-i18n="cockpit.daily.eyebrow">Training</p>
@@ -152,7 +179,6 @@
                 <p class="summary-card__hint" data-i18n="cockpit.daily.hint">Apri una scheda, rispondi e guadagna stelline extra.</p>
               </article>
 
-              <!-- Card 2: Performance Today -->
               <article class="summary-card summary-card--performance" data-carousel-item>
                 <div class="summary-card__header">
                   <p class="summary-card__eyebrow" data-i18n="cockpit.perf.eyebrow">Oggi</p>
@@ -169,248 +195,149 @@
                     <span class="stat-value" data-perf-points>0</span>
                   </div>
                   <div class="stat">
-                    <span class="stat-label" data-i18n="cockpit.stat.correct">Corrette</span>
+                    <span class="stat-label" data-i18n="cockpit.stat.gelatiWon">Gelati vinti</span>
+                    <span class="stat-value" data-perf-gelati>0</span>
+                  </div>
+                  <div class="stat">
+                    <span class="stat-label" data-i18n="cockpit.stat.quizCorrect">Quiz corretti</span>
                     <span class="stat-value" data-perf-quiz-correct>0</span>
                   </div>
                   <div class="stat">
-                    <span class="stat-label" data-i18n="cockpit.stat.wrong">Sbagliate</span>
+                    <span class="stat-label" data-i18n="cockpit.stat.quizWrong">Quiz sbagliati</span>
                     <span class="stat-value" data-perf-quiz-wrong>0</span>
                   </div>
                 </div>
               </article>
 
-              <!-- Card 3: Totals -->
               <article class="summary-card summary-card--totals" data-carousel-item>
                 <div class="summary-card__header">
-                  <p class="summary-card__eyebrow" data-i18n="cockpit.totals.eyebrow">Lifetime</p>
+                  <p class="summary-card__eyebrow" data-i18n="cockpit.totals.eyebrow">Storico</p>
+                  <span class="pill pill--soft" data-i18n="cockpit.totals.badge">Totale</span>
                 </div>
-                <h3 class="summary-card__title" data-i18n="cockpit.totals.title">Totali accumulati</h3>
+                <h3 class="summary-card__title" data-i18n="cockpit.totals.title">Totali</h3>
                 <div class="summary-stats">
-                  <div class="stat stat--big">
+                  <div class="stat">
+                    <span class="stat-label" data-i18n="cockpit.totals.stars">Stelle totali</span>
                     <span class="stat-value" data-perf-stars-total>0</span>
-                    <span class="stat-label" data-i18n="cockpit.stat.stars">⭐ Stelle</span>
                   </div>
                   <div class="stat">
-                    <span class="stat-label" data-i18n="cockpit.stat.gelatoTotal">Gelati totali</span>
+                    <span class="stat-label" data-i18n="cockpit.totals.gelati">Gelati totali</span>
                     <span class="stat-value" data-perf-gelati-total>0</span>
                   </div>
                   <div class="stat">
-                    <span class="stat-label" data-i18n="cockpit.stat.bonusPoints">Bonus</span>
+                    <span class="stat-label" data-i18n="cockpit.totals.bonus">Bonus totali</span>
                     <span class="stat-value" data-perf-bonus-total>0</span>
                   </div>
                 </div>
               </article>
 
-              <!-- Card 4: Wrong Answers -->
               <article class="summary-card summary-card--wrong" data-carousel-item>
                 <div class="summary-card__header">
-                  <h3 class="summary-card__title" data-i18n="cockpit.wrong.title">Da rivedere</h3>
+                  <p class="summary-card__eyebrow" data-i18n="cockpit.wrong.eyebrow">Errori recenti</p>
+                  <span class="pill pill--soft" data-i18n="cockpit.wrong.badge">Ultimi 10</span>
                 </div>
-                <div class="wrong-count">
-                  <span class="wrong-count__number" data-wrong-count>0</span>
-                  <span class="wrong-count__label" data-i18n="cockpit.wrong.subtitle">domande sbagliate</span>
+                <h3 class="summary-card__title" data-i18n="cockpit.wrong.title">Errori recenti</h3>
+                <ul class="summary-list" data-wrong-list>
+                  <li class="empty" data-i18n="cockpit.wrong.empty">Nessun errore recente — continua così! ✨</li>
+                </ul>
+                <div class="summary-card__footer">
+                  <span class="summary-card__meta" data-wrong-count aria-live="polite"></span>
+                  <button class="btn btn-ghost btn--sm" type="button" data-wrong-view-all data-i18n="cockpit.wrong.viewAll">Vedi tutti</button>
                 </div>
-                <div class="wrong-preview" data-wrong-list></div>
-                <button class="btn-text" data-wrong-view-all data-i18n="cockpit.wrong.viewAll">Vedi tutte →</button>
               </article>
 
-              <!-- Card 5: History -->
               <article class="summary-card summary-card--history" data-carousel-item>
                 <div class="summary-card__header">
-                  <h3 class="summary-card__title" data-i18n="cockpit.history.title">Cronologia</h3>
+                  <p class="summary-card__eyebrow" data-i18n="cockpit.history.eyebrow">Storico giorni</p>
+                  <span class="pill pill--soft" data-i18n="cockpit.history.badge">14 giorni</span>
                 </div>
-                <div class="history-stat">
-                  <span class="history-stat__value" data-history-days>0</span>
-                  <span class="history-stat__label" data-i18n="cockpit.history.subtitle">giorni di training</span>
-                </div>
+                <h3 class="summary-card__title" data-i18n="cockpit.history.title">Storico giorni</h3>
+                <ul class="summary-list" data-history-days>
+                  <li class="empty" data-i18n="cockpit.history.empty">Nessuna cronologia disponibile ancora.</li>
+                </ul>
               </article>
 
-              <!-- Card 6: Profile -->
-              <article class="summary-card summary-card--profile" data-carousel-item data-profile>
+              <article class="summary-card summary-card--profile" data-carousel-item>
                 <div class="summary-card__header">
-                  <div class="profile-avatar" data-profile-switch>
-                    <span class="profile-avatar__emoji" data-profile-gelato>🍦</span>
-                  </div>
-                  <h3 class="summary-card__title" data-profile-nick>Apprendista</h3>
+                  <p class="summary-card__eyebrow" data-i18n="cockpit.profile.eyebrow">Profilo</p>
+                  <span class="pill pill--blue" data-i18n="cockpit.profile.badge">Tu</span>
                 </div>
-                <button class="btn btn-ghost btn-sm" data-profile-edit data-i18n="cockpit.profile.edit">Modifica →</button>
+                <h3 class="summary-card__title" data-i18n="cockpit.profile.title">Profilo</h3>
+                <div class="summary-profile" data-profile>
+                  <div class="summary-profile__layout">
+                    <div class="summary-profile__avatar summary-profile__avatar--placeholder" aria-hidden="true">
+                      <span class="avatar-placeholder" role="img" aria-label="Profilo">👤</span>
+                    </div>
+                    <div class="summary-profile__main">
+                      <div class="summary-stats">
+                        <div class="stat">
+                          <span class="stat-label" data-i18n="cockpit.profile.nickname">Nickname</span>
+                          <span class="stat-value" data-profile-nick>—</span>
+                        </div>
+                        <div class="stat">
+                          <span class="stat-label" data-i18n="cockpit.profile.gelato">Gusto preferito</span>
+                          <span class="stat-value" data-profile-gelato>—</span>
+                        </div>
+                      </div>
+                      <div class="profile-actions">
+                        <button class="btn btn-primary" type="button" data-profile-edit data-i18n="cockpit.profile.changeGelato">Cambia gusto</button>
+                        <button class="btn btn-ghost" type="button" data-profile-switch data-i18n="cockpit.profile.switchProfile">Cambia profilo</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </article>
             </div>
           </section>
         </aside>
       </section>
 
-      <!-- Settings Panel (end of <main>, before BERNY widget) -->
-      <div class="settings-panel" id="settings-panel" hidden role="dialog" aria-modal="true" aria-labelledby="settings-panel-title">
-        <div class="settings-overlay" data-settings-close></div>
-        <div class="settings-content" role="document">
-          <header class="settings-header">
-            <h2 id="settings-panel-title">⚙️ Impostazioni &amp; Dati</h2>
-            <button class="btn-close" type="button" data-settings-close aria-label="Chiudi">×</button>
-          </header>
-
-          <div class="settings-body">
-            <!-- User Profile -->
-            <section class="settings-section">
-              <h3>👤 Profilo</h3>
-              <div class="form-group">
-                <label for="nickname-input">Nickname</label>
-                <input type="text" id="nickname-input" class="form-control" maxlength="20" />
-              </div>
-              <div class="form-group">
-                <label>Avatar Emoji</label>
-                <div class="emoji-picker">
-                  <button class="emoji-btn" type="button" data-emoji="🍦">🍦</button>
-                  <button class="emoji-btn" type="button" data-emoji="🍨">🍨</button>
-                  <button class="emoji-btn" type="button" data-emoji="🧁">🧁</button>
-                  <button class="emoji-btn" type="button" data-emoji="☕">☕</button>
-                  <button class="emoji-btn" type="button" data-emoji="🎂">🎂</button>
-                  <button class="emoji-btn" type="button" data-emoji="🍰">🍰</button>
-                  <button class="emoji-btn" type="button" data-emoji="⭐">⭐</button>
-                  <button class="emoji-btn" type="button" data-emoji="🔥">🔥</button>
-                </div>
-              </div>
-              <button class="btn btn--primary" type="button" id="save-profile-btn">Salva Profilo</button>
-            </section>
-
-            <!-- Stats Summary -->
-            <section class="settings-section">
-              <h3>📊 Le Tue Statistiche</h3>
-              <div class="stats-summary">
-                <div class="stat-row">
-                  <span>⭐ Stelle totali:</span>
-                  <strong id="stats-stars">0</strong>
-                </div>
-                <div class="stat-row">
-                  <span>🍦 Gelati guadagnati:</span>
-                  <strong id="stats-gelati">0</strong>
-                </div>
-                <div class="stat-row">
-                  <span>📅 Giorni attivi:</span>
-                  <strong id="stats-days">0</strong>
-                </div>
-                <div class="stat-row">
-                  <span>✅ Quiz completati:</span>
-                  <strong id="stats-quiz">0</strong>
-                </div>
-                <div class="stat-row">
-                  <span>❌ Errori da rivedere:</span>
-                  <strong id="stats-wrong">0</strong>
-                </div>
-              </div>
-            </section>
-
-            <!-- Data Management -->
-            <section class="settings-section">
-              <h3>💾 Gestione Dati</h3>
-              <div class="btn-group-vertical">
-                <button class="btn btn--ghost" type="button" id="export-data-btn">📥 Scarica Backup</button>
-                <button class="btn btn--ghost" type="button" id="import-data-btn">📤 Importa Backup</button>
-                <input type="file" id="import-file-input" accept=".json" hidden />
-                <button class="btn btn--danger" type="button" id="reset-data-btn">🗑️ Reset Tutti i Dati</button>
-              </div>
-              <p class="help-text">💡 Scarica un backup prima di resettare i dati!</p>
-            </section>
-
-            <!-- Storage Info -->
-            <section class="settings-section">
-              <h3>💿 Storage Info</h3>
-              <div class="storage-info">
-                <div class="storage-bar">
-                  <div class="storage-bar__fill" id="storage-fill"></div>
-                </div>
-                <p class="storage-text">
-                  <span><span id="storage-used">0</span> KB utilizzati</span>
-                  <small>Limite browser: ~5-10 MB</small>
-                </p>
-              </div>
-            </section>
+      <!-- CHAT ASSISTANT - Messenger-style (Berny) -->
+      <section class="chat-container chat-berny" aria-label="Chat con BERNY" data-i18n-attr="aria-label:assistant.aria">
+        <header class="chat-header chat-header--compact">
+          <div class="chat-header-text">
+            <h2 class="chat-title" data-i18n="assistant.title">Parla con BERNY</h2>
+            <p class="chat-subtitle" data-i18n="assistant.eyebrow">Assistente</p>
           </div>
-        </div>
-      </div>
+        </header>
 
-    </main>
-
-    <!-- BERNY Floating Widget -->
-    <div class="berny-widget" data-berny-widget>
-      <button class="berny-fab" data-berny-toggle aria-label="Apri chat BERNY">
-        <div class="berny-fab__icon" data-fab-icon>
-          <lottie-player
-            src="public/berny-avatar.json"
-            background="transparent"
-            speed="1"
-            style="width: 48px; height: 48px;"
-            loop
-            autoplay
-          ></lottie-player>
-        </div>
-        <div class="berny-fab__close" data-fab-close hidden>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M18 6L6 18M6 6l12 12"/>
-          </svg>
-        </div>
-      </button>
-
-      <div class="berny-chat-window" data-chat-window hidden>
-        <header class="berny-chat-header">
-          <div class="berny-chat-header__content">
-            <div class="berny-avatar-live">
+        <div class="chat-body">
+          <div class="chat-avatar-sticky" aria-hidden="true">
+            <div class="avatar-container" data-chat-avatar>
               <lottie-player
                 src="public/berny-avatar.json"
                 background="transparent"
                 speed="1"
-                style="width: 36px; height: 36px;"
+                style="width: 50px; height: 50px;"
                 loop
                 autoplay
               ></lottie-player>
             </div>
-            <div class="berny-chat-header__text">
-              <h3 class="berny-chat-title" data-i18n="assistant.title">BERNY</h3>
-              <p class="berny-chat-status">
-                <span class="status-dot"></span>
-                <span data-i18n="assistant.status">Sempre disponibile</span>
-              </p>
-            </div>
           </div>
-          <button class="berny-minimize-btn" data-berny-toggle aria-label="Minimizza chat">
+
+          <div class="messages-area chat-thread" data-messages-area>
+            <div class="chat-placeholder" data-i18n="assistant.placeholder">Es. Coni: quanti gusti e quanti grammi?</div>
+          </div>
+        </div>
+
+        <div class="chat-input-container">
+          <input
+            type="text"
+            class="chat-input"
+            placeholder="Chiedi a BERNY…"
+            data-chat-input
+            data-i18n-attr="placeholder:assistant.inputPlaceholder"
+            aria-label="Scrivi messaggio"
+          />
+          <button class="chat-send-btn" type="button" data-chat-send aria-label="Invia">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M19 9l-7 7-7-7"/>
+              <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
             </svg>
           </button>
-        </header>
-
-        <div class="berny-chat-body" data-messages-area></div>
-
-        <div class="berny-chat-footer">
-          <div class="berny-input-wrapper">
-            <input
-              type="text"
-              class="berny-input"
-              placeholder="Chiedi a BERNY…"
-              data-chat-input
-              data-i18n-attr="placeholder:assistant.inputPlaceholder"
-              aria-label="Scrivi messaggio"
-            />
-            <button class="berny-send-btn" type="button" data-chat-send aria-label="Invia">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
-              </svg>
-            </button>
-          </div>
-          <div class="berny-suggestions" data-suggestions-area></div>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
 
-    <!-- Settings FAB -->
-    <button class="settings-fab" data-settings-open aria-label="Apri impostazioni">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="12" cy="12" r="3"/>
-        <path d="M12 1v6m0 6v6M6.5 6.5l4.24 4.24M13.76 13.76l4.24 4.24M6.5 17.5l4.24-4.24M13.76 10.24l4.24-4.24"/>
-      </svg>
-    </button>
-
-    <!-- Menu Drawer -->
     <div class="menu-drawer" data-menu-drawer aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="menu-drawer-title">
       <div class="menu-drawer__overlay" data-menu-close></div>
       <div class="menu-drawer__panel">
@@ -428,7 +355,7 @@
         <nav class="menu-drawer__nav">
           <ul class="menu-categories">
             <li><a href="story-orbit.html" data-i18n="menu.link.storyOrbit">Story Orbit</a></li>
-            <li><a href="operations.html" data-i18n="menu.link.operations">Operations & Setup</a></li>
+            <li><a href="operations.html" data-i18n="menu.link.operations">Operations &amp; Setup</a></li>
             <li><a href="caffe.html" data-i18n="menu.link.caffe">Bar & Drinks</a></li>
             <li><a href="sweet-treats.html" data-i18n="menu.link.sweetTreats">Sweet Treat Atelier</a></li>
             <li><a href="pastries.html" data-i18n="menu.link.pastries">Pastry Lab</a></li>
@@ -437,40 +364,22 @@
             <li><a href="festive.html" data-i18n="menu.link.festive">Festive & Churros</a></li>
           </ul>
         </nav>
+
+        <div class="menu-drawer__footer">
+          <details class="menu-lang" data-lang-selector>
+            <summary class="menu-lang__summary">
+              <span class="menu-lang__label" data-lang-label>Lingua</span>
+              <span class="menu-lang__current" data-lang-current>Italiano</span>
+            </summary>
+            <div class="menu-lang__options" role="radiogroup" aria-label="Lingua">
+              <button type="button" class="menu-lang__option" role="radio" data-lang-option="it" aria-checked="true">Italiano</button>
+              <button type="button" class="menu-lang__option" role="radio" data-lang-option="en" aria-checked="false">English</button>
+              <button type="button" class="menu-lang__option" role="radio" data-lang-option="es" aria-checked="false">Español</button>
+              <button type="button" class="menu-lang__option" role="radio" data-lang-option="fr" aria-checked="false">Français</button>
+            </div>
+          </details>
+        </div>
       </div>
     </div>
-
-    <!-- Loading & Error Toast -->
-    <div class="loading-overlay" data-loading hidden>
-      <div class="loading-spinner" role="status">
-        <span class="sr-only" data-i18n="loading.message">Caricamento in corso...</span>
-      </div>
-    </div>
-
-    <div class="error-toast" data-error-toast hidden role="alert" aria-live="polite">
-      <div class="error-toast__content">
-        <p class="error-toast__message" data-error-message></p>
-      </div>
-      <button type="button" class="error-toast__close" data-error-close aria-label="Chiudi notifica">×</button>
-    </div>
-
-    <!-- JavaScript - ORDINE CRITICO -->
-    <!-- 1. Lottie Player (esterno) -->
-    <script defer src="https://unpkg.com/@lottiefiles/lottie-player@2.0.2/dist/lottie-player.js"></script>
-
-    <!-- 2. BERNY Brain (self-contained, no API) -->
-    <script src="scripts/berny-knowledge.js?v=20251230_2"></script>
-    <script src="scripts/berny-nlp.js?v=20251230_2"></script>
-    <script src="scripts/berny-brain-local.js?v=20251230_2"></script>
-
-    <!-- 3. UI Controllers -->
-    <script src="scripts/berny-widget-controller.js?v=20251230_3"></script>
-    <script defer src="scripts/berny-ui.js?v=20251230_1"></script>
-    <script src="scripts/dashboard-animations.js?v=20251230_4"></script>
-    <script src="scripts/settings-panel.js?v=20251230_1"></script>
-
-    <!-- 4. Site specific (se esiste, aggiorna per usare window.storageManager e window.i18n) -->
-    <script defer src="scripts/site.js?v=20251230_7"></script>
-    <script defer src="scripts/gelato-effects.js?v=20251227_1"></script>
   </body>
 </html>

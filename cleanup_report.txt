@@ -1,0 +1,180 @@
+BADIANI PROJECT CLEANUP REPORT
+========================================================================
+
+Workspace: C:\Users\Mamabru\Documents\GitHub\Nuova cartella\badiani-mobile
+Scan dirs: scripts, styles, public
+
+Used (local, under scan dirs): 36
+Missing (referenced but not found): 20
+Unused (present under scan dirs, never referenced): 36
+
+MISSING FILES
+------------------------------------------------------------------------
+- scripts/assets/avatars/berny-sprite.png
+- scripts/assets/brand/logo-avatar.svg
+- scripts/assets/products/caffe-affogato.webp
+- scripts/assets/products/caffe-americano.webp
+- scripts/assets/products/caffe-cappuccino.webp
+- scripts/assets/products/caffe-espresso.webp
+- scripts/assets/products/espresso TW.png
+- scripts/assets/products/espresso double TW.png
+- scripts/assets/products/festive-churros.webp
+- scripts/assets/products/gelato-box.webp
+- scripts/assets/products/gelato-cones.webp
+- scripts/assets/products/pandoro.webp
+- scripts/assets/products/panettone.webp
+- scripts/assets/products/pastry-brownie.webp
+- scripts/assets/products/pastry-cake.webp
+- scripts/assets/products/pastry-croissant.webp
+- scripts/assets/products/slitti-praline.webp
+- scripts/assets/products/sweet-pancake.webp
+- scripts/assets/products/sweet-storage.webp
+- scripts/assets/products/sweet-waffle.webp
+
+UNUSED FILES
+------------------------------------------------------------------------
+- scripts/audit_assets.py
+- scripts/audit_i18n_cards.py
+- scripts/berny-brain.js
+- scripts/convert_jpg_to_webp.py
+- scripts/convert_png_to_jpg_webp.py
+- scripts/convert_webp_to_jpg.py
+- scripts/copy_kb.py
+- scripts/count_veryeasy.py
+- scripts/extract_all_pdf_text.py
+- scripts/extract_caffe_fixed.py
+- scripts/extract_pdf_text.py
+- scripts/generate_image_pack.py
+- scripts/generate_placeholder_assets.py
+- scripts/generate_sm_correct.py
+- scripts/import_generated_images.py
+- scripts/infer_sm_correct_from_i18n.py
+- scripts/insert_french_translations.py
+- scripts/learn-bubbles.js
+- scripts/list_pdf_images.py
+- scripts/parse_quiz_translations.py
+- scripts/parse_veryeasy_translations.py
+- scripts/peek_pdf_pages.py
+- scripts/quiz_all_questions.json
+- scripts/quiz_en_partial.txt
+- scripts/quiz_i18n_en.txt
+- scripts/quiz_i18n_es.txt
+- scripts/quiz_i18n_fr.txt
+- scripts/quiz_i18n_output.txt
+- scripts/quiz_i18n_sm_en.txt
+- scripts/quiz_i18n_sm_es.txt
+- scripts/quiz_i18n_sm_fr.txt
+- scripts/quiz_translations_en.js
+- scripts/quiz_translations_en_output.js
+- scripts/render_pdf_images.py
+- scripts/translate_quiz.py
+- styles/berny-chat.css
+
+REFERENCES (used files → referrers)
+------------------------------------------------------------------------
+public/berny-avatar.json
+  <- index.html
+scripts/assets/avatars/berny-sprite.png
+  <- scripts/site.js
+scripts/assets/brand/logo-avatar.svg
+  <- scripts/site.js
+scripts/assets/products/caffe-affogato.webp
+  <- scripts/site.js
+scripts/assets/products/caffe-americano.webp
+  <- scripts/site.js
+scripts/assets/products/caffe-cappuccino.webp
+  <- scripts/site.js
+scripts/assets/products/caffe-espresso.webp
+  <- scripts/site.js
+scripts/assets/products/espresso TW.png
+  <- scripts/i18n.js
+scripts/assets/products/espresso double TW.png
+  <- scripts/i18n.js
+scripts/assets/products/festive-churros.webp
+  <- scripts/site.js
+scripts/assets/products/gelato-box.webp
+  <- scripts/site.js
+scripts/assets/products/gelato-cones.webp
+  <- scripts/site.js
+scripts/assets/products/pandoro.webp
+  <- scripts/site.js
+scripts/assets/products/panettone.webp
+  <- scripts/site.js
+scripts/assets/products/pastry-brownie.webp
+  <- scripts/site.js
+scripts/assets/products/pastry-cake.webp
+  <- scripts/site.js
+scripts/assets/products/pastry-croissant.webp
+  <- scripts/site.js
+scripts/assets/products/slitti-praline.webp
+  <- scripts/site.js
+scripts/assets/products/sweet-pancake.webp
+  <- scripts/site.js
+scripts/assets/products/sweet-storage.webp
+  <- scripts/site.js
+scripts/assets/products/sweet-waffle.webp
+  <- scripts/site.js
+scripts/berny-brain-local.js
+  <- index.html
+scripts/berny-knowledge.js
+  <- index.html
+scripts/berny-nlp.js
+  <- index.html
+scripts/berny-ui.js
+  <- index.html
+scripts/berny-widget-controller.js
+  <- index.html
+scripts/dashboard-animations.js
+  <- index.html
+scripts/gelato-effects.js
+  <- index.html
+scripts/i18n-manager.js
+  <- caffe.html
+  <- festive.html
+  <- gelato-lab.html
+  <- index.html
+  <- operations.html
+  <- pastries.html
+  <- quiz-solution.html
+  <- slitti-yoyo.html
+  <- story-orbit.html
+  <- sweet-treats.html
+scripts/i18n.js
+  <- caffe.html
+  <- festive.html
+  <- gelato-lab.html
+  <- operations.html
+  <- pastries.html
+  <- quiz-solution.html
+  <- slitti-yoyo.html
+  <- story-orbit.html
+  <- sweet-treats.html
+scripts/settings-panel.js
+  <- index.html
+scripts/site.js
+  <- caffe.html
+  <- festive.html
+  <- gelato-lab.html
+  <- index.html
+  <- operations.html
+  <- pastries.html
+  <- slitti-yoyo.html
+  <- story-orbit.html
+  <- sweet-treats.html
+scripts/storage-manager.js
+  <- index.html
+styles/berny-widget.css
+  <- index.html
+styles/dashboard.css
+  <- index.html
+styles/site.css
+  <- caffe.html
+  <- festive.html
+  <- gelato-lab.html
+  <- index.html
+  <- operations.html
+  <- pastries.html
+  <- quiz-solution.html
+  <- slitti-yoyo.html
+  <- story-orbit.html
+  <- sweet-treats.html

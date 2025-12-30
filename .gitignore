@@ -1,0 +1,13 @@
+# Local backups created by cleanup scripts
+backup_*/
+
+# Python virtual env (local)
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Environment secrets
+.env
+.env.*
