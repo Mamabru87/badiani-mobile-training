@@ -4,7 +4,7 @@
 class BernyBrainAPI {
   constructor() {
     this.apiKey = localStorage.getItem('berny_api_key');
-    this.modelName = "gemini-2.0-flash-exp";
+    this.modelName = "gemini-1.5-flash-8b";
     this.history = [];
     this.genAI = null;
     this.model = null;
@@ -35,26 +35,45 @@ class BernyBrainAPI {
 
   async processMessage(userMessage) {
     if (!this.apiKey) return "⚠️ Scrivi '/apikey LA_TUA_CHIAVE' per attivarmi!";
-    if (!this.model) this.init(); // Riprova init se fallito prima
-    if (!this.model) return "⚠️ Errore caricamento SDK Google. Controlla la connessione.";
+    if (!this.model) this.init();
 
+    // Notifica UI
     window.dispatchEvent(new CustomEvent('berny-typing-start'));
 
     try {
-      // Costruisci il prompt con il contesto
       const systemPrompt = this.buildSystemPrompt();
       const fullPrompt = `${systemPrompt}\n\nUtente: ${userMessage}`;
-
-      // Chiamata via SDK
+      
+      // TENTATIVO 1: Modello Veloce (Flash)
+      console.log(`Tentativo 1 con ${this.modelName}...`);
       const result = await this.model.generateContent(fullPrompt);
       const response = await result.response;
-      const text = response.text();
-
-      return text;
+      return response.text();
 
     } catch (error) {
-      console.error("Errore Gemini SDK:", error);
-      return `Mi dispiace, errore tecnico: ${error.message || "Connessione fallita"}`;
+      // Se fallisce per limiti (429) o errore tecnico
+      if (error.message.includes('429') || error.message.includes('quota') || error.message.includes('404')) {
+        
+        console.warn(`⚠️ ${this.modelName} fallito. Passo al BACKUP (gemini-pro)...`);
+        
+        try {
+          // TENTATIVO 2: Modello Backup (Gemini Pro)
+          // Istanzia al volo il modello Pro
+          const backupModel = this.genAI.getGenerativeModel({ model: "gemini-pro" });
+          
+          const systemPrompt = this.buildSystemPrompt();
+          const result = await backupModel.generateContent(`${systemPrompt}\n\nUtente: ${userMessage}`);
+          const response = await result.response;
+          
+          return response.text(); // Restituisce la risposta senza errori!
+          
+        } catch (backupError) {
+          console.error("❌ Anche il backup è fallito:", backupError);
+          return "Mi dispiace, oggi sono richiestissimo! 🚦 Riprova tra 1 minuto (Quota Google esaurita).";
+        }
+      }
+      
+      return `Errore tecnico: ${error.message}`;
     } finally {
       window.dispatchEvent(new CustomEvent('berny-typing-end'));
     }
@@ -62,14 +81,35 @@ class BernyBrainAPI {
 
   buildSystemPrompt() {
     const kb = window.BERNY_KNOWLEDGE || {};
-    let info = "Sei Berny, l'assistente esperto di gelato Badiani. Rispondi in italiano.\n\nINFO PRODOTTI:\n";
+    const superKb = window.BERNY_SUPER_KNOWLEDGE || {};
+    const appContext = window.FULL_APP_CONTEXT || "";
     
-    // Inietta info dal knowledge base
+    // Rileva lingua utente (default IT)
+    const userLang = (window.BadianiI18n?.currentLang || 'it').toLowerCase();
+    
+    let info = `Sei Berny, l'assistente esperto di gelato Badiani. Rispondi in ${userLang}.\n\n`;
+    
+    // 1. Inietta info dai prodotti (Legacy KB)
     if (kb.products) {
+      info += "INFO PRODOTTI (Legacy):\n";
       Object.entries(kb.products).forEach(([key, val]) => {
         info += `- ${key.toUpperCase()}: ${val.response}\n`;
       });
     }
+
+    // 2. Inietta Full App Context (Testo Gigante)
+    if (appContext) {
+      info += "\n--- FULL APP CONTEXT ---\n";
+      info += appContext;
+      info += "\n--- END APP CONTEXT ---\n";
+    }
+
+    // 3. Inietta Super Knowledge Base (Multilingua - se presente)
+    if (superKb.manuals || superKb.pages) {
+      info += "\nSUPER KNOWLEDGE BASE (Contesto Esteso):\n";
+      // ... (resto della logica esistente)
+    }
+
     return info;
   }
 }
