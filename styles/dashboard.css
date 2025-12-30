@@ -8,3 +8,273 @@
 .page-home .dash-card {
   will-change: transform, opacity;
 }
+
+/* =====================================================================
+   Settings Panel (Hub)
+   ===================================================================== */
+
+.settings-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* IMPORTANT: `hidden` must win over `.settings-panel { display:flex; }`.
+   Otherwise the panel stays visible and blocks the whole app. */
+.settings-panel[hidden] {
+  display: none;
+}
+
+.settings-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.settings-content {
+  position: relative;
+  width: min(600px, 92vw);
+  max-height: min(90vh, 92dvh);
+  background: var(--paper, #fff);
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(33, 64, 152, 0.12);
+}
+
+.settings-header {
+  padding: 20px 22px;
+  border-bottom: 1px solid rgba(33, 64, 152, 0.12);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+}
+
+.settings-header h2 {
+  margin: 0;
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.btn-close {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(33, 64, 152, 0.14);
+  background: rgba(33, 64, 152, 0.06);
+  font-size: 1.6rem;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+  transition: transform var(--anim-fast, 180ms) ease, background var(--anim-fast, 180ms) ease;
+}
+
+.btn-close:hover,
+.btn-close:focus-visible {
+  transform: translateY(-1px);
+  background: rgba(236, 65, 140, 0.10);
+}
+
+.settings-body {
+  flex: 1;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 20px 22px;
+}
+
+.settings-section {
+  margin-bottom: 26px;
+}
+
+.settings-section h3 {
+  font-size: 0.95rem;
+  margin: 0 0 12px;
+  color: var(--brand-blue);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.form-group {
+  margin-bottom: 14px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--ink, #0f2154);
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid rgba(33, 64, 152, 0.18);
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: border-color var(--anim-fast, 180ms) ease, box-shadow var(--anim-fast, 180ms) ease;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--brand-blue);
+  box-shadow: 0 0 0 4px rgba(33, 64, 152, 0.12);
+}
+
+.emoji-picker {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.emoji-btn {
+  width: 50px;
+  height: 50px;
+  border: 2px solid rgba(33, 64, 152, 0.18);
+  border-radius: 12px;
+  background: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: transform var(--anim-fast, 180ms) ease, border-color var(--anim-fast, 180ms) ease, background var(--anim-fast, 180ms) ease;
+}
+
+.emoji-btn:hover,
+.emoji-btn:focus-visible {
+  border-color: var(--brand-blue);
+  transform: scale(1.06);
+}
+
+.emoji-btn.active {
+  border-color: var(--brand-blue);
+  background: rgba(33, 64, 152, 0.08);
+}
+
+.stats-summary {
+  background: rgba(33, 64, 152, 0.05);
+  border-radius: 14px;
+  padding: 14px;
+  border: 1px solid rgba(33, 64, 152, 0.12);
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(33, 64, 152, 0.12);
+}
+
+.stat-row:last-child {
+  border-bottom: none;
+}
+
+.stat-row strong {
+  color: var(--brand-blue);
+  font-size: 1.05rem;
+}
+
+.btn-group-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn--danger {
+  background: rgba(236, 65, 140, 0.95);
+  color: #fff;
+  border: none;
+}
+
+.btn--danger:hover,
+.btn--danger:focus-visible {
+  background: rgba(236, 65, 140, 1);
+}
+
+.help-text {
+  font-size: 0.9rem;
+  color: var(--brand-gray-soft);
+  margin: 12px 0 0;
+  line-height: 1.5;
+}
+
+.storage-info {
+  background: rgba(33, 64, 152, 0.05);
+  border-radius: 14px;
+  padding: 14px;
+  border: 1px solid rgba(33, 64, 152, 0.12);
+}
+
+.storage-bar {
+  height: 12px;
+  background: rgba(33, 64, 152, 0.18);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.storage-bar__fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--brand-blue) 0%, rgba(0, 153, 255, 1) 100%);
+  width: 0%;
+  transition: width 600ms ease;
+}
+
+.storage-text {
+  font-size: 0.9rem;
+  color: var(--brand-gray-soft);
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.settings-fab {
+  position: fixed;
+  bottom: 100px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(100, 116, 139, 0.95);
+  border: none;
+  color: white;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: transform var(--anim-slow, 420ms) ease, background var(--anim-fast, 180ms) ease;
+  z-index: 9998;
+}
+
+.settings-fab:hover,
+.settings-fab:focus-visible {
+  background: rgba(71, 85, 105, 0.98);
+  transform: scale(1.08);
+}
+
+@media (max-width: 420px) {
+  .settings-fab {
+    right: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .settings-fab,
+  .emoji-btn,
+  .btn-close {
+    transition: none;
+  }
+}

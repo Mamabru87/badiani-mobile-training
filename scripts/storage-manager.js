@@ -469,8 +469,12 @@
       });
       this.set('achievements', achievements);
 
-      // Show notification
-      this.showNotification(`🎉 Achievement! ${value} ${type}!`);
+      // Usa chiave i18n (fallback su stringa)
+      this.showNotification(
+        window.i18n?.t?.('notif.achievementUnlocked', { achievement: `${value} ${type}` }) ||
+          `🎉 Achievement! ${value} ${type}!`,
+        'success'
+      );
 
       // Trigger confetti
       if (window.dashboardAnimations && typeof window.dashboardAnimations.confettiEffect === 'function') {
@@ -639,15 +643,23 @@
     }
 
     showNotification(message, type = 'info') {
-      console.log(`[${String(type || 'info').toUpperCase()}] ${message}`);
+      const raw = message == null ? '' : String(message);
+
+      // Se il messaggio è una chiave i18n, traducilo
+      const translatedMessage = raw.startsWith('notif.')
+        ? window.i18n?.t?.(raw) || raw
+        : raw;
+
+      console.log(`[${String(type || 'info').toUpperCase()}] ${translatedMessage}`);
 
       // Se esiste toast UI
       const toast = document.querySelector('[data-error-toast]');
       if (toast) {
         const messageEl = toast.querySelector('[data-error-message]');
         if (messageEl) {
-          messageEl.textContent = message;
+          messageEl.textContent = translatedMessage;
           toast.hidden = false;
+          toast.setAttribute('data-type', String(type || 'info'));
 
           setTimeout(() => {
             toast.hidden = true;

@@ -6,6 +6,7 @@
 
 (() => {
   const STORAGE_KEY = 'badianiUILang.v1';
+  const STORAGE_KEY_ALT = 'user-language';
   const SUPPORTED = ['it', 'en', 'es', 'fr'];
   const DEFAULT_LANG = 'it';
 
@@ -8247,6 +8248,12 @@
       if (stored) return stored;
     } catch {}
 
+    // Compatibility: some tools/snippets store language under a simpler key.
+    try {
+      const storedAlt = normalizeLang(localStorage.getItem(STORAGE_KEY_ALT));
+      if (storedAlt) return storedAlt;
+    } catch {}
+
     try {
       const fromHtml = normalizeLang(document.documentElement.getAttribute('lang'));
       if (fromHtml) return fromHtml;
@@ -8333,7 +8340,10 @@
     // Show loading spinner
     showLanguageLoadingSpinner();
     
-    try { localStorage.setItem(STORAGE_KEY, lang); } catch {}
+    try {
+      localStorage.setItem(STORAGE_KEY, lang);
+      localStorage.setItem(STORAGE_KEY_ALT, lang);
+    } catch {}
 
     try {
       document.documentElement.setAttribute('lang', lang);

@@ -135,10 +135,27 @@
           this.userContext = this.loadUserContext();
         } catch {}
       });
+
+      // Refresh KB when the new i18n manager emits updates.
+      // (Useful when scripts/i18n.js is not present or when relying on i18nUpdated.)
+      window.addEventListener('i18nUpdated', () => {
+        try {
+          this.knowledgeBase = this.loadBadianiKnowledge();
+        } catch {}
+      });
     }
 
     // Carica il knowledge base Badiani (lightweight, can be expanded later)
     loadBadianiKnowledge() {
+      // Prefer the dedicated localized KB provider if present.
+      try {
+        if (window.bernyNLP && typeof window.bernyNLP.getLocalizedKnowledge === 'function') {
+          const kb = window.bernyNLP.getLocalizedKnowledge();
+          if (kb && typeof kb === 'object') return kb;
+        }
+      } catch {}
+
+      // Fallback (legacy shape)
       return {
         products: {
           coni: {
