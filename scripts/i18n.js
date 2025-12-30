@@ -14,6 +14,7 @@
   const dict = {
     it: {
       'assistant.greeting': 'Ciao! Sono BERNY 👋🍦 Il tuo assistente per il training Badiani. Chiedimi qualsiasi cosa!',
+      'assistant.openCard': '📖 Apri Scheda Correlata',
       'lang.label': 'Lingua',
       'lang.it': 'Italiano',
       'lang.en': 'English',
@@ -997,6 +998,7 @@
 
     en: {
       'assistant.greeting': 'Hi! I\'m BERNY 👋🍦 Your Badiani training assistant. Ask me anything!',
+      'assistant.openCard': '📖 Open Related Card',
       'lang.label': 'Language',
       'lang.it': 'Italiano',
       'lang.en': 'English',
@@ -4099,6 +4101,7 @@
 
     es: {
       'assistant.greeting': '¡Hola! Soy BERNY 👋🍦 Tu asistente de formación Badiani. ¡Pregúntame lo que quieras!',
+      'assistant.openCard': '📖 Abrir Ficha Relacionada',
       'lang.label': 'Idioma',
       'lang.it': 'Italiano',
       'lang.en': 'English',
@@ -5771,6 +5774,7 @@
 
     fr: {
       'assistant.greeting': 'Salut ! Je suis BERNY 👋🍦 Ton assistant de formation Badiani. Demande-moi n\'importe quoi !',
+      'assistant.openCard': '📖 Ouvrir Fiche Associée',
       'lang.label': 'Langue',
       'lang.it': 'Italiano',
       'lang.en': 'English',

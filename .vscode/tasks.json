@@ -1,0 +1,14 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "append_css",
+			"type": "shell",
+			"command": "echo \"/* Effetto Evidenziatore Badiani */\n@keyframes badianiPulse {\n  0% { box-shadow: 0 0 0 0 rgba(227, 6, 19, 0.7); transform: scale(1); }\n  50% { box-shadow: 0 0 0 20px rgba(227, 6, 19, 0); transform: scale(1.02); }\n  100% { box-shadow: 0 0 0 0 rgba(227, 6, 19, 0); transform: scale(1); }\n}\n\n.berny-highlight-pulse {\n  animation: badianiPulse 1s ease-out infinite;\n  border: 2px solid #E30613 !important; /* Bordo rosso */\n  position: relative;\n  z-index: 9999; /* Sopra tutto */\n}\" >> styles/berny-chat.css",
+			"args": [],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		}
+	]
+}

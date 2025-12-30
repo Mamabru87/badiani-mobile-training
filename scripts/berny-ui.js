@@ -224,7 +224,11 @@
       }
 
       this.currentStreamingText += c;
-      this.currentStreamingBubble.textContent = this.currentStreamingText;
+      
+      // Nascondi i tag [[LINK:...]] durante lo streaming per non mostrare codice grezzo
+      const displayText = this.currentStreamingText.replace(/\[\[LINK:.*?\]\]/g, '');
+      
+      this.currentStreamingBubble.textContent = displayText;
       this.scrollToBottom(false);
     }
 
@@ -289,7 +293,7 @@
       this.messagesArea.appendChild(msgDiv);
       
       let i = 0;
-      const speed = 40; 
+      const speed = 90; 
 
       const type = () => {
         if (i < cleanText.length) {
@@ -316,7 +320,10 @@
       const btn = document.createElement('a');
       btn.href = url;
       btn.className = 'berny-link-btn';
-      btn.innerHTML = '📖 <b>Apri Scheda Correlata</b>';
+      
+      // Usa la traduzione se disponibile, altrimenti fallback
+      const label = tr('assistant.openCard', null, '📖 Apri Scheda Correlata');
+      btn.innerHTML = `<b>${label}</b>`;
       
       // Inline styles (preserved for compatibility)
       btn.style.display = 'inline-block';

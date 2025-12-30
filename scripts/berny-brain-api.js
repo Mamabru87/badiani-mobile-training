@@ -161,23 +161,29 @@ class BernyBrainAPI {
       REGOLE DI RISPOSTA:
       1. Sii brevissimo. Riassumi i punti chiave.
       2. NON fare elenchi puntati lunghi.
-      3. Chiudi SEMPRE invitando ad aprire la scheda (es: "Apri la scheda qui sotto per i dettagli!").
+      3. Chiudi SEMPRE invitando l'utente ad aprire la scheda per i dettagli (usa la lingua dell'utente).
       4. Usa emoji ma non esagerare.
 
       REGOLE LINK SCHEDE:
-      Se la tua risposta riguarda uno di questi argomenti, AGGIUNGI ALLA FINE del messaggio il tag corrispondente (invisibile all'utente):
-      - Gelato/Gusti -> [[LINK:gelato-lab.html]]
-      - Caffè/Bar -> [[LINK:caffe.html]]
-      - Churros/Crepes/Waffle -> [[LINK:sweet-treats.html]] (o pastries.html se specifico)
-      - Storia/Azienda -> [[LINK:story-orbit.html]]
-      - Procedure/Operazioni -> [[LINK:operations.html]]
+      Se la tua risposta riguarda uno di questi argomenti, AGGIUNGI ALLA FINE del messaggio il tag corrispondente (invisibile all'utente).
+      IMPORTANTE: Aggiungi sempre "?q=PAROLA_CHIAVE" per aprire la scheda specifica (es. buontalenti, pistacchio, waffle).
+
+      - Gelato/Gusti -> [[LINK:gelato-lab.html?q=PAROLA_CHIAVE]]
+      - Caffè/Bar -> [[LINK:caffe.html?q=PAROLA_CHIAVE]]
+      - Churros/Crepes/Waffle -> [[LINK:sweet-treats.html?q=PAROLA_CHIAVE]] (o pastries.html se specifico)
+      - Storia/Azienda -> [[LINK:story-orbit.html?q=PAROLA_CHIAVE]]
+      - Procedure/Operazioni -> [[LINK:operations.html?q=PAROLA_CHIAVE]]
 
       CONOSCENZA ATTUALE:
       ${info}
       
-      ESEMPIO:
+      ESEMPIO (Italiano):
       Utente: "Come si fanno i churros?"
-      Tu: "I churros vanno fritti a 190°C. 🥨 Apri la scheda per i dettagli!" [[LINK:sweet-treats.html]]
+      Tu: "I churros vanno fritti a 190°C. 🥨 Apri la scheda per i dettagli!" [[LINK:sweet-treats.html?q=churros]]
+
+      ESEMPIO (English):
+      Utente: "How do I make churros?"
+      Tu: "Churros must be fried at 190°C. 🥨 Open the card below for details!" [[LINK:sweet-treats.html?q=churros]]
     `;
   }
 }
@@ -204,14 +210,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // pseudo-stream per UI
         if (typeof onChunk === 'function') {
-          const chunkSize = 24;
+          // VELOCIZZATO: 2 caratteri ogni 30ms (circa 66 caratteri al secondo)
+          // Più fluido ma ancora leggibile.
+          const chunkSize = 2; 
           let i = 0;
           const tick = () => {
             const c = text.slice(i, i + chunkSize);
             if (c) {
               try { onChunk(c); } catch {}
               i += chunkSize;
-              window.setTimeout(tick, 16);
+              window.setTimeout(tick, 30);
             } else {
               if (typeof onComplete === 'function') onComplete(text, 'gemini-sdk');
             }

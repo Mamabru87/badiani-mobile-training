@@ -368,18 +368,16 @@
         </nav>
 
         <div class="menu-drawer__footer">
-          <details class="menu-lang" data-lang-selector>
-            <summary class="menu-lang__summary">
-              <span class="menu-lang__label" data-lang-label>Lingua</span>
-              <span class="menu-lang__current" data-lang-current>Italiano</span>
-            </summary>
-            <div class="menu-lang__options" role="radiogroup" aria-label="Lingua">
-              <button type="button" class="menu-lang__option" role="radio" data-lang-option="it" aria-checked="true">Italiano</button>
-              <button type="button" class="menu-lang__option" role="radio" data-lang-option="en" aria-checked="false">English</button>
-              <button type="button" class="menu-lang__option" role="radio" data-lang-option="es" aria-checked="false">Español</button>
-              <button type="button" class="menu-lang__option" role="radio" data-lang-option="fr" aria-checked="false">Français</button>
-            </div>
-          </details>
+          <!-- Footer Funzionale (Settings + Lang) -->
+          <div class="menu-footer-actions" style="display: flex; gap: 12px;">
+            <button class="menu-action-btn" onclick="openProfileSettings()">
+              <span class="icon">👤</span> Profilo
+            </button>
+            
+            <button class="menu-action-btn" onclick="toggleLanguage()">
+              <span class="icon">🌍</span> <span id="current-lang-label">IT</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

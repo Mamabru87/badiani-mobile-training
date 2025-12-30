@@ -2534,14 +2534,6 @@ scrollButtons.forEach((btn) => {
   if (window.__badianiBernyChatInit) return;
   window.__badianiBernyChatInit = true;
 
-  // If the newer Berny UI controller is enabled, it owns the chat.
-  // This avoids double event handlers and duplicate messages.
-  try {
-    if (window.__badianiBernyUIEnabled || window.bernyUI) {
-      return;
-    }
-  } catch {}
-
   const chatInput = document.querySelector('[data-chat-input]');
   const chatSend = document.querySelector('[data-chat-send]');
   const messagesArea = document.querySelector('[data-messages-area]');
@@ -2738,58 +2730,9 @@ scrollButtons.forEach((btn) => {
     setAvatarThinking(true);
 
     const typingId = makeId('assistant-typing');
-    const typingWrapper = addMessage({ id: typingId, text: '…', role: 'assistant' });
-    const typingBubble = (() => {
-      try {
-        return typingWrapper?.querySelector?.('.message-bubble') || null;
-      } catch {
-        return null;
-      }
-    })();
+    addMessage({ id: typingId, text: '…', role: 'assistant' });
 
-    const setAssistantText = (value) => {
-      const v = String(value ?? '');
-      if (typingBubble) {
-        // Preserve streaming text as-is (trim only at the very end)
-        typingBubble.textContent = v;
-      }
-    };
-
-    // If BernyBrain is present, use it (streaming-friendly). Otherwise fall back to local stub.
-    const brain = window.bernyBrain;
-    if (brain && typeof brain.sendMessage === 'function') {
-      let streamed = '';
-      try {
-        brain.sendMessage(
-          text,
-          (chunk) => {
-            const c = String(chunk ?? '');
-            if (!c) return;
-            streamed += c;
-            setAssistantText(streamed);
-          },
-          (fullResponse, source) => {
-            const finalText = sanitizeChatText(fullResponse || streamed || '');
-            // If sanitize removed everything, keep the streamed text.
-            setAssistantText(finalText || streamed || '…');
-            setAvatarThinking(false);
-            bounceAvatar();
-            try {
-              // Expose source for debugging (local/proxy/openai/error)
-              typingWrapper?.setAttribute?.('data-berny-source', String(source || 'unknown'));
-            } catch {}
-          }
-        );
-      } catch (e) {
-        console.error('BERNY chat error:', e);
-        setAssistantText('Oops! Ho avuto un problema tecnico 😅');
-        setAvatarThinking(false);
-        bounceAvatar();
-      }
-      return;
-    }
-
-    // Local fallback (previous behavior)
+    // Simulate assistant response after short delay
     window.setTimeout(() => {
       removeMessageById(typingId);
       addMessage({ id: makeId('assistant'), text: 'Sto cercando informazioni per te…', role: 'assistant' });
@@ -5105,148 +5048,61 @@ const gamification = (() => {
     setText('[data-perf-stars-total]', totals.stars || 0);
     setText('[data-perf-gelati-total]', totals.gelati || 0);
     setText('[data-perf-bonus-total]', totals.bonusPoints || 0);
-
-    // Optional progress ring (dashboard totals card).
-    // We treat it as a visual milestone toward 100 total stars.
-    try {
-      const circle = root.querySelector('[data-progress-circle]');
-      if (circle) {
-        const r = Number(circle.getAttribute('r')) || 50;
-        const circumference = 2 * Math.PI * r;
-        circle.style.strokeDasharray = String(circumference);
-
-        const goalStars = 100;
-        const currentStars = Number(totals.stars || 0);
-        const ratio = goalStars > 0 ? Math.max(0, Math.min(1, currentStars / goalStars)) : 0;
-        circle.style.strokeDashoffset = String(circumference * (1 - ratio));
-      }
-    } catch {}
     const list = root.querySelector('[data-wrong-list]');
     const wrongCountNode = root.querySelector('[data-wrong-count]');
-    const wrongAll = quizHistory.filter(q => q.correct === false);
-    const wrongItems = wrongAll.slice(-10).reverse();
-    const wrongTotal = wrongAll.length;
-
-    // Wrong count: dashboard uses a plain number; legacy cockpit uses a label string.
-    if (wrongCountNode) {
-      const wantsNumberOnly = wrongCountNode.classList?.contains('wrong-count-big');
-      wrongCountNode.textContent = wantsNumberOnly
-        ? String(wrongTotal)
-        : (wrongTotal ? tr('cockpit.wrong.total', { count: wrongTotal }, `Totale: ${wrongTotal}`) : '');
-    }
-
-    const viewAllBtn = root.querySelector('[data-wrong-view-all]');
-    if (viewAllBtn) viewAllBtn.hidden = wrongTotal === 0;
-
     if (list) {
       list.innerHTML = '';
-      const isList = list.matches?.('ul,ol');
-
-      const appendEmpty = () => {
-        const emptyText = tr('cockpit.wrong.empty', null, 'Nessun errore recente - continua cos\u00EC!');
-        if (isList) {
-          const li = document.createElement('li');
-          li.className = 'empty';
-          li.textContent = emptyText;
-          list.appendChild(li);
-          return;
-        }
-        const p = document.createElement('p');
-        p.className = 'empty';
-        p.textContent = emptyText;
-        list.appendChild(p);
-      };
-
+      const wrongAll = quizHistory.filter(q => q.correct === false);
+      const wrongItems = wrongAll.slice(-10).reverse();
+      if (wrongCountNode) {
+        const total = wrongAll.length;
+        wrongCountNode.textContent = total ? tr('cockpit.wrong.total', { count: total }, `Totale: ${total}`) : '';
+        const viewAllBtn = root.querySelector('[data-wrong-view-all]');
+        if (viewAllBtn) viewAllBtn.hidden = total === 0;
+      }
       if (!wrongItems.length) {
-        appendEmpty();
+        const li = document.createElement('li');
+        li.className = 'empty';
+        li.textContent = tr('cockpit.wrong.empty', null, 'Nessun errore recente - continua cos\u00EC!');
+        list.appendChild(li);
       } else {
         wrongItems.forEach(item => {
           const localizedItem = localizeHistoryItem(item) || item;
+          const li = document.createElement('li');
           const when = new Date(item.ts || Date.now());
           const date = when.toLocaleDateString(uiLocale);
           const time = when.toLocaleTimeString(uiLocale, { hour: '2-digit', minute: '2-digit' });
-          const prompt = localizedItem?.prompt || tr('quiz.generic', null, 'Quiz');
-
           const btn = document.createElement('button');
           btn.type = 'button';
           btn.className = 'summary-list__btn';
+          const prompt = localizedItem?.prompt || tr('quiz.generic', null, 'Quiz');
           btn.textContent = `${date} ${time} - ${prompt}`;
           btn.setAttribute('aria-label', tr('cockpit.wrong.reviewAria', { title: prompt }, `Apri revisione errore: ${prompt}`));
           btn.addEventListener('click', () => openWrongReviewModal(localizedItem));
-
-          if (isList) {
-            const li = document.createElement('li');
-            li.appendChild(btn);
-            list.appendChild(li);
-          } else {
-            list.appendChild(btn);
-          }
+          li.appendChild(btn);
+          list.appendChild(li);
         });
       }
     }
 
-    // Optional daily history list/count if present
+    // Optional daily history list if present
     const daysRoot = root.querySelector('[data-history-days]');
-    const daysData = Array.isArray(state.history?.days) ? state.history.days : [];
-
-    if (daysRoot) {
-      const isDaysList = daysRoot.matches?.('ul,ol');
-      if (isDaysList) {
-        daysRoot.innerHTML = '';
-        const days = [...daysData].slice(-14).reverse();
-        if (!days.length) {
-          const li = document.createElement('li');
-          li.className = 'empty';
-          li.textContent = tr('cockpit.history.empty', null, 'Nessuna cronologia disponibile ancora.');
-          daysRoot.appendChild(li);
-        } else {
-          days.forEach(d => {
-            const li = document.createElement('li');
-            li.textContent = `${d.date} | Stars: ${d.stars} | Cards: ${d.cardsOpened} | Correct: ${d.quizzes?.correct || 0} | Wrong: ${d.quizzes?.wrong || 0} | Gelati: ${d.gelati}`;
-            daysRoot.appendChild(li);
-          });
-        }
+    if (daysRoot && Array.isArray(state.history?.days)) {
+      daysRoot.innerHTML = '';
+      const days = [...state.history.days].slice(-14).reverse();
+      if (!days.length) {
+        const li = document.createElement('li');
+        li.className = 'empty';
+        li.textContent = tr('cockpit.history.empty', null, 'Nessuna cronologia disponibile ancora.');
+        daysRoot.appendChild(li);
       } else {
-        daysRoot.textContent = String(daysData.length || 0);
+        days.forEach(d => {
+          const li = document.createElement('li');
+          li.textContent = `${d.date} | Stars: ${d.stars} | Cards: ${d.cardsOpened} | Correct: ${d.quizzes?.correct || 0} | Wrong: ${d.quizzes?.wrong || 0} | Gelati: ${d.gelati}`;
+          daysRoot.appendChild(li);
+        });
       }
     }
-
-    // Optional 7-day activity chart for the dashboard.
-    try {
-      const chart = root.querySelector('[data-activity-chart]');
-      if (chart) {
-        const bars = Array.from(chart.querySelectorAll('.activity-bar'));
-        if (!bars.length) {
-          // Markup not present (or customized) — nothing to paint.
-        } else {
-          const last7 = [...daysData]
-            .filter(Boolean)
-            .sort((a, b) => String(a.date || '').localeCompare(String(b.date || '')))
-            .slice(-7);
-
-          // Pad to 7 so we always paint all bars.
-          while (last7.length < 7) last7.unshift({ date: '', stars: 0 });
-
-          const max = Math.max(1, ...last7.map(d => Number(d?.stars || 0)));
-          last7.forEach((d, idx) => {
-            const bar = bars[idx];
-            if (!bar) return;
-            const starsVal = Number(d?.stars || 0);
-            const pct = Math.max(0, Math.min(100, Math.round((starsVal / max) * 100)));
-            try { bar.style.setProperty('--height', `${pct}%`); } catch {}
-
-            const label = bar.querySelector('span');
-            if (label && d?.date) {
-              const dt = new Date(d.date);
-              if (!Number.isNaN(dt.valueOf())) {
-                const wk = dt.toLocaleDateString(uiLocale, { weekday: 'short' });
-                label.textContent = String(wk || '').trim().slice(0, 1).toUpperCase() || label.textContent;
-              }
-            }
-          });
-        }
-      }
-    } catch {}
   }
 
   function getCorrectAnswerText(question) {
@@ -13072,3 +12928,88 @@ if (document.readyState === 'loading') {
 } else {
   initGuideCardAutoScroll();
 }
+
+// ============================================================
+// MODERN MENU DRAWER CONTROLLER (Global)
+// Integrates with existing markup and bodyScrollLock helper.
+// ============================================================
+
+// Funzione Aggiornata Toggle Menu
+window.toggleMenu = function() {
+  const drawer = document.querySelector('.menu-drawer');
+  if (!drawer) return;
+  
+  const isOpen = drawer.getAttribute('aria-hidden') === 'false';
+  const nextState = !isOpen;
+  
+  drawer.setAttribute('aria-hidden', String(nextState));
+  
+  // Use the global bodyScrollLock helper if available, otherwise fallback
+  if (typeof bodyScrollLock !== 'undefined') {
+    if (nextState) { // closing (aria-hidden=true) -> unlock
+      bodyScrollLock.unlock();
+    } else { // opening (aria-hidden=false) -> lock
+      bodyScrollLock.lock();
+    }
+  } else {
+    document.body.style.overflow = nextState ? '' : 'hidden';
+  }
+};
+
+// Event Listeners (using robust delegation or direct attachment)
+document.addEventListener('DOMContentLoaded', () => {
+  // Backdrop click
+  const backdrop = document.querySelector('.menu-drawer__overlay');
+  if (backdrop) {
+    backdrop.addEventListener('click', (e) => {
+      // Only close if it's currently open
+      const drawer = document.querySelector('.menu-drawer');
+      if (drawer && drawer.getAttribute('aria-hidden') === 'false') {
+        window.toggleMenu();
+      }
+    });
+  }
+
+  // Close button click
+  const closeBtn = document.querySelector('.menu-drawer__close');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.toggleMenu();
+    });
+  }
+});
+
+// Gestione Profilo (Placeholder)
+window.openProfileSettings = function() {
+    // Chiudi prima il menu principale per pulizia
+    if (typeof window.toggleMenu === 'function') {
+        const drawer = document.querySelector('.menu-drawer');
+        if (drawer && drawer.getAttribute('aria-hidden') === 'false') {
+            window.toggleMenu();
+        }
+    }
+    
+    // Apri il pannello impostazioni (quello che c'era prima)
+    const settingsPanel = document.getElementById('settings-panel');
+    if (settingsPanel) {
+        settingsPanel.classList.add('open');
+        // Ensure body scroll is locked if needed for settings panel
+        if (typeof bodyScrollLock !== 'undefined') bodyScrollLock.lock();
+    } else {
+        console.warn("Pannello impostazioni non trovato (ID: settings-panel)");
+        // Fallback: try to find the old profile overlay if it exists
+        const oldProfileOverlay = document.getElementById('profile-overlay');
+        if (oldProfileOverlay) {
+             oldProfileOverlay.hidden = false;
+             if (typeof bodyScrollLock !== 'undefined') bodyScrollLock.lock();
+        }
+    }
+};
+
+// Gestione Lingua (Placeholder)
+window.toggleLanguage = function() {
+   // Logica esistente per switch lingua
+   console.log("Cambio lingua...");
+   // alert("Cambio lingua...");
+};
