@@ -57,7 +57,122 @@
   --nav-gap: 12px;
   --carousel-sticky-offset-desktop: 52px;
   --carousel-sticky-offset-mobile: 44px;
+
+  /* =====================================================================
+     Carousel + guide cards sizing tokens
+     (Used across ALL pages to keep mobile carousels compact and readable.)
+     ===================================================================== */
+  --carousel-header-margin-inline: 24px;
+  --carousel-header-padding-block: 14px;
+  --carousel-header-padding-inline: 18px;
+  --carousel-header-radius: 18px;
+
+  --carousel-title-size: 18px;
+  --carousel-category-size: 11px;
+
+  --carousel-track-gap: 24px;
+  --carousel-track-pad-inline: 28px;
+  --carousel-track-pad-bottom: 40px;
+  --carousel-card-basis: clamp(280px, 90vw, 380px);
+
+  /* Vertical spacing between consecutive carousel sections */
+  --carousel-section-gap: 40px;
+
+  --carousel-indicators-gap: 6px;
+  --carousel-indicators-padding-block: 6px;
+  --carousel-indicators-padding-inline: 10px;
+  --carousel-indicators-max-width: 220px;
+  --carousel-indicator-width: 10px;
+  --carousel-indicator-height: 4px;
+  --carousel-indicator-active-scale: 1.8;
+
+  --guide-card-padding: 18px;
+  --guide-card-gap: 12px;
+  --guide-card-title-size: 24px;
+  --guide-card-text-size: 15px;
+
+  --guide-media-padding: 8px;
+  --guide-media-max-height: 210px;
+
+  --guide-toggle-padding-block: 10px;
+  --guide-toggle-padding-inline: 16px;
+  --guide-toggle-font-size: 13px;
+  --guide-toggle-gap: 10px;
   font-family: var(--font-regular);
+}
+
+@media (max-width: 768px) {
+  :root {
+    --carousel-header-margin-inline: 12px;
+    --carousel-header-padding-block: 12px;
+    --carousel-header-padding-inline: 14px;
+    --carousel-header-radius: 16px;
+
+    --carousel-title-size: 16px;
+    --carousel-category-size: 10px;
+
+    --carousel-track-gap: 16px;
+    --carousel-track-pad-inline: 16px;
+    --carousel-track-pad-bottom: 32px;
+    --carousel-card-basis: clamp(260px, 92vw, 360px);
+
+    --carousel-section-gap: 32px;
+
+    --carousel-indicators-max-width: 190px;
+    --carousel-indicators-gap: 5px;
+    --carousel-indicators-padding-block: 5px;
+    --carousel-indicators-padding-inline: 8px;
+    --carousel-indicator-width: 9px;
+    --carousel-indicator-height: 3px;
+    --carousel-indicator-active-scale: 1.65;
+
+    --guide-card-padding: 14px;
+    --guide-card-gap: 10px;
+    --guide-card-title-size: 20px;
+    --guide-card-text-size: 14px;
+
+    --guide-media-padding: 6px;
+    --guide-media-max-height: 180px;
+
+    --guide-toggle-padding-block: 9px;
+    --guide-toggle-padding-inline: 14px;
+    --guide-toggle-font-size: 12px;
+    --guide-toggle-gap: 9px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --carousel-header-margin-inline: 10px;
+    --carousel-header-padding-block: 10px;
+    --carousel-header-padding-inline: 12px;
+
+    --carousel-title-size: 15px;
+    --carousel-category-size: 9px;
+
+    --carousel-track-gap: 12px;
+    --carousel-track-pad-inline: 12px;
+    --carousel-track-pad-bottom: 24px;
+    --carousel-card-basis: clamp(252px, 94vw, 340px);
+
+    --carousel-section-gap: 24px;
+
+    --carousel-indicators-max-width: 170px;
+    --carousel-indicator-width: 8px;
+    --carousel-indicator-height: 3px;
+    --carousel-indicator-active-scale: 1.55;
+
+    --guide-card-padding: 12px;
+    --guide-card-title-size: 18px;
+    --guide-card-text-size: 13.5px;
+
+    --guide-media-max-height: 160px;
+
+    --guide-toggle-padding-block: 8px;
+    --guide-toggle-padding-inline: 12px;
+    --guide-toggle-font-size: 11px;
+    --guide-toggle-gap: 8px;
+  }
 }
 
 * {
@@ -256,7 +371,9 @@ body.page-home {
 
 /* Homepage cockpit carousel (uses existing carousel JS + indicators) */
 .page-home [data-carousel="cockpit"] {
-  overflow: visible; /* FIXED: was overflow-x: hidden */
+  /* Allow vertical effects (focused lift), but never allow page-level horizontal scroll. */
+  overflow-x: hidden;
+  overflow-y: visible;
   min-width: 0;
   max-width: 100%;
 }
@@ -375,7 +492,8 @@ body.page-home {
 
 .page-home [data-carousel="cockpit"] .carousel-track [data-carousel-item] {
   flex: 0 0 auto;
-  width: min(420px, calc(100% - 20px));
+  /* Responsive sizing: prefer relative units to avoid fixed-pixel overflow on resize. */
+  width: clamp(18rem, 86vw, 26rem);
   max-width: none;
   min-width: 0;
   scroll-snap-align: center;
@@ -896,6 +1014,86 @@ h4 {
   font-family: var(--font-medium);
   letter-spacing: 0.05em;
   text-transform: uppercase;
+
+.nav-token__icon svg {
+  width: 1em;
+  height: 1em;
+  display: block;
+}
+
+/* ========================================================================
+   Global animated close icon (blue → pink)
+   Applied to close buttons across overlays, modals, drawers, and cards.
+   ======================================================================== */
+
+:root {
+  --x-icon-gradient: linear-gradient(120deg, var(--brand-blue), var(--brand-rose));
+  --x-icon-size: 18px;
+  --x-icon-thickness: 2.6px;
+}
+
+@keyframes xIconShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+:where(.reward-overlay__close, .menu-drawer__close, .card-modal-close, .story-modal__close, .menu-search__assistant-clear) {
+  position: relative;
+  isolation: isolate;
+}
+
+/* Hide legacy glyphs/SVGs; keep aria-label for accessibility. */
+:where(.reward-overlay__close, .menu-drawer__close, .story-modal__close, .menu-search__assistant-clear) {
+  font-size: 0;
+  line-height: 0;
+}
+
+:where(.menu-drawer__close, .card-modal-close) svg {
+  display: none;
+}
+
+:where(.reward-overlay__close, .menu-drawer__close, .card-modal-close, .story-modal__close, .menu-search__assistant-clear)::before,
+:where(.reward-overlay__close, .menu-drawer__close, .card-modal-close, .story-modal__close, .menu-search__assistant-clear)::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--x-icon-size);
+  height: var(--x-icon-thickness);
+  border-radius: 999px;
+  transform-origin: center;
+  background-image: var(--x-icon-gradient);
+  background-size: 220% 220%;
+  background-position: 0% 50%;
+  animation: xIconShift 2.4s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+  filter: drop-shadow(0 10px 18px rgba(15, 33, 84, 0.14));
+}
+
+:where(.reward-overlay__close, .menu-drawer__close, .card-modal-close, .story-modal__close, .menu-search__assistant-clear)::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+:where(.reward-overlay__close, .menu-drawer__close, .card-modal-close, .story-modal__close, .menu-search__assistant-clear)::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+:where(.reward-overlay__close, .menu-drawer__close, .card-modal-close, .story-modal__close, .menu-search__assistant-clear):hover::before,
+:where(.reward-overlay__close, .menu-drawer__close, .card-modal-close, .story-modal__close, .menu-search__assistant-clear):hover::after,
+:where(.reward-overlay__close, .menu-drawer__close, .card-modal-close, .story-modal__close, .menu-search__assistant-clear):focus-visible::before,
+:where(.reward-overlay__close, .menu-drawer__close, .card-modal-close, .story-modal__close, .menu-search__assistant-clear):focus-visible::after {
+  animation-duration: 1.25s;
+  filter: drop-shadow(0 14px 26px rgba(236, 65, 140, 0.18));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(.reward-overlay__close, .menu-drawer__close, .card-modal-close, .story-modal__close, .menu-search__assistant-clear)::before,
+  :where(.reward-overlay__close, .menu-drawer__close, .card-modal-close, .story-modal__close, .menu-search__assistant-clear)::after {
+    animation: none;
+  }
+}
   color: var(--ink);
   cursor: pointer;
   transition: background var(--anim-fast) ease, transform var(--anim-fast) ease;
@@ -3731,24 +3929,35 @@ button,
 /* Carousel Section */
 .carousel {
   position: relative;
-  overflow: hidden;
+  /* Never let carousel visuals create page-level horizontal scroll.
+     The track itself can scroll horizontally; the container must clip X. */
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+  overflow-y: hidden;
   background: transparent;
+  margin-bottom: var(--carousel-section-gap);
+}
+
+/* Don't force extra whitespace after the last carousel on a page */
+section.carousel:last-of-type {
+  margin-bottom: 0;
 }
 
 .carousel-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 18px;
+  padding: var(--carousel-header-padding-block) var(--carousel-header-padding-inline);
   background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(14px);
   border: 1px solid rgba(33, 64, 152, 0.14);
-  border-radius: 18px;
+  border-radius: var(--carousel-header-radius);
   position: sticky;
   top: calc(var(--nav-height) + var(--nav-gap));
   z-index: 900;
   gap: 16px;
-  margin: 0 24px;
+  margin: 0 var(--carousel-header-margin-inline);
   box-shadow: 0 10px 22px rgba(15, 33, 84, 0.08);
   cursor: pointer;
   overflow: hidden;
@@ -3792,7 +4001,7 @@ button,
 }
 
 .carousel-title {
-  font-size: 18px;
+  font-size: var(--carousel-title-size);
   font-weight: 700;
   color: var(--brand-blue);
   transition: color 400ms cubic-bezier(0.4, 0, 0.2, 1), transform 320ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -3810,7 +4019,7 @@ button,
 }
 
 .carousel-category {
-  font-size: 11px;
+  font-size: var(--carousel-category-size);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.18em;
@@ -3845,12 +4054,12 @@ button,
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 6px;
+  gap: var(--carousel-indicators-gap);
   flex-wrap: nowrap;
   min-width: 0;
-  max-width: 220px;
+  max-width: var(--carousel-indicators-max-width);
   overflow: hidden;
-  padding: 6px 10px;
+  padding: var(--carousel-indicators-padding-block) var(--carousel-indicators-padding-inline);
   border-radius: 999px;
   border: 1px solid rgba(33, 64, 152, 0.10);
   background: rgba(255, 255, 255, 0.66);
@@ -3861,8 +4070,8 @@ button,
 
 .carousel-indicator {
   position: relative;
-  flex: 0 0 10px;
-  height: 4px;
+  flex: 0 0 var(--carousel-indicator-width);
+  height: var(--carousel-indicator-height);
   border-radius: 999px;
   background: rgba(33, 64, 152, 0.18);
   cursor: pointer;
@@ -3890,7 +4099,7 @@ button,
 }
 
 .carousel-indicator.is-active {
-  transform: scaleX(1.8);
+  transform: scaleX(var(--carousel-indicator-active-scale));
   background: var(--brand-blue);
   opacity: 1;
 }
@@ -3903,21 +4112,23 @@ button,
   display: flex;
   flex-wrap: nowrap;
   align-items: start;
-  gap: 24px;
+  gap: var(--carousel-track-gap);
   overflow-x: auto;
   /* Cards scale/float slightly; keep their top shadows/transform from being clipped. */
   overflow-y: visible;
+  max-width: 100%;
+  min-width: 0;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
-  padding: 28px;
+  padding-left: var(--carousel-track-pad-inline);
+  padding-right: calc(var(--carousel-track-pad-inline) + (100vw - 100%));
   padding-top: calc(var(--nav-height) + var(--nav-gap) + var(--carousel-sticky-offset-desktop));
-  padding-bottom: 64px;
-  padding-right: calc(100vw - 100%);
+  padding-bottom: var(--carousel-track-pad-bottom);
   scrollbar-width: none;
   scrollbar-color: transparent transparent;
   -ms-overflow-style: none;
   scroll-padding-top: calc(var(--nav-height) + var(--nav-gap) + var(--carousel-sticky-offset-desktop));
-  scroll-padding-inline: 28px;
+  scroll-padding-inline: var(--carousel-track-pad-inline);
   transition: padding 240ms ease;
 }
 
@@ -3932,7 +4143,7 @@ button,
 }
 
 .guide-card[data-carousel-item] {
-  flex: 0 0 clamp(280px, 90vw, 380px);
+  flex: 0 0 var(--carousel-card-basis);
   scroll-snap-align: center;
   scroll-snap-stop: always;
   scroll-margin-top: calc(var(--nav-height) + var(--nav-gap) + var(--carousel-sticky-offset-desktop));
@@ -3949,24 +4160,25 @@ button,
 
 @media (max-width: 720px) {
   .carousel {
-    /* Let focused cards breathe on mobile; avoids “deformed/clipped” edges. */
-    overflow: visible;
+    /* Let focused cards breathe on mobile (Y), but never allow page-level X scroll. */
+    overflow-x: hidden;
+    overflow-y: visible;
   }
 
   .carousel-header {
-    margin: 0 12px;
-    padding: 12px 14px;
+    margin: 0 var(--carousel-header-margin-inline);
+    padding: var(--carousel-header-padding-block) var(--carousel-header-padding-inline);
   }
 
   .carousel-track {
-    gap: 18px;
     /* IMPORTANT: do not use padding shorthand here, otherwise it overrides
        the dynamic padding-top that keeps content below the sticky nav/header. */
-    padding-left: 16px;
-    padding-right: 16px;
-    padding-bottom: 56px;
+    gap: var(--carousel-track-gap);
+    padding-left: var(--carousel-track-pad-inline);
+    padding-right: calc(var(--carousel-track-pad-inline) + (100vw - 100%));
+    padding-bottom: var(--carousel-track-pad-bottom);
     padding-top: calc(var(--nav-height) + var(--nav-gap) + var(--carousel-sticky-offset-mobile));
-    scroll-padding-inline: 16px;
+    scroll-padding-inline: var(--carousel-track-pad-inline);
     scroll-padding-top: calc(var(--nav-height) + var(--nav-gap) + var(--carousel-sticky-offset-mobile));
   }
 
@@ -3986,6 +4198,9 @@ button,
   .carousel-header {
     gap: 12px;
   }
+}
+
+@media (max-width: 360px) {
   .carousel-indicators {
     display: none;
   }
@@ -4053,13 +4268,13 @@ button,
   flex: 0 1 clamp(280px, 31%, 360px);
   max-width: 380px;
   width: 100%;
-  padding: 18px;
+  padding: var(--guide-card-padding);
   border-radius: var(--radius-lg);
   background: #ffffff;
   border: 1px solid rgba(33, 64, 152, 0.10);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--guide-card-gap);
   box-shadow: none;
   transition: transform var(--anim-fast) ease, box-shadow var(--anim-fast) ease;
   position: relative;
@@ -4075,16 +4290,16 @@ button,
   align-self: stretch;
   border: 1px solid rgba(236, 65, 140, 0.26);
   background: rgba(236, 65, 140, 0.06);
-  padding: 10px 16px;
+  padding: var(--guide-toggle-padding-block) var(--guide-toggle-padding-inline);
   border-radius: 999px;
-  font-size: 13px;
+  font-size: var(--guide-toggle-font-size);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   font-family: var(--font-medium);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: var(--guide-toggle-gap);
 }
 
 /* Card-level progress indicator (✓ / ★) shown inside the page button */
@@ -4627,9 +4842,38 @@ button,
   border-radius: 999px;
   background: rgba(236, 65, 140, 0.06);
   color: var(--brand-rose);
-  font-size: 13px;
-  line-height: 1;
+  font-size: 0;
+  line-height: 0;
   align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Indicator icon (diamond for opened, star for starred) */
+.accordion-header .crystal-indicator::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  display: block;
+  background: currentColor;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+.accordion-header .crystal-indicator.is-starred::before {
+  width: 11px;
+  height: 11px;
+  clip-path: polygon(
+    50% 0%,
+    61% 36%,
+    98% 38%,
+    68% 59%,
+    79% 94%,
+    50% 72%,
+    21% 94%,
+    32% 59%,
+    2% 38%,
+    39% 36%
+  );
 }
 
 .accordion-header .crystal-indicator.is-hidden {
@@ -5486,7 +5730,29 @@ button,
 }
 
 .accordion-chevron {
+  width: 18px;
+  height: 18px;
+  display: inline-grid;
+  place-items: center;
+  color: var(--ink-soft);
   transition: transform 0.2s ease;
+}
+
+.accordion-chevron::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  margin-top: -2px;
+}
+
+/* Ensure inline SVG icons in the crystal chip scale correctly */
+.card-modal-crystals__icon svg {
+  width: 1em;
+  height: 1em;
+  display: block;
 }
 
 .accordion-item.is-open .accordion-chevron {
@@ -6035,7 +6301,7 @@ button,
   margin-bottom: 8px;
   overflow: hidden;
   background: #ffffff;
-  padding: 8px;
+  padding: var(--guide-media-padding);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -6051,7 +6317,7 @@ button,
 .guide-media img {
   width: 100%;
   height: auto;
-  max-height: 210px;
+  max-height: var(--guide-media-max-height);
   display: block;
   object-fit: contain;
 }
@@ -6065,7 +6331,7 @@ button,
 /* Story section */
 .story-experience {
   margin-top: 0;
-  display: grid;
+  font-size: var(--guide-card-title-size);
   grid-template-columns: minmax(320px, 0.95fr) minmax(360px, 1.05fr);
   grid-template-rows: auto 1fr;
   grid-template-areas:
@@ -6075,7 +6341,7 @@ button,
   gap: clamp(18px, 3vw, 46px);
   padding: clamp(18px, 3vw, 28px);
   background: #ffffff;
-  background-image: none;
+  font-size: var(--guide-card-text-size);
   border: 1px solid rgba(33, 64, 152, 0.08);
   border-radius: var(--radius-xl);
   box-shadow: none;
@@ -6715,112 +6981,281 @@ body.page-home {
 }
 
 /* =========================
-   Hub assistant (index)
+   CHAT ASSISTANT - Messenger-style (BERNY)
    ========================= */
-.hub-assistant {
-  width: min(1160px, calc(100% - 40px));
-  margin: 8px auto 28px;
-  position: relative;
+.chat-berny {
+  --berny-avatar-size: 50px;
+  --berny-bubble-max: 70%;
 }
 
-.hub-assistant__inner {
-  position: relative;
-  border-radius: 22px;
-  border: 1px solid rgba(33, 64, 152, 0.14);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(33, 64, 152, 0.03));
-  box-shadow: 0 18px 60px rgba(15, 33, 84, 0.10);
-  padding: 18px 18px 16px;
+.chat-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 0;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(15, 33, 84, 0.10);
   overflow: hidden;
+  border: 1px solid rgba(33, 64, 152, 0.12);
 }
 
-.hub-assistant__glow {
-  position: absolute;
-  inset: -60px -40px;
-  background:
-    radial-gradient(circle at 18% 30%, rgba(236, 65, 140, 0.18), transparent 52%),
-    radial-gradient(circle at 70% 20%, rgba(33, 64, 152, 0.16), transparent 55%),
-    radial-gradient(circle at 60% 85%, rgba(255, 208, 102, 0.14), transparent 60%);
-  filter: blur(18px);
-  pointer-events: none;
-  opacity: 0.85;
-}
-
-.hub-assistant__head {
-  position: relative;
-  z-index: 1;
+.chat-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  gap: 14px;
-  margin-bottom: 10px;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(33, 64, 152, 0.08);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(33, 64, 152, 0.02));
 }
 
-.hub-assistant__eyebrow {
-  margin: 0 0 4px;
-  font-size: 12px;
-  letter-spacing: 0.18em;
+.chat-header--compact {
+  padding: 8px 14px;
+}
+
+.chat-header-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.chat-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 900;
+  color: var(--brand-blue-deep);
+  line-height: 1.2;
+}
+
+.chat-subtitle {
+  margin: 2px 0 0;
+  font-size: 11px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   font-family: var(--font-medium);
   color: var(--brand-rose);
 }
 
-.hub-assistant__title {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: 18px;
-  font-weight: 900;
-  color: var(--brand-blue-deep);
-  letter-spacing: -0.01em;
+/* Scroll container = body (so the avatar can be sticky inside the same scroller) */
+.chat-body {
+  display: grid;
+  grid-template-columns: var(--berny-avatar-size) 1fr;
+  gap: 10px;
+  padding: 12px;
+  background: #f5f5f5;
+  max-height: 320px;
+  overflow-y: auto;
 }
 
-.hub-assistant__sub {
-  margin: 6px 0 0;
+.chat-avatar-sticky {
+  position: sticky;
+  top: 12px;
+  align-self: start;
+  height: fit-content;
+}
+
+.avatar-container {
+  width: var(--berny-avatar-size);
+  height: var(--berny-avatar-size);
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.85), rgba(255,255,255,0.35));
+  border: 1px solid rgba(33, 64, 152, 0.16);
+  box-shadow: 0 10px 24px rgba(15, 33, 84, 0.14);
+  transform: translateZ(0);
+}
+
+.avatar-container lottie-player {
+  display: block;
+}
+
+.avatar-container.is-thinking {
+  animation: bernyPulse 1.2s ease-in-out infinite;
+}
+
+.avatar-container.is-bounce {
+  animation: bernyBounce 420ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.avatar-container.is-blink {
+  /* subtle “blink” illusion: quick squash */
+  animation: bernyBlink 140ms ease-in-out 1;
+}
+
+@keyframes bernyPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 10px 24px rgba(15, 33, 84, 0.14); }
+  50% { transform: scale(1.04); box-shadow: 0 14px 30px rgba(15, 33, 84, 0.18); }
+}
+
+@keyframes bernyBounce {
+  0% { transform: translateY(0); }
+  45% { transform: translateY(-3px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes bernyBlink {
+  0% { transform: scaleY(1); }
+  50% { transform: scaleY(0.92); }
+  100% { transform: scaleY(1); }
+}
+
+.messages-area {
+  min-height: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0;
+  background: transparent;
+}
+
+.chat-placeholder {
+  text-align: left;
   color: var(--ink-soft);
   font-size: 14px;
-  line-height: 1.35;
-  max-width: 70ch;
+  padding: 12px 8px;
+  font-style: italic;
 }
 
-.menu-search.menu-search--hub {
-  padding: 0;
-  z-index: 1;
+.berny-message {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 2px;
 }
 
-.menu-search.menu-search--hub::before {
-  inset: -2px;
-  opacity: 0.55;
+.message-bubble {
+  max-width: var(--berny-bubble-max);
+  padding: 12px 16px;
+  background: #fff;
+  border-radius: 18px;
+  border: 1px solid #e5e5e5;
+  position: relative;
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.45;
+  box-shadow: 0 6px 18px rgba(15, 33, 84, 0.08);
 }
 
-.hub-assistant .menu-search__assistant-avatar {
-  width: 140px;
-  flex: 0 0 140px;
+/* Arrow toward the avatar column (left) */
+.message-bubble::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 14px;
+  width: 0;
+  height: 0;
+  border: 8px solid;
+  border-color: transparent #fff transparent transparent;
 }
 
-@media (max-width: 520px) {
-  .hub-assistant {
-    width: calc(100% - 24px);
-    margin-top: -10px;
+/* subtle outline for the arrow */
+.message-bubble::after {
+  content: '';
+  position: absolute;
+  left: -9px;
+  top: 14px;
+  width: 0;
+  height: 0;
+  border: 9px solid;
+  border-color: transparent #e5e5e5 transparent transparent;
+  z-index: -1;
+}
+
+.user-message {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 2px;
+}
+
+.user-bubble {
+  max-width: var(--berny-bubble-max);
+  padding: 12px 16px;
+  background: #1E40AF;
+  color: #fff;
+  border-radius: 18px;
+  font-size: 14px;
+  line-height: 1.45;
+  box-shadow: 0 10px 22px rgba(15, 33, 84, 0.12);
+}
+
+/* Message enter animation */
+.berny-message,
+.user-message {
+  animation: messageSlide 180ms ease-out;
+}
+
+@keyframes messageSlide {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.chat-input-container {
+  display: flex;
+  gap: 10px;
+  padding: 12px 14px;
+  border-top: 1px solid rgba(33, 64, 152, 0.08);
+  background: #fff;
+}
+
+.chat-input {
+  flex: 1;
+  padding: 11px 14px;
+  border: 1px solid rgba(33, 64, 152, 0.15);
+  border-radius: 999px;
+  font-size: 14px;
+  font-family: var(--font-regular);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.chat-input:focus {
+  border-color: var(--brand-blue);
+  box-shadow: 0 0 0 3px rgba(33, 64, 152, 0.16);
+}
+
+.chat-send-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: var(--brand-blue);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.chat-send-btn:hover {
+  background: var(--brand-blue-deep);
+}
+
+.chat-send-btn:active {
+  transform: scale(0.96);
+}
+
+@media (max-width: 600px) {
+  .chat-container {
+    width: 95%;
+    margin: 16px auto;
   }
-  .hub-assistant__inner {
-    padding: 14px 12px 12px;
+
+  .chat-berny {
+    --berny-avatar-size: 40px;
+    --berny-bubble-max: 85%;
   }
-  .hub-assistant__sub {
-    font-size: 13px;
+
+  .chat-body {
+    max-height: 280px;
+    padding: 10px;
   }
-  .hub-assistant .menu-search__assistant {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .hub-assistant .menu-search__assistant-bubble::before {
-    left: 26px;
-    bottom: auto;
-    top: -8px;
-    transform: rotate(135deg);
-  }
-  .hub-assistant .menu-search__assistant-avatar {
-    width: 120px;
-    flex: 0 0 120px;
-    place-items: end start;
+
+  .message-bubble,
+  .user-bubble {
+    font-size: 13.5px;
   }
 }
 
@@ -7159,6 +7594,8 @@ body.page-home {
   border: 1px solid rgba(33, 64, 152, 0.14);
   background: rgba(255, 255, 255, 0.85);
   color: var(--brand-blue-deep);
+  --x-icon-size: 14px;
+  --x-icon-thickness: 2.2px;
   cursor: pointer;
   display: grid;
   place-items: center;
@@ -7898,6 +8335,10 @@ body.page-home {
   background: #fff;
   border-radius: var(--radius-lg);
   padding: 16px;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+  overflow-y: visible;
 }
 
 .page-home .carousel--cockpit .carousel-header {
@@ -7927,8 +8368,9 @@ body.page-home {
 
 .page-home .carousel--cockpit .carousel-track [data-carousel-item] {
   flex: 0 0 auto;
-  width: min(380px, calc(100% - 24px));
-  min-width: 280px;
+  /* Prefer relative units: stable under resize, no fixed px widths. */
+  width: clamp(18rem, 78vw, 24rem);
+  min-width: 0;
 }
 
 .page-home .carousel--cockpit .summary-card {
@@ -7988,8 +8430,8 @@ body.page-home {
   }
 
   .page-home .carousel--cockpit .carousel-track [data-carousel-item] {
-    width: min(280px, calc(100vw - 60px));
-    min-width: 240px;
+    width: clamp(15.5rem, 82vw, 19rem);
+    min-width: 0;
   }
 
   .page-home .carousel--cockpit .summary-card {
@@ -8074,8 +8516,8 @@ body.page-home {
 /* Extra small screens */
 @media (max-width: 380px) {
   .page-home .carousel--cockpit .carousel-track [data-carousel-item] {
-    width: calc(100vw - 50px);
-    min-width: 200px;
+    width: 86vw;
+    min-width: 0;
   }
 
   .page-home .carousel--cockpit .summary-card {
@@ -8135,8 +8577,8 @@ body.page-home {
 
 @media (min-width: 769px) {
   .page-home .carousel--cockpit .carousel-track [data-carousel-item] {
-    width: min(360px, calc(100% - 24px));
-    min-width: 280px;
+    width: clamp(18rem, 56vw, 22.5rem);
+    min-width: 0;
   }
 }
 
@@ -8146,31 +8588,17 @@ body.page-home {
    The navbar remains sticky; hero and assistant share the viewport.
    ================================================================ */
 @media (max-width: 600px) {
-  /* Use the viewport height for the main shell so the three blocks
-     fit without requiring page scroll. */
+  /* Allow normal page flow on mobile; the assistant becomes a floating bubble. */
   body.page-home main {
-    display: grid;
-    grid-template-rows: auto minmax(0, 1fr) auto; /* nav · hero · assistant */
-    height: 100dvh;
-    overflow: hidden; /* prevent page scroll; overlays use fixed on body */
+    height: auto;
+    overflow: visible;
   }
 
-  /* Keep hero in two columns but cap its total height to the grid row */
   .page-home .hero.hero--orbit {
-    height: 100%;
+    height: auto;
     min-height: 0;
     align-items: start;
     padding: 8px 0 6px;
-  }
-
-  .page-home .hero.hero--orbit > .hero-focus,
-  .page-home .hero.hero--orbit > .hero-aside {
-    height: 100%;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* actions and content always visible */
-    overflow: hidden; /* avoid pushing the layout taller than the row */
   }
 
   /* Clamp copy so the Playbook panel stays compact */
@@ -8186,22 +8614,6 @@ body.page-home {
     max-height: none;
     overflow-y: visible !important;
   }
-
-  /* Assistant anchored at the bottom, always visible */
-  .page-home .hub-assistant {
-    position: sticky;
-    bottom: 0;
-    z-index: 900; /* below nav popovers */
-    width: min(1160px, calc(100% - 12px));
-    margin: 6px auto; /* tighter spacing in compact mode */
-  }
-
-  .page-home .hub-assistant__inner {
-    padding: 10px 12px;
-    border-radius: 16px;
-  }
-
-  .page-home .menu-search__field { padding: 8px 10px; }
-  .page-home .menu-search__field input { font-size: 14px; }
-  .page-home .menu-search.menu-search--hub .btn { padding: 8px 12px; font-size: 12px; }
 }
+
+/* Mobile chat: già responsivo con le regole base sopra */

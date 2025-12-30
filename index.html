@@ -9,6 +9,7 @@
     <title>Badiani Training Orbit</title>
     <link rel="stylesheet" href="styles/site.css?v=20251229_1" />
     <script defer src="scripts/i18n.js?v=20251228_4"></script>
+    <script defer src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <script defer src="scripts/site.js?v=20251229_2"></script>
     <script defer src="scripts/gelato-effects.js?v=20251227_1"></script>
   <!-- COCKPIT_COMPACT block removed: styling now lives in styles/site.css -->
@@ -226,24 +227,48 @@
         </aside>
       </section>
 
-      <section class="hub-assistant" aria-label="Assistente BERNY" data-i18n-attr="aria-label:assistant.aria">
-        <div class="hub-assistant__inner">
-          <div class="hub-assistant__glow" aria-hidden="true"></div>
-          <header class="hub-assistant__head">
-            <div>
-              <p class="hub-assistant__eyebrow" data-i18n="assistant.eyebrow">Assistente</p>
-              <h2 class="hub-assistant__title" data-i18n="assistant.title">Parla con BERNY</h2>
-              <p class="hub-assistant__sub" data-i18n="assistant.sub">Chiedi procedure, ricette e dove trovare una scheda. Ti porto al punto giusto.</p>
-            </div>
-          </header>
-
-          <div class="menu-search menu-search--hub" data-hub-assistant>
-            <div class="menu-search__field">
-              <input type="search" placeholder="Es. Coni: quanti gusti e quanti grammi?" autocomplete="off" aria-label="Parla con BERNY" data-hub-assistant-search data-i18n-attr="placeholder:assistant.placeholder|aria-label:assistant.ariaInput" />
-              <button class="btn btn-primary btn--sm" type="button" data-hub-assistant-send data-i18n="assistant.send">Chiedi</button>
-            </div>
-            <div class="menu-search__suggestions" data-hub-assistant-suggestions></div>
+      <!-- CHAT ASSISTANT - Messenger-style (Berny) -->
+      <section class="chat-container chat-berny" aria-label="Chat con BERNY" data-i18n-attr="aria-label:assistant.aria">
+        <header class="chat-header chat-header--compact">
+          <div class="chat-header-text">
+            <h2 class="chat-title" data-i18n="assistant.title">Parla con BERNY</h2>
+            <p class="chat-subtitle" data-i18n="assistant.eyebrow">Assistente</p>
           </div>
+        </header>
+
+        <div class="chat-body">
+          <div class="chat-avatar-sticky" aria-hidden="true">
+            <div class="avatar-container" data-chat-avatar>
+              <lottie-player
+                src="public/berny-avatar.json"
+                background="transparent"
+                speed="1"
+                style="width: 50px; height: 50px;"
+                loop
+                autoplay
+              ></lottie-player>
+            </div>
+          </div>
+
+          <div class="messages-area chat-thread" data-messages-area>
+            <div class="chat-placeholder" data-i18n="assistant.placeholder">Es. Coni: quanti gusti e quanti grammi?</div>
+          </div>
+        </div>
+
+        <div class="chat-input-container">
+          <input
+            type="text"
+            class="chat-input"
+            placeholder="Chiedi a BERNY…"
+            data-chat-input
+            data-i18n-attr="placeholder:assistant.inputPlaceholder"
+            aria-label="Scrivi messaggio"
+          />
+          <button class="chat-send-btn" type="button" data-chat-send aria-label="Invia">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+            </svg>
+          </button>
         </div>
       </section>
     </main>
