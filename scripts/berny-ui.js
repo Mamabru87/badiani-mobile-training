@@ -77,7 +77,7 @@
       } catch {}
 
       // Welcome message
-      this.addMessage(
+      const greetingEl = this.addMessage(
         tr(
           'assistant.greeting',
           null,
@@ -86,6 +86,19 @@
         'berny',
         false
       );
+      if (greetingEl) greetingEl.setAttribute('data-greeting', 'true');
+
+      // Listen for language changes
+      window.addEventListener('i18nUpdated', () => {
+         const el = this.messagesArea.querySelector('[data-greeting="true"] .message-bubble');
+         if (el) {
+             el.textContent = tr(
+                'assistant.greeting',
+                null,
+                'Ciao! Sono BERNY 👋🍦 Il tuo assistente per il training Badiani. Chiedimi qualsiasi cosa!'
+             );
+         }
+      });
 
       // Event listeners
       this.sendButton.addEventListener('click', () => this.handleSend());
@@ -256,6 +269,7 @@
 
       this.messagesArea.appendChild(messageEl);
       if (scroll) this.scrollToBottom(false);
+      return messageEl;
     }
 
     scrollToBottom(smooth) {

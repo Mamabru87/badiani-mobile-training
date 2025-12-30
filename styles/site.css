@@ -9342,3 +9342,47 @@ body.page-home {
 }
 
 /* Mobile chat: già responsivo con le regole base sopra */
+
+/* ========================================================================
+   FIX: Mobile Visibility for Profile & Language
+   ======================================================================== */
+@media (max-width: 600px) {
+  /* Ensure Profile Bar is visible and fits */
+  .user-nickname-bar {
+    margin-left: auto; /* Push to right */
+    margin-right: 8px;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+  
+  /* If JS sets display:flex, ensure it stays visible */
+  .user-nickname-bar[style*="display"] {
+    display: flex !important;
+  }
+
+  .user-nickname-pill {
+    padding: 6px 10px;
+    max-width: 100%;
+  }
+
+  .user-nickname-pill__value {
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100px; /* Prevent long names from breaking layout */
+  }
+
+  /* Ensure Menu Panel allows scrolling to reach Language Selector */
+  .menu-panel__inner {
+    overflow-y: auto !important;
+    padding-bottom: 100px !important; /* Extra space at bottom */
+  }
+
+  /* Make Language Selector more visible */
+  .menu-lang {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-soft);
+  }
+}

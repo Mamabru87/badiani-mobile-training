@@ -13,6 +13,7 @@
   /** @type {Record<string, Record<string, string>>} */
   const dict = {
     it: {
+      'assistant.greeting': 'Ciao! Sono BERNY 👋🍦 Il tuo assistente per il training Badiani. Chiedimi qualsiasi cosa!',
       'lang.label': 'Lingua',
       'lang.it': 'Italiano',
       'lang.en': 'English',
@@ -995,6 +996,7 @@
     },
 
     en: {
+      'assistant.greeting': 'Hi! I\'m BERNY 👋🍦 Your Badiani training assistant. Ask me anything!',
       'lang.label': 'Language',
       'lang.it': 'Italiano',
       'lang.en': 'English',
@@ -4096,6 +4098,7 @@
     },
 
     es: {
+      'assistant.greeting': '¡Hola! Soy BERNY 👋🍦 Tu asistente de formación Badiani. ¡Pregúntame lo que quieras!',
       'lang.label': 'Idioma',
       'lang.it': 'Italiano',
       'lang.en': 'English',
@@ -5767,6 +5770,7 @@
     },
 
     fr: {
+      'assistant.greeting': 'Salut ! Je suis BERNY 👋🍦 Ton assistant de formation Badiani. Demande-moi n\'importe quoi !',
       'lang.label': 'Langue',
       'lang.it': 'Italiano',
       'lang.en': 'English',

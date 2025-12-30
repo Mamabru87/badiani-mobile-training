@@ -107,7 +107,16 @@ class BernyBrainAPI {
     const appContext = window.FULL_APP_CONTEXT || "";
     
     // Rileva lingua utente (default IT)
-    const userLang = (window.BadianiI18n?.currentLang || 'it').toLowerCase();
+    // FIX: Usa getLang() se disponibile, altrimenti fallback su currentLang o 'it'
+    const userLangCode = (window.BadianiI18n?.getLang?.() || window.BadianiI18n?.currentLang || 'it').toLowerCase();
+    
+    const langMap = {
+      'it': 'Italiano',
+      'en': 'English',
+      'es': 'Español',
+      'fr': 'Français'
+    };
+    const userLang = langMap[userLangCode] || 'Italiano';
     
     let info = `Sei Berny, l'assistente esperto di gelato Badiani. Rispondi in ${userLang}.\n\n`;
     
