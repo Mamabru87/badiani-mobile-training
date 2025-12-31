@@ -171,121 +171,115 @@
             </header>
 
             <div class="carousel-track" data-carousel-track>
-              <article class="summary-card summary-card--daily" data-carousel-item>
-                <div class="summary-card__header">
-                  <p class="summary-card__eyebrow" data-i18n="cockpit.daily.eyebrow">Training</p>
-                  <span class="pill pill--blue" data-i18n="cockpit.daily.badge">Live</span>
+              <!-- DAILY CARD -->
+              <article class="hub-card hub-card--daily" data-carousel-item>
+                <div class="hub-card__top">
+                  <span data-i18n="cockpit.daily.eyebrow">Training</span>
                 </div>
-                <h3 class="summary-card__title" data-i18n="cockpit.daily.title">Training quotidiano</h3>
-                <p class="summary-card__question" data-daily-question data-i18n="cockpit.daily.loading">Caricamento domanda del giorno...</p>
-                <p class="summary-card__hint" data-i18n="cockpit.daily.hint">Apri una scheda, rispondi e guadagna stelline extra.</p>
-              </article>
-
-              <article class="summary-card summary-card--performance" data-carousel-item>
-                <div class="summary-card__header">
-                  <p class="summary-card__eyebrow" data-i18n="cockpit.perf.eyebrow">Oggi</p>
-                  <span class="pill pill--soft" data-i18n="cockpit.perf.badge">Aggiornato</span>
+                <div class="hub-card__center">
+                  <div class="hub-card__icon">📅</div>
+                  <h3 class="hub-card__title" data-i18n="cockpit.daily.title">Training quotidiano</h3>
                 </div>
-                <h3 class="summary-card__title" data-i18n="cockpit.perf.title">Performance oggi</h3>
-                <div class="summary-stats">
-                  <div class="stat">
-                    <span class="stat-label" data-i18n="cockpit.stat.stars">Stelle</span>
-                    <span class="stat-value" data-perf-stars>0</span>
-                  </div>
-                  <div class="stat">
-                    <span class="stat-label" data-i18n="cockpit.stat.bonusPoints">Punti Bonus</span>
-                    <span class="stat-value" data-perf-points>0</span>
-                  </div>
-                  <div class="stat">
-                    <span class="stat-label" data-i18n="cockpit.stat.gelatiWon">Gelati vinti</span>
-                    <span class="stat-value" data-perf-gelati>0</span>
-                  </div>
-                  <div class="stat">
-                    <span class="stat-label" data-i18n="cockpit.stat.quizCorrect">Quiz corretti</span>
-                    <span class="stat-value" data-perf-quiz-correct>0</span>
-                  </div>
-                  <div class="stat">
-                    <span class="stat-label" data-i18n="cockpit.stat.quizWrong">Quiz sbagliati</span>
-                    <span class="stat-value" data-perf-quiz-wrong>0</span>
-                  </div>
+                <div class="hub-card__bottom">
+                  <p class="summary-card__question" data-daily-question data-i18n="cockpit.daily.loading">Caricamento...</p>
+                  <p class="summary-card__hint" data-i18n="cockpit.daily.hint" style="margin-top:8px; font-size:11px;">Guadagna stelline extra.</p>
                 </div>
               </article>
 
-              <article class="summary-card summary-card--totals" data-carousel-item>
-                <div class="summary-card__header">
-                  <p class="summary-card__eyebrow" data-i18n="cockpit.totals.eyebrow">Storico</p>
-                  <span class="pill pill--soft" data-i18n="cockpit.totals.badge">Totale</span>
+              <!-- PERFORMANCE CARD -->
+              <article class="hub-card hub-card--stats" data-carousel-item>
+                <div class="hub-card__top">
+                  <span data-i18n="cockpit.perf.eyebrow">Oggi</span>
                 </div>
-                <h3 class="summary-card__title" data-i18n="cockpit.totals.title">Totali</h3>
-                <div class="summary-stats">
-                  <div class="stat">
-                    <span class="stat-label" data-i18n="cockpit.totals.stars">Stelle totali</span>
-                    <span class="stat-value" data-perf-stars-total>0</span>
-                  </div>
-                  <div class="stat">
-                    <span class="stat-label" data-i18n="cockpit.totals.gelati">Gelati totali</span>
-                    <span class="stat-value" data-perf-gelati-total>0</span>
-                  </div>
-                  <div class="stat">
-                    <span class="stat-label" data-i18n="cockpit.totals.bonus">Bonus totali</span>
-                    <span class="stat-value" data-perf-bonus-total>0</span>
+                <div class="hub-card__center">
+                  <span class="hub-card__big-text hub-card__big-text--gold" data-perf-stars>0</span>
+                  <span class="stat-label" data-i18n="cockpit.stat.stars">Stelle</span>
+                </div>
+                <div class="hub-card__bottom">
+                  <div class="summary-stats">
+                    <div class="stat">
+                      <span class="stat-label" data-i18n="cockpit.stat.gelatiWon">Gelati</span>
+                      <span class="stat-value" data-perf-gelati>0</span>
+                    </div>
+                    <div class="stat">
+                      <span class="stat-label" data-i18n="cockpit.stat.quizCorrect">Quiz OK</span>
+                      <span class="stat-value" data-perf-quiz-correct>0</span>
+                    </div>
                   </div>
                 </div>
               </article>
 
-              <article class="summary-card summary-card--wrong" data-carousel-item>
-                <div class="summary-card__header">
-                  <p class="summary-card__eyebrow" data-i18n="cockpit.wrong.eyebrow">Errori recenti</p>
-                  <span class="pill pill--soft" data-i18n="cockpit.wrong.badge">Ultimi 10</span>
+              <!-- TOTALS CARD -->
+              <article class="hub-card hub-card--stats" data-carousel-item>
+                <div class="hub-card__top">
+                  <span data-i18n="cockpit.totals.eyebrow">Storico</span>
                 </div>
-                <h3 class="summary-card__title" data-i18n="cockpit.wrong.title">Errori recenti</h3>
-                <ul class="summary-list" data-wrong-list>
-                  <li class="empty" data-i18n="cockpit.wrong.empty">Nessun errore recente — continua così! ✨</li>
-                </ul>
-                <div class="summary-card__footer">
-                  <span class="summary-card__meta" data-wrong-count aria-live="polite"></span>
+                <div class="hub-card__center">
+                  <span class="hub-card__big-text" data-perf-gelati-total>0</span>
+                  <span class="stat-label" data-i18n="cockpit.totals.gelati">Gelati Totali</span>
+                </div>
+                <div class="hub-card__bottom">
+                  <div class="summary-stats">
+                    <div class="stat">
+                      <span class="stat-label" data-i18n="cockpit.totals.stars">Stelle Tot</span>
+                      <span class="stat-value" data-perf-stars-total>0</span>
+                    </div>
+                    <div class="stat">
+                      <span class="stat-label" data-i18n="cockpit.totals.bonus">Bonus</span>
+                      <span class="stat-value" data-perf-bonus-total>0</span>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              <!-- WRONG CARD -->
+              <article class="hub-card hub-card--list" data-carousel-item>
+                <div class="hub-card__top">
+                  <span data-i18n="cockpit.wrong.eyebrow">Errori</span>
+                </div>
+                <div class="hub-card__center">
+                  <span class="hub-card__big-text" data-wrong-count>0</span>
+                  <span class="stat-label">Recenti</span>
+                </div>
+                <div class="hub-card__bottom">
                   <button class="btn btn-ghost btn--sm" type="button" data-wrong-view-all data-i18n="cockpit.wrong.viewAll">Vedi tutti</button>
+                  <!-- Hidden list for JS logic compatibility -->
+                  <ul class="summary-list" data-wrong-list hidden></ul>
                 </div>
               </article>
 
-              <article class="summary-card summary-card--history" data-carousel-item>
-                <div class="summary-card__header">
-                  <p class="summary-card__eyebrow" data-i18n="cockpit.history.eyebrow">Storico giorni</p>
-                  <span class="pill pill--soft" data-i18n="cockpit.history.badge">14 giorni</span>
+              <!-- HISTORY CARD -->
+              <article class="hub-card hub-card--list" data-carousel-item>
+                <div class="hub-card__top">
+                  <span data-i18n="cockpit.history.eyebrow">Giorni</span>
                 </div>
-                <h3 class="summary-card__title" data-i18n="cockpit.history.title">Storico giorni</h3>
-                <ul class="summary-list" data-history-days>
-                  <li class="empty" data-i18n="cockpit.history.empty">Nessuna cronologia disponibile ancora.</li>
-                </ul>
+                <div class="hub-card__center">
+                  <div class="hub-card__icon">📊</div>
+                  <span class="stat-label" data-i18n="cockpit.history.title">Storico</span>
+                </div>
+                <div class="hub-card__bottom">
+                   <!-- Hidden list for JS logic compatibility -->
+                   <ul class="summary-list" data-history-days hidden></ul>
+                   <p class="summary-card__hint" style="font-size:11px;">Attivit ultimi 14 giorni</p>
+                </div>
               </article>
 
-              <article class="summary-card summary-card--profile" data-carousel-item>
-                <div class="summary-card__header">
-                  <p class="summary-card__eyebrow" data-i18n="cockpit.profile.eyebrow">Profilo</p>
-                  <span class="pill pill--blue" data-i18n="cockpit.profile.badge">Tu</span>
+              <!-- PROFILE CARD -->
+              <article class="hub-card hub-card--profile" data-carousel-item>
+                <div class="hub-card__top">
+                  <span data-i18n="cockpit.profile.eyebrow">Profilo</span>
                 </div>
-                <h3 class="summary-card__title" data-i18n="cockpit.profile.title">Profilo</h3>
-                <div class="summary-profile" data-profile>
-                  <div class="summary-profile__layout">
-                    <div class="summary-profile__avatar summary-profile__avatar--placeholder" aria-hidden="true">
+                <div class="hub-card__center" data-profile>
+                   <div class="summary-profile__avatar summary-profile__avatar--placeholder" aria-hidden="true" style="transform: scale(1.5); margin-bottom: 10px;">
                       <span class="avatar-placeholder" role="img" aria-label="Profilo">👤</span>
-                    </div>
-                    <div class="summary-profile__main">
-                      <div class="summary-stats">
-                        <div class="stat">
-                          <span class="stat-label" data-i18n="cockpit.profile.nickname">Nickname</span>
-                          <span class="stat-value" data-profile-nick>—</span>
-                        </div>
-                        <div class="stat">
-                          <span class="stat-label" data-i18n="cockpit.profile.gelato">Gusto preferito</span>
-                          <span class="stat-value" data-profile-gelato>—</span>
-                        </div>
-                      </div>
-                      <div class="profile-actions">
-                        <button class="btn btn-primary" type="button" data-profile-edit data-i18n="cockpit.profile.changeGelato">Cambia gusto</button>
-                        <button class="btn btn-ghost" type="button" data-profile-switch data-i18n="cockpit.profile.switchProfile">Cambia profilo</button>
-                      </div>
-                    </div>
+                   </div>
+                   <h3 class="hub-card__title" data-profile-nick>—</h3>
+                   <span class="stat-label" data-profile-gelato>—</span>
+                </div>
+                <div class="hub-card__bottom">
+                  <div class="profile-actions" style="display:flex; gap:8px; justify-content:center; margin-top:8px;">
+                    <button class="btn btn-primary" type="button" data-profile-edit data-i18n="cockpit.profile.changeGelato" style="padding:6px 12px; font-size:11px;">Modifica</button>
+                    <button class="btn btn-ghost" type="button" data-profile-switch data-i18n="cockpit.profile.switchProfile" style="padding:6px 12px; font-size:11px;">Cambia</button>
                   </div>
                 </div>
               </article>

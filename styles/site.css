@@ -462,7 +462,7 @@ body.page-home {
    RESTYLED COCKPIT CARDS (Minimal & Cute)
    ======================================================================== */
 
-.page-home [data-carousel="cockpit"] .summary-card {
+.hub-card {
   /* Structure & Spacing */
   padding: 24px;
   gap: 16px;
@@ -470,105 +470,160 @@ body.page-home {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 180px; /* Increased for breathing room */
-  max-height: max-content;
-  aspect-ratio: auto;
+  align-items: center;
+  text-align: center;
+  min-height: 260px; /* Square-ish aspect ratio */
+  aspect-ratio: 1 / 1;
+  width: 100%;
 
   /* Visual Style */
   background: #ffffff;
   border: 1px solid rgba(33, 64, 152, 0.06); /* Very subtle border */
-  border-radius: 32px; /* Extra rounded (Cute) */
-  box-shadow: 0 12px 36px -8px rgba(33, 64, 152, 0.08); /* Soft, diffused shadow */
+  border-radius: 24px; /* Soft rounded corners */
+  box-shadow: 0 8px 24px rgba(15, 33, 84, 0.12); /* Floating effect */
   
   /* Interaction */
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), 
               box-shadow 0.3s ease,
               border-color 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.page-home [data-carousel="cockpit"] .summary-card:hover {
-  transform: translateY(-4px) scale(1.01);
-  box-shadow: 0 20px 48px -12px rgba(33, 64, 152, 0.12);
+.hub-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 20px 48px -12px rgba(33, 64, 152, 0.18);
   border-color: rgba(236, 65, 140, 0.2); /* Subtle pink hint on hover */
   z-index: 1;
 }
 
 /* Typography Polish */
-.page-home [data-carousel="cockpit"] .summary-card__title {
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
+.hub-card__top {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-weight: 700;
   color: var(--brand-blue-deep);
+  opacity: 0.8;
   margin-bottom: 4px;
 }
 
-.page-home [data-carousel="cockpit"] .summary-card__eyebrow {
-  font-size: 11px;
-  letter-spacing: 0.15em;
-  font-weight: 700;
-  color: var(--brand-gray-soft);
-  opacity: 0.8;
+.hub-card__title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--brand-blue);
+  margin: 0;
+}
+
+.hub-card__center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.hub-card__big-text {
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--brand-rose); /* Pink for numbers */
+  font-family: var(--font-medium);
+}
+
+.hub-card__big-text--gold {
+  color: var(--brand-gold);
+}
+
+.hub-card__icon {
+  font-size: 48px;
+  line-height: 1;
   margin-bottom: 8px;
 }
 
+.hub-card__bottom {
+  width: 100%;
+  font-size: 13px;
+  color: var(--brand-gray-soft);
+}
+
 /* Buttons: Pill shaped & Friendly */
-.page-home [data-carousel="cockpit"] .btn {
+.hub-card .btn {
   border-radius: 999px;
   padding: 10px 20px;
   font-size: 13px;
   letter-spacing: 0.02em;
   font-weight: 600;
   transition: all 0.2s ease;
+  width: 100%;
 }
 
-.page-home [data-carousel="cockpit"] .btn-ghost {
+.hub-card .btn-ghost {
   background: rgba(33, 64, 152, 0.04);
   color: var(--brand-blue);
   border: none;
 }
 
-.page-home [data-carousel="cockpit"] .btn-ghost:hover {
+.hub-card .btn-ghost:hover {
   background: rgba(33, 64, 152, 0.1);
   transform: scale(1.05);
 }
 
 /* Specific Card Accents (Pastel touches) */
-.page-home [data-carousel="cockpit"] .summary-card--daily {
+.hub-card--daily {
   background: linear-gradient(160deg, #ffffff 40%, rgba(236, 65, 140, 0.03) 100%);
 }
 
-.page-home [data-carousel="cockpit"] .summary-card--performance {
+.hub-card--stats {
   background: linear-gradient(160deg, #ffffff 40%, rgba(242, 190, 88, 0.05) 100%);
 }
 
 /* Fix for stats layout in new design */
-.page-home [data-carousel="cockpit"] .summary-stats {
+.hub-card .summary-stats {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  gap: 8px;
+  width: 100%;
 }
 
-.page-home [data-carousel="cockpit"] .stat {
+.hub-card .stat {
   background: rgba(247, 248, 250, 0.8);
-  padding: 10px 14px;
-  border-radius: 16px;
+  padding: 8px;
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
+  align-items: center;
 }
 
-.page-home [data-carousel="cockpit"] .stat-label {
-  font-size: 10px;
+.hub-card .stat-label {
+  font-size: 9px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--brand-gray-soft);
 }
 
-.page-home [data-carousel="cockpit"] .stat-value {
-  font-size: 18px;
+.hub-card .stat-value {
+  font-size: 16px;
   font-weight: 700;
   color: var(--brand-blue);
 }
+
+/* Mobile Layout Adjustments */
+@media (max-width: 480px) {
+  .hub-card {
+    width: 260px; /* Fixed width for mobile */
+    min-height: 260px;
+  }
+}
+
+/* Keep original summary-card styles for non-cockpit usage if any, 
+   but override for cockpit specific usage */
+.page-home [data-carousel="cockpit"] .summary-card {
+  display: none; /* Hide old cards if they exist */
+}
+
 
 .page-home [data-carousel="cockpit"] .cockpit-track [data-carousel-item].is-focused {
   transform: translateY(-3px) scale(1.015);
