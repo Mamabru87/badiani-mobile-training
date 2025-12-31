@@ -458,67 +458,116 @@ body.page-home {
   background: #fff;
 }
 
-.page-home [data-carousel="cockpit"] .cockpit-track {
-  display: flex;
-  gap: 10px;
-  background: #ffffff;
-  overflow-x: auto;
-  overflow-y: visible;
-  max-width: 100%;
-  flex: 1 1 auto;
-  scroll-behavior: smooth;
-  scroll-snap-type: x proximity;
-  /*
-    Cockpit centering (Windows-safe):
-    JS centers cards by computing a target scrollLeft, but scrollLeft clamps to
-    [0, scrollWidth - clientWidth]. If we don't provide enough *real* padding on BOTH
-    sides, the first/last cards can't fully center and the carousel can feel â€œstuckâ€.
-  */
-  --cockpit-side-pad: max(12px, calc((100% - min(420px, 100% - 20px)) / 2 + 10px));
-  scroll-padding-inline: var(--cockpit-side-pad);
-  padding: 6px var(--cockpit-side-pad) 4px; /* top air so focused cards are not clipped */
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-  cursor: grab;
-  user-select: none;
-  touch-action: pan-x pan-y; /* Allow both, or just pan-x if we want to be specific */
-  overscroll-behavior-x: contain;
-}
-
-/* Ensure cockpit rules also apply to the actual track class used in markup */
-.page-home [data-carousel="cockpit"] .carousel-track {
-  overflow-y: visible;
-}
-
-.page-home [data-carousel="cockpit"] .carousel-track [data-carousel-item] {
-  flex: 0 0 auto;
-  /* Responsive sizing: prefer relative units to avoid fixed-pixel overflow on resize. */
-  width: var(--carousel-card-basis);
-  max-width: none;
-  min-width: 0;
-  scroll-snap-align: center;
-  scroll-snap-stop: normal;
-}
-
-.page-home [data-carousel="cockpit"] .cockpit-track::-webkit-scrollbar {
-  display: none;
-}
-
-.page-home [data-carousel="cockpit"] .cockpit-track [data-carousel-item] {
-  flex: 0 0 auto;
-  width: var(--carousel-card-basis);
-  max-width: none;
-  min-width: 0;
-  scroll-snap-align: center;
-  scroll-snap-stop: normal;
-  transform: scale(0.992);
-  transition: transform 420ms cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 420ms ease, border-color 220ms ease;
-}
+/* ========================================================================
+   RESTYLED COCKPIT CARDS (Minimal & Cute)
+   ======================================================================== */
 
 .page-home [data-carousel="cockpit"] .summary-card {
-  min-height: 140px;
+  /* Structure & Spacing */
+  padding: 24px;
+  gap: 16px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 180px; /* Increased for breathing room */
   max-height: max-content;
   aspect-ratio: auto;
+
+  /* Visual Style */
+  background: #ffffff;
+  border: 1px solid rgba(33, 64, 152, 0.06); /* Very subtle border */
+  border-radius: 32px; /* Extra rounded (Cute) */
+  box-shadow: 0 12px 36px -8px rgba(33, 64, 152, 0.08); /* Soft, diffused shadow */
+  
+  /* Interaction */
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), 
+              box-shadow 0.3s ease,
+              border-color 0.3s ease;
+}
+
+.page-home [data-carousel="cockpit"] .summary-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 20px 48px -12px rgba(33, 64, 152, 0.12);
+  border-color: rgba(236, 65, 140, 0.2); /* Subtle pink hint on hover */
+  z-index: 1;
+}
+
+/* Typography Polish */
+.page-home [data-carousel="cockpit"] .summary-card__title {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--brand-blue-deep);
+  margin-bottom: 4px;
+}
+
+.page-home [data-carousel="cockpit"] .summary-card__eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  font-weight: 700;
+  color: var(--brand-gray-soft);
+  opacity: 0.8;
+  margin-bottom: 8px;
+}
+
+/* Buttons: Pill shaped & Friendly */
+.page-home [data-carousel="cockpit"] .btn {
+  border-radius: 999px;
+  padding: 10px 20px;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.page-home [data-carousel="cockpit"] .btn-ghost {
+  background: rgba(33, 64, 152, 0.04);
+  color: var(--brand-blue);
+  border: none;
+}
+
+.page-home [data-carousel="cockpit"] .btn-ghost:hover {
+  background: rgba(33, 64, 152, 0.1);
+  transform: scale(1.05);
+}
+
+/* Specific Card Accents (Pastel touches) */
+.page-home [data-carousel="cockpit"] .summary-card--daily {
+  background: linear-gradient(160deg, #ffffff 40%, rgba(236, 65, 140, 0.03) 100%);
+}
+
+.page-home [data-carousel="cockpit"] .summary-card--performance {
+  background: linear-gradient(160deg, #ffffff 40%, rgba(242, 190, 88, 0.05) 100%);
+}
+
+/* Fix for stats layout in new design */
+.page-home [data-carousel="cockpit"] .summary-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.page-home [data-carousel="cockpit"] .stat {
+  background: rgba(247, 248, 250, 0.8);
+  padding: 10px 14px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.page-home [data-carousel="cockpit"] .stat-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--brand-gray-soft);
+}
+
+.page-home [data-carousel="cockpit"] .stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--brand-blue);
 }
 
 .page-home [data-carousel="cockpit"] .cockpit-track [data-carousel-item].is-focused {
@@ -1266,7 +1315,6 @@ main {
   width: min(1200px, 92vw);
   margin: 0 auto;
   position: relative;
-  overflow-x: visible;
 }
 
 h1,
@@ -4726,30 +4774,25 @@ section.carousel:last-of-type {
   display: flex;
   flex-wrap: nowrap;
   align-items: start;
-  gap: 16px; /* User request */
+  gap: var(--carousel-track-gap);
   overflow-x: auto;
   /* Cards scale/float slightly; keep their top shadows/transform from being clipped. */
   overflow-y: visible;
-  width: 100%; /* User request */
   max-width: 100%;
   min-width: 0;
-  box-sizing: border-box; /* User request */
   touch-action: pan-x;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
-  
-  /* Padding logic merging user request (24px inline) with existing sticky offsets */
-  padding-left: 24px;
-  padding-right: 24px;
+  padding-left: var(--carousel-track-pad-inline);
+  padding-right: calc(var(--carousel-track-pad-inline) + (100vw - 100%));
   padding-top: calc(var(--nav-height) + var(--nav-gap) + var(--carousel-sticky-offset-desktop));
   padding-bottom: var(--carousel-track-pad-bottom);
-  
   scrollbar-width: none;
   scrollbar-color: transparent transparent;
   -ms-overflow-style: none;
   scroll-padding-top: calc(var(--nav-height) + var(--nav-gap) + var(--carousel-sticky-offset-desktop));
-  scroll-padding-inline: 24px;
+  scroll-padding-inline: var(--carousel-track-pad-inline);
   transition: padding 240ms ease;
 }
 
@@ -4769,28 +4812,13 @@ section.carousel:last-of-type {
 }
 
 .guide-card[data-carousel-item] {
-  /* Mobile First: Dynamic width */
-  flex: 0 0 85%;
-  width: 85%;
-  min-width: 280px;
-  max-width: 340px;
-  margin: 0;
-  height: auto;
-  min-height: 400px;
-
+  flex: 0 0 var(--carousel-card-basis);
   scroll-snap-align: center;
   scroll-snap-stop: always;
   scroll-margin-top: calc(var(--nav-height) + var(--nav-gap) + var(--carousel-sticky-offset-desktop));
   transform: scale(0.96);
   opacity: 0.96;
   transition: transform 360ms cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 360ms ease, opacity 240ms ease;
-}
-
-@media (min-width: 768px) {
-  .guide-card[data-carousel-item] {
-    flex: 0 0 320px;
-    width: 320px;
-  }
 }
 
 .guide-card[data-carousel-item].is-focused {
@@ -4814,12 +4842,12 @@ section.carousel:last-of-type {
   .carousel-track {
     /* IMPORTANT: do not use padding shorthand here, otherwise it overrides
        the dynamic padding-top that keeps content below the sticky nav/header. */
-    gap: 16px; /* User request */
-    padding-left: 24px; /* User request */
-    padding-right: 24px; /* User request */
+    gap: var(--carousel-track-gap);
+    padding-left: var(--carousel-track-pad-inline);
+    padding-right: calc(var(--carousel-track-pad-inline) + (100vw - 100%));
     padding-bottom: var(--carousel-track-pad-bottom);
     padding-top: calc(var(--nav-height) + var(--nav-gap) + var(--carousel-sticky-offset-mobile));
-    scroll-padding-inline: 24px;
+    scroll-padding-inline: var(--carousel-track-pad-inline);
     scroll-padding-top: calc(var(--nav-height) + var(--nav-gap) + var(--carousel-sticky-offset-mobile));
   }
 
@@ -9838,151 +9866,5 @@ body.page-home {
 
 .menu-action-btn .icon {
   font-size: 16px;
-}
-
-
-
-/* ========================================================================
-   FIX CAROSELLO MOBILE (User Request)
-   ======================================================================== */
-
-/* 1. Contenitore (Track) */
-.carousel--cockpit-grid, 
-.carousel-track {
-  display: flex !important;
-  gap: 16px !important;
-  padding: 10px 24px !important; /* Padding laterale */
-  margin: 0 -16px !important;    /* Margine negativo per full-width */
-  width: calc(100% + 32px) !important;
-  overflow-x: auto !important;
-  scroll-snap-type: x mandatory !important;
-  box-sizing: border-box !important;
-  /* Assicura che i figli stiano in riga */
-  flex-direction: row !important;
-  flex-wrap: nowrap !important;
-}
-
-/* 2. Le Card (.guide-item -> .summary-card, .guide-card) */
-.summary-card,
-.guide-card,
-.carousel--cockpit .summary-card {
-  /* Larghezza Mobile Ottimizzata */
-  flex: 0 0 280px !important; /* Forza larghezza fissa */
-  width: 280px !important;
-  max-width: 85vw !important; /* Non più largo dell'85% dello schermo */
-  
-  /* Reset */
-  height: auto !important;
-  margin-right: 0 !important; /* Il gap lo gestisce il genitore */
-  scroll-snap-align: center !important;
-  
-  /* Stile (opzionale se già c'è) */
-  /* background: white; */
-  /* border-radius: 16px; */
-  /* border: 1px solid #eee; */
-}
-
-/* Fix per spaziatura finale */
-.carousel--cockpit-grid::after {
-  content: '';
-  flex: 0 0 24px;
-  width: 24px;
-}
-
-/* DESKTOP RESET */
-@media (min-width: 768px) {
-  .carousel--cockpit-grid {
-    margin: 0 !important;
-    width: 100% !important;
-    padding: 0 !important;
-    display: grid !important; /* Se su desktop è una griglia */
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important;
-    overflow: visible !important;
-  }
-  
-  .summary-card,
-  .guide-card {
-    width: auto !important;
-    flex: none !important;
-    max-width: none !important;
-  }
-}
-
-
-
-/* ========================================================================
-   FIX CAROSELLO DEFINITIVO (Mobile) - User Request 2
-   ======================================================================== */
-
-/* 1. Il contenitore azzurro (Cockpit) */
-.carousel--cockpit {
-  width: 100% !important;
-  max-width: 100% !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  background: transparent !important; /* Rimuovi sfondo se da fastidio */
-  overflow: hidden !important; /* Nasconde scrollbar brutte esterne */
-}
-
-/* 2. La Griglia scorrevole (MAPPED TO .carousel-track because .carousel--cockpit-grid is the section) */
-.carousel-track,
-.carousel--cockpit-grid .carousel-track {
-  display: flex !important;
-  flex-wrap: nowrap !important;
-  gap: 16px !important;
-  
-  /* Logica Full-Width con Padding */
-  width: 100% !important;
-  padding: 10px 24px !important; /* Spazio ai lati */
-  overflow-x: auto !important;
-  scroll-snap-type: x mandatory !important;
-  
-  /* Rimuovi bordi strani */
-  margin: 0 !important;
-  border: none !important;
-  
-  /* Nascondi scrollbar */
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.carousel-track::-webkit-scrollbar,
-.carousel--cockpit-grid .carousel-track::-webkit-scrollbar {
-  display: none;
-}
-
-/* 3. Le Card (.guide-item -> .summary-card, .guide-card) */
-.summary-card,
-.guide-card,
-.carousel--cockpit .summary-card {
-  /* Larghezza Dinamica ma Controllata */
-  flex: 0 0 85vw !important; /* Occupa 85% della larghezza schermo */
-  width: 85vw !important;
-  max-width: 320px !important; /* Non diventare gigante su tablet */
-  
-  scroll-snap-align: center !important;
-  
-  /* Fix Altezza e Aspetto */
-  height: auto !important;
-  min-height: 200px !important;
-  margin: 0 !important;
-}
-
-/* 4. Fix Margine Desktop */
-@media (min-width: 768px) {
-  .summary-card,
-  .guide-card {
-    flex: 0 0 300px !important;
-    width: 300px !important;
-    max-width: none !important;
-  }
-  
-  /* Restore grid layout for desktop cockpit if needed, targeting the track */
-  .carousel--cockpit-grid .carousel-track {
-     display: grid !important;
-     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important;
-     overflow: visible !important;
-     padding: 0 !important;
-     gap: 16px !important;
-  }
 }
 
