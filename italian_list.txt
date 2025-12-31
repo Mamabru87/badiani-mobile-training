@@ -1,0 +1,100 @@
+Block 0: Un collega prepara il mix crepes e lo lascia riposare 1 ora: qual è la correzione giusta?
+Block 1: Stai facendo una Buontalenti crepe e il cliente vuole “più salsa sopra”: qual è la quantità standard di salsa top prima di eventuali extra?
+Block 2: Vuoi preparare una crepe “Italiana plain base”: quale combinazione è coerente con lo standard?
+Block 3: La crepe salata è pronta ma “molle” al centro: quale step finale è stato probabilmente saltato?
+Block 4: Stai preparando la versione beetroot (barbabietola): quale procedura è corretta?
+Block 5: Waffle: quale combinazione “setup + dose” è corretta?
+Block 6: Waffle: cosa evita di “sciupare” la presentazione quando aggiungi il topping?
+Block 7: Per un ciclo waffle completo, qual è il tempo totale di cottura standard?
+Block 8: Gelato Burger: quale regola “porzione + salsa” è corretta?
+Block 9: Gelato Burger: quale impostazione della macchina è corretta per il tempo di chiusura?
+Block 10: Gelato Burger: se trovi briciole sulla macchina, qual è l’azione corretta?
+Block 11: Gelato Croissant: quanto gelato Buontalenti va inserito secondo lo standard?
+Block 12: Gelato Croissant: scegli l’ordine corretto per i topping.
+Block 13: Gelato Croissant: quale coppia di quantità è corretta?
+Block 14: Pancake: come riconosci il momento giusto per girarli?
+Block 15: Pancake: quanti pancake compongono una porzione completa?
+Block 16: Blueberry Pancake: quale set di frutta è corretto?
+Block 17: BYO Pancake: quale abbinamento di ingredienti secchi è coerente con lo standard?
+Block 18: Porridge: qual è la dose di latte standard?
+Block 19: Porridge: quanti misurini di avena (oats)?
+Block 20: Porridge: quanto tempo lasci “assestare” dopo aver mescolato?
+Block 21: Afternoon Tea Set: quale combinazione è corretta?
+Block 22: Coppette gelato: un “Medio” quanti gusti può contenere?
+Block 23: Se una coppetta Media pesa 170g, come la valuti rispetto al range standard?
+Block 24: Se una coppetta Piccola pesa 115g, come la valuti?
+Block 25: “Mega” (linea porzionamento): qual è il massimo standard?
+Block 26: Coni: quale affermazione è corretta?
+Block 27: Vaschette d'asporto: quale set “taglia → max gusti” è corretto?
+Block 28: Vaschetta gelato: qual è la priorità per evitare difetti visivi?
+Block 29: Vaschetta gelato: quale azione è corretta per la chiusura?
+Block 30: Vaschetta gelato: quale priorità riduce le contaminazioni?
+Block 31: Vetrina treats (verticale): qual è il requisito minimo di temperatura?
+Block 32: Vetrina treats: come imposti la disposizione visiva corretta?
+Block 33: Shelf life treats: quale coppia è corretta?
+Block 34: Pulizia mattina vetrina gelato: quale azione va fatta prima di esporre il gelato?
+Block 35: Temperatura di esposizione gelato: quando inizi a mettere le vaschette in vetrina?
+Block 36: Scampolo: quale definizione è corretta?
+Block 37: Scampolo: quale tecnica di integrazione è corretta?
+Block 38: Scampolo: qual è il limite massimo di altezza dell'aggiunta?
+Block 39: Manutenzione vetrina: quale frequenza è corretta?
+Block 40: Manutenzione vetrina: se c'è poco traffico in negozio, cosa fai con le sliding doors?
+Block 41: Smoothie: qual è l’ingrediente comune a tutte le varianti?
+Block 42: Smoothie: quale abbinamento colore-etichetta è corretto?
+Block 43: Matcha pre-miscelato (big batch): quante porzioni produce?
+Block 44: Matcha pre-miscelato: qual è la shelf life (incluso il giorno di produzione)?
+Block 45: Matcha: qual è l’azione fondamentale per evitare i grumi?
+Block 46: Matcha Iced Latte: quale combinazione base è corretta?
+Block 47: Matcha Iced Latte: quale opzione è “su richiesta”?
+Block 48: Buontalenti/Strawberry Iced (matcha): quanto latte si usa nella tazza?
+Block 49: Buontalenti/Strawberry Iced (matcha): come prepari la schiuma di gelato?
+Block 50: Buontalenti/Strawberry Iced (matcha): qual è il peso massimo del gelato?
+Block 51: Dirty Matcha Affogato: cosa lo rende “dirty”?
+Block 52: Matcha Matcha Affogato: cosa versi sopra la pallina di gelato al matcha?
+Block 53: Buontalenti Matcha Affogato: quale gelato viene usato?
+Block 54: Cocktail pouches: qual è la formula base comune?
+Block 55: Strawberry Daiquiri: quale alcol è previsto?
+Block 56: Frozen Lemonade: quale alcol è previsto?
+Block 57: Frozen Aperol: quale ingrediente alcolico si usa?
+Block 58: Piña Colada: quale “latte” si usa al posto dell’acqua?
+Block 59: Churros: quale triade di parametri è corretta?
+Block 60: Copertura churros: quale rapporto è corretto?
+Block 61: Fetta di Panettone calda: qual è la sequenza corretta?
+Block 62: Pandoro: quale finitura si usa sulla fetta?
+Block 63: Mini panettone in negozio: quale coppia azione/salsa è corretta?
+Block 64: Delivery mini panettone: qual è la disposizione nella scatola?
+Block 65: Delivery mini panettone: dove si conserva la scatola in attesa del driver?
+Block 66: Mulled wine (Vin Brulé): quale setup evita errori?
+Block 67: Mulled wine: quale riscaldamento è corretto?
+Block 68: Mulled wine: quale decorazione è standard?
+Block 69: Mulled wine: quale shelf life è corretta?
+Block 70: Slitti: in che anno nasce come torrefazione?
+Block 71: Slitti: quando Andrea espande la produzione al cioccolato?
+Block 72: Slitti: quale premio è associato al 1994?
+Block 73: Slitti: quale pralina contiene alcol e in che percentuale?
+Block 74: Slitti Coffee Spoons: in che anno sono state create?
+Block 75: Dragée Pistacchi di Bronte: come sono descritti?
+Block 76: Dragée “Grani di Arabica”: quale copertura hanno?
+Block 77: Spalmabile Slittosa: percentuale di nocciole delle Langhe?
+Block 78: Spalmabile Riccosa: percentuale di nocciole delle Langhe?
+Block 79: Spalmabile Gianera: percentuale di nocciole delle Langhe?
+Block 80: Yo-Yo: qual è la porzione di gelato standard?
+Block 81: Yo-Yo: quale combo è corretta per il servizio?
+Block 82: Yo-Yo: quale pratica evita che il gelato sbordi?
+Block 83: Vaschetta gelato: quale azione migliora la pulizia in consegna?
+Block 84: Vaschetta gelato: quale logica di riempimento usi se hai gusti morbidi e duri?
+Block 85: Coppa gelato: quale strumento si usa per le tre palline?
+Block 86: Preparazione mattina: cosa fai prima di riutilizzare le spatole su altri gusti?
+Block 87: Deep clean vetrina: quale step è fondamentale?
+Block 88: Deep clean vetrina: cosa deve brillare alla fine?
+Block 89: Smoothie: tempo minimo di frullata?
+Block 90: Matcha iced latte: perché versi lentamente il matcha sul latte e ghiaccio?
+Block 91: Buontalenti/Strawberry iced (matcha): dove deve stare il topping di gelato?
+Block 92: Cocktail pouches: quanti cubetti di ghiaccio grandi si usano come riferimento?
+Block 93: Mulled wine: dove si conserva la miscela la notte?
+Block 94: Mulled wine: pulizia a fine servizio?
+Block 95: Panettone/Pandoro: come aumentare l'appetibilità al banco?
+Block 96: Coppette gelato: quale tecnica di servizio è corretta?
+Block 97: Coni gelato: quale upsell è coerente con lo standard?
+Block 98: Slitti: cosa rende speciali le coffee spoons?
+Block 99: Slitti: quale abbinamento spalmabile-tipo è corretto?

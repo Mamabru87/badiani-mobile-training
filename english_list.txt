@@ -1,0 +1,100 @@
+sm-001: Un collègue prépare l'appareil à crêpes et le laisse reposer 1h : quel correctif appliquer ?
+sm-002: Tu fais une Buontalenti crêpe et le client veut “plus de sauce dessus” : quelle quantité standard de sauce top avant l'extra ?
+sm-003: Tu veux préparer une crêpe “Italiana plain base” : quelle combinaison respecte le standard ?
+sm-004: La crêpe salée est prête mais “molle” au centre : quelle étape finale a probablement été oubliée ?
+sm-005: Pour la version beetroot : quel procédé est correct ?
+sm-006: Waffle : quelle combinaison “setup + dose” est correcte ?
+sm-007: Waffle : comment éviter de “casser” la présentation en posant les toppings ?
+sm-008: Pour un cycle complet de waffle, quel est le temps total standard ?
+sm-009: Gelato Burger : quelle règle “portion + sauce” est correcte ?
+sm-010: Gelato Burger : quel réglage machine est correct pour le temps de fermeture ?
+sm-011: Le Gelato Burger perd du gelato/sauce : quel outil de nettoyage est standard ?
+sm-012: Gelato Croissant : combien de scoops de Buontalenti sont standard ?
+sm-013: Gelato Croissant : quel topping s'applique en premier ?
+sm-014: Gelato Croissant : quelle quantité approximative de sauce pistacchio ?
+sm-015: Gelato Croissant : combien de grammes de pistacchio crumble ?
+sm-016: Pancake : combien de pancakes composent une portion complète ?
+sm-017: Pancake : quand tu vois des bulles (approx), combien de temps avant de retourner ?
+sm-018: Pancake : après le flip, combien de temps avant de les retirer ?
+sm-019: Blueberry Pancake : combien de fraises sont standard (puis coupées en 4) ?
+sm-020: Blueberry Pancake : environ combien de blueberries on top ?
+sm-021: Blueberry Pancake : avec quoi sert-on le sirop ?
+sm-022: BYO Pancake : combien de teaspoons de chocolate chips (ingrédient sec) ?
+sm-023: BYO Pancake : combien de teaspoons de coconut chips (ingrédient sec) ?
+sm-024: BYO Pancake : environ combien de “whole nuts” ?
+sm-025: Porridge : quel volume de lait est mesuré (approx) ?
+sm-026: Porridge : combien de measuring cups d'avoine ?
+sm-027: Afternoon Tea Set : quel gelato est inclus ?
+sm-028: Gelato cup : combien de tailles existent ?
+sm-029: Piccolo cup : quelle combinaison est correcte ?
+sm-030: Medio cup : quelle combinaison est correcte ?
+sm-031: Grande cup : quelle combinaison est correcte ?
+sm-032: Service en cup : comment tiens-tu correctement la coppetta ?
+sm-033: Préparation du gelato en cup : comment “assouplir” le gelato dans la vaschetta avant de portionner ?
+sm-034: Avant de former la boule, où nettoies-tu l'excès de gelato de l'ustensile ?
+sm-035: En cup : comment réduis-tu les bulles d'air dans le produit servi ?
+sm-036: Si le client le souhaite, que peut-on ajouter sur le gelato ?
+sm-037: Règle “kids” : dans une small cup, combien de goûts sont autorisés ?
+sm-038: Cornets : avant de servir, comment tient-on correctement le cornet ?
+sm-039: Cornets : combien de tailles prévues (Piccolo et Medio) ?
+sm-040: Choco Cone (vanilla flakes) : quel couple goût/poids est correct ?
+sm-041: Gluten Free Cone : quel couple goût/poids est correct ?
+sm-042: Gelato Boxes “Take Me Home” : combien de tailles de box existent ?
+sm-043: Box Piccolo : capacité correcte ?
+sm-044: Box Medio : capacité correcte ?
+sm-045: Box Grande : capacité correcte ?
+sm-046: Autonomie thermique max de la box (avant retour congélateur) :
+sm-047: Remplissage box : quel est l'objectif clé pendant le press du gelato ?
+sm-048: Couverture interne box : que met-on sur le gelato avant le lid ?
+sm-049: Scellage box : qu'est-ce qui assure la fermeture box–lid ?
+sm-050: Coppa Gelato : combien de scoops sont servies ?
+sm-051: Coppa Gelato : quel élément inclure en plus de la crème et la sauce ?
+sm-052: Conservation des treats : température minimale de la vitrine verticale ?
+sm-053: Exposition des treats : où placer les cakes ?
+sm-054: Exposition des treats : où vont cookies et Pinguinos ?
+sm-055: Shelf life treats : une fois exposées, les cookies durent :
+sm-056: Shelf life treats : une fois exposées, les mini cakes durent :
+sm-057: Morning prep vitrine : quelle couleur associer au sanitiser utilisé avec eau chaude ?
+sm-058: Morning prep vitrine : pour faire briller les surfaces métal on utilise :
+sm-059: Température de travail de la vitrine gelato : au moment de mettre le gelato en display, la machine doit atteindre :
+sm-060: Scampolo : quand un goût devient-il scampolo ?
+sm-061: Scampolo : quelle quantité de gelato ajoutes-tu à chaque fois dans le nouveau pan (approx) ?
+sm-062: Churros : à quelle température règles-tu la friteuse ?
+sm-063: Churros : “one portion” correspond à :
+sm-064: Churros : temps de friture pour atteindre couleur “golden” ?
+sm-065: Mix coating churros : quelle combinaison est correcte ?
+sm-066: Présentation churros : où mettre la sauce choisie ?
+sm-067: Panettone “warm slice” : combien de temps grilles-tu chaque face sur la crepe machine ?
+sm-068: Panettone “warm slice” : qu'est-il interdit d'ajouter pendant le réchauffage ?
+sm-069: Mini panettone farci : d'où le prends-tu en boutique ?
+sm-070: Mini panettone farci : à quel niveau remplir la espresso cup de sauce ?
+sm-071: Mini panettone – delivery : jusqu'à quel niveau remplis-tu la sauce pot ?
+sm-072: Mini panettone – delivery : une sauce pot couvre combien de mini unités ?
+sm-073: Mulled wine machine : quel volume d'eau va dans l'outer tank (approx) ?
+sm-074: Mulled wine : temps de warm-up au niveau 10 (approx) ?
+sm-075: Service du mulled wine : quel garnish est obligatoire dans le verre ?
+sm-076: Mulled wine : shelf life du vin réchauffé dans la machine (depuis le premier warm-up) ?
+sm-077: Smoothie Rosso Berry : quel couple “sticker + goût” est correct ?
+sm-078: Smoothie Verde Boost : quel sticker est correct ?
+sm-079: Smoothie Giallo Passion : quel sticker est correct ?
+sm-080: Smoothies : quelle quantité d'apple juice va dans le mixer ?
+sm-081: Smoothies : quel temps de mix (base) ?
+sm-082: Premade matcha (small batch) : quelle combinaison est correcte ?
+sm-083: Matcha Iced Latte : quel volume de premade matcha dans le verre ?
+sm-084: Dirty Matcha Affogato : que verse-t-on sur une scoop de gelato matcha ?
+sm-085: Yo-Yo : quelle est la construction correcte ?
+sm-086: Client demande plus de sauce sur Gelato Burger : quelle règle standard s'applique ?
+sm-087: Service en cornet : que met-on sur le cornet avant de servir ?
+sm-088: Avant de remplir les Gelato Boxes, quel est le step clé ?
+sm-089: Quand considère-t-on qu'un pan de gelato est “dur” ?
+sm-090: Temps de repos minimum pour la pâte à crêpes au frigo ?
+sm-091: Combien de sauces sont autorisées sur un waffle standard ?
+sm-092: Poids standard de la scoop pour Gelato Burger ?
+sm-093: Combien de churros font une portion ?
+sm-094: Quelle couleur de sanitiser utilise-t-on avec eau chaude pour la prep vitrine ?
+sm-095: Dose d'apple juice pour smoothies ?
+sm-096: Temps de blender pour smoothies (base) ?
+sm-097: Premade matcha (small batch) : ratio correct ?
+sm-098: Combien de premade matcha dans un Matcha Iced Latte ?
+sm-099: Dirty Matcha Affogato : que verse-t-on sur la scoop de gelato matcha ?
+sm-100: Yo-Yo : quelle est la construction correcte ?

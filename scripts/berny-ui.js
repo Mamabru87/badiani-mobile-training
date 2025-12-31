@@ -225,8 +225,11 @@
 
       this.currentStreamingText += c;
       
-      // Nascondi i tag [[LINK:...]] durante lo streaming per non mostrare codice grezzo
-      const displayText = this.currentStreamingText.replace(/\[\[LINK:.*?\]\]/g, '');
+      // Nascondi i tag [[LINK:...]] e [[CMD:...]] durante lo streaming per non mostrare codice grezzo
+      const displayText = this.currentStreamingText
+        .replace(/\[\[LINK:.*?\]\]/g, '')
+        .replace(/\[\[CMD:.*?\]\]/g, '')
+        .replace('[[NOLINK]]', '');
       
       this.currentStreamingBubble.textContent = displayText;
       this.scrollToBottom(false);
@@ -241,6 +244,7 @@
         // Apply Markdown parsing and Smart Links to the final result
         this.currentStreamingBubble.innerHTML = this.parseMarkdown(finalText);
         this.detectAndAddLink(finalText, this.currentStreamingBubble);
+        this.detectAndRunCommand(finalText); // NEW: Check for commands
 
         try {
           this.currentStreamingBubble
@@ -273,6 +277,13 @@
 
     // --- EFFETTO MACCHINA DA SCRIVERE (Adapted) ---
     typeWriterEffect(fullText) {
+      // 0. Check for NOLINK
+      let suppressLink = false;
+      if (fullText.includes('[[NOLINK]]')) {
+        suppressLink = true;
+        fullText = fullText.replace('[[NOLINK]]', '');
+      }
+
       // 1. Cerca il tag [[LINK:...]]
       let linkUrl = null;
       let cleanText = fullText;
@@ -280,7 +291,15 @@
       const linkMatch = fullText.match(/\[\[LINK:(.*?)\]\]/);
       if (linkMatch) {
         linkUrl = linkMatch[1]; 
-        cleanText = fullText.replace(linkMatch[0], '').trim(); // Rimuovi il tag dal testo visibile
+        cleanText = cleanText.replace(linkMatch[0], '').trim(); // Rimuovi il tag dal testo visibile
+      }
+
+      // 2. Cerca il tag [[CMD:...]]
+      let command = null;
+      const cmdMatch = fullText.match(/\[\[CMD:(.*?)\]\]/);
+      if (cmdMatch) {
+        command = cmdMatch[1];
+        cleanText = cleanText.replace(cmdMatch[0], '').trim();
       }
 
       this.playSynthSound('received');
@@ -306,9 +325,13 @@
           
           if (linkUrl) {
             this.createLinkButton(linkUrl, bubble);
-          } else {
-            // Fallback se nessun link esplicito è stato trovato
+          } else if (!suppressLink) {
+            // Fallback se nessun link esplicito è stato trovato E non è soppresso
             this.detectAndAddLink(cleanText, bubble);
+          }
+
+          if (command) {
+            this.runCommand(command);
           }
         }
       };
@@ -317,23 +340,31 @@
     }
 
     createLinkButton(url, container) {
+      // FIX: Prevent links to Hub (index.html) as requested by user
+      // "non deve mai collegarti allo hub tramite il pulsante"
+      if (!url || url === 'index.html' || url === './index.html' || url === '/') {
+          return;
+      }
+
       const btn = document.createElement('a');
       btn.href = url;
       btn.className = 'berny-link-btn';
       
       // Usa la traduzione se disponibile, altrimenti fallback
       const label = tr('assistant.openCard', null, '📖 Apri Scheda Correlata');
-      btn.innerHTML = `<b>${label}</b>`;
+      btn.textContent = label; // Removed <b> to avoid conflict with .message-bubble b color (Red)
       
       // Inline styles (preserved for compatibility)
       btn.style.display = 'inline-block';
       btn.style.marginTop = '10px';
-      btn.style.padding = '5px 10px';
-      btn.style.backgroundColor = '#002B5C';
+      btn.style.padding = '8px 14px'; // Slightly larger
+      btn.style.backgroundColor = '#ec418c'; // Brand Rose (Brighter)
       btn.style.color = 'white';
-      btn.style.borderRadius = '15px';
+      btn.style.borderRadius = '20px'; // More rounded
       btn.style.textDecoration = 'none';
-      btn.style.fontSize = '0.8rem';
+      btn.style.fontSize = '0.9rem'; // Slightly larger
+      btn.style.fontWeight = '600'; // Bold via style instead of tag
+      btn.style.boxShadow = '0 4px 10px rgba(236, 65, 140, 0.3)'; // Soft shadow
       
       container.appendChild(document.createElement('br'));
       container.appendChild(btn);
@@ -352,10 +383,39 @@
       return html;
     }
 
+    // --- COMANDI SPECIALI ---
+    detectAndRunCommand(text) {
+      const cmdMatch = text.match(/\[\[CMD:(.*?)\]\]/);
+      if (cmdMatch) {
+        this.runCommand(cmdMatch[1]);
+      }
+    }
+
+    runCommand(commandName) {
+      console.log("🤖 Berny Command:", commandName);
+      const brain = window.bernyBrain;
+      
+      if (commandName === 'trigger_gelato_reward') {
+        if (brain && typeof brain.triggerGelatoReward === 'function') {
+          brain.triggerGelatoReward();
+        } else {
+          console.warn("Function triggerGelatoReward not found on bernyBrain");
+        }
+      }
+    }
+
     // --- PULSANTE LINK INTELLIGENTE ---
     detectAndAddLink(text, container) {
       let link = null;
       let cleanText = text;
+
+      // 0. Check for NOLINK suppression
+      if (text.includes('[[NOLINK]]')) {
+        cleanText = text.replace('[[NOLINK]]', '').trim();
+        // Re-render content without the tag
+        container.innerHTML = this.parseMarkdown(cleanText);
+        return; // Exit without adding any link
+      }
 
       // 1. Cerca tag esplicito [[LINK:url]] (per casi non-typewriter)
       const tagMatch = text.match(/\[\[LINK:(.*?)\]\]/);
@@ -364,13 +424,23 @@
         cleanText = text.replace(tagMatch[0], '').trim();
         container.innerHTML = this.parseMarkdown(cleanText);
       } 
+      // 1b. Rimuovi anche eventuali CMD tags dal testo visibile (se non già fatto)
+      const cmdMatch = cleanText.match(/\[\[CMD:(.*?)\]\]/);
+      if (cmdMatch) {
+        cleanText = cleanText.replace(cmdMatch[0], '').trim();
+        container.innerHTML = this.parseMarkdown(cleanText);
+      }
+
       // 2. Fallback: Mappa argomenti -> link
-      else {
+      if (!tagMatch) { // Only fallback if no explicit link
         const lower = text.toLowerCase();
-        if (lower.includes('churro')) link = 'pastries.html';
-        else if (lower.includes('gelato') || lower.includes('gusti')) link = 'gelato-lab.html';
-        else if (lower.includes('caffè') || lower.includes('espresso')) link = 'caffe.html';
-        else if (lower.includes('crepes') || lower.includes('waffle')) link = 'sweet-treats.html';
+        if (lower.includes('churro')) link = 'pastries.html?q=churro';
+        else if (lower.includes('gelato')) link = 'gelato-lab.html?q=gelato';
+        else if (lower.includes('gusti')) link = 'gelato-lab.html?q=gusti';
+        else if (lower.includes('caffè')) link = 'caffe.html?q=caffe';
+        else if (lower.includes('espresso')) link = 'caffe.html?q=espresso';
+        else if (lower.includes('crepes')) link = 'sweet-treats.html?q=crepes';
+        else if (lower.includes('waffle')) link = 'sweet-treats.html?q=waffle';
       }
 
       if (link) {

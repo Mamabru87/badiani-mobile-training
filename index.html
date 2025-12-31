@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="it">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
     <meta http-equiv="Pragma" content="no-cache" />
@@ -29,6 +29,7 @@
     <script src="scripts/berny-widget-controller.js?v=3"></script>
     <script defer src="scripts/i18n.js?v=20251228_4"></script>
     <script defer src="scripts/berny-ui.js?v=1"></script>
+    <script defer src="scripts/avatar-lab.js"></script>
     <script defer src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <script defer src="scripts/site.js?v=20251229_2"></script>
     <script defer src="scripts/gelato-effects.js?v=20251227_1"></script>
@@ -210,7 +211,7 @@
               </article>
 
               <!-- TOTALS CARD -->
-              <article class="hub-card hub-card--stats" data-carousel-item>
+              <article class="hub-card hub-card--stats summary-card--totals" data-carousel-item>
                 <div class="hub-card__top">
                   <span data-i18n="cockpit.totals.eyebrow">Storico</span>
                 </div>
@@ -271,6 +272,7 @@
                 </div>
                 <div class="hub-card__center" data-profile>
                    <div class="summary-profile__avatar summary-profile__avatar--placeholder" aria-hidden="true" style="transform: scale(1.5); margin-bottom: 10px;">
+                      <img id="hub-profile-img" src="" alt="Avatar" style="width:100%; height:100%; object-fit:cover; display:none; border-radius:50%;">
                       <span class="avatar-placeholder" role="img" aria-label="Profilo">👤</span>
                    </div>
                    <h3 class="hub-card__title" data-profile-nick>—</h3>
@@ -363,14 +365,28 @@
 
         <div class="menu-drawer__footer">
           <!-- Footer Funzionale (Settings + Lang) -->
-          <div class="menu-footer-actions" style="display: flex; gap: 12px;">
-            <button class="menu-action-btn" onclick="openProfileSettings()">
-              <span class="icon">👤</span> Profilo
+          <div class="menu-footer-actions" style="display: flex; flex-direction: column; gap: 12px;">
+            <button class="menu-action-btn" onclick="openProfileSettings()" style="width: 100%; justify-content: flex-start;">
+              <span class="icon">👤</span> <span data-i18n="nav.profileLabel">Profilo</span>
             </button>
             
-            <button class="menu-action-btn" onclick="toggleLanguage()">
-              <span class="icon">🌍</span> <span id="current-lang-label">IT</span>
-            </button>
+            <div class="menu-lang" data-lang-selector>
+              <details>
+                <summary class="menu-lang__summary">
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <span class="icon">🌍</span>
+                    <span class="menu-lang__label" data-lang-label>Lingua</span>
+                  </div>
+                  <span class="menu-lang__current" data-lang-current>Italiano</span>
+                </summary>
+                <div class="menu-lang__options" role="radiogroup" aria-label="Lingua">
+                  <button type="button" class="menu-lang__option" role="radio" data-lang-option="it" aria-checked="true">Italiano</button>
+                  <button type="button" class="menu-lang__option" role="radio" data-lang-option="en" aria-checked="false">English</button>
+                  <button type="button" class="menu-lang__option" role="radio" data-lang-option="es" aria-checked="false">Español</button>
+                  <button type="button" class="menu-lang__option" role="radio" data-lang-option="fr" aria-checked="false">Français</button>
+                </div>
+              </details>
+            </div>
           </div>
         </div>
       </div>
