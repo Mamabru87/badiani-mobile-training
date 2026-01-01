@@ -9923,3 +9923,33 @@ body.page-home {
   font-size: 16px;
 }
 
+/* ========================================================================
+   Compact Layout for Product Pages (requested by user)
+   Applies to all pages except Hub and Story Orbit.
+   ======================================================================== */
+
+body.page-product {
+  /* Reduce gap between carousel sections significantly */
+  --carousel-section-gap: 12px;
+}
+
+/* Compact Hero on product pages */
+body.page-product .hero {
+  padding-bottom: 0;
+  gap: 12px; /* Reduce grid gap */
+}
+
+body.page-product .hero-card {
+  padding: 20px; /* Reduce from 32px */
+}
+
+body.page-product .hero h1 {
+  margin-bottom: 8px; /* Reduce from 14px */
+  font-size: clamp(28px, 5vw, 42px); /* Slightly smaller title */
+}
+
+/* Reduce space between hero and first carousel */
+body.page-product .hero + .carousel {
+  margin-top: 8px;
+}
+
