@@ -76,12 +76,8 @@
     // causes visible flicker (two systems fight each other). Keep gelato-effects
     // lightweight: sounds only.
     function initGelatoObserver() {
-        const track = document.querySelector('.cockpit-track');
+        const track = document.querySelector('[data-carousel="cockpit"] .carousel-track');
         if (!track) return;
-
-        // On touch devices, avoid extra work and avoid any risk of scroll jank.
-        const isCoarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
-        if (isCoarse) return;
 
         // Scroll Interaction for Sound
         let isScrolling;
