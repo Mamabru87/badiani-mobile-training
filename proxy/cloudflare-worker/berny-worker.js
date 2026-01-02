@@ -93,7 +93,9 @@ export default {
           contents: chat,
           generationConfig: {
             temperature: 0.6,
-            maxOutputTokens: 260,
+            // Give the model enough room to finish a thought.
+            // The system prompt already asks for short answers.
+            maxOutputTokens: 512,
           },
         };
 

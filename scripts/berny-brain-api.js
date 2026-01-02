@@ -526,27 +526,28 @@ document.addEventListener('DOMContentLoaded', () => {
         const full = await brain.processMessage(String(userMessage ?? ''));
         const text = String(full ?? '');
 
+        const sourceLabel = (String(brain?.mode || '') === 'proxy') ? 'proxy' : 'gemini-sdk';
+
         // pseudo-stream per UI
         if (typeof onChunk === 'function') {
-          // VELOCIZZATO: 2 caratteri ogni 30ms (circa 66 caratteri al secondo)
-          // Più fluido ma ancora leggibile.
-          const chunkSize = 2; 
+          // Faster streaming so longer replies don't look like they "freeze" mid-sentence.
+          const chunkSize = 4;
           let i = 0;
           const tick = () => {
             const c = text.slice(i, i + chunkSize);
             if (c) {
               try { onChunk(c); } catch {}
               i += chunkSize;
-              window.setTimeout(tick, 30);
+              window.setTimeout(tick, 15);
             } else {
-              if (typeof onComplete === 'function') onComplete(text, 'gemini-sdk');
+              if (typeof onComplete === 'function') onComplete(text, sourceLabel);
             }
           };
           tick();
           return;
         }
 
-        if (typeof onComplete === 'function') onComplete(text, 'gemini-sdk');
+        if (typeof onComplete === 'function') onComplete(text, sourceLabel);
       } catch (e) {
         const msg = 'Mi dispiace, ho un problema tecnico col mio cervello Google 🧠🔌.';
         if (typeof onComplete === 'function') onComplete(msg, 'error');
