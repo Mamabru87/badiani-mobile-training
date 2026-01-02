@@ -8,24 +8,95 @@
 // - OPENAI_API_KEY, OPENAI_MODEL (optional)
 // - ANTHROPIC_API_KEY, ANTHROPIC_MODEL (optional)
 // - GEMINI_API_KEY, GEMINI_MODEL (optional)
-// - ALLOWED_ORIGIN (optional)
+// - ALLOWED_ORIGIN (optional)  ("*" or comma-separated origins)
+// - RATE_LIMIT_MAX (optional)  (default 30) POST requests per window
+// - RATE_LIMIT_WINDOW_SEC (optional) (default 60)
+
+/**
+ * Lightweight per-isolate rate limiting.
+ * Notes:
+ * - This is best-effort (memory resets on cold starts / deploys).
+ * - Still useful to prevent accidental loops and casual abuse.
+ */
+const RATE_STATE = new Map();
+
+function getClientIp(request) {
+  // Cloudflare populates CF-Connecting-IP.
+  const cfIp = request.headers.get('CF-Connecting-IP');
+  if (cfIp) return cfIp;
+
+  // Fallback (in case of proxies).
+  const xff = request.headers.get('X-Forwarded-For');
+  if (xff) return String(xff).split(',')[0].trim();
+
+  return 'unknown';
+}
+
+function rateLimitCheck(request, env) {
+  const max = Math.max(1, Number.parseInt(String(env.RATE_LIMIT_MAX || '30'), 10) || 30);
+  const windowMs =
+    Math.max(1, Number.parseInt(String(env.RATE_LIMIT_WINDOW_SEC || '60'), 10) || 60) * 1000;
+
+  const ip = getClientIp(request);
+  const now = Date.now();
+
+  const existing = RATE_STATE.get(ip);
+  const bucket =
+    existing && now - existing.windowStart < windowMs
+      ? existing
+      : { windowStart: now, count: 0 };
+
+  bucket.count += 1;
+  RATE_STATE.set(ip, bucket);
+
+  // Opportunistic cleanup to avoid unbounded growth.
+  if (RATE_STATE.size > 2000) {
+    for (const [k, v] of RATE_STATE) {
+      if (!v || now - v.windowStart >= windowMs) RATE_STATE.delete(k);
+    }
+  }
+
+  const remaining = Math.max(0, max - bucket.count);
+  const limited = bucket.count > max;
+  const retryAfterSec = limited ? Math.ceil((bucket.windowStart + windowMs - now) / 1000) : 0;
+
+  return { limited, remaining, retryAfterSec };
+}
 
 export default {
   async fetch(request, env) {
     const urlObj = new URL(request.url);
     const pathname = urlObj.pathname || '/';
     const origin = request.headers.get('Origin') || '';
-    const allowed = env.ALLOWED_ORIGIN || '*';
+
+    // CORS allowlist
+    const allowedRaw = String(env.ALLOWED_ORIGIN || '*').trim();
+    const allowAll = allowedRaw === '*';
+    const allowedSet = allowAll
+      ? null
+      : new Set(
+          allowedRaw
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean)
+        );
 
     const isCorsRequest = !!origin;
-    const isAllowedOrigin = allowed === '*' || (!isCorsRequest ? true : origin === allowed);
+    const isAllowedOrigin =
+      allowAll || (!isCorsRequest ? true : allowedSet && allowedSet.has(origin));
 
-    // CORS: do not reflect arbitrary origins.
+    // CORS: never reflect arbitrary origins.
     // - If ALLOWED_ORIGIN is '*', allow all.
-    // - If ALLOWED_ORIGIN is set, only allow that exact Origin on CORS requests.
-    // - Non-CORS requests (no Origin header) are still allowed (e.g. opening /models in the browser address bar).
+    // - Else: allow only listed origins.
+    // - Non-CORS requests (no Origin header) are allowed (e.g. opening /models in the browser address bar).
+    const allowOriginHeader = allowAll
+      ? '*'
+      : isCorsRequest && isAllowedOrigin
+        ? origin
+        : Array.from(allowedSet || [])[0] || '';
+
     const corsHeaders = {
-      'Access-Control-Allow-Origin': allowed === '*' ? '*' : allowed,
+      'Access-Control-Allow-Origin': allowOriginHeader,
       'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
       'Access-Control-Max-Age': '86400',
@@ -76,6 +147,17 @@ export default {
 
     if (request.method !== 'POST') {
       return new Response('Method Not Allowed', { status: 405, headers: corsHeaders });
+    }
+
+    // Rate limit only chat POSTs (keep GET /health and GET /models convenient to open).
+    const rl = rateLimitCheck(request, env);
+    if (rl.limited) {
+      const headers = {
+        ...corsHeaders,
+        'Retry-After': String(rl.retryAfterSec || 1),
+        'content-type': 'text/plain; charset=utf-8',
+      };
+      return new Response('Too Many Requests', { status: 429, headers });
     }
 
     let body;
