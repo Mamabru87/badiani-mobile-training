@@ -12,6 +12,8 @@
 
 export default {
   async fetch(request, env) {
+    const urlObj = new URL(request.url);
+    const pathname = urlObj.pathname || '/';
     const origin = request.headers.get('Origin') || '';
     const allowed = env.ALLOWED_ORIGIN || '*';
 
@@ -23,6 +25,29 @@ export default {
 
     if (request.method === 'OPTIONS') {
       return new Response(null, { status: 204, headers: corsHeaders });
+    }
+
+    // Helper endpoint: list available Gemini models for this API key.
+    // Usage: open https://<worker>.workers.dev/models in the browser.
+    if (request.method === 'GET' && pathname === '/models') {
+      const key = env.GEMINI_API_KEY;
+      if (!key) {
+        return new Response('Missing GEMINI_API_KEY', { status: 500, headers: corsHeaders });
+      }
+
+      const listV1beta = `https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(key)}`;
+      const listV1 = `https://generativelanguage.googleapis.com/v1/models?key=${encodeURIComponent(key)}`;
+
+      let r = await fetch(listV1beta);
+      if (!r.ok && r.status === 404) {
+        r = await fetch(listV1);
+      }
+
+      const text = await r.text().catch(() => '');
+      return new Response(text, {
+        status: r.ok ? 200 : 500,
+        headers: { ...corsHeaders, 'content-type': 'application/json' },
+      });
     }
 
     if (request.method !== 'POST') {
@@ -53,27 +78,42 @@ export default {
             parts: [{ text: String(m.content || '') }],
           }));
 
-        const model = env.GEMINI_MODEL || 'gemini-1.5-flash';
+        // Gemini model names may be provided either as "gemini-…" or "models/gemini-…".
+        // Also, some accounts expose models differently between v1beta and v1.
+        const rawModel = String(env.GEMINI_MODEL || 'gemini-1.5-flash-latest');
+        const model = rawModel.replace(/^models\//i, '');
         const key = env.GEMINI_API_KEY;
 
         if (!key) {
           return new Response('Missing GEMINI_API_KEY', { status: 500, headers: corsHeaders });
         }
 
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(key)}`;
+        const payload = {
+          systemInstruction: sys ? { parts: [{ text: String(sys) }] } : undefined,
+          contents: chat,
+          generationConfig: {
+            temperature: 0.6,
+            maxOutputTokens: 260,
+          },
+        };
 
-        const r = await fetch(url, {
+        const urlV1beta = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(key)}`;
+        const urlV1 = `https://generativelanguage.googleapis.com/v1/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(key)}`;
+
+        let r = await fetch(urlV1beta, {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({
-            systemInstruction: sys ? { parts: [{ text: String(sys) }] } : undefined,
-            contents: chat,
-            generationConfig: {
-              temperature: 0.6,
-              maxOutputTokens: 260,
-            },
-          }),
+          body: JSON.stringify(payload),
         });
+
+        // If the model isn't available on v1beta (common 404), retry against v1.
+        if (!r.ok && r.status === 404) {
+          r = await fetch(urlV1, {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+        }
 
         if (!r.ok) {
           const t = await r.text().catch(() => '');
