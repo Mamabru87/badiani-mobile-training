@@ -17,14 +17,38 @@ export default {
     const origin = request.headers.get('Origin') || '';
     const allowed = env.ALLOWED_ORIGIN || '*';
 
+    const isCorsRequest = !!origin;
+    const isAllowedOrigin = allowed === '*' || (!isCorsRequest ? true : origin === allowed);
+
+    // CORS: do not reflect arbitrary origins.
+    // - If ALLOWED_ORIGIN is '*', allow all.
+    // - If ALLOWED_ORIGIN is set, only allow that exact Origin on CORS requests.
+    // - Non-CORS requests (no Origin header) are still allowed (e.g. opening /models in the browser address bar).
     const corsHeaders = {
-      'Access-Control-Allow-Origin': allowed === '*' ? '*' : origin,
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Origin': allowed === '*' ? '*' : allowed,
+      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Max-Age': '86400',
+      Vary: 'Origin',
     };
+
+    if (!isAllowedOrigin) {
+      // Block browser-based calls coming from untrusted origins.
+      return new Response('Forbidden (CORS)', { status: 403, headers: corsHeaders });
+    }
 
     if (request.method === 'OPTIONS') {
       return new Response(null, { status: 204, headers: corsHeaders });
+    }
+
+    // Health endpoint (no secrets). Useful to confirm routing + provider.
+    // Usage: open https://<worker>.workers.dev/health in the browser.
+    if (request.method === 'GET' && (pathname === '/health' || pathname === '/health/' || pathname === '/berny/health' || pathname === '/berny/health/')) {
+      const provider = String(env.PROVIDER || 'openai').toLowerCase();
+      return new Response(JSON.stringify({ ok: true, provider }), {
+        status: 200,
+        headers: { ...corsHeaders, 'content-type': 'application/json' },
+      });
     }
 
     // Helper endpoint: list available Gemini models for this API key.
@@ -119,6 +143,7 @@ export default {
 
         if (!r.ok) {
           const t = await r.text().catch(() => '');
+          console.log('Gemini upstream error', r.status);
           return new Response(`Gemini error ${r.status}: ${t}`, { status: 500, headers: corsHeaders });
         }
 
@@ -160,6 +185,7 @@ export default {
 
         if (!r.ok) {
           const t = await r.text().catch(() => '');
+          console.log('Anthropic upstream error', r.status);
           return new Response(`Anthropic error ${r.status}: ${t}`, { status: 500, headers: corsHeaders });
         }
 
@@ -194,6 +220,7 @@ export default {
 
       if (!r.ok) {
         const t = await r.text().catch(() => '');
+        console.log('OpenAI upstream error', r.status);
         return new Response(`OpenAI error ${r.status}: ${t}`, { status: 500, headers: corsHeaders });
       }
 
@@ -205,6 +232,7 @@ export default {
         headers: { ...corsHeaders, 'content-type': 'application/json' },
       });
     } catch (e) {
+      console.log('Proxy exception', String(env.PROVIDER || 'openai').toLowerCase());
       return new Response(`Proxy exception: ${String(e?.message || e)}`, { status: 500, headers: corsHeaders });
     }
   },

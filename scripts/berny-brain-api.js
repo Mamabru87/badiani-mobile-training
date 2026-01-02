@@ -120,15 +120,17 @@ class BernyBrainAPI {
       }
     }
 
-    // Listener per inserimento chiave via chat
-    window.addEventListener('berny-user-message', (e) => {
-      if (e.detail.message.startsWith('/apikey')) {
-        const key = e.detail.message.replace('/apikey', '').trim();
-        localStorage.setItem('berny_api_key', key);
-        alert("Chiave salvata! Ricarico...");
-        window.location.reload();
-      }
-    });
+    // Listener per inserimento chiave via chat (solo in modalità SDK).
+    if (this.mode === 'sdk') {
+      window.addEventListener('berny-user-message', (e) => {
+        if (e.detail.message.startsWith('/apikey')) {
+          const key = e.detail.message.replace('/apikey', '').trim();
+          localStorage.setItem('berny_api_key', key);
+          alert("Chiave salvata! Ricarico...");
+          window.location.reload();
+        }
+      });
+    }
   }
 
   // --- QUIZ LOGIC START ---
@@ -338,7 +340,9 @@ class BernyBrainAPI {
         ];
 
         const ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
-        const timer = setTimeout(() => { try { ctrl?.abort(); } catch {} }, 9000);
+        // Proxy calls may occasionally take longer (network + model latency).
+        // A too-low timeout looks like a UI freeze.
+        const timer = setTimeout(() => { try { ctrl?.abort(); } catch {} }, 25000);
 
         const r = await fetch(endpoint, {
           method: 'POST',
@@ -363,6 +367,10 @@ class BernyBrainAPI {
         const text = String(data?.text || '').trim();
         return text || 'Mi sa che il proxy non mi ha risposto bene. Riprova tra poco.';
       } catch (e) {
+        const name = String(e?.name || '');
+        if (name === 'AbortError') {
+          return '⏳ Sto impiegando un po’ più del solito a rispondere (timeout). Riprova tra qualche secondo.';
+        }
         return `❌ Proxy exception: ${String(e?.message || e)}`;
       } finally {
         window.dispatchEvent(new CustomEvent('berny-typing-end'));

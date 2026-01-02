@@ -19,16 +19,29 @@
       }
     </script>
     <script type="module">
-      import { GoogleGenerativeAI } from "@google/generative-ai";
-      window.GoogleGenerativeAI = GoogleGenerativeAI; // Rendilo globale per berny-brain-api.js
+      // Load Google SDK only when running in SDK mode (proxy mode doesn't need it).
+      (() => {
+        let cfg = null;
+        try { cfg = JSON.parse(localStorage.getItem('badianiBerny.config.v1') || 'null'); } catch { cfg = null; }
+        const isProxy = !!(cfg && typeof cfg === 'object' && String(cfg.provider || '').toLowerCase() === 'proxy' && cfg.proxyEndpoint);
+        if (isProxy) return;
+
+        import("@google/generative-ai")
+          .then(({ GoogleGenerativeAI }) => {
+            window.GoogleGenerativeAI = GoogleGenerativeAI; // Rendilo globale per berny-brain-api.js
+          })
+          .catch((e) => {
+            console.warn('Google Generative AI SDK failed to load (proxy recommended).', e);
+          });
+      })();
     </script>
 
     <script src="scripts/berny-knowledge.js?v=3"></script>
     <script src="scripts/berny-super-knowledge.js"></script>
-    <script src="scripts/berny-brain-api.js?v=Google1"></script>
-    <script src="scripts/berny-widget-controller.js?v=3"></script>
+    <script src="scripts/berny-brain-api.js?v=20260102_5"></script>
+    <script src="scripts/berny-widget-controller.js?v=20260102_5"></script>
     <script defer src="scripts/i18n.js?v=20251228_4"></script>
-    <script defer src="scripts/berny-ui.js?v=1"></script>
+    <script defer src="scripts/berny-ui.js?v=20260102_5"></script>
     <script defer src="scripts/avatar-lab.js"></script>
     <script defer src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <script defer src="scripts/site.js?v=20260102_4"></script>
