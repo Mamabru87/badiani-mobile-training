@@ -29,7 +29,7 @@ export default {
 
     // Helper endpoint: list available Gemini models for this API key.
     // Usage: open https://<worker>.workers.dev/models in the browser.
-    if (request.method === 'GET' && pathname === '/models') {
+    if (request.method === 'GET' && (pathname === '/models' || pathname === '/models/' || pathname === '/berny/models' || pathname === '/berny/models/')) {
       const key = env.GEMINI_API_KEY;
       if (!key) {
         return new Response('Missing GEMINI_API_KEY', { status: 500, headers: corsHeaders });
