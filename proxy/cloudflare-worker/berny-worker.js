@@ -4,9 +4,10 @@
 // - Returns { text }
 //
 // Env vars (recommended):
-// - PROVIDER=openai|anthropic
+// - PROVIDER=openai|anthropic|gemini
 // - OPENAI_API_KEY, OPENAI_MODEL (optional)
 // - ANTHROPIC_API_KEY, ANTHROPIC_MODEL (optional)
+// - GEMINI_API_KEY, GEMINI_MODEL (optional)
 // - ALLOWED_ORIGIN (optional)
 
 export default {
@@ -43,6 +44,54 @@ export default {
     const provider = String(env.PROVIDER || 'openai').toLowerCase();
 
     try {
+      if (provider === 'gemini') {
+        const sys = messages.find((m) => m?.role === 'system')?.content || '';
+        const chat = messages
+          .filter((m) => m?.role === 'user' || m?.role === 'assistant')
+          .map((m) => ({
+            role: m.role === 'assistant' ? 'model' : 'user',
+            parts: [{ text: String(m.content || '') }],
+          }));
+
+        const model = env.GEMINI_MODEL || 'gemini-1.5-flash';
+        const key = env.GEMINI_API_KEY;
+
+        if (!key) {
+          return new Response('Missing GEMINI_API_KEY', { status: 500, headers: corsHeaders });
+        }
+
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(key)}`;
+
+        const r = await fetch(url, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            systemInstruction: sys ? { parts: [{ text: String(sys) }] } : undefined,
+            contents: chat,
+            generationConfig: {
+              temperature: 0.6,
+              maxOutputTokens: 260,
+            },
+          }),
+        });
+
+        if (!r.ok) {
+          const t = await r.text().catch(() => '');
+          return new Response(`Gemini error ${r.status}: ${t}`, { status: 500, headers: corsHeaders });
+        }
+
+        const data = await r.json().catch(() => null);
+        const parts = data?.candidates?.[0]?.content?.parts || [];
+        const text = Array.isArray(parts)
+          ? parts.map((p) => String(p?.text || '')).join('').trim()
+          : '';
+
+        return new Response(JSON.stringify({ text }), {
+          status: 200,
+          headers: { ...corsHeaders, 'content-type': 'application/json' },
+        });
+      }
+
       if (provider === 'anthropic') {
         const sys = messages.find((m) => m?.role === 'system')?.content || '';
         const chat = messages

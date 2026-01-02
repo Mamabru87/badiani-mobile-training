@@ -3,18 +3,28 @@
 
 class BernyBrainAPI {
   constructor() {
-    // HARDCODED FALLBACK per sbloccare la situazione
-    const HARDCODED_KEY = "AIzaSyDDMtpPb6C3LA0SNWU2ghSZ48dx67HvOjc";
-    
-    let stored = localStorage.getItem('berny_api_key');
-    if (!stored || stored.length < 10) {
-      console.log("🔑 Inietto la nuova chiave fornita...");
-      localStorage.setItem('berny_api_key', HARDCODED_KEY);
-      stored = HARDCODED_KEY;
+    // SECURITY: do not ship API keys in the frontend.
+    // Configure proxy mode via:
+    // localStorage.setItem('badianiBerny.config.v1', JSON.stringify({ provider:'proxy', proxyEndpoint:'https://<worker>/berny' }))
+    let cfg = null;
+    try {
+      cfg = JSON.parse(localStorage.getItem('badianiBerny.config.v1') || 'null');
+    } catch {
+      cfg = null;
     }
 
-    this.apiKey = stored;
-    // USO IL MODELLO PRESENTE NELLA LISTA (Gemini 2.0 Flash Experimental)
+    this.config = (cfg && typeof cfg === 'object') ? cfg : {};
+    this.mode = (String(this.config.provider || '')).toLowerCase() === 'proxy' && this.config.proxyEndpoint
+      ? 'proxy'
+      : 'sdk';
+
+    // SDK mode requires the user to provide their own key (via /apikey) and the SDK script to be present.
+    this.apiKey = '';
+    if (this.mode === 'sdk') {
+      try { this.apiKey = String(localStorage.getItem('berny_api_key') || '').trim(); } catch { this.apiKey = ''; }
+    }
+
+    // Default model (only used for SDK mode)
     this.modelName = "gemini-2.0-flash-exp";
     this.history = [];
     this.genAI = null;
@@ -95,21 +105,19 @@ class BernyBrainAPI {
       ]
     };
 
-    if (this.apiKey) {
-      console.log("🔑 API Key caricata:", this.apiKey.substring(0, 8) + "...");
-    }
-    
     this.init();
   }
 
   init() {
-    // Aspetta che l'SDK sia caricato
-    if (window.GoogleGenerativeAI && this.apiKey) {
-      this.genAI = new window.GoogleGenerativeAI(this.apiKey);
-      this.model = this.genAI.getGenerativeModel({ model: this.modelName });
-      console.log("🤖 Berny Brain (Google SDK) pronto!");
-    } else {
-      console.warn("⚠️ SDK Google o API Key mancante.");
+    // SDK init (only if configured)
+    if (this.mode === 'sdk') {
+      if (window.GoogleGenerativeAI && this.apiKey && this.apiKey.length >= 10) {
+        this.genAI = new window.GoogleGenerativeAI(this.apiKey);
+        this.model = this.genAI.getGenerativeModel({ model: this.modelName });
+        console.log("🤖 Berny Brain (Google SDK) pronto!");
+      } else {
+        console.warn("⚠️ SDK Google o API Key mancante. (Consigliato: proxy) ");
+      }
     }
 
     // Listener per inserimento chiave via chat
@@ -314,8 +322,55 @@ class BernyBrainAPI {
         return this.startQuiz(detectedLang);
     }
 
-    // 2. STANDARD GEMINI LOGIC
-    if (!this.apiKey) return "⚠️ Scrivi '/apikey LA_TUA_CHIAVE' per attivarmi!";
+    // 2. STANDARD LLM LOGIC (proxy preferred)
+    if (this.mode === 'proxy') {
+      const endpoint = String(this.config.proxyEndpoint || '').trim();
+      if (!endpoint) return "⚠️ Config proxy mancante. Imposta badianiBerny.config.v1.";
+
+      // Notifica UI
+      window.dispatchEvent(new CustomEvent('berny-typing-start'));
+
+      try {
+        const systemPrompt = this.buildSystemPrompt();
+        const messages = [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: String(userMessage ?? '') },
+        ];
+
+        const ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+        const timer = setTimeout(() => { try { ctrl?.abort(); } catch {} }, 9000);
+
+        const r = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            intent: 'chat',
+            userContext: {
+              nickname: window.BadianiProfile?.getActive?.()?.nickname || '',
+              language: (window.BadianiI18n?.getLang?.() || 'it'),
+            },
+            messages,
+          }),
+          signal: ctrl ? ctrl.signal : undefined,
+        });
+        clearTimeout(timer);
+
+        if (!r || !r.ok) {
+          const t = await r.text().catch(() => '');
+          return `❌ Proxy error ${r?.status || 0}: ${t}`;
+        }
+        const data = await r.json().catch(() => null);
+        const text = String(data?.text || '').trim();
+        return text || 'Mi sa che il proxy non mi ha risposto bene. Riprova tra poco.';
+      } catch (e) {
+        return `❌ Proxy exception: ${String(e?.message || e)}`;
+      } finally {
+        window.dispatchEvent(new CustomEvent('berny-typing-end'));
+      }
+    }
+
+    // SDK fallback
+    if (!this.apiKey || this.apiKey.length < 10) return "⚠️ Scrivi '/apikey LA_TUA_CHIAVE' per attivarmi (oppure usa il proxy)!";
     if (!this.model) this.init();
 
     // Notifica UI
@@ -440,7 +495,8 @@ class BernyBrainAPI {
 
       - Gelato/Gusti -> [[LINK:gelato-lab.html?q=PAROLA_CHIAVE]]
       - Caffè/Bar -> [[LINK:caffe.html?q=PAROLA_CHIAVE]]
-      - Churros/Crepes/Waffle -> [[LINK:sweet-treats.html?q=PAROLA_CHIAVE]] (o pastries.html se specifico)
+      - Crepes/Waffle -> [[LINK:sweet-treats.html?q=PAROLA_CHIAVE]]
+      - Churros/Festive -> [[LINK:festive.html?q=PAROLA_CHIAVE]]
       - Storia/Azienda -> [[LINK:story-orbit.html?q=PAROLA_CHIAVE]]
       - Procedure/Operazioni -> [[LINK:operations.html?q=PAROLA_CHIAVE]]
 

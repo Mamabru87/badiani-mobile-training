@@ -1,6 +1,194 @@
 document.documentElement.classList.add('has-js');
 
 // ============================================================
+// STORAGE ADAPTER + PROFILE API (stability layer)
+// - Centralizes JSON parsing, safe storage access, and profile consistency.
+// - Does NOT change any DOM hooks; it only makes persistence more reliable.
+// ============================================================
+
+(() => {
+  if (window.BadianiStorage) return;
+
+  const safeGet = (store, key) => {
+    try { return store.getItem(key); } catch { return null; }
+  };
+  const safeSet = (store, key, value) => {
+    try { store.setItem(key, value); return true; } catch { return false; }
+  };
+  const safeRemove = (store, key) => {
+    try { store.removeItem(key); return true; } catch { return false; }
+  };
+
+  const jsonParse = (raw, fallback = null) => {
+    try {
+      if (raw == null || raw === '') return fallback;
+      return JSON.parse(raw);
+    } catch {
+      return fallback;
+    }
+  };
+
+  const jsonStringify = (value) => {
+    try { return JSON.stringify(value); } catch { return ''; }
+  };
+
+  const hasLocalStorage = () => {
+    try {
+      const k = '__badiani_ls_test__';
+      localStorage.setItem(k, '1');
+      localStorage.removeItem(k);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const getRaw = (key) => {
+    // Prefer localStorage when available.
+    if (hasLocalStorage()) {
+      const raw = safeGet(localStorage, key);
+      if (raw != null) return raw;
+    }
+    // Fallback to sessionStorage.
+    const s = safeGet(sessionStorage, key);
+    if (s != null) return s;
+    return null;
+  };
+
+  const setRaw = (key, value) => {
+    // Best-effort local first, session fallback.
+    if (hasLocalStorage() && safeSet(localStorage, key, value)) return true;
+    return safeSet(sessionStorage, key, value);
+  };
+
+  const removeRaw = (key) => {
+    // Remove from both stores.
+    let ok = false;
+    ok = safeRemove(localStorage, key) || ok;
+    ok = safeRemove(sessionStorage, key) || ok;
+    return ok;
+  };
+
+  window.BadianiStorage = {
+    hasLocalStorage,
+    getRaw,
+    setRaw,
+    removeRaw,
+    getJSON(key, fallback = null) {
+      return jsonParse(getRaw(key), fallback);
+    },
+    setJSON(key, value) {
+      return setRaw(key, jsonStringify(value));
+    },
+    remove(key) {
+      return removeRaw(key);
+    },
+  };
+})();
+
+(() => {
+  if (window.BadianiProfile) return;
+
+  const KEY_ACTIVE = 'badianiUser.profile.v1';
+  const KEY_LIST = 'badianiUser.profiles';
+
+  const normalizeText = (v) => String(v || '').trim();
+
+  const readProfiles = () => {
+    const list = window.BadianiStorage?.getJSON?.(KEY_LIST, []) || [];
+    return Array.isArray(list) ? list : [];
+  };
+
+  const writeProfiles = (profiles) => {
+    const arr = Array.isArray(profiles) ? profiles : [];
+    window.BadianiStorage?.setJSON?.(KEY_LIST, arr);
+    return arr;
+  };
+
+  const sanitizeProfile = (p) => {
+    if (!p || typeof p !== 'object') return null;
+    const id = normalizeText(p.id);
+    const nickname = normalizeText(p.nickname);
+    const gelato = normalizeText(p.gelato);
+    if (!id || nickname.length < 1 || gelato.length < 1) return null;
+    return {
+      id,
+      nickname,
+      gelato,
+      createdAt: (typeof p.createdAt === 'number' && Number.isFinite(p.createdAt)) ? p.createdAt : Date.now(),
+      updatedAt: (typeof p.updatedAt === 'number' && Number.isFinite(p.updatedAt)) ? p.updatedAt : undefined,
+    };
+  };
+
+  const upsertIntoList = (profile) => {
+    const p = sanitizeProfile(profile);
+    if (!p) return null;
+    const profiles = readProfiles();
+    const idx = profiles.findIndex((x) => x && x.id === p.id);
+    if (idx >= 0) {
+      const prev = profiles[idx] || {};
+      profiles[idx] = {
+        ...prev,
+        ...p,
+        createdAt: (typeof prev.createdAt === 'number' && Number.isFinite(prev.createdAt)) ? prev.createdAt : p.createdAt,
+      };
+    } else {
+      profiles.push(p);
+    }
+    writeProfiles(profiles);
+    return p;
+  };
+
+  const dispatchUpdated = (profile) => {
+    try {
+      document.dispatchEvent(new CustomEvent('badiani:profile-updated', { detail: { profile } }));
+    } catch {}
+  };
+
+  const getActive = () => {
+    const raw = window.BadianiStorage?.getJSON?.(KEY_ACTIVE, null);
+    return sanitizeProfile(raw);
+  };
+
+  const setActive = (profile) => {
+    const p = sanitizeProfile(profile);
+    if (!p) return null;
+    const now = Date.now();
+    const next = { ...p, updatedAt: now };
+    window.BadianiStorage?.setJSON?.(KEY_ACTIVE, next);
+    upsertIntoList(next);
+    dispatchUpdated(next);
+    return next;
+  };
+
+  const updateActive = (patch) => {
+    const current = getActive();
+    if (!current) return null;
+    const next = {
+      ...current,
+      ...patch,
+      nickname: patch && Object.prototype.hasOwnProperty.call(patch, 'nickname') ? normalizeText(patch.nickname) : current.nickname,
+      gelato: patch && Object.prototype.hasOwnProperty.call(patch, 'gelato') ? normalizeText(patch.gelato) : current.gelato,
+      updatedAt: Date.now(),
+    };
+    return setActive(next);
+  };
+
+  window.BadianiProfile = {
+    KEY_ACTIVE,
+    KEY_LIST,
+    getActive,
+    getProfiles: readProfiles,
+    setActive,
+    updateActive,
+    logout() {
+      window.BadianiStorage?.remove?.(KEY_ACTIVE);
+      dispatchUpdated(null);
+    },
+  };
+})();
+
+// ============================================================
 // AVATAR SPRITE (index.html)
 // Sprite sheet animation helper (no bundler, vanilla JS, IIFE).
 // Renders via <canvas> by default for crisp, pixel-perfect cropping (prevents
@@ -537,19 +725,25 @@ const tr = (key, vars, fallback) => {
 // Mostra nickname utente nella barra
 window.addEventListener('DOMContentLoaded', function() {
   try {
-    const user = (function() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY_USER);
-        if (!raw) return null;
-        const user = JSON.parse(raw);
-        if (!user?.nickname) return null;
-        return user;
-      } catch { return null; }
-    })();
+    const user = window.BadianiProfile?.getActive?.() || null;
     const bar = document.getElementById('user-nickname-bar');
     const nick = document.getElementById('nickname-display');
     if (user && bar && nick) {
       nick.textContent = user.nickname;
+      bar.style.display = 'flex';
+    }
+  } catch {}
+});
+
+// Live update nickname bar if profile changes while the app is open.
+document.addEventListener('badiani:profile-updated', (e) => {
+  try {
+    const profile = e?.detail?.profile;
+    const bar = document.getElementById('user-nickname-bar');
+    const nick = document.getElementById('nickname-display');
+    if (!bar || !nick) return;
+    if (profile && profile.nickname) {
+      nick.textContent = profile.nickname;
       bar.style.display = 'flex';
     }
   } catch {}
@@ -584,9 +778,29 @@ window.addEventListener('DOMContentLoaded', function() {
     }
   };
 
-  const saveUser = (id, nickname, gelato) => {
-    const profile = { id, nickname: nickname.trim(), gelato: gelato.trim(), createdAt: Date.now() };
+  const saveUser = (id, nickname, gelato, createdAt = null) => {
+    const now = Date.now();
+    const profile = { id, nickname: nickname.trim(), gelato: gelato.trim(), createdAt: (typeof createdAt === 'number' ? createdAt : now), updatedAt: now };
     localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(profile));
+    // Keep the profiles list in sync (stability).
+    try {
+      const profiles = getProfiles();
+      const idx = profiles.findIndex((p) => p && p.id === id);
+      if (idx >= 0) {
+        const prev = profiles[idx] || {};
+        profiles[idx] = {
+          ...prev,
+          ...profile,
+          createdAt: (typeof prev.createdAt === 'number' && Number.isFinite(prev.createdAt)) ? prev.createdAt : profile.createdAt,
+        };
+      } else {
+        profiles.push(profile);
+      }
+      saveProfiles(profiles);
+    } catch {}
+    try {
+      document.dispatchEvent(new CustomEvent('badiani:profile-updated', { detail: { profile } }));
+    } catch {}
     return profile;
   };
 
@@ -601,7 +815,7 @@ window.addEventListener('DOMContentLoaded', function() {
     const profile = { id, nickname: nickname.trim(), gelato: gelato.trim(), createdAt };
     profiles.push(profile);
     saveProfiles(profiles);
-    saveUser(id, nickname, gelato);
+    saveUser(id, nickname, gelato, createdAt);
     // NOTE: Do NOT wipe other profiles' gamification keys.
     // Gamification is stored per profile (badianiGamification.v3:<profileId>) and will be
     // initialized automatically on first load for the new profile.
@@ -612,7 +826,7 @@ window.addEventListener('DOMContentLoaded', function() {
     const profiles = getProfiles();
     const found = profiles.find(p => p.nickname.toLowerCase() === nickname.toLowerCase() && p.gelato.toLowerCase() === gelato.toLowerCase());
     if (!found) return null;
-    saveUser(found.id, found.nickname, found.gelato);
+    saveUser(found.id, found.nickname, found.gelato, found.createdAt);
     return found;
   };
 
@@ -874,9 +1088,13 @@ scrollButtons.forEach((btn) => {
 
   const load = () => {
     try {
-      const raw = localStorage.getItem(KEY);
-      if (!raw) return { pages: {} };
-      const parsed = JSON.parse(raw);
+      const parsed = window.BadianiStorage?.getJSON
+        ? window.BadianiStorage.getJSON(KEY, null)
+        : (function() {
+            const raw = localStorage.getItem(KEY);
+            if (!raw) return null;
+            return JSON.parse(raw);
+          })();
       if (!parsed || typeof parsed !== 'object') return { pages: {} };
       return {
         updatedAt: parsed.updatedAt || '',
@@ -889,6 +1107,10 @@ scrollButtons.forEach((btn) => {
 
   const save = (catalog) => {
     try {
+      if (window.BadianiStorage?.setJSON) {
+        window.BadianiStorage.setJSON(KEY, catalog);
+        return;
+      }
       localStorage.setItem(KEY, JSON.stringify(catalog));
     } catch {
       /* ignore */
@@ -1238,9 +1460,7 @@ scrollButtons.forEach((btn) => {
 
   const getActiveProfileId = () => {
     try {
-      const raw = localStorage.getItem('badianiUser.profile.v1');
-      if (!raw) return 'guest';
-      const p = JSON.parse(raw);
+      const p = window.BadianiProfile?.getActive?.();
       return p?.id || 'guest';
     } catch {
       return 'guest';
@@ -2941,11 +3161,10 @@ const gamification = (() => {
 
   const getActiveProfile = () => {
     try {
-      const raw = localStorage.getItem('badianiUser.profile.v1');
-      if (!raw) return null;
-      const p = JSON.parse(raw);
-      return p?.id ? p : null;
-    } catch { return null; }
+      return window.BadianiProfile?.getActive?.() || null;
+    } catch {
+      return null;
+    }
   };
   const storageKey = () => {
     const prof = getActiveProfile();
@@ -5033,9 +5252,8 @@ const gamification = (() => {
     const uiLocale = ({ it: 'it-IT', en: 'en-GB', es: 'es-ES', fr: 'fr-FR' }[uiLang]) || undefined;
     // Profile info
     try {
-      const raw = localStorage.getItem('badianiUser.profile.v1');
-      if (raw) {
-        const user = JSON.parse(raw);
+      const user = window.BadianiProfile?.getActive?.() || null;
+      if (user) {
         const nickNode = root.querySelector('[data-profile-nick]');
         const gelatoNode = root.querySelector('[data-profile-gelato]');
         if (nickNode) nickNode.textContent = user?.nickname || '';
@@ -5676,10 +5894,13 @@ const gamification = (() => {
 
   function showChangeGelatoModal() {
     console.log('showChangeGelatoModal called');
-    const getUser = () => {
-      try { return JSON.parse(localStorage.getItem('badianiUser.profile.v1') || 'null'); } catch { return null; }
-    };
+    const getUser = () => window.BadianiProfile?.getActive?.() || null;
     const saveUserGelato = (gelato) => {
+      // Prefer the stability layer (keeps profiles list in sync + emits update event).
+      if (window.BadianiProfile?.updateActive) {
+        return window.BadianiProfile.updateActive({ gelato: gelato.trim() });
+      }
+      // Fallback: legacy behavior (best-effort).
       const current = getUser() || {};
       const profile = {
         id: current.id,
@@ -5687,7 +5908,11 @@ const gamification = (() => {
         gelato: gelato.trim(),
         createdAt: current.createdAt || Date.now(),
       };
-      localStorage.setItem('badianiUser.profile.v1', JSON.stringify(profile));
+      try {
+        const key = window.BadianiProfile?.KEY_ACTIVE || 'badianiUser.profile.v1';
+        if (window.BadianiStorage?.setJSON) window.BadianiStorage.setJSON(key, profile);
+        else localStorage.setItem(key, JSON.stringify(profile));
+      } catch {}
       return profile;
     };
 
@@ -5741,7 +5966,15 @@ const gamification = (() => {
     container.style.maxWidth = '400px';
     
     // Check if AvatarLab is available
-    const avatarHtml = (typeof AvatarLab !== 'undefined') ? AvatarLab.getHTML() : '<p>Avatar Creator non disponibile.</p>';
+    let avatarHtml = '<p>Avatar Creator non disponibile.</p>';
+    try {
+      if (typeof AvatarLab !== 'undefined' && AvatarLab && typeof AvatarLab.getHTML === 'function') {
+        avatarHtml = AvatarLab.getHTML();
+      }
+    } catch (e) {
+      console.warn('AvatarLab.getHTML failed', e);
+      avatarHtml = '<p>Avatar Creator non disponibile.</p>';
+    }
     
     container.innerHTML = `
       <div style="text-align:center; margin-bottom:12px;">
@@ -5760,27 +5993,57 @@ const gamification = (() => {
       </div>
     `;
     
-    // Init Avatar Lab
-    if (typeof AvatarLab !== 'undefined') {
-      // Use setTimeout to ensure DOM is ready inside the overlay if needed, 
-      // but openOverlay usually appends immediately.
-      AvatarLab.init(container);
-    }
-
     const confirmBtn = container.querySelector('[data-confirm-switch]');
     const cancelBtn = container.querySelector('[data-cancel-switch]');
     if (confirmBtn) {
-      confirmBtn.addEventListener('click', () => {
-        if(confirm('Sei sicuro di voler uscire da questo profilo?')) {
-            try { localStorage.removeItem('badianiUser.profile.v1'); } catch {}
-            try { window.location.reload(); } catch {}
-        }
+      confirmBtn.addEventListener('click', (event) => {
+        // Some environments (mobile webviews / strict settings) can block native confirm() dialogs.
+        // We keep this action reliable: exit immediately and let the signup gate re-open on reload.
+        try {
+          event.preventDefault();
+          event.stopPropagation();
+          event.stopImmediatePropagation();
+        } catch {}
+
+        try { if (typeof showToast === 'function') showToast('Uscita dal profilo…'); } catch {}
+
+        try {
+          if (window.BadianiProfile?.logout) window.BadianiProfile.logout();
+          else localStorage.removeItem('badianiUser.profile.v1');
+        } catch {}
+
+        try { closeOverlay({ force: true }); } catch { try { closeOverlay(); } catch {} }
+        try { bodyScrollLock.forceUnlock(); } catch {}
+
+        setTimeout(() => {
+          try { window.location.reload(); } catch {}
+        }, 50);
       });
     }
     if (cancelBtn) cancelBtn.addEventListener('click', closeOverlay);
 
+    // Mount first, then init AvatarLab so its render() can find DOM nodes.
     openOverlay(container);
+    if (typeof AvatarLab !== 'undefined' && AvatarLab && typeof AvatarLab.init === 'function') {
+      setTimeout(() => {
+        try {
+          AvatarLab.init(container);
+          // Ensure an initial render after mount (some AvatarLab versions render via document.getElementById).
+          if (typeof AvatarLab.render === 'function') AvatarLab.render();
+        } catch (e) {
+          console.warn('AvatarLab.init failed', e);
+          try { if (window.showToast) window.showToast('Avatar Creator non disponibile (errore).'); } catch {}
+        }
+      }, 0);
+    }
   }
+
+  // Allow external UI entrypoints (e.g. drawer "Profilo") to open the same modal.
+  try {
+    if (typeof window.openAvatarProfileModal !== 'function') {
+      window.openAvatarProfileModal = () => showChangeProfileModal();
+    }
+  } catch {}
 
   function initProfileControls() {
     console.log('Initializing profile controls...');
@@ -8577,9 +8840,7 @@ sectionMenus.forEach((menu) => {
 
   const getActiveProfileId = () => {
     try {
-      const raw = localStorage.getItem('badianiUser.profile.v1');
-      if (!raw) return 'guest';
-      const p = JSON.parse(raw);
+      const p = window.BadianiProfile?.getActive?.();
       return p?.id || 'guest';
     } catch {
       return 'guest';
@@ -8601,7 +8862,7 @@ sectionMenus.forEach((menu) => {
   const loadCompletion = () => {
     const today = getDayStamp();
     try {
-      const raw = localStorage.getItem(storageKey());
+      const raw = window.BadianiStorage?.getRaw?.(storageKey()) || localStorage.getItem(storageKey());
       if (!raw) return { dayStamp: today, completed: {}, celebrated: {} };
       const parsed = JSON.parse(raw);
       if (!parsed || typeof parsed !== 'object') return { dayStamp: today, completed: {}, celebrated: {} };
@@ -8618,6 +8879,10 @@ sectionMenus.forEach((menu) => {
 
   const saveCompletion = (value) => {
     try {
+      if (window.BadianiStorage?.setJSON) {
+        window.BadianiStorage.setJSON(storageKey(), value);
+        return;
+      }
       localStorage.setItem(storageKey(), JSON.stringify(value));
     } catch {
       /* ignore */
@@ -8757,7 +9022,8 @@ sectionMenus.forEach((menu) => {
     const completion = loadCompletion();
     const prev = !!completion.completed[pageKey];
     if (allSatisfied) completion.completed[pageKey] = true;
-    else delete completion.completed[pageKey];
+    // IMPORTANT: completion should be monotonic within the same day.
+    // Do NOT delete a completion flag here; this avoids flicker / cross-page counting differences.
 
     // Congrats toast (once per day per category), only when it becomes completed.
     const next = !!completion.completed[pageKey];
@@ -13030,13 +13296,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Gestione Profilo (Placeholder)
 window.openProfileSettings = function() {
-    // Chiudi prima il menu principale per pulizia
-    if (typeof window.toggleMenu === 'function') {
-        const drawer = document.querySelector('.menu-drawer');
-        if (drawer && drawer.getAttribute('aria-hidden') === 'false') {
-            window.toggleMenu();
-        }
+  // Chiudi il menu drawer per mostrare la scheda sotto.
+  try {
+    const drawer = document.querySelector('[data-menu-drawer]') || document.querySelector('.menu-drawer');
+    if (drawer && drawer.getAttribute('aria-hidden') === 'false') {
+      drawer.setAttribute('aria-hidden', 'true');
+      try { if (typeof bodyScrollLock !== 'undefined') bodyScrollLock.unlock(); } catch {}
     }
+  } catch {}
+
+  // Preferred: open the Avatar/Profile modal used in the cockpit.
+  if (typeof window.openAvatarProfileModal === 'function') {
+    // Small delay to let the drawer close/unlock before opening overlay.
+    setTimeout(() => {
+      try { window.openAvatarProfileModal(); } catch (e) { console.warn('openAvatarProfileModal failed', e); }
+    }, 120);
+    return;
+  }
     
     // Apri il pannello impostazioni (quello che c'era prima)
     const settingsPanel = document.getElementById('settings-panel');
@@ -13087,20 +13363,26 @@ window.BadianiGamificationHelper = {
   addGelato: function() {
     try {
       // 1. Determine Profile ID
-      let profileId = 'guest';
-      try {
-        const rawProfile = localStorage.getItem('badianiUser.profile.v1');
-        if (rawProfile) {
-          const p = JSON.parse(rawProfile);
-          if (p && p.id) profileId = p.id;
-        }
-      } catch (e) { console.warn('Error reading profile:', e); }
+      const profileId = window.BadianiProfile?.getActive?.()?.id || 'guest';
 
-      // 2. Load State
+      // 2. Load State (localStorage -> sessionStorage -> window.name)
       const key = `badianiGamification.v3:${profileId}`;
-      const rawState = localStorage.getItem(key);
+      const sessionKey = `badianiGamification.session.v1:${profileId}`;
+      const windowNamePrefix = '__badianiGam__:';
+
+      let rawState = '';
+      try { rawState = localStorage.getItem(key) || ''; } catch {}
+      if (!rawState) {
+        try { rawState = sessionStorage.getItem(sessionKey) || ''; } catch {}
+      }
+      if (!rawState) {
+        try {
+          const wn = String(window.name || '');
+          if (wn.startsWith(windowNamePrefix)) rawState = wn.slice(windowNamePrefix.length);
+        } catch {}
+      }
+
       let state = {};
-      
       if (rawState) {
         try { state = JSON.parse(rawState); } catch (e) { console.warn('Error parsing state:', e); }
       }
@@ -13114,8 +13396,11 @@ window.BadianiGamificationHelper = {
       if (!state.history.totals) state.history.totals = { stars: 0, gelati: 0, bonusPoints: 0 };
       state.history.totals.gelati = (state.history.totals.gelati || 0) + 1;
 
-      // 4. Save State
-      localStorage.setItem(key, JSON.stringify(state));
+      // 4. Save State (best-effort to all stores used by core gamification)
+      const serialized = JSON.stringify(state);
+      try { localStorage.setItem(key, serialized); } catch {}
+      try { sessionStorage.setItem(sessionKey, serialized); } catch {}
+      try { window.name = `${windowNamePrefix}${serialized}`; } catch {}
       console.log(`[GamificationHelper] Added gelato for ${profileId}. New total: ${state.gelati}`);
 
       // 5. Notify UI

@@ -42,7 +42,8 @@ localStorage.setItem('badianiBerny.config.v1', JSON.stringify({
 
 Esempio (vedi `.env` / `.env.example`):
 
-- `PROVIDER=openai|anthropic`
+- `PROVIDER=openai|anthropic|gemini`
 - `OPENAI_API_KEY`, `OPENAI_MODEL`
 - `ANTHROPIC_API_KEY`, `ANTHROPIC_MODEL`
+- `GEMINI_API_KEY`, `GEMINI_MODEL`
 - `ALLOWED_ORIGIN` (CORS)
