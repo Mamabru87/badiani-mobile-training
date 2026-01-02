@@ -11,6 +11,7 @@
 // - ALLOWED_ORIGIN (optional)  ("*" or comma-separated origins)
 // - RATE_LIMIT_MAX (optional)  (default 30) POST requests per window
 // - RATE_LIMIT_WINDOW_SEC (optional) (default 60)
+// - ACCESS_CODES (optional) (comma/newline-separated). If set, requires header: x-berny-access-code
 
 /**
  * Lightweight per-isolate rate limiting.
@@ -63,6 +64,15 @@ function rateLimitCheck(request, env) {
   return { limited, remaining, retryAfterSec };
 }
 
+function parseList(raw) {
+  const s = String(raw || '').trim();
+  if (!s) return [];
+  return s
+    .split(/[,\n\r\t ]+/g)
+    .map((x) => String(x || '').trim())
+    .filter(Boolean);
+}
+
 export default {
   async fetch(request, env) {
     const urlObj = new URL(request.url);
@@ -98,7 +108,7 @@ export default {
     const corsHeaders = {
       'Access-Control-Allow-Origin': allowOriginHeader,
       'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Allow-Headers': 'Content-Type, X-Berny-Access-Code',
       'Access-Control-Max-Age': '86400',
       Vary: 'Origin',
     };
@@ -147,6 +157,16 @@ export default {
 
     if (request.method !== 'POST') {
       return new Response('Method Not Allowed', { status: 405, headers: corsHeaders });
+    }
+
+    // Optional access gate
+    const allowedCodes = parseList(env.ACCESS_CODES);
+    if (allowedCodes.length) {
+      const code = String(request.headers.get('x-berny-access-code') || '').trim();
+      const ok = code && allowedCodes.includes(code);
+      if (!ok) {
+        return new Response('Unauthorized', { status: 401, headers: corsHeaders });
+      }
     }
 
     // Rate limit only chat POSTs (keep GET /health and GET /models convenient to open).

@@ -10,6 +10,11 @@
     <link rel="icon" href="assets/brand/logo-b-blue.png" type="image/png" />
     <link rel="stylesheet" href="styles/site.css?v=20260102_6" />
 
+    <!-- Berny default proxy endpoint (so new users don't depend on localStorage) -->
+    <script>
+      window.BERNY_PROXY_ENDPOINT = 'https://autumn-boat-f7a0badiani-berny-proxy.marco-bruzzi.workers.dev/berny';
+    </script>
+
     <!-- Importa SDK Ufficiale Google (Modul type="importmap" è il modo moderno) -->
     <script type="importmap">
       {
@@ -23,7 +28,17 @@
       (() => {
         let cfg = null;
         try { cfg = JSON.parse(localStorage.getItem('badianiBerny.config.v1') || 'null'); } catch { cfg = null; }
-        const isProxy = !!(cfg && typeof cfg === 'object' && String(cfg.provider || '').toLowerCase() === 'proxy' && cfg.proxyEndpoint);
+        const globalProxyEndpoint = (() => {
+          try {
+            const raw = window.BERNY_PROXY_ENDPOINT || window.__BERNY_PROXY_ENDPOINT__ || '';
+            return String(raw || '').trim();
+          } catch {
+            return '';
+          }
+        })();
+
+        const configuredProxyEndpoint = (cfg && typeof cfg === 'object') ? String(cfg.proxyEndpoint || '').trim() : '';
+        const isProxy = !!(configuredProxyEndpoint || globalProxyEndpoint);
         if (isProxy) return;
 
         import("@google/generative-ai")

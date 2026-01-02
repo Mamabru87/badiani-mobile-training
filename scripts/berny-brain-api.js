@@ -3,6 +3,19 @@
 
 class BernyBrainAPI {
   constructor() {
+    const readGlobalProxyEndpoint = () => {
+      // Preferred: configured by the page (so new users don't rely on localStorage state).
+      // You can set this in index.html or a small config script.
+      try {
+        const w = (typeof window !== 'undefined') ? window : null;
+        const raw = w ? (w.BERNY_PROXY_ENDPOINT || w.__BERNY_PROXY_ENDPOINT__ || '') : '';
+        const s = String(raw || '').trim();
+        return s;
+      } catch {
+        return '';
+      }
+    };
+
     // SECURITY: do not ship API keys in the frontend.
     // Configure proxy mode via:
     // localStorage.setItem('badianiBerny.config.v1', JSON.stringify({ provider:'proxy', proxyEndpoint:'https://<worker>/berny' }))
@@ -14,14 +27,28 @@ class BernyBrainAPI {
     }
 
     this.config = (cfg && typeof cfg === 'object') ? cfg : {};
-    this.mode = (String(this.config.provider || '')).toLowerCase() === 'proxy' && this.config.proxyEndpoint
+
+    // Determine proxy endpoint:
+    // 1) explicit localStorage config
+    // 2) global configured endpoint (recommended for production)
+    const configuredProxyEndpoint = String(this.config.proxyEndpoint || '').trim();
+    const globalProxyEndpoint = readGlobalProxyEndpoint();
+    this.proxyEndpoint = configuredProxyEndpoint || globalProxyEndpoint;
+
+    this.mode = ((String(this.config.provider || '')).toLowerCase() === 'proxy' && this.proxyEndpoint)
       ? 'proxy'
-      : 'sdk';
+      : (this.proxyEndpoint ? 'proxy' : 'sdk');
 
     // SDK mode requires the user to provide their own key (via /apikey) and the SDK script to be present.
     this.apiKey = '';
     if (this.mode === 'sdk') {
       try { this.apiKey = String(localStorage.getItem('berny_api_key') || '').trim(); } catch { this.apiKey = ''; }
+    }
+
+    // Optional: proxy access gate code (checked server-side by the Worker)
+    this.accessCode = '';
+    if (this.mode === 'proxy') {
+      try { this.accessCode = String(localStorage.getItem('badianiBerny.accessCode.v1') || '').trim(); } catch { this.accessCode = ''; }
     }
 
     // Default model (only used for SDK mode)
@@ -127,6 +154,20 @@ class BernyBrainAPI {
           const key = e.detail.message.replace('/apikey', '').trim();
           localStorage.setItem('berny_api_key', key);
           alert("Chiave salvata! Ricarico...");
+          window.location.reload();
+        }
+      });
+    }
+
+    // Listener per inserimento access code via chat (solo in modalità proxy).
+    // Usage: /access IL_TUO_CODICE
+    if (this.mode === 'proxy') {
+      window.addEventListener('berny-user-message', (e) => {
+        const msg = String(e?.detail?.message || '');
+        if (msg.startsWith('/access')) {
+          const code = msg.replace('/access', '').trim();
+          try { localStorage.setItem('badianiBerny.accessCode.v1', code); } catch {}
+          alert('Accesso salvato! Ricarico...');
           window.location.reload();
         }
       });
@@ -326,7 +367,7 @@ class BernyBrainAPI {
 
     // 2. STANDARD LLM LOGIC (proxy preferred)
     if (this.mode === 'proxy') {
-      const endpoint = String(this.config.proxyEndpoint || '').trim();
+      const endpoint = String(this.proxyEndpoint || '').trim();
       if (!endpoint) return "⚠️ Config proxy mancante. Imposta badianiBerny.config.v1.";
 
       // Notifica UI
@@ -344,9 +385,15 @@ class BernyBrainAPI {
         // A too-low timeout looks like a UI freeze.
         const timer = setTimeout(() => { try { ctrl?.abort(); } catch {} }, 25000);
 
+        const headers = { 'content-type': 'application/json' };
+        if (this.accessCode) {
+          // Sent to Worker for server-side allowlist enforcement.
+          headers['x-berny-access-code'] = String(this.accessCode);
+        }
+
         const r = await fetch(endpoint, {
           method: 'POST',
-          headers: { 'content-type': 'application/json' },
+          headers,
           body: JSON.stringify({
             intent: 'chat',
             userContext: {
@@ -358,6 +405,14 @@ class BernyBrainAPI {
           signal: ctrl ? ctrl.signal : undefined,
         });
         clearTimeout(timer);
+
+        if (r && r.status === 401) {
+          return "🔒 Accesso richiesto. Scrivi '/access IL_TUO_CODICE' per attivarmi.";
+        }
+
+        if (r && r.status === 403) {
+          return "⛔ Accesso negato (CORS/origine non autorizzata). Controlla ALLOWED_ORIGIN nel Worker.";
+        }
 
         if (!r || !r.ok) {
           const t = await r.text().catch(() => '');
