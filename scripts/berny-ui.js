@@ -437,6 +437,7 @@
         if (lower.includes('churro')) link = 'pastries.html?q=churro';
         else if (lower.includes('gelato')) link = 'gelato-lab.html?q=gelato';
         else if (lower.includes('gusti')) link = 'gelato-lab.html?q=gusti';
+        else if (lower.includes('smoothie') || lower.includes('smoothies') || lower.includes('frullato') || lower.includes('frullati')) link = 'caffe.html?q=smoothie';
         else if (lower.includes('caffè')) link = 'caffe.html?q=caffe';
         else if (lower.includes('espresso')) link = 'caffe.html?q=espresso';
         else if (lower.includes('crepes')) link = 'sweet-treats.html?q=crepes';

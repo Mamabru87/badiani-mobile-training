@@ -235,6 +235,7 @@ class BernyBrainAPI {
     if (has('espresso', 'grinder', 'tamper', 'portafiltro', 'estrazione')) this.bumpTopicScore(state, 'caffe.espresso', 2);
     if (has('cappuccino', 'latte', 'steam', 'wand', 'microfoam', 'flat white')) this.bumpTopicScore(state, 'caffe.milk', 2);
     if (has('affogato', 'dirty matcha')) this.bumpTopicScore(state, 'caffe.affogato', 2);
+    if (has('smoothie', 'smoothies', 'frullato', 'frullati', 'blender')) this.bumpTopicScore(state, 'caffe.smoothies', 2);
 
     // Treats
     if (has('waffle')) this.bumpTopicScore(state, 'treats.waffle', 2);
@@ -272,6 +273,7 @@ class BernyBrainAPI {
       'caffe.espresso': 'caffe.html?q=espresso',
       'caffe.milk': 'caffe.html?q=cappuccino',
       'caffe.affogato': 'caffe.html?q=affogato',
+      'caffe.smoothies': 'caffe.html?q=smoothie',
       'treats.waffle': 'sweet-treats.html?q=waffle',
       'treats.crepe': 'sweet-treats.html?q=crepe',
       'treats.pancake': 'sweet-treats.html?q=pancake',
@@ -356,6 +358,12 @@ class BernyBrainAPI {
 
     // High-signal direct mappings (topic -> page?q)
     const topicCandidates = [
+      { href: 'caffe.html?q=smoothie', keys: ['smoothie', 'smoothies', 'frullato', 'frullati'] },
+      { href: 'caffe.html?q=smoothies', keys: ['parametri smoothies', 'smoothies: parametri', 'smoothie standard'] },
+      { href: 'caffe.html?q=smoothie%20giallo', keys: ['smoothie giallo', 'giallo passion'] },
+      { href: 'caffe.html?q=smoothie%20rosso', keys: ['smoothie rosso', 'rosso berry'] },
+      { href: 'caffe.html?q=smoothie%20verde', keys: ['smoothie verde', 'verde boost'] },
+
       { href: 'gelato-lab.html?q=buontalenti', keys: ['buontalenti'] },
       { href: 'gelato-lab.html?q=coni', keys: ['cono', 'coni', 'cone'] },
       { href: 'gelato-lab.html?q=gusti', keys: ['gusti', 'flavour', 'flavors', 'parfums', 'sabores'] },
