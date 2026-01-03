@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Debug • BERNY Multilang Linking</title>
+  <link rel="stylesheet" href="styles/site.css" />
+  <style>
+    body { padding: 20px; }
+    .wrap { max-width: 980px; margin: 0 auto; }
+    .panel { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); border-radius: 14px; padding: 14px; }
+    .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .row > * { flex: 0 0 auto; }
+    label { font-size: 14px; opacity: 0.9; }
+    input[type="number"] { width: 120px; }
+    textarea { width: 100%; min-height: 84px; }
+    .log { white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 12px; line-height: 1.35; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.14); border-radius: 12px; padding: 12px; max-height: 420px; overflow: auto; }
+    .muted { opacity: 0.78; }
+    .ok { color: #9ef5c3; }
+    .bad { color: #ffb3b3; }
+    .pill { display: inline-block; padding: 2px 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.18); font-size: 12px; }
+    .kpi { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+    .kpi .panel { padding: 10px 12px; }
+    .kpi .val { font-size: 22px; font-weight: 700; }
+    .kpi .lbl { font-size: 12px; opacity: 0.8; }
+    @media (max-width: 720px) { .kpi { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1 style="margin: 0 0 10px;">Debug • BERNY Multilang Linking</h1>
+    <p class="muted" style="margin: 0 0 14px;">Questo test verifica che BERNY riesca a trasformare i <strong>titoli delle schede</strong> (it/en/es/fr) in deep-link coerenti del tipo <code>page.html?card=&lt;slug-it&gt;&amp;center=1</code>. Non richiede proxy né API key.</p>
+
+    <div class="panel" style="margin-bottom: 12px;">
+      <div class="row" style="margin-bottom: 10px;">
+        <label for="maxKeys">Max schede (0 = tutte):</label>
+        <input id="maxKeys" type="number" min="0" value="250" />
+
+        <button class="btn" id="runAll">Run test i18n titles</button>
+        <button class="btn btn-ghost" id="runSmoke">Run smoke tests</button>
+        <button class="btn btn-ghost" id="clear">Clear Berny storage</button>
+
+        <span class="pill" id="status">idle</span>
+      </div>
+
+      <div class="row" style="margin-bottom: 10px; width: 100%;">
+        <div style="flex: 1 1 360px;">
+          <label for="single">Test singolo messaggio (usa inferRecommendationFromMessage):</label>
+          <textarea id="single" placeholder="Es: Comment faire: Pandoro Classique ?"></textarea>
+          <div class="row" style="margin-top: 8px;">
+            <button class="btn btn-ghost" id="runSingle">Run single</button>
+            <span class="muted" id="singleOut"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="kpi" style="margin-bottom: 12px;">
+      <div class="panel"><div class="val" id="kpiTotal">–</div><div class="lbl">test eseguiti</div></div>
+      <div class="panel"><div class="val ok" id="kpiPass">–</div><div class="lbl">pass</div></div>
+      <div class="panel"><div class="val bad" id="kpiFail">–</div><div class="lbl">fail</div></div>
+      <div class="panel"><div class="val" id="kpiKeys">–</div><div class="lbl">keys (unique)</div></div>
+    </div>
+
+    <div class="log" id="log">(log)
+</div>
+
+    <p class="muted" style="margin-top: 12px;">Nota: questo test controlla la coerenza del mapping (titolo → href). Per verificare anche che ogni <code>?card=</code> apra davvero la scheda nella pagina target, serve caricare quella pagina e far girare anche il resolver di <code>scripts/site.js</code>.</p>
+  </div>
+
+  <!-- i18n must load before berny brain (it provides window.BadianiI18n.dict) -->
+  <script src="scripts/i18n.js"></script>
+  <script src="scripts/berny-brain-api.js"></script>
+
+  <script>
+    (function () {
+      const $ = (id) => document.getElementById(id);
+      const logEl = $('log');
+      const statusEl = $('status');
+      const kpiTotal = $('kpiTotal');
+      const kpiPass = $('kpiPass');
+      const kpiFail = $('kpiFail');
+      const kpiKeys = $('kpiKeys');
+      const singleOut = $('singleOut');
+
+      const PAGES_BY_PREFIX = {
+        operations: 'operations.html',
+        gelatoLab: 'gelato-lab.html',
+        caffe: 'caffe.html',
+        sweetTreats: 'sweet-treats.html',
+        pastries: 'pastries.html',
+        festive: 'festive.html',
+        slittiYoyo: 'slitti-yoyo.html',
+        storyOrbit: 'story-orbit.html',
+      };
+
+      const TITLE_RX = /^(operations|gelatoLab|caffe|sweetTreats|pastries|festive|slittiYoyo|storyOrbit)\.(cards|ops)\.[^.]+\.title$/;
+      const LANGS = ['it', 'en', 'es', 'fr'];
+
+      const appendLog = (line) => {
+        logEl.textContent += String(line) + "\n";
+      };
+
+      const setStatus = (s) => {
+        statusEl.textContent = s;
+      };
+
+      const resetKpi = () => {
+        kpiTotal.textContent = '0';
+        kpiPass.textContent = '0';
+        kpiFail.textContent = '0';
+        kpiKeys.textContent = '0';
+      };
+
+      const updateKpi = (total, pass, fail, keys) => {
+        kpiTotal.textContent = String(total);
+        kpiPass.textContent = String(pass);
+        kpiFail.textContent = String(fail);
+        kpiKeys.textContent = String(keys);
+      };
+
+      const safeEncode = (s) => encodeURIComponent(String(s || ''));
+
+      const waitForBrain = () => new Promise((resolve) => {
+        const tick = () => {
+          if (window.bernyBrain && typeof window.bernyBrain.inferRecommendationFromMessage === 'function') return resolve(window.bernyBrain);
+          window.setTimeout(tick, 30);
+        };
+        tick();
+      });
+
+      const collectTitleKeys = () => {
+        const dict = window.BadianiI18n && window.BadianiI18n.dict;
+        const it = dict && dict.it;
+        if (!it) return [];
+        return Object.keys(it).filter((k) => TITLE_RX.test(k));
+      };
+
+      const buildExpected = (brain, key) => {
+        const dict = window.BadianiI18n.dict;
+        const itTitle = dict.it[key];
+        if (!itTitle) return null;
+        const prefix = key.split('.')[0];
+        const page = PAGES_BY_PREFIX[prefix];
+        if (!page) return null;
+        const slug = brain.slugify(String(itTitle));
+        if (!slug) return null;
+        return `${page}?card=${safeEncode(slug)}&center=1`;
+      };
+
+      const runSmokeTests = async () => {
+        logEl.textContent = '';
+        resetKpi();
+        setStatus('running smoke…');
+        appendLog('Running smoke tests…');
+
+        const brain = await waitForBrain();
+
+        const tests = [
+          { q: 'pandoro', want: 'festive.html?card=pandoro-classico&center=1' },
+          { q: 'panettone', want: 'festive.html?card=panettone-classico&center=1' },
+          { q: 'cakes', want: 'pastries.html?q=cakes' },
+          { q: 'torta', want: 'pastries.html?q=cakes' },
+          { q: 'pancake', want: 'sweet-treats.html?q=pancake' },
+          { q: 'smoothies parameters', want: 'caffe.html?q=smoothies' },
+          { q: 'closing procedure', want: 'operations.html?q=chiusura' },
+          { q: 'crêpes', want: 'sweet-treats.html?q=crepe' },
+        ];
+
+        let pass = 0;
+        let fail = 0;
+
+        for (const t of tests) {
+          const reco = brain.inferRecommendationFromMessage(t.q);
+          const got = reco && reco.href;
+          const ok = got === t.want;
+          if (ok) {
+            pass += 1;
+            appendLog(`✅ ${t.q} → ${got}`);
+          } else {
+            fail += 1;
+            appendLog(`❌ ${t.q} → ${got || '(null)'} (want ${t.want}) reason=${reco && reco.reason}`);
+          }
+        }
+
+        updateKpi(pass + fail, pass, fail, tests.length);
+        setStatus(fail ? 'smoke FAIL' : 'smoke OK');
+      };
+
+      const runI18nTitleTests = async () => {
+        logEl.textContent = '';
+        resetKpi();
+        setStatus('running…');
+
+        const brain = await waitForBrain();
+        const dict = window.BadianiI18n && window.BadianiI18n.dict;
+        if (!dict) {
+          appendLog('❌ Missing window.BadianiI18n.dict');
+          setStatus('error');
+          return;
+        }
+
+        const maxKeys = Math.max(0, Number($('maxKeys').value) || 0);
+        const keys = collectTitleKeys();
+        const limitedKeys = maxKeys ? keys.slice(0, maxKeys) : keys;
+
+        appendLog(`Found ${keys.length} i18n title keys. Testing ${limitedKeys.length}…`);
+
+        let total = 0;
+        let pass = 0;
+        let fail = 0;
+
+        for (const key of limitedKeys) {
+          const expectedHref = buildExpected(brain, key);
+          if (!expectedHref) continue;
+
+          for (const lang of LANGS) {
+            const title = dict[lang] && dict[lang][key];
+            if (!title) continue;
+
+            // Make sure the full title is present in the message.
+            const q = `How to: ${title}`;
+            const reco = brain.inferRecommendationFromMessage(q);
+            const got = reco && reco.href;
+
+            total += 1;
+            if (got === expectedHref && reco && reco.reason === 'i18n-title') {
+              pass += 1;
+            } else {
+              fail += 1;
+              appendLog(`❌ [${lang}] ${key}`);
+              appendLog(`   title: ${title}`);
+              appendLog(`   got  : ${(got || '(null)')} reason=${reco && reco.reason}`);
+              appendLog(`   want : ${expectedHref}`);
+              appendLog('');
+            }
+          }
+        }
+
+        updateKpi(total, pass, fail, limitedKeys.length);
+        setStatus(fail ? 'FAIL' : 'OK');
+        appendLog(`\nDone. Pass ${pass}/${total}. Fail ${fail}.`);
+      };
+
+      const runSingle = async () => {
+        singleOut.textContent = '';
+        const brain = await waitForBrain();
+        const q = String($('single').value || '').trim();
+        if (!q) {
+          singleOut.textContent = 'Inserisci un messaggio.';
+          return;
+        }
+        const reco = brain.inferRecommendationFromMessage(q);
+        if (reco && reco.href) {
+          singleOut.textContent = `→ ${reco.href} (reason=${reco.reason || '-'})`;
+        } else {
+          singleOut.textContent = '→ (null)';
+        }
+      };
+
+      const clearStorage = () => {
+        const keys = [
+          'badianiBerny.lastRecommendation.v1',
+          'badianiBerny.conversationState.v1',
+          'badianiBerny.config.v1',
+          'badianiBerny.accessCode.v1',
+          'berny_api_key',
+        ];
+        for (const k of keys) {
+          try { localStorage.removeItem(k); } catch {}
+        }
+        appendLog('Cleared Berny-related localStorage keys.');
+      };
+
+      $('runAll').addEventListener('click', () => runI18nTitleTests());
+      $('runSmoke').addEventListener('click', () => runSmokeTests());
+      $('runSingle').addEventListener('click', () => runSingle());
+      $('clear').addEventListener('click', () => clearStorage());
+
+      window.addEventListener('error', (e) => {
+        try {
+          appendLog(`\n⚠️ JS error: ${String(e && e.message || e)}`);
+          setStatus('error');
+        } catch {}
+      });
+
+      // Ready banner
+      document.addEventListener('DOMContentLoaded', () => {
+        appendLog('Ready. (Waiting for window.bernyBrain…)');
+      });
+    })();
+  </script>
+</body>
+</html>

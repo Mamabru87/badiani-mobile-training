@@ -1360,10 +1360,25 @@ scrollButtons.forEach((btn) => {
 
     const cards = Array.from(document.querySelectorAll('.guide-card'))
       .map((card) => {
-        const title = card?.querySelector?.('h3')?.textContent?.trim() || '';
+        const titleEl = card?.querySelector?.('h3') || null;
+        const title = titleEl?.textContent?.trim() || '';
         if (!title) return null;
-        const cardKey = slugify(title);
+
+        // Prefer a stable key derived from the card id (e.g. id="card-waffles" => "waffles").
+        // This keeps deep-links stable even if titles are translated.
+        let cardKey = '';
+        try {
+          const rawId = String(card?.getAttribute?.('id') || '').trim().toLowerCase();
+          if (rawId.startsWith('card-') && rawId.length > 5) {
+            cardKey = rawId.slice(5);
+          }
+        } catch {
+          cardKey = '';
+        }
+        if (!cardKey) cardKey = slugify(title);
         if (!cardKey) return null;
+
+        const titleKey = titleEl?.getAttribute?.('data-i18n') || '';
 
         // Lightweight keyword indexing: allow searching by intent words even when
         // they appear only inside tags/details (e.g. "Upselling", "Sicurezza", "Chiusura").
@@ -1384,7 +1399,7 @@ scrollButtons.forEach((btn) => {
           upselling: norm.includes('upselling') || norm.includes('upsell'),
         };
 
-        return { title, cardKey, signals };
+        return { title, cardKey, titleKey, signals };
       })
       .filter(Boolean);
 
@@ -9007,9 +9022,54 @@ sectionMenus.forEach((menu) => {
     const cards = Array.from(document.querySelectorAll('.guide-card'));
     if (!cards.length) return;
 
+    const candidateKeysForCard = (card) => {
+      const keys = new Set();
+
+      // 1) Current title slug (works for non-translated pages)
+      try {
+        const title = card?.querySelector?.('h3')?.textContent?.trim() || '';
+        const k = slugify(title);
+        if (k) keys.add(k);
+      } catch {
+        /* ignore */
+      }
+
+      // 2) Stable key from id="card-..." (works across translations)
+      try {
+        const rawId = String(card?.getAttribute?.('id') || '').trim().toLowerCase();
+        if (rawId) keys.add(rawId);
+        if (rawId.startsWith('card-') && rawId.length > 5) keys.add(rawId.slice(5));
+      } catch {
+        /* ignore */
+      }
+
+      // 3) If the title is i18n-driven, also accept slugs for *all* supported languages.
+      // This keeps existing links (often authored in Italian) working when UI language is EN/ES/FR.
+      try {
+        const titleEl = card?.querySelector?.('h3');
+        const i18nKey = titleEl?.getAttribute?.('data-i18n') || '';
+        const dict = window.BadianiI18n?.dict;
+        if (i18nKey && dict && typeof dict === 'object') {
+          ['it', 'en', 'es', 'fr'].forEach((lang) => {
+            const t = dict?.[lang]?.[i18nKey];
+            if (t) {
+              const k = slugify(String(t));
+              if (k) keys.add(k);
+            }
+          });
+        }
+      } catch {
+        /* ignore */
+      }
+
+      return keys;
+    };
+
+    const normalizedTargetKey = String(cardKey || '').trim().toLowerCase();
+
     const target = cards.find((card) => {
-      const title = card?.querySelector?.('h3')?.textContent?.trim() || '';
-      return slugify(title) === cardKey;
+      const keys = candidateKeysForCard(card);
+      return keys.has(normalizedTargetKey);
     });
 
     if (!target) return;

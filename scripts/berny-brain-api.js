@@ -170,6 +170,84 @@ class BernyBrainAPI {
     }
   }
 
+  // ------------------------------
+  // i18n title integration
+  // If a user types the card title in EN/ES/FR (or IT), map it deterministically
+  // to the canonical deep-link slug (based on the Italian title).
+  // This makes "find the right card" work across languages without hardcoding.
+  // ------------------------------
+  buildI18nTitleIndex() {
+    if (this._i18nTitleIndex) return this._i18nTitleIndex;
+    const dict = window.BadianiI18n?.dict;
+    if (!dict || typeof dict !== 'object') return null;
+
+    const pagesByPrefix = {
+      operations: 'operations.html',
+      gelatoLab: 'gelato-lab.html',
+      caffe: 'caffe.html',
+      sweetTreats: 'sweet-treats.html',
+      pastries: 'pastries.html',
+      festive: 'festive.html',
+      slittiYoyo: 'slitti-yoyo.html',
+      storyOrbit: 'story-orbit.html',
+    };
+
+    const keys = Object.keys(dict?.it || {});
+    const rx = /^(operations|gelatoLab|caffe|sweetTreats|pastries|festive|slittiYoyo|storyOrbit)\.(cards|ops)\.[^.]+\.title$/;
+    const langs = ['it', 'en', 'es', 'fr'];
+    const index = [];
+
+    for (const k of keys) {
+      if (!rx.test(k)) continue;
+      const prefix = k.split('.')[0];
+      const pageHref = pagesByPrefix[prefix];
+      if (!pageHref) continue;
+
+      const itTitle = dict?.it?.[k];
+      if (!itTitle) continue;
+      const cardSlug = this.slugify(String(itTitle));
+      if (!cardSlug) continue;
+
+      for (const lang of langs) {
+        const title = dict?.[lang]?.[k];
+        if (!title) continue;
+        const titleNorm = this.normalizeText(String(title));
+        if (!titleNorm) continue;
+        index.push({ key: k, pageHref, cardSlug, titleNorm, titleRaw: String(title) });
+      }
+    }
+
+    // Cache on the instance.
+    this._i18nTitleIndex = index;
+    return index;
+  }
+
+  inferRecommendationFromI18nTitles(userMessage) {
+    const msgNorm = this.normalizeText(userMessage);
+    if (!msgNorm) return null;
+
+    const index = this.buildI18nTitleIndex();
+    if (!Array.isArray(index) || !index.length) return null;
+
+    // Pick the longest title contained in the message (most specific).
+    let best = null;
+    let bestLen = 0;
+
+    for (const entry of index) {
+      const t = entry?.titleNorm || '';
+      if (!t || t.length < 4) continue;
+      if (!msgNorm.includes(t)) continue;
+      if (t.length > bestLen) {
+        best = entry;
+        bestLen = t.length;
+      }
+    }
+
+    if (!best) return null;
+    const href = `${best.pageHref}?card=${encodeURIComponent(best.cardSlug)}&center=1`;
+    return { href, reason: 'i18n-title', label: best.titleRaw };
+  }
+
   inferRecommendationFromCatalog(userMessage) {
     const msgNorm = this.normalizeText(userMessage);
     if (!msgNorm) return null;
@@ -191,6 +269,11 @@ class BernyBrainAPI {
       const esc = n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       try { return new RegExp(`\\b${esc}\\b`, 'i').test(msgNorm); } catch { return false; }
     };
+
+    // Support short queries like "pandoro" / "panettone" / "chiusura":
+    // allow a single meaningful word to match a multi-word title (e.g. "Pandoro Classico").
+    const meaningfulWords = words.filter((w) => String(w || '').length >= 4 && !stop.has(String(w)));
+    const singleQueryWord = (meaningfulWords.length === 1) ? meaningfulWords[0] : '';
 
     let best = null;
     let bestScore = 0;
@@ -225,6 +308,18 @@ class BernyBrainAPI {
         // Single-word titles like "Cakes" need to be easy to hit.
         if (!score && tokens.length === 1 && hasWord(tokens[0])) {
           score = 8;
+        }
+
+        // Single-word queries should be able to match multi-word titles when the title starts
+        // with that word (e.g. "pandoro" -> "Pandoro Classico").
+        if (!score && singleQueryWord && hasWord(singleQueryWord)) {
+          if (titleNorm === singleQueryWord) {
+            score = 10;
+          } else if (titleNorm.startsWith(`${singleQueryWord} `)) {
+            score = 10;
+          } else if (titleNorm.includes(` ${singleQueryWord} `) || titleNorm.endsWith(` ${singleQueryWord}`) || titleNorm.startsWith(`${singleQueryWord} `)) {
+            score = Math.max(score, 8);
+          }
         }
 
         // If the user mentions the slug itself, accept it.
@@ -358,7 +453,9 @@ class BernyBrainAPI {
 
     // Festive
     if (has('churro', 'churros')) this.bumpTopicScore(state, 'festive.churro', 2);
-    if (has('panettone', 'pandoro')) this.bumpTopicScore(state, 'festive.panettone', 2);
+    // IMPORTANT: keep panettone and pandoro separated to avoid mis-linking.
+    if (has('panettone')) this.bumpTopicScore(state, 'festive.panettone', 2);
+    if (has('pandoro')) this.bumpTopicScore(state, 'festive.pandoro', 2);
     if (has('vin brule', 'mulled')) this.bumpTopicScore(state, 'festive.mulled', 2);
 
     // Gelato
@@ -392,7 +489,8 @@ class BernyBrainAPI {
       'treats.crepe': 'sweet-treats.html?q=crepe',
       'treats.pancake': 'sweet-treats.html?q=pancake',
       'festive.churro': 'festive.html?q=churro',
-      'festive.panettone': 'festive.html?q=panettone',
+      'festive.panettone': 'festive.html?card=panettone-classico&center=1',
+      'festive.pandoro': 'festive.html?card=pandoro-classico&center=1',
       'festive.mulled': 'festive.html?q=mulled',
       'gelato.buontalenti': 'gelato-lab.html?q=buontalenti',
       'gelato.coni': 'gelato-lab.html?q=coni',
@@ -471,7 +569,13 @@ class BernyBrainAPI {
 
     const has = (...needles) => needles.some(n => msgNorm.includes(this.normalizeText(n)));
 
-    // 0) Try the auto-indexed search catalog first (covers ALL cards across pages once indexed)
+    // 0) If the user typed a card title in their language, link deterministically.
+    const i18nReco = this.inferRecommendationFromI18nTitles(userMessage);
+    if (i18nReco && i18nReco.href) {
+      return i18nReco;
+    }
+
+    // 1) Try the auto-indexed search catalog first (covers ALL cards across pages once indexed)
     const catalogReco = this.inferRecommendationFromCatalog(userMessage);
     if (catalogReco && catalogReco.href) {
       return catalogReco;
@@ -480,6 +584,14 @@ class BernyBrainAPI {
     // Pastry Lab: cakes/torte (avoid false positive on "pancake")
     if (/\b(cake|cakes|torta|torte)\b/.test(msgNorm)) {
       return { href: 'pastries.html?q=cakes', reason: 'keyword' };
+    }
+
+    // Festive: keep pandoro and panettone separated (avoid pandoro -> panettone).
+    if (/\bpandoro\b/.test(msgNorm)) {
+      return { href: 'festive.html?card=pandoro-classico&center=1', reason: 'keyword' };
+    }
+    if (/\bpanettone\b/.test(msgNorm)) {
+      return { href: 'festive.html?card=panettone-classico&center=1', reason: 'keyword' };
     }
 
     // High-signal direct mappings (topic -> page?q)
@@ -504,7 +616,8 @@ class BernyBrainAPI {
       { href: 'sweet-treats.html?q=pancake', keys: ['pancake'] },
 
       { href: 'festive.html?q=churro', keys: ['churro', 'churros'] },
-      { href: 'festive.html?q=panettone', keys: ['panettone', 'pandoro'] },
+      { href: 'festive.html?card=panettone-classico&center=1', keys: ['panettone'] },
+      { href: 'festive.html?card=pandoro-classico&center=1', keys: ['pandoro'] },
       { href: 'festive.html?q=mulled', keys: ['vin brule', 'vinbrule', 'mulled'] },
 
       { href: 'operations.html?q=apertura', keys: ['apertura', 'opening', 'open store'] },
