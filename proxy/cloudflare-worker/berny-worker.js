@@ -577,7 +577,7 @@ export default {
           },
           body: JSON.stringify({
             model,
-            max_tokens: 260,
+            max_tokens: 520,
             temperature: 0.6,
             system: String(sys),
             messages: chat,
@@ -615,7 +615,7 @@ export default {
           model,
           messages,
           temperature: 0.6,
-          max_tokens: 260,
+          max_tokens: 520,
         }),
       });
 

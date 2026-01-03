@@ -138,6 +138,30 @@ class BernyBrainAPI {
     this.init();
   }
 
+  looksTruncatedAnswer(text) {
+    const s = String(text || '').trim();
+    if (!s) return false;
+
+    // Ignore obvious error/status strings.
+    if (/^(⚠️|⛔|❌|🔒|⏳)/.test(s)) return false;
+
+    // If it's very short, don't try to be clever.
+    if (s.length < 60) return false;
+
+    // Clean terminal punctuation => not truncated.
+    if (/[.!?…]$/.test(s)) return false;
+
+    // If it ends with a closing quote/bracket AND there's punctuation before it, accept.
+    if (/[)\]}'"”»]$/.test(s) && /[.!?…][)\]}'"”»]$/.test(s)) return false;
+
+    // If the last token is very short (e.g. "cre"), it's very likely cut.
+    const lastToken = s.split(/\s+/).pop() || '';
+    if (lastToken.length <= 3) return true;
+
+    // Otherwise: missing terminal punctuation is suspicious.
+    return true;
+  }
+
   // ------------------------------
   // Catalog-based deep-link resolver
   // - Uses badianiSearchCatalog.v2 (seeded on index.html) to map arbitrary queries
@@ -824,7 +848,51 @@ class BernyBrainAPI {
         }
         const data = await r.json().catch(() => null);
         const text = String(data?.text || '').trim();
-        const out = text || 'Mi sa che il proxy non mi ha risposto bene. Riprova tra poco.';
+        let out = text || 'Mi sa che il proxy non mi ha risposto bene. Riprova tra poco.';
+
+        // If the model output is occasionally cut mid-sentence, do one continuation round-trip.
+        // This is best-effort and only triggers when the output looks truncated.
+        if (out && this.looksTruncatedAnswer(out)) {
+          try {
+            const continuationMessages = [
+              { role: 'system', content: systemPrompt },
+              { role: 'user', content: String(userMessage ?? '') },
+              { role: 'assistant', content: String(out) },
+              {
+                role: 'user',
+                content:
+                  "Continua e completa la risposta precedente. Finisci sempre le frasi e chiudi con punteggiatura. Non ripetere dall'inizio: continua da dove eri rimasto.",
+              },
+            ];
+
+            const ctrl2 = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+            const timer2 = setTimeout(() => { try { ctrl2?.abort(); } catch {} }, 20000);
+
+            const r2 = await fetch(endpoint, {
+              method: 'POST',
+              headers,
+              body: JSON.stringify({
+                intent: 'chat',
+                userContext: {
+                  nickname: window.BadianiProfile?.getActive?.()?.nickname || '',
+                  language: (window.BadianiI18n?.getLang?.() || 'it'),
+                },
+                messages: continuationMessages,
+              }),
+              signal: ctrl2 ? ctrl2.signal : undefined,
+            });
+            clearTimeout(timer2);
+
+            if (r2 && r2.ok) {
+              const data2 = await r2.json().catch(() => null);
+              const add = String(data2?.text || '').trim();
+              if (add) out = `${String(out).trim()} ${add}`.trim();
+            }
+          } catch {
+            // ignore and keep original
+          }
+        }
+
         const recoFinal = this.inferRecommendationFromContext(userMessage, out);
         if (recoFinal?.href) {
           recoFinal.href = this.coerceHrefToCatalogCard(recoFinal.href, userMessage, out);
@@ -963,13 +1031,15 @@ class BernyBrainAPI {
       Sii simpatico, leggermente sfacciato ma incoraggiante. Usa emoji gelato (🍦, 🍧, 🧊).
 
       IL TUO OBIETTIVO PRINCIPALE (se non è un quiz):
-      Dare risposte "flash" (max 2 frasi) che invitano l'utente ad aprire la scheda tecnica.
+      Dare risposte concise ma COMPLETE (tipicamente 2–6 frasi) e invitare l'utente ad aprire la scheda tecnica per i dettagli.
       
       REGOLE DI RISPOSTA (Standard):
-      1. Sii brevissimo. Riassumi i punti chiave.
-      2. NON fare elenchi puntati lunghi.
-      3. Chiudi SEMPRE invitando l'utente ad aprire la scheda per i dettagli (usa la lingua dell'utente).
-      4. Usa emoji ma non esagerare.
+      1. Rispondi in modo chiaro e completo alla domanda.
+      2. Se servono dettagli, usa un mini elenco (max 4 bullet).
+      3. NON troncare mai una frase a metà: chiudi sempre con punteggiatura (., !, ?).
+      4. Se non hai certezza, dichiaralo e proponi cosa consultare nel playbook.
+      5. Chiudi SEMPRE invitando ad aprire la scheda per i dettagli (usa la lingua dell'utente).
+      6. Usa emoji ma non esagerare.
 
       LINK SCHEDE (IMPORTANTE):
       I tag [[LINK:...]] vengono gestiti dal client per mantenere coerenza tra domanda e scheda consigliata.
