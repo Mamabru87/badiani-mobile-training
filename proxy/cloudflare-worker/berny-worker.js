@@ -229,7 +229,23 @@ async function sendSmsTwilio({ to, body }, env) {
 
   if (!r.ok) {
     const t = await r.text().catch(() => '');
-    throw new Error(`Twilio error ${r.status}: ${t}`);
+    let details = null;
+    try {
+      // Twilio usually responds with JSON on errors.
+      const j = JSON.parse(t);
+      details = {
+        status: r.status,
+        code: j?.code,
+        message: j?.message,
+        moreInfo: j?.more_info,
+      };
+    } catch {
+      details = { status: r.status, message: t };
+    }
+    // Attach a JSON payload so the caller can return a useful error.
+    const err = new Error(`Twilio error ${r.status}`);
+    err.details = details;
+    throw err;
   }
 }
 
@@ -291,83 +307,107 @@ export default {
     // - POST /auth/verify   { phone, code }
     // ============================================================
     if (request.method === 'POST' && (path === '/auth/request' || path === '/auth/verify')) {
-      let body;
       try {
-        body = await request.json();
-      } catch {
-        return new Response('Bad JSON', { status: 400, headers: corsHeaders });
-      }
-
-      const pepper = String(env.PHONE_HASH_PEPPER || '').trim();
-      const otpPepper = String(env.OTP_HASH_PEPPER || '').trim();
-      const otpStore = env.OTP_STORE;
-
-      const phone = normalizePhone(body?.phone);
-      if (!phone) return new Response('Invalid phone', { status: 400, headers: corsHeaders });
-      const phoneHash = await sha256Hex(`${phone}|${pepper}`);
-
-      const allowed = await isPhoneAllowed(phoneHash, env);
-      if (!allowed) return new Response('Not Found', { status: 404, headers: corsHeaders });
-
-      if (!otpStore || typeof otpStore.get !== 'function' || typeof otpStore.put !== 'function') {
-        return new Response('Missing OTP_STORE KV binding', { status: 500, headers: corsHeaders });
-      }
-
-      const otpTtlSec = Math.max(60, Number.parseInt(String(env.OTP_TTL_SEC || '600'), 10) || 600);
-
-      if (path === '/auth/request') {
-        // Simple per-phone cooldown (60s)
+        let body;
         try {
-          const last = await otpStore.get(`otp_req:${phoneHash}`);
-          if (last) return new Response('Too Many Requests', { status: 429, headers: corsHeaders });
-        } catch {}
+          body = await request.json();
+        } catch {
+          return new Response('Bad JSON', { status: 400, headers: corsHeaders });
+        }
 
-        const buf = new Uint32Array(1);
-        crypto.getRandomValues(buf);
-        const otp = String(buf[0] % 100000).padStart(5, '0');
-        const otpHash = await sha256Hex(`${phoneHash}|${otp}|${otpPepper}`);
+        const pepper = String(env.PHONE_HASH_PEPPER || '').trim();
+        const otpPepper = String(env.OTP_HASH_PEPPER || '').trim();
+        const otpStore = env.OTP_STORE;
 
-        await otpStore.put(`otp:${phoneHash}`, otpHash, { expirationTtl: otpTtlSec });
-        await otpStore.put(`otp_req:${phoneHash}`, '1', { expirationTtl: 60 });
+        const phone = normalizePhone(body?.phone);
+        if (!phone) return new Response('Invalid phone', { status: 400, headers: corsHeaders });
+        const phoneHash = await sha256Hex(`${phone}|${pepper}`);
 
-        // Send SMS
-        await sendSmsTwilio(
-          {
-            to: phone,
-            body: `Badiani Training: il tuo codice di verifica è ${otp}. Valido per ${Math.ceil(otpTtlSec / 60)} minuti.`,
-          },
-          env
-        );
+        const allowed = await isPhoneAllowed(phoneHash, env);
+        if (!allowed) return new Response('Not Found', { status: 404, headers: corsHeaders });
 
-        return new Response(JSON.stringify({ ok: true }), {
+        if (!otpStore || typeof otpStore.get !== 'function' || typeof otpStore.put !== 'function') {
+          return new Response('Missing OTP_STORE KV binding', { status: 500, headers: corsHeaders });
+        }
+
+        const otpTtlSec = Math.max(60, Number.parseInt(String(env.OTP_TTL_SEC || '600'), 10) || 600);
+
+        if (path === '/auth/request') {
+          // Simple per-phone cooldown (60s)
+          try {
+            const last = await otpStore.get(`otp_req:${phoneHash}`);
+            if (last) return new Response('Too Many Requests', { status: 429, headers: corsHeaders });
+          } catch {}
+
+          const buf = new Uint32Array(1);
+          crypto.getRandomValues(buf);
+          const otp = String(buf[0] % 100000).padStart(5, '0');
+          const otpHash = await sha256Hex(`${phoneHash}|${otp}|${otpPepper}`);
+
+          await otpStore.put(`otp:${phoneHash}`, otpHash, { expirationTtl: otpTtlSec });
+          await otpStore.put(`otp_req:${phoneHash}`, '1', { expirationTtl: 60 });
+
+          // Send SMS (never allow an uncaught exception here, otherwise the browser sees a CORS failure)
+          try {
+            await sendSmsTwilio(
+              {
+                to: phone,
+                body: `Badiani Training: il tuo codice di verifica è ${otp}. Valido per ${Math.ceil(otpTtlSec / 60)} minuti.`,
+              },
+              env
+            );
+          } catch (e) {
+            const msg = String(e?.message || e);
+            const details = e?.details || null;
+            console.log('OTP SMS send failed', msg, details ? JSON.stringify(details) : '');
+            // Return a safe, actionable error to the browser (no secrets).
+            return new Response(
+              JSON.stringify({
+                ok: false,
+                error: 'sms_send_failed',
+                message: 'SMS send failed',
+                twilio: details,
+              }),
+              {
+                status: 502,
+                headers: { ...corsHeaders, 'content-type': 'application/json' },
+              }
+            );
+          }
+
+          return new Response(JSON.stringify({ ok: true }), {
+            status: 200,
+            headers: { ...corsHeaders, 'content-type': 'application/json' },
+          });
+        }
+
+        // /auth/verify
+        const code = String(body?.code || '').trim();
+        if (!/^\d{5}$/.test(code)) return new Response('Invalid code', { status: 400, headers: corsHeaders });
+
+        const stored = await otpStore.get(`otp:${phoneHash}`);
+        if (!stored) return new Response('Unauthorized', { status: 401, headers: corsHeaders });
+        const check = await sha256Hex(`${phoneHash}|${code}|${otpPepper}`);
+        if (String(stored) !== String(check)) return new Response('Unauthorized', { status: 401, headers: corsHeaders });
+
+        try { await otpStore.delete(`otp:${phoneHash}`); } catch {}
+        try { await otpStore.delete(`otp_req:${phoneHash}`); } catch {}
+
+        let issued;
+        try {
+          issued = await issueAuthToken(phoneHash, env);
+        } catch (e) {
+          return new Response(`Auth token error: ${String(e?.message || e)}`, { status: 500, headers: corsHeaders });
+        }
+
+        return new Response(JSON.stringify({ ok: true, token: issued.token, exp: issued.exp }), {
           status: 200,
           headers: { ...corsHeaders, 'content-type': 'application/json' },
         });
-      }
-
-      // /auth/verify
-      const code = String(body?.code || '').trim();
-      if (!/^\d{5}$/.test(code)) return new Response('Invalid code', { status: 400, headers: corsHeaders });
-
-      const stored = await otpStore.get(`otp:${phoneHash}`);
-      if (!stored) return new Response('Unauthorized', { status: 401, headers: corsHeaders });
-      const check = await sha256Hex(`${phoneHash}|${code}|${otpPepper}`);
-      if (String(stored) !== String(check)) return new Response('Unauthorized', { status: 401, headers: corsHeaders });
-
-      try { await otpStore.delete(`otp:${phoneHash}`); } catch {}
-      try { await otpStore.delete(`otp_req:${phoneHash}`); } catch {}
-
-      let issued;
-      try {
-        issued = await issueAuthToken(phoneHash, env);
       } catch (e) {
-        return new Response(`Auth token error: ${String(e?.message || e)}`, { status: 500, headers: corsHeaders });
+        console.log('OTP handler exception', String(e?.message || e));
+        return new Response('OTP endpoint error', { status: 500, headers: corsHeaders });
       }
-
-      return new Response(JSON.stringify({ ok: true, token: issued.token, exp: issued.exp }), {
-        status: 200,
-        headers: { ...corsHeaders, 'content-type': 'application/json' },
-      });
     }
 
     // Health endpoint (no secrets). Useful to confirm routing + provider.
