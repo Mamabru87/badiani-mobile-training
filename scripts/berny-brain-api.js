@@ -59,6 +59,10 @@ class BernyBrainAPI {
 
     // Recommendation state (to avoid always suggesting the same card)
     this.RECO_STORAGE_KEY = 'badianiBerny.lastRecommendation.v1';
+
+    // Conversation memory (to keep multi-turn coherence + delayed suggestions)
+    this.CONV_STORAGE_KEY = 'badianiBerny.conversationState.v1';
+    this.MAX_HISTORY_TURNS = 8; // bounded to keep proxy payload small
     
     // QUIZ STATE
     this.quizState = { active: false, lang: 'it', questions: [], index: 0, correct: 0 };
@@ -182,6 +186,146 @@ class BernyBrainAPI {
     } catch {}
   }
 
+  // ------------------------------
+  // Conversation state (multi-turn)
+  // ------------------------------
+  loadConversationState() {
+    try {
+      const raw = localStorage.getItem(this.CONV_STORAGE_KEY);
+      const data = raw ? JSON.parse(raw) : null;
+      if (data && typeof data === 'object') return data;
+    } catch {}
+    return {
+      turn: 0,
+      genericTurns: 0,
+      activeTopicHref: '',
+      activeTopicLabel: '',
+      lastSuggestedTurn: 0,
+      topicScores: {},
+    };
+  }
+
+  saveConversationState(state) {
+    try {
+      localStorage.setItem(this.CONV_STORAGE_KEY, JSON.stringify(state || {}));
+    } catch {}
+  }
+
+  bumpTopicScore(state, topicKey, inc = 1) {
+    if (!state || !topicKey) return;
+    const key = String(topicKey);
+    const next = (state.topicScores && typeof state.topicScores === 'object') ? state.topicScores : {};
+    next[key] = (Number(next[key]) || 0) + (Number(inc) || 0);
+    state.topicScores = next;
+  }
+
+  updateTopicScoresFromText(state, text) {
+    if (!state) return;
+    const msgNorm = this.normalizeText(text);
+    if (!msgNorm) return;
+    const has = (...needles) => needles.some(n => msgNorm.includes(this.normalizeText(n)));
+
+    // Operations
+    if (has('apertura', 'opening', 'open store')) this.bumpTopicScore(state, 'operations.apertura', 2);
+    if (has('chiusura', 'closing', 'close store')) this.bumpTopicScore(state, 'operations.chiusura', 2);
+    if (has('pulizia', 'cleaning', 'sanificazione', 'sanitize')) this.bumpTopicScore(state, 'operations.pulizia', 2);
+    if (has('servizio', 'service', 'upsell', 'obiezione', 'cliente')) this.bumpTopicScore(state, 'operations.servizio', 2);
+
+    // Coffee
+    if (has('espresso', 'grinder', 'tamper', 'portafiltro', 'estrazione')) this.bumpTopicScore(state, 'caffe.espresso', 2);
+    if (has('cappuccino', 'latte', 'steam', 'wand', 'microfoam', 'flat white')) this.bumpTopicScore(state, 'caffe.milk', 2);
+    if (has('affogato', 'dirty matcha')) this.bumpTopicScore(state, 'caffe.affogato', 2);
+
+    // Treats
+    if (has('waffle')) this.bumpTopicScore(state, 'treats.waffle', 2);
+    if (has('crepe', 'crêpe', 'crepes')) this.bumpTopicScore(state, 'treats.crepe', 2);
+    if (has('pancake')) this.bumpTopicScore(state, 'treats.pancake', 2);
+
+    // Festive
+    if (has('churro', 'churros')) this.bumpTopicScore(state, 'festive.churro', 2);
+    if (has('panettone', 'pandoro')) this.bumpTopicScore(state, 'festive.panettone', 2);
+    if (has('vin brule', 'mulled')) this.bumpTopicScore(state, 'festive.mulled', 2);
+
+    // Gelato
+    if (has('buontalenti')) this.bumpTopicScore(state, 'gelato.buontalenti', 2);
+    if (has('cono', 'coni', 'cone')) this.bumpTopicScore(state, 'gelato.coni', 2);
+    if (has('gusti', 'flavour', 'flavors', 'parfums', 'sabores')) this.bumpTopicScore(state, 'gelato.gusti', 2);
+    if (has('vetrina', 'display', 'vitrine', '-14', '-15')) this.bumpTopicScore(state, 'gelato.vetrina', 2);
+
+    // Other
+    if (has('slitti', 'yoyo', 'yo-yo')) this.bumpTopicScore(state, 'slitti', 2);
+    if (has('storia', 'story orbit', 'firenze', 'origine')) this.bumpTopicScore(state, 'story', 2);
+
+    // IMPORTANT: avoid scoring generic word "box" unless explicitly about take-away.
+    if (has('gelato box', 'gelato boxes', 'take me home', 'take away', 'asporto')) {
+      this.bumpTopicScore(state, 'gelato.boxes', 2);
+    }
+  }
+
+  topicKeyToReco(topicKey) {
+    const key = String(topicKey || '');
+    const hrefMap = {
+      'operations.apertura': 'operations.html?q=apertura',
+      'operations.chiusura': 'operations.html?q=chiusura',
+      'operations.pulizia': 'operations.html?q=pulizia',
+      'operations.servizio': 'operations.html?q=servizio',
+      'caffe.espresso': 'caffe.html?q=espresso',
+      'caffe.milk': 'caffe.html?q=cappuccino',
+      'caffe.affogato': 'caffe.html?q=affogato',
+      'treats.waffle': 'sweet-treats.html?q=waffle',
+      'treats.crepe': 'sweet-treats.html?q=crepe',
+      'treats.pancake': 'sweet-treats.html?q=pancake',
+      'festive.churro': 'festive.html?q=churro',
+      'festive.panettone': 'festive.html?q=panettone',
+      'festive.mulled': 'festive.html?q=mulled',
+      'gelato.buontalenti': 'gelato-lab.html?q=buontalenti',
+      'gelato.coni': 'gelato-lab.html?q=coni',
+      'gelato.gusti': 'gelato-lab.html?q=gusti',
+      'gelato.vetrina': 'gelato-lab.html?q=vetrina',
+      'gelato.boxes': 'gelato-lab.html?card=gelato-boxes&center=1',
+      'slitti': 'slitti-yoyo.html?q=slitti',
+      'story': 'story-orbit.html?q=story',
+    };
+    const href = hrefMap[key] || '';
+    if (!href) return null;
+    return { href, reason: 'conversation' };
+  }
+
+  pickTopTopicReco(state) {
+    const scores = (state && state.topicScores && typeof state.topicScores === 'object') ? state.topicScores : {};
+    const entries = Object.entries(scores)
+      .filter(([, v]) => Number(v) > 0)
+      .sort((a, b) => (Number(b[1]) || 0) - (Number(a[1]) || 0));
+    if (!entries.length) return null;
+    return this.topicKeyToReco(entries[0][0]);
+  }
+
+  isFollowUp(msgNorm) {
+    const m = String(msgNorm || '');
+    if (!m) return false;
+    return /\b(ok|capito|chiaro|perfetto|quindi|allora|ancora|e\s+poi)\b/.test(m) || m.length <= 14;
+  }
+
+  shouldSuggestNow(state, explicitReco) {
+    if (!state) return false;
+    const turn = Number(state.turn) || 0;
+    const last = Number(state.lastSuggestedTurn) || 0;
+
+    // Explicit request: suggest immediately (but avoid double-CTA in the same turn)
+    if (explicitReco && explicitReco.href) {
+      return (turn - last) >= 1;
+    }
+
+    // Active topic: re-suggest occasionally, not every message
+    if (state.activeTopicHref) {
+      return (turn - last) >= 3;
+    }
+
+    // Generic chat: suggest after 3 turns
+    if ((Number(state.genericTurns) || 0) >= 3) return true;
+    return false;
+  }
+
   pickDifferent(options, lastHref) {
     const list = Array.isArray(options) ? options.filter(Boolean) : [];
     if (!list.length) return null;
@@ -259,33 +403,37 @@ class BernyBrainAPI {
       ];
       const pick = this.pickDifferent(options, last?.href);
       const label = pick?.label?.[uiLang] || pick?.label?.it || 'Training';
-      return { href: pick?.href || 'operations.html?q=apertura', reason: isShort ? 'short' : 'smalltalk', label };
+      return { href: pick?.href || 'operations.html?q=apertura', reason: isShort ? 'short' : 'smalltalk', label, tentative: true };
     }
 
     return null;
   }
 
-  buildSmallTalkResponse(reco) {
+  buildSmallTalkResponse(reco, shouldSuggest) {
     const lang = this.getUiLang();
     const topicLabel = String(reco?.label || '').trim();
     const topic = topicLabel || (lang === 'en' ? 'a quick refresher' : 'un ripasso veloce');
 
     const templates = {
-      it: `Sto benissimo: fresco come una vaschetta a -14°C 🧊🍦. Se vuoi, ti apro una scheda per ripassare ${topic}.`,
-      en: `I'm doing great—cool as gelato at -14°C 🧊🍦. If you want, I'll open a card so you can refresh ${topic}.`,
-      es: `¡Estoy genial—fresco como un helado a -14°C 🧊🍦! Si quieres, te abro una ficha para repasar ${topic}.`,
-      fr: `Je vais super bien—frais comme une glace à -14°C 🧊🍦. Si tu veux, j'ouvre une fiche pour réviser ${topic}.`,
+      it: `Sto bene 😄🍦. Tu invece? Vuoi parlare di gelato, bar o procedure?`,
+      en: `I'm good 😄🍦. How about you? Want gelato, bar or procedures?`,
+      es: `¡Estoy bien 😄🍦! ¿Y tú? ¿Gelato, bar o procedimientos?`,
+      fr: `Je vais bien 😄🍦. Et toi ? Gelato, bar ou procédures ?`,
     };
 
     const base = templates[lang] || templates.it;
     const href = reco?.href;
-    if (!href) return base;
-    return `${base} [[LINK:${href}]]`;
+    if (shouldSuggest && href) {
+      return `${base} [[LINK:${href}]]`;
+    }
+    return `${base} [[NOLINK]]`;
   }
 
-  applyRecommendationToResponse(text, reco) {
+  applyRecommendationToResponse(text, reco, opts = {}) {
     let out = String(text ?? '').trim();
     if (!out) return out;
+
+    const suppressLink = !!opts.suppressLink;
 
     // Respect explicit suppression (quiz + other special flows)
     if (out.includes('[[NOLINK]]')) {
@@ -298,9 +446,34 @@ class BernyBrainAPI {
     if (reco && reco.href) {
       out = `${out} [[LINK:${reco.href}]]`;
       this.saveLastRecommendation(reco);
+      return out;
+    }
+
+    if (suppressLink) {
+      // Prevent berny-ui.js keyword fallback from adding an unrelated link.
+      return `${out} [[NOLINK]]`;
     }
 
     return out;
+  }
+
+  pushToHistory(role, content) {
+    const r = String(role || '').toLowerCase();
+    if (r !== 'user' && r !== 'assistant') return;
+    const c = String(content ?? '').trim();
+    if (!c) return;
+
+    const clean = c
+      .replace(/\[\[LINK:.*?\]\]/g, '')
+      .replace(/\[\[CMD:.*?\]\]/g, '')
+      .replace(/\[\[NOLINK\]\]/g, '')
+      .trim();
+    if (!clean) return;
+
+    this.history = Array.isArray(this.history) ? this.history : [];
+    this.history.push({ role: r, content: clean });
+    const max = Math.max(2, Number(this.MAX_HISTORY_TURNS) || 8);
+    if (this.history.length > max) this.history = this.history.slice(-max);
   }
 
   init() {
@@ -533,11 +706,61 @@ class BernyBrainAPI {
         return this.startQuiz(detectedLang);
     }
 
-    // 1b. Handle very short / small-talk inputs locally so the suggestion card is coherent and varies.
-    const reco = this.inferRecommendationFromMessage(userMessage);
+    // 1b. Conversation tracking + delayed recommendations (avoid always suggesting the same card).
     const msgNorm = this.normalizeText(userMessage);
+    const state = this.loadConversationState();
+    state.turn = (Number(state.turn) || 0) + 1;
+    this.updateTopicScoresFromText(state, userMessage);
+
+    const inferred = this.inferRecommendationFromMessage(userMessage);
+    const explicitReco = (inferred && inferred.href && !inferred.tentative && !this.isSmallTalk(msgNorm)) ? inferred : null;
+
+    if (explicitReco && explicitReco.href) {
+      state.activeTopicHref = explicitReco.href;
+      state.activeTopicLabel = explicitReco.label || '';
+      state.genericTurns = 0;
+    } else {
+      const follow = this.isFollowUp(msgNorm);
+      if (!follow || !state.activeTopicHref) {
+        state.genericTurns = (Number(state.genericTurns) || 0) + 1;
+      }
+    }
+
+    const suggestNow = this.shouldSuggestNow(state, explicitReco);
+    let recoToAttach = null;
+    if (suggestNow) {
+      if (explicitReco) {
+        recoToAttach = explicitReco;
+      } else if (state.activeTopicHref) {
+        recoToAttach = { href: state.activeTopicHref, reason: 'active-topic' };
+      } else {
+        recoToAttach = this.pickTopTopicReco(state);
+        if (!recoToAttach) {
+          const last = this.loadLastRecommendation();
+          recoToAttach = this.pickDifferent(
+            [
+              { href: 'operations.html?q=servizio', reason: 'fallback' },
+              { href: 'caffe.html?q=espresso', reason: 'fallback' },
+              { href: 'sweet-treats.html?q=waffle', reason: 'fallback' },
+              { href: 'gelato-lab.html?q=buontalenti', reason: 'fallback' },
+            ],
+            last?.href
+          );
+        }
+      }
+
+      state.lastSuggestedTurn = Number(state.turn) || state.lastSuggestedTurn || 0;
+      state.genericTurns = 0;
+    }
+
+    this.saveConversationState(state);
+
+    // Small talk gets a local conversational answer; only attach a card when suggestNow is true.
     if (this.isSmallTalk(msgNorm)) {
-      return this.buildSmallTalkResponse(reco);
+      const out = this.buildSmallTalkResponse(recoToAttach || inferred, !!recoToAttach);
+      this.pushToHistory('user', userMessage);
+      this.pushToHistory('assistant', out);
+      return out;
     }
 
     // 2. STANDARD LLM LOGIC (proxy preferred)
@@ -550,8 +773,10 @@ class BernyBrainAPI {
 
       try {
         const systemPrompt = this.buildSystemPrompt();
+        const history = Array.isArray(this.history) ? this.history.slice(-this.MAX_HISTORY_TURNS) : [];
         const messages = [
           { role: 'system', content: systemPrompt },
+          ...history,
           { role: 'user', content: String(userMessage ?? '') },
         ];
 
@@ -603,8 +828,10 @@ class BernyBrainAPI {
         const data = await r.json().catch(() => null);
         const text = String(data?.text || '').trim();
         const out = text || 'Mi sa che il proxy non mi ha risposto bene. Riprova tra poco.';
+        this.pushToHistory('user', userMessage);
+        this.pushToHistory('assistant', out);
         // Ensure the recommended card (when we have one) is specific and not always the same.
-        return this.applyRecommendationToResponse(out, reco);
+        return this.applyRecommendationToResponse(out, recoToAttach, { suppressLink: !recoToAttach });
       } catch (e) {
         const name = String(e?.name || '');
         if (name === 'AbortError') {
@@ -641,7 +868,10 @@ class BernyBrainAPI {
       ]);
 
       const response = await result.response;
-      return this.applyRecommendationToResponse(response.text(), reco);
+      const raw = response.text();
+      this.pushToHistory('user', userMessage);
+      this.pushToHistory('assistant', raw);
+      return this.applyRecommendationToResponse(raw, recoToAttach, { suppressLink: !recoToAttach });
 
     } catch (error) {
       console.warn(`⚠️ Errore o Timeout (${error.message}). Passo al BACKUP...`);
@@ -656,8 +886,10 @@ class BernyBrainAPI {
           const systemPrompt = this.buildSystemPrompt();
           const result = await backupModel.generateContent(`${systemPrompt}\n\nUtente: ${userMessage}`);
           const response = await result.response;
-          
-          return this.applyRecommendationToResponse(response.text(), reco); 
+          const raw = response.text();
+          this.pushToHistory('user', userMessage);
+          this.pushToHistory('assistant', raw);
+          return this.applyRecommendationToResponse(raw, recoToAttach, { suppressLink: !recoToAttach }); 
           
         } catch (backupError) {
           console.error("❌ Anche il backup è fallito:", backupError);
@@ -728,13 +960,16 @@ class BernyBrainAPI {
       Sii simpatico, leggermente sfacciato ma incoraggiante. Usa emoji gelato (🍦, 🍧, 🧊).
 
       IL TUO OBIETTIVO PRINCIPALE (se non è un quiz):
-      Dare risposte "flash" (max 2 frasi) che invitano l'utente ad aprire la scheda tecnica.
+      Aiutare l'utente in modo utile e naturale:
+      - Se la richiesta è operativa (procedura/prodotto/standard), dai una risposta "flash" (max 2 frasi).
+      - Se la richiesta è generica o conversazionale, fai conversazione e fai UNA domanda di chiarimento.
       
       REGOLE DI RISPOSTA (Standard):
-      1. Sii brevissimo. Riassumi i punti chiave.
+      1. Sii breve. Riassumi i punti chiave.
       2. NON fare elenchi puntati lunghi.
-      3. Chiudi SEMPRE invitando l'utente ad aprire la scheda per i dettagli (usa la lingua dell'utente).
-      4. Usa emoji ma non esagerare.
+      3. Se manca contesto, chiedi una domanda di chiarimento (1 sola).
+      4. Se è un tema operativo, puoi invitare ad aprire la scheda per i dettagli (non sempre).
+      5. Usa emoji ma non esagerare.
 
       LINK SCHEDE (IMPORTANTE):
       I tag [[LINK:...]] vengono gestiti dal client per mantenere coerenza tra domanda e scheda consigliata.
