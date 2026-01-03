@@ -209,8 +209,18 @@ class BernyBrainAPI {
     const qSlug = this.slugifyKey(qRaw);
     const qNorm = this.normalizeText(qRaw);
 
+    // IMPORTANT:
+    // Do not let a generic or wrongly-chosen q (e.g. 'panettone') bias the rewrite.
+    // Only use qRaw as extra context when the user/assistant actually mentions it.
+    const userNorm = this.normalizeText(userMessage);
+    const assistantNorm = this.normalizeText(assistantMessage);
+    const qMention = (qNorm || '').replace(/[-_]+/g, ' ').trim();
+    const qMentioned = !!(qMention && (userNorm.includes(qMention) || assistantNorm.includes(qMention)));
+
     // Build a query context that strongly reflects user intent.
-    const ctx = `${String(userMessage || '')} ${String(assistantMessage || '')} ${qRaw}`;
+    const ctx = qMentioned
+      ? `${String(userMessage || '')} ${String(assistantMessage || '')} ${qRaw}`
+      : `${String(userMessage || '')} ${String(assistantMessage || '')}`;
     const qTokens = new Set(this.tokenizeLoose(ctx));
 
     let best = null;
@@ -240,8 +250,8 @@ class BernyBrainAPI {
       }
       score += overlap * 5;
 
-      // Light boost if the normalized title contains the normalized q.
-      if (qNorm && titleNorm && titleNorm.includes(qNorm)) score += 6;
+      // Light boost if the normalized title contains the normalized q (only if q is actually mentioned).
+      if (qMentioned && qNorm && titleNorm && titleNorm.includes(qNorm)) score += 6;
 
       if (score > bestScore) {
         bestScore = score;
