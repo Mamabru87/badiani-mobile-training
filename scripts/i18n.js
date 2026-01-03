@@ -413,10 +413,12 @@
       'gelatoLab.cards.cones.stats': `<li>Avvolgimento: tissue sempre, per grip e look</li><li>Dosaggio: 1 ball per cono piccolo, 1-2 ball per coni speciali (choco/GF)</li><li>Posizionamento: appoggia la ball ruotando il cono per stabilità</li><li>Pulizia area: ogni 30 minuti elimina briciole (assorbono umidità)</li><li>Stock rotation: FIFO rigoroso (i coni assorbono umidità, usa quelli meno freschi prima)</li><li>Upgrade upsell: cono cioccolato (ricoperto dentro e fuori), panna montata</li>`,
       'gelatoLab.cards.cones.details': `<div class="steps"><span>1 · Avvolgi cono con tissue.</span><span>2 · Prepara ball e appoggiala ruotando.</span><span>3 · Proponi upgrade al cono choco o panna montata.</span></div><div class="tips">Mantieni l\'area dei coni pulita eliminando briciole.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Opzione 1:</strong> "Upgrade al cono cioccolato? è ricoperto dentro e fuori"</span><span><strong>Opzione 2:</strong> "Cono gluten-free disponibile (se presente)"</span><span><strong>Opzione 3:</strong> "Vuoi panna montata sopra per look Instagram?"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Pulisci area coni ogni 30 minuti per eliminare briciole. Rotazione stock: i coni assorbono umidità, usa FIFO rigoroso. Avvolgi sempre con tissue per grip.</div>`,
 
+      'gelatoLab.cards.boxes.title': 'Gelato Boxes',
       'gelatoLab.cards.boxes.desc': 'Gelato da asporto in box termici da 500/750/1000 ml. Ogni box mantiene il gelato al giusto stato per circa 1 ora se messo nella borsa termica. Comunica sempre al cliente di mettere subito in freezer a casa: il gelato cambia di consistenza quando si scongela.',
       'gelatoLab.cards.boxes.stats': `<li>Piccolo: 500 ml (1-3 gusti)</li><li>Medio: 750 ml (1-4 gusti)</li><li>Grande: 1000 ml (1-5 gusti)</li><li>Ordine inserimento: inizia dai gusti più morbidi (sorbet prima) per evitare contaminazione sapori</li><li>Compattamento: elimina bene le bolle d\'aria, pulisci bordi con spatola prima di sigillare</li><li>Sigillatura: film + nastro Badiani, consegna in borsa termica</li><li>Autonomia: 1 ora in borsa termica; comunica sempre il freezer a casa per mantenere qualità</li>`,
       'gelatoLab.cards.boxes.details': `<div class="steps"><span>1 · Inserisci gusti iniziando dai più morbidi (sorbet prima per evitare contaminazioni).</span><span>2 · Compatta eliminando bolle d\'aria e pulisci bordi.</span><span>3 · Sigilla con film + nastro Badiani, consegna in borsa.</span></div><div class="tips">Upsell box più grande + pack 10 waffle o coni.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Opzione 1:</strong> "Il box grande da 1L ti fa provare più gusti diversi"</span><span><strong>Opzione 2:</strong> "Aggiungiamo pack di coni per servire a casa?"</span><span><strong>Opzione 3:</strong> "Con borsa termica mantieni tutto perfetto fino a 2 ore"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Compatta bene eliminando aria per evitare cristalli. Pulisci bordi prima di sigillare. Autonomia: 1h in borsa termica, comunica sempre al cliente di mettere subito in freezer.</div>`,
 
+      'gelatoLab.cards.coppa.title': 'Coppa Badiani',
       'gelatoLab.cards.coppa.desc': 'Tre boules di gelato in coppa di vetro, completate con panna montata, una salsa a scelta, mini cono e wafer Badiani. È la proposta “wow”: va costruita con ordine e servita subito per mantenere texture e pulizia del topping.',
       'gelatoLab.cards.coppa.stats': `<li>Base: coppa in vetro</li><li>Porzione: 3 scoops con scooper tondo (anche 3 gusti diversi)</li><li>Top: panna montata + swirl di sauce scelta</li><li>Finitura: mini cono + wafer Badiani</li><li>Servizio: cucchiaio in acciaio, consegna immediata</li>`,
       'gelatoLab.cards.coppa.details': `<div class="steps"><span>1 · Prendi una coppa di vetro e prepara i gusti con lo scooper tondo: 3 boules regolari (anche di gusti diversi).</span><span>2 · Completa con panna montata e uno swirl della sauce scelta (senza sporcare i bordi).</span><span>3 · Aggiungi mini cono + wafer Badiani e servi con cucchiaio in acciaio.</span></div><div class="tips">Proponi pairing con Slitti dragée per un dessert completo.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Opzione 1:</strong> "Vuoi aggiungere granella di nocciola tostata e dragée Slitti?"</span><span><strong>Opzione 2:</strong> "Con doppia salsa pistacchio e cioccolato diventa signature"</span><span><strong>Opzione 3:</strong> "Abbinamento perfetto: Coppa + espresso affogato style"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Usa bicchieri in vetro freddi per mantenere temperatura. Monta boules con scooper tondo per estetica uniforme. Servi immediatamente dopo guarnizione per evitare scioglimento panna.</div>`,
@@ -711,23 +713,28 @@
       'pastries.ops.title': 'Setup & Conservazione',
       'pastries.ops.category': 'Apertura · Dati tecnici · Shelf life · FIFO · Chiusura',
 
+      'pastries.ops.display.title': 'Vetrina pastry (apertura)',
       'pastries.ops.display.alt': 'Vetrina pastry Badiani',
       'pastries.ops.display.desc': 'Obiettivo apertura: vetrina piena, ordinata e leggibile. Label sempre accanto al tray corretto; le cakes sui cake stand con una fetta rimossa per mostrare l\'interno.',
       'pastries.ops.display.stats': `<li>CAKES: cake stands + rimuovi 1 slice (visual interno)</li><li>CROISSANTS: su tray dedicati (file pulite)</li><li>BROWNIES/PUDDING/TARTS/SCONES: su tray, allineati</li><li>LOAF: taglia e mostra la prima fetta sul tray</li>`,
       'pastries.ops.display.details': `<div class="steps"><span>1 · Ripristina vetrina “full look” (senza buchi visivi).</span><span>2 · Metti le label accanto al tray giusto (mai generiche).</span><span>3 · Verifica FIFO e shelf life prima del primo servizio.</span></div><div class="tips">Coerenza visiva = vendite. Il banco “pieno” invita all'acquisto.</div>`,
 
+      'pastries.ops.cuts.title': 'Standard di taglio',
       'pastries.ops.cuts.desc': 'Porzioni costanti = qualità costante. Usa sempre gli stessi tagli per controllo food cost e per lavorare “in squadra”.',
       'pastries.ops.cuts.stats': `<li>Cake: usa il cake slicer guida 14 fette</li><li>Brownie tray: taglio 4×3 = 12 pezzi</li><li>Loaf: ricava 10 fette dalla forma intera</li>`,
       'pastries.ops.cuts.details': `<div class="steps"><span>1 · Usa sempre lo stesso strumento guida (slicer / righello visivo).</span><span>2 · Se una porzione è fuori standard, correggi subito il taglio successivo.</span><span>3 · Mantieni le lame pulite: taglio netto = presentazione premium.</span></div>`,
 
+      'pastries.ops.shelf.title': 'Shelf life & Labeling',
       'pastries.ops.shelf.desc': 'Lista shelf life per controlli quotidiani, rotazione e label corrette.',
       'pastries.ops.shelf.stats': `<li>Chocolate Cake: 3 giorni</li><li>Carrot Cake: 2 giorni</li><li>Walnut Cake: 3 giorni</li><li>Brownie: 4 giorni</li><li>Banana Loaf: 4 giorni</li><li>Croissants: 2 giorni</li><li>Scones: 2 giorni</li>`,
       'pastries.ops.shelf.details': `<div class="steps"><span>1 · Etichetta sempre: data defrost/apertura + scadenza.</span><span>2 · FIFO rigoroso (first in, first out).</span><span>3 · In dubbio: non servire (chiedi al manager).</span></div>`,
 
+      'pastries.ops.full.title': 'Mantenimento "Full Look"',
       'pastries.ops.full.desc': 'Regola vetrina: deve apparire sempre piena e ordinata. Le label stanno accanto al tray corretto, sempre.',
-      'pastries.ops.full.stats': `<li>Ridisponi i prodotti per chiudere vuoti (senza mescolare referenze)</li><li>Allinea fronti: brownie/loaf/croissant sempre “in squadra”</li><li>Controlla che le label siano leggibili e coerenti con il tray</li>`,
+      'pastries.ops.full.stats': `<li>Ridisponi i prodotti per chiudere vuoti (senza mescolare referenze)</li><li>Allinea fronti: brownie/loaf/croissant always “in squadra”</li><li>Controlla che le label siano leggibili e coerenti con il tray</li>`,
       'pastries.ops.full.details': `<div class="steps"><span>1 · Riempi e riallinea dopo ogni rush.</span><span>2 · Aggiorna le label quando cambia il tray (mai lasciare “vecchie”).</span><span>3 · Verifica scadenze durante i refill.</span></div><div class="tips">Visual merchandising = training: è una skill, non un dettaglio.</div>`,
 
+      'pastries.ops.close.title': 'Chiusura & Pulizia',
       'pastries.ops.close.desc': 'Obiettivo: ripristinare ordine e preparare una partenza veloce domani, senza perdere controllo su shelf life.',
       'pastries.ops.close.stats': `<li>Rimuovi briciole e residui dai tray (prima che diventino “incollati”)</li><li>Raggruppa per referenza e verifica scadenze (FIFO)</li><li>Controlla che tutte le label siano presenti e corrette</li>`,
       'pastries.ops.close.details': `<div class="steps"><span>1 · Riordina per categoria, controlla date e scarta ciò che è oltre shelf life.</span><span>2 · Pulisci superfici e tray; asciuga prima di richiudere.</span><span>3 · Prepara il banco “apertura-ready”: label e layout già impostati.</span></div>`,
@@ -1433,10 +1440,12 @@
       'gelatoLab.cards.cones.stats': `<li>Wrap: tissue always, for grip and look</li><li>Portion: 1 ball for classic cone, 1-2 balls for special cones (choco/GF)</li><li>Placement: set the ball while rotating the cone for stability</li><li>Area clean: every 30 minutes remove crumbs (they absorb moisture)</li><li>Stock rotation: strict FIFO (cones absorb moisture—use older stock first)</li><li>Upgrade upsell: chocolate cone (coated inside/out), whipped cream</li>`,
       'gelatoLab.cards.cones.details': `<div class="steps"><span>1 · Wrap the cone with tissue.</span><span>2 · Prepare the ball and place it while rotating.</span><span>3 · Offer an upgrade to the choco cone or whipped cream.</span></div><div class="tips">Keep the cone area clean by removing crumbs.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Option 1:</strong> "Upgrade to the chocolate cone? It\'s coated inside and out"</span><span><strong>Option 2:</strong> "Gluten-free cone available (if in stock)"</span><span><strong>Option 3:</strong> "Add whipped cream on top for an Instagram look?"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Clean the cone area every 30 minutes. Stock rotation: cones absorb moisture, keep FIFO strict. Always wrap with tissue for grip.</div>`,
 
+      'gelatoLab.cards.boxes.title': 'Gelato Boxes',
       'gelatoLab.cards.boxes.desc': 'Take-away GELATO in insulated boxes of 500/750/1000 ml. Each box keeps GELATO in good condition for about 1 hour when placed in the thermal bag. Always tell the customer to put it straight into the freezer at home: GELATO changes texture when it melts.',
       'gelatoLab.cards.boxes.stats': `<li>Small: 500 ml (1-3 flavours)</li><li>Medium: 750 ml (1-4 flavours)</li><li>Large: 1000 ml (1-5 flavours)</li><li>Filling order: start with softer flavours (sorbet first) to avoid flavour cross-contact</li><li>Compacting: remove air bubbles; clean edges with the spatula before sealing</li><li>Seal: film + Badiani tape; hand over in thermal bag</li><li>Autonomy: ~1 hour in thermal bag; always remind customers about the freezer at home</li>`,
       'gelatoLab.cards.boxes.details': `<div class="steps"><span>1 · Add flavours starting from the softest (sorbet first to avoid cross-contact).</span><span>2 · Compact to remove air bubbles and clean the edges.</span><span>3 · Seal with film + Badiani tape and place in the bag.</span></div><div class="tips">Upsell a bigger box + a 10-pack of waffles or cones.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Option 1:</strong> "The 1L box lets you try more flavours"</span><span><strong>Option 2:</strong> "Shall we add a pack of cones to serve at home?"</span><span><strong>Option 3:</strong> "With a thermal bag, you can keep everything perfect for up to 2 hours"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Compact well to remove air and reduce ice crystals. Clean edges before sealing. Autonomy: ~1h in the thermal bag—always remind customers to freeze it ASAP.</div>`,
 
+      'gelatoLab.cards.coppa.title': 'Badiani Cup',
       'gelatoLab.cards.coppa.desc': 'Three scoops of GELATO in a glass cup, finished with whipped cream, a sauce of choice, a mini cone and a Badiani wafer. It\'s the “wow” option: build it in order and serve immediately to keep texture and toppings clean.',
       'gelatoLab.cards.coppa.stats': `<li>Base: glass cup</li><li>Portion: 3 scoops with a round scooper (can be 3 different flavours)</li><li>Top: whipped cream + a swirl of the chosen sauce</li><li>Finish: mini cone + Badiani wafer</li><li>Service: steel spoon, serve immediately</li>`,
       'gelatoLab.cards.coppa.details': `<div class="steps"><span>1 · Take a glass cup and scoop 3 regular balls (can be different flavours) with the round scooper.</span><span>2 · Finish with whipped cream and a swirl of the chosen sauce (keep the rim clean).</span><span>3 · Add the mini cone + Badiani wafer and serve with a steel spoon.</span></div><div class="tips">Suggest a pairing with Slitti dragée for a complete dessert.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Option 1:</strong> "Add toasted hazelnut crumble and Slitti dragée?"</span><span><strong>Option 2:</strong> "Double sauce (pistachio + chocolate) makes it signature"</span><span><strong>Option 3:</strong> "Perfect pairing: Coppa + espresso affogato style"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Use chilled glass cups to help keep temperature. Make uniform scoops with the round scooper. Serve immediately after topping to avoid whipped-cream melt.</div>`,
@@ -1727,23 +1736,28 @@
       'pastries.ops.title': 'Setup & Storage',
       'pastries.ops.category': 'Opening · Tech data · Shelf life · FIFO · Closing',
 
+      'pastries.ops.display.title': 'Pastry display (opening)',
       'pastries.ops.display.alt': 'Badiani pastry display',
       'pastries.ops.display.desc': 'Opening goal: a full, tidy, easy-to-read display. Labels always next to the correct tray; cakes on cake stands with one slice removed to show the inside.',
       'pastries.ops.display.stats': `<li>CAKES: cake stands + remove 1 slice (inside visual)</li><li>CROISSANTS: dedicated trays (clean rows)</li><li>BROWNIES/PUDDING/TARTS/SCONES: on trays, aligned</li><li>LOAF: slice and show the first slice on the tray</li>`,
       'pastries.ops.display.details': `<div class="steps"><span>1 · Restore a “full look” (no visual gaps).</span><span>2 · Place labels next to the right tray (never generic).</span><span>3 · Check FIFO and shelf life before the first service.</span></div><div class="tips">Visual consistency = sales. A “full” counter invites purchase.</div>`,
 
+      'pastries.ops.cuts.title': 'Cutting standards',
       'pastries.ops.cuts.desc': 'Consistent portions = consistent quality. Always use the same cuts to control food cost and work “as a team”.',
       'pastries.ops.cuts.stats': `<li>Cake: use the cake slicer guide (14 slices)</li><li>Brownie tray: 4×3 cut = 12 pieces</li><li>Loaf: get 10 slices from the full loaf</li>`,
       'pastries.ops.cuts.details': `<div class="steps"><span>1 · Always use the same guiding tool (slicer / visual ruler).</span><span>2 · If a portion is off-standard, correct the next cut immediately.</span><span>3 · Keep blades clean: a clean cut = premium presentation.</span></div>`,
 
+      'pastries.ops.shelf.title': 'Shelf life & Labeling',
       'pastries.ops.shelf.desc': 'Shelf life list for daily checks, rotation and correct labels.',
       'pastries.ops.shelf.stats': `<li>Chocolate Cake: 3 days</li><li>Carrot Cake: 2 days</li><li>Walnut Cake: 3 days</li><li>Brownie: 4 days</li><li>Banana Loaf: 4 days</li><li>Croissants: 2 days</li><li>Scones: 2 days</li>`,
       'pastries.ops.shelf.details': `<div class="steps"><span>1 · Always label: defrost/open date + expiry.</span><span>2 · Strict FIFO (first in, first out).</span><span>3 · If in doubt: don\'t serve (ask the manager).</span></div>`,
 
+      'pastries.ops.full.title': 'Maintaining "Full Look"',
       'pastries.ops.full.desc': 'Display rule: it must always look full and tidy. Labels must be next to the correct tray, always.',
       'pastries.ops.full.stats': `<li>Reposition products to close gaps (without mixing references)</li><li>Align fronts: brownie/loaf/croissant always “in formation”</li><li>Check labels are readable and match the tray</li>`,
       'pastries.ops.full.details': `<div class="steps"><span>1 · Refill and realign after every rush.</span><span>2 · Update labels whenever the tray changes (never leave “old” ones).</span><span>3 · Check expiry dates during refills.</span></div><div class="tips">Visual merchandising = training: it\'s a skill, not a detail.</div>`,
 
+      'pastries.ops.close.title': 'Closing & Cleaning',
       'pastries.ops.close.desc': 'Goal: restore order and prep for a fast start tomorrow, without losing shelf life control.',
       'pastries.ops.close.stats': `<li>Remove crumbs and residue from trays (before they “stick”)</li><li>Group by reference and verify expiry dates (FIFO)</li><li>Check all labels are present and correct</li>`,
       'pastries.ops.close.details': `<div class="steps"><span>1 · Tidy by category, check dates, and discard anything beyond shelf life.</span><span>2 · Clean surfaces and trays; dry before closing.</span><span>3 · Leave the counter “opening-ready”: labels and layout already set.</span></div>`,
@@ -4932,23 +4946,28 @@
       'pastries.ops.title': 'Setup y conservación',
       'pastries.ops.category': 'Apertura · Datos técnicos · Shelf life · FIFO · Cierre',
 
+      'pastries.ops.display.title': 'Vitrina pastry (apertura)',
       'pastries.ops.display.alt': 'Vitrina pastry Badiani',
       'pastries.ops.display.desc': 'Objetivo de apertura: vitrina llena, ordenada y legible. Label siempre junto al tray correcto; las cakes en cake stand con una porción retirada para mostrar el interior.',
       'pastries.ops.display.stats': `<li>CAKES: cake stands + retirar 1 slice (visual interior)</li><li>CROISSANTS: en trays dedicados (filas limpias)</li><li>BROWNIES/PUDDING/TARTS/SCONES: en tray, alineados</li><li>LOAF: cortar y mostrar la primera porción en el tray</li>`,
-      'pastries.ops.display.details': `<div class="steps"><span>1 · Restablece un “full look” (sin huecos visibles).</span><span>2 · Coloca las label junto al tray correcto (nunca genéricas).</span><span>3 · Verifica FIFO y shelf life antes del primer servicio.</span></div><div class="tips">Consistencia visual = ventas. Un mostrador “lleno” invita a comprar.</div>`,
+      'pastries.ops.display.details': `<div class="steps"><span>1 · Restablece un “full look” (sin huecos visibles).</span><span>2 · Coloca las label junto al tray correcto (nunca genéricas).</span><span>3 · Verifica FIFO e shelf life antes del primer servicio.</span></div><div class="tips">Consistencia visual = ventas. Un mostrador “lleno” invita a comprar.</div>`,
 
+      'pastries.ops.cuts.title': 'Estándares de corte',
       'pastries.ops.cuts.desc': 'Porciones consistentes = calidad consistente. Usa siempre los mismos cortes para controlar food cost y trabajar “en equipo”.',
       'pastries.ops.cuts.stats': `<li>Cake: usa el cake slicer guía (14 porciones)</li><li>Brownie tray: corte 4×3 = 12 piezas</li><li>Loaf: saca 10 slices de la pieza entera</li>`,
       'pastries.ops.cuts.details': `<div class="steps"><span>1 · Usa siempre la misma herramienta guía (slicer / regla visual).</span><span>2 · Si una porción sale fuera de estándar, corrige el siguiente corte.</span><span>3 · Mantén las cuchillas limpias: corte limpio = presentación premium.</span></div>`,
 
+      'pastries.ops.shelf.title': 'Shelf life y etiquetado',
       'pastries.ops.shelf.desc': 'Lista de shelf life para controles diarios, rotación y labels correctas.',
       'pastries.ops.shelf.stats': `<li>Chocolate Cake: 3 días</li><li>Carrot Cake: 2 días</li><li>Walnut Cake: 3 días</li><li>Brownie: 4 días</li><li>Banana Loaf: 4 días</li><li>Croissants: 2 días</li><li>Scones: 2 días</li>`,
       'pastries.ops.shelf.details': `<div class="steps"><span>1 · Etiqueta siempre: fecha de defrost/apertura + caducidad.</span><span>2 · FIFO estricto (first in, first out).</span><span>3 · En caso de duda: no servir (pregunta al manager).</span></div>`,
 
-      'pastries.ops.full.desc': 'Regla de vitrina: debe parecer siempre llena y ordenada. Las label van junto al tray correcto, siempre.',
-      'pastries.ops.full.stats': `<li>Reubica productos para cerrar huecos (sin mezclar referencias)</li><li>Alinea frentes: brownie/loaf/croissant siempre “en formación”</li><li>Comprueba que las label sean legibles y coherentes con el tray</li>`,
+      'pastries.ops.full.title': 'Mantenimiento "Full Look"',
+      'pastries.ops.full.desc': 'Regola de vitrina: debe parecer siempre llena y ordenada. Las label van junto al tray correcto, siempre.',
+      'pastries.ops.full.stats': `<li>Reubica productos para cerrar huecos (sin mezclar referencias)</li><li>Alinea frentes: brownie/loaf/croissant siempre “in formación”</li><li>Comprueba que las label sean legibles y coherentes con el tray</li>`,
       'pastries.ops.full.details': `<div class="steps"><span>1 · Rellena y realinea después de cada rush.</span><span>2 · Actualiza las label cuando cambie el tray (nunca dejes “antiguas”).</span><span>3 · Revisa caducidades durante los refills.</span></div><div class="tips">Visual merchandising = training: es una skill, no un detalle.</div>`,
 
+      'pastries.ops.close.title': 'Cierre y limpieza',
       'pastries.ops.close.desc': 'Objetivo: restaurar orden y preparar un arranque rápido mañana, sin perder control de shelf life.',
       'pastries.ops.close.stats': `<li>Retira migas y residuos de los trays (antes de que se “peguen”)</li><li>Agrupa por referencia y verifica caducidades (FIFO)</li><li>Comprueba que todas las label estén presentes y correctas</li>`,
       'pastries.ops.close.details': `<div class="steps"><span>1 · Ordena por categoría, revisa fechas y desecha lo que supere shelf life.</span><span>2 · Limpia superficies y trays; seca antes de cerrar.</span><span>3 · Deja el mostrador “opening-ready”: label y layout ya listos.</span></div>`,
@@ -7407,23 +7426,28 @@
       'pastries.ops.title': 'Setup & conservation',
       'pastries.ops.category': 'Ouverture · Données techniques · Shelf life · FIFO · Fermeture',
 
+      'pastries.ops.display.title': 'Vitrine pastry (ouverture)',
       'pastries.ops.display.alt': 'Vitrine pastry Badiani',
       'pastries.ops.display.desc': 'Objectif ouverture : vitrine pleine, ordonnée et lisible. Label toujours près du tray correct ; cakes sur cake stands avec une part retirée pour montrer l\'intérieur.',
       'pastries.ops.display.stats': `<li>CAKES: cake stands + retire 1 slice (visual intérieur)</li><li>CROISSANTS: trays dédiés (lignes propres)</li><li>BROWNIES/PUDDING/TARTS/SCONES: sur trays, alignés</li><li>LOAF: coupe et montre la première tranche sur le tray</li>`,
       'pastries.ops.display.details': `<div class="steps"><span>1 · Restaure un “full look” (sans trous visuels).</span><span>2 · Place les label près du bon tray (jamais génériques).</span><span>3 · Vérifie FIFO et shelf life avant le premier service.</span></div><div class="tips">Cohérence visuelle = ventes. Un comptoir “plein” donne envie.</div>`,
 
+      'pastries.ops.cuts.title': 'Standards de coupe',
       'pastries.ops.cuts.desc': 'Portions constantes = qualité constante. Utilise toujours les mêmes découpes pour contrôler le food cost et travailler “en équipe”.',
       'pastries.ops.cuts.stats': `<li>Cake: cake slicer guide 14 parts</li><li>Brownie tray: découpe 4×3 = 12 pièces</li><li>Loaf: 10 slices par loaf</li>`,
       'pastries.ops.cuts.details': `<div class="steps"><span>1 · Utilise toujours le même outil guide (slicer / repère visuel).</span><span>2 · Si une portion est hors standard, corrige dès la coupe suivante.</span><span>3 · Lames propres : coupe nette = présentation premium.</span></div>`,
 
+      'pastries.ops.shelf.title': 'Shelf life & Étiquetage',
       'pastries.ops.shelf.desc': 'Liste shelf life pour contrôles quotidiens, rotation et labels correctes.',
       'pastries.ops.shelf.stats': `<li>Chocolate Cake: 3 jours</li><li>Carrot Cake: 2 jours</li><li>Walnut Cake: 3 jours</li><li>Brownie: 4 jours</li><li>Banana Loaf: 4 jours</li><li>Croissants: 2 jours</li><li>Scones: 2 jours</li>`,
       'pastries.ops.shelf.details': `<div class="steps"><span>1 · Label toujours : date defrost/ouverture + expiration.</span><span>2 · FIFO strict (first in, first out).</span><span>3 · En cas de doute : ne pas servir (demande au manager).</span></div>`,
 
+      'pastries.ops.full.title': 'Maintien "Full Look"',
       'pastries.ops.full.desc': 'Règle vitrine : elle doit toujours paraître pleine et ordonnée. Les label sont près du tray correct, toujours.',
       'pastries.ops.full.stats': `<li>Repositionne pour fermer les vides (sans mélanger les références)</li><li>Aligne les fronts : brownie/loaf/croissant toujours “en formation”</li><li>Vérifie que les label sont lisibles et cohérentes avec le tray</li>`,
       'pastries.ops.full.details': `<div class="steps"><span>1 · Refill et réaligne après chaque rush.</span><span>2 · Mets à jour les label quand le tray change (ne laisse jamais les “anciennes”).</span><span>3 · Vérifie les dates pendant les refills.</span></div><div class="tips">Visual merchandising = training : c\'est une skill, pas un détail.</div>`,
 
+      'pastries.ops.close.title': 'Fermeture & Nettoyage',
       'pastries.ops.close.desc': 'Objectif : remettre en ordre et préparer un départ rapide demain, sans perdre le contrôle de la shelf life.',
       'pastries.ops.close.stats': `<li>Retire miettes et résidus des trays (avant qu\'ils ne “collent”)</li><li>Groupe par référence et vérifie les dates (FIFO)</li><li>Vérifie que toutes les label sont présentes et correctes</li>`,
       'pastries.ops.close.details': `<div class="steps"><span>1 · Range par catégorie, vérifie les dates et jette ce qui dépasse la shelf life.</span><span>2 · Nettoie surfaces et trays ; sèche avant de fermer.</span><span>3 · Laisse le comptoir “opening-ready” : labels et layout déjà prêts.</span></div>`,

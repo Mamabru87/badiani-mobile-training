@@ -349,6 +349,23 @@
       const btn = document.createElement('a');
       btn.href = url;
       btn.className = 'berny-link-btn';
+
+      // Force reload if same page to trigger site.js deep-link logic
+      btn.addEventListener('click', (e) => {
+        try {
+          const targetUrl = new URL(url, window.location.origin);
+          if (targetUrl.pathname === window.location.pathname || 
+             (targetUrl.pathname.endsWith('index.html') && window.location.pathname.endsWith('/')) ||
+             (targetUrl.pathname === '/' && window.location.pathname.endsWith('index.html'))) {
+            e.preventDefault();
+            window.location.href = url;
+            // Small delay then reload if href change didn't trigger it
+            setTimeout(() => window.location.reload(), 100);
+          }
+        } catch (err) {
+          console.error("Berny link error:", err);
+        }
+      });
       
       // Usa la traduzione se disponibile, altrimenti fallback
       const label = tr('assistant.openCard', null, '📖 Apri Scheda Correlata');

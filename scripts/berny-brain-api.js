@@ -229,21 +229,58 @@ class BernyBrainAPI {
     const index = this.buildI18nTitleIndex();
     if (!Array.isArray(index) || !index.length) return null;
 
-    // Pick the longest title contained in the message (most specific).
+    const stop = new Set(['della','delle','degli','dello','dell','d','del','dei','di','da','a','al','allo','alla','alle','ai','il','lo','la','i','gli','le','un','uno','una','and','or','the','of','to','in','on','for']);
+    const hasWord = (needle) => {
+      const n = String(needle || '').trim();
+      if (!n) return false;
+      const esc = n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      try { return new RegExp(`\\b${esc}\\b`, 'i').test(msgNorm); } catch { return false; }
+    };
+
     let best = null;
-    let bestLen = 0;
+    let bestScore = 0;
 
     for (const entry of index) {
       const t = entry?.titleNorm || '';
-      if (!t || t.length < 4) continue;
-      if (!msgNorm.includes(t)) continue;
-      if (t.length > bestLen) {
+      if (!t || t.length < 3) continue;
+
+      let score = 0;
+      // 1) Exact match or full substring (high confidence)
+      if (msgNorm === t) {
+        score += 15;
+      } else if (msgNorm.includes(t)) {
+        score += 12;
+      } else if (t.includes(msgNorm) && msgNorm.length >= 4) {
+        score += 10;
+      }
+
+      // 2) Token matching (word boundaries)
+      const tokens = t.split(' ').filter(tok => tok.length >= 3 && !stop.has(tok));
+      let hits = 0;
+      for (const tok of tokens) {
+        if (hasWord(tok) || (msgNorm.length >= 4 && tok.includes(msgNorm)) || (tok.length >= 4 && msgNorm.includes(tok))) {
+          hits++;
+          score += 4;
+        }
+      }
+
+      // 3) Bonus for matching more tokens
+      if (hits > 0 && hits === tokens.length) {
+        score += 5;
+      }
+
+      // 4) If user message is exactly one of the tokens (e.g. "Panettone")
+      if (tokens.length > 1 && tokens.some(tok => tok === msgNorm)) {
+        score += 8;
+      }
+
+      if (score > bestScore) {
+        bestScore = score;
         best = entry;
-        bestLen = t.length;
       }
     }
 
-    if (!best) return null;
+    if (!best || bestScore < 8) return null;
     const href = `${best.pageHref}?card=${encodeURIComponent(best.cardSlug)}&center=1`;
     return { href, reason: 'i18n-title', label: best.titleRaw };
   }
