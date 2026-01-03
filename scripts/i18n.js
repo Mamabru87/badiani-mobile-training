@@ -8611,14 +8611,19 @@
     scope.querySelectorAll?.('[data-i18n]').forEach((node) => {
       const key = node.getAttribute('data-i18n');
       if (!key) return;
-      node.textContent = t(key);
+      const translated = t(key);
+      // Non-destructive: if a translation is missing, don't replace existing content with the key.
+      if (translated === key) return;
+      node.textContent = translated;
     });
 
     // HTML nodes (trusted, internal)
     scope.querySelectorAll?.('[data-i18n-html]').forEach((node) => {
       const key = node.getAttribute('data-i18n-html');
       if (!key) return;
-      node.innerHTML = t(key);
+      const translated = t(key);
+      if (translated === key) return;
+      node.innerHTML = translated;
     });
 
     // Attributes
@@ -8632,7 +8637,9 @@
         const attr = pair.slice(0, idx).trim();
         const key = pair.slice(idx + 1).trim();
         if (!attr || !key) return;
-        try { node.setAttribute(attr, t(key)); } catch {}
+        const translated = t(key);
+        if (translated === key) return;
+        try { node.setAttribute(attr, translated); } catch {}
       });
     });
 
