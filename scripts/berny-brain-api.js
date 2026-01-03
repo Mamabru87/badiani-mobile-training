@@ -139,6 +139,132 @@ class BernyBrainAPI {
   }
 
   // ------------------------------
+  // Catalog-based deep-link resolver
+  // - Uses badianiSearchCatalog.v2 (seeded on index.html) to map arbitrary queries
+  //   to a real cardKey on the recommended page.
+  // - This prevents "pagina giusta ma niente scroll" when q doesn't match any card id/title.
+  // ------------------------------
+  loadSearchCatalog() {
+    const KEY = 'badianiSearchCatalog.v2';
+    try {
+      const raw = localStorage.getItem(KEY);
+      const parsed = raw ? JSON.parse(raw) : null;
+      if (parsed && typeof parsed === 'object' && parsed.pages && typeof parsed.pages === 'object') {
+        return parsed;
+      }
+    } catch {}
+
+    // Fallback: seed may expose itself globally.
+    try {
+      const seed = window.__BADIANI_SEARCH_CATALOG_SEED__;
+      if (seed && typeof seed === 'object' && seed.pages && typeof seed.pages === 'object') return seed;
+    } catch {}
+
+    return null;
+  }
+
+  slugifyKey(value = '') {
+    return (String(value || '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/gi, '-')
+      .replace(/^-+|-+$/g, '')) || '';
+  }
+
+  tokenizeLoose(value = '') {
+    const s = this.normalizeText(value)
+      .replace(/[^a-z0-9\s]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    if (!s) return [];
+    const stop = new Set([
+      'il','lo','la','i','gli','le','un','una','uno','di','del','della','dei','delle','da','in','su','per','con','senza',
+      'e','o','ma','che','chi','cosa','come','quanto','quale','quali','quando','dove','mi','ti','si','no','ok','poi',
+      'nel','nella','nei','nelle','al','allo','alla','agli','alle','a'
+    ]);
+    return s.split(' ').filter((t) => t.length >= 3 && !stop.has(t));
+  }
+
+  coerceHrefToCatalogCard(href, userMessage, assistantMessage) {
+    const rawHref = String(href || '').trim();
+    if (!rawHref) return rawHref;
+
+    let url;
+    try {
+      url = new URL(rawHref, window.location.href);
+    } catch {
+      return rawHref;
+    }
+
+    const pageKey = (url.pathname || '').split('/').pop() || '';
+    const qRaw = String(url.searchParams.get('q') || '').trim();
+    if (!pageKey || !qRaw) return rawHref;
+
+    const catalog = this.loadSearchCatalog();
+    const page = catalog?.pages?.[pageKey];
+    const cards = Array.isArray(page?.cards) ? page.cards : [];
+    if (!cards.length) return rawHref;
+
+    const qSlug = this.slugifyKey(qRaw);
+    const qNorm = this.normalizeText(qRaw);
+
+    // Build a query context that strongly reflects user intent.
+    const ctx = `${String(userMessage || '')} ${String(assistantMessage || '')} ${qRaw}`;
+    const qTokens = new Set(this.tokenizeLoose(ctx));
+
+    let best = null;
+    let bestScore = 0;
+
+    for (const c of cards) {
+      const cardKey = String(c?.cardKey || '').trim();
+      const title = String(c?.title || '').trim();
+      if (!cardKey) continue;
+
+      const keySlug = this.slugifyKey(cardKey);
+      const titleNorm = this.normalizeText(title);
+      const titleSlug = this.slugifyKey(title);
+
+      let score = 0;
+
+      // Exact q -> cardKey match wins immediately.
+      if (qSlug && (keySlug === qSlug || titleSlug === qSlug || titleNorm === qNorm)) {
+        score += 100;
+      }
+
+      // Token overlap (handles synonyms like "coppa badiani" -> "Coppa Gelato").
+      const titleTokens = this.tokenizeLoose(title);
+      let overlap = 0;
+      for (const t of titleTokens) {
+        if (qTokens.has(t)) overlap += 1;
+      }
+      score += overlap * 5;
+
+      // Light boost if the normalized title contains the normalized q.
+      if (qNorm && titleNorm && titleNorm.includes(qNorm)) score += 6;
+
+      if (score > bestScore) {
+        bestScore = score;
+        best = { cardKey };
+      }
+    }
+
+    // Conservative threshold: only rewrite if we're confident.
+    if (best && best.cardKey && bestScore >= 8) {
+      try {
+        url.searchParams.set('q', String(best.cardKey));
+        return url.pathname.endsWith(pageKey)
+          ? `${pageKey}?${url.searchParams.toString()}`
+          : `${url.pathname}?${url.searchParams.toString()}`;
+      } catch {
+        return rawHref;
+      }
+    }
+
+    return rawHref;
+  }
+
+  // ------------------------------
   // Recommendation helpers
   // ------------------------------
   getUiLang() {
@@ -213,6 +339,7 @@ class BernyBrainAPI {
     // High-signal direct mappings (topic -> page?q)
     const topicCandidates = [
       { href: 'gelato-lab.html?q=buontalenti', keys: ['buontalenti'] },
+      { href: 'gelato-lab.html?q=coppa-gelato', keys: ['coppa badiani', 'coppa gelato', 'coppa'] },
       { href: 'gelato-lab.html?q=coni', keys: ['cono', 'coni', 'cone'] },
       { href: 'gelato-lab.html?q=gusti', keys: ['gusti', 'flavour', 'flavors', 'parfums', 'sabores'] },
       { href: 'gelato-lab.html?q=vetrina', keys: ['vetrina', 'display', 'vitrine'] },
@@ -279,6 +406,7 @@ class BernyBrainAPI {
 
     const topicCandidates = [
       { href: 'gelato-lab.html?q=buontalenti', keys: ['buontalenti'] },
+      { href: 'gelato-lab.html?q=coppa-gelato', keys: ['coppa badiani', 'coppa gelato', 'coppa'] },
       { href: 'gelato-lab.html?q=coni', keys: ['cono', 'coni', 'cone'] },
       { href: 'gelato-lab.html?q=gusti', keys: ['gusti', 'flavour', 'flavors', 'parfums', 'sabores'] },
       { href: 'gelato-lab.html?q=vetrina', keys: ['vetrina', 'display', 'vitrine'] },
@@ -684,6 +812,9 @@ class BernyBrainAPI {
         const text = String(data?.text || '').trim();
         const out = text || 'Mi sa che il proxy non mi ha risposto bene. Riprova tra poco.';
         const recoFinal = this.inferRecommendationFromContext(userMessage, out);
+        if (recoFinal?.href) {
+          recoFinal.href = this.coerceHrefToCatalogCard(recoFinal.href, userMessage, out);
+        }
         // Ensure the recommended card (when we have one) is coherent with the actual answer.
         return this.applyRecommendationToResponse(out, recoFinal);
       } catch (e) {
@@ -724,6 +855,9 @@ class BernyBrainAPI {
       const response = await result.response;
       const out = response.text();
       const recoFinal = this.inferRecommendationFromContext(userMessage, out);
+      if (recoFinal?.href) {
+        recoFinal.href = this.coerceHrefToCatalogCard(recoFinal.href, userMessage, out);
+      }
       return this.applyRecommendationToResponse(out, recoFinal);
 
     } catch (error) {
@@ -741,6 +875,9 @@ class BernyBrainAPI {
           const response = await result.response;
           const out = response.text();
           const recoFinal = this.inferRecommendationFromContext(userMessage, out);
+          if (recoFinal?.href) {
+            recoFinal.href = this.coerceHrefToCatalogCard(recoFinal.href, userMessage, out);
+          }
           return this.applyRecommendationToResponse(out, recoFinal);
           
         } catch (backupError) {
