@@ -472,7 +472,12 @@
         // Very-last-resort minimal mapping (keep conservative)
         if (!link) {
           const lower = text.toLowerCase();
-          if (lower.includes('churro')) link = 'festive.html?q=churro';
+          // If Berny explicitly mentions Story Orbit, always route there.
+          // This avoids accidental routing to Gelato Lab due to generic words like "gelato".
+          if (lower.includes('story orbit') || lower.includes('story-orbit') || (lower.includes('firenze') && lower.includes('origine'))) {
+            link = 'story-orbit.html?q=story';
+          }
+          else if (lower.includes('churro')) link = 'festive.html?q=churro';
           else if (lower.includes('waffle')) link = 'sweet-treats.html?q=waffle';
           else if (lower.includes('pancake')) link = 'sweet-treats.html?q=pancake';
           else if (lower.includes('gelato')) link = 'gelato-lab.html?q=gusti';

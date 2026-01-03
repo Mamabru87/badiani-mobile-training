@@ -215,7 +215,12 @@ class BernyBrainAPI {
   }
 
   looksTruncatedAnswer(text) {
-    const s = String(text || '').trim();
+    // Remove control tags that might be appended after generation.
+    const s = String(text || '')
+      .replace(/\[\[LINK:.*?\]\]/g, '')
+      .replace(/\[\[CMD:.*?\]\]/g, '')
+      .replace(/\[\[NOLINK\]\]/g, '')
+      .trim();
     if (!s) return false;
 
     // Ignore obvious error/status strings.
@@ -224,11 +229,21 @@ class BernyBrainAPI {
     // If it's very short, don't try to be clever.
     if (s.length < 60) return false;
 
+    // If it ends with an ellipsis, it's often an incomplete thought in our UX.
+    // Prefer completing the sentence.
+    if (/(\.\.\.|…)$/.test(s)) return true;
+
     // Clean terminal punctuation => not truncated.
-    if (/[.!?…]$/.test(s)) return false;
+    if (/[.!?]$/.test(s)) return false;
 
     // If it ends with a closing quote/bracket AND there's punctuation before it, accept.
     if (/[)\]}'"”»]$/.test(s) && /[.!?…][)\]}'"”»]$/.test(s)) return false;
+
+    // Trailing separators are a strong signal of truncation.
+    if (/[,:;\-]$/.test(s)) return true;
+
+    // Ending on a conjunction/connector is very likely cut.
+    if (/\b(e|o|ma|che|quindi|perche|perché|cosi|così|oppure)$/i.test(s)) return true;
 
     // If the last token is very short (e.g. "cre"), it's very likely cut.
     const lastToken = s.split(/\s+/).pop() || '';
@@ -439,6 +454,47 @@ class BernyBrainAPI {
     );
   }
 
+  // Meta-requests like "upselling" or "setup" are cross-cutting.
+  // If the user does NOT specify a product/category, we should ask a clarifying question
+  // instead of guessing a page (which often produces "testo giusto, link sbagliato").
+  isMetaGuidanceRequest(msgNorm) {
+    const m = String(msgNorm || '');
+    if (!m) return false;
+    return /\b(upsell|upselling|setup|set\s*-\s*up|set\s+up|apertura|opening|chiusura|closing|service|servizio)\b/i.test(m);
+  }
+
+  // Lightweight topic detection for meta-requests.
+  // Keep conservative: only true when we see explicit product/category signals.
+  hasExplicitTopicSignal(msgNorm) {
+    const m = String(msgNorm || '');
+    if (!m) return false;
+    return /\b(story\s*orbit|storia|firenze|origine|gelato|buontalenti|cono|coni|coppett|coppa|gusti|vetrina|caffe|caff[eè]|espresso|americano|cappuccino|chai|affogato|matcha|waffle|crepe|cr[eè]p|pancake|cakes|cake|torta|torte|fetta|slice|croissant|brownie|slitti|yo\s*-\s*yo|yoyo|churro|churros|panettone|pandoro|mulled|vin\s*brul|festive)\b/i.test(m);
+  }
+
+  buildClarificationForMetaGuidance(userMessage) {
+    const lang = this.getUiLang();
+    const base = String(userMessage || '').trim();
+
+    // Keep it short and actionable; no link until clarified.
+    const it =
+      `Posso aiutarti volentieri, ma mi serve un dettaglio: su quale linea/prodotto vuoi fare "${base}"?\n` +
+      `Esempi rapidi (scrivine uno): Gelato Lab (coni/coppette), Cakes (Pastry Lab), Crepe/Waffle (Sweet Treats), Bar & Drinks (caffè/matcha), Festive (churros/panettone), Slitti & Yo-Yo, oppure Operations (apertura/chiusura). [[NOLINK]]`;
+
+    const en =
+      `Happy to help—quick clarification: which product/category is your "${base}" about?\n` +
+      `Examples: Gelato Lab (cones/cups), Cakes (Pastry Lab), Crepe/Waffle (Sweet Treats), Bar & Drinks, Festive, Slitti & Yo-Yo, or Operations (opening/closing). [[NOLINK]]`;
+
+    const es =
+      `¡Claro! Solo una aclaración: ¿sobre qué producto/categoría es tu "${base}"?\n` +
+      `Ejemplos: Gelato Lab, Cakes (Pastry Lab), Crepe/Waffle (Sweet Treats), Bar & Drinks, Festive, Slitti & Yo-Yo, u Operations (apertura/cierre). [[NOLINK]]`;
+
+    const fr =
+      `Avec plaisir—petite précision: ton "${base}" concerne quel produit/catégorie ?\n` +
+      `Exemples : Gelato Lab, Cakes (Pastry Lab), Crêpe/Waffle (Sweet Treats), Bar & Drinks, Festive, Slitti & Yo-Yo, ou Operations (ouverture/fermeture). [[NOLINK]]`;
+
+    return ({ it, en, es, fr }[lang] || it);
+  }
+
   inferRecommendationFromMessage(userMessage) {
     const uiLang = this.getUiLang();
     const msgNorm = this.normalizeText(userMessage);
@@ -448,6 +504,8 @@ class BernyBrainAPI {
 
     // High-signal direct mappings (topic -> page?q)
     const topicCandidates = [
+      // Cakes / torta: route to Pastry Lab (avoid generic "upsell" sending users to Operations).
+      { href: 'pastries.html?q=cakes', keys: ['cakes', 'cake', 'torta', 'torte', 'fetta', 'slice'] },
       { href: 'gelato-lab.html?q=buontalenti', keys: ['buontalenti'] },
       { href: 'gelato-lab.html?q=coppa-gelato', keys: ['coppa badiani', 'coppa gelato', 'coppa'] },
       { href: 'gelato-lab.html?q=coni', keys: ['cono', 'coni', 'cone'] },
@@ -470,7 +528,8 @@ class BernyBrainAPI {
       { href: 'festive.html?q=mulled', keys: ['vin brule', 'vinbrule', 'mulled'] },
 
       { href: 'operations.html?q=apertura', keys: ['apertura', 'opening', 'open store'] },
-      { href: 'operations.html?q=servizio', keys: ['servizio', 'service', 'upsell', 'obiezione'] },
+      // NOTE: do NOT map generic "upsell/upselling" here; it must be anchored to a product.
+      { href: 'operations.html?q=servizio', keys: ['servizio', 'service', 'obiezione'] },
       { href: 'operations.html?q=chiusura', keys: ['chiusura', 'closing', 'close store'] },
       { href: 'operations.html?q=pulizia', keys: ['pulizia', 'cleaning', 'sanificazione', 'sanitize'] },
 
@@ -517,6 +576,8 @@ class BernyBrainAPI {
     };
 
     const topicCandidates = [
+      // Cakes / torta: route to Pastry Lab (avoid generic "servizio" matches hijacking the link).
+      { href: 'pastries.html?q=cakes', keys: ['cakes', 'cake', 'torta', 'torte', 'fetta', 'slice'] },
       { href: 'gelato-lab.html?q=buontalenti', keys: ['buontalenti'] },
       { href: 'gelato-lab.html?q=coppa-gelato', keys: ['coppa badiani', 'coppa gelato', 'coppa'] },
       { href: 'gelato-lab.html?q=coni', keys: ['cono', 'coni', 'cone'] },
@@ -539,7 +600,8 @@ class BernyBrainAPI {
       { href: 'festive.html?q=mulled', keys: ['vin brule', 'vinbrule', 'mulled'] },
 
       { href: 'operations.html?q=apertura', keys: ['apertura', 'opening', 'open store'] },
-      { href: 'operations.html?q=servizio', keys: ['servizio', 'service', 'upsell', 'obiezione'] },
+      // NOTE: do NOT map generic "upsell/upselling" here; it must be anchored to a product.
+      { href: 'operations.html?q=servizio', keys: ['servizio', 'service', 'obiezione'] },
       { href: 'operations.html?q=chiusura', keys: ['chiusura', 'closing', 'close store'] },
       { href: 'operations.html?q=pulizia', keys: ['pulizia', 'cleaning', 'sanificazione', 'sanitize'] },
 
@@ -555,6 +617,7 @@ class BernyBrainAPI {
     // - We first maximize userScore; only then use assistantScore as a tie-breaker.
     let best = null;
     let bestUserScore = 0;
+    let bestAssistantScore = 0;
     let bestTotalScore = 0;
     topicCandidates.forEach((cand) => {
       const keys = Array.isArray(cand.keys) ? cand.keys : [];
@@ -572,6 +635,7 @@ class BernyBrainAPI {
         (userScore === bestUserScore && totalScore > bestTotalScore)
       ) {
         bestUserScore = userScore;
+        bestAssistantScore = assistantScore;
         bestTotalScore = totalScore;
         best = cand;
       }
@@ -581,6 +645,18 @@ class BernyBrainAPI {
     // Otherwise, fallback to legacy inference.
     if (best && best.href && bestUserScore >= 3) {
       return { href: best.href, reason: 'keyword' };
+    }
+
+    // Special case: onboarding / generic questions where the user did not name a topic,
+    // but the assistant explicitly recommended Story Orbit.
+    // In that case, we WANT the link to follow the recommendation (and not be hijacked by
+    // generic words like "gelato" present in the explanation).
+    if (
+      bestUserScore === 0 &&
+      bestAssistantScore >= 2 &&
+      (hasIn(msgB, 'story orbit') || hasIn(msgB, 'story-orbit') || hasIn(msgB, 'storia'))
+    ) {
+      return { href: 'story-orbit.html?q=story', reason: 'assistant_explicit' };
     }
 
     // Fallback: keep legacy behavior.
@@ -860,6 +936,13 @@ class BernyBrainAPI {
     const msgNorm = this.normalizeText(userMessage);
     if (this.isSmallTalk(msgNorm)) {
       return this.buildSmallTalkResponse(reco);
+    }
+
+    // 1b2. Meta-guidance (upselling/setup/open/close/service): require an explicit topic.
+    // If missing, ask a clarifying question instead of guessing a page.
+    // (Keeps the generated link coherent and avoids "Pandoro" hijacks.)
+    if (this.isMetaGuidanceRequest(msgNorm) && !this.hasExplicitTopicSignal(msgNorm)) {
+      return this.buildClarificationForMetaGuidance(userMessage);
     }
 
     // 1c. If the question clearly matches a legacy KB entry, answer locally.
