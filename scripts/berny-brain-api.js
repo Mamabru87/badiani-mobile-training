@@ -307,24 +307,37 @@ class BernyBrainAPI {
       { href: 'story-orbit.html?q=story', keys: ['story orbit', 'firenze', 'origine', 'storia'] },
     ];
 
-    // Weighted scoring: user message is stronger than assistant message,
-    // but assistant text can override when the LLM clearly focused elsewhere.
+    // Scoring:
+    // - User intent must dominate. Many drinks (e.g. Americano) *contain* the word "espresso" in the explanation,
+    //   so we must not allow assistant-only matches (espresso/shot) to override an explicit user query.
+    // - We first maximize userScore; only then use assistantScore as a tie-breaker.
     let best = null;
-    let bestScore = 0;
+    let bestUserScore = 0;
+    let bestTotalScore = 0;
     topicCandidates.forEach((cand) => {
       const keys = Array.isArray(cand.keys) ? cand.keys : [];
-      let score = 0;
+      let userScore = 0;
+      let assistantScore = 0;
       keys.forEach((k) => {
-        if (hasIn(msgA, k)) score += 3;
-        if (hasIn(msgB, k)) score += 2;
+        if (hasIn(msgA, k)) userScore += 3;
+        if (hasIn(msgB, k)) assistantScore += 2;
       });
-      if (score > bestScore) {
-        bestScore = score;
+      const totalScore = userScore + assistantScore;
+
+      // Prefer higher userScore; then higher totalScore.
+      if (
+        userScore > bestUserScore ||
+        (userScore === bestUserScore && totalScore > bestTotalScore)
+      ) {
+        bestUserScore = userScore;
+        bestTotalScore = totalScore;
         best = cand;
       }
     });
 
-    if (best && best.href && bestScore >= 3) {
+    // Require at least one strong user hit (>=3) to attach a link from context.
+    // Otherwise, fallback to legacy inference.
+    if (best && best.href && bestUserScore >= 3) {
       return { href: best.href, reason: 'keyword' };
     }
 

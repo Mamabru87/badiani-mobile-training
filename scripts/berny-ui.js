@@ -52,6 +52,9 @@
       this.currentStreamingBubble = null;
       this.currentStreamingText = '';
 
+      // Track last user message so fallback link inference can use real intent.
+      this.lastUserMessage = '';
+
       this.init();
     }
 
@@ -128,6 +131,9 @@
     handleSend() {
       const message = sanitize(this.chatInput.value);
       if (!message) return;
+
+      // Keep the latest user intent for coherent link inference.
+      this.lastUserMessage = message;
 
       // Broadcast raw user message so other components can react (e.g. /apikey secret command).
       try {
@@ -454,10 +460,11 @@
         try {
           const brain = window.bernyBrain;
           if (brain && typeof brain.inferRecommendationFromContext === 'function') {
-            const reco = brain.inferRecommendationFromContext(text, '');
+            // Use last user message + assistant text to avoid "espresso" overriding e.g. "americano".
+            const reco = brain.inferRecommendationFromContext(this.lastUserMessage || '', cleanText || '');
             if (reco && reco.href) link = reco.href;
           } else if (brain && typeof brain.inferRecommendationFromMessage === 'function') {
-            const reco = brain.inferRecommendationFromMessage(text);
+            const reco = brain.inferRecommendationFromMessage(this.lastUserMessage || text);
             if (reco && reco.href) link = reco.href;
           }
         } catch {}
