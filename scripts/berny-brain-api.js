@@ -346,7 +346,9 @@ class BernyBrainAPI {
 
       { href: 'caffe.html?q=espresso', keys: ['espresso', 'shot', 'estrazione', 'portafiltro', 'grinder', 'tamper'] },
       { href: 'caffe.html?q=americano', keys: ['americano', 'caffe americano', 'caffè americano', 'american coffee'] },
-      { href: 'caffe.html?q=cappuccino', keys: ['cappuccino', 'milk', 'latte', 'steam', 'wand', 'microfoam'] },
+      // Be careful with generic keywords like "latte"/"milk": they would incorrectly match Chai Latte, Matcha Latte, Iced Latte, etc.
+      { href: 'caffe.html?q=chai-latte', keys: ['chai', 'chai latte', 'chai-latte'] },
+      { href: 'caffe.html?q=cappuccino', keys: ['cappuccino', 'microfoam', 'schiuma', 'schiuma fine', 'montare latte', 'latte art', 'steam', 'steam wand', 'lancia vapore', 'wand'] },
       { href: 'caffe.html?q=affogato', keys: ['affogato', 'dirty matcha'] },
 
       { href: 'sweet-treats.html?q=crepe', keys: ['crepe', 'crepes', 'crepe', 'crêpe', 'crêpes', 'crêpe', 'crêpes'] },
@@ -413,7 +415,9 @@ class BernyBrainAPI {
 
       { href: 'caffe.html?q=espresso', keys: ['espresso', 'shot', 'estrazione', 'portafiltro', 'grinder', 'tamper'] },
       { href: 'caffe.html?q=americano', keys: ['americano', 'caffe americano', 'caffè americano', 'american coffee'] },
-      { href: 'caffe.html?q=cappuccino', keys: ['cappuccino', 'milk', 'latte', 'steam', 'wand', 'microfoam'] },
+      // Avoid generic "latte"/"milk" triggers, otherwise any *Latte* drink could be routed to cappuccino.
+      { href: 'caffe.html?q=chai-latte', keys: ['chai', 'chai latte', 'chai-latte'] },
+      { href: 'caffe.html?q=cappuccino', keys: ['cappuccino', 'microfoam', 'schiuma', 'schiuma fine', 'montare latte', 'latte art', 'steam', 'steam wand', 'lancia vapore', 'wand'] },
       { href: 'caffe.html?q=affogato', keys: ['affogato', 'dirty matcha'] },
 
       { href: 'sweet-treats.html?q=crepe', keys: ['crepe', 'crepes', 'crêpe', 'crêpes', 'crêpe', 'crêpes'] },
