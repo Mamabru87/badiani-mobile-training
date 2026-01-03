@@ -391,6 +391,13 @@ class BernyBrainAPI {
           headers['x-berny-access-code'] = String(this.accessCode);
         }
 
+        // Optional: site-level verification token (phone OTP gate).
+        // Stored by scripts/site.js after successful verification.
+        try {
+          const authToken = String(localStorage.getItem('badianiAuth.token.v1') || '').trim();
+          if (authToken) headers['x-badiani-auth'] = authToken;
+        } catch {}
+
         const r = await fetch(endpoint, {
           method: 'POST',
           headers,

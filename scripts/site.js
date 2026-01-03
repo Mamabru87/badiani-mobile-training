@@ -751,6 +751,63 @@ document.addEventListener('badiani:profile-updated', (e) => {
 
 (function signupGate() {
 
+  // ============================================================
+  // PHONE VERIFICATION (device-level)
+  // - The real enforcement is server-side on the Worker (for Berny/proxy calls).
+  // - This client gate is for UX and blocks the app UI until verified.
+  // ============================================================
+  const AUTH_TOKEN_KEY = 'badianiAuth.token.v1';
+  const AUTH_VERIFIED_AT_KEY = 'badianiAuth.verifiedAt.v1';
+
+  const getAuthToken = () => {
+    try { return String(localStorage.getItem(AUTH_TOKEN_KEY) || '').trim(); } catch { return ''; }
+  };
+
+  const decodeTokenPayload = (token) => {
+    try {
+      const t = String(token || '').trim();
+      const part = t.split('.')[0] || '';
+      if (!part) return null;
+      const b64 = part.replace(/-/g, '+').replace(/_/g, '/').padEnd(Math.ceil(part.length / 4) * 4, '=');
+      const json = atob(b64);
+      return JSON.parse(json);
+    } catch {
+      return null;
+    }
+  };
+
+  const isVerified = () => {
+    const token = getAuthToken();
+    if (!token) return false;
+    const payload = decodeTokenPayload(token);
+    const exp = payload?.exp;
+    if (typeof exp !== 'number' || !Number.isFinite(exp)) return false;
+    return (exp * 1000) > Date.now();
+  };
+
+  const getAuthBase = () => {
+    // Prefer explicit endpoint.
+    try {
+      const explicit = String(window.BADIANI_AUTH_ENDPOINT || '').trim();
+      if (explicit) return explicit.replace(/\/+$/g, '');
+    } catch {}
+
+    // Derive from proxy endpoint.
+    let endpoint = '';
+    try {
+      const w = (typeof window !== 'undefined') ? window : null;
+      endpoint = w ? String(w.BERNY_PROXY_ENDPOINT || w.__BERNY_PROXY_ENDPOINT__ || '').trim() : '';
+    } catch {}
+    if (!endpoint) {
+      try {
+        const cfg = JSON.parse(localStorage.getItem('badianiBerny.config.v1') || 'null');
+        endpoint = (cfg && typeof cfg === 'object') ? String(cfg.proxyEndpoint || '').trim() : '';
+      } catch {}
+    }
+    if (!endpoint) return '';
+    return endpoint.replace(/\/?berny\/?$/i, '').replace(/\/+$/g, '');
+  };
+
   const getProfiles = () => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY_PROFILES);
@@ -843,13 +900,35 @@ document.addEventListener('badiani:profile-updated', (e) => {
     card.className = 'signup-card';
     card.style.cssText = `width: min(92vw, 480px); background: #fff; border-radius: 16px; box-shadow: 0 16px 44px rgba(15,33,84,0.18); padding: 24px; color: var(--ink, #0f2154);`;
 
+    const verifiedNow = isVerified();
+
     card.innerHTML = `
       <h2 id="signup-title" style="margin:0 0 16px 0; font-size:24px; font-family: var(--font-medium);">Badiani Training</h2>
       <div style="display:flex; gap:12px; margin-bottom:16px;">
-        <button type="button" data-tab="signup" class="tab-btn is-active" style="flex:1; padding:10px; border-radius:10px; border:2px solid #214098; background:#214098; color:#fff; font-weight:600; cursor:pointer;">${tr('profile.gate.signup', null, 'Iscrizione')}</button>
-        <button type="button" data-tab="login" class="tab-btn" style="flex:1; padding:10px; border-radius:10px; border:2px solid #d1d5db; background:transparent; color:#0f2154; font-weight:600; cursor:pointer;">${tr('profile.gate.login', null, 'Accedi')}</button>
+        <button type="button" data-tab="verify" class="tab-btn ${verifiedNow ? '' : 'is-active'}" style="flex:1; padding:10px; border-radius:10px; border:2px solid ${verifiedNow ? '#d1d5db' : '#214098'}; background:${verifiedNow ? 'transparent' : '#214098'}; color:${verifiedNow ? '#0f2154' : '#fff'}; font-weight:600; cursor:pointer;">${tr('auth.verify.tab', null, 'Verifica')}</button>
+        <button type="button" data-tab="signup" class="tab-btn ${verifiedNow ? 'is-active' : ''}" ${verifiedNow ? '' : 'disabled'} style="flex:1; padding:10px; border-radius:10px; border:2px solid ${verifiedNow ? '#214098' : '#d1d5db'}; background:${verifiedNow ? '#214098' : '#f3f4f6'}; color:${verifiedNow ? '#fff' : '#9ca3af'}; font-weight:600; cursor:${verifiedNow ? 'pointer' : 'not-allowed'};">${tr('profile.gate.signup', null, 'Iscrizione')}</button>
+        <button type="button" data-tab="login" class="tab-btn" ${verifiedNow ? '' : 'disabled'} style="flex:1; padding:10px; border-radius:10px; border:2px solid #d1d5db; background:${verifiedNow ? 'transparent' : '#f3f4f6'}; color:${verifiedNow ? '#0f2154' : '#9ca3af'}; font-weight:600; cursor:${verifiedNow ? 'pointer' : 'not-allowed'};">${tr('profile.gate.login', null, 'Accedi')}</button>
       </div>
-      <div data-panel="signup" style="display:block;">
+      <div data-panel="verify" style="display:${verifiedNow ? 'none' : 'block'};">
+        <p style="margin:0 0 16px 0; color: var(--brand-gray-soft, #6b7280);">${tr('auth.verify.lede', null, 'Inserisci il tuo numero di cellulare. Se risulti nel registro Badiani, riceverai un codice SMS per sbloccare l\'accesso.')}</p>
+
+        <div style="display:grid; gap:10px;">
+          <label style="display:block; font-weight:600; margin-bottom:6px;">${tr('auth.verify.phoneLabel', null, 'Numero di cellulare')}</label>
+          <input type="tel" data-input="phone" placeholder="${tr('auth.verify.phonePh', null, 'Es. +39 333 123 4567')}" style="width:100%; padding:12px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:16px;" />
+
+          <button type="button" data-action="send-otp" style="padding:10px 14px; border-radius:10px; background:#214098; color:#fff; border:none; font-weight:600; cursor:pointer;">${tr('auth.verify.sendBtn', null, 'Invia codice SMS')}</button>
+
+          <label style="display:block; font-weight:600; margin:8px 0 6px;">${tr('auth.verify.codeLabel', null, 'Codice (5 cifre)')}</label>
+          <input type="text" inputmode="numeric" maxlength="5" data-input="otp" placeholder="${tr('auth.verify.codePh', null, 'Es. 12345')}" style="width:100%; padding:12px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:16px;" />
+
+          <p data-error-verify style="margin:0; color:#b91c1c; display:none; font-size:14px;"></p>
+          <p data-info-verify style="margin:0; color:#1f2937; display:none; font-size:14px;"></p>
+
+          <button type="button" data-action="verify-otp" style="padding:10px 14px; border-radius:10px; background:#0f2154; color:#fff; border:none; font-weight:600; cursor:pointer;">${tr('auth.verify.confirmBtn', null, 'Conferma e continua')}</button>
+        </div>
+      </div>
+
+      <div data-panel="signup" style="display:${verifiedNow ? 'block' : 'none'};">
         <p style="margin:0 0 16px 0; color: var(--brand-gray-soft, #6b7280);">${tr('profile.gate.signupLead', null, 'Crea un nuovo profilo con il tuo nickname e gusto di gelato preferito.')}</p>
         <form data-form="signup" novalidate>
           <label style="display:block; font-weight:600; margin-bottom:6px;">${tr('profile.gate.nickname', null, 'Nickname')}</label>
@@ -879,7 +958,43 @@ document.addEventListener('badiani:profile-updated', (e) => {
     const signupForm = card.querySelector('[data-form="signup"]');
     const loginForm = card.querySelector('[data-form="login"]');
 
+    const verifyPanel = card.querySelector('[data-panel="verify"]');
+    const phoneInput = verifyPanel?.querySelector('[data-input="phone"]');
+    const otpInput = verifyPanel?.querySelector('[data-input="otp"]');
+    const sendOtpBtn = verifyPanel?.querySelector('[data-action="send-otp"]');
+    const verifyOtpBtn = verifyPanel?.querySelector('[data-action="verify-otp"]');
+    const verifyErr = verifyPanel?.querySelector('[data-error-verify]');
+    const verifyInfo = verifyPanel?.querySelector('[data-info-verify]');
+
+    const setVerifyMessage = (kind, text) => {
+      if (verifyErr) verifyErr.style.display = 'none';
+      if (verifyInfo) verifyInfo.style.display = 'none';
+      const el = kind === 'error' ? verifyErr : verifyInfo;
+      if (!el) return;
+      el.textContent = String(text || '');
+      el.style.display = 'block';
+    };
+
+    const updateTabsEnabled = () => {
+      const ok = isVerified();
+      tabBtns.forEach((btn) => {
+        if (!btn?.dataset?.tab) return;
+        if (btn.dataset.tab === 'verify') return;
+        btn.disabled = !ok;
+        if (!ok) {
+          btn.style.cursor = 'not-allowed';
+          btn.style.color = '#9ca3af';
+          btn.style.background = '#f3f4f6';
+          btn.style.borderColor = '#d1d5db';
+        }
+      });
+    };
+
     const switchTab = (targetTab) => {
+      if (targetTab !== 'verify' && !isVerified()) {
+        setVerifyMessage('error', tr('auth.verify.required', null, 'Prima devi verificare il numero di telefono.'));
+        targetTab = 'verify';
+      }
       tabBtns.forEach(btn => {
         const isActive = btn.dataset.tab === targetTab;
         btn.classList.toggle('is-active', isActive);
@@ -888,8 +1003,14 @@ document.addEventListener('badiani:profile-updated', (e) => {
       panels.forEach(p => {
         p.style.display = (p.dataset.panel === targetTab) ? 'block' : 'none';
       });
+
+      if (targetTab === 'verify') {
+        phoneInput?.focus?.({ preventScroll: true });
+        return;
+      }
+
       const focusInput = card.querySelector(`[data-form="${targetTab}"] [data-input="nickname"]`);
-      if (focusInput) focusInput.focus();
+      if (focusInput) focusInput.focus({ preventScroll: true });
     };
 
     tabBtns.forEach(btn => {
@@ -898,6 +1019,111 @@ document.addEventListener('badiani:profile-updated', (e) => {
         switchTab(btn.dataset.tab);
       });
     });
+
+    // Verification handlers
+    if (phoneInput) {
+      phoneInput.addEventListener('input', () => {
+        if (verifyErr) verifyErr.style.display = 'none';
+        if (verifyInfo) verifyInfo.style.display = 'none';
+      });
+    }
+    if (otpInput) {
+      otpInput.addEventListener('input', () => {
+        if (verifyErr) verifyErr.style.display = 'none';
+        if (verifyInfo) verifyInfo.style.display = 'none';
+      });
+    }
+
+    const requestOtp = async () => {
+      const base = getAuthBase();
+      if (!base) {
+        setVerifyMessage('error', 'Config mancante: endpoint di verifica non disponibile.');
+        return;
+      }
+      const phone = String(phoneInput?.value || '').trim();
+      if (phone.length < 8) {
+        setVerifyMessage('error', tr('auth.verify.phoneInvalid', null, 'Inserisci un numero valido.'));
+        return;
+      }
+      if (sendOtpBtn) sendOtpBtn.disabled = true;
+      try {
+        const r = await fetch(`${base}/auth/request`, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ phone }),
+        });
+        if (r.status === 404) {
+          setVerifyMessage('error', tr('auth.verify.notInRegistry', null, 'Numero non trovato nel registro Badiani.'));
+          return;
+        }
+        if (!r.ok) {
+          const t = await r.text().catch(() => '');
+          setVerifyMessage('error', `Errore verifica (${r.status}): ${t}`);
+          return;
+        }
+        setVerifyMessage('info', tr('auth.verify.sent', null, 'Codice inviato via SMS. Inseriscilo qui sotto.'));
+        otpInput?.focus?.({ preventScroll: true });
+      } catch (e) {
+        setVerifyMessage('error', `Errore rete: ${String(e?.message || e)}`);
+      } finally {
+        if (sendOtpBtn) sendOtpBtn.disabled = false;
+      }
+    };
+
+    const confirmOtp = async () => {
+      const base = getAuthBase();
+      if (!base) {
+        setVerifyMessage('error', 'Config mancante: endpoint di verifica non disponibile.');
+        return;
+      }
+      const phone = String(phoneInput?.value || '').trim();
+      const code = String(otpInput?.value || '').trim();
+      if (code.length !== 5) {
+        setVerifyMessage('error', tr('auth.verify.codeInvalid', null, 'Inserisci un codice di 5 cifre.'));
+        return;
+      }
+
+      if (verifyOtpBtn) verifyOtpBtn.disabled = true;
+      try {
+        const r = await fetch(`${base}/auth/verify`, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ phone, code }),
+        });
+        if (r.status === 401) {
+          setVerifyMessage('error', tr('auth.verify.wrong', null, 'Codice non valido o scaduto.'));
+          return;
+        }
+        if (r.status === 404) {
+          setVerifyMessage('error', tr('auth.verify.notInRegistry', null, 'Numero non trovato nel registro Badiani.'));
+          return;
+        }
+        if (!r.ok) {
+          const t = await r.text().catch(() => '');
+          setVerifyMessage('error', `Errore verifica (${r.status}): ${t}`);
+          return;
+        }
+        const data = await r.json().catch(() => null);
+        const token = String(data?.token || '').trim();
+        if (!token) {
+          setVerifyMessage('error', 'Risposta inattesa dal server (token mancante).');
+          return;
+        }
+        localStorage.setItem(AUTH_TOKEN_KEY, token);
+        localStorage.setItem(AUTH_VERIFIED_AT_KEY, String(Date.now()));
+        setVerifyMessage('info', tr('auth.verify.ok', null, 'Verifica completata. Ora puoi accedere.'));
+
+        updateTabsEnabled();
+        switchTab('signup');
+      } catch (e) {
+        setVerifyMessage('error', `Errore rete: ${String(e?.message || e)}`);
+      } finally {
+        if (verifyOtpBtn) verifyOtpBtn.disabled = false;
+      }
+    };
+
+    if (sendOtpBtn) sendOtpBtn.addEventListener('click', (e) => { e.preventDefault(); requestOtp(); });
+    if (verifyOtpBtn) verifyOtpBtn.addEventListener('click', (e) => { e.preventDefault(); confirmOtp(); });
 
     if (signupForm) {
       const submitBtn = signupForm.querySelector('button[type="submit"]');
@@ -1021,12 +1247,19 @@ document.addEventListener('badiani:profile-updated', (e) => {
 
     overlay.appendChild(card);
     document.body.appendChild(overlay);
-    signupForm.querySelector('[data-input="nickname"]')?.focus({ preventScroll: true });
+
+    updateTabsEnabled();
+    if (!isVerified()) {
+      switchTab('verify');
+    } else {
+      signupForm?.querySelector?.('[data-input="nickname"]')?.focus?.({ preventScroll: true });
+    }
   };
 
   const init = () => {
     const user = getUser();
-    if (!user) {
+    const verified = isVerified();
+    if (!verified || !user) {
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', showGate);
       } else {
