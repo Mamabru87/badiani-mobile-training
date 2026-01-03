@@ -59,10 +59,6 @@ class BernyBrainAPI {
 
     // Recommendation state (to avoid always suggesting the same card)
     this.RECO_STORAGE_KEY = 'badianiBerny.lastRecommendation.v1';
-
-    // Conversation memory (to keep multi-turn coherence + delayed suggestions)
-    this.CONV_STORAGE_KEY = 'badianiBerny.conversationState.v1';
-    this.MAX_HISTORY_TURNS = 8; // bounded to keep proxy payload small
     
     // QUIZ STATE
     this.quizState = { active: false, lang: 'it', questions: [], index: 0, correct: 0 };
@@ -143,246 +139,6 @@ class BernyBrainAPI {
   }
 
   // ------------------------------
-  // Search catalog integration (auto-indexed by scripts/site.js)
-  // - site.js extracts all .guide-card titles on each content page and stores them in:
-  //   localStorage key: badianiSearchCatalog.v2
-  // - We can use that catalog here to deep-link to ANY card via:
-  //   <page>.html?card=<slug>&center=1
-  // ------------------------------
-  slugify(value = '') {
-    return (value || '')
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/gi, '-')
-      .replace(/^-+|-+$/g, '') || '';
-  }
-
-  loadSearchCatalogPages() {
-    try {
-      const rawV2 = localStorage.getItem('badianiSearchCatalog.v2');
-      const rawV1 = localStorage.getItem('badianiSearchCatalog.v1');
-      const raw = rawV2 || rawV1;
-      if (!raw) return {};
-      const parsed = JSON.parse(raw);
-      if (!parsed || typeof parsed !== 'object') return {};
-      return (parsed.pages && typeof parsed.pages === 'object') ? parsed.pages : {};
-    } catch {
-      return {};
-    }
-  }
-
-  // ------------------------------
-  // i18n title integration
-  // If a user types the card title in EN/ES/FR (or IT), map it deterministically
-  // to the canonical deep-link slug (based on the Italian title).
-  // This makes "find the right card" work across languages without hardcoding.
-  // ------------------------------
-  buildI18nTitleIndex() {
-    if (this._i18nTitleIndex) return this._i18nTitleIndex;
-    const dict = window.BadianiI18n?.dict;
-    if (!dict || typeof dict !== 'object') return null;
-
-    const pagesByPrefix = {
-      operations: 'operations.html',
-      gelatoLab: 'gelato-lab.html',
-      caffe: 'caffe.html',
-      sweetTreats: 'sweet-treats.html',
-      pastries: 'pastries.html',
-      festive: 'festive.html',
-      slittiYoyo: 'slitti-yoyo.html',
-      storyOrbit: 'story-orbit.html',
-    };
-
-    const keys = Object.keys(dict?.it || {});
-    const rx = /^(operations|gelatoLab|caffe|sweetTreats|pastries|festive|slittiYoyo|storyOrbit)\.(cards|ops)\.[^.]+\.title$/;
-    const langs = ['it', 'en', 'es', 'fr'];
-    const index = [];
-
-    for (const k of keys) {
-      if (!rx.test(k)) continue;
-      const prefix = k.split('.')[0];
-      const pageHref = pagesByPrefix[prefix];
-      if (!pageHref) continue;
-
-      const itTitle = dict?.it?.[k];
-      if (!itTitle) continue;
-      const cardSlug = this.slugify(String(itTitle));
-      if (!cardSlug) continue;
-
-      for (const lang of langs) {
-        const title = dict?.[lang]?.[k];
-        if (!title) continue;
-        const titleNorm = this.normalizeText(String(title));
-        if (!titleNorm) continue;
-        index.push({ key: k, pageHref, cardSlug, titleNorm, titleRaw: String(title) });
-      }
-    }
-
-    // Cache on the instance.
-    this._i18nTitleIndex = index;
-    return index;
-  }
-
-  inferRecommendationFromI18nTitles(userMessage) {
-    const msgNorm = this.normalizeText(userMessage);
-    if (!msgNorm) return null;
-
-    const index = this.buildI18nTitleIndex();
-    if (!Array.isArray(index) || !index.length) return null;
-
-    const stop = new Set(['della','delle','degli','dello','dell','d','del','dei','di','da','a','al','allo','alla','alle','ai','il','lo','la','i','gli','le','un','uno','una','and','or','the','of','to','in','on','for']);
-    const hasWord = (needle) => {
-      const n = String(needle || '').trim();
-      if (!n) return false;
-      const esc = n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      try { return new RegExp(`\\b${esc}\\b`, 'i').test(msgNorm); } catch { return false; }
-    };
-
-    let best = null;
-    let bestScore = 0;
-
-    for (const entry of index) {
-      const t = entry?.titleNorm || '';
-      if (!t || t.length < 3) continue;
-
-      let score = 0;
-      // 1) Exact match or full substring (high confidence)
-      if (msgNorm === t) {
-        score += 15;
-      } else if (msgNorm.includes(t)) {
-        score += 12;
-      } else if (t.includes(msgNorm) && msgNorm.length >= 4) {
-        score += 10;
-      }
-
-      // 2) Token matching (word boundaries)
-      const tokens = t.split(' ').filter(tok => tok.length >= 3 && !stop.has(tok));
-      let hits = 0;
-      for (const tok of tokens) {
-        if (hasWord(tok) || (msgNorm.length >= 4 && tok.includes(msgNorm)) || (tok.length >= 4 && msgNorm.includes(tok))) {
-          hits++;
-          score += 4;
-        }
-      }
-
-      // 3) Bonus for matching more tokens
-      if (hits > 0 && hits === tokens.length) {
-        score += 5;
-      }
-
-      // 4) If user message is exactly one of the tokens (e.g. "Panettone")
-      if (tokens.length > 1 && tokens.some(tok => tok === msgNorm)) {
-        score += 8;
-      }
-
-      if (score > bestScore) {
-        bestScore = score;
-        best = entry;
-      }
-    }
-
-    if (!best || bestScore < 8) return null;
-    const href = `${best.pageHref}?card=${encodeURIComponent(best.cardSlug)}&center=1`;
-    return { href, reason: 'i18n-title', label: best.titleRaw };
-  }
-
-  inferRecommendationFromCatalog(userMessage) {
-    const msgNorm = this.normalizeText(userMessage);
-    if (!msgNorm) return null;
-
-    // Avoid matching ultra-short chatter.
-    const words = msgNorm.split(' ').filter(Boolean);
-    const hasSignalWord = words.some(w => String(w).length >= 4);
-    if (!hasSignalWord) return null;
-
-    const pages = this.loadSearchCatalogPages();
-    const pageKeys = Object.keys(pages || {});
-    if (!pageKeys.length) return null;
-
-    const stop = new Set(['della','delle','degli','dello','dell','d','del','dei','di','da','a','al','allo','alla','alle','ai','il','lo','la','i','gli','le','un','uno','una','and','or','the','of','to','in','on','for']);
-    const hasWord = (needle) => {
-      const n = String(needle || '').trim();
-      if (!n) return false;
-      // word-boundary match, but escape hyphens etc.
-      const esc = n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      try { return new RegExp(`\\b${esc}\\b`, 'i').test(msgNorm); } catch { return false; }
-    };
-
-    // Support short queries like "pandoro" / "panettone" / "chiusura":
-    // allow a single meaningful word to match a multi-word title (e.g. "Pandoro Classico").
-    const meaningfulWords = words.filter((w) => String(w || '').length >= 4 && !stop.has(String(w)));
-    const singleQueryWord = (meaningfulWords.length === 1) ? meaningfulWords[0] : '';
-
-    let best = null;
-    let bestScore = 0;
-
-    for (const pageKey of pageKeys) {
-      const page = pages[pageKey];
-      const cards = Array.isArray(page?.cards) ? page.cards : [];
-      for (const card of cards) {
-        const title = String(card?.title || '').trim();
-        const cardKey = String(card?.cardKey || this.slugify(title) || '').trim();
-        if (!title || !cardKey) continue;
-
-        const titleNorm = this.normalizeText(title);
-        if (!titleNorm) continue;
-
-        // Highest confidence: full title substring.
-        let score = 0;
-        if (msgNorm.includes(titleNorm)) {
-          score += 12;
-        }
-
-        // Token confidence: word-boundary matches for meaningful tokens.
-        const tokens = titleNorm.split(' ').map(t => t.trim()).filter(t => t.length >= 4 && !stop.has(t));
-        let tokenHits = 0;
-        for (const t of tokens) {
-          if (hasWord(t)) {
-            tokenHits += 1;
-            score += 3;
-          }
-        }
-
-        // Single-word titles like "Cakes" need to be easy to hit.
-        if (!score && tokens.length === 1 && hasWord(tokens[0])) {
-          score = 8;
-        }
-
-        // Single-word queries should be able to match multi-word titles when the title starts
-        // with that word (e.g. "pandoro" -> "Pandoro Classico").
-        if (!score && singleQueryWord && hasWord(singleQueryWord)) {
-          if (titleNorm === singleQueryWord) {
-            score = 10;
-          } else if (titleNorm.startsWith(`${singleQueryWord} `)) {
-            score = 10;
-          } else if (titleNorm.includes(` ${singleQueryWord} `) || titleNorm.endsWith(` ${singleQueryWord}`) || titleNorm.startsWith(`${singleQueryWord} `)) {
-            score = Math.max(score, 8);
-          }
-        }
-
-        // If the user mentions the slug itself, accept it.
-        if (!score && cardKey && msgNorm.includes(cardKey.replace(/-/g, ' '))) {
-          score = 7;
-        }
-
-        // Guard: avoid accidental matches on generic shared words (e.g. "standard")
-        if (tokenHits === 1 && tokens.length >= 3 && score < 9) {
-          score = Math.max(0, score - 2);
-        }
-
-        if (score > bestScore) {
-          bestScore = score;
-          best = { pageKey, title, cardKey };
-        }
-      }
-    }
-
-    // Threshold: avoid wrong links.
-    if (!best || bestScore < 8) return null;
-    const href = `${best.pageKey}?card=${encodeURIComponent(best.cardKey)}&center=1`;
-    return { href, reason: 'catalog', label: best.title };
-  }
-
-  // ------------------------------
   // Recommendation helpers
   // ------------------------------
   getUiLang() {
@@ -426,158 +182,6 @@ class BernyBrainAPI {
     } catch {}
   }
 
-  // ------------------------------
-  // Conversation state (multi-turn)
-  // ------------------------------
-  loadConversationState() {
-    try {
-      const raw = localStorage.getItem(this.CONV_STORAGE_KEY);
-      const data = raw ? JSON.parse(raw) : null;
-      if (data && typeof data === 'object') return data;
-    } catch {}
-    return {
-      turn: 0,
-      genericTurns: 0,
-      activeTopicHref: '',
-      activeTopicLabel: '',
-      lastSuggestedTurn: 0,
-      topicScores: {},
-    };
-  }
-
-  saveConversationState(state) {
-    try {
-      localStorage.setItem(this.CONV_STORAGE_KEY, JSON.stringify(state || {}));
-    } catch {}
-  }
-
-  bumpTopicScore(state, topicKey, inc = 1) {
-    if (!state || !topicKey) return;
-    const key = String(topicKey);
-    const next = (state.topicScores && typeof state.topicScores === 'object') ? state.topicScores : {};
-    next[key] = (Number(next[key]) || 0) + (Number(inc) || 0);
-    state.topicScores = next;
-  }
-
-  updateTopicScoresFromText(state, text) {
-    if (!state) return;
-    const msgNorm = this.normalizeText(text);
-    if (!msgNorm) return;
-    const has = (...needles) => needles.some(n => msgNorm.includes(this.normalizeText(n)));
-    const hasWord = (re) => {
-      try { return re.test(msgNorm); } catch { return false; }
-    };
-
-    // Operations
-    if (has('apertura', 'opening', 'open store')) this.bumpTopicScore(state, 'operations.apertura', 2);
-    if (has('chiusura', 'closing', 'close store')) this.bumpTopicScore(state, 'operations.chiusura', 2);
-    if (has('pulizia', 'cleaning', 'sanificazione', 'sanitize')) this.bumpTopicScore(state, 'operations.pulizia', 2);
-    if (has('servizio', 'service', 'upsell', 'obiezione', 'cliente')) this.bumpTopicScore(state, 'operations.servizio', 2);
-
-    // Coffee
-    if (has('espresso', 'grinder', 'tamper', 'portafiltro', 'estrazione')) this.bumpTopicScore(state, 'caffe.espresso', 2);
-    if (has('cappuccino', 'latte', 'steam', 'wand', 'microfoam', 'flat white')) this.bumpTopicScore(state, 'caffe.milk', 2);
-    if (has('affogato', 'dirty matcha')) this.bumpTopicScore(state, 'caffe.affogato', 2);
-    if (has('smoothie', 'smoothies', 'frullato', 'frullati', 'blender')) this.bumpTopicScore(state, 'caffe.smoothies', 2);
-
-    // Treats
-    if (has('waffle')) this.bumpTopicScore(state, 'treats.waffle', 2);
-    if (has('crepe', 'crêpe', 'crepes')) this.bumpTopicScore(state, 'treats.crepe', 2);
-    if (has('pancake')) this.bumpTopicScore(state, 'treats.pancake', 2);
-
-    // Pastry Lab (IMPORTANT: use word boundaries to avoid matching "pancake" -> "cake")
-    if (hasWord(/\b(cake|cakes|torta|torte)\b/)) this.bumpTopicScore(state, 'pastries.cakes', 2);
-
-    // Festive
-    if (has('churro', 'churros')) this.bumpTopicScore(state, 'festive.churro', 2);
-    // IMPORTANT: keep panettone and pandoro separated to avoid mis-linking.
-    if (has('panettone')) this.bumpTopicScore(state, 'festive.panettone', 2);
-    if (has('pandoro')) this.bumpTopicScore(state, 'festive.pandoro', 2);
-    if (has('vin brule', 'mulled')) this.bumpTopicScore(state, 'festive.mulled', 2);
-
-    // Gelato
-    if (has('buontalenti')) this.bumpTopicScore(state, 'gelato.buontalenti', 2);
-    if (has('cono', 'coni', 'cone')) this.bumpTopicScore(state, 'gelato.coni', 2);
-    if (has('gusti', 'flavour', 'flavors', 'parfums', 'sabores')) this.bumpTopicScore(state, 'gelato.gusti', 2);
-    if (has('vetrina', 'display', 'vitrine', '-14', '-15')) this.bumpTopicScore(state, 'gelato.vetrina', 2);
-
-    // Other
-    if (has('slitti', 'yoyo', 'yo-yo')) this.bumpTopicScore(state, 'slitti', 2);
-    if (has('storia', 'story orbit', 'firenze', 'origine')) this.bumpTopicScore(state, 'story', 2);
-
-    // IMPORTANT: avoid scoring generic word "box" unless explicitly about take-away.
-    if (has('gelato box', 'gelato boxes', 'take me home', 'take away', 'asporto')) {
-      this.bumpTopicScore(state, 'gelato.boxes', 2);
-    }
-  }
-
-  topicKeyToReco(topicKey) {
-    const key = String(topicKey || '');
-    const hrefMap = {
-      'operations.apertura': 'operations.html?q=apertura',
-      'operations.chiusura': 'operations.html?q=chiusura',
-      'operations.pulizia': 'operations.html?q=pulizia',
-      'operations.servizio': 'operations.html?q=servizio',
-      'caffe.espresso': 'caffe.html?q=espresso',
-      'caffe.milk': 'caffe.html?q=cappuccino',
-      'caffe.affogato': 'caffe.html?q=affogato',
-      'caffe.smoothies': 'caffe.html?q=smoothie',
-      'treats.waffle': 'sweet-treats.html?q=waffle',
-      'treats.crepe': 'sweet-treats.html?q=crepe',
-      'treats.pancake': 'sweet-treats.html?q=pancake',
-      'festive.churro': 'festive.html?q=churro',
-      'festive.panettone': 'festive.html?card=panettone-classico&center=1',
-      'festive.pandoro': 'festive.html?card=pandoro-classico&center=1',
-      'festive.mulled': 'festive.html?q=mulled',
-      'gelato.buontalenti': 'gelato-lab.html?q=buontalenti',
-      'gelato.coni': 'gelato-lab.html?q=coni',
-      'gelato.gusti': 'gelato-lab.html?q=gusti',
-      'gelato.vetrina': 'gelato-lab.html?q=vetrina',
-      'gelato.boxes': 'gelato-lab.html?card=gelato-boxes&center=1',
-      'pastries.cakes': 'pastries.html?q=cakes',
-      'slitti': 'slitti-yoyo.html?q=slitti',
-      'story': 'story-orbit.html?q=story',
-    };
-    const href = hrefMap[key] || '';
-    if (!href) return null;
-    return { href, reason: 'conversation' };
-  }
-
-  pickTopTopicReco(state) {
-    const scores = (state && state.topicScores && typeof state.topicScores === 'object') ? state.topicScores : {};
-    const entries = Object.entries(scores)
-      .filter(([, v]) => Number(v) > 0)
-      .sort((a, b) => (Number(b[1]) || 0) - (Number(a[1]) || 0));
-    if (!entries.length) return null;
-    return this.topicKeyToReco(entries[0][0]);
-  }
-
-  isFollowUp(msgNorm) {
-    const m = String(msgNorm || '');
-    if (!m) return false;
-    return /\b(ok|capito|chiaro|perfetto|quindi|allora|ancora|e\s+poi)\b/.test(m) || m.length <= 14;
-  }
-
-  shouldSuggestNow(state, explicitReco) {
-    if (!state) return false;
-    const turn = Number(state.turn) || 0;
-    const last = Number(state.lastSuggestedTurn) || 0;
-
-    // Explicit request: suggest immediately (but avoid double-CTA in the same turn)
-    if (explicitReco && explicitReco.href) {
-      return (turn - last) >= 1;
-    }
-
-    // Active topic: re-suggest occasionally, not every message
-    if (state.activeTopicHref) {
-      return (turn - last) >= 3;
-    }
-
-    // Generic chat: suggest after 3 turns
-    if ((Number(state.genericTurns) || 0) >= 3) return true;
-    return false;
-  }
-
   pickDifferent(options, lastHref) {
     const list = Array.isArray(options) ? options.filter(Boolean) : [];
     if (!list.length) return null;
@@ -606,39 +210,8 @@ class BernyBrainAPI {
 
     const has = (...needles) => needles.some(n => msgNorm.includes(this.normalizeText(n)));
 
-    // 0) If the user typed a card title in their language, link deterministically.
-    const i18nReco = this.inferRecommendationFromI18nTitles(userMessage);
-    if (i18nReco && i18nReco.href) {
-      return i18nReco;
-    }
-
-    // 1) Try the auto-indexed search catalog first (covers ALL cards across pages once indexed)
-    const catalogReco = this.inferRecommendationFromCatalog(userMessage);
-    if (catalogReco && catalogReco.href) {
-      return catalogReco;
-    }
-
-    // Pastry Lab: cakes/torte (avoid false positive on "pancake")
-    if (/\b(cake|cakes|torta|torte)\b/.test(msgNorm)) {
-      return { href: 'pastries.html?q=cakes', reason: 'keyword' };
-    }
-
-    // Festive: keep pandoro and panettone separated (avoid pandoro -> panettone).
-    if (/\bpandoro\b/.test(msgNorm)) {
-      return { href: 'festive.html?card=pandoro-classico&center=1', reason: 'keyword' };
-    }
-    if (/\bpanettone\b/.test(msgNorm)) {
-      return { href: 'festive.html?card=panettone-classico&center=1', reason: 'keyword' };
-    }
-
     // High-signal direct mappings (topic -> page?q)
     const topicCandidates = [
-      { href: 'caffe.html?q=smoothie-giallo-passion', keys: ['smoothie giallo', 'giallo passion'] },
-      { href: 'caffe.html?q=smoothie-rosso-berry', keys: ['smoothie rosso', 'rosso berry'] },
-      { href: 'caffe.html?q=smoothie-verde-boost', keys: ['smoothie verde', 'verde boost'] },
-      { href: 'caffe.html?q=smoothies-parametri-di-produzione', keys: ['parametri smoothies', 'smoothies: parametri', 'smoothie standard'] },
-      { href: 'caffe.html?q=smoothie', keys: ['smoothie', 'smoothies', 'frullato', 'frullati'] },
-
       { href: 'gelato-lab.html?q=buontalenti', keys: ['buontalenti'] },
       { href: 'gelato-lab.html?q=coni', keys: ['cono', 'coni', 'cone'] },
       { href: 'gelato-lab.html?q=gusti', keys: ['gusti', 'flavour', 'flavors', 'parfums', 'sabores'] },
@@ -653,8 +226,7 @@ class BernyBrainAPI {
       { href: 'sweet-treats.html?q=pancake', keys: ['pancake'] },
 
       { href: 'festive.html?q=churro', keys: ['churro', 'churros'] },
-      { href: 'festive.html?card=panettone-classico&center=1', keys: ['panettone'] },
-      { href: 'festive.html?card=pandoro-classico&center=1', keys: ['pandoro'] },
+      { href: 'festive.html?q=panettone', keys: ['panettone', 'pandoro'] },
       { href: 'festive.html?q=mulled', keys: ['vin brule', 'vinbrule', 'mulled'] },
 
       { href: 'operations.html?q=apertura', keys: ['apertura', 'opening', 'open store'] },
@@ -665,7 +237,6 @@ class BernyBrainAPI {
       { href: 'slitti-yoyo.html?q=slitti', keys: ['slitti', 'yoyo', 'yo-yo', 'yo yo'] },
       { href: 'pastries.html?q=croissant', keys: ['croissant'] },
       { href: 'pastries.html?q=brownie', keys: ['brownie'] },
-      // NOTE: Cakes handled above with word-boundary regex to avoid matching "pancake".
       { href: 'story-orbit.html?q=story', keys: ['story orbit', 'firenze', 'origine', 'storia'] },
     ];
 
@@ -688,37 +259,33 @@ class BernyBrainAPI {
       ];
       const pick = this.pickDifferent(options, last?.href);
       const label = pick?.label?.[uiLang] || pick?.label?.it || 'Training';
-      return { href: pick?.href || 'operations.html?q=apertura', reason: isShort ? 'short' : 'smalltalk', label, tentative: true };
+      return { href: pick?.href || 'operations.html?q=apertura', reason: isShort ? 'short' : 'smalltalk', label };
     }
 
     return null;
   }
 
-  buildSmallTalkResponse(reco, shouldSuggest) {
+  buildSmallTalkResponse(reco) {
     const lang = this.getUiLang();
     const topicLabel = String(reco?.label || '').trim();
     const topic = topicLabel || (lang === 'en' ? 'a quick refresher' : 'un ripasso veloce');
 
     const templates = {
-      it: `Sto bene 😄🍦. Tu invece? Vuoi parlare di gelato, bar o procedure?`,
-      en: `I'm good 😄🍦. How about you? Want gelato, bar or procedures?`,
-      es: `¡Estoy bien 😄🍦! ¿Y tú? ¿Gelato, bar o procedimientos?`,
-      fr: `Je vais bien 😄🍦. Et toi ? Gelato, bar ou procédures ?`,
+      it: `Sto benissimo: fresco come una vaschetta a -14°C 🧊🍦. Se vuoi, ti apro una scheda per ripassare ${topic}.`,
+      en: `I'm doing great—cool as gelato at -14°C 🧊🍦. If you want, I'll open a card so you can refresh ${topic}.`,
+      es: `¡Estoy genial—fresco como un helado a -14°C 🧊🍦! Si quieres, te abro una ficha para repasar ${topic}.`,
+      fr: `Je vais super bien—frais comme une glace à -14°C 🧊🍦. Si tu veux, j'ouvre une fiche pour réviser ${topic}.`,
     };
 
     const base = templates[lang] || templates.it;
     const href = reco?.href;
-    if (shouldSuggest && href) {
-      return `${base} [[LINK:${href}]]`;
-    }
-    return `${base} [[NOLINK]]`;
+    if (!href) return base;
+    return `${base} [[LINK:${href}]]`;
   }
 
-  applyRecommendationToResponse(text, reco, opts = {}) {
+  applyRecommendationToResponse(text, reco) {
     let out = String(text ?? '').trim();
     if (!out) return out;
-
-    const suppressLink = !!opts.suppressLink;
 
     // Respect explicit suppression (quiz + other special flows)
     if (out.includes('[[NOLINK]]')) {
@@ -731,34 +298,9 @@ class BernyBrainAPI {
     if (reco && reco.href) {
       out = `${out} [[LINK:${reco.href}]]`;
       this.saveLastRecommendation(reco);
-      return out;
-    }
-
-    if (suppressLink) {
-      // Prevent berny-ui.js keyword fallback from adding an unrelated link.
-      return `${out} [[NOLINK]]`;
     }
 
     return out;
-  }
-
-  pushToHistory(role, content) {
-    const r = String(role || '').toLowerCase();
-    if (r !== 'user' && r !== 'assistant') return;
-    const c = String(content ?? '').trim();
-    if (!c) return;
-
-    const clean = c
-      .replace(/\[\[LINK:.*?\]\]/g, '')
-      .replace(/\[\[CMD:.*?\]\]/g, '')
-      .replace(/\[\[NOLINK\]\]/g, '')
-      .trim();
-    if (!clean) return;
-
-    this.history = Array.isArray(this.history) ? this.history : [];
-    this.history.push({ role: r, content: clean });
-    const max = Math.max(2, Number(this.MAX_HISTORY_TURNS) || 8);
-    if (this.history.length > max) this.history = this.history.slice(-max);
   }
 
   init() {
@@ -991,61 +533,11 @@ class BernyBrainAPI {
         return this.startQuiz(detectedLang);
     }
 
-    // 1b. Conversation tracking + delayed recommendations (avoid always suggesting the same card).
+    // 1b. Handle very short / small-talk inputs locally so the suggestion card is coherent and varies.
+    const reco = this.inferRecommendationFromMessage(userMessage);
     const msgNorm = this.normalizeText(userMessage);
-    const state = this.loadConversationState();
-    state.turn = (Number(state.turn) || 0) + 1;
-    this.updateTopicScoresFromText(state, userMessage);
-
-    const inferred = this.inferRecommendationFromMessage(userMessage);
-    const explicitReco = (inferred && inferred.href && !inferred.tentative && !this.isSmallTalk(msgNorm)) ? inferred : null;
-
-    if (explicitReco && explicitReco.href) {
-      state.activeTopicHref = explicitReco.href;
-      state.activeTopicLabel = explicitReco.label || '';
-      state.genericTurns = 0;
-    } else {
-      const follow = this.isFollowUp(msgNorm);
-      if (!follow || !state.activeTopicHref) {
-        state.genericTurns = (Number(state.genericTurns) || 0) + 1;
-      }
-    }
-
-    const suggestNow = this.shouldSuggestNow(state, explicitReco);
-    let recoToAttach = null;
-    if (suggestNow) {
-      if (explicitReco) {
-        recoToAttach = explicitReco;
-      } else if (state.activeTopicHref) {
-        recoToAttach = { href: state.activeTopicHref, reason: 'active-topic' };
-      } else {
-        recoToAttach = this.pickTopTopicReco(state);
-        if (!recoToAttach) {
-          const last = this.loadLastRecommendation();
-          recoToAttach = this.pickDifferent(
-            [
-              { href: 'operations.html?q=servizio', reason: 'fallback' },
-              { href: 'caffe.html?q=espresso', reason: 'fallback' },
-              { href: 'sweet-treats.html?q=waffle', reason: 'fallback' },
-              { href: 'gelato-lab.html?q=buontalenti', reason: 'fallback' },
-            ],
-            last?.href
-          );
-        }
-      }
-
-      state.lastSuggestedTurn = Number(state.turn) || state.lastSuggestedTurn || 0;
-      state.genericTurns = 0;
-    }
-
-    this.saveConversationState(state);
-
-    // Small talk gets a local conversational answer; only attach a card when suggestNow is true.
     if (this.isSmallTalk(msgNorm)) {
-      const out = this.buildSmallTalkResponse(recoToAttach || inferred, !!recoToAttach);
-      this.pushToHistory('user', userMessage);
-      this.pushToHistory('assistant', out);
-      return out;
+      return this.buildSmallTalkResponse(reco);
     }
 
     // 2. STANDARD LLM LOGIC (proxy preferred)
@@ -1058,10 +550,8 @@ class BernyBrainAPI {
 
       try {
         const systemPrompt = this.buildSystemPrompt();
-        const history = Array.isArray(this.history) ? this.history.slice(-this.MAX_HISTORY_TURNS) : [];
         const messages = [
           { role: 'system', content: systemPrompt },
-          ...history,
           { role: 'user', content: String(userMessage ?? '') },
         ];
 
@@ -1113,10 +603,8 @@ class BernyBrainAPI {
         const data = await r.json().catch(() => null);
         const text = String(data?.text || '').trim();
         const out = text || 'Mi sa che il proxy non mi ha risposto bene. Riprova tra poco.';
-        this.pushToHistory('user', userMessage);
-        this.pushToHistory('assistant', out);
         // Ensure the recommended card (when we have one) is specific and not always the same.
-        return this.applyRecommendationToResponse(out, recoToAttach, { suppressLink: !recoToAttach });
+        return this.applyRecommendationToResponse(out, reco);
       } catch (e) {
         const name = String(e?.name || '');
         if (name === 'AbortError') {
@@ -1153,10 +641,7 @@ class BernyBrainAPI {
       ]);
 
       const response = await result.response;
-      const raw = response.text();
-      this.pushToHistory('user', userMessage);
-      this.pushToHistory('assistant', raw);
-      return this.applyRecommendationToResponse(raw, recoToAttach, { suppressLink: !recoToAttach });
+      return this.applyRecommendationToResponse(response.text(), reco);
 
     } catch (error) {
       console.warn(`⚠️ Errore o Timeout (${error.message}). Passo al BACKUP...`);
@@ -1171,10 +656,8 @@ class BernyBrainAPI {
           const systemPrompt = this.buildSystemPrompt();
           const result = await backupModel.generateContent(`${systemPrompt}\n\nUtente: ${userMessage}`);
           const response = await result.response;
-          const raw = response.text();
-          this.pushToHistory('user', userMessage);
-          this.pushToHistory('assistant', raw);
-          return this.applyRecommendationToResponse(raw, recoToAttach, { suppressLink: !recoToAttach }); 
+          
+          return this.applyRecommendationToResponse(response.text(), reco); 
           
         } catch (backupError) {
           console.error("❌ Anche il backup è fallito:", backupError);
@@ -1245,16 +728,13 @@ class BernyBrainAPI {
       Sii simpatico, leggermente sfacciato ma incoraggiante. Usa emoji gelato (🍦, 🍧, 🧊).
 
       IL TUO OBIETTIVO PRINCIPALE (se non è un quiz):
-      Aiutare l'utente in modo utile e naturale:
-      - Se la richiesta è operativa (procedura/prodotto/standard), dai una risposta "flash" (max 2 frasi).
-      - Se la richiesta è generica o conversazionale, fai conversazione e fai UNA domanda di chiarimento.
+      Dare risposte "flash" (max 2 frasi) che invitano l'utente ad aprire la scheda tecnica.
       
       REGOLE DI RISPOSTA (Standard):
-      1. Sii breve. Riassumi i punti chiave.
+      1. Sii brevissimo. Riassumi i punti chiave.
       2. NON fare elenchi puntati lunghi.
-      3. Se manca contesto, chiedi una domanda di chiarimento (1 sola).
-      4. Se è un tema operativo, puoi invitare ad aprire la scheda per i dettagli (non sempre).
-      5. Usa emoji ma non esagerare.
+      3. Chiudi SEMPRE invitando l'utente ad aprire la scheda per i dettagli (usa la lingua dell'utente).
+      4. Usa emoji ma non esagerare.
 
       LINK SCHEDE (IMPORTANTE):
       I tag [[LINK:...]] vengono gestiti dal client per mantenere coerenza tra domanda e scheda consigliata.
