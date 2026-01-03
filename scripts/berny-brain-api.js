@@ -218,6 +218,7 @@ class BernyBrainAPI {
       { href: 'gelato-lab.html?q=vetrina', keys: ['vetrina', 'display', 'vitrine'] },
 
       { href: 'caffe.html?q=espresso', keys: ['espresso', 'shot', 'estrazione', 'portafiltro', 'grinder', 'tamper'] },
+      { href: 'caffe.html?q=americano', keys: ['americano', 'caffe americano', 'caffè americano', 'american coffee'] },
       { href: 'caffe.html?q=cappuccino', keys: ['cappuccino', 'milk', 'latte', 'steam', 'wand', 'microfoam'] },
       { href: 'caffe.html?q=affogato', keys: ['affogato', 'dirty matcha'] },
 
@@ -283,6 +284,7 @@ class BernyBrainAPI {
       { href: 'gelato-lab.html?q=vetrina', keys: ['vetrina', 'display', 'vitrine'] },
 
       { href: 'caffe.html?q=espresso', keys: ['espresso', 'shot', 'estrazione', 'portafiltro', 'grinder', 'tamper'] },
+      { href: 'caffe.html?q=americano', keys: ['americano', 'caffe americano', 'caffè americano', 'american coffee'] },
       { href: 'caffe.html?q=cappuccino', keys: ['cappuccino', 'milk', 'latte', 'steam', 'wand', 'microfoam'] },
       { href: 'caffe.html?q=affogato', keys: ['affogato', 'dirty matcha'] },
 
