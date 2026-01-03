@@ -56,6 +56,9 @@ class BernyBrainAPI {
     this.history = [];
     this.genAI = null;
     this.model = null;
+
+    // Recommendation state (to avoid always suggesting the same card)
+    this.RECO_STORAGE_KEY = 'badianiBerny.lastRecommendation.v1';
     
     // QUIZ STATE
     this.quizState = { active: false, lang: 'it', questions: [], index: 0, correct: 0 };
@@ -133,6 +136,171 @@ class BernyBrainAPI {
     };
 
     this.init();
+  }
+
+  // ------------------------------
+  // Recommendation helpers
+  // ------------------------------
+  getUiLang() {
+    try {
+      const uiLang = (window.BadianiI18n?.getLang?.() || window.BadianiI18n?.currentLang || 'it');
+      const l = String(uiLang || 'it').toLowerCase();
+      if (['it', 'en', 'es', 'fr'].includes(l)) return l;
+    } catch {}
+    return 'it';
+  }
+
+  normalizeText(value) {
+    const s = String(value ?? '').trim().toLowerCase();
+    if (!s) return '';
+    try {
+      // Remove diacritics (crêpe -> crepe)
+      return s
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[’']/g, "'")
+        .replace(/\s+/g, ' ')
+        .trim();
+    } catch {
+      return s.replace(/\s+/g, ' ').trim();
+    }
+  }
+
+  loadLastRecommendation() {
+    try {
+      const raw = localStorage.getItem(this.RECO_STORAGE_KEY);
+      const data = raw ? JSON.parse(raw) : null;
+      if (data && typeof data === 'object') return data;
+    } catch {}
+    return null;
+  }
+
+  saveLastRecommendation(reco) {
+    try {
+      if (!reco || !reco.href) return;
+      localStorage.setItem(this.RECO_STORAGE_KEY, JSON.stringify({ href: String(reco.href), ts: Date.now() }));
+    } catch {}
+  }
+
+  pickDifferent(options, lastHref) {
+    const list = Array.isArray(options) ? options.filter(Boolean) : [];
+    if (!list.length) return null;
+    if (list.length === 1) return list[0];
+    const filtered = lastHref ? list.filter(o => o.href !== lastHref) : list;
+    const pool = filtered.length ? filtered : list;
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+
+  isSmallTalk(msgNorm) {
+    const m = String(msgNorm || '');
+    if (!m) return false;
+    // Italian + common EN/ES/FR variants
+    return (
+      /\bcome\s+stai\b|\bcome\s+va\b|\btutto\s+bene\b|\bche\s+mi\s+dici\b|\bcome\s+butta\b/.test(m) ||
+      /\bhow\s+are\s+you\b|\bhows\s+it\s+going\b|\bhow\s+you\s+doing\b/.test(m) ||
+      /\bque\s+tal\b|\bcomo\s+estas\b|\bcomo\s+va\b/.test(m) ||
+      /\bca\s+va\b|\bcomment\s+ca\s+va\b/.test(m)
+    );
+  }
+
+  inferRecommendationFromMessage(userMessage) {
+    const uiLang = this.getUiLang();
+    const msgNorm = this.normalizeText(userMessage);
+    const words = msgNorm.split(' ').filter(Boolean);
+
+    const has = (...needles) => needles.some(n => msgNorm.includes(this.normalizeText(n)));
+
+    // High-signal direct mappings (topic -> page?q)
+    const topicCandidates = [
+      { href: 'gelato-lab.html?q=buontalenti', keys: ['buontalenti'] },
+      { href: 'gelato-lab.html?q=coni', keys: ['cono', 'coni', 'cone'] },
+      { href: 'gelato-lab.html?q=gusti', keys: ['gusti', 'flavour', 'flavors', 'parfums', 'sabores'] },
+      { href: 'gelato-lab.html?q=vetrina', keys: ['vetrina', 'display', 'vitrine'] },
+
+      { href: 'caffe.html?q=espresso', keys: ['espresso', 'shot', 'estrazione', 'portafiltro', 'grinder', 'tamper'] },
+      { href: 'caffe.html?q=cappuccino', keys: ['cappuccino', 'milk', 'latte', 'steam', 'wand', 'microfoam'] },
+      { href: 'caffe.html?q=affogato', keys: ['affogato', 'dirty matcha'] },
+
+      { href: 'sweet-treats.html?q=crepe', keys: ['crepe', 'crepes', 'crepe', 'crêpe', 'crêpes', 'crêpe', 'crêpes'] },
+      { href: 'sweet-treats.html?q=waffle', keys: ['waffle'] },
+      { href: 'sweet-treats.html?q=pancake', keys: ['pancake'] },
+
+      { href: 'festive.html?q=churro', keys: ['churro', 'churros'] },
+      { href: 'festive.html?q=panettone', keys: ['panettone', 'pandoro'] },
+      { href: 'festive.html?q=mulled', keys: ['vin brule', 'vinbrule', 'mulled'] },
+
+      { href: 'operations.html?q=apertura', keys: ['apertura', 'opening', 'open store'] },
+      { href: 'operations.html?q=servizio', keys: ['servizio', 'service', 'upsell', 'obiezione'] },
+      { href: 'operations.html?q=chiusura', keys: ['chiusura', 'closing', 'close store'] },
+      { href: 'operations.html?q=pulizia', keys: ['pulizia', 'cleaning', 'sanificazione', 'sanitize'] },
+
+      { href: 'slitti-yoyo.html?q=slitti', keys: ['slitti', 'yoyo', 'yo-yo', 'yo yo'] },
+      { href: 'pastries.html?q=croissant', keys: ['croissant'] },
+      { href: 'pastries.html?q=brownie', keys: ['brownie'] },
+      { href: 'story-orbit.html?q=story', keys: ['story orbit', 'firenze', 'origine', 'storia'] },
+    ];
+
+    const matched = topicCandidates.find(c => (c.keys || []).some(k => has(k)));
+    if (matched) {
+      return { href: matched.href, reason: 'keyword' };
+    }
+
+    // For very short / ambiguous input: improvise with a rotating fallback
+    const isShort = msgNorm.length <= 12 || words.length <= 2;
+    if (isShort || this.isSmallTalk(msgNorm)) {
+      const last = this.loadLastRecommendation();
+      const options = [
+        { href: 'operations.html?q=apertura', label: { it: 'Apertura', en: 'Opening', es: 'Apertura', fr: 'Ouverture' } },
+        { href: 'sweet-treats.html?q=waffle', label: { it: 'Waffle', en: 'Waffle', es: 'Waffle', fr: 'Waffle' } },
+        { href: 'festive.html?q=churro', label: { it: 'Churros', en: 'Churros', es: 'Churros', fr: 'Churros' } },
+        { href: 'caffe.html?q=espresso', label: { it: 'Espresso', en: 'Espresso', es: 'Espresso', fr: 'Espresso' } },
+        { href: 'gelato-lab.html?q=buontalenti', label: { it: 'Buontalenti', en: 'Buontalenti', es: 'Buontalenti', fr: 'Buontalenti' } },
+        { href: 'slitti-yoyo.html?q=slitti', label: { it: 'Slitti & Yo-Yo', en: 'Slitti & Yo-Yo', es: 'Slitti & Yo-Yo', fr: 'Slitti & Yo-Yo' } },
+      ];
+      const pick = this.pickDifferent(options, last?.href);
+      const label = pick?.label?.[uiLang] || pick?.label?.it || 'Training';
+      return { href: pick?.href || 'operations.html?q=apertura', reason: isShort ? 'short' : 'smalltalk', label };
+    }
+
+    return null;
+  }
+
+  buildSmallTalkResponse(reco) {
+    const lang = this.getUiLang();
+    const topicLabel = String(reco?.label || '').trim();
+    const topic = topicLabel || (lang === 'en' ? 'a quick refresher' : 'un ripasso veloce');
+
+    const templates = {
+      it: `Sto benissimo: fresco come una vaschetta a -14°C 🧊🍦. Se vuoi, ti apro una scheda per ripassare ${topic}.`,
+      en: `I'm doing great—cool as gelato at -14°C 🧊🍦. If you want, I'll open a card so you can refresh ${topic}.`,
+      es: `¡Estoy genial—fresco como un helado a -14°C 🧊🍦! Si quieres, te abro una ficha para repasar ${topic}.`,
+      fr: `Je vais super bien—frais comme une glace à -14°C 🧊🍦. Si tu veux, j'ouvre une fiche pour réviser ${topic}.`,
+    };
+
+    const base = templates[lang] || templates.it;
+    const href = reco?.href;
+    if (!href) return base;
+    return `${base} [[LINK:${href}]]`;
+  }
+
+  applyRecommendationToResponse(text, reco) {
+    let out = String(text ?? '').trim();
+    if (!out) return out;
+
+    // Respect explicit suppression (quiz + other special flows)
+    if (out.includes('[[NOLINK]]')) {
+      return out;
+    }
+
+    // Remove any model-provided link tags; we will attach a coherent one when we have a recommendation.
+    out = out.replace(/\[\[LINK:.*?\]\]/g, '').trim();
+
+    if (reco && reco.href) {
+      out = `${out} [[LINK:${reco.href}]]`;
+      this.saveLastRecommendation(reco);
+    }
+
+    return out;
   }
 
   init() {
@@ -365,6 +533,13 @@ class BernyBrainAPI {
         return this.startQuiz(detectedLang);
     }
 
+    // 1b. Handle very short / small-talk inputs locally so the suggestion card is coherent and varies.
+    const reco = this.inferRecommendationFromMessage(userMessage);
+    const msgNorm = this.normalizeText(userMessage);
+    if (this.isSmallTalk(msgNorm)) {
+      return this.buildSmallTalkResponse(reco);
+    }
+
     // 2. STANDARD LLM LOGIC (proxy preferred)
     if (this.mode === 'proxy') {
       const endpoint = String(this.proxyEndpoint || '').trim();
@@ -427,7 +602,9 @@ class BernyBrainAPI {
         }
         const data = await r.json().catch(() => null);
         const text = String(data?.text || '').trim();
-        return text || 'Mi sa che il proxy non mi ha risposto bene. Riprova tra poco.';
+        const out = text || 'Mi sa che il proxy non mi ha risposto bene. Riprova tra poco.';
+        // Ensure the recommended card (when we have one) is specific and not always the same.
+        return this.applyRecommendationToResponse(out, reco);
       } catch (e) {
         const name = String(e?.name || '');
         if (name === 'AbortError') {
@@ -464,7 +641,7 @@ class BernyBrainAPI {
       ]);
 
       const response = await result.response;
-      return response.text();
+      return this.applyRecommendationToResponse(response.text(), reco);
 
     } catch (error) {
       console.warn(`⚠️ Errore o Timeout (${error.message}). Passo al BACKUP...`);
@@ -480,7 +657,7 @@ class BernyBrainAPI {
           const result = await backupModel.generateContent(`${systemPrompt}\n\nUtente: ${userMessage}`);
           const response = await result.response;
           
-          return response.text(); 
+          return this.applyRecommendationToResponse(response.text(), reco); 
           
         } catch (backupError) {
           console.error("❌ Anche il backup è fallito:", backupError);
@@ -559,16 +736,9 @@ class BernyBrainAPI {
       3. Chiudi SEMPRE invitando l'utente ad aprire la scheda per i dettagli (usa la lingua dell'utente).
       4. Usa emoji ma non esagerare.
 
-      REGOLE LINK SCHEDE:
-      Se la tua risposta riguarda uno di questi argomenti, AGGIUNGI ALLA FINE del messaggio il tag corrispondente (invisibile all'utente).
-      IMPORTANTE: Aggiungi sempre "?q=PAROLA_CHIAVE" per aprire la scheda specifica (es. buontalenti, pistacchio, waffle).
-
-      - Gelato/Gusti -> [[LINK:gelato-lab.html?q=PAROLA_CHIAVE]]
-      - Caffè/Bar -> [[LINK:caffe.html?q=PAROLA_CHIAVE]]
-      - Crepes/Waffle -> [[LINK:sweet-treats.html?q=PAROLA_CHIAVE]]
-      - Churros/Festive -> [[LINK:festive.html?q=PAROLA_CHIAVE]]
-      - Storia/Azienda -> [[LINK:story-orbit.html?q=PAROLA_CHIAVE]]
-      - Procedure/Operazioni -> [[LINK:operations.html?q=PAROLA_CHIAVE]]
+      LINK SCHEDE (IMPORTANTE):
+      I tag [[LINK:...]] vengono gestiti dal client per mantenere coerenza tra domanda e scheda consigliata.
+      Quindi: NON inserire tag [[LINK:...]] nella risposta.
 
       CONOSCENZA ATTUALE:
       ${info}
