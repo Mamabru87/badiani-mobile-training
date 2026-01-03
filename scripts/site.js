@@ -74,26 +74,20 @@ document.documentElement.classList.add('has-js');
     getRaw,
     setRaw,
     removeRaw,
-      // Scroll the page near the carousel first (vertical), then center the card inside the horizontal track.
-      const carousel = target.closest('[data-carousel]');
-      if (carousel) {
-        carousel.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' });
-      } else {
-        target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' });
-      }
+    getJSON(key, fallback = null) {
       return jsonParse(getRaw(key), fallback);
     },
     setJSON(key, value) {
+      return setRaw(key, jsonStringify(value));
+    },
+    remove(key) {
+      return removeRaw(key);
+    },
+  };
+})();
 
-    // Horizontal centering inside the carousel track.
-    // NOTE: per requirement, we ONLY highlight/center the card (no opening / no modal).
-    window.setTimeout(() => {
-      try {
-        target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'nearest', inline: 'center' });
-      } catch {
-        /* ignore */
-      }
-    }, 420);
+(() => {
+  if (window.BadianiProfile) return;
 
   const KEY_ACTIVE = 'badianiUser.profile.v1';
   const KEY_LIST = 'badianiUser.profiles';
