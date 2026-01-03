@@ -9,16 +9,24 @@
     const query = params.get('q');
     if (!query) return;
 
-    const normalize = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
-    const target = normalize(query);
+    const normalize = (s) => {
+      // Keep deep-linking robust with accented titles (e.g. Crêpe, Caffè).
+      return String(s || '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]/g, '');
+    };
+    const rawQuery = String(query || '').trim();
+    const target = normalize(rawQuery);
 
     // Find all cards
     const cards = Array.from(document.querySelectorAll('.guide-card'));
     
     // Strategy 1: Exact ID match (checking both raw query and normalized)
     // e.g. query="smoothie-rosso-berry" -> id="card-smoothie-rosso-berry"
-    let match = document.getElementById('card-' + query) || 
-                document.getElementById(query) ||
+    let match = document.getElementById('card-' + rawQuery) || 
+          document.getElementById(rawQuery) ||
                 cards.find(c => c.id && normalize(c.id).includes(target) && normalize(c.id).endsWith(target)); // stricter ID check
 
     // Strategy 2: Exact Title match
@@ -64,15 +72,22 @@
       }, 500);
 
       // 3. Highlight effect
-      match.style.transition = 'transform 0.5s ease, box-shadow 0.5s ease';
-      const originalTransform = match.style.transform;
-      match.style.transform = 'scale(1.02)';
-      match.style.boxShadow = '0 0 0 4px var(--color-gold, #D4AF37)';
-      
-      setTimeout(() => {
-        match.style.transform = originalTransform;
-        match.style.boxShadow = '';
-      }, 2000);
+      // Prefer CSS-based pulse (works site-wide via site.css) and fall back to inline styles.
+      try {
+        match.classList.add('berny-highlight-pulse');
+        setTimeout(() => {
+          try { match.classList.remove('berny-highlight-pulse'); } catch {}
+        }, 4500);
+      } catch {
+        match.style.transition = 'transform 0.5s ease, box-shadow 0.5s ease';
+        const originalTransform = match.style.transform;
+        match.style.transform = 'scale(1.02)';
+        match.style.boxShadow = '0 0 0 4px var(--color-gold, #D4AF37)';
+        setTimeout(() => {
+          match.style.transform = originalTransform;
+          match.style.boxShadow = '';
+        }, 2000);
+      }
 
       // 4. Open details if available
       // DISABLED per user request: "non aprirla" (do not open it)

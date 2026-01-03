@@ -450,23 +450,27 @@
 
       // 2. Fallback: Mappa argomenti -> link
       if (!tagMatch) { // Only fallback if no explicit link
-        const lower = text.toLowerCase();
-        if (lower.includes('churro')) link = 'pastries.html?q=churro';
-        else if (lower.includes('gelato')) link = 'gelato-lab.html?q=gelato';
-        else if (lower.includes('gusti')) link = 'gelato-lab.html?q=gusti';
-        // IMPORTANT: regex word boundary so "pancake" doesn't match "cake"
-        else if (/\b(cake|cakes|torta|torte)\b/i.test(text)) link = 'pastries.html?q=cakes';
-        
-        // Smoothies: check specific types first!
-        else if (lower.includes('smoothie rosso') || lower.includes('rosso berry')) link = 'caffe.html?q=smoothie-rosso-berry';
-        else if (lower.includes('smoothie giallo') || lower.includes('giallo passion')) link = 'caffe.html?q=smoothie-giallo-passion';
-        else if (lower.includes('smoothie verde') || lower.includes('verde boost')) link = 'caffe.html?q=smoothie-verde-boost';
-        else if (lower.includes('smoothie') || lower.includes('smoothies') || lower.includes('frullato') || lower.includes('frullati')) link = 'caffe.html?q=smoothie';
-        
-        else if (lower.includes('caffè')) link = 'caffe.html?q=caffe';
-        else if (lower.includes('espresso')) link = 'caffe.html?q=espresso';
-        else if (lower.includes('crepes')) link = 'sweet-treats.html?q=crepes';
-        else if (lower.includes('waffle')) link = 'sweet-treats.html?q=waffle';
+        // Prefer the same inference logic used by berny-brain-api.js
+        try {
+          const brain = window.bernyBrain;
+          if (brain && typeof brain.inferRecommendationFromContext === 'function') {
+            const reco = brain.inferRecommendationFromContext(text, '');
+            if (reco && reco.href) link = reco.href;
+          } else if (brain && typeof brain.inferRecommendationFromMessage === 'function') {
+            const reco = brain.inferRecommendationFromMessage(text);
+            if (reco && reco.href) link = reco.href;
+          }
+        } catch {}
+
+        // Very-last-resort minimal mapping (keep conservative)
+        if (!link) {
+          const lower = text.toLowerCase();
+          if (lower.includes('churro')) link = 'festive.html?q=churro';
+          else if (lower.includes('waffle')) link = 'sweet-treats.html?q=waffle';
+          else if (lower.includes('pancake')) link = 'sweet-treats.html?q=pancake';
+          else if (lower.includes('gelato')) link = 'gelato-lab.html?q=gusti';
+          else if (lower.includes('espresso')) link = 'caffe.html?q=espresso';
+        }
       }
 
       if (link) {

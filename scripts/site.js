@@ -1315,6 +1315,8 @@ scrollButtons.forEach((btn) => {
   const slugify = (value = '') => {
     return (value || '')
       .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
       .replace(/[^a-z0-9]+/gi, '-')
       .replace(/^-+|-+$/g, '') || '';
   };
@@ -1353,6 +1355,24 @@ scrollButtons.forEach((btn) => {
   const hydrate = () => {
     const pageKey = getPageKey();
     if (!pageKey || /^(index|index_new)\.html$/i.test(pageKey)) return;
+
+    // Ensure stable ids for deep-linking (and catalog cardKey stability)
+    // If a card has no id, we generate id="card-<slug>" based on its title.
+    try {
+      Array.from(document.querySelectorAll('.guide-card')).forEach((card) => {
+        if (!card) return;
+        const existing = String(card.getAttribute('id') || '').trim();
+        if (existing) return;
+        const titleEl = card.querySelector('h3');
+        const title = titleEl?.textContent?.trim() || '';
+        if (!title) return;
+        const key = slugify(title);
+        if (!key) return;
+        card.setAttribute('id', `card-${key}`);
+      });
+    } catch {
+      /* ignore */
+    }
 
     const category = document.querySelector('h1')?.textContent?.trim()
       || document.title?.split('')[0]?.trim()

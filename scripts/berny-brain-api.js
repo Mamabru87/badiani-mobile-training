@@ -265,6 +265,71 @@ class BernyBrainAPI {
     return null;
   }
 
+  // Prefer coherence between what the user asked and what Berny actually answered.
+  // This reduces "testo giusto, link sbagliato" when the LLM drifts or the question is multi-topic.
+  inferRecommendationFromContext(userMessage, assistantMessage) {
+    const msgA = this.normalizeText(userMessage);
+    const msgB = this.normalizeText(assistantMessage);
+
+    const hasIn = (hay, needle) => {
+      const n = this.normalizeText(needle);
+      return !!(n && hay && hay.includes(n));
+    };
+
+    const topicCandidates = [
+      { href: 'gelato-lab.html?q=buontalenti', keys: ['buontalenti'] },
+      { href: 'gelato-lab.html?q=coni', keys: ['cono', 'coni', 'cone'] },
+      { href: 'gelato-lab.html?q=gusti', keys: ['gusti', 'flavour', 'flavors', 'parfums', 'sabores'] },
+      { href: 'gelato-lab.html?q=vetrina', keys: ['vetrina', 'display', 'vitrine'] },
+
+      { href: 'caffe.html?q=espresso', keys: ['espresso', 'shot', 'estrazione', 'portafiltro', 'grinder', 'tamper'] },
+      { href: 'caffe.html?q=cappuccino', keys: ['cappuccino', 'milk', 'latte', 'steam', 'wand', 'microfoam'] },
+      { href: 'caffe.html?q=affogato', keys: ['affogato', 'dirty matcha'] },
+
+      { href: 'sweet-treats.html?q=crepe', keys: ['crepe', 'crepes', 'crêpe', 'crêpes', 'crêpe', 'crêpes'] },
+      { href: 'sweet-treats.html?q=waffle', keys: ['waffle'] },
+      { href: 'sweet-treats.html?q=pancake', keys: ['pancake'] },
+
+      { href: 'festive.html?q=churro', keys: ['churro', 'churros'] },
+      { href: 'festive.html?q=panettone', keys: ['panettone', 'pandoro'] },
+      { href: 'festive.html?q=mulled', keys: ['vin brule', 'vinbrule', 'mulled'] },
+
+      { href: 'operations.html?q=apertura', keys: ['apertura', 'opening', 'open store'] },
+      { href: 'operations.html?q=servizio', keys: ['servizio', 'service', 'upsell', 'obiezione'] },
+      { href: 'operations.html?q=chiusura', keys: ['chiusura', 'closing', 'close store'] },
+      { href: 'operations.html?q=pulizia', keys: ['pulizia', 'cleaning', 'sanificazione', 'sanitize'] },
+
+      { href: 'slitti-yoyo.html?q=slitti', keys: ['slitti', 'yoyo', 'yo-yo', 'yo yo'] },
+      { href: 'pastries.html?q=croissant', keys: ['croissant'] },
+      { href: 'pastries.html?q=brownie', keys: ['brownie'] },
+      { href: 'story-orbit.html?q=story', keys: ['story orbit', 'firenze', 'origine', 'storia'] },
+    ];
+
+    // Weighted scoring: user message is stronger than assistant message,
+    // but assistant text can override when the LLM clearly focused elsewhere.
+    let best = null;
+    let bestScore = 0;
+    topicCandidates.forEach((cand) => {
+      const keys = Array.isArray(cand.keys) ? cand.keys : [];
+      let score = 0;
+      keys.forEach((k) => {
+        if (hasIn(msgA, k)) score += 3;
+        if (hasIn(msgB, k)) score += 2;
+      });
+      if (score > bestScore) {
+        bestScore = score;
+        best = cand;
+      }
+    });
+
+    if (best && best.href && bestScore >= 3) {
+      return { href: best.href, reason: 'keyword' };
+    }
+
+    // Fallback: keep legacy behavior.
+    return this.inferRecommendationFromMessage(userMessage);
+  }
+
   buildSmallTalkResponse(reco) {
     const lang = this.getUiLang();
     const topicLabel = String(reco?.label || '').trim();
@@ -603,8 +668,9 @@ class BernyBrainAPI {
         const data = await r.json().catch(() => null);
         const text = String(data?.text || '').trim();
         const out = text || 'Mi sa che il proxy non mi ha risposto bene. Riprova tra poco.';
-        // Ensure the recommended card (when we have one) is specific and not always the same.
-        return this.applyRecommendationToResponse(out, reco);
+        const recoFinal = this.inferRecommendationFromContext(userMessage, out);
+        // Ensure the recommended card (when we have one) is coherent with the actual answer.
+        return this.applyRecommendationToResponse(out, recoFinal);
       } catch (e) {
         const name = String(e?.name || '');
         if (name === 'AbortError') {
@@ -641,7 +707,9 @@ class BernyBrainAPI {
       ]);
 
       const response = await result.response;
-      return this.applyRecommendationToResponse(response.text(), reco);
+      const out = response.text();
+      const recoFinal = this.inferRecommendationFromContext(userMessage, out);
+      return this.applyRecommendationToResponse(out, recoFinal);
 
     } catch (error) {
       console.warn(`⚠️ Errore o Timeout (${error.message}). Passo al BACKUP...`);
@@ -656,8 +724,9 @@ class BernyBrainAPI {
           const systemPrompt = this.buildSystemPrompt();
           const result = await backupModel.generateContent(`${systemPrompt}\n\nUtente: ${userMessage}`);
           const response = await result.response;
-          
-          return this.applyRecommendationToResponse(response.text(), reco); 
+          const out = response.text();
+          const recoFinal = this.inferRecommendationFromContext(userMessage, out);
+          return this.applyRecommendationToResponse(out, recoFinal);
           
         } catch (backupError) {
           console.error("❌ Anche il backup è fallito:", backupError);
