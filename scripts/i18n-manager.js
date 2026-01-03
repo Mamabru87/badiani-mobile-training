@@ -924,12 +924,17 @@
       scope.querySelectorAll?.('[data-i18n]').forEach((node) => {
         const key = node.getAttribute('data-i18n');
         if (!key) return;
-        node.textContent = this.t(key);
+        const translated = this.t(key);
+        // Non-destructive fallback: if translation missing, keep existing human text.
+        if (translated === key) return;
+        node.textContent = translated;
       });
       scope.querySelectorAll?.('[data-i18n-html]').forEach((node) => {
         const key = node.getAttribute('data-i18n-html');
         if (!key) return;
-        node.innerHTML = this.t(key);
+        const translated = this.t(key);
+        if (translated === key) return;
+        node.innerHTML = translated;
       });
       scope.querySelectorAll?.('[data-i18n-attr]').forEach((node) => {
         const raw = node.getAttribute('data-i18n-attr');
@@ -940,7 +945,9 @@
           const attr = pair.slice(0, idx).trim();
           const key = pair.slice(idx + 1).trim();
           if (!attr || !key) return;
-          try { node.setAttribute(attr, this.t(key)); } catch {}
+          const translated = this.t(key);
+          if (translated === key) return;
+          try { node.setAttribute(attr, translated); } catch {}
         });
       });
 
@@ -1033,9 +1040,9 @@
                     if (!key) return;
                     // Solo se il testo è diverso
                     const newText = this.t(key);
-                    if (el.textContent !== newText) {
-                      el.textContent = newText;
-                    }
+                    // Non sovrascrivere con la chiave se manca la traduzione.
+                    if (newText === key) return;
+                    if (el.textContent !== newText) el.textContent = newText;
                   });
                 }
 
@@ -1048,10 +1055,9 @@
                       const [attr, key] = pair.trim().split(':');
                       if (attr && key) {
                         const newValue = this.t(key);
+                        if (newValue === key) return;
                         // Solo se l'attributo è diverso
-                        if (el.getAttribute(attr) !== newValue) {
-                          el.setAttribute(attr, newValue);
-                        }
+                        if (el.getAttribute(attr) !== newValue) el.setAttribute(attr, newValue);
                       }
                     });
                   });
@@ -1062,9 +1068,8 @@
                   const key = node.getAttribute('data-i18n');
                   if (!key) return;
                   const newText = this.t(key);
-                  if (node.textContent !== newText) {
-                    node.textContent = newText;
-                  }
+                  if (newText === key) return;
+                  if (node.textContent !== newText) node.textContent = newText;
                 }
 
                 if (node.hasAttribute?.('data-i18n-attr')) {
@@ -1074,9 +1079,8 @@
                     const [attr, key] = pair.trim().split(':');
                     if (attr && key) {
                       const newValue = this.t(key);
-                      if (node.getAttribute(attr) !== newValue) {
-                        node.setAttribute(attr, newValue);
-                      }
+                      if (newValue === key) return;
+                      if (node.getAttribute(attr) !== newValue) node.setAttribute(attr, newValue);
                     }
                   });
                 }
