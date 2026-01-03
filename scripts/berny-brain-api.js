@@ -138,6 +138,82 @@ class BernyBrainAPI {
     this.init();
   }
 
+  // ------------------------------
+  // Legacy KB quick answers
+  // - When the question is clearly covered by BERNY_KNOWLEDGE.products, return that
+  //   response directly instead of calling the LLM. This avoids occasional provider
+  //   truncation and keeps “official” answers consistent.
+  // ------------------------------
+  matchLegacyKbProduct(userMessage) {
+    const msgNorm = this.normalizeText(userMessage);
+    if (!msgNorm) return null;
+
+    const kb = window.BERNY_KNOWLEDGE || {};
+    const products = kb && typeof kb === 'object' ? kb.products : null;
+    if (!products || typeof products !== 'object') return null;
+
+    let best = null;
+    let bestScore = 0;
+
+    const norm = (s) => this.normalizeText(s);
+
+    for (const [key, val] of Object.entries(products)) {
+      if (!val || typeof val !== 'object') continue;
+      const response = String(val.response || '').trim();
+      if (!response) continue;
+
+      const keywords = Array.isArray(val.keywords) ? val.keywords : [];
+      if (!keywords.length) continue;
+
+      let score = 0;
+      for (const kw of keywords) {
+        const kwn = norm(kw);
+        if (!kwn) continue;
+        if (msgNorm.includes(kwn)) {
+          // Longer, more specific keywords get a slightly higher weight.
+          score += (kwn.length >= 12 ? 3 : (kwn.length >= 6 ? 2 : 1));
+        }
+      }
+
+      if (score > bestScore) {
+        bestScore = score;
+        best = { key, response };
+      }
+    }
+
+    // Conservative: require at least one solid signal.
+    if (best && bestScore >= 2) return best;
+    return null;
+  }
+
+  // Best-effort continuation for SDK mode too (Gemini SDK sometimes returns cut text).
+  async continueIfTruncatedSdk({ systemPrompt, userMessage, assistantText, model }) {
+    const out = String(assistantText || '').trim();
+    if (!out) return out;
+    if (!this.looksTruncatedAnswer(out)) return out;
+    if (!model || typeof model.generateContent !== 'function') return out;
+
+    const continuationPrompt = `${systemPrompt}\n\nUtente: ${String(userMessage ?? '')}\n\nAssistente: ${out}\n\nUtente: Continua e completa la risposta precedente. Finisci sempre le frasi e chiudi con punteggiatura. Non ripetere dall'inizio: continua da dove eri rimasto.`;
+
+    try {
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Timeout - Continuation troppo lenta')), 8000)
+      );
+
+      const result2 = await Promise.race([
+        model.generateContent(continuationPrompt),
+        timeoutPromise,
+      ]);
+
+      const response2 = await result2.response;
+      const add = String(response2?.text?.() || '').trim();
+      if (add) return `${out} ${add}`.trim();
+    } catch {
+      // ignore
+    }
+    return out;
+  }
+
   looksTruncatedAnswer(text) {
     const s = String(text || '').trim();
     if (!s) return false;
@@ -786,6 +862,18 @@ class BernyBrainAPI {
       return this.buildSmallTalkResponse(reco);
     }
 
+    // 1c. If the question clearly matches a legacy KB entry, answer locally.
+    // This prevents occasional mid-sentence truncation from providers.
+    const kbHit = this.matchLegacyKbProduct(userMessage);
+    if (kbHit && kbHit.response) {
+      const localOut = String(kbHit.response).trim();
+      const recoLocal = this.inferRecommendationFromContext(userMessage, localOut);
+      if (recoLocal?.href) {
+        recoLocal.href = this.coerceHrefToCatalogCard(recoLocal.href, userMessage, localOut);
+      }
+      return this.applyRecommendationToResponse(localOut, recoLocal);
+    }
+
     // 2. STANDARD LLM LOGIC (proxy preferred)
     if (this.mode === 'proxy') {
       const endpoint = String(this.proxyEndpoint || '').trim();
@@ -935,7 +1023,16 @@ class BernyBrainAPI {
       ]);
 
       const response = await result.response;
-      const out = response.text();
+      let out = response.text();
+
+      // SDK continuation retry (same idea as proxy) if the output looks cut.
+      out = await this.continueIfTruncatedSdk({
+        systemPrompt,
+        userMessage,
+        assistantText: out,
+        model: this.model,
+      });
+
       const recoFinal = this.inferRecommendationFromContext(userMessage, out);
       if (recoFinal?.href) {
         recoFinal.href = this.coerceHrefToCatalogCard(recoFinal.href, userMessage, out);
@@ -955,7 +1052,15 @@ class BernyBrainAPI {
           const systemPrompt = this.buildSystemPrompt();
           const result = await backupModel.generateContent(`${systemPrompt}\n\nUtente: ${userMessage}`);
           const response = await result.response;
-          const out = response.text();
+          let out = response.text();
+
+          out = await this.continueIfTruncatedSdk({
+            systemPrompt,
+            userMessage,
+            assistantText: out,
+            model: backupModel,
+          });
+
           const recoFinal = this.inferRecommendationFromContext(userMessage, out);
           if (recoFinal?.href) {
             recoFinal.href = this.coerceHrefToCatalogCard(recoFinal.href, userMessage, out);
