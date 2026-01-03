@@ -1,0 +1,509 @@
+{
+  "pages": {
+    "caffe.html": {
+      "href": "caffe.html",
+      "category": "Bar & Drinks",
+      "cards": [
+        {
+          "title": "Espresso Single",
+          "cardKey": "espresso-single",
+          "signals": {
+            {
+              "note": "This file is intentionally kept minimal. To regenerate a full debug dump, run: build-tools/python/generate_search_catalog_seed.py --debug-json scripts/search-catalog-seed.debug.json",
+              "generated": "2026-01-03",
+              "key": "badianiSearchCatalog.v2"
+            }
+          }
+        },
+        {
+          "title": "FIFO & etichette (regola d'oro)",
+          "cardKey": "fifo-etichette-regola-d-oro",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Shelf life rapidi (mix & premade)",
+          "cardKey": "shelf-life-rapidi-mix-premade",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Take-away: autonomia termica",
+          "cardKey": "take-away-autonomia-termica",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Schedule pulizie (giorno / settimana)",
+          "cardKey": "schedule-pulizie-giorno-settimana",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        }
+      ]
+    },
+    "pastries.html": {
+      "href": "pastries.html",
+      "category": "Pastry Lab",
+      "cards": [
+        {
+          "title": "Cakes",
+          "cardKey": "cakes",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Brownie Tray",
+          "cardKey": "brownie-tray",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Banana / altri loaf",
+          "cardKey": "banana-altri-loaf",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Croissant farciti",
+          "cardKey": "croissant-farciti",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Scone con Buontalenti",
+          "cardKey": "scone-con-buontalenti",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Set-up vetrina (look & ordine)",
+          "cardKey": "set-up-vetrina-look-ordine",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Tagli standard (porzionatura)",
+          "cardKey": "tagli-standard-porzionatura",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Shelf life (quick list)",
+          "cardKey": "shelf-life-quick-list",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Come mantenerla “sempre piena”",
+          "cardKey": "come-mantenerla-sempre-piena",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Chiusura vetrina (routine)",
+          "cardKey": "chiusura-vetrina-routine",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        }
+      ]
+    },
+    "sweet-treats.html": {
+      "href": "sweet-treats.html",
+      "category": "Sweet Treat Atelier",
+      "cards": [
+        {
+          "title": "Crepe con Salsa",
+          "cardKey": "crepe-con-salsa",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Signature Buontalenti Crepe",
+          "cardKey": "signature-buontalenti-crepe",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Waffles",
+          "cardKey": "waffles",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Pancake Stack",
+          "cardKey": "pancake-stack",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Crepe Italiana (Plain)",
+          "cardKey": "crepe-italiana-plain",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Crepe Italiana (Beetroot)",
+          "cardKey": "crepe-italiana-beetroot",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Crepe Prosciutto (Plain)",
+          "cardKey": "crepe-prosciutto-plain",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Crepe Prosciutto (Beetroot)",
+          "cardKey": "crepe-prosciutto-beetroot",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Gelato Burger",
+          "cardKey": "gelato-burger",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Checklist apertura stazioni",
+          "cardKey": "checklist-apertura-stazioni",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Settaggi macchine (standard)",
+          "cardKey": "settaggi-macchine-standard",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Shelf life & storage rapidi",
+          "cardKey": "shelf-life-storage-rapidi",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Porzionatura & dosi (quick ref)",
+          "cardKey": "porzionatura-dosi-quick-ref",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Chiusura & pulizia rapida",
+          "cardKey": "chiusura-pulizia-rapida",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        }
+      ]
+    },
+    "festive.html": {
+      "href": "festive.html",
+      "category": "Churros, Panettoni & Vin Brule'",
+      "cards": [
+        {
+          "title": "Churros",
+          "cardKey": "churros",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Panettone Classico",
+          "cardKey": "panettone-classico",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Panettone Dark Chocolate",
+          "cardKey": "panettone-dark-chocolate",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Pandoro Classico",
+          "cardKey": "pandoro-classico",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Mulled Wine (Vin Brulé)",
+          "cardKey": "mulled-wine-vin-brul",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Servizio Caldo (Pandoro)",
+          "cardKey": "servizio-caldo-pandoro",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Setup macchina Vin Brulé",
+          "cardKey": "setup-macchina-vin-brul",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Warm-up & mantenimento (Vin Brulé)",
+          "cardKey": "warm-up-mantenimento-vin-brul",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Come conservarlo di notte",
+          "cardKey": "come-conservarlo-di-notte",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Shelf life Vin Brulé (quick)",
+          "cardKey": "shelf-life-vin-brul-quick",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Pulizia macchina (fine giornata)",
+          "cardKey": "pulizia-macchina-fine-giornata",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Packaging mini panettone (delivery)",
+          "cardKey": "packaging-mini-panettone-delivery",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        }
+      ]
+    },
+    "slitti-yoyo.html": {
+      "href": "slitti-yoyo.html",
+      "category": "Slitti & Yo-Yo",
+      "cards": [
+        {
+          "title": "Timeline essenziale",
+          "cardKey": "timeline-essenziale",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Tavolette LatteNero & Gran Cacao",
+          "cardKey": "tavolette-lattenero-gran-cacao",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Minicake",
+          "cardKey": "minicake",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Praline & Dragée",
+          "cardKey": "praline-drag-e",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Creme Slittosa / Riccosa / Gianera",
+          "cardKey": "creme-slittosa-riccosa-gianera",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Yo-Yo",
+          "cardKey": "yo-yo",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Allestimento Yo-Yo (banco)",
+          "cardKey": "allestimento-yo-yo-banco",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Stazione e strumenti (standard)",
+          "cardKey": "stazione-e-strumenti-standard",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Porzionatura gelato Yo-Yo",
+          "cardKey": "porzionatura-gelato-yo-yo",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Pan storage method (etichettatura)",
+          "cardKey": "pan-storage-method-etichettatura",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        },
+        {
+          "title": "Chiusura stazione Yo-Yo",
+          "cardKey": "chiusura-stazione-yo-yo",
+          "signals": {
+            "sicurezza": false,
+            "chiusura": false,
+            "upselling": false
+          }
+        }
+      ]
+    },
+    "story-orbit.html": {
+      "href": "story-orbit.html",
+      "category": "Story Orbit Badiani 1932",
+      "cards": []
+    }
+  }
+}

@@ -143,6 +143,114 @@ class BernyBrainAPI {
   }
 
   // ------------------------------
+  // Search catalog integration (auto-indexed by scripts/site.js)
+  // - site.js extracts all .guide-card titles on each content page and stores them in:
+  //   localStorage key: badianiSearchCatalog.v2
+  // - We can use that catalog here to deep-link to ANY card via:
+  //   <page>.html?card=<slug>&center=1
+  // ------------------------------
+  slugify(value = '') {
+    return (value || '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/gi, '-')
+      .replace(/^-+|-+$/g, '') || '';
+  }
+
+  loadSearchCatalogPages() {
+    try {
+      const rawV2 = localStorage.getItem('badianiSearchCatalog.v2');
+      const rawV1 = localStorage.getItem('badianiSearchCatalog.v1');
+      const raw = rawV2 || rawV1;
+      if (!raw) return {};
+      const parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== 'object') return {};
+      return (parsed.pages && typeof parsed.pages === 'object') ? parsed.pages : {};
+    } catch {
+      return {};
+    }
+  }
+
+  inferRecommendationFromCatalog(userMessage) {
+    const msgNorm = this.normalizeText(userMessage);
+    if (!msgNorm) return null;
+
+    // Avoid matching ultra-short chatter.
+    const words = msgNorm.split(' ').filter(Boolean);
+    const hasSignalWord = words.some(w => String(w).length >= 4);
+    if (!hasSignalWord) return null;
+
+    const pages = this.loadSearchCatalogPages();
+    const pageKeys = Object.keys(pages || {});
+    if (!pageKeys.length) return null;
+
+    const stop = new Set(['della','delle','degli','dello','dell','d','del','dei','di','da','a','al','allo','alla','alle','ai','il','lo','la','i','gli','le','un','uno','una','and','or','the','of','to','in','on','for']);
+    const hasWord = (needle) => {
+      const n = String(needle || '').trim();
+      if (!n) return false;
+      // word-boundary match, but escape hyphens etc.
+      const esc = n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      try { return new RegExp(`\\b${esc}\\b`, 'i').test(msgNorm); } catch { return false; }
+    };
+
+    let best = null;
+    let bestScore = 0;
+
+    for (const pageKey of pageKeys) {
+      const page = pages[pageKey];
+      const cards = Array.isArray(page?.cards) ? page.cards : [];
+      for (const card of cards) {
+        const title = String(card?.title || '').trim();
+        const cardKey = String(card?.cardKey || this.slugify(title) || '').trim();
+        if (!title || !cardKey) continue;
+
+        const titleNorm = this.normalizeText(title);
+        if (!titleNorm) continue;
+
+        // Highest confidence: full title substring.
+        let score = 0;
+        if (msgNorm.includes(titleNorm)) {
+          score += 12;
+        }
+
+        // Token confidence: word-boundary matches for meaningful tokens.
+        const tokens = titleNorm.split(' ').map(t => t.trim()).filter(t => t.length >= 4 && !stop.has(t));
+        let tokenHits = 0;
+        for (const t of tokens) {
+          if (hasWord(t)) {
+            tokenHits += 1;
+            score += 3;
+          }
+        }
+
+        // Single-word titles like "Cakes" need to be easy to hit.
+        if (!score && tokens.length === 1 && hasWord(tokens[0])) {
+          score = 8;
+        }
+
+        // If the user mentions the slug itself, accept it.
+        if (!score && cardKey && msgNorm.includes(cardKey.replace(/-/g, ' '))) {
+          score = 7;
+        }
+
+        // Guard: avoid accidental matches on generic shared words (e.g. "standard")
+        if (tokenHits === 1 && tokens.length >= 3 && score < 9) {
+          score = Math.max(0, score - 2);
+        }
+
+        if (score > bestScore) {
+          bestScore = score;
+          best = { pageKey, title, cardKey };
+        }
+      }
+    }
+
+    // Threshold: avoid wrong links.
+    if (!best || bestScore < 8) return null;
+    const href = `${best.pageKey}?card=${encodeURIComponent(best.cardKey)}&center=1`;
+    return { href, reason: 'catalog', label: best.title };
+  }
+
+  // ------------------------------
   // Recommendation helpers
   // ------------------------------
   getUiLang() {
@@ -224,6 +332,9 @@ class BernyBrainAPI {
     const msgNorm = this.normalizeText(text);
     if (!msgNorm) return;
     const has = (...needles) => needles.some(n => msgNorm.includes(this.normalizeText(n)));
+    const hasWord = (re) => {
+      try { return re.test(msgNorm); } catch { return false; }
+    };
 
     // Operations
     if (has('apertura', 'opening', 'open store')) this.bumpTopicScore(state, 'operations.apertura', 2);
@@ -241,6 +352,9 @@ class BernyBrainAPI {
     if (has('waffle')) this.bumpTopicScore(state, 'treats.waffle', 2);
     if (has('crepe', 'crêpe', 'crepes')) this.bumpTopicScore(state, 'treats.crepe', 2);
     if (has('pancake')) this.bumpTopicScore(state, 'treats.pancake', 2);
+
+    // Pastry Lab (IMPORTANT: use word boundaries to avoid matching "pancake" -> "cake")
+    if (hasWord(/\b(cake|cakes|torta|torte)\b/)) this.bumpTopicScore(state, 'pastries.cakes', 2);
 
     // Festive
     if (has('churro', 'churros')) this.bumpTopicScore(state, 'festive.churro', 2);
@@ -285,6 +399,7 @@ class BernyBrainAPI {
       'gelato.gusti': 'gelato-lab.html?q=gusti',
       'gelato.vetrina': 'gelato-lab.html?q=vetrina',
       'gelato.boxes': 'gelato-lab.html?card=gelato-boxes&center=1',
+      'pastries.cakes': 'pastries.html?q=cakes',
       'slitti': 'slitti-yoyo.html?q=slitti',
       'story': 'story-orbit.html?q=story',
     };
@@ -356,6 +471,17 @@ class BernyBrainAPI {
 
     const has = (...needles) => needles.some(n => msgNorm.includes(this.normalizeText(n)));
 
+    // 0) Try the auto-indexed search catalog first (covers ALL cards across pages once indexed)
+    const catalogReco = this.inferRecommendationFromCatalog(userMessage);
+    if (catalogReco && catalogReco.href) {
+      return catalogReco;
+    }
+
+    // Pastry Lab: cakes/torte (avoid false positive on "pancake")
+    if (/\b(cake|cakes|torta|torte)\b/.test(msgNorm)) {
+      return { href: 'pastries.html?q=cakes', reason: 'keyword' };
+    }
+
     // High-signal direct mappings (topic -> page?q)
     const topicCandidates = [
       { href: 'caffe.html?q=smoothie', keys: ['smoothie', 'smoothies', 'frullato', 'frullati'] },
@@ -389,6 +515,7 @@ class BernyBrainAPI {
       { href: 'slitti-yoyo.html?q=slitti', keys: ['slitti', 'yoyo', 'yo-yo', 'yo yo'] },
       { href: 'pastries.html?q=croissant', keys: ['croissant'] },
       { href: 'pastries.html?q=brownie', keys: ['brownie'] },
+      // NOTE: Cakes handled above with word-boundary regex to avoid matching "pancake".
       { href: 'story-orbit.html?q=story', keys: ['story orbit', 'firenze', 'origine', 'storia'] },
     ];
 
