@@ -6447,12 +6447,15 @@ const gamification = (() => {
     setTimeout(() => counter.classList.remove('nav-token--pulse'), 650);
   }
 
-  const slugify = (value = '') => {
+  // NOTE: Must be hoisted.
+  // `init()` can run before reaching this part of the file, and Story Orbit rewards
+  // call `slugify()` during init. A `const` here would be in the TDZ and crash.
+  function slugify(value = '') {
     return (value || '')
       .toLowerCase()
       .replace(/[^a-z0-9]+/gi, '-')
       .replace(/^-+|-+$/g, '') || 'tab';
-  };
+  }
 
   function getStartOfTodayTs() {
     const d = new Date();
