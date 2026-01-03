@@ -2411,7 +2411,8 @@ scrollButtons.forEach((btn) => {
     const base = item.categoryHref || item.href || '';
     if (!base) return '';
     if (item.card) {
-      return `${base}?card=${encodeURIComponent(String(item.card))}&center=1`;
+      // Use ?q= to leverage the smarter deep-link.js logic (exact ID match > title match)
+      return `${base}?q=${encodeURIComponent(String(item.card))}`;
     }
     if (item.tab) {
       return `${base}?tab=${encodeURIComponent(String(item.tab))}&center=1`;
@@ -9067,10 +9068,17 @@ sectionMenus.forEach((menu) => {
 
     const normalizedTargetKey = String(cardKey || '').trim().toLowerCase();
 
-    const target = cards.find((card) => {
-      const keys = candidateKeysForCard(card);
-      return keys.has(normalizedTargetKey);
-    });
+    // Priority 1: Exact ID match (most reliable)
+    let target = document.getElementById('card-' + normalizedTargetKey) || 
+                 document.getElementById(normalizedTargetKey);
+
+    // Priority 2: Search by keys (titles, translations, etc.)
+    if (!target) {
+      target = cards.find((card) => {
+        const keys = candidateKeysForCard(card);
+        return keys.has(normalizedTargetKey);
+      });
+    }
 
     if (!target) return;
 
@@ -9096,7 +9104,9 @@ sectionMenus.forEach((menu) => {
     // Optionally open details, so the user lands �inside� the right card.
     const toggle = target.querySelector('[data-toggle-card]');
     if (toggle) {
-      try { toggle.click(); } catch {}
+      // DISABLED per user request: "non aprirla" (do not open it)
+      // try { toggle.click(); } catch {}
+      
       // If requested, open a specific tab inside the modal for clarity.
       openTabInLatestModal();
     }

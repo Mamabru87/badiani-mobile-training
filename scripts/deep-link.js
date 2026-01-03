@@ -75,12 +75,15 @@
       }, 2000);
 
       // 4. Open details if available
+      // DISABLED per user request: "non aprirla" (do not open it)
+      /*
       const toggle = match.querySelector('[data-toggle-card]');
       const details = match.querySelector('.details');
       // Only open if currently closed
       if (toggle && details && (details.hidden || details.style.display === 'none')) {
         setTimeout(() => toggle.click(), 800);
       }
+      */
     } else {
       console.warn(`[DeepLink] No match found for "${query}"`);
     }
