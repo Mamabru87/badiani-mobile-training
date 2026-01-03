@@ -210,98 +210,122 @@
       'slittiYoyo.footer.stats.quality': 'Qualità',
       'slittiYoyo.footer.stats.origin': 'Origine',
 
+      'caffe.cards.espressoSingle.title': 'Espresso Single',
       'caffe.cards.espressoSingle.desc': 'L\'essenza del caffè. Estrazione perfetta per un gusto intenso, corpo rotondo e crema persistente.',
       'caffe.cards.espressoSingle.stats': `<li><strong>Dose:</strong> 1 shot in tazzina piccola</li><li><strong>Estrazione:</strong> 25-30 secondi</li><li><strong>Crema:</strong> Color nocciola, tigrata, elastica</li>`,
       'caffe.cards.espressoSingle.details': `<div class="steps"><span>1 · Pulisci e asciuga il portafiltro. Macina la dose al momento.</span><span>2 · Livella e pressa (tamping) in modo uniforme.</span><span>3 · Estrai e servi immediatamente (la crema svanisce in fretta).</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">🥡 Take Away (TW)</strong><img src="assets/products/espresso TW.png" alt="Espresso TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;"><p style="font-size: 0.9em;">Usa cup 4oz. Chiudi sempre con coperchio.</p></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Troubleshooting:</strong> Troppo veloce (&lt;20s)? Macinatura troppo grossa. Troppo lento (&gt;35s)? Macinatura troppo fine.</div>`,
 
+      'caffe.cards.espressoDouble.title': 'Espresso Double',
       'caffe.cards.espressoDouble.desc': 'Doppia dose di energia. Due shot estratti nello stesso tempo per un gusto più ricco.',
       'caffe.cards.espressoDouble.stats': `<li><strong>Dose:</strong> 2 shot in tazzina grande o bicchierino</li><li><strong>Estrazione:</strong> 25-30 secondi (flusso costante)</li><li><strong>Crema:</strong> Spessa e persistente</li>`,
       'caffe.cards.espressoDouble.details': `<div class="steps"><span>1 · Usa il filtro doppio. Macina dose doppia.</span><span>2 · Tamping deciso e uniforme.</span><span>3 · Estrai 2 shot in 25-30s.</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">🥡 Take Away (TW)</strong><img src="assets/products/espresso double TW.png" alt="Espresso Double TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;"><p style="font-size: 0.9em;">Usa cup 4oz o 8oz a richiesta. Coperchio obbligatorio.</p></div>`,
 
+      'caffe.cards.espressoMacchiato.title': 'Espresso Macchiato',
       'caffe.cards.espressoMacchiato.desc': 'Espresso "macchiato" con una piccola quantità di schiuma di latte calda.',
       'caffe.cards.espressoMacchiato.stats': `<li><strong>Base:</strong> 1 shot espresso</li><li><strong>Top:</strong> 1-2 cucchiaini di schiuma di latte</li><li><strong>Servizio:</strong> Tazzina espresso</li>`,
       'caffe.cards.espressoMacchiato.details': `<div class="steps"><span>1 · Prepara un espresso singolo.</span><span>2 · Monta una piccola quantità di latte (microfoam).</span><span>3 · Adagia delicatamente la schiuma al centro della crema ("macchia").</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">🥡 Take Away (TW)</strong><p style="font-size: 0.9em;">Disponibile in cup 4 oz. Chiudi sempre con coperchio.</p></div>`,
 
+      'caffe.cards.doubleMacchiato.title': 'Double Macchiato',
       'caffe.cards.doubleMacchiato.desc': 'Doppio espresso con una macchia di latte schiumato. Più intenso, stesso tocco di latte.',
       'caffe.cards.doubleMacchiato.stats': `<li><strong>Base:</strong> 2 shot espresso</li><li><strong>Top:</strong> Schiuma di latte (microfoam)</li><li><strong>Servizio:</strong> Tazza grande o bicchierino</li>`,
       'caffe.cards.doubleMacchiato.details': `<div class="steps"><span>1 · Prepara un doppio espresso.</span><span>2 · Aggiungi la schiuma di latte al centro.</span><span>3 · Servi immediatamente.</span></div>`,
 
+      'caffe.cards.americano.title': 'Americano',
       'caffe.cards.americano.desc': 'Acqua calda + espresso estratto direttamente in tazza. Disponibile in versione Take Away.',
       'caffe.cards.americano.stats': `<li>Ricetta single: 8 oz acqua calda</li><li>Ricetta double: 12 oz acqua calda</li><li>Spazio di sicurezza: lascia 2 cm dalla sommità</li>`,
       'caffe.cards.americano.details': `<div class="steps"><span>1 · Riempi la tazza con acqua calda lasciando 2 cm.</span><span>2 · Estrai espresso direttamente in tazza o in beaker separato.</span><span>3 · Servi con piattino e spoon; integra latte a parte su richiesta.</span></div>`,
 
+      'caffe.cards.cappuccino.title': 'Cappuccino',
       'caffe.cards.cappuccino.desc': 'Espresso, latte caldo e schiuma fine. Texture vellutata senza bolle grandi.',
       'caffe.cards.cappuccino.stats': `<li>Formato: 8 oz (regular) / 12 oz (large)</li><li>Foam: circa 1/3 del volume</li><li>Temperatura: 65°C (sweet spot)</li>`,
       'caffe.cards.cappuccino.details': `<div class="steps"><span>1 · Espresso in tazza.</span><span>2 · Stretch 3-5s (aria), poi rolling (vortice) fino a microfoam.</span><span>3 · Versa controllando la schiuma; chiedi se desidera cacao.</span></div>`,
 
+      'caffe.cards.flatWhite.title': 'Flat White',
       'caffe.cards.flatWhite.desc': 'Doppio espresso + latte con microfoam sottilissima. Texture setosa.',
       'caffe.cards.flatWhite.stats': `<li>Latte: stretch 3 secondi, poi whirlpool.</li><li>Temperatura: 65°C.</li><li>Versata: inizia alta, poi abbassa per latte art.</li>`,
       'caffe.cards.flatWhite.details': `<div class="steps"><span>1 · Doppio espresso in 8 oz.</span><span>2 · Monta latte evitando eccesso di aria (microfoam).</span><span>3 · Versa per texture lucida e uniforme.</span></div>`,
 
+      'caffe.cards.mocha.title': 'Mocha',
       'caffe.cards.mocha.desc': 'Espresso + cacao + latte. Sciogli prima il cacao nell’espresso.',
       'caffe.cards.mocha.stats': `<li>Shot single</li><li>Milk: stretch leggero</li><li>Vaso 8 oz</li>`,
       'caffe.cards.mocha.details': `<div class="steps"><span>1 · Miscelare espresso e cacao nella tazza.</span><span>2 · Montare latte come per latte classico.</span><span>3 · Versare mantenendo il vortice.</span></div>`,
 
+      'caffe.cards.hotChocolate.title': 'Hot Chocolate',
       'caffe.cards.hotChocolate.desc': 'Cioccolata calda cremosa: consistenza liscia, servizio caldo.',
       'caffe.cards.hotChocolate.stats': `<li>Temperatura: 65°C</li><li>Texture: setosa (zero grumi)</li><li>Servizio: cucchiaino + piattino</li>`,
       'caffe.cards.hotChocolate.details': `<div class="steps"><span>1 · Scalda la base fino a temperatura di servizio.</span><span>2 · Mescola/omogeneizza prima di versare.</span><span>3 · Versa, pulisci bordo tazza, servi con spoon.</span></div>`,
 
+      'caffe.cards.chaiLatte.title': 'Chai Latte',
       'caffe.cards.chaiLatte.desc': '2 pump di sciroppo chai, latte montato lucido e cannella.',
       'caffe.cards.chaiLatte.stats': `<li>Sciroppo: 2 pump</li><li>Temperatura latte: 65°C</li><li>Finish: cannella (dust leggero)</li>`,
       'caffe.cards.chaiLatte.details': `<div class="steps"><span>1 · Eroga lo sciroppo chai in tazza.</span><span>2 · (Dirty) Estrai 1 shot e mescola con lo sciroppo.</span><span>3 · Monta latte e versa; finisci con cannella.</span></div><div class="tips">Consiglia Dirty Chai a chi vuole spezie + caffeina.</div>`,
 
+      'caffe.cards.teaSelection.title': 'Tea Selection',
       'caffe.cards.teaSelection.desc': 'Selezione di tè premium. Servito con teiera e clessidra per infusione perfetta.',
       'caffe.cards.teaSelection.stats': `<li>Acqua: 90-95°C (Black/Herbal), 80°C (Green)</li><li>Infusione: 3-5 minuti</li><li>Servizio: Teiera + tazza + latte/limone a parte</li>`,
       'caffe.cards.teaSelection.details': `<div class="steps"><span>1 · Scalda la teiera, inserisci la bustina/filtro.</span><span>2 · Riempi con acqua alla temperatura corretta.</span><span>3 · Servi con clessidra e piattino per bustina esausta.</span></div>`,
 
+      'caffe.cards.afternoonTeaSet.title': 'Afternoon Tea Set',
       'caffe.cards.afternoonTeaSet.desc': 'Selezione di mini dolci, scones e sandwich per l\'esperienza del tè pomeridiano.',
       'caffe.cards.afternoonTeaSet.stats': `<li><strong>Include:</strong> Scones, finger sandwiches, mini pastries</li><li><strong>Bevanda:</strong> Tè o Prosecco</li><li><strong>Servizio:</strong> Alzatina a 3 piani</li>`,
       'caffe.cards.afternoonTeaSet.details': `<div class="steps"><span>1 · Prepara l\'alzatina: salato sotto, scones in mezzo, dolci sopra.</span><span>2 · Servi il tè o la bevanda scelta.</span><span>3 · Spiega i componenti al tavolo.</span></div>`,
 
+      'caffe.cards.affogato.title': 'Affogato',
       'caffe.cards.affogato.desc': 'Gelato “annegato” con espresso: servi 1 scoop di Buontalenti e versa un doppio espresso davanti al cliente.',
       'caffe.cards.affogato.stats': `<li>Bicchiere 8 oz raffreddato</li><li>Espresso doppio</li><li>Servire subito</li>`,
       'caffe.cards.affogato.details': `<div class="steps"><span>1 · Pre-raffredda la tazza.</span><span>2 · Dosare 70 g di Buontalenti.</span><span>3 · Versa l\'espresso davanti al cliente per valorizzare lo show.</span></div>`,
 
+      'caffe.cards.whippedCoffee.title': 'Whipped Coffee',
       'caffe.cards.whippedCoffee.desc': 'Espresso singolo sormontato da panna montata fresca.',
       'caffe.cards.whippedCoffee.stats': `<li>Tazzina 2 oz preriscaldata</li><li>Panna montata al momento</li><li>Servire con cucchiaino</li>`,
       'caffe.cards.whippedCoffee.details': `<div class="steps"><span>1 · Prepara espresso singolo.</span><span>2 · Spruzza panna montata formando una cupola compatta.</span><span>3 · Servi immediatamente.</span></div>`,
 
+      'caffe.cards.matchaLatte.title': 'Matcha Latte',
       'caffe.cards.matchaLatte.desc': 'Tè verde Matcha cerimoniale con latte montato. Colore verde brillante e gusto umami.',
       'caffe.cards.matchaLatte.stats': `<li>Dose Matcha: 2g (o misurino dedicato)</li><li>Acqua: 30ml calda (80°C) per sciogliere</li><li>Latte: montato come cappuccino</li>`,
       'caffe.cards.matchaLatte.details': `<div class="steps"><span>1 · Sciogli il matcha in poca acqua calda con il frustino (chasen) o mixer.</span><span>2 · Monta il latte per ottenere una crema setosa.</span><span>3 · Versa il latte sulla base matcha creando latte art.</span></div><div class="tips">Evita acqua bollente (brucia il matcha). La pasta deve essere liscia senza grumi.</div>`,
 
+      'caffe.cards.icedMatchaLatte.title': 'Iced Matcha Latte',
       'caffe.cards.icedMatchaLatte.desc': 'Versione fredda rinfrescante. Matcha versato su latte e ghiaccio per effetto bicolor.',
       'caffe.cards.icedMatchaLatte.stats': `<li>Ghiaccio: riempire il bicchiere</li><li>Latte freddo: 3/4 bicchiere</li><li>Top: base matcha concentrata</li>`,
       'caffe.cards.icedMatchaLatte.details': `<div class="steps"><span>1 · Riempi il bicchiere di ghiaccio e latte freddo.</span><span>2 · Prepara il matcha concentrato con acqua calda.</span><span>3 · Versa lentamente il matcha sopra il latte per creare i layer.</span></div>`,
 
+      'caffe.cards.matchaAffogato.title': 'Matcha Affogato',
       'caffe.cards.matchaAffogato.desc': 'Scoop di gelato Buontalenti affogato con una dose di Matcha cerimoniale caldo.',
       'caffe.cards.matchaAffogato.stats': `<li>Gelato: 1 scoop Buontalenti</li><li>Matcha: dose standard concentrata</li><li>Servizio: versare al tavolo</li>`,
       'caffe.cards.matchaAffogato.details': `<div class="steps"><span>1 · Prepara la coppetta con lo scoop di gelato.</span><span>2 · Prepara il matcha caldo in un bricchetto.</span><span>3 · Servi e versa il matcha verde brillante sul gelato bianco.</span></div>`,
 
+      'caffe.cards.dirtyMatcha.title': 'Dirty Matcha',
       'caffe.cards.dirtyMatcha.desc': 'L\'incontro tra Oriente e Occidente: Matcha Latte con l\'aggiunta di uno shot di espresso.',
       'caffe.cards.dirtyMatcha.stats': `<li>Base: Matcha Latte (caldo o freddo)</li><li>Aggiunta: 1 shot espresso</li><li>Profilo: Energizzante e complesso</li>`,
       'caffe.cards.dirtyMatcha.details': `<div class="steps"><span>1 · Prepara un Matcha Latte standard.</span><span>2 · Estrai uno shot di espresso.</span><span>3 · Versa l\'espresso nel drink (se iced, versa sopra per layering).</span></div>`,
 
+      'caffe.cards.icedAmericano.title': 'Iced Americano',
       'caffe.cards.icedAmericano.desc': '3 cubi grandi di ghiaccio, acqua fredda e doppio espresso versato lentamente.',
       'caffe.cards.icedAmericano.stats': `<li>12 oz cup</li><li>Lascia 1/4 spazio</li><li>Mix zucchero nello shot</li>`,
       'caffe.cards.icedAmericano.details': `<div class="steps"><span>1 · Aggiungi ghiaccio e acqua lasciando spazio.</span><span>2 · Esegui doppio espresso in tazzina separata.</span><span>3 · Versa lentamente sopra un cubo per effetto visivo.</span></div>`,
 
+      'caffe.cards.icedLatte.title': 'Iced Latte',
       'caffe.cards.icedLatte.desc': 'Ghiaccio + latte freddo, doppio espresso versato direttamente sopra creando layering.',
       'caffe.cards.icedLatte.stats': `<li>3 cubi grandi o 9 piccoli</li><li>Latte fino a 3/4</li><li>Sciroppi: mixare con espresso</li>`,
       'caffe.cards.icedLatte.details': `<div class="steps"><span>1 · Aggiungi ghiaccio e latte lasciando spazio.</span><span>2 · Estrai doppio espresso.</span><span>3 · Versa lentamente su un cubo per effetto "slow motion".</span></div>`,
 
+      'caffe.cards.pistachioIcedLatte.title': 'Pistachio Iced Latte',
       'caffe.cards.pistachioIcedLatte.desc': 'Iced latte al pistacchio: salsa/sciroppo + latte freddo + espresso per effetto cascade.',
       'caffe.cards.pistachioIcedLatte.stats': `<li>Formato: 12 oz</li><li>Ghiaccio: 3 cubi grandi</li><li>Syrup/salsa: prima del latte</li>`,
       'caffe.cards.pistachioIcedLatte.details': `<div class="steps"><span>1 · Metti sauce/sciroppo nel bicchiere (swirl interno).</span><span>2 · Aggiungi ghiaccio e latte.</span><span>3 · Versa espresso sopra.</span></div>`,
 
+      'caffe.cards.smoothieGialloPassion.title': 'Smoothie Giallo Passion',
       'caffe.cards.smoothieGialloPassion.desc': 'Mix tropicale con mango, ananas e frutto della passione. Colore giallo vibrante.',
       'caffe.cards.smoothieGialloPassion.stats': `<li>Base: Succo mela/arancia o acqua cocco</li><li>Mix frutta: Giallo pack</li><li>Blend: 30 secondi</li>`,
       'caffe.cards.smoothieGialloPassion.details': `<div class="steps"><span>1 · Versa la base liquida nel blender.</span><span>2 · Aggiungi il contenuto del pack frutta congelata.</span><span>3 · Frulla fino a consistenza liscia e servi con cannuccia larga.</span></div>`,
 
+      'caffe.cards.smoothieRossoBerry.title': 'Smoothie Rosso Berry',
       'caffe.cards.smoothieRossoBerry.desc': 'Esplosione di frutti di bosco: fragole, lamponi, mirtilli. Dolce e acidulo.',
       'caffe.cards.smoothieRossoBerry.stats': `<li>Base: Succo mela o latte (se richiesto)</li><li>Mix frutta: Rosso pack</li><li>Blend: 30 secondi</li>`,
       'caffe.cards.smoothieRossoBerry.details': `<div class="steps"><span>1 · Versa la base liquida nel blender.</span><span>2 · Aggiungi il contenuto del pack frutta congelata.</span><span>3 · Frulla fino a consistenza liscia.</span></div>`,
 
+      'caffe.cards.smoothieVerdeBoost.title': 'Smoothie Verde Boost',
       'caffe.cards.smoothieVerdeBoost.desc': 'Mix salutare con spinaci, mela verde, cetriolo e zenzero. Fresco e dissetante.',
       'caffe.cards.smoothieVerdeBoost.stats': `<li>Base: Acqua o succo mela</li><li>Mix frutta/verdura: Verde pack</li><li>Blend: 30 secondi</li>`,
       'caffe.cards.smoothieVerdeBoost.details': `<div class="steps"><span>1 · Versa la base liquida nel blender.</span><span>2 · Aggiungi il contenuto del pack verde.</span><span>3 · Frulla bene per sminuzzare le fibre delle verdure.</span></div>`,
@@ -468,23 +492,27 @@
       'festive.footer.stats.procedures': 'Procedure',
       'festive.footer.stats.season': 'Stagione',
 
+      'festive.cards.churros.title': 'Churros',
       'festive.cards.churros.tag1': 'Friggitrice 190 °C',
       'festive.cards.churros.tag2': '8 pezzi/porzione',
       'festive.cards.churros.desc': 'Bastoncini di pastella fritta, croccanti fuori e morbidi dentro. Serviti caldi (8 pezzi) con zucchero e cannella.',
       'festive.cards.churros.details': `<div class="steps"><span>1 - Prepara il mix zucchero/cannella in una teglia larga.</span><span>2 - Preleva 8 churros dal freezer, friggi 8-9 min finché dorati.</span><span>3 - Scola bene l'olio e passa i churros nel mix per una copertura uniforme.</span></div><div class="tips">Controlla costantemente i tempi per evitare centro crudo; sostituisci l'olio quando scurisce.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Batch doppio:</strong> "Vuoi 16 churros per condividere?"</span><span><strong>Combo salse:</strong> "Prova il mix pistacchio + cioccolato fondente"</span><span><strong>Bundle:</strong> "Churros + cioccolata calda = combo perfetta"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Temperatura olio critica: 190 °C esatti. Più bassa = unto, più alta = bruciato esterno/crudo interno. Sostituisci olio ogni 40 porzioni o quando scurisce.</div>`,
 
+      'festive.cards.panettoneClassic.title': 'Panettone Classico',
       'festive.cards.panettoneClassic.tag1': 'Servizio a fetta',
       'festive.cards.panettoneClassic.tag2': '8 porzioni',
       'festive.cards.panettoneClassic.desc': 'Il re delle feste. Ricetta tradizionale con uvetta e canditi, lievitazione naturale. Servito a fetta (1/8) su piatto dessert con posate.',
       'festive.cards.panettoneClassic.stats': `<li>Taglio: verticale seguendo le 8 linee guida, coltello seghettato lungo</li><li>Porzioni: 8 spicchi uniformi per coerenza</li><li>Presentazione: piatto dessert + cutlery sempre</li><li>Campione visivo: tieni una fetta visibile al banco per stimolare ordini (storytelling visivo)</li><li>Abbinamenti suggeriti: gelato Buontalenti, salsa pistacchio, cioccolata calda</li>`,
       'festive.cards.panettoneClassic.details': `<div class="steps"><span>1 - Taglia verticale seguendo le linee guida.</span><span>2 - Disponi sul piatto con cutlery.</span><span>3 - Offri subito upsell: scoop Buontalenti + sauce o hot chocolate.</span></div><div class="tips">Campiona una delle 8 fette per storytelling e conversione vendite.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Opzione 1:</strong> "Fetta + scoop Buontalenti è il nostro abbinamento signature"</span><span><strong>Opzione 2:</strong> "Aggiungi salsa pistacchio per contrasto perfetto?"</span><span><strong>Opzione 3:</strong> "Con cioccolata calda diventa un momento di pura indulgenza"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Usa coltello seghettato lungo per taglio netto senza sbriciolare. 8 spicchi uniformi seguendo guida. Esponi fetta campione per stimolare ordini visivi.</div>`,
 
+      'festive.cards.panettoneDark.title': 'Panettone Dark Chocolate',
       'festive.cards.panettoneDark.tag1': 'Opzione tiepida',
       'festive.cards.panettoneDark.tag2': 'Piastra crepe',
       'festive.cards.panettoneDark.desc': 'Variante golosa con gocce di cioccolato fondente nell\'impasto. Ottimo servito tiepido (10\'\' su piastra) per sciogliere il cioccolato.',
       'festive.cards.panettoneDark.stats': `<li>Piastra crepe: pulita e asciutta (no olio)</li><li>Timing: 10 secondi per lato esatti (non di più o perde croccantezza)</li><li>Servizio immediato: servi subito dopo cottura</li><li>Abbinamenti: Dark Chocolate + salsa pistacchio (contrasto gourmet)</li><li>Upsell: gelato freddo + panettone caldo = contrasto di temperatura sensazionale</li>`,
       'festive.cards.panettoneDark.details': `<div class="steps"><span>1 - Posiziona la fetta sulla piastra crepe.</span><span>2 - Tosta 10 secondi per lato (no olio).</span><span>3 - Servi con sauce e Buontalenti se richiesto.</span></div><div class="tips">Chiedi sempre se lo vogliono tiepido: aumenta conversione e qualità percepita.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Opzione 1:</strong> "Provalo tiepido: il cioccolato si scioglie"</span><span><strong>Opzione 2:</strong> "Con scoop Buontalenti sopra fai il contrasto caldo/freddo"</span><span><strong>Opzione 3:</strong> "Aggiungiamo salsa pistacchio per un twist gourmet?"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> 10" per lato è lo standard: oltre si secca e perde fragranza. Piastra sempre pulita e asciutta.</div>`,
 
+      'festive.cards.pandoroClassic.title': 'Pandoro Classico',
       'festive.cards.pandoroClassic.tag1': 'Zucchero a velo',
       'festive.cards.pandoroClassic.desc': 'Soffice, burroso, a forma di stella a 8 punte. Servito con spolverata di zucchero a velo al momento.',
       'festive.cards.pandoroClassic.stats': `<li><strong>Taglio:</strong> seguendo la guida a stella per 8 spicchi uniformi (effetto presentazione professionale)</li><li><strong>Zucchero a velo:</strong> SEMPRE al momento del servizio, non prima (effetto neve fresca visivamente)</li><li><strong>Piatto dessert + cutlery:</strong> sempre</li><li><strong>Temperatura:</strong> ambiente per massimo profumo</li><li><strong>Storytelling:</strong> "Lievitazione 36 ore con ingredienti premium" (giustifica valore)</li><li><strong>Abbinamenti suggeriti:</strong> gelato Buontalenti, salsa mascarpone o pistacchio</li>`,
@@ -559,33 +587,50 @@
       'sweetTreats.carousel.main.title': 'Sweet Crepes & Waffles',
       'sweetTreats.carousel.main.category': 'Dolci tentazioni',
 
+      'sweetTreats.cards.crepeSauce.title': 'Crepe con Salsa',
       'sweetTreats.cards.crepeSauce.desc': 'Crepe classica servita con una delle nostre salse signature (Pistacchio, Nocciola, Cioccolato). Base perfetta per ogni aggiunta.',
       'sweetTreats.cards.crepeSauce.stats': `<li><strong>Shelf life mix:</strong> 3 giorni (frigo)</li><li><strong>Riposo:</strong> almeno 2 ore (frigo)</li><li><strong>Cottura:</strong> 20s per lato</li>`,
       'sweetTreats.cards.crepeSauce.details': `<div class="steps"><span>1 · Stendi mix, gira quando dorata.</span><span>2 · Spalma la salsa su metà, chiudi a mezzaluna poi a ventaglio.</span><span>3 · Impiatta, zucchero a velo e drizzle di salsa sopra.</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">✨ Pro tip:</strong> La piastra deve essere ben calda ma non fumante. Il primo giro è spesso di test.</div>`,
 
+      'sweetTreats.cards.buontalentiCrepe.title': 'Signature Buontalenti Crepe',
       'sweetTreats.cards.buontalentiCrepe.desc': 'Il nostro best seller: Crepe con salsa a scelta e uno scoop di Buontalenti on top.',
       'sweetTreats.cards.buontalentiCrepe.stats': `<li><strong>GELATO:</strong> 1 scoop Buontalenti (70g)</li><li><strong>Salsa:</strong> 30g interna + decorazione</li><li><strong>Servizio:</strong> Piatto dessert con posate</li>`,
       'sweetTreats.cards.buontalentiCrepe.details': `<div class="steps"><span>1 · Prepara la crepe con salsa come da standard.</span><span>2 · Piega a ventaglio e spolvera con zucchero a velo.</span><span>3 · Adagia lo scoop di Buontalenti sopra e finisci con salsa.</span></div><div class="tips">Aggiungi il GELATO solo all'ultimo secondo per evitare che si sciolga sulla crepe calda.</div>`,
 
+      'sweetTreats.cards.waffles.title': 'Waffles',
       'sweetTreats.cards.waffles.desc': 'Waffle dorato e croccante fuori, soffice dentro. Servito con salse, frutta o GELATO.',
       'sweetTreats.cards.waffles.stats': `<li><strong>Cottura:</strong> 2.5 min per lato (5 min tot)</li><li><strong>Riposo:</strong> 45s per croccantezza</li><li><strong>Batter:</strong> 1 scoop (177ml)</li>`,
       'sweetTreats.cards.waffles.details': `<div class="steps"><span>1 · Versa il mix nella piastra calda e chiudi.</span><span>2 · Cuoci 2.5 min, gira e cuoci altri 2.5 min.</span><span>3 · Lascia riposare su griglia 45s prima di decorare.</span></div><div class="tips">Il riposo è fondamentale: se servito subito risulta molle.</div>`,
 
+      'sweetTreats.cards.pancake.title': 'Pancake Stack',
       'sweetTreats.cards.pancake.desc': 'Torre di 3 pancake soffici. Serviti con sciroppo d\'acero, frutta fresca o salse Badiani.',
       'sweetTreats.cards.pancake.stats': `<li><strong>Porzione:</strong> 3 pezzi</li><li><strong>Cottura:</strong> Fino a comparsa bolle</li><li><strong>Topping:</strong> Generoso</li>`,
       'sweetTreats.cards.pancake.details': `<div class="steps"><span>1 · Versa 3 dischi di impasto sulla piastra.</span><span>2 · Gira quando compaiono le bolle in superficie.</span><span>3 · Impila e decora abbondantemente.</span></div>`,
 
+      'sweetTreats.cards.italianaPlain.title': 'Crepe Italiana (Plain)',
       'sweetTreats.cards.italianaPlain.desc': 'Mozzarella, rucola e pomodorini su base classica. Fresca e leggera.',
       'sweetTreats.cards.italianaPlain.stats': `<li><strong>Base:</strong> Classica</li><li><strong>Ripieno:</strong> Mozzarella, rucola, pomodorini</li><li><strong>Condimento:</strong> Olio EVO, sale, origano</li>`,
       'sweetTreats.cards.italianaPlain.details': `<div class="steps"><span>1 · Cuoci la crepe e gira.</span><span>2 · Aggiungi mozzarella e fai sciogliere leggermente.</span><span>3 · Aggiungi rucola e pomodorini conditi, chiudi a portafoglio.</span></div>`,
 
+      'sweetTreats.cards.italianaBeetroot.title': 'Crepe Italiana (Beetroot)',
       'sweetTreats.cards.italianaBeetroot.desc': 'La variante colorata: impasto alla barbabietola per un look unico e un tocco dolce-terroso.',
       'sweetTreats.cards.italianaBeetroot.stats': `<li><strong>Base:</strong> Beetroot (Barbabietola)</li><li><strong>Ripieno:</strong> Mozzarella, rucola, pomodorini</li><li><strong>Visual:</strong> Colore rosso/viola intenso</li>`,
       'sweetTreats.cards.italianaBeetroot.details': `<div class="steps"><span>1 · Usa il mix beetroot (3g polvere per 250g mix).</span><span>2 · Procedi come per la classica Italiana.</span><span>3 · Il contrasto di colori è il punto di forza: lascia intravedere il ripieno.</span></div>`,
 
+      'sweetTreats.cards.prosciuttoPlain.title': 'Crepe Prosciutto (Plain)',
       'sweetTreats.cards.prosciuttoPlain.desc': 'Classica con Prosciutto Crudo, mozzarella e rucola.',
       'sweetTreats.cards.prosciuttoPlain.stats': `<li><strong>Base:</strong> Classica</li><li><strong>Ripieno:</strong> Crudo, mozzarella, rucola</li><li><strong>Servizio:</strong> Calda e filante</li>`,
       'sweetTreats.cards.prosciuttoPlain.details': `<div class="steps"><span>1 · Sciogli la mozzarella sulla crepe in cottura.</span><span>2 · Aggiungi il prosciutto a fine cottura per non cuocerlo troppo.</span><span>3 · Completa con rucola e chiudi.</span></div>`,
+
+      'sweetTreats.cards.prosciuttoBeetroot.title': 'Crepe Prosciutto (Beetroot)',
+      'sweetTreats.cards.prosciuttoBeetroot.desc': 'Prosciutto Crudo su base alla barbabietola. Un twist moderno su un classico.',
+      'sweetTreats.cards.prosciuttoBeetroot.stats': `<li><strong>Base:</strong> Beetroot</li><li><strong>Ripieno:</strong> Crudo, mozzarella, rucola</li><li><strong>Gusto:</strong> Sapido + dolce (impasto)</li>`,
+      'sweetTreats.cards.prosciuttoBeetroot.details': `<div class="steps"><span>1 · Prepara la base beetroot.</span><span>2 · Farcisci generosamente.</span><span>3 · Servi tagliata a metà per mostrare gli strati.</span></div>`,
+
+      'sweetTreats.cards.gelatoBurger.title': 'Gelato Burger',
+      'sweetTreats.cards.gelatoBurger.desc': 'Una scoop di gelato in una brioche morbida, chiusa a caldo in pochi secondi: effetto “wow” e servizio veloce.',
+      'sweetTreats.cards.gelatoBurger.stats': `<li>Pane: Brioche bun leggermente scaldato</li><li>Gelato: 1 scoop (circa 70 g) a scelta</li><li>Sauce: 1 sola scelta (standard)</li>`,
+      'sweetTreats.cards.gelatoBurger.details': `<div class="steps"><span>1 · Scalda leggermente la brioche (non tostare troppo).</span><span>2 · Inserisci una scoop di gelato (circa 70 g) e rifinisci con una sola salsa a scelta.</span><span>3 · Chiudi, servi subito e consiglia di mangiare come un panino.</span></div>`,
 
       'sweetTreats.cards.prosciuttoBeetroot.desc': 'Prosciutto Crudo su base alla barbabietola. Un twist moderno su un classico.',
       'sweetTreats.cards.prosciuttoBeetroot.stats': `<li><strong>Base:</strong> Beetroot</li><li><strong>Ripieno:</strong> Crudo, mozzarella, rucola</li><li><strong>Gusto:</strong> Sapido + dolce (impasto)</li>`,
@@ -1195,98 +1240,122 @@
       'slittiYoyo.footer.stats.quality': 'Quality',
       'slittiYoyo.footer.stats.origin': 'Origin',
 
+      'caffe.cards.espressoSingle.title': 'Espresso Single',
       'caffe.cards.espressoSingle.desc': 'The essence of coffee. Perfect extraction for an intense taste, rounded body and a persistent crema.',
       'caffe.cards.espressoSingle.stats': `<li><strong>Dose:</strong> 1 shot in a small cup</li><li><strong>Extraction:</strong> 25-30 seconds</li><li><strong>Crema:</strong> Hazelnut colour, tiger-striped, elastic</li>`,
       'caffe.cards.espressoSingle.details': `<div class="steps"><span>1 · Clean and dry the portafilter. Grind the dose fresh.</span><span>2 · Level and tamp evenly.</span><span>3 · Extract and serve immediately (the crema fades quickly).</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">🥡 Take Away (TW)</strong><img src="assets/products/espresso TW.png" alt="Espresso TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;"><p style="font-size: 0.9em;">Use a 4oz cup. Always close with a lid.</p></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Troubleshooting:</strong> Too fast (&lt;20s)? Grind too coarse. Too slow (&gt;35s)? Grind too fine.</div>`,
 
+      'caffe.cards.espressoDouble.title': 'Espresso Double',
       'caffe.cards.espressoDouble.desc': 'Double energy. Two shots extracted at the same time for a richer taste.',
       'caffe.cards.espressoDouble.stats': `<li><strong>Dose:</strong> 2 shots in a large espresso cup or small glass</li><li><strong>Extraction:</strong> 25–30 seconds (steady flow)</li><li><strong>Crema:</strong> Thick and long-lasting</li>`,
       'caffe.cards.espressoDouble.details': `<div class="steps"><span>1 · Use the double filter. Grind a double dose.</span><span>2 · Tamp firmly and evenly.</span><span>3 · Pull 2 shots in 25–30s.</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">🥡 Take Away (TW)</strong><img src="assets/products/espresso double TW.png" alt="Espresso Double TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;"><p style="font-size: 0.9em;">Use a 4oz cup (or 8oz on request). Lid required.</p></div>`,
 
+      'caffe.cards.espressoMacchiato.title': 'Espresso Macchiato',
       'caffe.cards.espressoMacchiato.desc': 'Espresso “macchiato” with a small amount of hot milk foam.',
       'caffe.cards.espressoMacchiato.stats': `<li><strong>Base:</strong> 1 espresso shot</li><li><strong>Top:</strong> 1–2 teaspoons of milk foam</li><li><strong>Service:</strong> Espresso cup</li>`,
       'caffe.cards.espressoMacchiato.details': `<div class="steps"><span>1 · Pull a single espresso.</span><span>2 · Steam a small amount of milk (microfoam).</span><span>3 · Gently add the foam to the centre of the crema (the “macchia”).</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">🥡 Take Away (TW)</strong><p style="font-size: 0.9em;">Available in a 4oz cup. Always close with a lid.</p></div>`,
 
+      'caffe.cards.doubleMacchiato.title': 'Double Macchiato',
       'caffe.cards.doubleMacchiato.desc': 'Double espresso with a spot of foamed milk. More intense, same milk touch.',
       'caffe.cards.doubleMacchiato.stats': `<li><strong>Base:</strong> 2 espresso shots</li><li><strong>Top:</strong> Milk foam (microfoam)</li><li><strong>Service:</strong> Large cup or small glass</li>`,
       'caffe.cards.doubleMacchiato.details': `<div class="steps"><span>1 · Pull a double espresso.</span><span>2 · Add the milk foam to the centre.</span><span>3 · Serve immediately.</span></div>`,
 
+      'caffe.cards.americano.title': 'Americano',
       'caffe.cards.americano.desc': 'Hot water + espresso pulled into the cup. Available as Take Away.',
       'caffe.cards.americano.stats': `<li>Single recipe: 8 oz hot water</li><li>Double recipe: 12 oz hot water</li><li>Safety gap: leave 2 cm from the top</li>`,
       'caffe.cards.americano.details': `<div class="steps"><span>1 · Fill the cup with hot water, leaving 2 cm.</span><span>2 · Pull the espresso into the cup (or into a separate beaker).</span><span>3 · Serve with saucer + spoon; offer milk on the side if requested.</span></div>`,
 
+      'caffe.cards.cappuccino.title': 'Cappuccino',
       'caffe.cards.cappuccino.desc': 'Espresso, steamed milk and fine foam. Velvety texture with no big bubbles.',
       'caffe.cards.cappuccino.stats': `<li>Size: 8 oz (regular) / 12 oz (large)</li><li>Foam: about 1/3 of the volume</li><li>Temperature: 65°C (sweet spot)</li>`,
       'caffe.cards.cappuccino.details': `<div class="steps"><span>1 · Pull espresso into the cup.</span><span>2 · Stretch for 3–5s (air), then roll (whirlpool) to microfoam.</span><span>3 · Pour controlling the foam; ask if they want cocoa.</span></div>`,
 
+      'caffe.cards.flatWhite.title': 'Flat White',
       'caffe.cards.flatWhite.desc': 'Double espresso + milk with a very thin microfoam. Silky texture.',
       'caffe.cards.flatWhite.stats': `<li>Milk: stretch 3 seconds, then whirlpool.</li><li>Temperature: 65°C.</li><li>Pour: start high, then lower for latte art.</li>`,
       'caffe.cards.flatWhite.details': `<div class="steps"><span>1 · Pull a double espresso into an 8 oz cup.</span><span>2 · Steam milk avoiding too much air (microfoam).</span><span>3 · Pour for a glossy, even texture.</span></div>`,
 
+      'caffe.cards.mocha.title': 'Mocha',
       'caffe.cards.mocha.desc': 'Espresso + cocoa + milk. Dissolve the cocoa in the espresso first.',
       'caffe.cards.mocha.stats': `<li>Single shot</li><li>Milk: light stretch</li><li>8 oz cup</li>`,
       'caffe.cards.mocha.details': `<div class="steps"><span>1 · Mix espresso and cocoa in the cup.</span><span>2 · Steam milk like a classic latte.</span><span>3 · Pour keeping the whirlpool.</span></div>`,
 
+      'caffe.cards.hotChocolate.title': 'Hot Chocolate',
       'caffe.cards.hotChocolate.desc': 'Creamy hot chocolate: smooth texture, served hot.',
       'caffe.cards.hotChocolate.stats': `<li>Temperature: 65°C</li><li>Texture: silky (no lumps)</li><li>Service: spoon + saucer</li>`,
       'caffe.cards.hotChocolate.details': `<div class="steps"><span>1 · Heat the base to serving temperature.</span><span>2 · Stir/blend before pouring.</span><span>3 · Pour, clean the rim and serve with a spoon.</span></div>`,
 
+      'caffe.cards.chaiLatte.title': 'Chai Latte',
       'caffe.cards.chaiLatte.desc': '2 pumps of chai syrup, glossy steamed milk and cinnamon.',
       'caffe.cards.chaiLatte.stats': `<li>Syrup: 2 pumps</li><li>Milk temp: 65°C</li><li>Finish: cinnamon (light dust)</li>`,
       'caffe.cards.chaiLatte.details': `<div class="steps"><span>1 · Pump chai syrup into the cup.</span><span>2 · (Dirty) Pull 1 shot and mix with the syrup.</span><span>3 · Steam milk and pour; finish with cinnamon.</span></div><div class="tips">Suggest Dirty Chai for guests who want spices + caffeine.</div>`,
 
+      'caffe.cards.teaSelection.title': 'Tea Selection',
       'caffe.cards.teaSelection.desc': 'Premium tea selection. Served with a teapot and an infusion timer for a perfect steep.',
       'caffe.cards.teaSelection.stats': `<li>Water: 90–95°C (Black/Herbal), 80°C (Green)</li><li>Steep: 3–5 minutes</li><li>Service: teapot + cup + milk/lemon on the side</li>`,
       'caffe.cards.teaSelection.details': `<div class="steps"><span>1 · Warm the teapot and add the bag/infuser.</span><span>2 · Fill with water at the correct temperature.</span><span>3 · Serve with a timer and a small plate for the used bag.</span></div>`,
 
+      'caffe.cards.afternoonTeaSet.title': 'Afternoon Tea Set',
       'caffe.cards.afternoonTeaSet.desc': 'Selection of mini sweets, scones and sandwiches for the afternoon tea experience.',
       'caffe.cards.afternoonTeaSet.stats': `<li><strong>Includes:</strong> scones, finger sandwiches, mini pastries</li><li><strong>Drink:</strong> tea or Prosecco</li><li><strong>Service:</strong> 3-tier stand</li>`,
       'caffe.cards.afternoonTeaSet.details': `<div class="steps"><span>1 · Build the stand: savoury at the bottom, scones in the middle, sweets on top.</span><span>2 · Serve the tea or chosen drink.</span><span>3 · Explain the items at the table.</span></div>`,
 
+      'caffe.cards.affogato.title': 'Affogato',
       'caffe.cards.affogato.desc': 'GELATO “drowned” in espresso: serve 1 scoop of Buontalenti and pour a double espresso in front of the guest.',
       'caffe.cards.affogato.stats': `<li>Chilled 8 oz glass</li><li>Double espresso</li><li>Serve immediately</li>`,
       'caffe.cards.affogato.details': `<div class="steps"><span>1 · Pre-chill the glass.</span><span>2 · Portion 70 g of Buontalenti.</span><span>3 · Pour the espresso in front of the guest for a little show.</span></div>`,
 
+      'caffe.cards.whippedCoffee.title': 'Whipped Coffee',
       'caffe.cards.whippedCoffee.desc': 'Single espresso topped with fresh whipped cream.',
       'caffe.cards.whippedCoffee.stats': `<li>Pre-warmed 2 oz cup</li><li>Whip cream fresh</li><li>Serve with a spoon</li>`,
       'caffe.cards.whippedCoffee.details': `<div class="steps"><span>1 · Pull a single espresso.</span><span>2 · Pipe whipped cream into a neat dome.</span><span>3 · Serve immediately.</span></div>`,
 
+      'caffe.cards.matchaLatte.title': 'Matcha Latte',
       'caffe.cards.matchaLatte.desc': 'Ceremonial matcha green tea with steamed milk. Bright green colour and umami notes.',
       'caffe.cards.matchaLatte.stats': `<li>Matcha dose: 2 g (or dedicated scoop)</li><li>Water: 30 ml hot (80°C) to dissolve</li><li>Milk: steamed like cappuccino</li>`,
       'caffe.cards.matchaLatte.details': `<div class="steps"><span>1 · Dissolve matcha with a little hot water using a whisk (chasen) or mixer.</span><span>2 · Steam milk for a silky microfoam.</span><span>3 · Pour milk onto the matcha base (latte art).</span></div><div class="tips">Avoid boiling water (it burns the matcha). The paste must be smooth with no lumps.</div>`,
 
+      'caffe.cards.icedMatchaLatte.title': 'Iced Matcha Latte',
       'caffe.cards.icedMatchaLatte.desc': 'Refreshing iced version. Matcha poured over milk and ice for a two-tone look.',
       'caffe.cards.icedMatchaLatte.stats': `<li>Ice: fill the cup</li><li>Cold milk: 3/4 of the cup</li><li>Top: concentrated matcha base</li>`,
       'caffe.cards.icedMatchaLatte.details': `<div class="steps"><span>1 · Fill the cup with ice and cold milk.</span><span>2 · Prep a concentrated matcha with hot water.</span><span>3 · Pour matcha slowly on top to create layers.</span></div>`,
 
+      'caffe.cards.matchaAffogato.title': 'Matcha Affogato',
       'caffe.cards.matchaAffogato.desc': 'A scoop of Buontalenti affogato-style with a warm dose of ceremonial matcha.',
       'caffe.cards.matchaAffogato.stats': `<li>GELATO: 1 scoop Buontalenti</li><li>Matcha: standard concentrated dose</li><li>Service: pour at the table</li>`,
       'caffe.cards.matchaAffogato.details': `<div class="steps"><span>1 · Prepare the cup with the GELATO scoop.</span><span>2 · Prepare warm matcha in a small jug.</span><span>3 · Serve and pour the bright green matcha over the white GELATO.</span></div>`,
 
+      'caffe.cards.dirtyMatcha.title': 'Dirty Matcha',
       'caffe.cards.dirtyMatcha.desc': 'East meets West: Matcha Latte with an added espresso shot.',
       'caffe.cards.dirtyMatcha.stats': `<li>Base: Matcha Latte (hot or iced)</li><li>Add-on: 1 espresso shot</li><li>Profile: energising and complex</li>`,
       'caffe.cards.dirtyMatcha.details': `<div class="steps"><span>1 · Make a standard Matcha Latte.</span><span>2 · Pull one espresso shot.</span><span>3 · Add the espresso (for iced, pour on top for layering).</span></div>`,
 
+      'caffe.cards.icedAmericano.title': 'Iced Americano',
       'caffe.cards.icedAmericano.desc': '3 large ice cubes, cold water and a double espresso poured slowly.',
       'caffe.cards.icedAmericano.stats': `<li>12 oz cup</li><li>Leave 1/4 space</li><li>Mix sugar into the shot</li>`,
       'caffe.cards.icedAmericano.details': `<div class="steps"><span>1 · Add ice and water leaving space.</span><span>2 · Pull a double espresso into a separate cup.</span><span>3 · Pour slowly over a cube for visual effect.</span></div>`,
 
+      'caffe.cards.icedLatte.title': 'Iced Latte',
       'caffe.cards.icedLatte.desc': 'Ice + cold milk, double espresso poured on top to create layering.',
       'caffe.cards.icedLatte.stats': `<li>3 large cubes or 9 small</li><li>Milk up to 3/4</li><li>Syrups: mix into the espresso</li>`,
       'caffe.cards.icedLatte.details': `<div class="steps"><span>1 · Add ice and milk leaving space.</span><span>2 · Pull a double espresso.</span><span>3 · Pour slowly over a cube for a “slow motion” look.</span></div>`,
 
+      'caffe.cards.pistachioIcedLatte.title': 'Pistachio Iced Latte',
       'caffe.cards.pistachioIcedLatte.desc': 'Pistachio iced latte: sauce/syrup + cold milk + espresso for a cascade effect.',
       'caffe.cards.pistachioIcedLatte.stats': `<li>Size: 12 oz</li><li>Ice: 3 large cubes</li><li>Syrup/sauce: before the milk</li>`,
       'caffe.cards.pistachioIcedLatte.details': `<div class="steps"><span>1 · Add sauce/syrup to the cup (swirl the inside).</span><span>2 · Add ice and milk.</span><span>3 · Pour espresso on top.</span></div>`,
 
+      'caffe.cards.smoothieGialloPassion.title': 'Smoothie Giallo Passion',
       'caffe.cards.smoothieGialloPassion.desc': 'Tropical mix with mango, pineapple and passion fruit. Vibrant yellow colour.',
       'caffe.cards.smoothieGialloPassion.stats': `<li>Base: apple/orange juice or coconut water</li><li>Fruit mix: Yellow pack</li><li>Blend: 30 seconds</li>`,
       'caffe.cards.smoothieGialloPassion.details': `<div class="steps"><span>1 · Pour the liquid base into the blender.</span><span>2 · Add the frozen fruit pack.</span><span>3 · Blend until smooth and serve with a wide straw.</span></div>`,
 
+      'caffe.cards.smoothieRossoBerry.title': 'Smoothie Rosso Berry',
       'caffe.cards.smoothieRossoBerry.desc': 'Berry explosion: strawberries, raspberries, blueberries. Sweet and tangy.',
       'caffe.cards.smoothieRossoBerry.stats': `<li>Base: apple juice or milk (if requested)</li><li>Fruit mix: Red pack</li><li>Blend: 30 seconds</li>`,
       'caffe.cards.smoothieRossoBerry.details': `<div class="steps"><span>1 · Pour the liquid base into the blender.</span><span>2 · Add the frozen fruit pack.</span><span>3 · Blend until smooth.</span></div>`,
 
+      'caffe.cards.smoothieVerdeBoost.title': 'Smoothie Verde Boost',
       'caffe.cards.smoothieVerdeBoost.desc': 'Healthy mix with spinach, green apple, cucumber and ginger. Fresh and thirst-quenching.',
       'caffe.cards.smoothieVerdeBoost.stats': `<li>Base: water or apple juice</li><li>Fruit/veg mix: Green pack</li><li>Blend: 30 seconds</li>`,
       'caffe.cards.smoothieVerdeBoost.details': `<div class="steps"><span>1 · Pour the liquid base into the blender.</span><span>2 · Add the green pack.</span><span>3 · Blend well to break down the fibres.</span></div>`,
@@ -1443,23 +1512,27 @@
       'festive.footer.stats.procedures': 'Procedures',
       'festive.footer.stats.season': 'Season',
 
+      'festive.cards.churros.title': 'Churros',
       'festive.cards.churros.tag1': 'Fryer 190 °C',
       'festive.cards.churros.tag2': '8 pieces/portion',
       'festive.cards.churros.desc': 'Fried dough sticks: crunchy outside, soft inside. Served warm (8 pieces) with sugar and cinnamon.',
       'festive.cards.churros.details': `<div class="steps"><span>1 - Prepare the sugar/cinnamon mix in a wide tray.</span><span>2 - Take 8 churros from the freezer; fry for 8–9 min until golden.</span><span>3 - Drain well and coat in the mix for an even finish.</span></div><div class="tips">Keep an eye on timing to avoid a raw centre; replace the oil when it darkens.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Double batch:</strong> "Want 16 churros to share?"</span><span><strong>Sauce combo:</strong> "Try pistachio + dark chocolate"</span><span><strong>Bundle:</strong> "Churros + hot chocolate = the perfect combo"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Oil temperature is critical: exactly 190 °C. Lower = greasy; higher = burnt outside/raw inside. Replace oil every ~40 portions or when it darkens.</div>`,
 
+      'festive.cards.panettoneClassic.title': 'Panettone Classico',
       'festive.cards.panettoneClassic.tag1': 'Slice service',
       'festive.cards.panettoneClassic.tag2': '8 portions',
       'festive.cards.panettoneClassic.desc': 'The king of the holidays. Traditional recipe with raisins and candied fruit, naturally leavened. Served by the slice (1/8) on a dessert plate with cutlery.',
       'festive.cards.panettoneClassic.stats': `<li>Cut: vertical, following the 8 guide lines; long serrated knife</li><li>Portions: 8 even slices for consistency</li><li>Presentation: dessert plate + cutlery, always</li><li>Visual sample: keep one slice visible on the counter to boost orders (visual storytelling)</li><li>Suggested pairings: Buontalenti GELATO, pistachio sauce, hot chocolate</li>`,
       'festive.cards.panettoneClassic.details': `<div class="steps"><span>1 - Cut vertically following the guide lines.</span><span>2 - Plate with cutlery.</span><span>3 - Offer an upsell right away: Buontalenti scoop + sauce or hot chocolate.</span></div><div class="tips">Keep one of the 8 slices as a visual sample to support storytelling and conversion.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Option 1:</strong> "Slice + Buontalenti scoop is our signature pairing"</span><span><strong>Option 2:</strong> "Add pistachio sauce for the perfect contrast?"</span><span><strong>Option 3:</strong> "With hot chocolate it becomes pure indulgence"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Use a long serrated knife for a clean cut without crumbling. Keep slices uniform. Display a sample slice to trigger visual orders.</div>`,
 
+      'festive.cards.panettoneDark.title': 'Panettone Dark Chocolate',
       'festive.cards.panettoneDark.tag1': 'Warm option',
       'festive.cards.panettoneDark.tag2': 'Crepe plate',
       'festive.cards.panettoneDark.desc': 'A indulgent version with dark chocolate chips in the dough. Great served warm (10" on the plate) to soften the chocolate.',
       'festive.cards.panettoneDark.stats': `<li>Crepe plate: clean and dry (no oil)</li><li>Timing: exactly 10 seconds per side (longer = loses crunch)</li><li>Serve immediately after warming</li><li>Pairing: Dark Chocolate + pistachio sauce (gourmet contrast)</li><li>Upsell: cold GELATO + warm panettone = amazing temperature contrast</li>`,
       'festive.cards.panettoneDark.details': `<div class="steps"><span>1 - Place the slice on the crepe plate.</span><span>2 - Toast for 10 seconds per side (no oil).</span><span>3 - Serve with sauce and Buontalenti if requested.</span></div><div class="tips">Always ask if they want it warm: it boosts conversion and perceived quality.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Option 1:</strong> "Try it warm: the chocolate melts"</span><span><strong>Option 2:</strong> "Add a Buontalenti scoop for the hot/cold contrast"</span><span><strong>Option 3:</strong> "Shall we add pistachio sauce for a gourmet twist?"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> 10" per side is the standard: over that it dries out. Keep the plate clean and dry.</div>`,
 
+      'festive.cards.pandoroClassic.title': 'Pandoro Classico',
       'festive.cards.pandoroClassic.tag1': 'Icing sugar',
       'festive.cards.pandoroClassic.desc': 'Soft, buttery, 8-point star shape. Served with a fresh dusting of icing sugar.',
       'festive.cards.pandoroClassic.stats': `<li><strong>Cut:</strong> follow the star guide for 8 even slices (pro presentation)</li><li><strong>Icing sugar:</strong> ALWAYS at the moment of service, never before (fresh “snow” effect)</li><li><strong>Dessert plate + cutlery:</strong> always</li><li><strong>Temperature:</strong> room temp for maximum aroma</li><li><strong>Storytelling:</strong> "36-hour leavening with premium ingredients" (supports value)</li><li><strong>Suggested pairings:</strong> Buontalenti GELATO, mascarpone or pistachio sauce</li>`,
@@ -1533,38 +1606,47 @@
       'sweetTreats.carousel.main.title': 'Sweet Crepes & Waffles',
       'sweetTreats.carousel.main.category': 'Sweet temptations',
 
+      'sweetTreats.cards.crepeSauce.title': 'Crepe with Sauce',
       'sweetTreats.cards.crepeSauce.desc': 'Classic crepe served with one of our signature sauces (Pistachio, Hazelnut, Chocolate). The perfect base for any add-on.',
       'sweetTreats.cards.crepeSauce.stats': `<li><strong>Mix shelf life:</strong> 3 days (fridge)</li><li><strong>Rest:</strong> at least 2 hours (fridge)</li><li><strong>Cooking:</strong> 20s per side</li>`,
       'sweetTreats.cards.crepeSauce.details': `<div class="steps"><span>1 · Spread the mix; flip when golden.</span><span>2 · Spread sauce on half, fold into a half-moon then into a fan.</span><span>3 · Plate, dust with icing sugar and drizzle sauce on top.</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">✨ Pro tip:</strong> The plate must be hot but not smoking. The first crepe is often a test run.</div>`,
 
+      'sweetTreats.cards.buontalentiCrepe.title': 'Signature Buontalenti Crepe',
       'sweetTreats.cards.buontalentiCrepe.desc': 'Our best seller: crepe with a sauce of choice and one scoop of Buontalenti on top.',
       'sweetTreats.cards.buontalentiCrepe.stats': `<li><strong>GELATO:</strong> 1 scoop Buontalenti (70g)</li><li><strong>Sauce:</strong> 30g inside + decoration</li><li><strong>Service:</strong> Dessert plate with cutlery</li>`,
       'sweetTreats.cards.buontalentiCrepe.details': `<div class="steps"><span>1 · Make the sauce crepe as per standard.</span><span>2 · Fold into a fan and dust with icing sugar.</span><span>3 · Place the Buontalenti scoop on top and finish with sauce.</span></div><div class="tips">Add the GELATO at the very last second so it doesn't melt on the warm crepe.</div>`,
 
+      'sweetTreats.cards.waffles.title': 'Waffles',
       'sweetTreats.cards.waffles.desc': 'Golden and crunchy outside, soft inside. Served with sauces, fruit or GELATO.',
       'sweetTreats.cards.waffles.stats': `<li><strong>Cook:</strong> 2.5 min per side (5 min total)</li><li><strong>Rest:</strong> 45s for crunch</li><li><strong>Batter:</strong> 1 scoop (177ml)</li>`,
       'sweetTreats.cards.waffles.details': `<div class="steps"><span>1 · Pour the mix into the hot plate and close.</span><span>2 · Cook 2.5 min, flip and cook another 2.5 min.</span><span>3 · Rest on a rack for 45s before decorating.</span></div><div class="tips">Resting is key: if served immediately it turns soft.</div>`,
 
+      'sweetTreats.cards.pancake.title': 'Pancake Stack',
       'sweetTreats.cards.pancake.desc': 'A stack of 3 fluffy pancakes. Served with maple syrup, fresh fruit or Badiani sauces.',
       'sweetTreats.cards.pancake.stats': `<li><strong>Portion:</strong> 3 pieces</li><li><strong>Cooking:</strong> until bubbles appear</li><li><strong>Topping:</strong> generous</li>`,
       'sweetTreats.cards.pancake.details': `<div class="steps"><span>1 · Pour 3 rounds of batter onto the plate.</span><span>2 · Flip when bubbles appear on the surface.</span><span>3 · Stack and decorate generously.</span></div>`,
 
+      'sweetTreats.cards.italianaPlain.title': 'Crepe Italiana (Plain)',
       'sweetTreats.cards.italianaPlain.desc': 'Mozzarella, rocket and cherry tomatoes on a classic base. Fresh and light.',
       'sweetTreats.cards.italianaPlain.stats': `<li><strong>Base:</strong> Classic</li><li><strong>Filling:</strong> Mozzarella, rocket, cherry tomatoes</li><li><strong>Finish:</strong> EVO oil, salt, oregano</li>`,
       'sweetTreats.cards.italianaPlain.details': `<div class="steps"><span>1 · Cook the crepe and flip.</span><span>2 · Add mozzarella and let it melt slightly.</span><span>3 · Add dressed rocket and cherry tomatoes; fold into a parcel.</span></div>`,
 
+      'sweetTreats.cards.italianaBeetroot.title': 'Crepe Italiana (Beetroot)',
       'sweetTreats.cards.italianaBeetroot.desc': 'The colourful version: beetroot batter for a unique look and a sweet-earthy note.',
       'sweetTreats.cards.italianaBeetroot.stats': `<li><strong>Base:</strong> Beetroot</li><li><strong>Filling:</strong> Mozzarella, rocket, cherry tomatoes</li><li><strong>Visual:</strong> deep red/purple colour</li>`,
       'sweetTreats.cards.italianaBeetroot.details': `<div class="steps"><span>1 · Use the beetroot mix (3g powder per 250g mix).</span><span>2 · Build it like the classic Italiana.</span><span>3 · Colour contrast is the hero: let the filling show.</span></div>`,
 
+      'sweetTreats.cards.prosciuttoPlain.title': 'Crepe Prosciutto (Plain)',
       'sweetTreats.cards.prosciuttoPlain.desc': 'Classic with Prosciutto Crudo, mozzarella and rocket.',
       'sweetTreats.cards.prosciuttoPlain.stats': `<li><strong>Base:</strong> Classic</li><li><strong>Filling:</strong> Crudo, mozzarella, rocket</li><li><strong>Service:</strong> warm and melty</li>`,
       'sweetTreats.cards.prosciuttoPlain.details': `<div class="steps"><span>1 · Melt the mozzarella while the crepe is cooking.</span><span>2 · Add prosciutto at the end to avoid overcooking it.</span><span>3 · Finish with rocket and fold.</span></div>`,
 
+      'sweetTreats.cards.prosciuttoBeetroot.title': 'Crepe Prosciutto (Beetroot)',
       'sweetTreats.cards.prosciuttoBeetroot.desc': 'Prosciutto Crudo on a beetroot base. A modern twist on a classic.',
       'sweetTreats.cards.prosciuttoBeetroot.stats': `<li><strong>Base:</strong> Beetroot</li><li><strong>Filling:</strong> Crudo, mozzarella, rocket</li><li><strong>Taste:</strong> savoury + sweet (batter)</li>`,
       'sweetTreats.cards.prosciuttoBeetroot.details': `<div class="steps"><span>1 · Prepare the beetroot base.</span><span>2 · Fill generously.</span><span>3 · Serve cut in half to show the layers.</span></div>`,
 
+      'sweetTreats.cards.gelatoBurger.title': 'Gelato Burger',
       'sweetTreats.cards.gelatoBurger.desc': 'One scoop of GELATO in a soft brioche bun, sealed warm in seconds: “wow” effect and fast service.',
       'sweetTreats.cards.gelatoBurger.stats': `<li><strong>Bread:</strong> brioche bun, lightly warmed</li><li><strong>GELATO:</strong> 1 scoop (~70 g), flavour of choice</li><li><strong>Sauce:</strong> 1 choice only (standard)</li>`,
       'sweetTreats.cards.gelatoBurger.details': `<div class="steps"><span>1 · Warm the brioche lightly (don't over-toast).</span><span>2 · Add one scoop of GELATO (~70 g) and finish with one sauce choice.</span><span>3 · Close, serve immediately, and suggest eating it like a sandwich.</span></div>`,
@@ -1612,26 +1694,31 @@
       'pastries.carousel.main.title': 'Pastry Lab',
       'pastries.carousel.main.category': 'Counter pastry',
 
+      'pastries.cards.cakes.title': 'Cakes',
       'pastries.cards.cakes.alt': 'Slice of Badiani cake',
       'pastries.cards.cakes.desc': 'Chocolate (3g), Carrot (2g), Walnut (3g), always cut 14 slices per cake.',
       'pastries.cards.cakes.stats': `<li>Use the cake slicer as a guide</li><li>Serve on a plate with cutlery</li><li>Upsell a Buontalenti scoop + sauce</li>`,
       'pastries.cards.cakes.details': `<div class="steps"><span>1 → Place the cutter and score 14 portions.</span><span>2 → Serve the slice on a plate and suggest a pairing with GELATO.</span><span>3 → If the upsell lands, add one scoop with the milkshake scooper and drizzle sauce on the slice.</span></div><div class="tips">Team reminder: hot chocolate + cake is a premium combo.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💫 Upselling</strong><span><strong>Option 1:</strong> "Would you like to enrich your slice with a scoop of Buontalenti?"</span><span><strong>Option 2:</strong> "Shall we add a pistachio or caramel sauce drizzle?"</span><span><strong>Option 3:</strong> "Perfect combo? Cake + hot chocolate"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">✨ Pro tip:</strong> Keep cakes covered with film between cuts to avoid drying out. Room temp: max 2 hours out of the fridge.</div>`,
 
+      'pastries.cards.brownie.title': 'Brownies',
       'pastries.cards.brownie.alt': 'Badiani brownie',
       'pastries.cards.brownie.desc': 'Cut 4×3 (12 pieces) and serve on a plate with cutlery.',
       'pastries.cards.brownie.stats': `<li>Display on the dedicated tray</li><li>Upsell GELATO + sauce</li><li>Communicate shelf life</li>`,
       'pastries.cards.brownie.details': `<div class="steps"><span>1 - Cut 12 equal pieces and display on the tray.</span><span>2 - On order, plate and offer a Buontalenti scoop.</span><span>3 - Drizzle sauce on the brownie and on the GELATO.</span></div><div class="tips">Use the round scooper to keep the portion consistent.</div>`,
 
+      'pastries.cards.loaf.title': 'Loaf',
       'pastries.cards.loaf.alt': 'Banana loaf',
       'pastries.cards.loaf.desc': 'Each loaf must yield 10 slices. Service and upsell are the same as cakes.',
       'pastries.cards.loaf.stats': `<li>Cut consistent thickness</li><li>Serve with cutlery</li><li>Offer the guest\'s favourite sauce</li>`,
       'pastries.cards.loaf.details': `<div class="steps"><span>1 - Cut 10 equal slices and display the first one.</span><span>2 - Add a scoop + sauce if the guest agrees.</span><span>3 - Keep the loaf wrapped when not in use.</span></div><div class="tips">Keep shelf life visible on the label to make daily checks easy.</div>`,
 
+      'pastries.cards.croissants.title': 'Croissants',
       'pastries.cards.croissants.alt': 'Filled croissant',
       'pastries.cards.croissants.desc': 'Pre-laminated croissant, filled with the sauce requested by the guest. Open from the side, fill, and finish the presentation on a plate with fork and knife. Remember to lightly warm yesterday\'s croissants to revive the fragrance.',
       'pastries.cards.croissants.stats': `<li>Shelf life: 2 days from defrost (check date)</li><li>Cut: use a serrated knife; open the side horizontally</li><li>Filling: piping bag for consistency and precision</li><li>Presentation: sauce inside + drizzle on top, clean plate, cutlery always</li><li>Warming (if needed): 8–10 seconds only; never over 15s (filling melts)</li>`,
       'pastries.cards.croissants.details': `<div class="steps"><span>1 - Score the side with a serrated knife.</span><span>2 - Fill inside and top with the same sauce.</span><span>3 - Plate, add cutlery and serve.</span></div><div class="tips">Communicate shelf life and rotation: 2 days from defrost.</div>`,
 
+      'pastries.cards.scone.title': 'Scones',
       'pastries.cards.scone.alt': 'Scone filled with GELATO',
       'pastries.cards.scone.desc': 'Warm for 15s in the Gelato Burger machine, fill with a Buontalenti scoop and sauce.',
       'pastries.cards.scone.stats': `<li>Cut horizontally</li><li>Use the milkshake scooper</li><li>Finish with pistachio or chocolate</li>`,
@@ -4230,6 +4317,64 @@
       'operations.cards.cleaningSchedule.stats': `<li>Vitrina gelato: OFF cada noche</li><li>Vitrina gelato: deep clean semanal</li><li>Filtros: limpieza semanal</li><li>Freezer treats: defrost semanal (sin hielo)</li>`,
       'operations.cards.cleaningSchedule.details': `<div class="steps"><span>1 · Marca el día de deep clean (no improvises).</span><span>2 · Limpia antes de que se acumule: es más rápido.</span><span>3 · Después: monta, sanitiza y abrillanta.</span></div>`,
 
+      'gelatoLab.hero.badge': 'Línea Gelato',
+      'gelatoLab.hero.stars': '⭐ Estrellas: 0/8',
+      'gelatoLab.hero.title': 'Gelato Lab',
+      'gelatoLab.hero.desc': 'Manual para el mostrador de gelato: porciones, servicio take me home, copas escenográficas y mantenimiento de la vitrina a -14/-15 °C.',
+      'gelatoLab.carousel.products.title': 'Línea Gelato',
+      'gelatoLab.carousel.products.category': 'Productos',
+      'gelatoLab.ops.title': 'Setup y conservación',
+      'gelatoLab.ops.category': 'Apertura · Ajustes · Almacenaje · Cierre',
+
+      'gelatoLab.cards.cups.title': 'Coppette',
+      'gelatoLab.cards.cups.desc': 'Tarrinas en tres tamaños: Pequeño (1 sabor, 100 g), Mediano (1-2 sabores, 140 g), Grande (1-3 sabores, 180 g).',
+      'gelatoLab.cards.cups.stats': `<li>Pesaje: Pequeño 100-120g, Mediano 160-200g, Grande 200-240g</li><li>Técnica: scoop lineal + bola para look profesional</li><li>Compactado: elimina el aire empujando contra el lateral</li>`,
+      'gelatoLab.cards.cups.details': `<div class="steps"><span>1 · Calienta la espátula pasándola sobre el gelato.</span><span>2 · Empuja el gelato contra el lateral para eliminar aire.</span><span>3 · Ofrece siempre wafer y nata (upselling).</span></div>`,
+
+      'gelatoLab.cards.cones.title': 'Conos clásicos',
+      'gelatoLab.cards.cones.desc': 'Conos en tres variantes: Clásico (1 sabor), Chocolate o Sin Gluten (1-2 sabores).',
+      'gelatoLab.cards.cones.stats': `<li>Envoltorio: siempre con tissue para higiene y agarre</li><li>Dosificación: 1 bola para cono pequeño, 1-2 para especiales</li><li>Rotación: FIFO estricto (el cono absorbe humedad)</li>`,
+      'gelatoLab.cards.cones.details': `<div class="steps"><span>1 · Envuelve el cono con tissue.</span><span>2 · Prepara la bola y colócala rotando el cono.</span><span>3 · Propón upgrade a cono de chocolate o nata.</span></div>`,
+
+      'gelatoLab.cards.boxes.title': 'Gelato Boxes',
+      'gelatoLab.cards.boxes.desc': 'Gelato para llevar en cajas térmicas de 500/750/1000 ml. Autonomía de 1 hora en bolsa térmica.',
+      'gelatoLab.cards.boxes.stats': `<li>Pequeño: 500 ml (1-3 sabores)</li><li>Mediano: 750 ml (1-4 sabores)</li><li>Grande: 1000 ml (1-5 sabores)</li>`,
+      'gelatoLab.cards.boxes.details': `<div class="steps"><span>1 · Introduce sabores empezando por los más blandos (sorbetes).</span><span>2 · Compacta eliminando aire y limpia bordes.</span><span>3 · Sella con film + cinta Badiani y entrega en bolsa térmica.</span></div>`,
+
+      'gelatoLab.cards.coppa.title': 'Copa Badiani',
+      'gelatoLab.cards.coppa.desc': 'Tres bolas de gelato en copa de vidrio, con nata montada, salsa, mini cono y wafer.',
+      'gelatoLab.cards.coppa.stats': `<li>Base: copa de vidrio fría</li><li>Porción: 3 bolas con scooper redondo</li><li>Topping: nata + swirl de salsa + mini cono + wafer</li>`,
+      'gelatoLab.cards.coppa.details': `<div class="steps"><span>1 · Prepara 3 bolas regulares con el scooper redondo.</span><span>2 · Añade nata y salsa sin ensuciar los bordes.</span><span>3 · Termina con mini cono y wafer; sirve con cuchara de acero.</span></div>`,
+
+      'gelatoLab.ops.displayPrep.title': 'Preparación vitrina (mañana)',
+      'gelatoLab.ops.displayPrep.desc': 'Limpia y prepara la vitrina. Expón solo cuando llegue a -14/-15 °C.',
+      'gelatoLab.ops.displayPrep.stats': `<li>Limpieza: agua caliente + sanitizante</li><li>Metales: spray azul + blue roll para brillo</li><li>Setup: barras, cubetas y puertas correderas</li>`,
+      'gelatoLab.ops.displayPrep.details': `<div class="steps"><span>1 · Limpia y abrillanta metales y cristales.</span><span>2 · Enciende y coloca barras y cubetas.</span><span>3 · A -14/-15°C: carga el gelato y cierra puertas.</span></div>`,
+
+      'gelatoLab.ops.tempDoors.title': 'Temperatura y puertas',
+      'gelatoLab.ops.tempDoors.desc': 'Estándar: -14/-15 °C. Mantén las puertas cerradas si no hay servicio.',
+      'gelatoLab.ops.tempDoors.stats': `<li>Target: -14/-15 °C</li><li>Puertas: cerradas entre servicios</li><li>Higiene: lava y seca espátulas tras cada limpieza</li>`,
+      'gelatoLab.ops.tempDoors.details': `<div class="steps"><span>1 · Controla y anota la temperatura.</span><span>2 · Mantén puertas cerradas para preservar el frío.</span><span>3 · Limpieza constante de herramientas.</span></div>`,
+
+      'gelatoLab.ops.treatsShelfLife.title': 'Shelf life treats',
+      'gelatoLab.ops.treatsShelfLife.desc': 'Días máximos tras exposición en vitrina de treats.',
+      'gelatoLab.ops.treatsShelfLife.stats': `<li>Cakes / Pinguinos: 35 días</li><li>Mini cakes / Mini cones: 21 días</li><li>Cookies: 14 días</li>`,
+      'gelatoLab.ops.treatsShelfLife.details': `<div class="steps"><span>1 · Etiqueta siempre con fecha de exposición.</span><span>2 · Revisa caducidades a diario.</span><span>3 · FIFO estricto.</span></div>`,
+
+      'gelatoLab.ops.scampolo.title': 'Regla del Scampolo (1/4)',
+      'gelatoLab.ops.scampolo.desc': 'Menos de 1/4 de cubeta es un scampolo. Sustituye e integra en la nueva poco a poco.',
+      'gelatoLab.ops.scampolo.stats': `<li>Definición: < 1/4 cubeta</li><li>Integración: máx 100g cada vez</li><li>Límite: máx 5-7 cm de scampolo total</li>`,
+      'gelatoLab.ops.scampolo.details': `<div class="steps"><span>1 · Saca el scampolo del freezer dedicado.</span><span>2 · Añade pequeñas cantidades y nivela.</span><span>3 · No debe notarse visualmente la mezcla.</span></div>`,
+
+      'gelatoLab.ops.closeDeepClean.title': 'Cierre y limpieza profunda',
+      'gelatoLab.ops.closeDeepClean.desc': 'Vetrina OFF cada noche. Limpieza profunda semanal incluyendo filtros.',
+      'gelatoLab.ops.closeDeepClean.stats': `<li>Noche: OFF + limpieza ordinaria</li><li>Semanal: deep clean + filtros</li><li>Foco: eliminar restos y desinfectar</li>`,
+      'gelatoLab.ops.closeDeepClean.details': `<div class="steps"><span>1 · Retira paneles y limpia manchas de gelato.</span><span>2 · Elimina restos de toppings y desinfecta.</span><span>3 · Abrilla con spray azul y blue roll.</span></div>`,
+
+      'gelatoLab.footer.tagline': 'El arte del gelato florentino',
+      'gelatoLab.footer.tempLabel': 'Temp. Ideal',
+      'gelatoLab.footer.heritageLabel': 'Herencia',
+
       'slittiYoyo.hero.badge': 'Chocolate y snacks',
       'slittiYoyo.hero.stars': '⭐ Estrellas: 7/7',
       'slittiYoyo.hero.title': 'Slitti & Yo-Yo',
@@ -4300,98 +4445,122 @@
       'slittiYoyo.footer.stats.quality': 'Calidad',
       'slittiYoyo.footer.stats.origin': 'Origen',
 
+      'caffe.cards.espressoSingle.title': 'Espresso Single',
       'caffe.cards.espressoSingle.desc': 'La esencia del café. Extracción perfecta para un sabor intenso, cuerpo redondo y crema persistente.',
       'caffe.cards.espressoSingle.stats': `<li><strong>Dosis:</strong> 1 shot en taza pequeña</li><li><strong>Extracción:</strong> 25-30 segundos</li><li><strong>Crema:</strong> Color avellana, atigrada, elástica</li>`,
       'caffe.cards.espressoSingle.details': `<div class="steps"><span>1 · Limpia y seca el portafiltro. Muele la dosis al momento.</span><span>2 · Nivela y prensa (tamping) de forma uniforme.</span><span>3 · Extrae y sirve de inmediato (la crema se pierde rápido).</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">🥡 Take Away (TW)</strong><img src="assets/products/espresso TW.png" alt="Espresso TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;"><p style="font-size: 0.9em;">Usa vaso 4oz. Cierra siempre con tapa.</p></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Troubleshooting:</strong> ¿Demasiado rápido (&lt;20s)? Molienda demasiado gruesa. ¿Demasiado lento (&gt;35s)? Molienda demasiado fina.</div>`,
 
+      'caffe.cards.espressoDouble.title': 'Espresso Double',
       'caffe.cards.espressoDouble.desc': 'Doble dosis de energía. Dos shots extraídos al mismo tiempo para un sabor más intenso.',
       'caffe.cards.espressoDouble.stats': `<li><strong>Dosis:</strong> 2 shots en taza grande o vasito</li><li><strong>Extracción:</strong> 25–30 segundos (flujo constante)</li><li><strong>Crema:</strong> Espesa y persistente</li>`,
       'caffe.cards.espressoDouble.details': `<div class="steps"><span>1 · Usa el filtro doble. Muele una dosis doble.</span><span>2 · Presiona (tamp) de forma firme y uniforme.</span><span>3 · Extrae 2 shots en 25–30 s.</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">🥡 Take Away (TW)</strong><img src="assets/products/espresso double TW.png" alt="Espresso Double TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;"><p style="font-size: 0.9em;">Usa vaso de 4oz (u 8oz si lo piden). Tapa obligatoria.</p></div>`,
 
+      'caffe.cards.espressoMacchiato.title': 'Espresso Macchiato',
       'caffe.cards.espressoMacchiato.desc': 'Espresso “macchiato” con una pequeña cantidad de espuma de leche caliente.',
       'caffe.cards.espressoMacchiato.stats': `<li><strong>Base:</strong> 1 shot de espresso</li><li><strong>Top:</strong> 1–2 cucharaditas de espuma de leche</li><li><strong>Servicio:</strong> Taza espresso</li>`,
       'caffe.cards.espressoMacchiato.details': `<div class="steps"><span>1 · Prepara un espresso single.</span><span>2 · Espuma una pequeña cantidad de leche (microfoam).</span><span>3 · Coloca suavemente la espuma en el centro de la crema (la “macchia”).</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">🥡 Take Away (TW)</strong><p style="font-size: 0.9em;">Disponible en vaso 4oz. Cierra siempre con tapa.</p></div>`,
 
+      'caffe.cards.doubleMacchiato.title': 'Double Macchiato',
       'caffe.cards.doubleMacchiato.desc': 'Doble espresso con una “mancha” de leche espumada. Más intenso, el mismo toque de leche.',
       'caffe.cards.doubleMacchiato.stats': `<li><strong>Base:</strong> 2 shots de espresso</li><li><strong>Top:</strong> Espuma de leche (microfoam)</li><li><strong>Servicio:</strong> Taza grande o vasito</li>`,
       'caffe.cards.doubleMacchiato.details': `<div class="steps"><span>1 · Prepara un doble espresso.</span><span>2 · Añade la espuma de leche al centro.</span><span>3 · Sirve inmediatamente.</span></div>`,
 
+      'caffe.cards.americano.title': 'Americano',
       'caffe.cards.americano.desc': 'Agua caliente + espresso extraído directamente en la taza. Disponible en versión Take Away.',
       'caffe.cards.americano.stats': `<li>Receta single: 8 oz de agua caliente</li><li>Receta double: 12 oz de agua caliente</li><li>Espacio de seguridad: deja 2 cm hasta el borde</li>`,
       'caffe.cards.americano.details': `<div class="steps"><span>1 · Llena la taza con agua caliente dejando 2 cm.</span><span>2 · Extrae el espresso directamente en la taza o en un beaker aparte.</span><span>3 · Sirve con platillo y cuchara; ofrece leche aparte si lo piden.</span></div>`,
 
+      'caffe.cards.cappuccino.title': 'Cappuccino',
       'caffe.cards.cappuccino.desc': 'Espresso, leche caliente y espuma fina. Textura aterciopelada sin burbujas grandes.',
       'caffe.cards.cappuccino.stats': `<li>Tamaño: 8 oz (regular) / 12 oz (large)</li><li>Foam: ~1/3 del volumen</li><li>Temperatura: 65°C (sweet spot)</li>`,
       'caffe.cards.cappuccino.details': `<div class="steps"><span>1 · Espresso en la taza.</span><span>2 · Stretch 3–5 s (aire), luego rolling (vórtice) hasta microfoam.</span><span>3 · Vierte controlando la espuma; pregunta si quiere cacao.</span></div>`,
 
+      'caffe.cards.flatWhite.title': 'Flat White',
       'caffe.cards.flatWhite.desc': 'Doble espresso + leche con microfoam muy fina. Textura sedosa.',
       'caffe.cards.flatWhite.stats': `<li>Leche: stretch 3 segundos, luego whirlpool.</li><li>Temperatura: 65°C.</li><li>Vertido: empieza alto, luego baja para latte art.</li>`,
       'caffe.cards.flatWhite.details': `<div class="steps"><span>1 · Doble espresso en taza 8 oz.</span><span>2 · Espuma la leche evitando exceso de aire (microfoam).</span><span>3 · Vierte para una textura brillante y uniforme.</span></div>`,
 
+      'caffe.cards.mocha.title': 'Mocha',
       'caffe.cards.mocha.desc': 'Espresso + cacao + leche. Disuelve primero el cacao en el espresso.',
       'caffe.cards.mocha.stats': `<li>Shot single</li><li>Milk: stretch ligero</li><li>Vaso 8 oz</li>`,
       'caffe.cards.mocha.details': `<div class="steps"><span>1 · Mezcla espresso y cacao en la taza.</span><span>2 · Espuma la leche como para un latte clásico.</span><span>3 · Vierte manteniendo el vórtice.</span></div>`,
 
+      'caffe.cards.hotChocolate.title': 'Hot Chocolate',
       'caffe.cards.hotChocolate.desc': 'Chocolate caliente cremoso: textura lisa, servicio caliente.',
       'caffe.cards.hotChocolate.stats': `<li>Temperatura: 65°C</li><li>Textura: sedosa (cero grumos)</li><li>Servicio: cucharita + platillo</li>`,
       'caffe.cards.hotChocolate.details': `<div class="steps"><span>1 · Calienta la base hasta temperatura de servicio.</span><span>2 · Remueve/mezcla antes de servir.</span><span>3 · Vierte, limpia el borde y sirve con cucharita.</span></div>`,
 
+      'caffe.cards.chaiLatte.title': 'Chai Latte',
       'caffe.cards.chaiLatte.desc': '2 pumps de sirope chai, leche espumada brillante y canela.',
       'caffe.cards.chaiLatte.stats': `<li>Sirope: 2 pumps</li><li>Temp. leche: 65°C</li><li>Finish: canela (dust ligero)</li>`,
       'caffe.cards.chaiLatte.details': `<div class="steps"><span>1 · Dispensa el sirope chai en la taza.</span><span>2 · (Dirty) Extrae 1 shot y mézclalo con el sirope.</span><span>3 · Espuma la leche y vierte; termina con canela.</span></div><div class="tips">Sugiere Dirty Chai a quien quiera especias + cafeína.</div>`,
 
+      'caffe.cards.teaSelection.title': 'Tea Selection',
       'caffe.cards.teaSelection.desc': 'Selección de té premium. Se sirve con tetera y reloj de arena para una infusión perfecta.',
       'caffe.cards.teaSelection.stats': `<li>Agua: 90–95°C (Black/Herbal), 80°C (Green)</li><li>Infusión: 3–5 minutos</li><li>Servicio: tetera + taza + leche/limón aparte</li>`,
       'caffe.cards.teaSelection.details': `<div class="steps"><span>1 · Calienta la tetera y coloca la bolsita/filtro.</span><span>2 · Llena con agua a la temperatura correcta.</span><span>3 · Sirve con reloj de arena y un platito para la bolsita usada.</span></div>`,
 
+      'caffe.cards.afternoonTeaSet.title': 'Afternoon Tea Set',
       'caffe.cards.afternoonTeaSet.desc': 'Selección de mini dulces, scones y sandwiches para la experiencia del té de la tarde.',
       'caffe.cards.afternoonTeaSet.stats': `<li><strong>Incluye:</strong> scones, finger sandwiches, mini pastries</li><li><strong>Bebida:</strong> té o Prosecco</li><li><strong>Servicio:</strong> stand de 3 pisos</li>`,
       'caffe.cards.afternoonTeaSet.details': `<div class="steps"><span>1 · Monta el stand: salado abajo, scones en medio, dulces arriba.</span><span>2 · Sirve el té o la bebida elegida.</span><span>3 · Explica los componentes en la mesa.</span></div>`,
 
+      'caffe.cards.affogato.title': 'Affogato',
       'caffe.cards.affogato.desc': 'GELATO “ahogado” con espresso: sirve 1 scoop de Buontalenti y vierte un doble espresso delante del cliente.',
       'caffe.cards.affogato.stats': `<li>Vaso 8 oz frío</li><li>Espresso doble</li><li>Servir inmediatamente</li>`,
       'caffe.cards.affogato.details': `<div class="steps"><span>1 · Enfría previamente el vaso.</span><span>2 · Porciona 70 g de Buontalenti.</span><span>3 · Vierte el espresso delante del cliente para dar show.</span></div>`,
 
+      'caffe.cards.whippedCoffee.title': 'Whipped Coffee',
       'caffe.cards.whippedCoffee.desc': 'Espresso single coronado con nata montada fresca.',
       'caffe.cards.whippedCoffee.stats': `<li>Taza 2 oz precalentada</li><li>Nata montada al momento</li><li>Servir con cucharita</li>`,
       'caffe.cards.whippedCoffee.details': `<div class="steps"><span>1 · Prepara un espresso single.</span><span>2 · Añade la nata montada formando una cúpula compacta.</span><span>3 · Sirve inmediatamente.</span></div>`,
 
+      'caffe.cards.matchaLatte.title': 'Matcha Latte',
       'caffe.cards.matchaLatte.desc': 'Té verde Matcha ceremonial con leche espumada. Color verde brillante y notas umami.',
       'caffe.cards.matchaLatte.stats': `<li>Dosis Matcha: 2 g (o medida dedicada)</li><li>Agua: 30 ml caliente (80°C) para disolver</li><li>Leche: espumada como cappuccino</li>`,
       'caffe.cards.matchaLatte.details': `<div class="steps"><span>1 · Disuelve el matcha con un poco de agua caliente usando chasen o mixer.</span><span>2 · Espuma la leche para una crema sedosa.</span><span>3 · Vierte la leche sobre la base de matcha (latte art).</span></div><div class="tips">Evita agua hirviendo (quema el matcha). La pasta debe quedar lisa, sin grumos.</div>`,
 
+      'caffe.cards.icedMatchaLatte.title': 'Iced Matcha Latte',
       'caffe.cards.icedMatchaLatte.desc': 'Versión fría y refrescante. Matcha vertido sobre leche y hielo para un look bicolor.',
       'caffe.cards.icedMatchaLatte.stats': `<li>Hielo: llena el vaso</li><li>Leche fría: 3/4 del vaso</li><li>Top: base de matcha concentrada</li>`,
       'caffe.cards.icedMatchaLatte.details': `<div class="steps"><span>1 · Llena el vaso con hielo y leche fría.</span><span>2 · Prepara un matcha concentrado con agua caliente.</span><span>3 · Vierte el matcha lentamente arriba para crear capas.</span></div>`,
 
+      'caffe.cards.matchaAffogato.title': 'Matcha Affogato',
       'caffe.cards.matchaAffogato.desc': 'Un scoop de Buontalenti en estilo affogato con una dosis de Matcha ceremonial caliente.',
       'caffe.cards.matchaAffogato.stats': `<li>GELATO: 1 scoop Buontalenti</li><li>Matcha: dosis concentrada estándar</li><li>Servicio: verter en la mesa</li>`,
       'caffe.cards.matchaAffogato.details': `<div class="steps"><span>1 · Prepara el vaso con el scoop de GELATO.</span><span>2 · Prepara matcha caliente en una jarrita.</span><span>3 · Sirve y vierte el matcha verde brillante sobre el GELATO blanco.</span></div>`,
 
+      'caffe.cards.dirtyMatcha.title': 'Dirty Matcha',
       'caffe.cards.dirtyMatcha.desc': 'Oriente y Occidente: Matcha Latte con un shot extra de espresso.',
       'caffe.cards.dirtyMatcha.stats': `<li>Base: Matcha Latte (caliente o iced)</li><li>Añadido: 1 shot de espresso</li><li>Perfil: energizante y complejo</li>`,
       'caffe.cards.dirtyMatcha.details': `<div class="steps"><span>1 · Prepara un Matcha Latte estándar.</span><span>2 · Extrae un shot de espresso.</span><span>3 · Añade el espresso (si es iced, viértelo arriba para layering).</span></div>`,
 
+      'caffe.cards.icedAmericano.title': 'Iced Americano',
       'caffe.cards.icedAmericano.desc': '3 cubos grandes de hielo, agua fría y un doble espresso vertido lentamente.',
       'caffe.cards.icedAmericano.stats': `<li>Vaso 12 oz</li><li>Deja 1/4 de espacio</li><li>Mezcla azúcar en el shot</li>`,
       'caffe.cards.icedAmericano.details': `<div class="steps"><span>1 · Añade hielo y agua dejando espacio.</span><span>2 · Extrae doble espresso en una taza aparte.</span><span>3 · Vierte lentamente sobre un cubo para efecto visual.</span></div>`,
 
+      'caffe.cards.icedLatte.title': 'Iced Latte',
       'caffe.cards.icedLatte.desc': 'Hielo + leche fría, doble espresso vertido arriba para crear layering.',
       'caffe.cards.icedLatte.stats': `<li>3 cubos grandes o 9 pequeños</li><li>Leche hasta 3/4</li><li>Sirope: mezclar con el espresso</li>`,
       'caffe.cards.icedLatte.details': `<div class="steps"><span>1 · Añade hielo y leche dejando espacio.</span><span>2 · Extrae un doble espresso.</span><span>3 · Vierte lentamente sobre un cubo para efecto “slow motion”.</span></div>`,
 
+      'caffe.cards.pistachioIcedLatte.title': 'Pistachio Iced Latte',
       'caffe.cards.pistachioIcedLatte.desc': 'Iced latte de pistacho: salsa/sirope + leche fría + espresso para efecto cascade.',
       'caffe.cards.pistachioIcedLatte.stats': `<li>Tamaño: 12 oz</li><li>Hielo: 3 cubos grandes</li><li>Sirope/salsa: antes de la leche</li>`,
       'caffe.cards.pistachioIcedLatte.details': `<div class="steps"><span>1 · Añade salsa/sirope al vaso (swirl interior).</span><span>2 · Añade hielo y leche.</span><span>3 · Vierte el espresso arriba.</span></div>`,
 
+      'caffe.cards.smoothieGialloPassion.title': 'Smoothie Giallo Passion',
       'caffe.cards.smoothieGialloPassion.desc': 'Mix tropical con mango, piña y fruta de la pasión. Color amarillo vibrante.',
       'caffe.cards.smoothieGialloPassion.stats': `<li>Base: zumo de manzana/naranja o agua de coco</li><li>Mix fruta: pack amarillo</li><li>Blend: 30 segundos</li>`,
       'caffe.cards.smoothieGialloPassion.details': `<div class="steps"><span>1 · Vierte la base líquida en la batidora.</span><span>2 · Añade el pack de fruta congelada.</span><span>3 · Tritura hasta textura lisa y sirve con pajita ancha.</span></div>`,
 
+      'caffe.cards.smoothieRossoBerry.title': 'Smoothie Rosso Berry',
       'caffe.cards.smoothieRossoBerry.desc': 'Explosión de frutos rojos: fresas, frambuesas, arándanos. Dulce y ácido.',
       'caffe.cards.smoothieRossoBerry.stats': `<li>Base: zumo de manzana o leche (si lo piden)</li><li>Mix fruta: pack rojo</li><li>Blend: 30 segundos</li>`,
       'caffe.cards.smoothieRossoBerry.details': `<div class="steps"><span>1 · Vierte la base líquida en la batidora.</span><span>2 · Añade el pack de fruta congelada.</span><span>3 · Tritura hasta textura lisa.</span></div>`,
 
+      'caffe.cards.smoothieVerdeBoost.title': 'Smoothie Verde Boost',
       'caffe.cards.smoothieVerdeBoost.desc': 'Mix saludable con espinacas, manzana verde, pepino y jengibre. Fresco y muy hidratante.',
       'caffe.cards.smoothieVerdeBoost.stats': `<li>Base: agua o zumo de manzana</li><li>Mix fruta/verdura: pack verde</li><li>Blend: 30 segundos</li>`,
       'caffe.cards.smoothieVerdeBoost.details': `<div class="steps"><span>1 · Vierte la base líquida en la batidora.</span><span>2 · Añade el pack verde.</span><span>3 · Tritura bien para romper las fibras.</span></div>`,
@@ -4548,23 +4717,27 @@
       'festive.footer.stats.procedures': 'Procedimientos',
       'festive.footer.stats.season': 'Temporada',
 
+      'festive.cards.churros.title': 'Churros',
       'festive.cards.churros.tag1': 'Freidora 190 °C',
       'festive.cards.churros.tag2': '8 piezas/porción',
       'festive.cards.churros.desc': 'Bastoncillos de masa frita: crujientes por fuera y tiernos por dentro. Se sirven calientes (8 piezas) con azúcar y canela.',
       'festive.cards.churros.details': `<div class="steps"><span>1 - Prepara la mezcla de azúcar/canela en una bandeja amplia.</span><span>2 - Saca 8 churros del congelador; fríe 8–9 min hasta dorar.</span><span>3 - Escurre bien y pásalos por la mezcla para cubrir uniformemente.</span></div><div class="tips">Controla los tiempos para evitar el centro crudo; cambia el aceite cuando se oscurezca.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Lote doble:</strong> "¿Quieres 16 churros para compartir?"</span><span><strong>Combo salsas:</strong> "Prueba pistacho + chocolate negro"</span><span><strong>Bundle:</strong> "Churros + chocolate caliente = combo perfecta"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> La temperatura del aceite es crítica: 190 °C exactos. Más baja = grasiento; más alta = quemado fuera/crudo dentro. Cambia el aceite cada ~40 porciones o cuando se oscurezca.</div>`,
 
+      'festive.cards.panettoneClassic.title': 'Panettone Classic',
       'festive.cards.panettoneClassic.tag1': 'Servicio por porción',
       'festive.cards.panettoneClassic.tag2': '8 porciones',
       'festive.cards.panettoneClassic.desc': 'El rey de las fiestas. Receta tradicional con pasas y fruta confitada, fermentación natural. Se sirve por porción (1/8) en plato de postre con cubiertos.',
       'festive.cards.panettoneClassic.stats': `<li>Corte: vertical siguiendo las 8 líneas guía; cuchillo largo de sierra</li><li>Porciones: 8 porciones uniformes</li><li>Presentación: plato postre + cubiertos, siempre</li><li>Muestra visual: deja una porción visible en el mostrador para estimular pedidos</li><li>Maridajes sugeridos: GELATO Buontalenti, salsa de pistacho, chocolate caliente</li>`,
       'festive.cards.panettoneClassic.details': `<div class="steps"><span>1 - Corta en vertical siguiendo las líneas guía.</span><span>2 - Emplata con cubiertos.</span><span>3 - Ofrece upsell al momento: scoop Buontalenti + salsa o chocolate caliente.</span></div><div class="tips">Deja una de las 8 porciones como muestra visual para storytelling y conversión.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Opción 1:</strong> "Porción + scoop Buontalenti es nuestro maridaje signature"</span><span><strong>Opción 2:</strong> "¿Añadimos salsa de pistacho para el contraste perfecto?"</span><span><strong>Opción 3:</strong> "Con chocolate caliente es pura indulgencia"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Usa un cuchillo largo de sierra para un corte limpio sin desmigajar. Mantén porciones uniformes y muestra una porción para ventas visuales.</div>`,
 
+      'festive.cards.panettoneDark.title': 'Panettone Dark Chocolate',
       'festive.cards.panettoneDark.tag1': 'Opción templada',
       'festive.cards.panettoneDark.tag2': 'Plancha de crepes',
       'festive.cards.panettoneDark.desc': 'Variante golosa con pepitas de chocolate negro en la masa. Ideal templado (10" en la plancha) para ablandar el chocolate.',
       'festive.cards.panettoneDark.stats': `<li>Plancha de crepes: limpia y seca (sin aceite)</li><li>Timing: 10 segundos por lado (más = pierde crujiente)</li><li>Servicio inmediato tras calentar</li><li>Maridaje: Dark Chocolate + salsa de pistacho (contraste gourmet)</li><li>Upsell: GELATO frío + panettone caliente = contraste brutal</li>`,
       'festive.cards.panettoneDark.details': `<div class="steps"><span>1 - Coloca la porción en la plancha de crepes.</span><span>2 - Tuesta 10 segundos por lado (sin aceite).</span><span>3 - Sirve con salsa y Buontalenti si lo piden.</span></div><div class="tips">Pregunta siempre si lo quieren templado: aumenta conversión y calidad percibida.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Opción 1:</strong> "Pruébalo templado: el chocolate se funde"</span><span><strong>Opción 2:</strong> "Añade un scoop Buontalenti para el contraste caliente/frío"</span><span><strong>Opción 3:</strong> "¿Añadimos salsa de pistacho para un toque gourmet?"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> 10" por lado es el estándar: más tiempo lo seca. Plancha siempre limpia y seca.</div>`,
 
+      'festive.cards.pandoroClassic.title': 'Pandoro Classic',
       'festive.cards.pandoroClassic.tag1': 'Azúcar glas',
       'festive.cards.pandoroClassic.desc': 'Esponjoso, mantecoso, con forma de estrella de 8 puntas. Se sirve con azúcar glas al momento.',
       'festive.cards.pandoroClassic.stats': `<li><strong>Corte:</strong> sigue la guía en estrella para 8 porciones uniformes</li><li><strong>Azúcar glas:</strong> SIEMPRE al servir, nunca antes (efecto “nieve”)</li><li><strong>Plato postre + cubiertos:</strong> siempre</li><li><strong>Temperatura:</strong> ambiente para máximo aroma</li><li><strong>Storytelling:</strong> "36 horas de fermentación con ingredientes premium"</li><li><strong>Maridajes sugeridos:</strong> GELATO Buontalenti, salsa mascarpone o pistacho</li>`,
@@ -4638,38 +4811,47 @@
       'sweetTreats.carousel.main.title': 'Sweet Crepes & Waffles',
       'sweetTreats.carousel.main.category': 'Tentaciones dulces',
 
+      'sweetTreats.cards.crepeSauce.title': 'Crepe con salsa',
       'sweetTreats.cards.crepeSauce.desc': 'Crepe clásica servida con una de nuestras salsas signature (Pistacho, Avellana, Chocolate). Base perfecta para cualquier extra.',
       'sweetTreats.cards.crepeSauce.stats': `<li><strong>Shelf life del mix:</strong> 3 días (frigo)</li><li><strong>Reposo:</strong> mínimo 2 horas (frigo)</li><li><strong>Cocción:</strong> 20s por lado</li>`,
       'sweetTreats.cards.crepeSauce.details': `<div class="steps"><span>1 · Extiende el mix; gira cuando esté dorada.</span><span>2 · Unta la salsa en la mitad, cierra en media luna y luego en abanico.</span><span>3 · Emplata, azúcar glas y drizzle de salsa por encima.</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">✨ Pro tip:</strong> La plancha debe estar muy caliente pero sin humo. La primera suele ser de prueba.</div>`,
 
+      'sweetTreats.cards.buontalentiCrepe.title': 'Signature Buontalenti Crepe',
       'sweetTreats.cards.buontalentiCrepe.desc': 'Nuestro best seller: crepe con salsa a elección y un scoop de Buontalenti encima.',
       'sweetTreats.cards.buontalentiCrepe.stats': `<li><strong>GELATO:</strong> 1 scoop Buontalenti (70g)</li><li><strong>Salsa:</strong> 30g interior + decoración</li><li><strong>Servicio:</strong> Plato postre con cubiertos</li>`,
       'sweetTreats.cards.buontalentiCrepe.details': `<div class="steps"><span>1 · Prepara la crepe con salsa según estándar.</span><span>2 · Dobla en abanico y espolvorea azúcar glas.</span><span>3 · Coloca el scoop de Buontalenti encima y termina con salsa.</span></div><div class="tips">Añade el GELATO al último segundo para evitar que se derrita sobre la crepe caliente.</div>`,
 
+      'sweetTreats.cards.waffles.title': 'Waffles',
       'sweetTreats.cards.waffles.desc': 'Waffle dorado y crujiente por fuera, suave por dentro. Servido con salsas, fruta o GELATO.',
       'sweetTreats.cards.waffles.stats': `<li><strong>Cocción:</strong> 2.5 min por lado (5 min total)</li><li><strong>Reposo:</strong> 45s para crujiente</li><li><strong>Batter:</strong> 1 scoop (177ml)</li>`,
       'sweetTreats.cards.waffles.details': `<div class="steps"><span>1 · Vierte el mix en la plancha caliente y cierra.</span><span>2 · Cocina 2.5 min, gira y cocina otros 2.5 min.</span><span>3 · Deja reposar en rejilla 45s antes de decorar.</span></div><div class="tips">El reposo es clave: si se sirve al momento queda blando.</div>`,
 
+      'sweetTreats.cards.pancake.title': 'Pancakes',
       'sweetTreats.cards.pancake.desc': 'Torre de 3 pancakes esponjosos. Se sirven con sirope de arce, fruta fresca o salsas Badiani.',
       'sweetTreats.cards.pancake.stats': `<li><strong>Porción:</strong> 3 piezas</li><li><strong>Cocción:</strong> hasta que aparezcan burbujas</li><li><strong>Topping:</strong> generoso</li>`,
       'sweetTreats.cards.pancake.details': `<div class="steps"><span>1 · Vierte 3 discos de masa en la plancha.</span><span>2 · Gira cuando aparezcan burbujas en la superficie.</span><span>3 · Apila y decora generosamente.</span></div>`,
 
+      'sweetTreats.cards.italianaPlain.title': 'Crepe Italiana',
       'sweetTreats.cards.italianaPlain.desc': 'Mozzarella, rúcula y tomates cherry sobre base clásica. Fresca y ligera.',
       'sweetTreats.cards.italianaPlain.stats': `<li><strong>Base:</strong> Clásica</li><li><strong>Relleno:</strong> Mozzarella, rúcula, cherry</li><li><strong>Aliño:</strong> Aceite EVO, sal, orégano</li>`,
       'sweetTreats.cards.italianaPlain.details': `<div class="steps"><span>1 · Cocina la crepe y gira.</span><span>2 · Añade mozzarella y deja que se funda un poco.</span><span>3 · Añade rúcula y cherry aliñados; cierra tipo sobre.</span></div>`,
 
+      'sweetTreats.cards.italianaBeetroot.title': 'Crepe Italiana Beetroot',
       'sweetTreats.cards.italianaBeetroot.desc': 'La versión colorida: masa de remolacha para un look único y un toque dulce-terroso.',
       'sweetTreats.cards.italianaBeetroot.stats': `<li><strong>Base:</strong> Beetroot (remolacha)</li><li><strong>Relleno:</strong> Mozzarella, rúcula, cherry</li><li><strong>Visual:</strong> rojo/morado intenso</li>`,
       'sweetTreats.cards.italianaBeetroot.details': `<div class="steps"><span>1 · Usa el mix beetroot (3g de polvo por 250g de mix).</span><span>2 · Monta como la Italiana clásica.</span><span>3 · El contraste de color es el punto fuerte: deja ver el relleno.</span></div>`,
 
+      'sweetTreats.cards.prosciuttoPlain.title': 'Crepe Prosciutto',
       'sweetTreats.cards.prosciuttoPlain.desc': 'Clásica con Prosciutto Crudo, mozzarella y rúcula.',
       'sweetTreats.cards.prosciuttoPlain.stats': `<li><strong>Base:</strong> Clásica</li><li><strong>Relleno:</strong> Crudo, mozzarella, rúcula</li><li><strong>Servicio:</strong> caliente y fundente</li>`,
       'sweetTreats.cards.prosciuttoPlain.details': `<div class="steps"><span>1 · Funde la mozzarella mientras cocina la crepe.</span><span>2 · Añade el prosciutto al final para no cocinarlo demasiado.</span><span>3 · Completa con rúcula y cierra.</span></div>`,
 
+      'sweetTreats.cards.prosciuttoBeetroot.title': 'Crepe Prosciutto Beetroot',
       'sweetTreats.cards.prosciuttoBeetroot.desc': 'Prosciutto Crudo sobre base de remolacha. Un twist moderno de un clásico.',
       'sweetTreats.cards.prosciuttoBeetroot.stats': `<li><strong>Base:</strong> Beetroot</li><li><strong>Relleno:</strong> Crudo, mozzarella, rúcula</li><li><strong>Sabor:</strong> salado + dulce (masa)</li>`,
       'sweetTreats.cards.prosciuttoBeetroot.details': `<div class="steps"><span>1 · Prepara la base beetroot.</span><span>2 · Rellena generosamente.</span><span>3 · Sirve cortada a la mitad para mostrar capas.</span></div>`,
 
+      'sweetTreats.cards.gelatoBurger.title': 'Gelato Burger',
       'sweetTreats.cards.gelatoBurger.desc': 'Un scoop de GELATO dentro de un pan brioche suave, cerrado en caliente en segundos: efecto “wow” y servicio rápido.',
       'sweetTreats.cards.gelatoBurger.stats': `<li><strong>Pan:</strong> brioche bun ligeramente caliente</li><li><strong>GELATO:</strong> 1 scoop (~70 g) a elección</li><li><strong>Sauce:</strong> 1 sola elección (standard)</li>`,
       'sweetTreats.cards.gelatoBurger.details': `<div class="steps"><span>1 · Calienta ligeramente la brioche (sin tostar demasiado).</span><span>2 · Añade un scoop de GELATO (~70 g) y termina con una sola salsa a elección.</span><span>3 · Cierra, sirve al momento y sugiere comer como un sándwich.</span></div>`,
@@ -4717,26 +4899,31 @@
       'pastries.carousel.main.title': 'Pastry Lab',
       'pastries.carousel.main.category': 'Pastelería de mostrador',
 
+      'pastries.cards.cakes.title': 'Cakes',
       'pastries.cards.cakes.alt': 'Porción de tarta Badiani',
       'pastries.cards.cakes.desc': 'Chocolate (3g), Carrot (2g), Walnut (3g) respetando 14 porciones por tarta.',
       'pastries.cards.cakes.stats': `<li>Usa el cake slicer como guía</li><li>Sirve en plato con cubiertos</li><li>Upsell scoop Buontalenti + sauce</li>`,
       'pastries.cards.cakes.details': `<div class="steps"><span>1 → Coloca el cutter y marca las 14 porciones.</span><span>2 → Sirve la porción en plato y sugiere pairing con GELATO.</span><span>3 → Si el upsell funciona, añade un scoop con el milkshake scooper y drizzle sobre la porción.</span></div><div class="tips">Recordatorio al equipo: chocolate caliente + cake crea una combo premium.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💫 Upselling</strong><span><strong>Opción 1:</strong> "¿Quieres enriquecer la porción con un scoop de Buontalenti?"</span><span><strong>Opción 2:</strong> "¿Añadimos un drizzle de salsa de pistacho o caramelo?"</span><span><strong>Opción 3:</strong> "¿La combo perfecta? Cake + chocolate caliente"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">✨ Pro tip:</strong> Mantén las cakes cubiertas con film entre cortes para evitar que se sequen. Temp. ambiente: máx. 2 horas fuera del frigo.</div>`,
 
+      'pastries.cards.brownie.title': 'Brownies',
       'pastries.cards.brownie.alt': 'Brownie Badiani',
       'pastries.cards.brownie.desc': 'Corte 4×3 (12 piezas) y servicio en plato con cubiertos.',
       'pastries.cards.brownie.stats': `<li>Display en el tray dedicado</li><li>Upsell GELATO + sauce</li><li>Comunicar shelf life</li>`,
       'pastries.cards.brownie.details': `<div class="steps"><span>1 - Corta 12 piezas iguales y expón en bandeja.</span><span>2 - Al pedido, emplata y ofrece un scoop de Buontalenti.</span><span>3 - Drizzle sobre el brownie y sobre el GELATO.</span></div><div class="tips">Usa el round scooper para mantener la porción perfecta.</div>`,
 
+      'pastries.cards.loaf.title': 'Loaf',
       'pastries.cards.loaf.alt': 'Banana Loaf',
       'pastries.cards.loaf.desc': 'Cada loaf debe dar 10 porciones. Servicio y upsell idénticos a las cakes.',
       'pastries.cards.loaf.stats': `<li>Corta grosores constantes</li><li>Sirve con cubiertos</li><li>Propón la sauce favorita</li>`,
       'pastries.cards.loaf.details': `<div class="steps"><span>1 - Corta 10 slices iguales y muestra la primera.</span><span>2 - Añade scoop + sauce si el cliente acepta.</span><span>3 - Mantén el loaf envuelto cuando no se use.</span></div><div class="tips">Indica la shelf life en la etiqueta para facilitar controles diarios.</div>`,
 
+      'pastries.cards.croissants.title': 'Croissants',
       'pastries.cards.croissants.alt': 'Croissant relleno',
       'pastries.cards.croissants.desc': 'Croissant ya laminado, para rellenar con la sauce que pida el cliente. Abre lateralmente, rellena y completa la presentación en plato con tenedor y cuchillo. Recuerda calentar ligeramente los croissants del día anterior para recuperar fragancia.',
       'pastries.cards.croissants.stats': `<li>Shelf life: 2 días desde defrost (revisa fecha)</li><li>Corte: usa cuchillo de sierra; abre el lateral en horizontal</li><li>Relleno: manga pastelera para uniformidad y precisión</li><li>Presentación: sauce inside + drizzle arriba, plato limpio, cubiertos siempre</li><li>Calentado (si hace falta): solo 8–10 segundos; nunca más de 15s (el relleno se derrite)</li>`,
       'pastries.cards.croissants.details': `<div class="steps"><span>1 - Abre el lateral con cuchillo de sierra.</span><span>2 - Rellena interior y topping exterior con la misma sauce.</span><span>3 - Emplata, añade cubiertos y sirve.</span></div><div class="tips">Comunica shelf life y rotación: 2 días desde defrost.</div>`,
 
+      'pastries.cards.scone.title': 'Scones',
       'pastries.cards.scone.alt': 'Scone relleno de GELATO',
       'pastries.cards.scone.desc': 'Calienta 15 s en la gelato burger machine, rellena con scoop Buontalenti y sauce.',
       'pastries.cards.scone.stats': `<li>Corta en horizontal</li><li>Usa el milkshake scooper</li><li>Acabado pistacho o chocolate</li>`,
@@ -5905,6 +6092,64 @@
       'operations.cards.cleaningSchedule.stats': `<li>Vitrine gelato : OFF chaque nuit</li><li>Vitrine gelato : deep clean hebdo</li><li>Filtres : nettoyage hebdo</li><li>Freezer treats : defrost hebdo (sans glace)</li>`,
       'operations.cards.cleaningSchedule.details': `<div class="steps"><span>1 · Fixe le jour deep clean (pas d\'impro).</span><span>2 · Nettoie avant accumulation : plus rapide.</span><span>3 · Après : remonter, sanitiser, polir.</span></div>`,
 
+      'gelatoLab.hero.badge': 'Ligne Gelato',
+      'gelatoLab.hero.stars': '⭐ Étoiles : 0/8',
+      'gelatoLab.hero.title': 'Gelato Lab',
+      'gelatoLab.hero.desc': 'Manuel pour le comptoir gelato : portions, service take me home, coupes scénographiques et maintenance de la vitrine à -14/-15 °C.',
+      'gelatoLab.carousel.products.title': 'Ligne Gelato',
+      'gelatoLab.carousel.products.category': 'Produits',
+      'gelatoLab.ops.title': 'Setup & conservation',
+      'gelatoLab.ops.category': 'Ouverture · Réglages · Stockage · Fermeture',
+
+      'gelatoLab.cards.cups.title': 'Coppette',
+      'gelatoLab.cards.cups.desc': 'Pots en trois tailles : Petit (1 goût, 100 g), Moyen (1-2 goûts, 140 g), Grand (1-3 goûts, 180 g).',
+      'gelatoLab.cards.cups.stats': `<li>Pesage : Petit 100-120g, Moyen 160-200g, Grand 200-240g</li><li>Technique : scoop linéaire + boule pour look pro</li><li>Compactage : élimine l'air en poussant contre le côté</li>`,
+      'gelatoLab.cards.cups.details': `<div class="steps"><span>1 · Chauffe la spatule en la passant sur le gelato.</span><span>2 · Pousse le gelato contre le côté pour éliminer l'air.</span><span>3 · Offre toujours wafer et chantilly (upselling).</span></div>`,
+
+      'gelatoLab.cards.cones.title': 'Cônes classiques',
+      'gelatoLab.cards.cones.desc': 'Cônes en trois variantes : Classique (1 goût), Chocolat ou Sans Gluten (1-2 goûts).',
+      'gelatoLab.cards.cones.stats': `<li>Emballage : toujours avec tissue pour hygiène et grip</li><li>Dosage : 1 boule pour cône petit, 1-2 pour spéciaux</li><li>Rotation : FIFO strict (le cône absorbe l'humidité)</li>`,
+      'gelatoLab.cards.cones.details': `<div class="steps"><span>1 · Enveloppe le cône avec tissue.</span><span>2 · Prépare la boule et pose-la en tournant le cône.</span><span>3 · Propose upgrade cône choco ou chantilly.</span></div>`,
+
+      'gelatoLab.cards.boxes.title': 'Gelato Boxes',
+      'gelatoLab.cards.boxes.desc': 'Gelato à emporter en boîtes thermiques de 500/750/1000 ml. Autonomie d\'une heure en sac isotherme.',
+      'gelatoLab.cards.boxes.stats': `<li>Petit : 500 ml (1-3 goûts)</li><li>Moyen : 750 ml (1-4 goûts)</li><li>Grand : 1000 ml (1-5 goûts)</li>`,
+      'gelatoLab.cards.boxes.details': `<div class="steps"><span>1 · Introduis les goûts en commençant par les plus mous (sorbets).</span><span>2 · Compacte en éliminant l'air et nettoie les bords.</span><span>3 · Scelle avec film + ruban Badiani et livre en sac isotherme.</span></div>`,
+
+      'gelatoLab.cards.coppa.title': 'Coupe Badiani',
+      'gelatoLab.cards.coppa.desc': 'Trois boules de gelato en coupe de verre, avec chantilly, sauce, mini cône et wafer.',
+      'gelatoLab.cards.coppa.stats': `<li>Base : coupe en verre froide</li><li>Portion : 3 boules avec scooper rond</li><li>Topping : chantilly + swirl de sauce + mini cône + wafer</li>`,
+      'gelatoLab.cards.coppa.details': `<div class="steps"><span>1 · Prépare 3 boules régulières avec le scooper rond.</span><span>2 · Ajoute chantilly et sauce sans salir les bords.</span><span>3 · Termine avec mini cône et wafer ; sers avec cuillère en acier.</span></div>`,
+
+      'gelatoLab.ops.displayPrep.title': 'Préparation vitrine (matin)',
+      'gelatoLab.ops.displayPrep.desc': 'Nettoie et prépare la vitrine. Expose seulement quand elle atteint -14/-15 °C.',
+      'gelatoLab.ops.displayPrep.stats': `<li>Nettoyage : eau chaude + désinfectant</li><li>Métaux : spray bleu + blue roll pour la brillance</li><li>Setup : barres, bacs et portes coulissantes</li>`,
+      'gelatoLab.ops.displayPrep.details': `<div class="steps"><span>1 · Nettoie et polis métaux et vitres.</span><span>2 · Allume et place barres et bacs.</span><span>3 · À -14/-15°C : charge le gelato et ferme les portes.</span></div>`,
+
+      'gelatoLab.ops.tempDoors.title': 'Température & portes',
+      'gelatoLab.ops.tempDoors.desc': 'Standard : -14/-15 °C. Garde les portes fermées hors service.',
+      'gelatoLab.ops.tempDoors.stats': `<li>Target : -14/-15 °C</li><li>Portes : fermées entre les services</li><li>Hygiène : lave et sèche les spatules après chaque nettoyage</li>`,
+      'gelatoLab.ops.tempDoors.details': `<div class="steps"><span>1 · Contrôle et note la température.</span><span>2 · Garde les portes fermées pour préserver le froid.</span><span>3 · Nettoyage constant des outils.</span></div>`,
+
+      'gelatoLab.ops.treatsShelfLife.title': 'Shelf life treats',
+      'gelatoLab.ops.treatsShelfLife.desc': 'Jours maximum après exposition en vitrine treats.',
+      'gelatoLab.ops.treatsShelfLife.stats': `<li>Cakes / Pinguinos : 35 jours</li><li>Mini cakes / Mini cones : 21 jours</li><li>Cookies : 14 jours</li>`,
+      'gelatoLab.ops.treatsShelfLife.details': `<div class="steps"><span>1 · Étiquette toujours avec date d'exposition.</span><span>2 · Vérifie les dates quotidiennement.</span><span>3 · FIFO strict.</span></div>`,
+
+      'gelatoLab.ops.scampolo.title': 'Règle du Scampolo (1/4)',
+      'gelatoLab.ops.scampolo.desc': 'Moins d\'1/4 de bac est un scampolo. Remplace et intègre dans le nouveau petit à petit.',
+      'gelatoLab.ops.scampolo.stats': `<li>Définition : < 1/4 bac</li><li>Intégration : max 100g à la fois</li><li>Limite : max 5-7 cm de scampolo total</li>`,
+      'gelatoLab.ops.scampolo.details': `<div class="steps"><span>1 · Sors le scampolo du freezer dédié.</span><span>2 · Ajoute de petites quantités et nivelle.</span><span>3 · Le mélange ne doit pas se voir visuellement.</span></div>`,
+
+      'gelatoLab.ops.closeDeepClean.title': 'Fermeture & nettoyage profond',
+      'gelatoLab.ops.closeDeepClean.desc': 'Vitrine OFF chaque nuit. Nettoyage profond hebdo incluant les filtres.',
+      'gelatoLab.ops.closeDeepClean.stats': `<li>Nuit : OFF + nettoyage ordinaire</li><li>Hebdo : deep clean + filtres</li><li>Focus : éliminer les restes et désinfecter</li>`,
+      'gelatoLab.ops.closeDeepClean.details': `<div class="steps"><span>1 · Retire les panneaux et nettoie les taches de gelato.</span><span>2 · Élimine les restes de toppings et désinfecte.</span><span>3 · Polis avec spray bleu et blue roll.</span></div>`,
+
+      'gelatoLab.footer.tagline': "L'art du gelato florentin",
+      'gelatoLab.footer.tempLabel': 'Temp. Idéale',
+      'gelatoLab.footer.heritageLabel': 'Héritage',
+
       'slittiYoyo.hero.badge': 'Chocolat & snacks',
       'slittiYoyo.hero.stars': '⭐ Étoiles : 7/7',
       'slittiYoyo.hero.title': 'Slitti & Yo-Yo',
@@ -5975,98 +6220,122 @@
       'slittiYoyo.footer.stats.quality': 'Qualité',
       'slittiYoyo.footer.stats.origin': 'Origine',
 
+      'caffe.cards.espressoSingle.title': 'Espresso Single',
       'caffe.cards.espressoSingle.desc': 'L\'essence du café. Extraction parfaite pour un goût intense, un corps rond et une crema persistante.',
       'caffe.cards.espressoSingle.stats': `<li><strong>Dose :</strong> 1 shot en petite tasse</li><li><strong>Extraction :</strong> 25-30 secondes</li><li><strong>Crema :</strong> couleur noisette, tigrée, élastique</li>`,
       'caffe.cards.espressoSingle.details': `<div class="steps"><span>1 · Nettoie et sèche le porte-filtre. Mouds la dose à la minute.</span><span>2 · Nivelle et tasse de façon uniforme.</span><span>3 · Extrais et sers immédiatement (la crema disparaît vite).</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">🥡 Take Away (TW)</strong><img src="assets/products/espresso TW.png" alt="Espresso TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;"><p style="font-size: 0.9em;">Utilise un gobelet 4oz. Ferme toujours avec un couvercle.</p></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Troubleshooting:</strong> Trop rapide (&lt;20s) ? Mouture trop grosse. Trop lent (&gt;35s) ? Mouture trop fine.</div>`,
 
+      'caffe.cards.espressoDouble.title': 'Espresso Double',
       'caffe.cards.espressoDouble.desc': 'Double dose d’énergie. Deux shots extraits en même temps pour un goût plus riche.',
       'caffe.cards.espressoDouble.stats': `<li><strong>Dose :</strong> 2 shots dans une grande tasse ou un petit verre</li><li><strong>Extraction :</strong> 25–30 secondes (flux régulier)</li><li><strong>Crème :</strong> Épaisse et persistante</li>`,
       'caffe.cards.espressoDouble.details': `<div class="steps"><span>1 · Utilise le filtre double. Mouds une double dose.</span><span>2 · Tasse fermement et régulièrement.</span><span>3 · Extrais 2 shots en 25–30s.</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">🥡 Take Away (TW)</strong><img src="assets/products/espresso double TW.png" alt="Espresso Double TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;"><p style="font-size: 0.9em;">Utilise un gobelet 4oz (ou 8oz sur demande). Couvercle obligatoire.</p></div>`,
 
+      'caffe.cards.espressoMacchiato.title': 'Espresso Macchiato',
       'caffe.cards.espressoMacchiato.desc': 'Espresso “macchiato” avec une petite quantité de mousse de lait chaude.',
       'caffe.cards.espressoMacchiato.stats': `<li><strong>Base :</strong> 1 shot espresso</li><li><strong>Top :</strong> 1–2 cuillères à café de mousse de lait</li><li><strong>Service :</strong> tasse espresso</li>`,
       'caffe.cards.espressoMacchiato.details': `<div class="steps"><span>1 · Prépare un espresso simple.</span><span>2 · Fais une petite quantité de lait (microfoam).</span><span>3 · Dépose doucement la mousse au centre de la crema (la “macchia”).</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">🥡 Take Away (TW)</strong><p style="font-size: 0.9em;">Disponible en gobelet 4oz. Ferme toujours avec un couvercle.</p></div>`,
 
+      'caffe.cards.doubleMacchiato.title': 'Double Macchiato',
       'caffe.cards.doubleMacchiato.desc': 'Double espresso avec une “tache” de lait moussé. Plus intense, même touche de lait.',
       'caffe.cards.doubleMacchiato.stats': `<li><strong>Base :</strong> 2 shots espresso</li><li><strong>Top :</strong> mousse de lait (microfoam)</li><li><strong>Service :</strong> grande tasse ou petit verre</li>`,
       'caffe.cards.doubleMacchiato.details': `<div class="steps"><span>1 · Prépare un double espresso.</span><span>2 · Ajoute la mousse au centre.</span><span>3 · Sers immédiatement.</span></div>`,
 
+      'caffe.cards.americano.title': 'Americano',
       'caffe.cards.americano.desc': 'Eau chaude + espresso extrait directement dans la tasse. Disponible en Take Away.',
       'caffe.cards.americano.stats': `<li>Recette simple : 8 oz d’eau chaude</li><li>Recette double : 12 oz d’eau chaude</li><li>Marge de sécurité : laisser 2 cm en haut</li>`,
       'caffe.cards.americano.details': `<div class="steps"><span>1 · Remplis la tasse d’eau chaude en laissant 2 cm.</span><span>2 · Extrais l’espresso dans la tasse (ou dans un beaker séparé).</span><span>3 · Sers avec soucoupe + cuillère ; proposer le lait à part si demandé.</span></div>`,
 
+      'caffe.cards.cappuccino.title': 'Cappuccino',
       'caffe.cards.cappuccino.desc': 'Espresso, lait chaud et mousse fine. Texture veloutée sans grosses bulles.',
       'caffe.cards.cappuccino.stats': `<li>Taille : 8 oz (regular) / 12 oz (large)</li><li>Mousse : ~1/3 du volume</li><li>Température : 65°C (sweet spot)</li>`,
       'caffe.cards.cappuccino.details': `<div class="steps"><span>1 · Espresso dans la tasse.</span><span>2 · Stretch 3–5 s (air), puis rolling (tourbillon) jusqu’à microfoam.</span><span>3 · Verse en contrôlant la mousse ; demander s’ils veulent du cacao.</span></div>`,
 
+      'caffe.cards.flatWhite.title': 'Flat White',
       'caffe.cards.flatWhite.desc': 'Double espresso + lait avec microfoam très fin. Texture soyeuse.',
       'caffe.cards.flatWhite.stats': `<li>Lait : stretch 3 secondes, puis whirlpool.</li><li>Température : 65°C.</li><li>Verse : commencer haut, puis baisser pour latte art.</li>`,
       'caffe.cards.flatWhite.details': `<div class="steps"><span>1 · Double espresso dans une tasse 8 oz.</span><span>2 · Fais le lait en évitant trop d’air (microfoam).</span><span>3 · Verse pour une texture brillante et uniforme.</span></div>`,
 
+      'caffe.cards.mocha.title': 'Mocha',
       'caffe.cards.mocha.desc': 'Espresso + cacao + lait. Dissous d’abord le cacao dans l’espresso.',
       'caffe.cards.mocha.stats': `<li>Shot simple</li><li>Lait : stretch léger</li><li>Gobelet 8 oz</li>`,
       'caffe.cards.mocha.details': `<div class="steps"><span>1 · Mélange espresso et cacao dans la tasse.</span><span>2 · Fais le lait comme pour un latte classique.</span><span>3 · Verse en gardant le tourbillon.</span></div>`,
 
+      'caffe.cards.hotChocolate.title': 'Chocolat Chaud',
       'caffe.cards.hotChocolate.desc': 'Chocolat chaud crémeux : texture lisse, servi chaud.',
       'caffe.cards.hotChocolate.stats': `<li>Température : 65°C</li><li>Texture : soyeuse (zéro grumeaux)</li><li>Service : cuillère + soucoupe</li>`,
       'caffe.cards.hotChocolate.details': `<div class="steps"><span>1 · Chauffe la base à température de service.</span><span>2 · Mélange/homogénéise avant de verser.</span><span>3 · Verse, nettoie le bord et sers avec cuillère.</span></div>`,
 
+      'caffe.cards.chaiLatte.title': 'Chai Latte',
       'caffe.cards.chaiLatte.desc': '2 pumps de sirop chai, lait mousseux brillant et cannelle.',
       'caffe.cards.chaiLatte.stats': `<li>Sirop : 2 pumps</li><li>Temp. lait : 65°C</li><li>Finition : cannelle (léger dust)</li>`,
       'caffe.cards.chaiLatte.details': `<div class="steps"><span>1 · Pompe le sirop chai dans la tasse.</span><span>2 · (Dirty) Extrais 1 shot et mélange avec le sirop.</span><span>3 · Fais le lait et verse ; finis avec cannelle.</span></div><div class="tips">Propose Dirty Chai pour épices + caféine.</div>`,
 
+      'caffe.cards.teaSelection.title': 'Sélection de Thés',
       'caffe.cards.teaSelection.desc': 'Sélection de thés premium. Servi avec théière et sablier pour une infusion parfaite.',
       'caffe.cards.teaSelection.stats': `<li>Eau : 90–95°C (Black/Herbal), 80°C (Green)</li><li>Infusion : 3–5 minutes</li><li>Service : théière + tasse + lait/citron à part</li>`,
       'caffe.cards.teaSelection.details': `<div class="steps"><span>1 · Chauffe la théière et ajoute le sachet/filtre.</span><span>2 · Remplis avec l’eau à la bonne température.</span><span>3 · Sers avec sablier et petite assiette pour le sachet usagé.</span></div>`,
 
+      'caffe.cards.afternoonTeaSet.title': 'Afternoon Tea Set',
       'caffe.cards.afternoonTeaSet.desc': 'Sélection de mini douceurs, scones et sandwiches pour l’expérience du tea time.',
       'caffe.cards.afternoonTeaSet.stats': `<li><strong>Inclus :</strong> scones, finger sandwiches, mini pastries</li><li><strong>Boisson :</strong> thé ou Prosecco</li><li><strong>Service :</strong> présentoir à 3 étages</li>`,
       'caffe.cards.afternoonTeaSet.details': `<div class="steps"><span>1 · Monte le présentoir : salé en bas, scones au milieu, sucré en haut.</span><span>2 · Sers le thé ou la boisson choisie.</span><span>3 · Explique les éléments à table.</span></div>`,
 
+      'caffe.cards.affogato.title': 'Affogato',
       'caffe.cards.affogato.desc': 'GELATO “noyé” dans l’espresso : servir 1 scoop de Buontalenti et verser un double espresso devant le client.',
       'caffe.cards.affogato.stats': `<li>Verre 8 oz refroidi</li><li>Double espresso</li><li>Servir immédiatement</li>`,
       'caffe.cards.affogato.details': `<div class="steps"><span>1 · Pré-refroidis le verre.</span><span>2 · Portionne 70 g de Buontalenti.</span><span>3 · Verse l’espresso devant le client pour l’effet “show”.</span></div>`,
 
+      'caffe.cards.whippedCoffee.title': 'Whipped Coffee',
       'caffe.cards.whippedCoffee.desc': 'Espresso simple surmonté de chantilly fraîche.',
       'caffe.cards.whippedCoffee.stats': `<li>Tasse 2 oz préchauffée</li><li>Chantilly faite minute</li><li>Servir avec cuillère</li>`,
       'caffe.cards.whippedCoffee.details': `<div class="steps"><span>1 · Prépare un espresso simple.</span><span>2 · Ajoute la chantilly en dôme net.</span><span>3 · Sers immédiatement.</span></div>`,
 
+      'caffe.cards.matchaLatte.title': 'Matcha Latte',
       'caffe.cards.matchaLatte.desc': 'Thé vert matcha cérémonial avec lait mousseux. Vert brillant et notes umami.',
       'caffe.cards.matchaLatte.stats': `<li>Dose matcha : 2 g (ou cuillère dédiée)</li><li>Eau : 30 ml chaude (80°C) pour dissoudre</li><li>Lait : comme cappuccino</li>`,
       'caffe.cards.matchaLatte.details': `<div class="steps"><span>1 · Dissous le matcha avec un peu d’eau chaude au chasen ou au mixer.</span><span>2 · Fais le lait pour une microfoam soyeuse.</span><span>3 · Verse le lait sur la base matcha (latte art).</span></div><div class="tips">Évite l’eau bouillante (elle brûle le matcha). La pâte doit être lisse, sans grumeaux.</div>`,
 
+      'caffe.cards.icedMatchaLatte.title': 'Iced Matcha Latte',
       'caffe.cards.icedMatchaLatte.desc': 'Version iced rafraîchissante. Matcha versé sur lait et glace pour un look bicolore.',
       'caffe.cards.icedMatchaLatte.stats': `<li>Glace : remplir le gobelet</li><li>Lait froid : 3/4 du gobelet</li><li>Top : base matcha concentrée</li>`,
       'caffe.cards.icedMatchaLatte.details': `<div class="steps"><span>1 · Remplis le gobelet de glace et de lait froid.</span><span>2 · Prépare un matcha concentré à l’eau chaude.</span><span>3 · Verse le matcha lentement au-dessus pour créer les couches.</span></div>`,
 
+      'caffe.cards.matchaAffogato.title': 'Matcha Affogato',
       'caffe.cards.matchaAffogato.desc': 'Un scoop de Buontalenti affogato-style avec une dose de matcha cérémonial chaud.',
       'caffe.cards.matchaAffogato.stats': `<li>GELATO : 1 scoop Buontalenti</li><li>Matcha : dose concentrée standard</li><li>Service : verser à table</li>`,
       'caffe.cards.matchaAffogato.details': `<div class="steps"><span>1 · Prépare le gobelet avec le scoop de GELATO.</span><span>2 · Prépare le matcha chaud dans un petit pichet.</span><span>3 · Sers et verse le matcha vert sur le GELATO blanc.</span></div>`,
 
+      'caffe.cards.dirtyMatcha.title': 'Dirty Matcha',
       'caffe.cards.dirtyMatcha.desc': 'Rencontre Est/Ouest : Matcha Latte avec un shot d’espresso en plus.',
       'caffe.cards.dirtyMatcha.stats': `<li>Base : Matcha Latte (chaud ou iced)</li><li>Ajout : 1 shot espresso</li><li>Profil : énergisant et complexe</li>`,
       'caffe.cards.dirtyMatcha.details': `<div class="steps"><span>1 · Prépare un Matcha Latte standard.</span><span>2 · Extrais un shot espresso.</span><span>3 · Ajoute l’espresso (en iced, verser au-dessus pour layering).</span></div>`,
 
+      'caffe.cards.icedAmericano.title': 'Iced Americano',
       'caffe.cards.icedAmericano.desc': '3 gros glaçons, eau froide et double espresso versé lentement.',
       'caffe.cards.icedAmericano.stats': `<li>Gobelet 12 oz</li><li>Laisser 1/4 d’espace</li><li>Mélanger le sucre dans le shot</li>`,
       'caffe.cards.icedAmericano.details': `<div class="steps"><span>1 · Ajoute glace et eau en laissant de l’espace.</span><span>2 · Extrais un double espresso dans une tasse à part.</span><span>3 · Verse lentement sur un glaçon pour l’effet visuel.</span></div>`,
 
+      'caffe.cards.icedLatte.title': 'Iced Latte',
       'caffe.cards.icedLatte.desc': 'Glace + lait froid, double espresso versé au-dessus pour créer le layering.',
       'caffe.cards.icedLatte.stats': `<li>3 gros glaçons ou 9 petits</li><li>Lait jusqu’à 3/4</li><li>Sirops : mélanger avec l’espresso</li>`,
       'caffe.cards.icedLatte.details': `<div class="steps"><span>1 · Ajoute glace et lait en laissant de l’espace.</span><span>2 · Extrais un double espresso.</span><span>3 · Verse lentement sur un glaçon pour un look “slow motion”.</span></div>`,
 
+      'caffe.cards.pistachioIcedLatte.title': 'Pistachio Iced Latte',
       'caffe.cards.pistachioIcedLatte.desc': 'Iced latte pistache : sauce/sirop + lait froid + espresso pour effet cascade.',
       'caffe.cards.pistachioIcedLatte.stats': `<li>Taille : 12 oz</li><li>Glace : 3 gros glaçons</li><li>Sirop/sauce : avant le lait</li>`,
       'caffe.cards.pistachioIcedLatte.details': `<div class="steps"><span>1 · Ajoute sauce/sirop dans le gobelet (swirl intérieur).</span><span>2 · Ajoute glace et lait.</span><span>3 · Verse l’espresso au-dessus.</span></div>`,
 
+      'caffe.cards.smoothieGialloPassion.title': 'Smoothie Giallo Passion',
       'caffe.cards.smoothieGialloPassion.desc': 'Mix tropical avec mangue, ananas et fruit de la passion. Couleur jaune vibrante.',
       'caffe.cards.smoothieGialloPassion.stats': `<li>Base : jus pomme/orange ou eau de coco</li><li>Mix fruits : pack jaune</li><li>Blend : 30 secondes</li>`,
       'caffe.cards.smoothieGialloPassion.details': `<div class="steps"><span>1 · Verse la base liquide dans le blender.</span><span>2 · Ajoute le pack de fruits surgelés.</span><span>3 · Blend jusqu’à lisse et sers avec une paille large.</span></div>`,
 
+      'caffe.cards.smoothieRossoBerry.title': 'Smoothie Rosso Berry',
       'caffe.cards.smoothieRossoBerry.desc': 'Explosion de fruits rouges : fraises, framboises, myrtilles. Doux et acidulé.',
       'caffe.cards.smoothieRossoBerry.stats': `<li>Base : jus de pomme ou lait (sur demande)</li><li>Mix fruits : pack rouge</li><li>Blend : 30 secondes</li>`,
       'caffe.cards.smoothieRossoBerry.details': `<div class="steps"><span>1 · Verse la base liquide dans le blender.</span><span>2 · Ajoute le pack de fruits surgelés.</span><span>3 · Blend jusqu’à lisse.</span></div>`,
 
+      'caffe.cards.smoothieVerdeBoost.title': 'Smoothie Verde Boost',
       'caffe.cards.smoothieVerdeBoost.desc': 'Mix healthy avec épinards, pomme verte, concombre et gingembre. Frais et désaltérant.',
       'caffe.cards.smoothieVerdeBoost.stats': `<li>Base : eau ou jus de pomme</li><li>Mix fruits/légumes : pack vert</li><li>Blend : 30 secondes</li>`,
       'caffe.cards.smoothieVerdeBoost.details': `<div class="steps"><span>1 · Verse la base liquide dans le blender.</span><span>2 · Ajoute le pack vert.</span><span>3 · Blend bien pour casser les fibres.</span></div>`,
@@ -6923,23 +7192,27 @@
       'festive.footer.stats.procedures': 'Procédures',
       'festive.footer.stats.season': 'Saison',
 
+      'festive.cards.churros.title': 'Churros',
       'festive.cards.churros.tag1': 'Friteuse 190 °C',
       'festive.cards.churros.tag2': '8 pièces/portion',
       'festive.cards.churros.desc': 'Bâtonnets de pâte frite : croustillants dehors, moelleux dedans. Servis chauds (8 pièces) avec sucre et cannelle.',
       'festive.cards.churros.details': `<div class="steps"><span>1 - Prépare le mélange sucre/cannelle dans un grand bac.</span><span>2 - Prends 8 churros au freezer ; fais frire 8–9 min jusqu\'à doré.</span><span>3 - Égoutte bien et enrobe-les dans le mélange.</span></div><div class="tips">Surveille le timing pour éviter le centre cru ; change l\'huile quand elle fonce.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Double portion :</strong> "Tu en veux 16 à partager ?"</span><span><strong>Combo sauces :</strong> "Essaie pistache + chocolat noir"</span><span><strong>Bundle :</strong> "Churros + chocolat chaud = combo parfaite"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Température d\'huile critique : 190 °C pile. Plus bas = gras ; plus haut = brûlé dehors/cru dedans. Change l\'huile toutes les ~40 portions ou quand elle fonce.</div>`,
 
+      'festive.cards.panettoneClassic.title': 'Panettone Classique',
       'festive.cards.panettoneClassic.tag1': 'Service à la tranche',
       'festive.cards.panettoneClassic.tag2': '8 portions',
       'festive.cards.panettoneClassic.desc': 'Le roi des fêtes. Recette traditionnelle avec raisins et fruits confits, levain naturel. Servi à la tranche (1/8) sur assiette dessert avec couverts.',
       'festive.cards.panettoneClassic.stats': `<li>Découpe : verticale, selon les 8 lignes guide ; long couteau dentelé</li><li>Portions : 8 tranches régulières</li><li>Présentation : assiette dessert + couverts, toujours</li><li>Échantillon visuel : garde une tranche visible au comptoir (storytelling)</li><li>Accords : GELATO Buontalenti, sauce pistache, chocolat chaud</li>`,
       'festive.cards.panettoneClassic.details': `<div class="steps"><span>1 - Coupe verticalement selon les lignes guide.</span><span>2 - Dresse avec couverts.</span><span>3 - Propose l\'upsell tout de suite : scoop Buontalenti + sauce ou chocolat chaud.</span></div><div class="tips">Garde une tranche visible comme échantillon pour aider la conversion.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Option 1 :</strong> "Tranche + scoop Buontalenti, c\'est notre pairing signature"</span><span><strong>Option 2 :</strong> "On ajoute une sauce pistache pour le contraste parfait ?"</span><span><strong>Option 3 :</strong> "Avec un chocolat chaud, c\'est pure gourmandise"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Utilise un long couteau dentelé pour une coupe nette. Tranches uniformes et tranche “sample” visible = commandes visuelles.</div>`,
 
+      'festive.cards.panettoneDark.title': 'Panettone Dark Chocolate',
       'festive.cards.panettoneDark.tag1': 'Option tiède',
       'festive.cards.panettoneDark.tag2': 'Plaque crêpe',
       'festive.cards.panettoneDark.desc': 'Version gourmande avec pépites de chocolat noir. Excellent servi tiède (10" sur la plaque) pour faire fondre le chocolat.',
       'festive.cards.panettoneDark.stats': `<li>Plaque crêpe : propre et sèche (sans huile)</li><li>Timing : 10 secondes par côté (plus = moins croustillant)</li><li>Servir immédiatement après réchauffage</li><li>Accord : Dark Chocolate + sauce pistache (contraste gourmet)</li><li>Upsell : GELATO froid + panettone chaud = contraste de température</li>`,
       'festive.cards.panettoneDark.details': `<div class="steps"><span>1 - Pose la tranche sur la plaque crêpe.</span><span>2 - Toast 10 secondes par côté (sans huile).</span><span>3 - Sers avec sauce et Buontalenti si demandé.</span></div><div class="tips">Demande toujours s\'ils le veulent tiède : ça augmente conversion et qualité perçue.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Option 1 :</strong> "Goûte-le tiède : le chocolat fond"</span><span><strong>Option 2 :</strong> "Ajoute un scoop Buontalenti pour le contraste chaud/froid"</span><span><strong>Option 3 :</strong> "On ajoute une sauce pistache pour un twist gourmet ?"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> 10" par côté = standard. Au-delà, ça sèche. Plaque toujours propre et sèche.</div>`,
 
+      'festive.cards.pandoroClassic.title': 'Pandoro Classique',
       'festive.cards.pandoroClassic.tag1': 'Sucre glace',
       'festive.cards.pandoroClassic.desc': 'Moelleux, beurré, en étoile à 8 pointes. Servi avec une touche de sucre glace au moment.',
       'festive.cards.pandoroClassic.stats': `<li><strong>Découpe :</strong> suivre le guide étoile pour 8 parts régulières</li><li><strong>Sucre glace :</strong> TOUJOURS au service, jamais avant (effet “neige”)</li><li><strong>Assiette dessert + couverts :</strong> toujours</li><li><strong>Température :</strong> ambiante pour l\'arôme</li><li><strong>Storytelling :</strong> "36h de levée avec ingrédients premium"</li><li><strong>Accords :</strong> GELATO Buontalenti, sauce mascarpone ou pistache</li>`,
@@ -7013,38 +7286,47 @@
       'sweetTreats.carousel.main.title': 'Sweet Crepes & Waffles',
       'sweetTreats.carousel.main.category': 'Tentations sucrées',
 
+      'sweetTreats.cards.crepeSauce.title': 'Crêpe Sauce',
       'sweetTreats.cards.crepeSauce.desc': 'Crêpe classique servie avec une de nos sauces signature (Pistache, Noisette, Chocolat). Base parfaite pour toute addition.',
       'sweetTreats.cards.crepeSauce.stats': `<li><strong>Shelf life du mix :</strong> 3 jours (frigo)</li><li><strong>Repos :</strong> minimum 2 heures (frigo)</li><li><strong>Cuisson :</strong> 20s par côté</li>`,
       'sweetTreats.cards.crepeSauce.details': `<div class="steps"><span>1 · Étale le mix; retourne quand c'est doré.</span><span>2 · Étale la sauce sur la moitié, plie en demi-lune puis en éventail.</span><span>3 · Dresse, sucre glace et drizzle de sauce dessus.</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">✨ Pro tip:</strong> La plaque doit être bien chaude sans fumer. La première est souvent un test.</div>`,
 
+      'sweetTreats.cards.buontalentiCrepe.title': 'Crêpe Buontalenti',
       'sweetTreats.cards.buontalentiCrepe.desc': 'Notre best seller : crêpe avec sauce au choix et un scoop de Buontalenti on top.',
       'sweetTreats.cards.buontalentiCrepe.stats': `<li><strong>GELATO :</strong> 1 scoop Buontalenti (70g)</li><li><strong>Sauce :</strong> 30g à l'intérieur + décoration</li><li><strong>Service :</strong> Assiette dessert avec couverts</li>`,
       'sweetTreats.cards.buontalentiCrepe.details': `<div class="steps"><span>1 · Prépare la crêpe sauce selon le standard.</span><span>2 · Plie en éventail et saupoudre de sucre glace.</span><span>3 · Pose le scoop de Buontalenti dessus et termine avec la sauce.</span></div><div class="tips">Ajoute le GELATO au tout dernier moment pour éviter qu'il fonde sur la crêpe chaude.</div>`,
 
+      'sweetTreats.cards.waffles.title': 'Waffles',
       'sweetTreats.cards.waffles.desc': 'Waffle doré et croustillant dehors, moelleux dedans. Servi avec sauces, fruits ou GELATO.',
       'sweetTreats.cards.waffles.stats': `<li><strong>Cuisson :</strong> 2.5 min par côté (5 min total)</li><li><strong>Repos :</strong> 45s pour le croustillant</li><li><strong>Batter :</strong> 1 scoop (177ml)</li>`,
       'sweetTreats.cards.waffles.details': `<div class="steps"><span>1 · Verse le mix sur la plaque chaude et ferme.</span><span>2 · Cuis 2.5 min, retourne puis 2.5 min.</span><span>3 · Laisse reposer sur grille 45s avant de décorer.</span></div><div class="tips">Le repos est essentiel : servi tout de suite il devient mou.</div>`,
 
+      'sweetTreats.cards.pancake.title': 'Pancakes',
       'sweetTreats.cards.pancake.desc': 'Tour de 3 pancakes moelleux. Servis avec sirop d\'érable, fruits frais ou sauces Badiani.',
       'sweetTreats.cards.pancake.stats': `<li><strong>Portion :</strong> 3 pièces</li><li><strong>Cuisson :</strong> jusqu'à l'apparition de bulles</li><li><strong>Topping :</strong> généreux</li>`,
       'sweetTreats.cards.pancake.details': `<div class="steps"><span>1 · Verse 3 disques de pâte sur la plaque.</span><span>2 · Retourne quand les bulles apparaissent à la surface.</span><span>3 · Empile et décore généreusement.</span></div>`,
 
+      'sweetTreats.cards.italianaPlain.title': 'Italiana Classique',
       'sweetTreats.cards.italianaPlain.desc': 'Mozzarella, roquette et tomates cerise sur base classique. Fraîche et légère.',
       'sweetTreats.cards.italianaPlain.stats': `<li><strong>Base :</strong> Classique</li><li><strong>Garniture :</strong> Mozzarella, roquette, tomates cerise</li><li><strong>Assaisonnement :</strong> Huile EVO, sel, origan</li>`,
       'sweetTreats.cards.italianaPlain.details': `<div class="steps"><span>1 · Cuis la crêpe et retourne.</span><span>2 · Ajoute la mozzarella et fais fondre légèrement.</span><span>3 · Ajoute roquette et tomates assaisonnées, plie en portefeuille.</span></div>`,
 
+      'sweetTreats.cards.italianaBeetroot.title': 'Italiana Betterave',
       'sweetTreats.cards.italianaBeetroot.desc': 'La version colorée : pâte à la betterave pour un look unique et une note douce-terreuse.',
       'sweetTreats.cards.italianaBeetroot.stats': `<li><strong>Base :</strong> Betterave</li><li><strong>Garniture :</strong> Mozzarella, roquette, tomates cerise</li><li><strong>Visuel :</strong> rouge/violet intense</li>`,
       'sweetTreats.cards.italianaBeetroot.details': `<div class="steps"><span>1 · Utilise le mix betterave (3g poudre pour 250g mix).</span><span>2 · Procède comme la classique Italiana.</span><span>3 · Le contraste de couleurs est la force : laisse la garniture visible.</span></div>`,
 
+      'sweetTreats.cards.prosciuttoPlain.title': 'Prosciutto Classique',
       'sweetTreats.cards.prosciuttoPlain.desc': 'Classique avec Prosciutto Crudo, mozzarella et roquette.',
       'sweetTreats.cards.prosciuttoPlain.stats': `<li><strong>Base :</strong> Classique</li><li><strong>Garniture :</strong> Crudo, mozzarella, roquette</li><li><strong>Service :</strong> chaude et filante</li>`,
       'sweetTreats.cards.prosciuttoPlain.details': `<div class="steps"><span>1 · Fais fondre la mozzarella pendant la cuisson.</span><span>2 · Ajoute le prosciutto en fin pour ne pas trop le cuire.</span><span>3 · Termine avec roquette et plie.</span></div>`,
 
+      'sweetTreats.cards.prosciuttoBeetroot.title': 'Prosciutto Betterave',
       'sweetTreats.cards.prosciuttoBeetroot.desc': 'Prosciutto Crudo sur base betterave. Un twist moderne sur un classique.',
       'sweetTreats.cards.prosciuttoBeetroot.stats': `<li><strong>Base :</strong> Betterave</li><li><strong>Garniture :</strong> Crudo, mozzarella, roquette</li><li><strong>Goût :</strong> salé + doux (pâte)</li>`,
       'sweetTreats.cards.prosciuttoBeetroot.details': `<div class="steps"><span>1 · Prépare la base betterave.</span><span>2 · Garnis généreusement.</span><span>3 · Sers coupée en deux pour montrer les couches.</span></div>`,
 
+      'sweetTreats.cards.gelatoBurger.title': 'Gelato Burger',
       'sweetTreats.cards.gelatoBurger.desc': 'Un scoop de GELATO dans une brioche bun moelleuse, scellée à chaud en quelques secondes : effet “wow” et service rapide.',
       'sweetTreats.cards.gelatoBurger.stats': `<li><strong>Pain :</strong> brioche bun légèrement chauffée</li><li><strong>GELATO :</strong> 1 scoop (~70 g) au choix</li><li><strong>Sauce :</strong> 1 seul choix (standard)</li>`,
       'sweetTreats.cards.gelatoBurger.details': `<div class="steps"><span>1 · Chauffe légèrement la brioche (sans trop toaster).</span><span>2 · Ajoute un scoop de GELATO (~70 g) et termine avec une seule sauce.</span><span>3 · Ferme, sers tout de suite et conseille de manger comme un sandwich.</span></div>`,
@@ -7092,26 +7374,31 @@
       'pastries.carousel.main.title': 'Pastry Lab',
       'pastries.carousel.main.category': 'Pâtisserie comptoir',
 
+      'pastries.cards.cakes.title': 'Cakes (Chocolate, Carrot, Walnut)',
       'pastries.cards.cakes.alt': 'Part de gâteau Badiani',
       'pastries.cards.cakes.desc': 'Chocolate (3g), Carrot (2g), Walnut (3g) en respectant 14 parts par gâteau.',
       'pastries.cards.cakes.stats': `<li>Utilise le cake slicer comme guide</li><li>Serre sur assiette avec couverts</li><li>Upsell scoop Buontalenti + sauce</li>`,
       'pastries.cards.cakes.details': `<div class="steps"><span>1 → Place le cutter et marque 14 parts.</span><span>2 → Serre la part sur assiette et propose un pairing avec GELATO.</span><span>3 → Si l\'upsell passe, ajoute un scoop avec le milkshake scooper et un drizzle sur la part.</span></div><div class="tips">Rappel équipe : chocolat chaud + cake = combo premium.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💫 Upselling</strong><span><strong>Option 1:</strong> "On ajoute un scoop de Buontalenti sur la part ?"</span><span><strong>Option 2:</strong> "On met un drizzle de sauce pistache ou caramel ?"</span><span><strong>Option 3:</strong> "Combo parfaite ? Cake + chocolat chaud"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">✨ Pro tip:</strong> Garde les cakes couverts avec du film entre les coupes pour éviter qu\'ils sèchent. Temp. ambiante : max 2 heures hors frigo.</div>`,
 
+      'pastries.cards.brownie.title': 'Brownies',
       'pastries.cards.brownie.alt': 'Brownie Badiani',
       'pastries.cards.brownie.desc': 'Découpe 4×3 (12 pièces) et service sur assiette avec couverts.',
       'pastries.cards.brownie.stats': `<li>Display sur le tray dédié</li><li>Upsell GELATO + sauce</li><li>Communiquer la shelf life</li>`,
       'pastries.cards.brownie.details': `<div class="steps"><span>1 - Coupe 12 pièces égales, expose sur plateau.</span><span>2 - À la commande, dresse et propose un scoop Buontalenti.</span><span>3 - Drizzle sur le brownie et sur le GELATO.</span></div><div class="tips">Utilise le round scooper pour garder une portion régulière.</div>`,
 
+      'pastries.cards.loaf.title': 'Banana Loaf',
       'pastries.cards.loaf.alt': 'Banana Loaf',
       'pastries.cards.loaf.desc': 'Chaque loaf doit donner 10 tranches. Service et upsell identiques aux cakes.',
       'pastries.cards.loaf.stats': `<li>Coupe des épaisseurs constantes</li><li>Serre avec couverts</li><li>Propose la sauce préférée</li>`,
       'pastries.cards.loaf.details': `<div class="steps"><span>1 - Coupe 10 slices égales, expose la première.</span><span>2 - Ajoute scoop + sauce si le client accepte.</span><span>3 - Garde le loaf emballé quand il n\'est pas utilisé.</span></div><div class="tips">Indique la shelf life sur la label pour faciliter les contrôles quotidiens.</div>`,
 
+      'pastries.cards.croissants.title': 'Croissants Garnis',
       'pastries.cards.croissants.alt': 'Croissant garni',
       'pastries.cards.croissants.desc': 'Croissant déjà laminé, à garnir avec la sauce demandée. Ouvre sur le côté, remplis et termine la présentation sur assiette avec fourchette et couteau. Pense à réchauffer légèrement les croissants de la veille pour raviver la fragrance.',
       'pastries.cards.croissants.stats': `<li>Shelf life : 2 jours depuis le defrost (vérifie la date)</li><li>Découpe : couteau dentelé, ouverture latérale à l\'horizontale</li><li>Garniture : poche à douille pour uniformité et précision</li><li>Présentation : sauce inside + drizzle dessus, assiette propre, couverts toujours</li><li>Réchauffage (si besoin) : 8–10 secondes seulement ; jamais plus de 15s (la garniture fond)</li>`,
       'pastries.cards.croissants.details': `<div class="steps"><span>1 - Incise le côté avec un couteau dentelé.</span><span>2 - Garnis l\'intérieur et le topping avec la même sauce.</span><span>3 - Dresse, ajoute les couverts et sers.</span></div><div class="tips">Rappelle shelf life et rotation : 2 jours depuis le defrost.</div>`,
 
+      'pastries.cards.scone.title': 'Scone au Gelato',
       'pastries.cards.scone.alt': 'Scone garni de GELATO',
       'pastries.cards.scone.desc': 'Chauffe 15 s dans la gelato burger machine, garnis avec un scoop Buontalenti et sauce.',
       'pastries.cards.scone.stats': `<li>Coupe à l\'horizontale</li><li>Utilise le milkshake scooper</li><li>Finition pistache ou chocolat</li>`,
