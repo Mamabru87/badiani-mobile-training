@@ -15,13 +15,35 @@
     // Find all cards
     const cards = Array.from(document.querySelectorAll('.guide-card'));
     
-    // Find best match (Title or content)
-    const match = cards.find(card => {
-      const title = card.querySelector('h3')?.textContent || '';
-      // Also check data attributes if present
-      const type = card.dataset.type || ''; 
-      return normalize(title).includes(target) || normalize(type).includes(target);
-    });
+    // Strategy 1: Exact ID match (checking both raw query and normalized)
+    // e.g. query="smoothie-rosso-berry" -> id="card-smoothie-rosso-berry"
+    let match = document.getElementById('card-' + query) || 
+                document.getElementById(query) ||
+                cards.find(c => c.id && normalize(c.id).includes(target) && normalize(c.id).endsWith(target)); // stricter ID check
+
+    // Strategy 2: Exact Title match
+    if (!match) {
+      match = cards.find(card => {
+        const title = card.querySelector('h3')?.textContent || '';
+        return normalize(title) === target;
+      });
+    }
+
+    // Strategy 3: Partial match (fallback) - but prioritize title over type
+    if (!match) {
+      match = cards.find(card => {
+        const title = card.querySelector('h3')?.textContent || '';
+        return normalize(title).includes(target);
+      });
+    }
+
+    // Strategy 4: Data attributes (last resort)
+    if (!match) {
+      match = cards.find(card => {
+        const type = card.dataset.type || ''; 
+        return normalize(type).includes(target);
+      });
+    }
 
     if (match) {
       console.log(`[DeepLink] Found match for "${query}":`, match);

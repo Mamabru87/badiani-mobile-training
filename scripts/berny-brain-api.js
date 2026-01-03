@@ -633,11 +633,11 @@ class BernyBrainAPI {
 
     // High-signal direct mappings (topic -> page?q)
     const topicCandidates = [
+      { href: 'caffe.html?q=smoothie-giallo-passion', keys: ['smoothie giallo', 'giallo passion'] },
+      { href: 'caffe.html?q=smoothie-rosso-berry', keys: ['smoothie rosso', 'rosso berry'] },
+      { href: 'caffe.html?q=smoothie-verde-boost', keys: ['smoothie verde', 'verde boost'] },
+      { href: 'caffe.html?q=smoothies-parametri-di-produzione', keys: ['parametri smoothies', 'smoothies: parametri', 'smoothie standard'] },
       { href: 'caffe.html?q=smoothie', keys: ['smoothie', 'smoothies', 'frullato', 'frullati'] },
-      { href: 'caffe.html?q=smoothies', keys: ['parametri smoothies', 'smoothies: parametri', 'smoothie standard'] },
-      { href: 'caffe.html?q=smoothie%20giallo', keys: ['smoothie giallo', 'giallo passion'] },
-      { href: 'caffe.html?q=smoothie%20rosso', keys: ['smoothie rosso', 'rosso berry'] },
-      { href: 'caffe.html?q=smoothie%20verde', keys: ['smoothie verde', 'verde boost'] },
 
       { href: 'gelato-lab.html?q=buontalenti', keys: ['buontalenti'] },
       { href: 'gelato-lab.html?q=coni', keys: ['cono', 'coni', 'cone'] },

@@ -456,7 +456,13 @@
         else if (lower.includes('gusti')) link = 'gelato-lab.html?q=gusti';
         // IMPORTANT: regex word boundary so "pancake" doesn't match "cake"
         else if (/\b(cake|cakes|torta|torte)\b/i.test(text)) link = 'pastries.html?q=cakes';
+        
+        // Smoothies: check specific types first!
+        else if (lower.includes('smoothie rosso') || lower.includes('rosso berry')) link = 'caffe.html?q=smoothie-rosso-berry';
+        else if (lower.includes('smoothie giallo') || lower.includes('giallo passion')) link = 'caffe.html?q=smoothie-giallo-passion';
+        else if (lower.includes('smoothie verde') || lower.includes('verde boost')) link = 'caffe.html?q=smoothie-verde-boost';
         else if (lower.includes('smoothie') || lower.includes('smoothies') || lower.includes('frullato') || lower.includes('frullati')) link = 'caffe.html?q=smoothie';
+        
         else if (lower.includes('caffè')) link = 'caffe.html?q=caffe';
         else if (lower.includes('espresso')) link = 'caffe.html?q=espresso';
         else if (lower.includes('crepes')) link = 'sweet-treats.html?q=crepes';
