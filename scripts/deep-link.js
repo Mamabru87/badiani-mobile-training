@@ -4,10 +4,23 @@
 // Handles ?q=keyword to scroll to specific cards
 // ============================================================
 (() => {
+  const isDebugEnabled = () => {
+    try {
+      if (new URLSearchParams(window.location.search).get('debugDeepLink') === '1') return true;
+    } catch {}
+    try {
+      return String(localStorage.getItem('badianiDeepLink.debug') || '') === '1';
+    } catch {
+      return false;
+    }
+  };
+
   const handleDeepLink = () => {
     const params = new URLSearchParams(window.location.search);
     const query = params.get('q');
     if (!query) return;
+
+    const DEBUG = isDebugEnabled();
 
     const normalize = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
     const target = normalize(query);
@@ -24,7 +37,7 @@
     });
 
     if (match) {
-      console.log(`[DeepLink] Found match for "${query}":`, match);
+      if (DEBUG) console.log(`[DeepLink] Found match for "${query}":`, match);
       
       // 1. Scroll page to card (vertical)
       // We use scrollIntoView on the carousel wrapper if possible to avoid layout shifts
@@ -60,7 +73,7 @@
         setTimeout(() => toggle.click(), 800);
       }
     } else {
-      console.warn(`[DeepLink] No match found for "${query}"`);
+      if (DEBUG) console.warn(`[DeepLink] No match found for "${query}"`);
     }
   };
 
