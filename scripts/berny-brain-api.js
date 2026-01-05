@@ -1486,15 +1486,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // pseudo-stream per UI
         if (typeof onChunk === 'function') {
-          // Faster streaming so longer replies don't look like they "freeze" mid-sentence.
-          const chunkSize = 4;
+          // Slightly slower streaming per richiesta: scrittura più lenta e naturale
+          const chunkSize = 2;
           let i = 0;
           const tick = () => {
             const c = text.slice(i, i + chunkSize);
             if (c) {
               try { onChunk(c); } catch {}
               i += chunkSize;
-              window.setTimeout(tick, 15);
+              window.setTimeout(tick, 35);
             } else {
               if (typeof onComplete === 'function') onComplete(text, sourceLabel);
             }

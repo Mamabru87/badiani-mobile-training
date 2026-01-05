@@ -246,11 +246,24 @@
 
       if (this.currentStreamingBubble) {
         const finalText = sanitize(fullResponse || this.currentStreamingText);
-        
-        // Apply Markdown parsing and Smart Links to the final result
-        this.currentStreamingBubble.innerHTML = this.parseMarkdown(finalText);
-        this.detectAndAddLink(finalText, this.currentStreamingBubble);
-        this.detectAndRunCommand(finalText); // NEW: Check for commands
+
+        // Estrai link e testo pulito senza inserirlo subito (per mostrare prima il messaggio, poi il link)
+        const { cleanText, link, suppressLink } = this.resolveLinkData(finalText);
+
+        // Applica markdown al testo principale
+        this.currentStreamingBubble.innerHTML = this.parseMarkdown(cleanText);
+
+        // Comandi speciali
+        this.detectAndRunCommand(finalText);
+
+        // Dopo il testo, mostra i puntini e poi il link in un messaggio separato
+        if (!suppressLink && link) {
+          this.enqueueLinkMessage(link);
+        } else if (!suppressLink && !link) {
+          // Se non c'è link esplicito, prova a inferirlo (coerente con risposta) e poi mostra puntini + link
+          const inferred = this.inferLinkFromContext(cleanText);
+          if (inferred) this.enqueueLinkMessage(inferred);
+        }
 
         try {
           this.currentStreamingBubble
@@ -283,30 +296,7 @@
 
     // --- EFFETTO MACCHINA DA SCRIVERE (Adapted) ---
     typeWriterEffect(fullText) {
-      // 0. Check for NOLINK
-      let suppressLink = false;
-      if (fullText.includes('[[NOLINK]]')) {
-        suppressLink = true;
-        fullText = fullText.replace('[[NOLINK]]', '');
-      }
-
-      // 1. Cerca il tag [[LINK:...]]
-      let linkUrl = null;
-      let cleanText = fullText;
-      
-      const linkMatch = fullText.match(/\[\[LINK:(.*?)\]\]/);
-      if (linkMatch) {
-        linkUrl = linkMatch[1]; 
-        cleanText = cleanText.replace(linkMatch[0], '').trim(); // Rimuovi il tag dal testo visibile
-      }
-
-      // 2. Cerca il tag [[CMD:...]]
-      let command = null;
-      const cmdMatch = fullText.match(/\[\[CMD:(.*?)\]\]/);
-      if (cmdMatch) {
-        command = cmdMatch[1];
-        cleanText = cleanText.replace(cmdMatch[0], '').trim();
-      }
+      const { cleanText, link, suppressLink, command } = this.resolveLinkData(fullText);
 
       this.playSynthSound('received');
 
@@ -328,12 +318,10 @@
           setTimeout(type, speed);
         } else {
           bubble.innerHTML = this.parseMarkdown(cleanText);
-          
-          if (linkUrl) {
-            this.createLinkButton(linkUrl, bubble);
-          } else if (!suppressLink) {
-            // Fallback se nessun link esplicito è stato trovato E non è soppresso
-            this.detectAndAddLink(cleanText, bubble);
+
+          if (!suppressLink) {
+            const finalLink = link || this.inferLinkFromContext(cleanText);
+            if (finalLink) this.enqueueLinkMessage(finalLink);
           }
 
           if (command) {
@@ -429,65 +417,92 @@
 
     // --- PULSANTE LINK INTELLIGENTE ---
     detectAndAddLink(text, container) {
-      let link = null;
-      let cleanText = text;
-
-      // 0. Check for NOLINK suppression
-      if (text.includes('[[NOLINK]]')) {
-        cleanText = text.replace('[[NOLINK]]', '').trim();
-        // Re-render content without the tag
+      const { cleanText, link, suppressLink } = this.resolveLinkData(text, true);
+      if (cleanText !== text) {
         container.innerHTML = this.parseMarkdown(cleanText);
-        return; // Exit without adding any link
+      }
+      if (!suppressLink && link) {
+        this.createLinkButton(link, container);
+      } else if (!suppressLink && !link) {
+        const inferred = this.inferLinkFromContext(cleanText);
+        if (inferred) this.createLinkButton(inferred, container);
+      }
+    }
+
+    // Nuovo helper: estrae testo pulito, link (esplicito o nulla) e flag NOLINK. Se `forSameBubble` è true, rimuove CMD e LINK dal testo visibile.
+    resolveLinkData(rawText, forSameBubble = false) {
+      let cleanText = rawText || '';
+      let link = null;
+      let command = null;
+      let suppressLink = false;
+
+      if (cleanText.includes('[[NOLINK]]')) {
+        suppressLink = true;
+        cleanText = cleanText.replace('[[NOLINK]]', '').trim();
       }
 
-      // 1. Cerca tag esplicito [[LINK:url]] (per casi non-typewriter)
-      const tagMatch = text.match(/\[\[LINK:(.*?)\]\]/);
-      if (tagMatch) {
-        link = tagMatch[1];
-        cleanText = text.replace(tagMatch[0], '').trim();
-        container.innerHTML = this.parseMarkdown(cleanText);
-      } 
-      // 1b. Rimuovi anche eventuali CMD tags dal testo visibile (se non già fatto)
+      const linkMatch = cleanText.match(/\[\[LINK:(.*?)\]\]/);
+      if (linkMatch) {
+        link = linkMatch[1];
+        cleanText = cleanText.replace(linkMatch[0], '').trim();
+      }
+
       const cmdMatch = cleanText.match(/\[\[CMD:(.*?)\]\]/);
       if (cmdMatch) {
-        cleanText = cleanText.replace(cmdMatch[0], '').trim();
-        container.innerHTML = this.parseMarkdown(cleanText);
-      }
-
-      // 2. Fallback: Mappa argomenti -> link
-      if (!tagMatch) { // Only fallback if no explicit link
-        // Prefer the same inference logic used by berny-brain-api.js
-        try {
-          const brain = window.bernyBrain;
-          if (brain && typeof brain.inferRecommendationFromContext === 'function') {
-            // Use last user message + assistant text to avoid "espresso" overriding e.g. "americano".
-            const reco = brain.inferRecommendationFromContext(this.lastUserMessage || '', cleanText || '');
-            if (reco && reco.href) link = reco.href;
-          } else if (brain && typeof brain.inferRecommendationFromMessage === 'function') {
-            const reco = brain.inferRecommendationFromMessage(this.lastUserMessage || text);
-            if (reco && reco.href) link = reco.href;
-          }
-        } catch {}
-
-        // Very-last-resort minimal mapping (keep conservative)
-        if (!link) {
-          const lower = text.toLowerCase();
-          // If Berny explicitly mentions Story Orbit, always route there.
-          // This avoids accidental routing to Gelato Lab due to generic words like "gelato".
-          if (lower.includes('story orbit') || lower.includes('story-orbit') || (lower.includes('firenze') && lower.includes('origine'))) {
-            link = 'story-orbit.html?q=story';
-          }
-          else if (lower.includes('churro')) link = 'festive.html?q=churro';
-          else if (lower.includes('waffle')) link = 'sweet-treats.html?q=waffle';
-          else if (lower.includes('pancake')) link = 'sweet-treats.html?q=pancake';
-          else if (lower.includes('gelato')) link = 'gelato-lab.html?q=gusti';
-          else if (lower.includes('espresso')) link = 'caffe.html?q=espresso';
+        command = cmdMatch[1];
+        if (forSameBubble) {
+          cleanText = cleanText.replace(cmdMatch[0], '').trim();
         }
       }
 
-      if (link) {
-        this.createLinkButton(link, container);
+      // Se non c'è link esplicito, nessun comando da togliere e non è soppresso, ci pensa l'inferenza dopo
+      return { cleanText, link, suppressLink, command };
+    }
+
+    // Inferenza link coerente con la logica del brain, senza mutare il testo
+    inferLinkFromContext(cleanText) {
+      let link = null;
+      try {
+        const brain = window.bernyBrain;
+        if (brain && typeof brain.inferRecommendationFromContext === 'function') {
+          const reco = brain.inferRecommendationFromContext(this.lastUserMessage || '', cleanText || '');
+          if (reco && reco.href) link = reco.href;
+        } else if (brain && typeof brain.inferRecommendationFromMessage === 'function') {
+          const reco = brain.inferRecommendationFromMessage(this.lastUserMessage || cleanText || '');
+          if (reco && reco.href) link = reco.href;
+        }
+      } catch {}
+
+      if (!link) {
+        const lower = (cleanText || '').toLowerCase();
+        if (lower.includes('story orbit') || lower.includes('story-orbit') || (lower.includes('firenze') && lower.includes('origine'))) {
+          link = 'story-orbit.html?q=story';
+        } else if (lower.includes('churro')) link = 'festive.html?q=churro';
+        else if (lower.includes('waffle')) link = 'sweet-treats.html?q=waffle';
+        else if (lower.includes('pancake')) link = 'sweet-treats.html?q=pancake';
+        else if (lower.includes('gelato')) link = 'gelato-lab.html?q=gusti';
+        else if (lower.includes('espresso')) link = 'caffe.html?q=espresso';
       }
+
+      return link;
+    }
+
+    // Mostra i puntini, aspetta un attimo, poi crea un messaggio dedicato con il link
+    enqueueLinkMessage(linkUrl) {
+      if (!linkUrl) return;
+      // Mostra puntini
+      this.showTypingIndicator();
+      setTimeout(() => {
+        this.hideTypingIndicator();
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'berny-message';
+        const bubble = document.createElement('div');
+        bubble.className = 'message-bubble';
+        msgDiv.appendChild(bubble);
+        this.messagesArea.appendChild(msgDiv);
+        this.createLinkButton(linkUrl, bubble);
+        this.scrollToBottom(false);
+      }, 650); // leggero ritardo per dare l'idea che "sta pensando al link"
     }
 
     addMessage(text, sender, scroll = true) {
