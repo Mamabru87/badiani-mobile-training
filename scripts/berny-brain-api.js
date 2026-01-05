@@ -598,24 +598,52 @@ class BernyBrainAPI {
       { href: 'slitti-yoyo.html?q=slitti', keywords: ['slitti', 'yoyo', 'yo-yo'] },
     ];
 
-    let best = null;
+    // STRATEGIA MIGLIORATA:
+    // 1. Trova il PRIMO prodotto menzionato nel testo
+    // 2. Se più prodotti, usa il posizionamento: prima menzione = priorità
+    // 3. Scarta menzioni casuali alla fine (es: "vai in take away" dopo risposta su gelato)
+
+    let bestMatch = null;
+    let bestFirstPos = msgB.length; // Posizione della prima menzione nel testo
     let bestScore = 0;
 
     products.forEach((prod) => {
+      let minPos = msgB.length; // Posizione della prima menzione di questo prodotto
       let score = 0;
+      let foundCount = 0;
+
       (prod.keywords || []).forEach((kw) => {
         const kwn = this.normalizeText(kw);
         if (kwn && msgB.includes(kwn)) {
+          foundCount++;
+          const kwPos = msgB.indexOf(kwn); // Posizione della prima menzione di questo keyword
+          minPos = Math.min(minPos, kwPos);
+          // Score basato su lunghezza del keyword (più specifico = più importante)
           score += (kwn.length >= 15 ? 4 : (kwn.length >= 10 ? 3 : (kwn.length >= 6 ? 2 : 1)));
         }
       });
-      if (score > bestScore) {
-        bestScore = score;
-        best = prod;
+
+      if (score > 0) {
+        // Bonus per il primo prodotto menzionato (early mention = core topic)
+        const positionBonus = Math.max(0, (msgB.length - minPos) / msgB.length * 2);
+        const finalScore = score + positionBonus;
+
+        // Priorità: 
+        // 1. Primo prodotto menzionato (minPos piccolo)
+        // 2. Score più alto (più keyword match)
+        if (minPos < bestFirstPos || (minPos === bestFirstPos && finalScore > bestScore)) {
+          bestFirstPos = minPos;
+          bestScore = finalScore;
+          bestMatch = prod;
+        }
       }
     });
 
-    if (best && bestScore >= 2) return best;
+    // Se trovato un match robusto (score >= 2 O primo prodotto menzionato nel primo 50% del testo)
+    if (bestMatch && (bestScore >= 2 || bestFirstPos < msgB.length * 0.5)) {
+      return bestMatch;
+    }
+
     return null;
   }
 
@@ -1281,15 +1309,19 @@ class BernyBrainAPI {
       ### REGOLE DI TONO:
       Sii simpatico, leggermente sfacciato ma incoraggiante. Usa emoji gelato (🍦, 🍧, 🧊).
 
+      ⚠️ SINTETICITÀ OBBLIGATORIA:
+      Risposte BREVI e DIRETTE: massimo 2-3 frasi. NO a paragrafi lunghi.
+      Se serve spiegare di più: invita l'utente ad aprire la scheda per i dettagli completi.
+
       IL TUO OBIETTIVO PRINCIPALE (se non è un quiz):
-      Dare risposte concise ma COMPLETE (tipicamente 2–6 frasi) e invitare l'utente ad aprire la scheda tecnica per i dettagli.
+      Rispondere in 1-3 frasi brevi e invitare l'utente ad aprire la scheda tecnica per i dettagli completi.
       
       REGOLE DI RISPOSTA (Standard):
-      1. Rispondi in modo chiaro e completo alla domanda.
-      2. Se servono dettagli, usa un mini elenco (max 4 bullet).
+      1. Rispondi in modo BREVE E DIRETTO alla domanda (massimo 2-3 frasi).
+      2. Se servono dettagli, usa un mini elenco (max 2-3 bullet).
       3. NON troncare mai una frase a metà: chiudi sempre con punteggiatura (., !, ?).
-      4. Se non hai certezza, dichiaralo e proponi cosa consultare nel playbook.
-      5. Chiudi SEMPRE invitando ad aprire la scheda per i dettagli (usa la lingua dell'utente).
+      4. Se non hai certezza, dichiaralo brevemente.
+      5. Chiudi invitando ad aprire la scheda per i dettagli (usa la lingua dell'utente).
       6. Usa emoji ma non esagerare.
 
       LINK SCHEDE (IMPORTANTE):
