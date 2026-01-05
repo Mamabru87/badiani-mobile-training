@@ -564,9 +564,72 @@ class BernyBrainAPI {
     return null;
   }
 
+  // Self-check: analyze what Berny actually discussed in the response.
+  // Extract the main product discussed so the link matches what BERNY says, not just user keywords.
+  extractMainProductFromResponse(assistantMessage) {
+    const msgB = this.normalizeText(assistantMessage);
+    if (!msgB) return null;
+
+    const products = [
+      // Pastries
+      { href: 'pastries.html?q=cakes', keywords: ['cakes', 'cake', 'torta', 'torte', 'fetta', 'chocolate carrot walnut'] },
+      { href: 'pastries.html?q=brownie', keywords: ['brownie', 'brownies', 'tray'] },
+      { href: 'pastries.html?q=loaf', keywords: ['loaf', 'banana loaf'] },
+      { href: 'pastries.html?q=croissant', keywords: ['croissant', 'croissants', 'farcit'] },
+      { href: 'pastries.html?q=scone', keywords: ['scone', 'scones'] },
+      // Gelato
+      { href: 'gelato-lab.html?q=buontalenti', keywords: ['buontalenti'] },
+      { href: 'gelato-lab.html?q=coppa', keywords: ['coppa badiani', 'coppa gelato', 'coppa'] },
+      { href: 'gelato-lab.html?q=gusti', keywords: ['gusti', 'flavors', 'parfums'] },
+      // Coffee
+      { href: 'caffe.html?q=espresso', keywords: ['espresso', 'estrazione', 'portafiltro'] },
+      { href: 'caffe.html?q=cappuccino', keywords: ['cappuccino', 'microfoam', 'schiuma fine'] },
+      { href: 'caffe.html?q=americano', keywords: ['americano', 'caffe americano'] },
+      { href: 'caffe.html?q=chai-latte', keywords: ['chai', 'chai latte'] },
+      // Sweet treats
+      { href: 'sweet-treats.html?q=crepe', keywords: ['crepe', 'crêpe', 'crepes'] },
+      { href: 'sweet-treats.html?q=waffle', keywords: ['waffle', 'waffles'] },
+      { href: 'sweet-treats.html?q=pancake', keywords: ['pancake', 'pancakes'] },
+      // Festive
+      { href: 'festive.html?q=churro', keywords: ['churro', 'churros'] },
+      { href: 'festive.html?q=panettone', keywords: ['panettone', 'pandoro'] },
+      { href: 'festive.html?q=mulled', keywords: ['vin brule', 'mulled'] },
+      // Other
+      { href: 'slitti-yoyo.html?q=slitti', keywords: ['slitti', 'yoyo', 'yo-yo'] },
+    ];
+
+    let best = null;
+    let bestScore = 0;
+
+    products.forEach((prod) => {
+      let score = 0;
+      (prod.keywords || []).forEach((kw) => {
+        const kwn = this.normalizeText(kw);
+        if (kwn && msgB.includes(kwn)) {
+          score += (kwn.length >= 15 ? 4 : (kwn.length >= 10 ? 3 : (kwn.length >= 6 ? 2 : 1)));
+        }
+      });
+      if (score > bestScore) {
+        bestScore = score;
+        best = prod;
+      }
+    });
+
+    if (best && bestScore >= 2) return best;
+    return null;
+  }
+
   // Prefer coherence between what the user asked and what Berny actually answered.
   // This reduces "testo giusto, link sbagliato" when the LLM drifts or the question is multi-topic.
+  // NOW: check what BERNY discussed first, THEN fallback to user keywords.
   inferRecommendationFromContext(userMessage, assistantMessage) {
+    // Step 1: What product did BERNY actually discuss in the response?
+    const assistantProduct = this.extractMainProductFromResponse(assistantMessage);
+    if (assistantProduct && assistantProduct.href) {
+      return { href: assistantProduct.href, reason: 'response_content' };
+    }
+
+    // Step 2: Fallback to user intent keywords if no clear product in response.
     const msgA = this.normalizeText(userMessage);
     const msgB = this.normalizeText(assistantMessage);
 
