@@ -524,6 +524,7 @@ class BernyBrainAPI {
 
       { href: 'caffe.html?q=espresso', keys: ['espresso', 'shot', 'estrazione', 'portafiltro', 'grinder', 'tamper', 'expreso', 'café espresso'] },
       { href: 'caffe.html?q=americano', keys: ['americano', 'caffe americano', 'caffè americano', 'american coffee', 'café americano'] },
+      { href: 'caffe.html?q=smoothies-parametri-di-produzione', keys: ['smoothie', 'smoothies', 'frullato', 'frullati', 'frappe', 'frappè', 'frappé'] },
       // Be careful with generic keywords like "latte"/"milk": they would incorrectly match Chai Latte, Matcha Latte, Iced Latte, etc.
       { href: 'caffe.html?q=chai-latte', keys: ['chai', 'chai latte', 'chai-latte'] },
       { href: 'caffe.html?q=cappuccino', keys: ['cappuccino', 'microfoam', 'schiuma', 'schiuma fine', 'montare latte', 'latte art', 'steam', 'steam wand', 'lancia vapore', 'wand'] },
@@ -596,6 +597,7 @@ class BernyBrainAPI {
       { href: 'caffe.html?q=cappuccino', keywords: ['cappuccino', 'microfoam', 'schiuma fine', 'capuchino', 'mousse de lait'] },
       { href: 'caffe.html?q=hot-chocolate', keywords: ['hot chocolate', 'cioccolata calda', 'hot-choc', 'chocolate drink', 'chocolat chaud', 'chocolate caliente'] },
       { href: 'caffe.html?q=americano', keywords: ['americano', 'caffe americano', 'american coffee', 'café americano', 'café allongé'] },
+      { href: 'caffe.html?q=smoothies-parametri-di-produzione', keywords: ['smoothie', 'smoothies', 'frullato', 'frullati', 'frappe', 'frappè', 'frappé', 'blender smoothie', 'fruit smoothie'] },
       { href: 'caffe.html?q=chai-latte', keywords: ['chai', 'chai latte', 'té chai', 'chaï latte'] },
       { href: 'caffe.html?q=macchiato', keywords: ['macchiato', 'espresso macchiato', 'macchiato corto', 'macchiato lungo', 'café manchado', 'café noisette'] },
       { href: 'caffe.html?q=flat-white', keywords: ['flat white', 'flat-white', 'flat blanco', 'flat blanc'] },
@@ -753,6 +755,7 @@ class BernyBrainAPI {
 
       { href: 'caffe.html?q=espresso', keys: ['espresso', 'shot', 'estrazione', 'portafiltro', 'grinder', 'tamper'] },
       { href: 'caffe.html?q=americano', keys: ['americano', 'caffe americano', 'caffè americano', 'american coffee'] },
+      { href: 'caffe.html?q=smoothies-parametri-di-produzione', keys: ['smoothie', 'smoothies', 'frullato', 'frullati', 'frappe', 'frappè', 'frappé'] },
       { href: 'caffe.html?q=hot-chocolate', keys: ['hot chocolate', 'hot-choc', 'cioccolata calda', 'chocolate drink', 'chocolat chaud', 'chocolate caliente'] },
       { href: 'caffe.html?q=macchiato', keys: ['macchiato', 'espresso macchiato', 'macchiato corto', 'macchiato lungo'] },
       { href: 'caffe.html?q=flat-white', keys: ['flat white', 'flat-white'] },
