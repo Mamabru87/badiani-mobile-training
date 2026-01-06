@@ -275,14 +275,49 @@
         console.log('📝 handleComplete - Full response:', finalText);
         console.log('📏 Lunghezza testo ricevuto:', finalText.length, 'caratteri');
 
+        // Normalizza ellissi e spaziature per evitare duplicazioni
+        const collapseEllipses = (text) =>
+          String(text || '')
+            .replace(/\.{3,}/g, '…')
+            .replace(/\s*…\s*/g, ' … ')
+            .replace(/\s{2,}/g, ' ')
+            .trim();
+
+        // Unisce continuazioni evitando di ripetere il testo già presente
+        const mergeContinuation = (base, extra) => {
+          const a = String(base || '').trim();
+          const b = String(extra || '').trim();
+          if (!b) return a;
+          if (!a) return b;
+          const aLower = a.toLowerCase();
+          const bLower = b.toLowerCase();
+          if (bLower.startsWith(aLower)) return b; // il modello ha ripetuto tutto
+          if (aLower.endsWith(bLower)) return a;   // continuazione già inclusa
+
+          // Trova la sovrapposizione più lunga (max 200 caratteri) per unire senza doppioni
+          const maxOverlap = Math.min(200, Math.min(a.length, b.length));
+          let overlap = 0;
+          for (let i = maxOverlap; i >= 20; i--) {
+            const suffix = aLower.slice(-i);
+            if (bLower.startsWith(suffix)) {
+              overlap = i;
+              break;
+            }
+          }
+          return (a + ' ' + b.slice(overlap)).replace(/\s{2,}/g, ' ').trim();
+        };
+
+        finalText = collapseEllipses(finalText);
+
         // Se sembra troncato, chiedi al brain di completare la risposta prima di renderizzarla
         if (brain && typeof brain.looksTruncatedAnswer === 'function' && typeof brain.continueFromPartial === 'function') {
           try {
             if (brain.looksTruncatedAnswer(finalText)) {
               const continued = await brain.continueFromPartial(this.lastUserMessage || '', finalText);
               if (continued && continued !== finalText) {
-                console.log('✅ Continuation ottenuta, nuova lunghezza:', continued.length);
-                finalText = sanitize(continued);
+                const merged = mergeContinuation(finalText, continued);
+                console.log('✅ Continuation ottenuta, nuova lunghezza:', merged.length);
+                finalText = collapseEllipses(sanitize(merged));
               }
             }
           } catch (e) {
@@ -296,22 +331,25 @@
         console.log('📄 Clean text dopo resolveLinkData:', rawClean);
         console.log('📏 Lunghezza clean text:', rawClean.length, 'caratteri');
 
-        // Deduplica frasi consecutive identiche e rimuovi ellissi iniziali
+        // Deduplica frasi e segmenti ripetuti (anche quando separati da ellissi)
         const dedupeSentences = (text) => {
           if (!text) return text;
-          const sentences = text.split(/(?<=[.!?])\s+/);
+          const sentences = text.split(/(?<=[.!?])\s+|\s+…\s+|\n+/);
           const cleaned = [];
+          const seen = new Set();
           sentences.forEach((s) => {
-            const t = s.replace(/^\.{2,}\s*/, '').trim();
+            const t = s.replace(/^\.{2,}\s*/, '').replace(/^…\s*/, '').trim();
             if (!t) return;
-            if (cleaned.length === 0 || cleaned[cleaned.length - 1].toLowerCase() !== t.toLowerCase()) {
+            const norm = t.toLowerCase().replace(/\s+/g, ' ');
+            if (!seen.has(norm)) {
+              seen.add(norm);
               cleaned.push(t);
             }
           });
           return cleaned.join(' ');
         };
 
-        let cleanText = dedupeSentences(rawClean);
+        let cleanText = dedupeSentences(collapseEllipses(rawClean));
 
         // Se dopo la pulizia sembra ancora troncato, prova un secondo tentativo di continuation
         if (brain && typeof brain.looksTruncatedAnswer === 'function' && typeof brain.continueFromPartial === 'function') {
@@ -319,8 +357,9 @@
             if (brain.looksTruncatedAnswer(cleanText)) {
               const continued2 = await brain.continueFromPartial(this.lastUserMessage || '', cleanText);
               if (continued2 && continued2 !== cleanText) {
-                console.log('✅ Continuation (post-clean) ottenuta, nuova lunghezza:', continued2.length);
-                cleanText = dedupeSentences(continued2);
+                const merged2 = mergeContinuation(cleanText, continued2);
+                console.log('✅ Continuation (post-clean) ottenuta, nuova lunghezza:', merged2.length);
+                cleanText = dedupeSentences(collapseEllipses(merged2));
               }
             }
           } catch (e) {
