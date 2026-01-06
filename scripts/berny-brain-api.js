@@ -140,6 +140,33 @@ class BernyBrainAPI {
   }
 
   // ------------------------------
+  // User context helpers
+  // ------------------------------
+  getUserNickname() {
+    try {
+      const nick = String(window.BadianiProfile?.getActive?.()?.nickname || '').trim();
+      return nick;
+    } catch {
+      return '';
+    }
+  }
+
+  addressUser(text) {
+    const raw = String(text ?? '').trim();
+    if (!raw) return raw;
+    const nick = this.getUserNickname();
+    if (!nick) return raw;
+
+    const nickNorm = this.normalizeText(nick);
+    const head = this.normalizeText(raw.slice(0, Math.min(120, raw.length)));
+    // If the message already starts with the nickname (or "Ciao <nick>") avoid double-prefix.
+    if (head.startsWith(nickNorm) || head.startsWith(`ciao ${nickNorm}`) || head.startsWith(`hi ${nickNorm}`) || head.startsWith(`hola ${nickNorm}`) || head.startsWith(`salut ${nickNorm}`)) {
+      return raw;
+    }
+    return `${nick}, ${raw}`;
+  }
+
+  // ------------------------------
   // Text helpers
   // ------------------------------
   mergeContinuation(base, add) {
@@ -1318,26 +1345,12 @@ class BernyBrainAPI {
   // --- QUIZ LOGIC START ---
 
   detectLanguage(text) {
-    const t = text.toLowerCase();
-    
-    // Italian
-    if (/\b(domande|interrogami|sfida)\b/i.test(t)) return 'it';
-    // English
-    if (/\b(questions|challenge|ask me)\b/i.test(t)) return 'en';
-    // Spanish
-    if (/\b(cuestionario|preguntas|desafío|desafio)\b/i.test(t)) return 'es';
-    // French
-    if (/\b(défi|defi|interroge-moi)\b/i.test(t)) return 'fr';
-
-    // Common words: test, quiz. Check UI lang or default to IT.
-    if (/\b(test|quiz)\b/i.test(t)) {
-        // Try to respect current UI language if ambiguous
-        const uiLang = (window.BadianiI18n?.getLang?.() || 'it').toLowerCase();
-        if (['it','en','es','fr'].includes(uiLang)) return uiLang;
-        return 'it';
-    }
-
-    return null; 
+    // IMPORTANT: Language must NOT auto-switch based on what the user types.
+    // The assistant language follows ONLY the UI language selection.
+    const t = String(text || '').toLowerCase();
+    const wantsQuiz = /\b(domande|interrogami|sfida|questions|challenge|ask\s+me|cuestionario|preguntas|desaf[ií]o|d[ée]fi|interroge\s*[- ]?moi|quiz|test)\b/i.test(t);
+    if (!wantsQuiz) return null;
+    return this.getUiLang();
   }
 
   async loadQuestions(lang) {
@@ -1523,19 +1536,19 @@ class BernyBrainAPI {
   async processMessage(userMessage) {
     // 1. QUIZ INTERCEPTION
     if (this.quizState.active) {
-        return this.handleQuizAnswer(userMessage);
+      return this.addressUser(await this.handleQuizAnswer(userMessage));
     }
 
     const detectedLang = this.detectLanguage(userMessage);
     if (detectedLang) {
-        return this.startQuiz(detectedLang);
+      return this.addressUser(await this.startQuiz(detectedLang));
     }
 
     // 1b. Handle very short / small-talk inputs locally so the suggestion card is coherent and varies.
     const reco = this.inferRecommendationFromMessage(userMessage);
     const msgNorm = this.normalizeText(userMessage);
     if (this.isSmallTalk(msgNorm)) {
-      const resp = this.buildSmallTalkResponse(reco);
+      const resp = this.addressUser(this.buildSmallTalkResponse(reco));
       this.recordConversationTurn(userMessage, resp);
       return resp;
     }
@@ -1544,7 +1557,7 @@ class BernyBrainAPI {
     // If missing, ask a clarifying question instead of guessing a page.
     // (Keeps the generated link coherent and avoids "Pandoro" hijacks.)
     if (this.isMetaGuidanceRequest(msgNorm) && !this.hasExplicitTopicSignal(msgNorm)) {
-      const resp = this.buildClarificationForMetaGuidance(userMessage);
+      const resp = this.addressUser(this.buildClarificationForMetaGuidance(userMessage));
       this.recordConversationTurn(userMessage, resp);
       return resp;
     }
@@ -1572,7 +1585,8 @@ class BernyBrainAPI {
         }
         finalResp = this.applyRecommendationToResponse(localOut, recoLocal);
       }
-      
+
+      finalResp = this.addressUser(finalResp);
       this.recordConversationTurn(userMessage, finalResp);
       return finalResp;
     }
@@ -1696,19 +1710,22 @@ class BernyBrainAPI {
         if (Array.isArray(recoFinal)) {
           // Link multipli
           const finalResponse = this.applyRecommendationToResponse(out, recoFinal);
-          this.recordConversationTurn(userMessage, finalResponse);
-          return finalResponse;
+          const addressed = this.addressUser(finalResponse);
+          this.recordConversationTurn(userMessage, addressed);
+          return addressed;
         } else if (recoFinal?.href) {
           // Link singolo
           recoFinal.href = this.coerceHrefToCatalogCard(recoFinal.href, userMessage, out);
           const finalResponse = this.applyRecommendationToResponse(out, recoFinal);
-          this.recordConversationTurn(userMessage, finalResponse);
-          return finalResponse;
+          const addressed = this.addressUser(finalResponse);
+          this.recordConversationTurn(userMessage, addressed);
+          return addressed;
         } else {
           // Nessun link
           const finalResponse = this.applyRecommendationToResponse(out, null);
-          this.recordConversationTurn(userMessage, finalResponse);
-          return finalResponse;
+          const addressed = this.addressUser(finalResponse);
+          this.recordConversationTurn(userMessage, addressed);
+          return addressed;
         }
       } catch (e) {
         const name = String(e?.name || '');
@@ -1767,19 +1784,22 @@ class BernyBrainAPI {
       if (Array.isArray(recoFinal)) {
         // Link multipli
         const finalResponse = this.applyRecommendationToResponse(out, recoFinal);
-        this.recordConversationTurn(userMessage, finalResponse);
-        return finalResponse;
+        const addressed = this.addressUser(finalResponse);
+        this.recordConversationTurn(userMessage, addressed);
+        return addressed;
       } else if (recoFinal?.href) {
         // Link singolo
         recoFinal.href = this.coerceHrefToCatalogCard(recoFinal.href, userMessage, out);
         const finalResponse = this.applyRecommendationToResponse(out, recoFinal);
-        this.recordConversationTurn(userMessage, finalResponse);
-        return finalResponse;
+        const addressed = this.addressUser(finalResponse);
+        this.recordConversationTurn(userMessage, addressed);
+        return addressed;
       } else {
         // Nessun link
         const finalResponse = this.applyRecommendationToResponse(out, null);
-        this.recordConversationTurn(userMessage, finalResponse);
-        return finalResponse;
+        const addressed = this.addressUser(finalResponse);
+        this.recordConversationTurn(userMessage, addressed);
+        return addressed;
       }
 
     } catch (error) {
@@ -1815,19 +1835,22 @@ class BernyBrainAPI {
           if (Array.isArray(recoFinal)) {
             // Link multipli
             const finalResponse = this.applyRecommendationToResponse(out, recoFinal);
-            this.recordConversationTurn(userMessage, finalResponse);
-            return finalResponse;
+            const addressed = this.addressUser(finalResponse);
+            this.recordConversationTurn(userMessage, addressed);
+            return addressed;
           } else if (recoFinal?.href) {
             // Link singolo
             recoFinal.href = this.coerceHrefToCatalogCard(recoFinal.href, userMessage, out);
             const finalResponse = this.applyRecommendationToResponse(out, recoFinal);
-            this.recordConversationTurn(userMessage, finalResponse);
-            return finalResponse;
+            const addressed = this.addressUser(finalResponse);
+            this.recordConversationTurn(userMessage, addressed);
+            return addressed;
           } else {
             // Nessun link
             const finalResponse = this.applyRecommendationToResponse(out, null);
-            this.recordConversationTurn(userMessage, finalResponse);
-            return finalResponse;
+            const addressed = this.addressUser(finalResponse);
+            this.recordConversationTurn(userMessage, addressed);
+            return addressed;
           }
           
         } catch (backupError) {
@@ -1862,6 +1885,8 @@ class BernyBrainAPI {
       'fr': 'Français'
     };
     const userLang = langMap[userLangCode] || 'Italiano';
+
+    const nickname = String(this.getUserNickname() || '').trim();
     
     let info = "";
     
@@ -1889,6 +1914,12 @@ class BernyBrainAPI {
     return `
       SEI BERNY, ASSISTENTE DI BADIANI 1932. 🍦
       RISPONDI IN: ${userLang}
+
+      CONTESTO UTENTE:
+      - Nome profilo: ${nickname || '(non disponibile)'}
+      REGOLE:
+      - Rivolgiti all'utente usando SEMPRE il suo nome profilo quando rispondi (es. "${nickname || 'Nome'}, ...").
+      - Non inventare nomi.
 
       ### 🍦 PROTOCOLLO "SECRET CHALLENGE" (Easter Egg)
       (NOTA: Il quiz è ora gestito direttamente dal codice, ma se l'utente chiede info generiche sul quiz, rispondi così:)

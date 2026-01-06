@@ -30,6 +30,13 @@
     fr: "Salut! Je suis BERNY 👋🍦 Ton assistant de formation Badiani. Demande-moi n'importe quoi!"
   };
 
+  const BERNY_GREETINGS_WITH_NAME = {
+    it: (name) => `Ciao ${name}! Sono BERNY 👋🍦 Il tuo assistente per il training Badiani. Chiedimi qualsiasi cosa!`,
+    en: (name) => `Hi ${name}! I'm BERNY 👋🍦 Your Badiani training assistant. Ask me anything!`,
+    es: (name) => `¡Hola ${name}! Soy BERNY 👋🍦 Tu asistente de formación Badiani. ¡Pregúntame lo que quieras!`,
+    fr: (name) => `Salut ${name}! Je suis BERNY 👋🍦 Ton assistant de formation Badiani. Demande-moi n'importe quoi!`,
+  };
+
   const sanitize = (value) => String(value ?? '').trim();
 
   class BernyUI {
@@ -92,7 +99,10 @@
 
       // Welcome message
       const currentLang = (window.BadianiI18n?.getLang?.() || 'it').toLowerCase();
-      const fallbackGreeting = BERNY_GREETINGS[currentLang] || BERNY_GREETINGS['it'];
+      const nickname = String(window.BadianiProfile?.getActive?.()?.nickname || '').trim();
+      const fallbackGreeting = nickname
+        ? (BERNY_GREETINGS_WITH_NAME[currentLang] ? BERNY_GREETINGS_WITH_NAME[currentLang](nickname) : (BERNY_GREETINGS_WITH_NAME['it'](nickname)))
+        : (BERNY_GREETINGS[currentLang] || BERNY_GREETINGS['it']);
 
       const greetingEl = this.addMessage(
         tr(
@@ -110,7 +120,10 @@
          const el = this.messagesArea.querySelector('[data-greeting="true"] .message-bubble');
          if (el) {
              const newLang = (window.BadianiI18n?.getLang?.() || 'it').toLowerCase();
-             const newFallback = BERNY_GREETINGS[newLang] || BERNY_GREETINGS['it'];
+           const nickname = String(window.BadianiProfile?.getActive?.()?.nickname || '').trim();
+           const newFallback = nickname
+            ? (BERNY_GREETINGS_WITH_NAME[newLang] ? BERNY_GREETINGS_WITH_NAME[newLang](nickname) : (BERNY_GREETINGS_WITH_NAME['it'](nickname)))
+            : (BERNY_GREETINGS[newLang] || BERNY_GREETINGS['it']);
              
              el.textContent = tr(
                 'assistant.greeting',
@@ -166,8 +179,9 @@
       this.autoResizeInput();
       this.playSynthSound('sent');
 
-      // Non chiamiamo più showTypingIndicator() qui perché handleStreamChunk()
-      // creerà la bolla con puntini quando arriva il primo chunk
+      // Show the classic 3-dots immediately (as on first question).
+      // handleStreamChunk() will replace this indicator with the streaming bubble on first chunk.
+      this.showTypingIndicator();
       this.animateAvatar('thinking');
 
       try {
@@ -341,31 +355,36 @@
         // Comandi speciali
         this.detectAndRunCommand(finalText);
 
-        // Aggiungi i link direttamente nella stessa bolla (non in messaggio separato)
+        // IMPORTANT UX RULE:
+        // - Never reveal link buttons while BERNY is typing.
+        // - Keep the main message bubble synthetic.
+        // - Reveal buttons in a separate follow-up assistant bubble after a short “thinking” delay.
+        let actionLinks = [];
         if (!suppressLink) {
           if (links && Array.isArray(links) && links.length > 0) {
-            // Link multipli
-            console.log('🎨 Creating multiple links:', links);
-            links.forEach((linkObj) => {
-              const targetUrl = linkObj && (linkObj.url || linkObj.href);
-              if (targetUrl) {
-                const label = linkObj.label || tr('assistant.openCard', null, '📖 Apri Scheda Correlata');
-                console.log('➕ Adding link:', { url: targetUrl, label });
-                this.createLinkButton(targetUrl, actionsEl || bubble, label);
-              }
-            });
+            actionLinks = links
+              .map((obj) => {
+                const targetUrl = obj && (obj.url || obj.href);
+                if (!targetUrl) return null;
+                return {
+                  url: targetUrl,
+                  label: obj.label || tr('assistant.openCard', null, '📖 Apri Scheda Correlata'),
+                };
+              })
+              .filter(Boolean);
           } else if (link) {
-            // Link singolo
-            this.createLinkButton(link, actionsEl || bubble);
+            actionLinks = [{ url: link, label: tr('assistant.openCard', null, '📖 Apri Scheda Correlata') }];
           } else {
-            // Inferenza link
             const inferred = this.inferLinkFromContext(cleanText);
-            if (inferred) this.createLinkButton(inferred, actionsEl || bubble);
+            if (inferred) actionLinks = [{ url: inferred, label: tr('assistant.openCard', null, '📖 Apri Scheda Correlata') }];
           }
         }
 
         // Remove typing dots once final content is rendered.
         try { this.currentStreamingDotsEl?.remove?.(); } catch {}
+
+        // Clear any actions container in the main bubble (we're going to show actions in a separate message).
+        try { if (actionsEl) actionsEl.innerHTML = ''; } catch {}
 
         try {
           this.currentStreamingBubble
@@ -381,6 +400,11 @@
         this.messageCompleted = true; // Marca il messaggio come completato
         this.playSynthSound('received');
         this.scrollToBottom(true);
+
+        // Reveal actions in a separate follow-up bubble (with a short typing dots phase).
+        if (actionLinks && Array.isArray(actionLinks) && actionLinks.length > 0) {
+          this.enqueueActionsMessage(actionLinks);
+        }
       } else {
         this.hideTypingIndicator();
         // Use typeWriterEffect for non-streamed responses (e.g. fallback)
@@ -660,19 +684,49 @@
     // Mostra i puntini, aspetta un attimo, poi crea un messaggio dedicato con il link
     enqueueLinkMessage(linkUrl) {
       if (!linkUrl) return;
-      // NON mostriamo più l'indicatore qui per evitare puntini doppi
-      // this.showTypingIndicator();
-      setTimeout(() => {
-        // this.hideTypingIndicator();
-        const msgDiv = document.createElement('div');
-        msgDiv.className = 'berny-message';
-        const bubble = document.createElement('div');
-        bubble.className = 'message-bubble';
-        msgDiv.appendChild(bubble);
-        this.messagesArea.appendChild(msgDiv);
-        this.createLinkButton(linkUrl, bubble);
-        this.scrollToBottom(false);
-      }, 650); // leggero ritardo per dare l'idea che "sta pensando al link"
+      this.enqueueActionsMessage([{ url: linkUrl, label: tr('assistant.openCard', null, '📖 Apri Scheda Correlata') }]);
+    }
+
+    // Show a dedicated follow-up assistant bubble that first displays typing dots,
+    // then reveals one or more action buttons.
+    enqueueActionsMessage(actionLinks, delayMs = 650) {
+      const links = Array.isArray(actionLinks) ? actionLinks.filter(Boolean) : [];
+      if (!links.length) return;
+
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'berny-message berny-message--actions';
+
+      const bubble = document.createElement('div');
+      bubble.className = 'message-bubble message-bubble--typing';
+
+      const dots = document.createElement('span');
+      dots.className = 'typing-dots';
+      dots.innerHTML = '<span></span><span></span><span></span>';
+      bubble.appendChild(dots);
+
+      msgDiv.appendChild(bubble);
+      this.messagesArea.appendChild(msgDiv);
+      this.scrollToBottom(false);
+
+      window.setTimeout(() => {
+        try {
+          bubble.className = 'message-bubble';
+          bubble.innerHTML = '';
+
+          const actions = document.createElement('div');
+          actions.className = 'message-actions';
+          bubble.appendChild(actions);
+
+          links.forEach((l) => {
+            const targetUrl = l && l.url;
+            if (!targetUrl) return;
+            const label = l.label || tr('assistant.openCard', null, '📖 Apri Scheda Correlata');
+            this.createLinkButton(targetUrl, actions, label);
+          });
+
+          this.scrollToBottom(false);
+        } catch {}
+      }, Math.max(0, Number(delayMs) || 0));
     }
 
     addMessage(text, sender, scroll = true) {
