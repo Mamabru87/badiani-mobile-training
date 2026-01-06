@@ -271,109 +271,43 @@
       if (this.currentStreamingBubble) {
         // Usa SEMPRE fullResponse perché contiene il testo completo dal brain
         // currentStreamingText potrebbe essere incompleto a causa dei setTimeout asincroni
-        let finalText = sanitize(fullResponse);
-        console.log('📝 handleComplete - Full response:', finalText);
-        console.log('📏 Lunghezza testo ricevuto:', finalText.length, 'caratteri');
-
-        // Normalizza ellissi e spaziature per evitare duplicazioni
-        const collapseEllipses = (text) =>
-          String(text || '')
-            .replace(/\.{3,}/g, '…')
-            .replace(/\s*…\s*/g, ' … ')
-            .replace(/\s{2,}/g, ' ')
-            .trim();
-
-        // Unisce continuazioni evitando di ripetere il testo già presente
-        const mergeContinuation = (base, extra) => {
-          const a = String(base || '').trim();
-          const b = String(extra || '').trim();
-          if (!b) return a;
-          if (!a) return b;
-          const aLower = a.toLowerCase();
-          const bLower = b.toLowerCase();
-          if (bLower.startsWith(aLower)) return b; // il modello ha ripetuto tutto
-          if (aLower.endsWith(bLower)) return a;   // continuazione già inclusa
-
-          // Trova la sovrapposizione più lunga (max 200 caratteri) per unire senza doppioni
-          const maxOverlap = Math.min(200, Math.min(a.length, b.length));
-          let overlap = 0;
-          for (let i = maxOverlap; i >= 20; i--) {
-            const suffix = aLower.slice(-i);
-            if (bLower.startsWith(suffix)) {
-              overlap = i;
-              break;
-            }
-          }
-          return (a + ' ' + b.slice(overlap)).replace(/\s{2,}/g, ' ').trim();
-        };
-
-        finalText = collapseEllipses(finalText);
-
-        // Se sembra troncato, chiedi al brain di completare la risposta prima di renderizzarla
-        if (brain && typeof brain.looksTruncatedAnswer === 'function' && typeof brain.continueFromPartial === 'function') {
-          try {
-            if (brain.looksTruncatedAnswer(finalText)) {
-              const continued = await brain.continueFromPartial(this.lastUserMessage || '', finalText);
-              if (continued && continued !== finalText) {
-                const merged = mergeContinuation(finalText, continued);
-                console.log('✅ Continuation ottenuta, nuova lunghezza:', merged.length);
-                finalText = collapseEllipses(sanitize(merged));
-              }
-            }
-          } catch (e) {
-            console.warn('⚠️ Continuation fallback failed', e);
-          }
-        }
+        const finalText = sanitize(fullResponse);
 
         // Estrai link e testo pulito
         const { cleanText: rawClean, link, links, suppressLink } = this.resolveLinkData(finalText);
-        console.log('🔗 Resolved links:', { link, links, suppressLink });
-        console.log('📄 Clean text dopo resolveLinkData:', rawClean);
-        console.log('📏 Lunghezza clean text:', rawClean.length, 'caratteri');
+        // NOTE: La continuazione (anti-troncamento) viene già gestita dal brain (proxy/SDK).
+        // Farla anche qui causa lentezza e spesso duplicazioni (es. ripetizioni dopo "...").
+        const cleanForDisplay = (text) => {
+          let t = String(text || '').trim();
+          if (!t) return t;
 
-        // Deduplica frasi e segmenti ripetuti (anche quando separati da ellissi)
-        const dedupeSentences = (text) => {
-          if (!text) return text;
-          const sentences = text.split(/(?<=[.!?])\s+|\s+…\s+|\n+/);
+          // Normalizza puntini di sospensione: evita "..." incollati alle parole.
+          t = t.replace(/\s*\.{3,}\s*/g, ' … ');
+          t = t.replace(/\s*…\s*/g, ' … ');
+          t = t.replace(/\s{2,}/g, ' ').trim();
+
+          // Rimuovi ellissi iniziali e piccoli artefatti.
+          t = t.replace(/^(?:…\s*)+/g, '').trim();
+
+          // Deduplica frasi consecutive identiche (case-insensitive).
+          const sentences = t.split(/(?<=[.!?])\s+/);
           const cleaned = [];
-          const seen = new Set();
-          sentences.forEach((s) => {
-            const t = s.replace(/^\.{2,}\s*/, '').replace(/^…\s*/, '').trim();
-            if (!t) return;
-            const norm = t.toLowerCase().replace(/\s+/g, ' ');
-            if (!seen.has(norm)) {
-              seen.add(norm);
-              cleaned.push(t);
-            }
-          });
-          return cleaned.join(' ');
+          for (const s of sentences) {
+            const ss = String(s || '').trim();
+            if (!ss) continue;
+            const key = ss.toLowerCase();
+            if (!cleaned.length || cleaned[cleaned.length - 1].toLowerCase() !== key) cleaned.push(ss);
+          }
+          return cleaned.join(' ').trim();
         };
 
-        let cleanText = dedupeSentences(collapseEllipses(rawClean));
-
-        // Se dopo la pulizia sembra ancora troncato, prova un secondo tentativo di continuation
-        if (brain && typeof brain.looksTruncatedAnswer === 'function' && typeof brain.continueFromPartial === 'function') {
-          try {
-            if (brain.looksTruncatedAnswer(cleanText)) {
-              const continued2 = await brain.continueFromPartial(this.lastUserMessage || '', cleanText);
-              if (continued2 && continued2 !== cleanText) {
-                const merged2 = mergeContinuation(cleanText, continued2);
-                console.log('✅ Continuation (post-clean) ottenuta, nuova lunghezza:', merged2.length);
-                cleanText = dedupeSentences(collapseEllipses(merged2));
-              }
-            }
-          } catch (e) {
-            console.warn('⚠️ Continuation fallback (post-clean) failed', e);
-          }
-        }
+        const cleanText = cleanForDisplay(rawClean);
 
         // Svuota la bolla e riconstruisci con testo formattato + link
         this.currentStreamingBubble.innerHTML = '';
         
         // Applica markdown al testo principale
         const parsedHtml = this.parseMarkdown(cleanText);
-        console.log('🎨 HTML dopo parseMarkdown:', parsedHtml);
-        console.log('📏 Lunghezza HTML:', parsedHtml.length, 'caratteri');
         this.currentStreamingBubble.innerHTML = parsedHtml;
 
         // Comandi speciali

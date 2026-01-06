@@ -140,6 +140,115 @@ class BernyBrainAPI {
   }
 
   // ------------------------------
+  // Text helpers
+  // ------------------------------
+  mergeContinuation(base, add) {
+    const left = String(base || '').trim();
+    let right = String(add || '').trim();
+    if (!left) return right;
+    if (!right) return left;
+
+    // Remove leading ellipses/punctuation often produced by “continue…” prompts.
+    right = right
+      .replace(/^(?:\.{3,}|…)+\s*/g, '')
+      .replace(/^[,;:—\-]+\s*/g, '')
+      .trim();
+
+    if (!right) return left;
+
+    const stripWord = (w) => String(w || '')
+      .toLowerCase()
+      // keep accented latin letters too (IT/FR/ES)
+      .replace(/^[^a-z0-9À-ÿ]+|[^a-z0-9À-ÿ]+$/g, '');
+
+    // Remove overlapping prefix if the continuation repeats the last words of base.
+    const baseWords = left.split(/\s+/);
+    const addWords = right.split(/\s+/);
+    const maxK = Math.min(30, baseWords.length, addWords.length);
+
+    for (let k = maxK; k >= 3; k--) {
+      let ok = true;
+      for (let i = 0; i < k; i++) {
+        const bw = stripWord(baseWords[baseWords.length - k + i]);
+        const aw = stripWord(addWords[i]);
+        if (!bw || !aw || bw !== aw) {
+          ok = false;
+          break;
+        }
+      }
+      if (ok) {
+        right = addWords.slice(k).join(' ').trim();
+        break;
+      }
+    }
+
+    if (!right) return left;
+    return `${left} ${right}`.replace(/\s{2,}/g, ' ').trim();
+  }
+
+  polishAssistantText(text) {
+    let s = String(text || '').trim();
+    if (!s) return s;
+
+    // Normalize ellipses (avoid "...di" artifacts).
+    s = s.replace(/\s*\.{3,}\s*/g, ' … ');
+    s = s.replace(/\s*…\s*/g, ' … ');
+    s = s.replace(/\s{2,}/g, ' ').trim();
+    s = s.replace(/(?:\s…){2,}/g, ' …');
+
+    // Ensure we end with punctuation for a clean UI.
+    // Allow closing quotes/brackets after punctuation.
+    if (!/[.!?…][)\]}'"”»]*$/.test(s)) {
+      s = `${s}.`;
+    }
+    return s;
+  }
+
+  compactAssistantText(text) {
+    let s = String(text || '').trim();
+    if (!s) return s;
+
+    // Don't compact flows that explicitly suppress links / are special.
+    if (s.includes('[[NOLINK]]')) return s;
+
+    // Keep already-short answers as-is.
+    if (s.length <= 650) return s;
+
+    const lang = this.getUiLang();
+    const cta = {
+      it: 'Apri la scheda per i dettagli completi.',
+      en: 'Open the card for the full details.',
+      es: 'Abre la ficha para ver todos los detalles.',
+      fr: 'Ouvre la fiche pour tous les détails.',
+    }[lang] || 'Apri la scheda per i dettagli completi.';
+
+    // Try to cut on a sentence boundary within a target window.
+    const TARGET = 520;
+    const windowText = s.slice(0, Math.min(TARGET, s.length));
+    const lastPunct = Math.max(
+      windowText.lastIndexOf('.'),
+      windowText.lastIndexOf('!'),
+      windowText.lastIndexOf('?'),
+      windowText.lastIndexOf('…')
+    );
+
+    let head = '';
+    if (lastPunct >= 80) {
+      head = windowText.slice(0, lastPunct + 1).trim();
+    } else {
+      // Fallback: cut at last space.
+      const lastSpace = windowText.lastIndexOf(' ');
+      head = (lastSpace >= 80 ? windowText.slice(0, lastSpace) : windowText).trim();
+      if (head && !/[.!?…][)\]}'"”»]*$/.test(head)) head = `${head}.`;
+    }
+
+    // Ensure CTA punctuation.
+    let out = `${head} ${cta}`.replace(/\s{2,}/g, ' ').trim();
+    if (!/[.!?…]$/.test(out)) out = `${out}.`;
+    return out;
+  }
+
+  // ------------------------------
   // Legacy KB quick answers
   // - When the question is clearly covered by BERNY_KNOWLEDGE.products, return that
   //   response directly instead of calling the LLM. This avoids occasional provider
@@ -209,7 +318,7 @@ class BernyBrainAPI {
 
       const response2 = await result2.response;
       const add = String(response2?.text?.() || '').trim();
-      if (add) return `${out} ${add}`.trim();
+      if (add) return this.mergeContinuation(out, add);
     } catch {
       // ignore
     }
@@ -251,8 +360,8 @@ class BernyBrainAPI {
     const lastToken = s.split(/\s+/).pop() || '';
     if (lastToken.length <= 3) return true;
 
-    // Otherwise: missing terminal punctuation is suspicious.
-    return true;
+    // Otherwise: don't assume it's truncated (avoids slow + duplication-prone continuations).
+    return false;
   }
 
   // Best-effort continuation usable from the UI when a response looks cut.
@@ -301,7 +410,7 @@ class BernyBrainAPI {
         if (r && r.ok) {
           const data = await r.json().catch(() => null);
           const add = String(data?.text || '').trim();
-          if (add) return `${base} ${add}`.trim();
+          if (add) return this.mergeContinuation(base, add);
         }
       } catch (e) {
         console.warn('Proxy continuation failed', e);
@@ -1438,7 +1547,9 @@ class BernyBrainAPI {
     // This prevents occasional mid-sentence truncation from providers.
     const kbHit = this.matchLegacyKbProduct(userMessage);
     if (kbHit && kbHit.response) {
-      const localOut = String(kbHit.response).trim();
+      let localOut = String(kbHit.response).trim();
+      localOut = this.polishAssistantText(localOut);
+      localOut = this.compactAssistantText(localOut);
       
       // Prova prima a cercare link multipli (per prodotti come smoothies)
       const multipleRecos = this.inferMultipleRecommendations(userMessage, localOut);
@@ -1562,12 +1673,16 @@ class BernyBrainAPI {
             if (r2 && r2.ok) {
               const data2 = await r2.json().catch(() => null);
               const add = String(data2?.text || '').trim();
-              if (add) out = `${String(out).trim()} ${add}`.trim();
+              if (add) out = this.mergeContinuation(String(out).trim(), add);
             }
           } catch {
             // ignore and keep original
           }
         }
+
+        // Final polish for UI rendering (avoid missing punctuation / messy ellipses)
+        out = this.polishAssistantText(out);
+        out = this.compactAssistantText(out);
 
         const recoFinal = this.getRecommendationOrMultiple(userMessage, out, false);
         
@@ -1637,6 +1752,9 @@ class BernyBrainAPI {
         model: this.model,
       });
 
+      out = this.polishAssistantText(out);
+      out = this.compactAssistantText(out);
+
       const recoFinal = this.getRecommendationOrMultiple(userMessage, out, false);
       
       // Se è un array (link multipli), non c'è bisogno di coerceHref
@@ -1681,6 +1799,9 @@ class BernyBrainAPI {
             assistantText: out,
             model: backupModel,
           });
+
+          out = this.polishAssistantText(out);
+          out = this.compactAssistantText(out);
 
           const recoFinal = this.getRecommendationOrMultiple(userMessage, out, false);
           
@@ -1782,6 +1903,8 @@ class BernyBrainAPI {
       1. Rispondi in modo BREVE E DIRETTO alla domanda (massimo 2-3 frasi).
       2. Se servono dettagli, usa un mini elenco (max 2-3 bullet).
       3. NON troncare mai una frase a metà: chiudi sempre con punteggiatura (., !, ?).
+      3b. Evita i puntini di sospensione "..." come separatore: usa frasi complete.
+      3c. Evita ripetizioni (non ripetere l'ultima frase/pezzo se stai continuando).
       4. Se non hai certezza, dichiaralo brevemente.
       5. Chiudi invitando ad aprire la scheda per i dettagli (usa la lingua dell'utente).
       6. Usa emoji ma non esagerare.
