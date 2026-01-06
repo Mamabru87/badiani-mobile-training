@@ -255,6 +255,82 @@ class BernyBrainAPI {
     return true;
   }
 
+  // Best-effort continuation usable from the UI when a response looks cut.
+  async continueFromPartial(userMessage, assistantText) {
+    const base = String(assistantText || '').trim();
+    if (!base) return base;
+
+    // Se non sembra troncato, restituisci subito
+    if (!this.looksTruncatedAnswer(base)) return base;
+
+    const systemPrompt = (typeof this.buildSystemPrompt === 'function') ? this.buildSystemPrompt() : '';
+    const lang = (typeof this.getUiLang === 'function') ? this.getUiLang() : 'it';
+
+    // PROXY mode continuation (riutilizza lo stesso endpoint del proxy)
+    if (this.mode === 'proxy' && this.proxyEndpoint) {
+      try {
+        const headers = { 'content-type': 'application/json' };
+        if (this.accessCode) headers['x-berny-access-code'] = this.accessCode;
+        try {
+          const authToken = String(localStorage.getItem('badianiAuth.token.v1') || '').trim();
+          if (authToken) headers['x-badiani-auth'] = authToken;
+        } catch {}
+
+        const r = await fetch(this.proxyEndpoint, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            intent: 'chat',
+            userContext: {
+              nickname: window.BadianiProfile?.getActive?.()?.nickname || '',
+              language: lang,
+            },
+            messages: [
+              { role: 'system', content: systemPrompt },
+              { role: 'user', content: String(userMessage ?? '') },
+              { role: 'assistant', content: base },
+              {
+                role: 'user',
+                content:
+                  "Continua e completa la risposta precedente. Finisci sempre le frasi e chiudi con punteggiatura. Non ripetere dall'inizio: continua da dove eri rimasto.",
+              },
+            ],
+          }),
+        });
+
+        if (r && r.ok) {
+          const data = await r.json().catch(() => null);
+          const add = String(data?.text || '').trim();
+          if (add) return `${base} ${add}`.trim();
+        }
+      } catch (e) {
+        console.warn('Proxy continuation failed', e);
+      }
+
+      // In caso di fallimento, restituisci il testo originale
+      return base;
+    }
+
+    // SDK mode continuation (riusa la stessa logica del brain)
+    if (this.mode === 'sdk' && this.model && typeof this.continueIfTruncatedSdk === 'function') {
+      try {
+        const out = await this.continueIfTruncatedSdk({
+          systemPrompt,
+          userMessage,
+          assistantText: base,
+          model: this.model,
+        });
+        return out || base;
+      } catch (e) {
+        console.warn('SDK continuation failed', e);
+        return base;
+      }
+    }
+
+    // Default: nessun cambiamento
+    return base;
+  }
+
   // ------------------------------
   // Catalog-based deep-link resolver
   // - Uses badianiSearchCatalog.v2 (seeded on index.html) to map arbitrary queries

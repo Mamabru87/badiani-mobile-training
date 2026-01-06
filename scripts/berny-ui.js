@@ -262,15 +262,30 @@
       bubble.appendChild(dots);
     }
 
-    handleComplete(fullResponse, source) {
+    async handleComplete(fullResponse, source) {
       const brain = window.bernyBrain;
 
       if (this.currentStreamingBubble) {
         // Usa SEMPRE fullResponse perché contiene il testo completo dal brain
         // currentStreamingText potrebbe essere incompleto a causa dei setTimeout asincroni
-        const finalText = sanitize(fullResponse);
+        let finalText = sanitize(fullResponse);
         console.log('📝 handleComplete - Full response:', finalText);
         console.log('📏 Lunghezza testo ricevuto:', finalText.length, 'caratteri');
+
+        // Se sembra troncato, chiedi al brain di completare la risposta prima di renderizzarla
+        if (brain && typeof brain.looksTruncatedAnswer === 'function' && typeof brain.continueFromPartial === 'function') {
+          try {
+            if (brain.looksTruncatedAnswer(finalText)) {
+              const continued = await brain.continueFromPartial(this.lastUserMessage || '', finalText);
+              if (continued && continued !== finalText) {
+                console.log('✅ Continuation ottenuta, nuova lunghezza:', continued.length);
+                finalText = sanitize(continued);
+              }
+            }
+          } catch (e) {
+            console.warn('⚠️ Continuation fallback failed', e);
+          }
+        }
 
         // Estrai link e testo pulito
         const { cleanText, link, links, suppressLink } = this.resolveLinkData(finalText);
