@@ -549,6 +549,15 @@
         }
       }
 
+      // Fallback: rimuovi eventuali tag residui malformati e parentesi vaganti
+      cleanText = cleanText
+        .replace(/\[\[LINKS:[^\]]*\]\]/g, '')
+        .replace(/\[\[LINK:[^\]]*\]\]/g, '')
+        .replace(/\s*\]\s*/g, ' ') // parentesi quadre residue
+        .replace(/\s*\[\s*/g, ' ') // parentesi quadre residue
+        .replace(/\s{2,}/g, ' ')    // spazi doppi
+        .trim();
+
       const cmdMatch = cleanText.match(/\[\[CMD:(.*?)\]\]/);
       if (cmdMatch) {
         command = cmdMatch[1];
