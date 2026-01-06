@@ -724,6 +724,62 @@ class BernyBrainAPI {
     return null;
   }
 
+  // Nuova funzione: cerca TUTTI i link rilevanti per il messaggio dell'utente
+  // Ritorna un array di link con label
+  inferMultipleRecommendations(userMessage, assistantMessage = '') {
+    const results = [];
+    const seenHrefs = new Set();
+    
+    const msgA = this.normalizeText(userMessage);
+    const msgB = this.normalizeText(assistantMessage);
+    
+    const hasIn = (hay, needle) => {
+      const n = this.normalizeText(needle);
+      return !!(n && hay && hay.includes(n));
+    };
+
+    // Tutti i candidati (da inferRecommendationFromContext)
+    const topicCandidates = [
+      { href: 'pastries.html?q=cakes', keys: ['cakes', 'cake', 'torta', 'torte', 'fetta', 'slice'], label: '📖 Apri scheda Cakes' },
+      { href: 'gelato-lab.html?q=buontalenti', keys: ['buontalenti'], label: '🍦 Apri scheda Buontalenti' },
+      // Per smoothies: suggerisci sia i parametri che la scheda generica del Bar
+      { href: 'caffe.html?q=smoothies-parametri-di-produzione', keys: ['smoothie', 'smoothies', 'frullato', 'frullati', 'frappe', 'frappè', 'frappé'], label: '🍹 Apri parametri Smoothies', relatedLink: { href: 'caffe.html', label: '☕ Apri scheda Bar & Drinks' } },
+      { href: 'caffe.html', keys: ['caffe', 'caffè', 'espresso', 'cappuccino', 'bar', 'bevanda'], label: '☕ Apri scheda Bar & Drinks' },
+      { href: 'sweet-treats.html?q=waffle', keys: ['waffle', 'waffel', 'crepe', 'crêpe', 'pancake'], label: '🧇 Apri scheda Sweet Treats' },
+      { href: 'festive.html?q=churro', keys: ['churro', 'churros', 'panettone', 'natale', 'capodanno'], label: '🎄 Apri scheda Festive' },
+      { href: 'story-orbit.html?q=story', keys: ['story', 'storia', 'badiani', 'firenze', 'origine', 'tradizione'], label: '🌟 Apri Story Orbit' },
+      { href: 'slitti-yoyo.html', keys: ['slitti', 'yoyo', 'yo-yo', 'cioccolato'], label: '🍫 Apri scheda Slitti & Yo-Yo' },
+      { href: 'gelato-lab.html', keys: ['gelato', 'gusto', 'flavour', 'flavor', 'ricetta'], label: '🍦 Apri scheda Gelato Lab' },
+    ];
+
+    // Verifica quali link sono rilevanti
+    topicCandidates.forEach((cand) => {
+      if (seenHrefs.has(cand.href)) return; // Evita duplicati
+      
+      for (const key of cand.keys) {
+        if (hasIn(msgA, key) || hasIn(msgB, key)) {
+          results.push({
+            url: cand.href,
+            label: cand.label
+          });
+          seenHrefs.add(cand.href);
+          
+          // Se c'è un link correlato (e.g., smoothies con bar), aggiungilo
+          if (cand.relatedLink && !seenHrefs.has(cand.relatedLink.href)) {
+            results.push({
+              url: cand.relatedLink.href,
+              label: cand.relatedLink.label
+            });
+            seenHrefs.add(cand.relatedLink.href);
+          }
+          break;
+        }
+      }
+    });
+
+    return results.length > 0 ? results : null;
+  }
+
   // Prefer coherence between what the user asked and what Berny actually answered.
   // This reduces "testo giusto, link sbagliato" when the LLM drifts or the question is multi-topic.
   // NOW: check what BERNY discussed first, THEN fallback to user keywords.
@@ -918,10 +974,22 @@ class BernyBrainAPI {
 
     // Remove any model-provided link tags; we will attach a coherent one when we have a recommendation.
     out = out.replace(/\[\[LINK:.*?\]\]/g, '').trim();
+    out = out.replace(/\[\[LINKS:\[.*?\]\]\]/g, '').trim();
 
-    if (reco && reco.href) {
-      out = `${out} [[LINK:${reco.href}]]`;
-      this.saveLastRecommendation(reco);
+    if (reco) {
+      // Se reco è un array di link multipli
+      if (Array.isArray(reco) && reco.length > 0) {
+        const linksJson = JSON.stringify(reco);
+        out = `${out} [[LINKS:[${linksJson.slice(1, -1)}]]]`;
+        // Salva il primo come recommendation principale
+        if (reco[0] && reco[0].href) {
+          this.saveLastRecommendation({ href: reco[0].href });
+        }
+      } else if (reco && reco.href) {
+        // Link singolo
+        out = `${out} [[LINK:${reco.href}]]`;
+        this.saveLastRecommendation(reco);
+      }
     }
 
     return out;
@@ -1205,11 +1273,23 @@ class BernyBrainAPI {
     const kbHit = this.matchLegacyKbProduct(userMessage);
     if (kbHit && kbHit.response) {
       const localOut = String(kbHit.response).trim();
-      const recoLocal = this.inferRecommendationFromContext(userMessage, localOut, { allowWeak: false });
-      if (recoLocal?.href) {
-        recoLocal.href = this.coerceHrefToCatalogCard(recoLocal.href, userMessage, localOut);
+      
+      // Prova prima a cercare link multipli (per prodotti come smoothies)
+      const multipleRecos = this.inferMultipleRecommendations(userMessage, localOut);
+      let finalResp;
+      
+      if (multipleRecos && multipleRecos.length > 1) {
+        // Se ci sono link multipli, usali
+        finalResp = this.applyRecommendationToResponse(localOut, multipleRecos);
+      } else {
+        // Altrimenti usa il sistema singolo
+        const recoLocal = this.inferRecommendationFromContext(userMessage, localOut, { allowWeak: false });
+        if (recoLocal?.href) {
+          recoLocal.href = this.coerceHrefToCatalogCard(recoLocal.href, userMessage, localOut);
+        }
+        finalResp = this.applyRecommendationToResponse(localOut, recoLocal);
       }
-      const finalResp = this.applyRecommendationToResponse(localOut, recoLocal);
+      
       this.recordConversationTurn(userMessage, finalResp);
       return finalResp;
     }

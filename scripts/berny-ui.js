@@ -212,6 +212,7 @@
       const c = String(chunk ?? '');
       if (!c) return;
 
+      // Se non c'è ancora una bolla, crea il contenitore per i puntini di caricamento
       if (!this.currentStreamingBubble) {
         this.hideTypingIndicator();
 
@@ -220,25 +221,31 @@
 
         const bubble = document.createElement('div');
         bubble.className = 'message-bubble';
-        bubble.textContent = '';
+        bubble.textContent = ''; // Inizialmente vuoto
 
         wrapper.appendChild(bubble);
         this.messagesArea.appendChild(wrapper);
 
         this.currentStreamingBubble = bubble;
         this.currentStreamingText = '';
+        
+        // Mostra puntini di caricamento mentre accumula il testo
+        this.showTypingIndicatorInBubble(bubble);
       }
 
+      // Accumula il testo senza mostrarlo
       this.currentStreamingText += c;
-      
-      // Nascondi i tag [[LINK:...]] e [[CMD:...]] durante lo streaming per non mostrare codice grezzo
-      const displayText = this.currentStreamingText
-        .replace(/\[\[LINK:.*?\]\]/g, '')
-        .replace(/\[\[CMD:.*?\]\]/g, '')
-        .replace('[[NOLINK]]', '');
-      
-      this.currentStreamingBubble.textContent = displayText;
       this.scrollToBottom(false);
+    }
+
+    // Helper: mostra puntini nella bolla per indicare che sta elaborando
+    showTypingIndicatorInBubble(bubble) {
+      if (!bubble) return;
+      const dots = document.createElement('span');
+      dots.className = 'typing-dots';
+      dots.innerHTML = '<span>.</span><span>.</span><span>.</span>';
+      bubble.innerHTML = '';
+      bubble.appendChild(dots);
     }
 
     handleComplete(fullResponse, source) {
@@ -333,7 +340,7 @@
       type();
     }
 
-    createLinkButton(url, container) {
+    createLinkButton(url, container, customLabel = null) {
       // FIX: Prevent links to Hub (index.html) as requested by user
       // "non deve mai collegarti allo hub tramite il pulsante"
       if (!url || url === 'index.html' || url === './index.html' || url === '/') {
@@ -361,9 +368,9 @@
         }
       });
       
-      // Usa la traduzione se disponibile, altrimenti fallback
-      const label = tr('assistant.openCard', null, '📖 Apri Scheda Correlata');
-      btn.textContent = label; // Removed <b> to avoid conflict with .message-bubble b color (Red)
+      // Usa il label personalizzato, altrimenti la traduzione predefinita
+      const label = customLabel || tr('assistant.openCard', null, '📖 Apri Scheda Correlata');
+      btn.textContent = label;
       
       // Inline styles (preserved for compatibility)
       btn.style.display = 'inline-block';
@@ -417,22 +424,34 @@
 
     // --- PULSANTE LINK INTELLIGENTE ---
     detectAndAddLink(text, container) {
-      const { cleanText, link, suppressLink } = this.resolveLinkData(text, true);
+      const { cleanText, link, links, suppressLink } = this.resolveLinkData(text, true);
       if (cleanText !== text) {
         container.innerHTML = this.parseMarkdown(cleanText);
       }
-      if (!suppressLink && link) {
+      
+      // Se ci sono link multipli, creali tutti
+      if (!suppressLink && links && Array.isArray(links) && links.length > 0) {
+        links.forEach((linkObj) => {
+          if (linkObj && linkObj.url) {
+            const label = linkObj.label || tr('assistant.openCard', null, '📖 Apri Scheda Correlata');
+            this.createLinkButton(linkObj.url, container, label);
+          }
+        });
+      } else if (!suppressLink && link) {
+        // Link singolo
         this.createLinkButton(link, container);
-      } else if (!suppressLink && !link) {
+      } else if (!suppressLink && !link && !links) {
+        // Inferenza
         const inferred = this.inferLinkFromContext(cleanText);
         if (inferred) this.createLinkButton(inferred, container);
       }
     }
 
-    // Nuovo helper: estrae testo pulito, link (esplicito o nulla) e flag NOLINK. Se `forSameBubble` è true, rimuove CMD e LINK dal testo visibile.
+    // Nuovo helper: estrae testo pulito, link/links (esplicito o nulla) e flag NOLINK. Se `forSameBubble` è true, rimuove CMD e LINK dal testo visibile.
     resolveLinkData(rawText, forSameBubble = false) {
       let cleanText = rawText || '';
       let link = null;
+      let links = null; // Nuovo: array di link multipli
       let command = null;
       let suppressLink = false;
 
@@ -441,10 +460,26 @@
         cleanText = cleanText.replace('[[NOLINK]]', '').trim();
       }
 
-      const linkMatch = cleanText.match(/\[\[LINK:(.*?)\]\]/);
-      if (linkMatch) {
-        link = linkMatch[1];
-        cleanText = cleanText.replace(linkMatch[0], '').trim();
+      // Controlla prima per link multipli [[LINKS:[...]]]
+      const multiLinkMatch = cleanText.match(/\[\[LINKS:\[(.*?)\]\]\]/);
+      if (multiLinkMatch) {
+        try {
+          const jsonStr = '[' + multiLinkMatch[1] + ']';
+          links = JSON.parse(jsonStr);
+          cleanText = cleanText.replace(multiLinkMatch[0], '').trim();
+        } catch (e) {
+          console.warn('Failed to parse LINKS JSON:', e);
+          links = null;
+        }
+      }
+
+      // Se non ci sono link multipli, controlla per link singolo
+      if (!links) {
+        const linkMatch = cleanText.match(/\[\[LINK:(.*?)\]\]/);
+        if (linkMatch) {
+          link = linkMatch[1];
+          cleanText = cleanText.replace(linkMatch[0], '').trim();
+        }
       }
 
       const cmdMatch = cleanText.match(/\[\[CMD:(.*?)\]\]/);
@@ -456,7 +491,7 @@
       }
 
       // Se non c'è link esplicito, nessun comando da togliere e non è soppresso, ci pensa l'inferenza dopo
-      return { cleanText, link, suppressLink, command };
+      return { cleanText, link, links, suppressLink, command };
     }
 
     // Inferenza link coerente con la logica del brain, senza mutare il testo

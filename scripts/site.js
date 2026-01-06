@@ -925,6 +925,11 @@ document.addEventListener('badiani:profile-updated', (e) => {
           <p data-info-verify style="margin:0; color:#1f2937; display:none; font-size:14px;"></p>
 
           <button type="button" data-action="verify-otp" style="padding:10px 14px; border-radius:10px; background:#0f2154; color:#fff; border:none; font-weight:600; cursor:pointer;">${tr('auth.verify.confirmBtn', null, 'Conferma e continua')}</button>
+
+          <div style="border-top:1px solid #d1d5db; padding-top:10px; margin-top:10px;">
+            <p style="margin:0 0 10px 0; font-size:12px; color:#666; font-weight:600;">🧪 BETA - Accedi senza verifica:</p>
+            <button type="button" data-action="skip-verification" style="width:100%; padding:10px 14px; border-radius:10px; background:#f3f4f6; color:#0f2154; border:1px solid #d1d5db; font-weight:600; cursor:pointer;">${tr('auth.beta.skipBtn', null, 'Continua senza numero (test)')}</button>
+          </div>
         </div>
       </div>
 
@@ -1124,6 +1129,19 @@ document.addEventListener('badiani:profile-updated', (e) => {
 
     if (sendOtpBtn) sendOtpBtn.addEventListener('click', (e) => { e.preventDefault(); requestOtp(); });
     if (verifyOtpBtn) verifyOtpBtn.addEventListener('click', (e) => { e.preventDefault(); confirmOtp(); });
+
+    // Beta: Skip verification (bypass phone verification for testing)
+    const skipVerificationBtn = verifyPanel?.querySelector('[data-action="skip-verification"]');
+    if (skipVerificationBtn) {
+      skipVerificationBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        // Mark as verified in beta mode
+        localStorage.setItem(AUTH_VERIFIED_AT_KEY, String(Date.now()));
+        setVerifyMessage('info', '✓ Modalità beta attivata. Procedi con la creazione del profilo.');
+        updateTabsEnabled();
+        switchTab('signup');
+      });
+    }
 
     if (signupForm) {
       const submitBtn = signupForm.querySelector('button[type="submit"]');
