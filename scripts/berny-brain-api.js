@@ -2106,16 +2106,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // pseudo-stream per UI
         if (typeof onChunk === 'function') {
-          // Slightly slower streaming per richiesta: scrittura più lenta e naturale
-          const chunkSize = 2;
+          // Stream by words / line breaks (not fixed characters) so the text looks presentable
+          // while typing (avoids mid-word fragments and "appiccicato").
+          const parts = text.match(/(?:\r?\n+|\S+\s*)/g) || [];
+          const partsPerTick = parts.length > 140 ? 3 : 2;
           let i = 0;
           const tick = () => {
-            const c = text.slice(i, i + chunkSize);
-            if (c) {
-              try { onChunk(c); } catch {}
-              i += chunkSize;
-              // Ritmo più lento per un typing naturale
-              window.setTimeout(tick, 60);
+            if (i < parts.length) {
+              const c = parts.slice(i, i + partsPerTick).join('');
+              if (c) {
+                try { onChunk(c); } catch {}
+              }
+              i += partsPerTick;
+              // Typing rhythm: keep it readable, not too slow.
+              window.setTimeout(tick, 45);
             } else {
               if (typeof onComplete === 'function') onComplete(text, sourceLabel);
             }

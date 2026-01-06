@@ -253,6 +253,8 @@
         // Keep a stable structure to avoid the “refresh” effect.
         const textEl = document.createElement('div');
         textEl.className = 'message-text';
+        // While streaming, keep line breaks readable (e.g. story snippets / markdown).
+        textEl.style.whiteSpace = 'pre-wrap';
 
         const actionsEl = document.createElement('div');
         actionsEl.className = 'message-actions';
@@ -351,7 +353,11 @@
 
         // Applica markdown al testo principale (without tearing down the bubble)
         const parsedHtml = this.parseMarkdown(cleanText);
-        if (textEl) textEl.innerHTML = parsedHtml;
+        if (textEl) {
+          // Final render uses HTML; default white-space is handled by CSS.
+          try { textEl.style.whiteSpace = ''; } catch {}
+          textEl.innerHTML = parsedHtml;
+        }
 
         // Comandi speciali
         this.detectAndRunCommand(finalText);
