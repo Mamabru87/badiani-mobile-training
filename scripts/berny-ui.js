@@ -517,27 +517,35 @@
         cleanText = cleanText.replace('[[NOLINK]]', '').trim();
       }
 
-      // Controlla prima per link multipli [[LINKS:[...]]]
-      const multiLinkMatch = cleanText.match(/\[\[LINKS:\[(.*?)\]\]\]/);
-      if (multiLinkMatch) {
-        try {
-          const jsonStr = '[' + multiLinkMatch[1] + ']';
-          console.log('🔗 Parsing LINKS JSON:', jsonStr);
-          links = JSON.parse(jsonStr);
-          console.log('✅ Parsed links:', links);
-          cleanText = cleanText.replace(multiLinkMatch[0], '').trim();
-        } catch (e) {
-          console.warn('❌ Failed to parse LINKS JSON:', e, 'String was:', multiLinkMatch[1]);
-          links = null;
+      // Controlla prima per link multipli [[LINKS:[...]]], robust anche con virgole e spazi
+      const multiStart = cleanText.indexOf('[[LINKS:');
+      if (multiStart >= 0) {
+        const multiEnd = cleanText.indexOf(']]', multiStart);
+        if (multiEnd > multiStart) {
+          const rawPayload = cleanText.substring(multiStart + '[[LINKS:'.length, multiEnd).trim();
+          try {
+            const jsonStr = rawPayload.startsWith('[') ? rawPayload : `[${rawPayload}]`;
+            console.log('🔗 Parsing LINKS JSON:', jsonStr);
+            links = JSON.parse(jsonStr);
+            console.log('✅ Parsed links:', links);
+          } catch (e) {
+            console.warn('❌ Failed to parse LINKS JSON:', e, 'String was:', rawPayload);
+            links = null;
+          }
+          // Rimuovi comunque il tag dal testo
+          cleanText = (cleanText.slice(0, multiStart) + cleanText.slice(multiEnd + 2)).trim();
         }
       }
 
       // Se non ci sono link multipli, controlla per link singolo
       if (!links) {
-        const linkMatch = cleanText.match(/\[\[LINK:(.*?)\]\]/);
-        if (linkMatch) {
-          link = linkMatch[1];
-          cleanText = cleanText.replace(linkMatch[0], '').trim();
+        const singleStart = cleanText.indexOf('[[LINK:');
+        if (singleStart >= 0) {
+          const singleEnd = cleanText.indexOf(']]', singleStart);
+          if (singleEnd > singleStart) {
+            link = cleanText.substring(singleStart + '[[LINK:'.length, singleEnd).trim();
+            cleanText = (cleanText.slice(0, singleStart) + cleanText.slice(singleEnd + 2)).trim();
+          }
         }
       }
 

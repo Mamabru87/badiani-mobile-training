@@ -883,7 +883,26 @@ class BernyBrainAPI {
       { href: 'gelato-lab.html', keys: ['gelato', 'gusto', 'flavour', 'flavor', 'ricetta'], label: '🍦 Apri scheda Gelato Lab' },
     ];
 
-    // Step 1: Verifica quali categorie sono rilevanti
+    // Step 1: Cerca prodotti SPECIFICI menzionati nel messaggio di Berny (prioritario)
+    const catalog = this.getProductCatalog();
+    catalog.forEach((product) => {
+      if (seenHrefs.has(product.href)) return; // Evita duplicati
+      
+      // Controlla tutti gli alias del prodotto
+      for (const alias of product.aliases) {
+        if (hasIn(msgB, alias)) { // Cerca nel messaggio di Berny (assistantMessage)
+          results.push({
+            url: product.href,
+            label: product.label
+          });
+          seenHrefs.add(product.href);
+          console.log(`✅ Found product "${product.name}" in response`);
+          break;
+        }
+      }
+    });
+
+    // Step 2: Verifica quali categorie generiche sono rilevanti (solo se non già aggiunte)
     topicCandidates.forEach((cand) => {
       if (seenHrefs.has(cand.href)) return; // Evita duplicati
       
@@ -903,25 +922,6 @@ class BernyBrainAPI {
             });
             seenHrefs.add(cand.relatedLink.href);
           }
-          break;
-        }
-      }
-    });
-
-    // Step 2: Cerca prodotti SPECIFICI menzionati nel messaggio di Berny
-    const catalog = this.getProductCatalog();
-    catalog.forEach((product) => {
-      if (seenHrefs.has(product.href)) return; // Evita duplicati
-      
-      // Controlla tutti gli alias del prodotto
-      for (const alias of product.aliases) {
-        if (hasIn(msgB, alias)) { // Cerca nel messaggio di Berny (assistantMessage)
-          results.push({
-            url: product.href,
-            label: product.label
-          });
-          seenHrefs.add(product.href);
-          console.log(`✅ Found product "${product.name}" in response`);
           break;
         }
       }
