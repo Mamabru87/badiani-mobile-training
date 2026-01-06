@@ -758,6 +758,9 @@ document.addEventListener('badiani:profile-updated', (e) => {
   // ============================================================
   const AUTH_TOKEN_KEY = 'badianiAuth.token.v1';
   const AUTH_VERIFIED_AT_KEY = 'badianiAuth.verifiedAt.v1';
+  // Beta-only: allow entering the UI without a phone (does NOT grant server-side access).
+  // This is intentionally separate from the real token so it won't compromise normal login.
+  const AUTH_BETA_SKIP_KEY = 'badianiAuth.betaSkip.v1';
 
   const getAuthToken = () => {
     try { return String(localStorage.getItem(AUTH_TOKEN_KEY) || '').trim(); } catch { return ''; }
@@ -783,6 +786,15 @@ document.addEventListener('badiani:profile-updated', (e) => {
     const exp = payload?.exp;
     if (typeof exp !== 'number' || !Number.isFinite(exp)) return false;
     return (exp * 1000) > Date.now();
+  };
+
+  const isVerifiedOrBeta = () => {
+    if (isVerified()) return true;
+    try {
+      return String(localStorage.getItem(AUTH_BETA_SKIP_KEY) || '') === '1';
+    } catch {
+      return false;
+    }
   };
 
   const getAuthBase = () => {
@@ -900,7 +912,7 @@ document.addEventListener('badiani:profile-updated', (e) => {
     card.className = 'signup-card';
     card.style.cssText = `width: min(92vw, 480px); background: #fff; border-radius: 16px; box-shadow: 0 16px 44px rgba(15,33,84,0.18); padding: 24px; color: var(--ink, #0f2154);`;
 
-    const verifiedNow = isVerified();
+    const verifiedNow = isVerifiedOrBeta();
 
     card.innerHTML = `
       <h2 id="signup-title" style="margin:0 0 16px 0; font-size:24px; font-family: var(--font-medium);">Badiani Training</h2>
@@ -981,7 +993,7 @@ document.addEventListener('badiani:profile-updated', (e) => {
     };
 
     const updateTabsEnabled = () => {
-      const ok = isVerified();
+      const ok = isVerifiedOrBeta();
       tabBtns.forEach((btn) => {
         if (!btn?.dataset?.tab) return;
         if (btn.dataset.tab === 'verify') return;
@@ -996,7 +1008,7 @@ document.addEventListener('badiani:profile-updated', (e) => {
     };
 
     const switchTab = (targetTab) => {
-      if (targetTab !== 'verify' && !isVerified()) {
+      if (targetTab !== 'verify' && !isVerifiedOrBeta()) {
         setVerifyMessage('error', tr('auth.verify.required', null, 'Prima devi verificare il numero di telefono.'));
         targetTab = 'verify';
       }
@@ -1116,6 +1128,8 @@ document.addEventListener('badiani:profile-updated', (e) => {
         }
         localStorage.setItem(AUTH_TOKEN_KEY, token);
         localStorage.setItem(AUTH_VERIFIED_AT_KEY, String(Date.now()));
+        // If user later completes real verification, remove beta bypass.
+        try { localStorage.removeItem(AUTH_BETA_SKIP_KEY); } catch {}
         setVerifyMessage('info', tr('auth.verify.ok', null, 'Verifica completata. Ora puoi accedere.'));
 
         updateTabsEnabled();
@@ -1135,9 +1149,10 @@ document.addEventListener('badiani:profile-updated', (e) => {
     if (skipVerificationBtn) {
       skipVerificationBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        // Mark as verified in beta mode
-        localStorage.setItem(AUTH_VERIFIED_AT_KEY, String(Date.now()));
-        setVerifyMessage('info', '✓ Modalità beta attivata. Procedi con la creazione del profilo.');
+        // Mark as verified in beta mode (UI-only; does not create a real auth token)
+        try { localStorage.setItem(AUTH_BETA_SKIP_KEY, '1'); } catch {}
+        try { localStorage.setItem(AUTH_VERIFIED_AT_KEY, String(Date.now())); } catch {}
+        setVerifyMessage('info', tr('auth.beta.enabled', null, '✓ Modalità beta attivata. Procedi con la creazione del profilo.'));
         updateTabsEnabled();
         switchTab('signup');
       });
@@ -1267,7 +1282,7 @@ document.addEventListener('badiani:profile-updated', (e) => {
     document.body.appendChild(overlay);
 
     updateTabsEnabled();
-    if (!isVerified()) {
+    if (!isVerifiedOrBeta()) {
       switchTab('verify');
     } else {
       signupForm?.querySelector?.('[data-input="nickname"]')?.focus?.({ preventScroll: true });
@@ -1276,7 +1291,7 @@ document.addEventListener('badiani:profile-updated', (e) => {
 
   const init = () => {
     const user = getUser();
-    const verified = isVerified();
+    const verified = isVerifiedOrBeta();
     if (!verified || !user) {
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', showGate);

@@ -7716,7 +7716,7 @@ body.page-home {
    CHAT ASSISTANT - Messenger-style (BERNY)
    ========================= */
 .chat-berny {
-  --berny-avatar-size: 50px;
+  --berny-avatar-size: 62px;
   --berny-bubble-max: 70%;
 }
 
@@ -7797,6 +7797,17 @@ body.page-home {
   border: 1px solid rgba(33, 64, 152, 0.16);
   box-shadow: 0 10px 24px rgba(15, 33, 84, 0.14);
   transform: translateZ(0);
+}
+
+.avatar-container img,
+.avatar-container lottie-player {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.avatar-container img {
+  object-fit: cover;
 }
 
 .avatar-container lottie-player {
@@ -8035,12 +8046,21 @@ body.page-home {
   border: none;
   background: var(--brand-blue);
   color: #fff;
+  padding: 0;
+  line-height: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   flex-shrink: 0;
   transition: background 0.2s, transform 0.1s;
+}
+
+/* Ensure the send icon is readable (some browsers/overrides can shrink inline SVGs). */
+.chat-send-btn svg {
+  width: 22px;
+  height: 22px;
+  display: block;
 }
 
 .chat-send-btn:hover {
@@ -8058,7 +8078,7 @@ body.page-home {
   }
 
   .chat-berny {
-    --berny-avatar-size: 40px;
+    --berny-avatar-size: 48px;
     --berny-bubble-max: 85%;
   }
 
