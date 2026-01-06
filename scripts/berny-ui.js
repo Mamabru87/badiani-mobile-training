@@ -262,7 +262,9 @@
       const brain = window.bernyBrain;
 
       if (this.currentStreamingBubble) {
-        const finalText = sanitize(fullResponse || this.currentStreamingText);
+        // Usa SEMPRE fullResponse perché contiene il testo completo dal brain
+        // currentStreamingText potrebbe essere incompleto a causa dei setTimeout asincroni
+        const finalText = sanitize(fullResponse);
         console.log('📝 handleComplete - Full response:', finalText);
 
         // Estrai link e testo pulito
@@ -557,10 +559,10 @@
     // Mostra i puntini, aspetta un attimo, poi crea un messaggio dedicato con il link
     enqueueLinkMessage(linkUrl) {
       if (!linkUrl) return;
-      // Mostra puntini
-      this.showTypingIndicator();
+      // NON mostriamo più l'indicatore qui per evitare puntini doppi
+      // this.showTypingIndicator();
       setTimeout(() => {
-        this.hideTypingIndicator();
+        // this.hideTypingIndicator();
         const msgDiv = document.createElement('div');
         msgDiv.className = 'berny-message';
         const bubble = document.createElement('div');
