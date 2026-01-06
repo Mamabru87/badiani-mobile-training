@@ -5392,6 +5392,70 @@ const gamification = (() => {
         closeOverlay();
       }
     });
+
+    // Mobile UX: allow dismissing the overlay by pulling down ("forzando lo scroll in basso")
+    // when the overlay content is already at the top. Respects `data-lock-close`.
+    try {
+      let startY = 0;
+      let armed = false;
+      let scroller = null;
+      const THRESHOLD = 72;
+
+      const resolveScroller = (target) => {
+        try {
+          const content = target && target.closest ? target.closest('[data-overlay-content]') : null;
+          if (content && content.scrollHeight > content.clientHeight + 2) return content;
+        } catch (e) {}
+        return overlayNodes.panel;
+      };
+
+      const onTouchStart = (e) => {
+        try {
+          if (!overlayNodes.overlay?.classList.contains('is-visible')) return;
+          if (overlayNodes.panel?.dataset.lockClose === 'true') return;
+          if (!e || !e.touches || e.touches.length !== 1) return;
+          scroller = resolveScroller(e.target);
+          startY = e.touches[0].clientY;
+          armed = !!scroller && (scroller.scrollTop <= 0);
+        } catch (err) {
+          armed = false;
+          scroller = null;
+        }
+      };
+
+      const onTouchMove = (e) => {
+        try {
+          if (!armed || !scroller) return;
+          if (overlayNodes.panel?.dataset.lockClose === 'true') {
+            armed = false;
+            scroller = null;
+            return;
+          }
+          if (scroller.scrollTop > 0) {
+            armed = false;
+            scroller = null;
+            return;
+          }
+          if (!e || !e.touches || e.touches.length !== 1) return;
+          const dy = e.touches[0].clientY - startY;
+          if (dy > THRESHOLD) {
+            closeOverlay();
+            armed = false;
+            scroller = null;
+          }
+        } catch (err) {}
+      };
+
+      const onTouchEnd = () => {
+        armed = false;
+        scroller = null;
+      };
+
+      overlayNodes.panel?.addEventListener('touchstart', onTouchStart, { passive: true });
+      overlayNodes.panel?.addEventListener('touchmove', onTouchMove, { passive: true });
+      overlayNodes.panel?.addEventListener('touchend', onTouchEnd, { passive: true });
+      overlayNodes.panel?.addEventListener('touchcancel', onTouchEnd, { passive: true });
+    } catch (e) {}
   }
 
   function lockOverlayClose() {
@@ -12021,7 +12085,76 @@ toggles.forEach((button) => {
     }
     
     // Chiusura modal
+    // Mobile UX: consenti di chiudere la scheda "forzando lo scroll in basso" (pull-down) quando sei in cima.
+    // Nota: su mobile il contenitore scrollabile spesso è `.card-modal` (non `.card-modal-body`).
+    let modalClosed = false;
+    let swipeStartY = 0;
+    let swipeArmed = false;
+    let swipeScroller = null;
+    const SWIPE_CLOSE_THRESHOLD_PX = 72;
+
+    const resolveSwipeScroller = (target) => {
+      try {
+        // Prefer the inner body if it is actually scrollable.
+        const body = target && target.closest ? target.closest('.card-modal-body') : null;
+        if (body && body.scrollHeight > body.clientHeight + 2) return body;
+      } catch (e) {}
+      return modal;
+    };
+
+    const onModalTouchStart = (e) => {
+      try {
+        if (modalClosed) return;
+        if (!e || !e.touches || e.touches.length !== 1) return;
+        swipeScroller = resolveSwipeScroller(e.target);
+        swipeStartY = e.touches[0].clientY;
+        swipeArmed = !!swipeScroller && (swipeScroller.scrollTop <= 0);
+      } catch (err) {
+        swipeArmed = false;
+        swipeScroller = null;
+      }
+    };
+
+    const onModalTouchMove = (e) => {
+      try {
+        if (modalClosed) return;
+        if (!swipeArmed || !swipeScroller) return;
+        // If the user started scrolling inside the modal, do not treat it as a dismiss.
+        if (swipeScroller.scrollTop > 0) {
+          swipeArmed = false;
+          swipeScroller = null;
+          return;
+        }
+        if (!e || !e.touches || e.touches.length !== 1) return;
+        const dy = e.touches[0].clientY - swipeStartY;
+        if (dy > SWIPE_CLOSE_THRESHOLD_PX) {
+          closeModal();
+          swipeArmed = false;
+          swipeScroller = null;
+        }
+      } catch (err) {}
+    };
+
+    const onModalTouchEnd = () => {
+      swipeArmed = false;
+      swipeScroller = null;
+    };
+
+    const handleEsc = (e) => {
+      if (e && e.key === 'Escape') closeModal();
+    };
+
     const closeModal = () => {
+      if (modalClosed) return;
+      modalClosed = true;
+
+      // Cleanup listeners (important: ESC listener would otherwise accumulate).
+      try { document.removeEventListener('keydown', handleEsc); } catch (e) {}
+      try { modal.removeEventListener('touchstart', onModalTouchStart); } catch (e) {}
+      try { modal.removeEventListener('touchmove', onModalTouchMove); } catch (e) {}
+      try { modal.removeEventListener('touchend', onModalTouchEnd); } catch (e) {}
+      try { modal.removeEventListener('touchcancel', onModalTouchEnd); } catch (e) {}
+
       overlay.classList.remove('is-visible');
       setTimeout(() => {
         try { document.removeEventListener('badiani:crystals-updated', handleCrystalUpdate); } catch (e) {}
@@ -12040,14 +12173,16 @@ toggles.forEach((button) => {
     
     // Click su bottone close
     closeBtn.addEventListener('click', closeModal);
-    
+
+    // Swipe down (pull) to close on touch devices.
+    try {
+      modal.addEventListener('touchstart', onModalTouchStart, { passive: true });
+      modal.addEventListener('touchmove', onModalTouchMove, { passive: true });
+      modal.addEventListener('touchend', onModalTouchEnd, { passive: true });
+      modal.addEventListener('touchcancel', onModalTouchEnd, { passive: true });
+    } catch (e) {}
+
     // ESC key
-    const handleEsc = (e) => {
-      if (e.key === 'Escape') {
-        closeModal();
-        document.removeEventListener('keydown', handleEsc);
-      }
-    };
     document.addEventListener('keydown', handleEsc);
   });
 });
