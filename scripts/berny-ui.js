@@ -181,6 +181,7 @@
     }
 
     showTypingIndicator() {
+      console.log('🔵 showTypingIndicator() chiamato');
       this.isTyping = true;
       try {
         this.sendButton.disabled = true;
@@ -224,6 +225,7 @@
 
       // Se non c'è ancora una bolla, crea il contenitore per i puntini di caricamento
       if (!this.currentStreamingBubble) {
+        console.log('🆕 Creazione nuova bolla in handleStreamChunk');
         this.hideTypingIndicator();
 
         const wrapper = document.createElement('div');
@@ -250,6 +252,7 @@
 
     // Helper: mostra puntini nella bolla per indicare che sta elaborando
     showTypingIndicatorInBubble(bubble) {
+      console.log('🟢 showTypingIndicatorInBubble() chiamato');
       if (!bubble) return;
       const dots = document.createElement('span');
       dots.className = 'typing-dots';
