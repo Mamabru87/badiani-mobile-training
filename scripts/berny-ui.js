@@ -270,16 +270,22 @@
         // currentStreamingText potrebbe essere incompleto a causa dei setTimeout asincroni
         const finalText = sanitize(fullResponse);
         console.log('📝 handleComplete - Full response:', finalText);
+        console.log('📏 Lunghezza testo ricevuto:', finalText.length, 'caratteri');
 
         // Estrai link e testo pulito
         const { cleanText, link, links, suppressLink } = this.resolveLinkData(finalText);
         console.log('🔗 Resolved links:', { link, links, suppressLink });
+        console.log('📄 Clean text dopo resolveLinkData:', cleanText);
+        console.log('📏 Lunghezza clean text:', cleanText.length, 'caratteri');
 
         // Svuota la bolla e riconstruisci con testo formattato + link
         this.currentStreamingBubble.innerHTML = '';
         
         // Applica markdown al testo principale
-        this.currentStreamingBubble.innerHTML = this.parseMarkdown(cleanText);
+        const parsedHtml = this.parseMarkdown(cleanText);
+        console.log('🎨 HTML dopo parseMarkdown:', parsedHtml);
+        console.log('📏 Lunghezza HTML:', parsedHtml.length, 'caratteri');
+        this.currentStreamingBubble.innerHTML = parsedHtml;
 
         // Comandi speciali
         this.detectAndRunCommand(finalText);
