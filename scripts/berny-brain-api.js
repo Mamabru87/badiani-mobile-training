@@ -738,12 +738,24 @@ class BernyBrainAPI {
       return !!(n && hay && hay.includes(n));
     };
 
+    // I 3 smoothies disponibili
+    const smoothiesOptions = [
+      { href: 'caffe.html?q=smoothie-giallo-passion', label: '🍹 Apri Smoothie Giallo Passion' },
+      { href: 'caffe.html?q=smoothie-rosso-berry', label: '🍹 Apri Smoothie Rosso Berry' },
+      { href: 'caffe.html?q=smoothie-verde-boost', label: '🍹 Apri Smoothie Verde Boost' }
+    ];
+
     // Tutti i candidati (da inferRecommendationFromContext)
     const topicCandidates = [
       { href: 'pastries.html?q=cakes', keys: ['cakes', 'cake', 'torta', 'torte', 'fetta', 'slice'], label: '📖 Apri scheda Cakes' },
       { href: 'gelato-lab.html?q=buontalenti', keys: ['buontalenti'], label: '🍦 Apri scheda Buontalenti' },
-      // Per smoothies: suggerisci sia i parametri che la scheda generica del Bar
-      { href: 'caffe.html?q=smoothies-parametri-di-produzione', keys: ['smoothie', 'smoothies', 'frullato', 'frullati', 'frappe', 'frappè', 'frappé'], label: '🍹 Apri parametri Smoothies', relatedLink: { href: 'caffe.html', label: '☕ Apri scheda Bar & Drinks' } },
+      // Per smoothies: suggerisci sia i parametri che UNO dei 3 smoothies specifici
+      { 
+        href: 'caffe.html?q=smoothies-parametri-di-produzione', 
+        keys: ['smoothie', 'smoothies', 'frullato', 'frullati', 'frappe', 'frappè', 'frappé'], 
+        label: '🍹 Apri parametri Smoothies',
+        relatedLink: smoothiesOptions[Math.floor(Math.random() * smoothiesOptions.length)] // Scegli uno random
+      },
       { href: 'caffe.html', keys: ['caffe', 'caffè', 'espresso', 'cappuccino', 'bar', 'bevanda'], label: '☕ Apri scheda Bar & Drinks' },
       { href: 'sweet-treats.html?q=waffle', keys: ['waffle', 'waffel', 'crepe', 'crêpe', 'pancake'], label: '🧇 Apri scheda Sweet Treats' },
       { href: 'festive.html?q=churro', keys: ['churro', 'churros', 'panettone', 'natale', 'capodanno'], label: '🎄 Apri scheda Festive' },
@@ -764,7 +776,7 @@ class BernyBrainAPI {
           });
           seenHrefs.add(cand.href);
           
-          // Se c'è un link correlato (e.g., smoothies con bar), aggiungilo
+          // Se c'è un link correlato (e.g., smoothies con uno specifico), aggiungilo
           if (cand.relatedLink && !seenHrefs.has(cand.relatedLink.href)) {
             results.push({
               url: cand.relatedLink.href,
