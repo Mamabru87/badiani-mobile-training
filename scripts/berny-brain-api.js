@@ -945,6 +945,19 @@ class BernyBrainAPI {
     return this.inferRecommendationFromMessage(userMessage);
   }
 
+  // Helper: prova a ottenere link multipli, altrimenti ritorna un singolo link
+  getRecommendationOrMultiple(userMessage, assistantMessage = '', allowWeak = false) {
+    const multipleRecos = this.inferMultipleRecommendations(userMessage, assistantMessage);
+    if (multipleRecos && multipleRecos.length > 1) {
+      console.log('🎯 Found multiple recommendations:', multipleRecos);
+      return multipleRecos;
+    }
+    // Altrimenti ritorna il link singolo
+    const singleReco = this.inferRecommendationFromContext(userMessage, assistantMessage, { allowWeak });
+    console.log('📌 Found single recommendation:', singleReco);
+    return singleReco;
+  }
+
   buildSmallTalkResponse(reco) {
     const lang = this.getUiLang();
     const topicLabel = String(reco?.label || '').trim();
@@ -979,8 +992,11 @@ class BernyBrainAPI {
     if (reco) {
       // Se reco è un array di link multipli
       if (Array.isArray(reco) && reco.length > 0) {
+        console.log('🔗 applyRecommendationToResponse - Multiple links detected:', reco);
         const linksJson = JSON.stringify(reco);
-        out = `${out} [[LINKS:[${linksJson.slice(1, -1)}]]]`;
+        const linksStr = linksJson.slice(1, -1);
+        out = `${out} [[LINKS:[${linksStr}]]]`;
+        console.log('📎 Applied LINKS tag:', out.substring(Math.max(0, out.length - 100)));
         // Salva il primo come recommendation principale
         if (reco[0] && reco[0].href) {
           this.saveLastRecommendation({ href: reco[0].href });
@@ -1403,14 +1419,26 @@ class BernyBrainAPI {
           }
         }
 
-        const recoFinal = this.inferRecommendationFromContext(userMessage, out, { allowWeak: false });
-        if (recoFinal?.href) {
+        const recoFinal = this.getRecommendationOrMultiple(userMessage, out, false);
+        
+        // Se è un array (link multipli), non c'è bisogno di coerceHref
+        if (Array.isArray(recoFinal)) {
+          // Link multipli
+          const finalResponse = this.applyRecommendationToResponse(out, recoFinal);
+          this.recordConversationTurn(userMessage, finalResponse);
+          return finalResponse;
+        } else if (recoFinal?.href) {
+          // Link singolo
           recoFinal.href = this.coerceHrefToCatalogCard(recoFinal.href, userMessage, out);
+          const finalResponse = this.applyRecommendationToResponse(out, recoFinal);
+          this.recordConversationTurn(userMessage, finalResponse);
+          return finalResponse;
+        } else {
+          // Nessun link
+          const finalResponse = this.applyRecommendationToResponse(out, null);
+          this.recordConversationTurn(userMessage, finalResponse);
+          return finalResponse;
         }
-        // Ensure the recommended card (when we have one) is coherent with the actual answer.
-        const finalResponse = this.applyRecommendationToResponse(out, recoFinal);
-        this.recordConversationTurn(userMessage, finalResponse);
-        return finalResponse;
       } catch (e) {
         const name = String(e?.name || '');
         if (name === 'AbortError') {
@@ -1459,13 +1487,26 @@ class BernyBrainAPI {
         model: this.model,
       });
 
-      const recoFinal = this.inferRecommendationFromContext(userMessage, out, { allowWeak: false });
-      if (recoFinal?.href) {
+      const recoFinal = this.getRecommendationOrMultiple(userMessage, out, false);
+      
+      // Se è un array (link multipli), non c'è bisogno di coerceHref
+      if (Array.isArray(recoFinal)) {
+        // Link multipli
+        const finalResponse = this.applyRecommendationToResponse(out, recoFinal);
+        this.recordConversationTurn(userMessage, finalResponse);
+        return finalResponse;
+      } else if (recoFinal?.href) {
+        // Link singolo
         recoFinal.href = this.coerceHrefToCatalogCard(recoFinal.href, userMessage, out);
+        const finalResponse = this.applyRecommendationToResponse(out, recoFinal);
+        this.recordConversationTurn(userMessage, finalResponse);
+        return finalResponse;
+      } else {
+        // Nessun link
+        const finalResponse = this.applyRecommendationToResponse(out, null);
+        this.recordConversationTurn(userMessage, finalResponse);
+        return finalResponse;
       }
-      const finalResponse = this.applyRecommendationToResponse(out, recoFinal);
-      this.recordConversationTurn(userMessage, finalResponse);
-      return finalResponse;
 
     } catch (error) {
       console.warn(`⚠️ Errore o Timeout (${error.message}). Passo al BACKUP...`);
@@ -1491,13 +1532,26 @@ class BernyBrainAPI {
             model: backupModel,
           });
 
-          const recoFinal = this.inferRecommendationFromContext(userMessage, out, { allowWeak: false });
-          if (recoFinal?.href) {
+          const recoFinal = this.getRecommendationOrMultiple(userMessage, out, false);
+          
+          // Se è un array (link multipli), non c'è bisogno di coerceHref
+          if (Array.isArray(recoFinal)) {
+            // Link multipli
+            const finalResponse = this.applyRecommendationToResponse(out, recoFinal);
+            this.recordConversationTurn(userMessage, finalResponse);
+            return finalResponse;
+          } else if (recoFinal?.href) {
+            // Link singolo
             recoFinal.href = this.coerceHrefToCatalogCard(recoFinal.href, userMessage, out);
+            const finalResponse = this.applyRecommendationToResponse(out, recoFinal);
+            this.recordConversationTurn(userMessage, finalResponse);
+            return finalResponse;
+          } else {
+            // Nessun link
+            const finalResponse = this.applyRecommendationToResponse(out, null);
+            this.recordConversationTurn(userMessage, finalResponse);
+            return finalResponse;
           }
-          const finalResponse = this.applyRecommendationToResponse(out, recoFinal);
-          this.recordConversationTurn(userMessage, finalResponse);
-          return finalResponse;
           
         } catch (backupError) {
           console.error("❌ Anche il backup è fallito:", backupError);

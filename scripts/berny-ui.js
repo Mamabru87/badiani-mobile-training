@@ -253,9 +253,11 @@
 
       if (this.currentStreamingBubble) {
         const finalText = sanitize(fullResponse || this.currentStreamingText);
+        console.log('📝 handleComplete - Full response:', finalText);
 
         // Estrai link e testo pulito
         const { cleanText, link, links, suppressLink } = this.resolveLinkData(finalText);
+        console.log('🔗 Resolved links:', { link, links, suppressLink });
 
         // Svuota la bolla e riconstruisci con testo formattato + link
         this.currentStreamingBubble.innerHTML = '';
@@ -270,9 +272,11 @@
         if (!suppressLink) {
           if (links && Array.isArray(links) && links.length > 0) {
             // Link multipli
+            console.log('🎨 Creating multiple links:', links);
             links.forEach((linkObj) => {
               if (linkObj && linkObj.url) {
                 const label = linkObj.label || tr('assistant.openCard', null, '📖 Apri Scheda Correlata');
+                console.log('➕ Adding link:', { url: linkObj.url, label });
                 this.createLinkButton(linkObj.url, this.currentStreamingBubble, label);
               }
             });
@@ -480,10 +484,12 @@
       if (multiLinkMatch) {
         try {
           const jsonStr = '[' + multiLinkMatch[1] + ']';
+          console.log('🔗 Parsing LINKS JSON:', jsonStr);
           links = JSON.parse(jsonStr);
+          console.log('✅ Parsed links:', links);
           cleanText = cleanText.replace(multiLinkMatch[0], '').trim();
         } catch (e) {
-          console.warn('Failed to parse LINKS JSON:', e);
+          console.warn('❌ Failed to parse LINKS JSON:', e, 'String was:', multiLinkMatch[1]);
           links = null;
         }
       }
