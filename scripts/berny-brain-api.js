@@ -696,6 +696,31 @@ class BernyBrainAPI {
     }
   }
 
+  // Normalization for keyword matching.
+  // We strip punctuation to make word-boundary checks reliable (e.g. "tè," -> "te").
+  normalizeForMatch(value) {
+    const s = this.normalizeText(value);
+    if (!s) return '';
+    return s
+      .replace(/[^a-z0-9]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  // Robust keyword matching:
+  // - For very short needles (<=3 chars), require whole-word matches.
+  //   This avoids false positives like "tè" -> "te" matching inside "presentazione".
+  // - For longer needles, allow substring match on the cleaned text.
+  hasKeyword(haystack, needle) {
+    const h = this.normalizeForMatch(haystack);
+    const n = this.normalizeForMatch(needle);
+    if (!h || !n) return false;
+    if (n.length <= 3) {
+      return (` ${h} `).includes(` ${n} `);
+    }
+    return h.includes(n);
+  }
+
   loadLastRecommendation() {
     try {
       const raw = localStorage.getItem(this.RECO_STORAGE_KEY);
@@ -966,6 +991,7 @@ class BernyBrainAPI {
     let bestFirstPos = msgB.length; // Posizione della prima menzione nel testo
     let bestScore = 0;
 
+    const msgBMatch = this.normalizeForMatch(msgB);
     products.forEach((prod) => {
       let minPos = msgB.length; // Posizione della prima menzione di questo prodotto
       let score = 0;
@@ -973,12 +999,29 @@ class BernyBrainAPI {
 
       (prod.keywords || []).forEach((kw) => {
         const kwn = this.normalizeText(kw);
-        if (kwn && msgB.includes(kwn)) {
+        if (!kwn) return;
+
+        // For short keywords (e.g. "tè" -> "te"), require whole-word match.
+        // We also compute a stable "position" using the cleaned string.
+        const kwMatch = this.normalizeForMatch(kwn);
+        if (!kwMatch) return;
+
+        let hit = false;
+        let kwPos = -1;
+        if (kwMatch.length <= 3) {
+          const re = new RegExp(`(?:^|\\s)${kwMatch}(?:\\s|$)`, 'i');
+          kwPos = msgBMatch.search(re);
+          hit = kwPos >= 0;
+        } else {
+          kwPos = msgBMatch.indexOf(kwMatch);
+          hit = kwPos >= 0;
+        }
+
+        if (hit) {
           foundCount++;
-          const kwPos = msgB.indexOf(kwn); // Posizione della prima menzione di questo keyword
           minPos = Math.min(minPos, kwPos);
           // Score basato su lunghezza del keyword (più specifico = più importante)
-          score += (kwn.length >= 15 ? 4 : (kwn.length >= 10 ? 3 : (kwn.length >= 6 ? 2 : 1)));
+          score += (kwMatch.length >= 15 ? 4 : (kwMatch.length >= 10 ? 3 : (kwMatch.length >= 6 ? 2 : 1)));
         }
       });
 
@@ -1061,10 +1104,7 @@ class BernyBrainAPI {
     const msgA = this.normalizeText(userMessage);
     const msgB = this.normalizeText(assistantMessage);
     
-    const hasIn = (hay, needle) => {
-      const n = this.normalizeText(needle);
-      return !!(n && hay && hay.includes(n));
-    };
+    const hasIn = (hay, needle) => this.hasKeyword(hay, needle);
 
     // If Berny is clearly talking about Whipped Coffee, don't let the word "espresso"
     // inside the explanation hijack the CTA (unless the user explicitly asked espresso).
@@ -1171,10 +1211,7 @@ class BernyBrainAPI {
     const msgA = this.normalizeText(userMessage);
     const msgB = this.normalizeText(assistantMessage);
 
-    const hasIn = (hay, needle) => {
-      const n = this.normalizeText(needle);
-      return !!(n && hay && hay.includes(n));
-    };
+    const hasIn = (hay, needle) => this.hasKeyword(hay, needle);
 
     const topicCandidates = [
       // Cakes / torta: route to Pastry Lab (avoid generic "servizio" matches hijacking the link).
