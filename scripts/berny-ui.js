@@ -254,22 +254,36 @@
       if (this.currentStreamingBubble) {
         const finalText = sanitize(fullResponse || this.currentStreamingText);
 
-        // Estrai link e testo pulito senza inserirlo subito (per mostrare prima il messaggio, poi il link)
-        const { cleanText, link, suppressLink } = this.resolveLinkData(finalText);
+        // Estrai link e testo pulito
+        const { cleanText, link, links, suppressLink } = this.resolveLinkData(finalText);
 
+        // Svuota la bolla e riconstruisci con testo formattato + link
+        this.currentStreamingBubble.innerHTML = '';
+        
         // Applica markdown al testo principale
         this.currentStreamingBubble.innerHTML = this.parseMarkdown(cleanText);
 
         // Comandi speciali
         this.detectAndRunCommand(finalText);
 
-        // Dopo il testo, mostra i puntini e poi il link in un messaggio separato
-        if (!suppressLink && link) {
-          this.enqueueLinkMessage(link);
-        } else if (!suppressLink && !link) {
-          // Se non c'è link esplicito, prova a inferirlo (coerente con risposta) e poi mostra puntini + link
-          const inferred = this.inferLinkFromContext(cleanText);
-          if (inferred) this.enqueueLinkMessage(inferred);
+        // Aggiungi i link direttamente nella stessa bolla (non in messaggio separato)
+        if (!suppressLink) {
+          if (links && Array.isArray(links) && links.length > 0) {
+            // Link multipli
+            links.forEach((linkObj) => {
+              if (linkObj && linkObj.url) {
+                const label = linkObj.label || tr('assistant.openCard', null, '📖 Apri Scheda Correlata');
+                this.createLinkButton(linkObj.url, this.currentStreamingBubble, label);
+              }
+            });
+          } else if (link) {
+            // Link singolo
+            this.createLinkButton(link, this.currentStreamingBubble);
+          } else {
+            // Inferenza link
+            const inferred = this.inferLinkFromContext(cleanText);
+            if (inferred) this.createLinkButton(inferred, this.currentStreamingBubble);
+          }
         }
 
         try {
@@ -281,6 +295,7 @@
         this.currentStreamingBubble = null;
         this.currentStreamingText = '';
         this.playSynthSound('received');
+        this.scrollToBottom(true);
       } else {
         this.hideTypingIndicator();
         // Use typeWriterEffect for non-streamed responses (e.g. fallback)
