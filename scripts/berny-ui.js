@@ -163,7 +163,8 @@
       this.autoResizeInput();
       this.playSynthSound('sent');
 
-      this.showTypingIndicator();
+      // Non chiamiamo più showTypingIndicator() qui perché handleStreamChunk()
+      // creerà la bolla con puntini quando arriva il primo chunk
       this.animateAvatar('thinking');
 
       try {
@@ -174,7 +175,6 @@
         );
       } catch (e) {
         console.error('BernyUI send error:', e);
-        this.hideTypingIndicator();
         this.addMessage(tr('assistant.error', null, 'Oops! Ho avuto un problema tecnico 😅'), 'berny');
         this.animateAvatar('idle');
       }
