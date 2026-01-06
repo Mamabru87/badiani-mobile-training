@@ -13996,6 +13996,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <span aria-hidden="true">×</span>
         </button>
         <div class="berny-guide-body">
+          <div class="berny-guide-audio-hint" data-berny-guide-audio-hint>Tocca per attivare audio</div>
           <video
             class="berny-guide-video"
             playsinline
@@ -14034,6 +14035,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let endedHandler = null;
   let playCycles = 0;
+  let audioUnlockHandler = null;
+
+  const setAudioState = (isOn) => {
+    try {
+      if (!overlay) return;
+      overlay.dataset.audio = isOn ? 'on' : 'off';
+    } catch {}
+  };
+
+  const tryEnableAudio = () => {
+    if (!video) return false;
+    try {
+      video.muted = false;
+      video.volume = 1;
+      const p = video.play();
+      if (p && typeof p.catch === 'function') {
+        p.catch(() => {});
+      }
+      setAudioState(true);
+      return true;
+    } catch {
+      return false;
+    }
+  };
 
   const open = async (opts = {}) => {
     const { reason = '' } = opts;
@@ -14088,16 +14113,55 @@ document.addEventListener("DOMContentLoaded", () => {
       };
       try { video.addEventListener('ended', endedHandler); } catch {}
 
-      // Hard reset + autoplay (muted)
+      // Hard reset + autoplay
       try {
         video.pause();
         video.currentTime = 0;
         // Make sure native controls are not shown
         video.controls = false;
-        video.muted = true;
+
+        // Audio policy:
+        // - auto open: must start muted; user can tap to enable audio
+        // - manual open (triple click): user gesture exists, so start with audio
+        const wantsSound = reason !== 'auto';
+        if (wantsSound) {
+          setAudioState(true);
+          video.muted = false;
+          video.volume = 1;
+        } else {
+          setAudioState(false);
+          video.muted = true;
+          video.volume = 1;
+        }
+
         const p = video.play();
         if (p && typeof p.catch === 'function') p.catch(() => {});
       } catch {}
+
+      // Tap-to-unmute only when auto-opened.
+      try {
+        if (audioUnlockHandler) {
+          panel?.removeEventListener?.('pointerdown', audioUnlockHandler);
+          panel?.removeEventListener?.('click', audioUnlockHandler);
+        }
+      } catch {}
+      audioUnlockHandler = null;
+
+      if (reason === 'auto') {
+        audioUnlockHandler = () => {
+          // Try enabling audio. If it works, remove handler.
+          const ok = tryEnableAudio();
+          if (!ok) return;
+          try {
+            panel?.removeEventListener?.('pointerdown', audioUnlockHandler);
+            panel?.removeEventListener?.('click', audioUnlockHandler);
+          } catch {}
+          audioUnlockHandler = null;
+        };
+        // pointerdown covers touch, click is fallback.
+        try { panel?.addEventListener?.('pointerdown', audioUnlockHandler, { passive: true }); } catch {}
+        try { panel?.addEventListener?.('click', audioUnlockHandler, { passive: true }); } catch {}
+      }
     }
   };
 
@@ -14116,6 +14180,16 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch {}
     endedHandler = null;
     playCycles = 0;
+
+    // Remove audio unlock handler
+    try {
+      if (panel && audioUnlockHandler) {
+        panel.removeEventListener('pointerdown', audioUnlockHandler);
+        panel.removeEventListener('click', audioUnlockHandler);
+      }
+    } catch {}
+    audioUnlockHandler = null;
+    setAudioState(false);
 
     try { bodyScrollLock?.unlock?.(); } catch {}
 

@@ -1541,12 +1541,21 @@ h4 {
   border-radius: 999px;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   cursor: pointer;
   font-family: inherit;
   letter-spacing: 0.08em;
+  line-height: 1;
   transition: transform var(--anim-fast) ease, border-color var(--anim-fast) ease, background var(--anim-fast) ease;
   margin-left: 8px;
+}
+
+/* Keep the label optically centered (avoid font baseline pushing it up/down). */
+.menu-trigger > span:not(.menu-icon) {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
 }
 
 @media (max-width: 600px) {
@@ -1568,6 +1577,9 @@ h4 {
   display: inline-flex;
   flex-direction: column;
   gap: 3px;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
 }
 
 .menu-icon span {
@@ -2188,20 +2200,46 @@ h4 {
   right: 12px;
   z-index: 2;
   border: none;
-  background: rgba(255, 255, 255, 0.14);
-  color: rgba(255, 255, 255, 0.96);
+  background: var(--brand-blue);
+  color: #fff;
   width: 44px;
   height: 44px;
   border-radius: 999px;
   cursor: pointer;
   display: grid;
   place-items: center;
-  backdrop-filter: blur(6px);
+  box-shadow: 0 12px 30px rgba(5, 10, 44, 0.35);
 }
 
 .berny-guide-close:hover,
 .berny-guide-close:focus-visible {
-  background: rgba(255, 255, 255, 0.14);
+  background: var(--brand-blue-deep);
+}
+
+.berny-guide-close > span {
+  /* Hide the glyph; we draw a perfectly centered X with pseudo-elements */
+  display: none;
+}
+
+.berny-guide-close::before,
+.berny-guide-close::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 18px;
+  height: 2.5px;
+  background: #fff;
+  border-radius: 999px;
+  transform-origin: center;
+}
+
+.berny-guide-close::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.berny-guide-close::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
 }
 
 .berny-guide-body {
@@ -2219,6 +2257,27 @@ h4 {
   object-fit: cover;
   object-position: center center;
   background: #000;
+}
+
+.berny-guide-audio-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  z-index: 2;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(15, 33, 84, 0.68);
+  color: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  user-select: none;
+}
+
+.berny-guide-overlay[data-audio="on"] .berny-guide-audio-hint {
+  display: none;
 }
 
 @media (max-width: 560px) {
@@ -7623,6 +7682,13 @@ body.page-home {
   padding: 20px 0 12px;
 }
 
+/* Hub: make the Playbook column slimmer and give more room to the Cockpit. */
+@media (min-width: 721px) {
+  .page-home .hero.hero--orbit {
+    grid-template-columns: minmax(300px, 0.72fr) minmax(0, 1.28fr);
+  }
+}
+
 .page-home .hero {
   gap: 14px;
   /* On mid-size viewports the hero is often 2-column; equal-height stretching makes
@@ -7657,8 +7723,8 @@ body.page-home {
 }
 
 .page-home .hero-aside {
-  max-width: 520px;
-  margin: 0 auto;
+  max-width: none;
+  margin: 0;
   background: #ffffff;
   padding: 4px;
   border-radius: 24px;
@@ -7670,8 +7736,8 @@ body.page-home {
   cursor: grabbing;
 }
 .page-home [data-carousel="cockpit"] {
-  max-width: 520px;
-  margin: 0 auto;
+  max-width: none;
+  margin: 0;
   background: #ffffff;
   border: 1px solid rgba(33, 64, 152, 0.14);
   box-shadow: none;
@@ -9100,7 +9166,7 @@ body.page-home {
 
   /* Keep Playbook + Cockpit side-by-side on mobile */
   .page-home .hero.hero--orbit {
-    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
     gap: 10px;
     padding: 12px 0 10px;
     padding-inline: 0;
@@ -9569,10 +9635,19 @@ body.page-home {
 
   /* Clamp copy so the Playbook panel stays compact */
   .page-home .hero.hero--orbit .hero-lede {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    /* Don't truncate text on the Hub: allow full sentences to wrap. */
+    display: block;
+    overflow: visible;
+    -webkit-line-clamp: unset;
+    -webkit-box-orient: unset;
+  }
+
+  /* Hub: avoid ellipsis in cockpit header titles. */
+  .page-home .carousel-title {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    line-height: 1.15;
   }
 
   /* Cockpit: keep only horizontal scroll of cards */
