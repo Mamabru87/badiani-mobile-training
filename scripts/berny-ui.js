@@ -499,6 +499,7 @@
       // Inline styles (preserved for compatibility)
       btn.style.display = 'inline-block';
       btn.style.marginTop = '10px';
+      btn.style.marginRight = '8px';
       btn.style.padding = '8px 14px'; // Slightly larger
       btn.style.backgroundColor = '#ec418c'; // Brand Rose (Brighter)
       btn.style.color = 'white';
@@ -715,10 +716,15 @@
 
           const actions = document.createElement('div');
           actions.className = 'message-actions';
+          // Make multiple CTAs clearly visible (wrap + spacing).
+          actions.style.display = 'flex';
+          actions.style.flexWrap = 'wrap';
+          actions.style.gap = '8px';
+          actions.style.alignItems = 'flex-start';
           bubble.appendChild(actions);
 
           links.forEach((l) => {
-            const targetUrl = l && l.url;
+            const targetUrl = l && (l.url || l.href);
             if (!targetUrl) return;
             const label = l.label || tr('assistant.openCard', null, '📖 Apri Scheda Correlata');
             this.createLinkButton(targetUrl, actions, label);
