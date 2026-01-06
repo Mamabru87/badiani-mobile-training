@@ -256,7 +256,8 @@
       if (!bubble) return;
       const dots = document.createElement('span');
       dots.className = 'typing-dots';
-      dots.innerHTML = '<span>.</span><span>.</span><span>.</span>';
+      // Span vuoti senza contenuto testuale, il CSS crea i pallini visivi
+      dots.innerHTML = '<span></span><span></span><span></span>';
       bubble.innerHTML = '';
       bubble.appendChild(dots);
     }
