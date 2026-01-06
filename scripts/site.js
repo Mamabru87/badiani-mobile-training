@@ -13992,14 +13992,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     overlay.innerHTML = `
       <div class="berny-guide-panel" role="dialog" aria-modal="true" aria-label="Video guida BERNY">
-        <div class="berny-guide-header">
-          <p class="berny-guide-title">Video guida · BERNY</p>
-          <button type="button" class="berny-guide-close" aria-label="Chiudi video guida" data-berny-guide-close>
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
+        <button type="button" class="berny-guide-close" aria-label="Chiudi video guida" data-berny-guide-close>
+          <span aria-hidden="true">×</span>
+        </button>
         <div class="berny-guide-body">
-          <video class="berny-guide-video" playsinline controls preload="metadata" data-berny-guide-video>
+          <video
+            class="berny-guide-video"
+            playsinline
+            preload="metadata"
+            muted
+            autoplay
+            data-berny-guide-video
+            disablepictureinpicture
+            controlslist="nodownload noplaybackrate noremoteplayback"
+          >
             <source src="${VIDEO_SRC}" type="video/mp4" />
           </video>
         </div>
@@ -14023,17 +14029,14 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // Mark as seen when the user reaches the end (extra safety)
-    if (video) {
-      video.addEventListener('ended', () => {
-        const p = getActiveProfile();
-        markSeen(p?.id);
-      });
-    }
+    // Note: ended behavior is handled per-open (we repeat once then close).
   };
 
+  let endedHandler = null;
+  let playCycles = 0;
+
   const open = async (opts = {}) => {
-    const { autoplay = false, reason = '' } = opts;
+    const { reason = '' } = opts;
     const profile = getActiveProfile();
 
     // Do not open on top of the signup gate.
@@ -14047,6 +14050,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!profile?.id) return;
       if (!isVerifiedOrBeta()) return;
       if (hasSeen(profile.id)) return;
+      // Mark seen immediately so it doesn't pop up again if the user reloads mid-video.
       markSeen(profile.id);
     }
 
@@ -14063,13 +14067,37 @@ document.addEventListener("DOMContentLoaded", () => {
       closeBtn?.focus?.({ preventScroll: true });
     } catch {}
 
-    if (autoplay && video) {
+    // (Re)bind ended behavior: play twice (repeat once) then close.
+    if (video) {
       try {
-        // Autoplay with audio is usually blocked; we try anyway.
-        await video.play();
-      } catch {
-        // If blocked, user can press play.
-      }
+        if (endedHandler) video.removeEventListener('ended', endedHandler);
+      } catch {}
+      playCycles = 0;
+      endedHandler = () => {
+        // First end -> replay once. Second end -> close.
+        if (playCycles === 0) {
+          playCycles = 1;
+          try {
+            video.currentTime = 0;
+            const p = video.play();
+            if (p && typeof p.catch === 'function') p.catch(() => {});
+          } catch {}
+          return;
+        }
+        close();
+      };
+      try { video.addEventListener('ended', endedHandler); } catch {}
+
+      // Hard reset + autoplay (muted)
+      try {
+        video.pause();
+        video.currentTime = 0;
+        // Make sure native controls are not shown
+        video.controls = false;
+        video.muted = true;
+        const p = video.play();
+        if (p && typeof p.catch === 'function') p.catch(() => {});
+      } catch {}
     }
   };
 
@@ -14081,6 +14109,13 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       if (video && !video.paused) video.pause();
     } catch {}
+
+    // Remove ended handler so it doesn't leak across opens.
+    try {
+      if (video && endedHandler) video.removeEventListener('ended', endedHandler);
+    } catch {}
+    endedHandler = null;
+    playCycles = 0;
 
     try { bodyScrollLock?.unlock?.(); } catch {}
 
@@ -14111,7 +14146,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       if (count >= 3) {
         reset();
-        open({ autoplay: false, reason: 'triple' });
+        open({ reason: 'triple' });
       }
     }, { passive: true });
   };
@@ -14127,7 +14162,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Auto-show once the app is ready (post-gate reload)
   const autoShow = () => {
-    try { open({ autoplay: false, reason: 'auto' }); } catch {}
+    try { open({ reason: 'auto' }); } catch {}
   };
 
   if (document.readyState === 'loading') {
@@ -14152,14 +14187,14 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener('badiani:profile-updated', () => {
     // Delay a bit so other UI can settle.
     window.setTimeout(() => {
-      try { open({ autoplay: false, reason: 'auto' }); } catch {}
+      try { open({ reason: 'auto' }); } catch {}
     }, 250);
   });
 
   // Expose a tiny hook for debugging/manual triggers (optional).
   try {
     window.BadianiBernyGuideVideo = {
-      open: () => open({ autoplay: false, reason: 'manual' }),
+      open: () => open({ reason: 'manual' }),
       close,
       _src: VIDEO_SRC,
     };

@@ -2172,46 +2172,31 @@ h4 {
 }
 
 .berny-guide-panel {
-  width: min(1100px, 100%);
-  height: min(720px, calc(100vh - 28px));
-  background: rgba(15, 33, 84, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  width: 100%;
+  height: calc(100vh - 28px);
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius-xl);
   box-shadow: 0 40px 120px rgba(5, 10, 44, 0.55);
   overflow: hidden;
   position: relative;
-  display: grid;
-  grid-template-rows: auto 1fr;
-}
-
-.berny-guide-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 12px 12px 10px 16px;
-  background: rgba(15, 33, 84, 0.55);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-.berny-guide-title {
-  margin: 0;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  color: rgba(255, 255, 255, 0.92);
 }
 
 .berny-guide-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
   border: none;
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.92);
-  width: 38px;
-  height: 38px;
+  background: rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.96);
+  width: 44px;
+  height: 44px;
   border-radius: 999px;
   cursor: pointer;
   display: grid;
   place-items: center;
+  backdrop-filter: blur(6px);
 }
 
 .berny-guide-close:hover,
@@ -2222,13 +2207,17 @@ h4 {
 .berny-guide-body {
   position: relative;
   background: #000;
+  width: 100%;
+  height: 100%;
 }
 
 .berny-guide-video {
   width: 100%;
   height: 100%;
   display: block;
-  object-fit: contain;
+  /* cover elimina le bande nere (croppa se serve) */
+  object-fit: cover;
+  object-position: center center;
   background: #000;
 }
 
@@ -2237,6 +2226,18 @@ h4 {
     width: 100%;
     height: calc(100vh - 28px);
     border-radius: var(--radius-lg);
+  }
+}
+
+@media (max-width: 420px) {
+  .berny-guide-panel {
+    border-radius: 14px;
+  }
+  .berny-guide-close {
+    top: 10px;
+    right: 10px;
+    width: 42px;
+    height: 42px;
   }
 }
 
