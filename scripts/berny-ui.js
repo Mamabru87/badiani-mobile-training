@@ -288,10 +288,42 @@
         }
 
         // Estrai link e testo pulito
-        const { cleanText, link, links, suppressLink } = this.resolveLinkData(finalText);
+        const { cleanText: rawClean, link, links, suppressLink } = this.resolveLinkData(finalText);
         console.log('🔗 Resolved links:', { link, links, suppressLink });
-        console.log('📄 Clean text dopo resolveLinkData:', cleanText);
-        console.log('📏 Lunghezza clean text:', cleanText.length, 'caratteri');
+        console.log('📄 Clean text dopo resolveLinkData:', rawClean);
+        console.log('📏 Lunghezza clean text:', rawClean.length, 'caratteri');
+
+        // Deduplica frasi consecutive identiche e rimuovi ellissi iniziali
+        const dedupeSentences = (text) => {
+          if (!text) return text;
+          const sentences = text.split(/(?<=[.!?])\s+/);
+          const cleaned = [];
+          sentences.forEach((s) => {
+            const t = s.replace(/^\.{2,}\s*/, '').trim();
+            if (!t) return;
+            if (cleaned.length === 0 || cleaned[cleaned.length - 1].toLowerCase() !== t.toLowerCase()) {
+              cleaned.push(t);
+            }
+          });
+          return cleaned.join(' ');
+        };
+
+        let cleanText = dedupeSentences(rawClean);
+
+        // Se dopo la pulizia sembra ancora troncato, prova un secondo tentativo di continuation
+        if (brain && typeof brain.looksTruncatedAnswer === 'function' && typeof brain.continueFromPartial === 'function') {
+          try {
+            if (brain.looksTruncatedAnswer(cleanText)) {
+              const continued2 = await brain.continueFromPartial(this.lastUserMessage || '', cleanText);
+              if (continued2 && continued2 !== cleanText) {
+                console.log('✅ Continuation (post-clean) ottenuta, nuova lunghezza:', continued2.length);
+                cleanText = dedupeSentences(continued2);
+              }
+            }
+          } catch (e) {
+            console.warn('⚠️ Continuation fallback (post-clean) failed', e);
+          }
+        }
 
         // Svuota la bolla e riconstruisci con testo formattato + link
         this.currentStreamingBubble.innerHTML = '';
@@ -524,7 +556,8 @@
         if (multiEnd > multiStart) {
           const rawPayload = cleanText.substring(multiStart + '[[LINKS:'.length, multiEnd).trim();
           try {
-            const jsonStr = rawPayload.startsWith('[') ? rawPayload : `[${rawPayload}]`;
+            const normalized = rawPayload.replace(/\s+/g, ' ');
+            const jsonStr = normalized.startsWith('[') ? normalized : `[${normalized}]`;
             console.log('🔗 Parsing LINKS JSON:', jsonStr);
             links = JSON.parse(jsonStr);
             console.log('✅ Parsed links:', links);
@@ -532,7 +565,7 @@
             console.warn('❌ Failed to parse LINKS JSON:', e, 'String was:', rawPayload);
             links = null;
           }
-          // Rimuovi comunque il tag dal testo
+          // Rimuovi comunque il tag dal testo anche se il parse fallisce
           cleanText = (cleanText.slice(0, multiStart) + cleanText.slice(multiEnd + 2)).trim();
         }
       }
@@ -545,6 +578,9 @@
           if (singleEnd > singleStart) {
             link = cleanText.substring(singleStart + '[[LINK:'.length, singleEnd).trim();
             cleanText = (cleanText.slice(0, singleStart) + cleanText.slice(singleEnd + 2)).trim();
+          } else {
+            // Tag malformato: rimuovilo
+            cleanText = (cleanText.slice(0, singleStart) + cleanText.slice(singleStart + '[[LINK:'.length)).trim();
           }
         }
       }
