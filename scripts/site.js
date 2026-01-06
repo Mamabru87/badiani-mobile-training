@@ -13896,3 +13896,272 @@ document.addEventListener("DOMContentLoaded", () => {
     menuButtons.forEach(btn => btn.addEventListener('click', triggerBlup));
     closeButtons.forEach(btn => btn.addEventListener('click', triggerBlup));
 });
+
+// ============================================================
+// BERNY - VIDEO GUIDA FULLSCREEN
+// - Auto: una sola volta per profilo (dopo login/signup, grazie al reload del gate)
+// - Manuale: triplo click sull'avatar tondo di Berny (chat) o sul FAB del widget
+// ============================================================
+(() => {
+  // Avoid double-init
+  if (window.__badianiBernyGuideVideoInit) return;
+  window.__badianiBernyGuideVideoInit = true;
+
+  const VIDEO_SRC = (() => {
+    // Keep it simple: the file is inside the repo at "berny video/berny video.mp4"
+    try { return encodeURI('berny video/berny video.mp4'); } catch { return 'berny%20video/berny%20video.mp4'; }
+  })();
+
+  const KEY_SEEN_PREFIX = 'badianiBerny.guideVideo.seen.v1';
+
+  const getActiveProfile = () => {
+    try {
+      const p = window.BadianiProfile?.getActive?.();
+      if (p && typeof p === 'object') return p;
+    } catch {}
+
+    try {
+      const raw = localStorage.getItem(typeof STORAGE_KEY_USER === 'string' ? STORAGE_KEY_USER : 'badianiUser.profile.v1');
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      if (parsed && parsed.id) return parsed;
+    } catch {}
+
+    return null;
+  };
+
+  const decodeTokenPayload = (token) => {
+    try {
+      const t = String(token || '').trim();
+      const part = t.split('.')[0] || '';
+      if (!part) return null;
+      const b64 = part.replace(/-/g, '+').replace(/_/g, '/').padEnd(Math.ceil(part.length / 4) * 4, '=');
+      const json = atob(b64);
+      return JSON.parse(json);
+    } catch {
+      return null;
+    }
+  };
+
+  const isVerifiedOrBeta = () => {
+    try {
+      const beta = String(localStorage.getItem('badianiAuth.betaSkip.v1') || '') === '1';
+      if (beta) return true;
+    } catch {}
+
+    try {
+      const token = String(localStorage.getItem('badianiAuth.token.v1') || '').trim();
+      if (!token) return false;
+      const payload = decodeTokenPayload(token);
+      const exp = payload?.exp;
+      if (typeof exp !== 'number' || !Number.isFinite(exp)) return false;
+      return (exp * 1000) > Date.now();
+    } catch {
+      return false;
+    }
+  };
+
+  const makeSeenKey = (profileId) => {
+    const id = String(profileId || '').trim() || 'anon';
+    return `${KEY_SEEN_PREFIX}:${id}`;
+  };
+
+  const hasSeen = (profileId) => {
+    try {
+      return String(localStorage.getItem(makeSeenKey(profileId)) || '') === '1';
+    } catch {
+      return false;
+    }
+  };
+
+  const markSeen = (profileId) => {
+    try { localStorage.setItem(makeSeenKey(profileId), '1'); } catch {}
+  };
+
+  let overlay = null;
+  let panel = null;
+  let video = null;
+  let lastFocus = null;
+
+  const buildOverlay = () => {
+    if (overlay) return;
+
+    overlay = document.createElement('div');
+    overlay.className = 'berny-guide-overlay';
+    overlay.setAttribute('aria-hidden', 'true');
+
+    overlay.innerHTML = `
+      <div class="berny-guide-panel" role="dialog" aria-modal="true" aria-label="Video guida BERNY">
+        <div class="berny-guide-header">
+          <p class="berny-guide-title">Video guida · BERNY</p>
+          <button type="button" class="berny-guide-close" aria-label="Chiudi video guida" data-berny-guide-close>
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="berny-guide-body">
+          <video class="berny-guide-video" playsinline controls preload="metadata" data-berny-guide-video>
+            <source src="${VIDEO_SRC}" type="video/mp4" />
+          </video>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+    panel = overlay.querySelector('.berny-guide-panel');
+    video = overlay.querySelector('[data-berny-guide-video]');
+
+    const closeBtn = overlay.querySelector('[data-berny-guide-close]');
+    if (closeBtn) closeBtn.addEventListener('click', () => close());
+
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) close();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay?.classList?.contains('is-visible')) {
+        close();
+      }
+    });
+
+    // Mark as seen when the user reaches the end (extra safety)
+    if (video) {
+      video.addEventListener('ended', () => {
+        const p = getActiveProfile();
+        markSeen(p?.id);
+      });
+    }
+  };
+
+  const open = async (opts = {}) => {
+    const { autoplay = false, reason = '' } = opts;
+    const profile = getActiveProfile();
+
+    // Do not open on top of the signup gate.
+    if (document.querySelector('.signup-gate')) return;
+
+    buildOverlay();
+    if (!overlay || !panel) return;
+
+    // Manual open should always work; auto open should be gated.
+    if (reason === 'auto') {
+      if (!profile?.id) return;
+      if (!isVerifiedOrBeta()) return;
+      if (hasSeen(profile.id)) return;
+      markSeen(profile.id);
+    }
+
+    lastFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+
+    overlay.classList.add('is-visible');
+    overlay.setAttribute('aria-hidden', 'false');
+
+    try { bodyScrollLock?.lock?.(); } catch {}
+
+    // Focus close button for accessibility
+    try {
+      const closeBtn = overlay.querySelector('[data-berny-guide-close]');
+      closeBtn?.focus?.({ preventScroll: true });
+    } catch {}
+
+    if (autoplay && video) {
+      try {
+        // Autoplay with audio is usually blocked; we try anyway.
+        await video.play();
+      } catch {
+        // If blocked, user can press play.
+      }
+    }
+  };
+
+  const close = () => {
+    if (!overlay) return;
+    overlay.classList.remove('is-visible');
+    overlay.setAttribute('aria-hidden', 'true');
+
+    try {
+      if (video && !video.paused) video.pause();
+    } catch {}
+
+    try { bodyScrollLock?.unlock?.(); } catch {}
+
+    if (lastFocus) {
+      try { lastFocus.focus({ preventScroll: true }); } catch { try { lastFocus.focus(); } catch {} }
+      lastFocus = null;
+    }
+  };
+
+  const attachTripleClick = (el) => {
+    if (!el || el.__badianiTripleClickAttached) return;
+    el.__badianiTripleClickAttached = true;
+
+    let count = 0;
+    let timer = 0;
+    const reset = () => {
+      count = 0;
+      if (timer) {
+        window.clearTimeout(timer);
+        timer = 0;
+      }
+    };
+
+    el.addEventListener('click', () => {
+      count += 1;
+      if (count === 1) {
+        timer = window.setTimeout(reset, 850);
+      }
+      if (count >= 3) {
+        reset();
+        open({ autoplay: false, reason: 'triple' });
+      }
+    }, { passive: true });
+  };
+
+  const attachTriggers = () => {
+    try {
+      attachTripleClick(document.querySelector('[data-chat-avatar]'));
+    } catch {}
+    try {
+      attachTripleClick(document.querySelector('.berny-fab'));
+    } catch {}
+  };
+
+  // Auto-show once the app is ready (post-gate reload)
+  const autoShow = () => {
+    try { open({ autoplay: false, reason: 'auto' }); } catch {}
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      attachTriggers();
+      autoShow();
+      // In some pages the widget FAB is injected late.
+      let tries = 0;
+      const tick = () => {
+        tries += 1;
+        attachTriggers();
+        if (tries >= 10) window.clearInterval(id);
+      };
+      const id = window.setInterval(tick, 500);
+    }, { once: true });
+  } else {
+    attachTriggers();
+    autoShow();
+  }
+
+  // If the active profile changes while the app is open, auto-show once for that profile.
+  document.addEventListener('badiani:profile-updated', () => {
+    // Delay a bit so other UI can settle.
+    window.setTimeout(() => {
+      try { open({ autoplay: false, reason: 'auto' }); } catch {}
+    }, 250);
+  });
+
+  // Expose a tiny hook for debugging/manual triggers (optional).
+  try {
+    window.BadianiBernyGuideVideo = {
+      open: () => open({ autoplay: false, reason: 'manual' }),
+      close,
+      _src: VIDEO_SRC,
+    };
+  } catch {}
+})();
