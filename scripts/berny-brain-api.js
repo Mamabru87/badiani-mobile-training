@@ -54,6 +54,7 @@ class BernyBrainAPI {
     // Default model (only used for SDK mode)
     this.modelName = "gemini-2.0-flash-exp";
     this.history = [];
+    this.recentHistory = [];
     this.genAI = null;
     this.model = null;
 
@@ -190,6 +191,7 @@ class BernyBrainAPI {
   async continueIfTruncatedSdk({ systemPrompt, userMessage, assistantText, model }) {
     const out = String(assistantText || '').trim();
     if (!out) return out;
+    this.recordConversationTurn(userMessage, out);
     if (!this.looksTruncatedAnswer(out)) return out;
     if (!model || typeof model.generateContent !== 'function') return out;
 
@@ -224,7 +226,7 @@ class BernyBrainAPI {
     if (!s) return false;
 
     // Ignore obvious error/status strings.
-    if (/^(⚠️|⛔|❌|🔒|⏳)/.test(s)) return false;
+    if (/^(error|❌|⚠️|⛔|🔒|⏳)/i.test(s)) return false;
 
     // If it's very short, don't try to be clever.
     if (s.length < 60) return false;
@@ -723,7 +725,8 @@ class BernyBrainAPI {
   // Prefer coherence between what the user asked and what Berny actually answered.
   // This reduces "testo giusto, link sbagliato" when the LLM drifts or the question is multi-topic.
   // NOW: check what BERNY discussed first, THEN fallback to user keywords.
-  inferRecommendationFromContext(userMessage, assistantMessage) {
+  inferRecommendationFromContext(userMessage, assistantMessage, options = {}) {
+    const allowWeak = !!options.allowWeak;
     // Step 1: What product did BERNY actually discuss in the response?
     const assistantProduct = this.extractMainProductFromResponse(assistantMessage);
     if (assistantProduct && assistantProduct.href) {
@@ -860,9 +863,8 @@ class BernyBrainAPI {
       }
     });
 
-    // Require at least one strong user hit (>=3) to attach a link from context.
-    // Otherwise, fallback to legacy inference.
-    if (best && best.href && bestUserScore >= 3) {
+    // Se non c'è un match forte lato utente, non forzare un link.
+    if (best && best.href && (bestUserScore >= 3 || allowWeak)) {
       return { href: best.href, reason: 'keyword' };
     }
 
@@ -878,7 +880,9 @@ class BernyBrainAPI {
       return { href: 'story-orbit.html?q=story', reason: 'assistant_explicit' };
     }
 
-    // Fallback: keep legacy behavior.
+    // Fallback: se non c'è sufficiente contesto, niente link.
+    if (!allowWeak) return null;
+
     return this.inferRecommendationFromMessage(userMessage);
   }
 
@@ -1139,6 +1143,31 @@ class BernyBrainAPI {
 
   // --- QUIZ LOGIC END ---
 
+  // Memoria breve: conserva le ultime 2-3 coppie (user/assistant) per follow-up
+  recordConversationTurn(userText, assistantText) {
+    if (userText) this.recentHistory.push({ role: 'user', content: String(userText || '').trim() });
+    if (assistantText) this.recentHistory.push({ role: 'assistant', content: String(assistantText || '').trim() });
+    // Tieni solo le ultime 6 entry (3 turni completi)
+    if (this.recentHistory.length > 6) {
+      this.recentHistory = this.recentHistory.slice(this.recentHistory.length - 6);
+    }
+  }
+
+  getRecentHistoryMessages(maxPairs = 3) {
+    // Restituisce array di messaggi {role, content} per il prompt
+    const entries = [...this.recentHistory];
+    // Limita a maxPairs*2 dalla fine
+    const keep = Math.max(0, Math.min(entries.length, maxPairs * 2));
+    return entries.slice(entries.length - keep).map((e) => ({ role: e.role, content: e.content }));
+  }
+
+  renderRecentHistoryForPrompt(maxPairs = 3) {
+    const msgs = this.getRecentHistoryMessages(maxPairs);
+    if (!msgs.length) return '';
+    const lines = msgs.map((m) => `${m.role === 'assistant' ? 'Assistente' : 'Utente'}: ${m.content}`);
+    return `CONTESTO PRECEDENTE (breve):\n${lines.join('\n')}`;
+  }
+
   async processMessage(userMessage) {
     // 1. QUIZ INTERCEPTION
     if (this.quizState.active) {
@@ -1154,14 +1183,18 @@ class BernyBrainAPI {
     const reco = this.inferRecommendationFromMessage(userMessage);
     const msgNorm = this.normalizeText(userMessage);
     if (this.isSmallTalk(msgNorm)) {
-      return this.buildSmallTalkResponse(reco);
+      const resp = this.buildSmallTalkResponse(reco);
+      this.recordConversationTurn(userMessage, resp);
+      return resp;
     }
 
     // 1b2. Meta-guidance (upselling/setup/open/close/service): require an explicit topic.
     // If missing, ask a clarifying question instead of guessing a page.
     // (Keeps the generated link coherent and avoids "Pandoro" hijacks.)
     if (this.isMetaGuidanceRequest(msgNorm) && !this.hasExplicitTopicSignal(msgNorm)) {
-      return this.buildClarificationForMetaGuidance(userMessage);
+      const resp = this.buildClarificationForMetaGuidance(userMessage);
+      this.recordConversationTurn(userMessage, resp);
+      return resp;
     }
 
     // 1c. If the question clearly matches a legacy KB entry, answer locally.
@@ -1169,11 +1202,13 @@ class BernyBrainAPI {
     const kbHit = this.matchLegacyKbProduct(userMessage);
     if (kbHit && kbHit.response) {
       const localOut = String(kbHit.response).trim();
-      const recoLocal = this.inferRecommendationFromContext(userMessage, localOut);
+      const recoLocal = this.inferRecommendationFromContext(userMessage, localOut, { allowWeak: false });
       if (recoLocal?.href) {
         recoLocal.href = this.coerceHrefToCatalogCard(recoLocal.href, userMessage, localOut);
       }
-      return this.applyRecommendationToResponse(localOut, recoLocal);
+      const finalResp = this.applyRecommendationToResponse(localOut, recoLocal);
+      this.recordConversationTurn(userMessage, finalResp);
+      return finalResp;
     }
 
     // 2. STANDARD LLM LOGIC (proxy preferred)
@@ -1186,8 +1221,10 @@ class BernyBrainAPI {
 
       try {
         const systemPrompt = this.buildSystemPrompt();
+        const historyMsgs = this.getRecentHistoryMessages(3); // ultime 3 coppie
         const messages = [
           { role: 'system', content: systemPrompt },
+          ...historyMsgs,
           { role: 'user', content: String(userMessage ?? '') },
         ];
 
@@ -1283,12 +1320,14 @@ class BernyBrainAPI {
           }
         }
 
-        const recoFinal = this.inferRecommendationFromContext(userMessage, out);
+        const recoFinal = this.inferRecommendationFromContext(userMessage, out, { allowWeak: false });
         if (recoFinal?.href) {
           recoFinal.href = this.coerceHrefToCatalogCard(recoFinal.href, userMessage, out);
         }
         // Ensure the recommended card (when we have one) is coherent with the actual answer.
-        return this.applyRecommendationToResponse(out, recoFinal);
+        const finalResponse = this.applyRecommendationToResponse(out, recoFinal);
+        this.recordConversationTurn(userMessage, finalResponse);
+        return finalResponse;
       } catch (e) {
         const name = String(e?.name || '');
         if (name === 'AbortError') {
@@ -1309,7 +1348,9 @@ class BernyBrainAPI {
 
     try {
       const systemPrompt = this.buildSystemPrompt();
-      const fullPrompt = `${systemPrompt}\n\nUtente: ${userMessage}`;
+      const historyText = this.renderRecentHistoryForPrompt(3);
+      const contextBlock = historyText ? `\n${historyText}\n` : '';
+      const fullPrompt = `${systemPrompt}${contextBlock}\nUtente: ${userMessage}`;
       
       // TENTATIVO 1: Modello Veloce (Flash)
       console.log(`Tentativo 1 con ${this.modelName}...`);
@@ -1335,11 +1376,13 @@ class BernyBrainAPI {
         model: this.model,
       });
 
-      const recoFinal = this.inferRecommendationFromContext(userMessage, out);
+      const recoFinal = this.inferRecommendationFromContext(userMessage, out, { allowWeak: false });
       if (recoFinal?.href) {
         recoFinal.href = this.coerceHrefToCatalogCard(recoFinal.href, userMessage, out);
       }
-      return this.applyRecommendationToResponse(out, recoFinal);
+      const finalResponse = this.applyRecommendationToResponse(out, recoFinal);
+      this.recordConversationTurn(userMessage, finalResponse);
+      return finalResponse;
 
     } catch (error) {
       console.warn(`⚠️ Errore o Timeout (${error.message}). Passo al BACKUP...`);
@@ -1352,7 +1395,9 @@ class BernyBrainAPI {
           const backupModel = this.genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
           
           const systemPrompt = this.buildSystemPrompt();
-          const result = await backupModel.generateContent(`${systemPrompt}\n\nUtente: ${userMessage}`);
+          const historyText = this.renderRecentHistoryForPrompt(3);
+          const contextBlock = historyText ? `\n${historyText}\n` : '';
+          const result = await backupModel.generateContent(`${systemPrompt}${contextBlock}\nUtente: ${userMessage}`);
           const response = await result.response;
           let out = response.text();
 
@@ -1363,11 +1408,13 @@ class BernyBrainAPI {
             model: backupModel,
           });
 
-          const recoFinal = this.inferRecommendationFromContext(userMessage, out);
+          const recoFinal = this.inferRecommendationFromContext(userMessage, out, { allowWeak: false });
           if (recoFinal?.href) {
             recoFinal.href = this.coerceHrefToCatalogCard(recoFinal.href, userMessage, out);
           }
-          return this.applyRecommendationToResponse(out, recoFinal);
+          const finalResponse = this.applyRecommendationToResponse(out, recoFinal);
+          this.recordConversationTurn(userMessage, finalResponse);
+          return finalResponse;
           
         } catch (backupError) {
           console.error("❌ Anche il backup è fallito:", backupError);

@@ -465,7 +465,7 @@
       try {
         const brain = window.bernyBrain;
         if (brain && typeof brain.inferRecommendationFromContext === 'function') {
-          const reco = brain.inferRecommendationFromContext(this.lastUserMessage || '', cleanText || '');
+          const reco = brain.inferRecommendationFromContext(this.lastUserMessage || '', cleanText || '', { allowWeak: false });
           if (reco && reco.href) link = reco.href;
         } else if (brain && typeof brain.inferRecommendationFromMessage === 'function') {
           const reco = brain.inferRecommendationFromMessage(this.lastUserMessage || cleanText || '');
