@@ -5727,37 +5727,56 @@ const gamification = (() => {
       return { href: 'gelato-lab.html?card=coni-classici&tab=parametri&center=1', label: 'Apri Coni classici' };
     }
 
-    if (has('churro', 'churros', 'panettone', 'pandoro', 'Vin Brulé', 'mulled')) {
-      const match = ['churro', 'panettone', 'pandoro', 'Vin Brulé', 'mulled'].find(k => p.includes(k)) || 'festive';
-      const label = match === 'mulled' ? 'Mulled Wine' : match.charAt(0).toUpperCase() + match.slice(1);
-      return { href: `festive.html?q=${match}`, label: `Apri ${label}` };
+    if (has('churro', 'churros', 'panettone', 'pandoro', 'vin brulé', 'vin brule', 'vin chaud', 'mulled', 'vino caliente')) {
+      if (has('mulled', 'vin brulé', 'vin brule', 'vin chaud', 'vino caliente')) {
+        return { href: 'festive.html?q=mulled-wine-vin-brul', label: 'Apri Mulled Wine' };
+      }
+      if (has('pandoro')) return { href: 'festive.html?q=pandoro-classico', label: 'Apri Pandoro' };
+      if (has('panettone')) return { href: 'festive.html?q=panettone-classico', label: 'Apri Panettone' };
+      if (has('churro', 'churros')) return { href: 'festive.html?q=churros', label: 'Apri Churros' };
+      return { href: 'festive.html', label: 'Apri Festive' };
     }
-    if (has('espresso', 'cappuccino', 'americano', 'latte ', 'flat white', 'macchiato', 'shot', 'estrazione', 'grinder', 'steam', 'wand', 'portafiltro', 'tamper')) {
-      const match = ['espresso', 'cappuccino', 'americano', 'latte', 'flat white', 'macchiato', 'shot', 'estrazione', 'grinder', 'steam', 'wand', 'portafiltro', 'tamper'].find(k => p.includes(k)) || 'caffe';
-      const label = match.charAt(0).toUpperCase() + match.slice(1);
-      return { href: `caffe.html?q=${match}`, label: `Apri ${label}` };
+
+    if (has('espresso', 'cappuccino', 'americano', 'flat white', 'macchiato', 'shot', 'estrazione', 'grinder', 'steam', 'wand', 'portafiltro', 'tamper', 'latte')) {
+      // Prefer stable card ids (no spaces) so deep-link.js can scroll reliably.
+      if (has('cappuccino', 'steam', 'wand')) return { href: 'caffe.html?q=cappuccino', label: 'Apri Cappuccino' };
+      if (has('macchiato')) return { href: 'caffe.html?q=macchiato-single', label: 'Apri Macchiato' };
+      if (has('flat white')) return { href: 'caffe.html?q=flat-white', label: 'Apri Flat White' };
+      if (has('americano')) return { href: 'caffe.html?q=americano', label: 'Apri Americano' };
+      if (has('latte')) return { href: 'caffe.html?q=iced-latte', label: 'Apri Iced Latte' };
+      // Default espresso tooling keywords.
+      return { href: 'caffe.html?q=espresso-single', label: 'Apri Espresso Single' };
     }
+
     if (has('croissant', 'brownie', 'pastry', 'scone', 'loaf', 'cake', 'vetrina pasticceria')) {
-      const match = ['croissant', 'brownie', 'pastry', 'scone', 'loaf', 'cake'].find(k => p.includes(k)) || 'pastry';
-      const label = match.charAt(0).toUpperCase() + match.slice(1);
-      return { href: `pastries.html?q=${match}`, label: `Apri ${label}` };
+      if (has('croissant')) return { href: 'pastries.html?q=croissants', label: 'Apri Croissants' };
+      if (has('scone')) return { href: 'pastries.html?q=scones', label: 'Apri Scones' };
+      if (has('brownie')) return { href: 'pastries.html?q=brownie', label: 'Apri Brownie' };
+      if (has('loaf')) return { href: 'pastries.html?q=loaf', label: 'Apri Loaf' };
+      if (has('cake')) return { href: 'pastries.html?q=cakes', label: 'Apri Cakes' };
+      return { href: 'pastries.html', label: 'Apri Pastries' };
     }
-    if (has('waffle', 'pancake', 'crepe', 'porridge', 'dessert', 'sweet')) {
-      const match = ['waffle', 'pancake', 'crepe', 'porridge', 'dessert', 'sweet'].find(k => p.includes(k)) || 'sweet';
-      const label = match.charAt(0).toUpperCase() + match.slice(1);
-      return { href: `sweet-treats.html?q=${match}`, label: `Apri ${label}` };
+
+    if (has('waffle', 'pancake', 'crepe', 'crêpe', 'porridge', 'dessert', 'sweet')) {
+      if (has('waffle')) return { href: 'sweet-treats.html?q=waffles', label: 'Apri Waffles' };
+      if (has('pancake')) return { href: 'sweet-treats.html?q=pancake', label: 'Apri Pancake' };
+      if (has('crepe', 'crêpe')) return { href: 'sweet-treats.html?q=crepe-sauce', label: 'Apri Crepe' };
+      return { href: 'sweet-treats.html', label: 'Apri Sweet Treats' };
     }
+
     if (has('slitti', 'yo-yo', 'yoyo')) {
-      return { href: 'slitti-yoyo.html?q=slitti', label: 'Apri Slitti & Yo-Yo' };
+      return { href: 'slitti-yoyo.html?q=slitti-timeline', label: 'Apri Slitti & Yo-Yo' };
     }
     // Affogati/affogato (es. Dirty Matcha Affogato) vivono in Bar & Drinks, non in Gelato Lab
     if (has('affogato', 'affogati', 'dirty matcha')) {
       return { href: 'caffe.html?q=affogato', label: 'Apri Affogato' };
     }
     if (has('gelato', 'buontalenti', 'vetrina', 'vaschetta', 'cristalli', 'spatol')) {
-      const match = ['buontalenti', 'vetrina', 'vaschetta', 'cristalli', 'spatol'].find(k => p.includes(k)) || 'gelato';
-      const label = match.charAt(0).toUpperCase() + match.slice(1);
-      return { href: `gelato-lab.html?q=${match}`, label: `Apri ${label}` };
+      if (has('buontalenti')) return { href: 'gelato-lab.html?q=cups', label: 'Apri Gelato Lab' };
+      if (has('vaschetta')) return { href: 'gelato-lab.html?q=boxes', label: 'Apri Gelato Boxes' };
+      if (has('cristalli')) return { href: 'gelato-lab.html?q=shelf-life-treats-dopo-esposizione', label: 'Apri Shelf Life (treats)' };
+      if (has('vetrina', 'spatol')) return { href: 'gelato-lab.html?q=gelato-setup', label: 'Apri Gelato Setup' };
+      return { href: 'gelato-lab.html', label: 'Apri Gelato Lab' };
     }
     if (has('story orbit', 'firenze', 'origine')) {
       return { href: 'story-orbit.html?q=story', label: 'Apri Story Orbit' };

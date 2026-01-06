@@ -785,13 +785,15 @@ class BernyBrainAPI {
     const topicCandidates = [
       // Cakes / torta: route to Pastry Lab (avoid generic "upsell" sending users to Operations).
       { href: 'pastries.html?q=cakes', keys: ['cakes', 'cake', 'torta', 'torte', 'fetta', 'slice'] },
-      { href: 'gelato-lab.html?q=buontalenti', keys: ['buontalenti'] },
+      // Note: there is no dedicated "buontalenti" card id; route to the Gelato Lab cups card as the closest practical entry point.
+      { href: 'gelato-lab.html?q=cups', keys: ['buontalenti'] },
       { href: 'gelato-lab.html?q=coppa-gelato', keys: ['coppa badiani', 'coppa gelato', 'coppa'] },
       { href: 'gelato-lab.html?q=cups', keys: ['coppette', 'cups', 'cup', 'copas gelato', 'coupes gelato'] },
       { href: 'gelato-lab.html?q=cones', keys: ['coni', 'cone', 'cones', 'cornets', 'conos'] },
       { href: 'gelato-lab.html?q=boxes', keys: ['box gelato', 'take home box', 'gelato boxes', 'boîtes glace', 'cajas helado'] },
-      { href: 'gelato-lab.html?q=gusti', keys: ['gusti', 'flavour', 'flavors', 'parfums', 'sabores', 'sabor'] },
-      { href: 'gelato-lab.html?q=vetrina', keys: ['vetrina', 'display', 'vitrine', 'vitrina'] },
+      // No dedicated "gusti"/"vetrina" card ids exist on Gelato Lab; route to stable entry points.
+      { href: 'gelato-lab.html?q=cups', keys: ['gusti', 'flavour', 'flavors', 'parfums', 'sabores', 'sabor'] },
+      { href: 'gelato-lab.html?q=gelato-setup', keys: ['vetrina', 'display', 'vitrine', 'vitrina'] },
       { href: 'gelato-lab.html?q=gelato-setup', keys: ['setup gelato', 'set up gelato'] },
       { href: 'gelato-lab.html?q=temperatura-porte-standard', keys: ['temperatura porte', 'porta gelato'] },
       { href: 'gelato-lab.html?q=shelf-life-treats-dopo-esposizione', keys: ['shelf life gelato', 'durata esposizione gelato'] },
@@ -799,7 +801,7 @@ class BernyBrainAPI {
       { href: 'gelato-lab.html?q=regola-scampolo-1-4-pan', keys: ['regola scampolo', '1/4 pan', 'un quarto pan'] },
       { href: 'gelato-lab.html?q=chiusura-deep-clean-vetrina', keys: ['chiusura vetrina', 'deep clean vetrina'] },
 
-      { href: 'caffe.html?q=espresso', keys: ['espresso', 'shot', 'estrazione', 'portafiltro', 'grinder', 'tamper', 'expreso', 'café espresso'] },
+      { href: 'caffe.html?q=espresso-single', keys: ['espresso', 'shot', 'estrazione', 'portafiltro', 'grinder', 'tamper', 'expreso', 'café espresso'] },
       { href: 'caffe.html?q=americano', keys: ['americano', 'caffe americano', 'caffè americano', 'american coffee', 'café americano'] },
       { href: 'caffe.html?q=smoothies-parametri-di-produzione', keys: ['smoothie', 'smoothies', 'frullato', 'frullati', 'frappe', 'frappè', 'frappé'] },
       // Be careful with generic keywords like "latte"/"milk": they would incorrectly match Chai Latte, Matcha Latte, Iced Latte, etc.
@@ -807,22 +809,23 @@ class BernyBrainAPI {
       { href: 'caffe.html?q=cappuccino', keys: ['cappuccino', 'microfoam', 'schiuma', 'schiuma fine', 'montare latte', 'latte art', 'steam', 'steam wand', 'lancia vapore', 'wand'] },
       { href: 'caffe.html?q=affogato', keys: ['affogato', 'dirty matcha'] },
 
-      { href: 'sweet-treats.html?q=crepe', keys: ['crepe', 'crepes', 'crepe', 'crêpe', 'crêpes', 'crêpe', 'crêpes'] },
-      { href: 'sweet-treats.html?q=waffle', keys: ['waffle'] },
+      { href: 'sweet-treats.html?q=crepe-sauce', keys: ['crepe', 'crepes', 'crepe', 'crêpe', 'crêpes', 'crêpe', 'crêpes'] },
+      { href: 'sweet-treats.html?q=waffles', keys: ['waffle'] },
       { href: 'sweet-treats.html?q=pancake', keys: ['pancake'] },
 
-      { href: 'festive.html?q=churro', keys: ['churro', 'churros'] },
-      { href: 'festive.html?q=panettone', keys: ['panettone', 'pandoro'] },
-      { href: 'festive.html?q=mulled', keys: ['vin brule', 'vinbrule', 'mulled'] },
+      { href: 'festive.html?q=churros', keys: ['churro', 'churros'] },
+      { href: 'festive.html?q=panettone-classico', keys: ['panettone'] },
+      { href: 'festive.html?q=pandoro-classico', keys: ['pandoro'] },
+      { href: 'festive.html?q=mulled-wine-vin-brul', keys: ['vin brule', 'vinbrule', 'mulled'] },
 
-      { href: 'operations.html?q=apertura', keys: ['apertura', 'opening', 'open store'] },
+      { href: 'operations.html?q=ops-opening', keys: ['apertura', 'opening', 'open store'] },
       // NOTE: do NOT map generic "upsell/upselling" here; it must be anchored to a product.
-      { href: 'operations.html?q=servizio', keys: ['servizio', 'service', 'obiezione'] },
-      { href: 'operations.html?q=chiusura', keys: ['chiusura', 'closing', 'close store'] },
-      { href: 'operations.html?q=pulizia', keys: ['pulizia', 'cleaning', 'sanificazione', 'sanitize'] },
+      { href: 'operations.html?q=service-chiusura', keys: ['servizio', 'service', 'obiezione'] },
+      { href: 'operations.html?q=service-chiusura', keys: ['chiusura', 'closing', 'close store'] },
+      { href: 'operations.html?q=schedule-pulizie-giorno-settimana', keys: ['pulizia', 'cleaning', 'sanificazione', 'sanitize'] },
 
-      { href: 'slitti-yoyo.html?q=slitti', keys: ['slitti', 'yoyo', 'yo-yo', 'yo yo'] },
-      { href: 'pastries.html?q=croissant', keys: ['croissant'] },
+      { href: 'slitti-yoyo.html?q=slitti-timeline', keys: ['slitti', 'yoyo', 'yo-yo', 'yo yo'] },
+      { href: 'pastries.html?q=croissants', keys: ['croissant'] },
       { href: 'pastries.html?q=brownie', keys: ['brownie'] },
       { href: 'story-orbit.html?q=story', keys: ['story orbit', 'firenze', 'origine', 'storia'] },
     ];
@@ -837,16 +840,16 @@ class BernyBrainAPI {
     if (isShort || this.isSmallTalk(msgNorm)) {
       const last = this.loadLastRecommendation();
       const options = [
-        { href: 'operations.html?q=apertura', label: { it: 'Apertura', en: 'Opening', es: 'Apertura', fr: 'Ouverture' } },
-        { href: 'sweet-treats.html?q=waffle', label: { it: 'Waffle', en: 'Waffle', es: 'Waffle', fr: 'Waffle' } },
-        { href: 'festive.html?q=churro', label: { it: 'Churros', en: 'Churros', es: 'Churros', fr: 'Churros' } },
-        { href: 'caffe.html?q=espresso', label: { it: 'Espresso', en: 'Espresso', es: 'Espresso', fr: 'Espresso' } },
-        { href: 'gelato-lab.html?q=buontalenti', label: { it: 'Buontalenti', en: 'Buontalenti', es: 'Buontalenti', fr: 'Buontalenti' } },
-        { href: 'slitti-yoyo.html?q=slitti', label: { it: 'Slitti & Yo-Yo', en: 'Slitti & Yo-Yo', es: 'Slitti & Yo-Yo', fr: 'Slitti & Yo-Yo' } },
+        { href: 'operations.html?q=ops-opening', label: { it: 'Apertura', en: 'Opening', es: 'Apertura', fr: 'Ouverture' } },
+        { href: 'sweet-treats.html?q=waffles', label: { it: 'Waffle', en: 'Waffle', es: 'Waffle', fr: 'Waffle' } },
+        { href: 'festive.html?q=churros', label: { it: 'Churros', en: 'Churros', es: 'Churros', fr: 'Churros' } },
+        { href: 'caffe.html?q=espresso-single', label: { it: 'Espresso', en: 'Espresso', es: 'Espresso', fr: 'Espresso' } },
+        { href: 'gelato-lab.html?q=cups', label: { it: 'Gelato Lab', en: 'Gelato Lab', es: 'Gelato Lab', fr: 'Gelato Lab' } },
+        { href: 'slitti-yoyo.html?q=slitti-timeline', label: { it: 'Slitti & Yo-Yo', en: 'Slitti & Yo-Yo', es: 'Slitti & Yo-Yo', fr: 'Slitti & Yo-Yo' } },
       ];
       const pick = this.pickDifferent(options, last?.href);
       const label = pick?.label?.[uiLang] || pick?.label?.it || 'Training';
-      return { href: pick?.href || 'operations.html?q=apertura', reason: isShort ? 'short' : 'smalltalk', label };
+      return { href: pick?.href || 'operations.html?q=ops-opening', reason: isShort ? 'short' : 'smalltalk', label };
     }
 
     return null;
@@ -863,20 +866,21 @@ class BernyBrainAPI {
       { href: 'pastries.html?q=cakes', keywords: ['cakes', 'cake', 'torta', 'torte', 'fetta', 'chocolate carrot walnut'] },
       { href: 'pastries.html?q=brownie', keywords: ['brownie', 'brownies', 'tray'] },
       { href: 'pastries.html?q=loaf', keywords: ['loaf', 'banana loaf'] },
-      { href: 'pastries.html?q=croissant', keywords: ['croissant', 'croissants', 'farcit'] },
-      { href: 'pastries.html?q=scone', keywords: ['scone', 'scones'] },
+      { href: 'pastries.html?q=croissants', keywords: ['croissant', 'croissants', 'farcit'] },
+      { href: 'pastries.html?q=scones', keywords: ['scone', 'scones'] },
       // Gelato
-      { href: 'gelato-lab.html?q=buontalenti', keywords: ['buontalenti'] },
-      { href: 'gelato-lab.html?q=coppa', keywords: ['coppa badiani', 'coppa gelato', 'coppa'] },
-      { href: 'gelato-lab.html?q=gusti', keywords: ['gusti', 'flavors', 'parfums'] },
+      // No dedicated Buontalenti card id exists; keep it inside Gelato Lab entry points.
+      { href: 'gelato-lab.html?q=cups', keywords: ['buontalenti'] },
+      { href: 'gelato-lab.html?q=coppa-gelato', keywords: ['coppa badiani', 'coppa gelato', 'coppa'] },
+      { href: 'gelato-lab.html?q=cups', keywords: ['gusti', 'flavors', 'parfums'] },
       // Coffee
-      { href: 'caffe.html?q=espresso', keywords: ['espresso', 'estrazione', 'portafiltro', 'expreso', 'espresso corto', 'café serré'] },
+      { href: 'caffe.html?q=espresso-single', keywords: ['espresso', 'estrazione', 'portafiltro', 'expreso', 'espresso corto', 'café serré'] },
       { href: 'caffe.html?q=cappuccino', keywords: ['cappuccino', 'microfoam', 'schiuma fine', 'capuchino', 'mousse de lait'] },
       { href: 'caffe.html?q=hot-chocolate', keywords: ['hot chocolate', 'cioccolata calda', 'hot-choc', 'chocolate drink', 'chocolat chaud', 'chocolate caliente'] },
       { href: 'caffe.html?q=americano', keywords: ['americano', 'caffe americano', 'american coffee', 'café americano', 'café allongé'] },
       { href: 'caffe.html?q=smoothies-parametri-di-produzione', keywords: ['smoothie', 'smoothies', 'frullato', 'frullati', 'frappe', 'frappè', 'frappé', 'blender smoothie', 'fruit smoothie'] },
       { href: 'caffe.html?q=chai-latte', keywords: ['chai', 'chai latte', 'té chai', 'chaï latte'] },
-      { href: 'caffe.html?q=macchiato', keywords: ['macchiato', 'espresso macchiato', 'macchiato corto', 'macchiato lungo', 'café manchado', 'café noisette'] },
+      { href: 'caffe.html?q=macchiato-single', keywords: ['macchiato', 'espresso macchiato', 'macchiato corto', 'macchiato lungo', 'café manchado', 'café noisette'] },
       { href: 'caffe.html?q=flat-white', keywords: ['flat white', 'flat-white', 'flat blanco', 'flat blanc'] },
       { href: 'caffe.html?q=mocha', keywords: ['mocha', 'mocaccino', 'caffe mocha', 'caffè mocha', 'moka', 'moka latte'] },
       { href: 'caffe.html?q=tea', keywords: ['tea', 'tè', 'tisana', 'té', 'thé'] },
@@ -890,8 +894,8 @@ class BernyBrainAPI {
       { href: 'caffe.html?q=iced-latte', keywords: ['iced latte', 'latte freddo', 'latte frío', 'latte glacé'] },
       { href: 'caffe.html?q=pistachio-iced-latte', keywords: ['pistachio iced latte', 'latte freddo pistacchio', 'latte pistacchio', 'latte frío pistacho', 'latte pistache'] },
       // Sweet treats
-      { href: 'sweet-treats.html?q=crepe', keywords: ['crepe', 'crêpe', 'crepes', 'crepa', 'crepé', 'crêpes'] },
-      { href: 'sweet-treats.html?q=waffle', keywords: ['waffle', 'waffles', 'gaufre'] },
+      { href: 'sweet-treats.html?q=crepe-sauce', keywords: ['crepe', 'crêpe', 'crepes', 'crepa', 'crepé', 'crêpes'] },
+      { href: 'sweet-treats.html?q=waffles', keywords: ['waffle', 'waffles', 'gaufre'] },
       { href: 'sweet-treats.html?q=pancake', keywords: ['pancake', 'pancakes', 'tortita', 'crêpe épaisse'] },
       { href: 'sweet-treats.html?q=crepe-sauce', keywords: ['crepe sauce', 'crepe con salsa', 'crêpe sauce'] },
       { href: 'sweet-treats.html?q=buontalenti-crepe', keywords: ['buontalenti crepe', 'crepe buontalenti'] },
@@ -906,9 +910,10 @@ class BernyBrainAPI {
       { href: 'sweet-treats.html?q=porzionatura-dosi-quick-ref', keywords: ['porzionatura dolci', 'dosi dolci', 'quick ref dolci'] },
       { href: 'sweet-treats.html?q=chiusura-pulizia-rapida', keywords: ['chiusura dolci', 'pulizia dolci'] },
       // Festive
-      { href: 'festive.html?q=churro', keywords: ['churro', 'churros', 'churro caliente'] },
-      { href: 'festive.html?q=panettone', keywords: ['panettone', 'pandoro', 'panetón', 'panettone classic', 'panettone classique'] },
-      { href: 'festive.html?q=mulled', keywords: ['vin brule', 'mulled', 'vin chaud', 'vino caliente'] },
+      { href: 'festive.html?q=churros', keywords: ['churro', 'churros', 'churro caliente'] },
+      { href: 'festive.html?q=panettone-classico', keywords: ['panettone', 'panetón', 'panettone classic', 'panettone classique'] },
+      { href: 'festive.html?q=pandoro-classico', keywords: ['pandoro'] },
+      { href: 'festive.html?q=mulled-wine-vin-brul', keywords: ['vin brule', 'mulled', 'vin chaud', 'vino caliente'] },
       { href: 'festive.html?q=panettone-classico', keywords: ['panettone classico', 'classic panettone'] },
       { href: 'festive.html?q=panettone-dark-chocolate', keywords: ['panettone dark', 'panettone cioccolato'] },
       { href: 'festive.html?q=pandoro-classico', keywords: ['pandoro', 'pandoro classico'] },
@@ -920,7 +925,7 @@ class BernyBrainAPI {
       { href: 'festive.html?q=pulizia-macchina-fine-giornata', keywords: ['pulizia macchina vin brul', 'cleaning vin brule'] },
       { href: 'festive.html?q=packaging-mini-panettone-delivery', keywords: ['packaging mini panettone', 'delivery panettone'] },
       // Other
-      { href: 'slitti-yoyo.html?q=slitti', keywords: ['slitti', 'yoyo', 'yo-yo'] },
+      { href: 'slitti-yoyo.html?q=slitti-timeline', keywords: ['slitti', 'yoyo', 'yo-yo'] },
       // Gelato Lab products & procedures
       { href: 'gelato-lab.html?q=cups', keywords: ['cups', 'coppette', 'cup'] },
       { href: 'gelato-lab.html?q=cones', keywords: ['cones', 'coni', 'cono'] },
@@ -1012,6 +1017,7 @@ class BernyBrainAPI {
       { name: 'macchiato', aliases: ['macchiato'], href: 'caffe.html?q=macchiato-single', label: '☕ Apri Macchiato' },
       { name: 'flat white', aliases: ['flat white', 'flat-white'], href: 'caffe.html?q=flat-white', label: '☕ Apri Flat White' },
       { name: 'mocha', aliases: ['mocha', 'mocca'], href: 'caffe.html?q=mocha', label: '☕ Apri Mocha' },
+      { name: 'whipped coffee', aliases: ['whipped coffee', 'dalgona', 'caffe montato', 'caffè montato', 'caffè montato', 'cafe fouette', 'café fouetté'], href: 'caffe.html?q=whipped-coffee', label: '☕ Apri Whipped Coffee' },
       { name: 'matcha', aliases: ['matcha', 'tè verde'], href: 'caffe.html?q=matcha-latte', label: '🍵 Apri Matcha Latte' },
       { name: 'affogato', aliases: ['affogato'], href: 'caffe.html?q=affogato', label: '☕ Apri Affogato' },
       
@@ -1021,26 +1027,28 @@ class BernyBrainAPI {
       { name: 'smoothie verde', aliases: ['smoothie verde', 'detox', 'green power', 'spinaci'], href: 'caffe.html?q=smoothie-verde-boost', label: '🍹 Apri Smoothie Verde Boost' },
       
       // Gelato Lab
-      { name: 'buontalenti', aliases: ['buontalenti'], href: 'gelato-lab.html?q=buontalenti', label: '🍦 Apri Buontalenti' },
+      // No dedicated Buontalenti card id exists; route to Gelato Lab entry.
+      { name: 'buontalenti', aliases: ['buontalenti'], href: 'gelato-lab.html?q=cups', label: '🍦 Apri Buontalenti' },
       { name: 'gelato', aliases: ['gelato', 'gusto', 'flavour', 'flavor'], href: 'gelato-lab.html', label: '🍦 Apri Gelato Lab' },
       
       // Sweet Treats
-      { name: 'waffle', aliases: ['waffle', 'waffel'], href: 'sweet-treats.html?q=waffle', label: '🧇 Apri Waffle' },
-      { name: 'crepe', aliases: ['crepe', 'crêpe', 'pancake'], href: 'sweet-treats.html?q=crepe', label: '🧇 Apri Crepe' },
+      { name: 'waffle', aliases: ['waffle', 'waffel'], href: 'sweet-treats.html?q=waffles', label: '🧇 Apri Waffle' },
+      { name: 'crepe', aliases: ['crepe', 'crêpe'], href: 'sweet-treats.html?q=crepe-sauce', label: '🧇 Apri Crepe' },
       { name: 'pancake', aliases: ['pancake'], href: 'sweet-treats.html?q=pancake', label: '🧇 Apri Pancake' },
       
       // Pastries
       { name: 'cakes', aliases: ['cake', 'torta', 'torte', 'fetta'], href: 'pastries.html?q=cakes', label: '🎂 Apri Cakes' },
       
       // Festive
-      { name: 'churro', aliases: ['churro', 'churros'], href: 'festive.html?q=churro', label: '🎄 Apri Churro' },
-      { name: 'panettone', aliases: ['panettone', 'pandoro'], href: 'festive.html?q=panettone', label: '🎄 Apri Panettone' },
+      { name: 'churro', aliases: ['churro', 'churros'], href: 'festive.html?q=churros', label: '🎄 Apri Churros' },
+      { name: 'panettone', aliases: ['panettone'], href: 'festive.html?q=panettone-classico', label: '🎄 Apri Panettone' },
+      { name: 'pandoro', aliases: ['pandoro'], href: 'festive.html?q=pandoro-classico', label: '🎄 Apri Pandoro' },
       
       // Story Orbit
       { name: 'story', aliases: ['story', 'storia', 'badiani', 'firenze', 'origine'], href: 'story-orbit.html?q=story', label: '🌟 Apri Story Orbit' },
       
       // Slitti & Yo-Yo
-      { name: 'slitti', aliases: ['slitti', 'cioccolato', 'yoyo', 'yo-yo'], href: 'slitti-yoyo.html', label: '🍫 Apri Slitti & Yo-Yo' }
+      { name: 'slitti', aliases: ['slitti', 'cioccolato', 'yoyo', 'yo-yo'], href: 'slitti-yoyo.html?q=slitti-timeline', label: '🍫 Apri Slitti & Yo-Yo' }
     ];
   }
 
@@ -1058,6 +1066,13 @@ class BernyBrainAPI {
       return !!(n && hay && hay.includes(n));
     };
 
+    // If Berny is clearly talking about Whipped Coffee, don't let the word "espresso"
+    // inside the explanation hijack the CTA (unless the user explicitly asked espresso).
+    const userAskedEspresso = /\bespresso\b/i.test(msgA);
+    const userAskedWhippedCoffee = /\bwhipped\s+coffee\b|\bdalgona\b|\bcaff[eè]\s+montat/i.test(msgA);
+    const responseIsWhippedCoffee = /\bwhipped\s+coffee\b|\bdalgona\b|\bcaff[eè]\s+montat/i.test(msgB);
+    const isWhippedCoffeeContext = (userAskedWhippedCoffee || responseIsWhippedCoffee);
+
     // I 3 smoothies disponibili (per scelta random se non specifico)
     const smoothiesOptions = [
       { href: 'caffe.html?q=smoothie-giallo-passion', label: '🍹 Apri Smoothie Giallo Passion' },
@@ -1068,7 +1083,8 @@ class BernyBrainAPI {
     // Tutti i candidati (da inferRecommendationFromContext)
     const topicCandidates = [
       { href: 'pastries.html?q=cakes', keys: ['cakes', 'cake', 'torta', 'torte', 'fetta', 'slice'], label: '📖 Apri scheda Cakes' },
-      { href: 'gelato-lab.html?q=buontalenti', keys: ['buontalenti'], label: '🍦 Apri scheda Buontalenti' },
+      { href: 'gelato-lab.html?q=cups', keys: ['buontalenti'], label: '🍦 Apri scheda Buontalenti' },
+      { href: 'caffe.html?q=whipped-coffee', keys: ['whipped coffee', 'dalgona', 'caffe montato', 'caffè montato'], label: '☕ Apri Whipped Coffee' },
       // Per smoothies: suggerisci sia i parametri che UNO dei 3 smoothies specifici
       { 
         href: 'caffe.html?q=smoothies-parametri-di-produzione', 
@@ -1077,8 +1093,8 @@ class BernyBrainAPI {
         relatedLink: smoothiesOptions[Math.floor(Math.random() * smoothiesOptions.length)] // Scegli uno random
       },
       { href: 'caffe.html', keys: ['caffe', 'caffè', 'espresso', 'cappuccino', 'bar', 'bevanda'], label: '☕ Apri scheda Bar & Drinks' },
-      { href: 'sweet-treats.html?q=waffle', keys: ['waffle', 'waffel', 'crepe', 'crêpe', 'pancake'], label: '🧇 Apri scheda Sweet Treats' },
-      { href: 'festive.html?q=churro', keys: ['churro', 'churros', 'panettone', 'natale', 'capodanno'], label: '🎄 Apri scheda Festive' },
+      { href: 'sweet-treats.html?q=waffles', keys: ['waffle', 'waffel', 'crepe', 'crêpe', 'pancake'], label: '🧇 Apri scheda Sweet Treats' },
+      { href: 'festive.html?q=churros', keys: ['churro', 'churros', 'panettone', 'pandoro', 'natale', 'capodanno'], label: '🎄 Apri scheda Festive' },
       { href: 'story-orbit.html?q=story', keys: ['story', 'storia', 'badiani', 'firenze', 'origine', 'tradizione'], label: '🌟 Apri Story Orbit' },
       { href: 'slitti-yoyo.html', keys: ['slitti', 'yoyo', 'yo-yo', 'cioccolato'], label: '🍫 Apri scheda Slitti & Yo-Yo' },
       { href: 'gelato-lab.html', keys: ['gelato', 'gusto', 'flavour', 'flavor', 'ricetta'], label: '🍦 Apri scheda Gelato Lab' },
@@ -1088,6 +1104,9 @@ class BernyBrainAPI {
     const catalog = this.getProductCatalog();
     catalog.forEach((product) => {
       if (seenHrefs.has(product.href)) return; // Evita duplicati
+
+      // Avoid suggesting Espresso when the actual topic is Whipped Coffee (unless user asked espresso).
+      if (isWhippedCoffeeContext && !userAskedEspresso && product.name === 'espresso') return;
       
       // Controlla tutti gli alias del prodotto
       for (const alias of product.aliases) {
@@ -1106,6 +1125,12 @@ class BernyBrainAPI {
     // Step 2: Verifica quali categorie generiche sono rilevanti (solo se non già aggiunte)
     topicCandidates.forEach((cand) => {
       if (seenHrefs.has(cand.href)) return; // Evita duplicati
+
+      // If we already have a specific Bar & Drinks card (caffe.html?q=...), don't add the generic page.
+      if (cand.href === 'caffe.html') {
+        const alreadyHasSpecificCaffe = results.some((r) => String(r?.url || '').startsWith('caffe.html?q='));
+        if (alreadyHasSpecificCaffe) return;
+      }
       
       for (const key of cand.keys) {
         if (hasIn(msgA, key) || hasIn(msgB, key)) {
@@ -1154,17 +1179,17 @@ class BernyBrainAPI {
     const topicCandidates = [
       // Cakes / torta: route to Pastry Lab (avoid generic "servizio" matches hijacking the link).
       { href: 'pastries.html?q=cakes', keys: ['cakes', 'cake', 'torta', 'torte', 'fetta', 'slice'] },
-      { href: 'gelato-lab.html?q=buontalenti', keys: ['buontalenti'] },
+      { href: 'gelato-lab.html?q=cups', keys: ['buontalenti'] },
       { href: 'gelato-lab.html?q=coppa-gelato', keys: ['coppa badiani', 'coppa gelato', 'coppa'] },
-      { href: 'gelato-lab.html?q=coni', keys: ['cono', 'coni', 'cone'] },
-      { href: 'gelato-lab.html?q=gusti', keys: ['gusti', 'flavour', 'flavors', 'parfums', 'sabores'] },
-      { href: 'gelato-lab.html?q=vetrina', keys: ['vetrina', 'display', 'vitrine'] },
+      { href: 'gelato-lab.html?q=cones', keys: ['cono', 'coni', 'cone'] },
+      { href: 'gelato-lab.html?q=cups', keys: ['gusti', 'flavour', 'flavors', 'parfums', 'sabores'] },
+      { href: 'gelato-lab.html?q=gelato-setup', keys: ['vetrina', 'display', 'vitrine'] },
 
-      { href: 'caffe.html?q=espresso', keys: ['espresso', 'shot', 'estrazione', 'portafiltro', 'grinder', 'tamper'] },
+      { href: 'caffe.html?q=espresso-single', keys: ['espresso', 'shot', 'estrazione', 'portafiltro', 'grinder', 'tamper'] },
       { href: 'caffe.html?q=americano', keys: ['americano', 'caffe americano', 'caffè americano', 'american coffee'] },
       { href: 'caffe.html?q=smoothies-parametri-di-produzione', keys: ['smoothie', 'smoothies', 'frullato', 'frullati', 'frappe', 'frappè', 'frappé'] },
       { href: 'caffe.html?q=hot-chocolate', keys: ['hot chocolate', 'hot-choc', 'cioccolata calda', 'chocolate drink', 'chocolat chaud', 'chocolate caliente'] },
-      { href: 'caffe.html?q=macchiato', keys: ['macchiato', 'espresso macchiato', 'macchiato corto', 'macchiato lungo'] },
+      { href: 'caffe.html?q=macchiato-single', keys: ['macchiato', 'espresso macchiato', 'macchiato corto', 'macchiato lungo'] },
       { href: 'caffe.html?q=flat-white', keys: ['flat white', 'flat-white'] },
       { href: 'caffe.html?q=mocha', keys: ['mocha', 'mocaccino', 'caffe mocha', 'caffè mocha'] },
       { href: 'caffe.html?q=tea', keys: ['tea', 'tè', 'tisana'] },
@@ -1182,8 +1207,8 @@ class BernyBrainAPI {
       { href: 'caffe.html?q=cappuccino', keys: ['cappuccino', 'microfoam', 'schiuma', 'schiuma fine', 'montare latte', 'latte art', 'steam', 'steam wand', 'lancia vapore', 'wand', 'capuchino'] },
       { href: 'caffe.html?q=affogato', keys: ['affogato', 'dirty matcha'] },
 
-      { href: 'sweet-treats.html?q=crepe', keys: ['crepe', 'crepes', 'crêpe', 'crêpes', 'crêpe', 'crêpes'] },
-      { href: 'sweet-treats.html?q=waffle', keys: ['waffle', 'gaufre'] },
+      { href: 'sweet-treats.html?q=crepe-sauce', keys: ['crepe', 'crepes', 'crêpe', 'crêpes', 'crêpe', 'crêpes'] },
+      { href: 'sweet-treats.html?q=waffles', keys: ['waffle', 'gaufre'] },
       { href: 'sweet-treats.html?q=pancake', keys: ['pancake', 'tortita'] },
       { href: 'sweet-treats.html?q=crepe-sauce', keys: ['crepe sauce', 'crepe con salsa', 'crêpe sauce'] },
       { href: 'sweet-treats.html?q=buontalenti-crepe', keys: ['buontalenti crepe', 'crepe buontalenti'] },
@@ -1198,9 +1223,10 @@ class BernyBrainAPI {
       { href: 'sweet-treats.html?q=porzionatura-dosi-quick-ref', keys: ['porzionatura dolci', 'dosi dolci', 'quick ref dolci'] },
       { href: 'sweet-treats.html?q=chiusura-pulizia-rapida', keys: ['chiusura dolci', 'pulizia dolci'] },
 
-      { href: 'festive.html?q=churro', keys: ['churro', 'churros'] },
-      { href: 'festive.html?q=panettone', keys: ['panettone', 'pandoro'] },
-      { href: 'festive.html?q=mulled', keys: ['vin brule', 'vinbrule', 'mulled', 'vin chaud', 'vino caliente'] },
+      { href: 'festive.html?q=churros', keys: ['churro', 'churros'] },
+      { href: 'festive.html?q=panettone-classico', keys: ['panettone'] },
+      { href: 'festive.html?q=pandoro-classico', keys: ['pandoro'] },
+      { href: 'festive.html?q=mulled-wine-vin-brul', keys: ['vin brule', 'vinbrule', 'mulled', 'vin chaud', 'vino caliente'] },
       { href: 'festive.html?q=panettone-classico', keys: ['panettone classico', 'classic panettone'] },
       { href: 'festive.html?q=panettone-dark-chocolate', keys: ['panettone dark', 'panettone cioccolato'] },
       { href: 'festive.html?q=pandoro-classico', keys: ['pandoro', 'pandoro classico'] },
@@ -1212,11 +1238,11 @@ class BernyBrainAPI {
       { href: 'festive.html?q=pulizia-macchina-fine-giornata', keys: ['pulizia macchina vin brul', 'cleaning vin brule'] },
       { href: 'festive.html?q=packaging-mini-panettone-delivery', keys: ['packaging mini panettone', 'delivery panettone'] },
 
-      { href: 'operations.html?q=apertura', keys: ['apertura', 'opening', 'open store'] },
+      { href: 'operations.html?q=ops-opening', keys: ['apertura', 'opening', 'open store'] },
       // NOTE: do NOT map generic "upsell/upselling" here; it must be anchored to a product.
-      { href: 'operations.html?q=servizio', keys: ['servizio', 'service', 'obiezione'] },
-      { href: 'operations.html?q=chiusura', keys: ['chiusura', 'closing', 'close store'] },
-      { href: 'operations.html?q=pulizia', keys: ['pulizia', 'cleaning', 'sanificazione', 'sanitize'] },
+      { href: 'operations.html?q=service-chiusura', keys: ['servizio', 'service', 'obiezione'] },
+      { href: 'operations.html?q=service-chiusura', keys: ['chiusura', 'closing', 'close store'] },
+      { href: 'operations.html?q=schedule-pulizie-giorno-settimana', keys: ['pulizia', 'cleaning', 'sanificazione', 'sanitize'] },
 
       { href: 'operations.html?q=ops-opening', keys: ['ops opening', 'apertura negozio', 'apertura operativa'] },
       { href: 'operations.html?q=ops-daily-setup', keys: ['daily setup', 'setup giornaliero', 'set up giornaliero'] },
@@ -1230,8 +1256,8 @@ class BernyBrainAPI {
       { href: 'operations.html?q=take-away-autonomia-termica', keys: ['autonomia termica', 'take away termico'] },
       { href: 'operations.html?q=schedule-pulizie-giorno-settimana', keys: ['schedule pulizie', 'pulizie settimana'] },
 
-      { href: 'slitti-yoyo.html?q=slitti', keys: ['slitti', 'yoyo', 'yo-yo', 'yo yo'] },
-      { href: 'pastries.html?q=croissant', keys: ['croissant'] },
+      { href: 'slitti-yoyo.html?q=slitti-timeline', keys: ['slitti', 'yoyo', 'yo-yo', 'yo yo'] },
+      { href: 'pastries.html?q=croissants', keys: ['croissant'] },
       { href: 'pastries.html?q=brownie', keys: ['brownie'] },
       { href: 'pastries.html?q=loaf', keys: ['loaf', 'banana loaf'] },
       { href: 'pastries.html?q=scones', keys: ['scones', 'scone'] },
