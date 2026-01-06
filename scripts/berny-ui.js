@@ -287,7 +287,8 @@
     stripControlTagsForStreaming(text) {
       let t = String(text || '');
       // Remove fully-formed tags.
-      t = t.replace(/\[\[(?:LINKS|LINK|CMD):[\s\S]*?\]\]/g, '');
+      // Use a closing matcher that won't stop early on "]]]" (LINKS tags include a JSON array that ends with "]").
+      t = t.replace(/\[\[(?:LINKS|LINK|CMD):[\s\S]*?\]\](?!\])/g, '');
       t = t.replace(/\[\[NOLINK\]\]/g, '');
       // If an opening tag started but didn't close yet, strip it to the end.
       t = t.replace(/\[\[(?:LINKS|LINK|CMD):[\s\S]*$/g, '');
@@ -589,7 +590,9 @@
 
       // Controlla prima per link multipli [[LINKS:...]]
       // There can be more than one tag (model-provided + our injected). Try all and keep the first parsable one.
-      const linksMatches = Array.from(cleanText.matchAll(/\[\[LINKS:([\s\S]*?)\]\]/g));
+      // IMPORTANT: Our LINKS tag often ends with "]]]" (array close "]" + tag close "]]"),
+      // so match the closing "]]" that is NOT followed by another "]".
+      const linksMatches = Array.from(cleanText.matchAll(/\[\[LINKS:([\s\S]*?)\]\](?!\])/g));
       if (linksMatches.length) {
         for (const m of linksMatches) {
           const rawPayload = (m[1] || '').trim();
@@ -619,7 +622,7 @@
         }
 
         // Remove ALL LINKS tags from visible text (even if parsing failed).
-        cleanText = cleanText.replace(/\[\[LINKS:[\s\S]*?\]\]/g, '').trim();
+        cleanText = cleanText.replace(/\[\[LINKS:[\s\S]*?\]\](?!\])/g, '').trim();
         if (!links) {
           console.warn('⚠️ LINKS tag ignorato per parse fallita');
         }

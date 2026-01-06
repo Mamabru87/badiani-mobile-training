@@ -1279,7 +1279,8 @@ class BernyBrainAPI {
     // Remove any model-provided link tags; we will attach a coherent one when we have a recommendation.
     // Use [\s\S] so we also match tags that contain newlines.
     out = out.replace(/\[\[LINK:[\s\S]*?\]\]/g, '').trim();
-    out = out.replace(/\[\[LINKS:[\s\S]*?\]\]/g, '').trim();
+    // LINKS tags can end with "]]]"; match the closing "]]" that is NOT followed by another "]".
+    out = out.replace(/\[\[LINKS:[\s\S]*?\]\](?!\])/g, '').trim();
 
     if (reco) {
       // Se reco è un array di link multipli
