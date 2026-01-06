@@ -51,6 +51,9 @@
       this.isTyping = false;
       this.currentStreamingBubble = null;
       this.currentStreamingText = '';
+      this.currentStreamingTextEl = null;
+      this.currentStreamingActionsEl = null;
+      this.currentStreamingDotsEl = null;
       this.messageCompleted = false; // Flag per prevenire doppi puntini
 
       // Track last user message so fallback link inference can use real intent.
@@ -233,24 +236,48 @@
 
         const bubble = document.createElement('div');
         bubble.className = 'message-bubble';
-        bubble.textContent = ''; // Inizialmente vuoto
+        // Keep a stable structure to avoid the “refresh” effect.
+        const textEl = document.createElement('div');
+        textEl.className = 'message-text';
+
+        const actionsEl = document.createElement('div');
+        actionsEl.className = 'message-actions';
+
+        const dots = document.createElement('span');
+        dots.className = 'typing-dots';
+        dots.innerHTML = '<span></span><span></span><span></span>';
+
+        bubble.appendChild(textEl);
+        bubble.appendChild(actionsEl);
+        bubble.appendChild(dots);
 
         wrapper.appendChild(bubble);
         this.messagesArea.appendChild(wrapper);
 
         this.currentStreamingBubble = bubble;
         this.currentStreamingText = '';
-        
-        // Mostra puntini di caricamento mentre accumula il testo
-        this.showTypingIndicatorInBubble(bubble);
+        this.currentStreamingTextEl = textEl;
+        this.currentStreamingActionsEl = actionsEl;
+        this.currentStreamingDotsEl = dots;
       }
 
       // Accumula il testo e mostra progressivamente per effetto "typing"
       this.currentStreamingText += c;
-      if (this.currentStreamingBubble) {
-        this.currentStreamingBubble.textContent = this.currentStreamingText;
+      if (this.currentStreamingTextEl) {
+        this.currentStreamingTextEl.textContent = this.stripControlTagsForStreaming(this.currentStreamingText);
       }
       this.scrollToBottom(false);
+    }
+
+    // During streaming, never show raw control tags (they look like “links that disappear”).
+    stripControlTagsForStreaming(text) {
+      let t = String(text || '');
+      // Remove fully-formed tags.
+      t = t.replace(/\[\[(?:LINKS|LINK|CMD):[\s\S]*?\]\]/g, '');
+      t = t.replace(/\[\[NOLINK\]\]/g, '');
+      // If an opening tag started but didn't close yet, strip it to the end.
+      t = t.replace(/\[\[(?:LINKS|LINK|CMD):[\s\S]*$/g, '');
+      return t;
     }
 
     // Helper: mostra puntini nella bolla per indicare che sta elaborando
@@ -303,12 +330,13 @@
 
         const cleanText = cleanForDisplay(rawClean);
 
-        // Svuota la bolla e riconstruisci con testo formattato + link
-        this.currentStreamingBubble.innerHTML = '';
-        
-        // Applica markdown al testo principale
+        const bubble = this.currentStreamingBubble;
+        const textEl = this.currentStreamingTextEl || bubble.querySelector('.message-text');
+        const actionsEl = this.currentStreamingActionsEl || bubble.querySelector('.message-actions');
+
+        // Applica markdown al testo principale (without tearing down the bubble)
         const parsedHtml = this.parseMarkdown(cleanText);
-        this.currentStreamingBubble.innerHTML = parsedHtml;
+        if (textEl) textEl.innerHTML = parsedHtml;
 
         // Comandi speciali
         this.detectAndRunCommand(finalText);
@@ -319,21 +347,25 @@
             // Link multipli
             console.log('🎨 Creating multiple links:', links);
             links.forEach((linkObj) => {
-              if (linkObj && linkObj.url) {
+              const targetUrl = linkObj && (linkObj.url || linkObj.href);
+              if (targetUrl) {
                 const label = linkObj.label || tr('assistant.openCard', null, '📖 Apri Scheda Correlata');
-                console.log('➕ Adding link:', { url: linkObj.url, label });
-                this.createLinkButton(linkObj.url, this.currentStreamingBubble, label);
+                console.log('➕ Adding link:', { url: targetUrl, label });
+                this.createLinkButton(targetUrl, actionsEl || bubble, label);
               }
             });
           } else if (link) {
             // Link singolo
-            this.createLinkButton(link, this.currentStreamingBubble);
+            this.createLinkButton(link, actionsEl || bubble);
           } else {
             // Inferenza link
             const inferred = this.inferLinkFromContext(cleanText);
-            if (inferred) this.createLinkButton(inferred, this.currentStreamingBubble);
+            if (inferred) this.createLinkButton(inferred, actionsEl || bubble);
           }
         }
+
+        // Remove typing dots once final content is rendered.
+        try { this.currentStreamingDotsEl?.remove?.(); } catch {}
 
         try {
           this.currentStreamingBubble
@@ -343,6 +375,9 @@
 
         this.currentStreamingBubble = null;
         this.currentStreamingText = '';
+        this.currentStreamingTextEl = null;
+        this.currentStreamingActionsEl = null;
+        this.currentStreamingDotsEl = null;
         this.messageCompleted = true; // Marca il messaggio come completato
         this.playSynthSound('received');
         this.scrollToBottom(true);
@@ -449,7 +484,8 @@
       btn.style.fontWeight = '600'; // Bold via style instead of tag
       btn.style.boxShadow = '0 4px 10px rgba(236, 65, 140, 0.3)'; // Soft shadow
       
-      container.appendChild(document.createElement('br'));
+      const isActions = !!(container && container.classList && container.classList.contains('message-actions'));
+      if (!isActions) container.appendChild(document.createElement('br'));
       container.appendChild(btn);
     }
 
@@ -497,9 +533,10 @@
       // Se ci sono link multipli, creali tutti
       if (!suppressLink && links && Array.isArray(links) && links.length > 0) {
         links.forEach((linkObj) => {
-          if (linkObj && linkObj.url) {
+          const targetUrl = linkObj && (linkObj.url || linkObj.href);
+          if (targetUrl) {
             const label = linkObj.label || tr('assistant.openCard', null, '📖 Apri Scheda Correlata');
-            this.createLinkButton(linkObj.url, container, label);
+            this.createLinkButton(targetUrl, container, label);
           }
         });
       } else if (!suppressLink && link) {
@@ -525,23 +562,42 @@
         cleanText = cleanText.replace('[[NOLINK]]', '').trim();
       }
 
-      // Controlla prima per link multipli [[LINKS:[...]]], robust anche con virgole e spazi
-      const multiMatch = cleanText.match(/\[\[LINKS:([\s\S]*?)\]\]/);
-      if (multiMatch) {
-        const rawPayload = (multiMatch[1] || '').trim();
-        try {
-          const normalized = rawPayload.replace(/\s+/g, ' ');
-          const jsonStr = normalized.startsWith('[') ? normalized : `[${normalized}]`;
-          console.log('🔗 Parsing LINKS JSON:', jsonStr);
-          links = JSON.parse(jsonStr);
-          console.log('✅ Parsed links:', links);
-        } catch (e) {
-          // Non bloccare il rendering: se il JSON è sporco, ignora i link e prosegui
-          links = null;
+      // Controlla prima per link multipli [[LINKS:...]]
+      // There can be more than one tag (model-provided + our injected). Try all and keep the first parsable one.
+      const linksMatches = Array.from(cleanText.matchAll(/\[\[LINKS:([\s\S]*?)\]\]/g));
+      if (linksMatches.length) {
+        for (const m of linksMatches) {
+          const rawPayload = (m[1] || '').trim();
+          const normalized = rawPayload.replace(/\s+/g, ' ').trim();
+          const candidate = normalized.startsWith('[') ? normalized : `[${normalized}]`;
+          try {
+            console.log('🔗 Parsing LINKS JSON:', candidate);
+            links = JSON.parse(candidate);
+            console.log('✅ Parsed links:', links);
+            break;
+          } catch (e1) {
+            // Salvage attempt: extract the first JSON array in the payload.
+            try {
+              const start = candidate.indexOf('[');
+              const end = candidate.lastIndexOf(']');
+              if (start >= 0 && end > start) {
+                const sliced = candidate.slice(start, end + 1);
+                console.log('🧩 Salvage LINKS JSON:', sliced);
+                links = JSON.parse(sliced);
+                console.log('✅ Parsed links (salvaged):', links);
+                break;
+              }
+            } catch (e2) {
+              // keep trying next tag
+            }
+          }
+        }
+
+        // Remove ALL LINKS tags from visible text (even if parsing failed).
+        cleanText = cleanText.replace(/\[\[LINKS:[\s\S]*?\]\]/g, '').trim();
+        if (!links) {
           console.warn('⚠️ LINKS tag ignorato per parse fallita');
         }
-        // Rimuovi SEMPRE il tag dal testo per non troncare le frasi
-        cleanText = cleanText.replace(multiMatch[0], '').trim();
       }
 
       // Se non ci sono link multipli, controlla per link singolo
@@ -554,13 +610,11 @@
         }
       }
 
-      // Fallback: rimuovi eventuali tag residui malformati e parentesi vaganti
+      // Fallback: rimuovi eventuali tag residui malformati (ma NON distruggere parentesi quadre normali nel testo).
       cleanText = cleanText
-        .replace(/\[\[LINKS:[^\]]*\]\]/g, '')
-        .replace(/\[\[LINK:[^\]]*\]\]/g, '')
-        .replace(/\s*\]\s*/g, ' ') // parentesi quadre residue
-        .replace(/\s*\[\s*/g, ' ') // parentesi quadre residue
-        .replace(/\s{2,}/g, ' ')    // spazi doppi
+        .replace(/\[\[(?:LINKS|LINK|CMD):[\s\S]*?\]\]/g, '')
+        .replace(/\[\[NOLINK\]\]/g, '')
+        .replace(/\s{2,}/g, ' ')
         .trim();
 
       const cmdMatch = cleanText.match(/\[\[CMD:(.*?)\]\]/);

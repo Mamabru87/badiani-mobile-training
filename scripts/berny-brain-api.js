@@ -212,7 +212,8 @@ class BernyBrainAPI {
     if (s.includes('[[NOLINK]]')) return s;
 
     // Keep already-short answers as-is.
-    if (s.length <= 650) return s;
+    // 650 was too aggressive and caused awkward cut-offs (e.g. ending with "con.").
+    if (s.length <= 1400) return s;
 
     const lang = this.getUiLang();
     const cta = {
@@ -223,7 +224,7 @@ class BernyBrainAPI {
     }[lang] || 'Apri la scheda per i dettagli completi.';
 
     // Try to cut on a sentence boundary within a target window.
-    const TARGET = 520;
+    const TARGET = 1100;
     const windowText = s.slice(0, Math.min(TARGET, s.length));
     const lastPunct = Math.max(
       windowText.lastIndexOf('.'),
@@ -241,6 +242,10 @@ class BernyBrainAPI {
       head = (lastSpace >= 80 ? windowText.slice(0, lastSpace) : windowText).trim();
       if (head && !/[.!?…][)\]}'"”»]*$/.test(head)) head = `${head}.`;
     }
+
+    // Avoid ending on connectors/prepositions (common source of “frasi troncate”).
+    head = head.replace(/\b(con|e|o|ma|che|quindi|perche|perché|cosi|così|oppure|senza|per|di|da|del|della|dei|degli|delle|al|allo|alla|ai|agli|alle)\.?$/i, '').trim();
+    if (head && !/[.!?…][)\]}'"”»]*$/.test(head)) head = `${head}.`;
 
     // Ensure CTA punctuation.
     let out = `${head} ${cta}`.replace(/\s{2,}/g, ' ').trim();
@@ -1245,8 +1250,9 @@ class BernyBrainAPI {
     }
 
     // Remove any model-provided link tags; we will attach a coherent one when we have a recommendation.
-    out = out.replace(/\[\[LINK:.*?\]\]/g, '').trim();
-    out = out.replace(/\[\[LINKS:\[.*?\]\]\]/g, '').trim();
+    // Use [\s\S] so we also match tags that contain newlines.
+    out = out.replace(/\[\[LINK:[\s\S]*?\]\]/g, '').trim();
+    out = out.replace(/\[\[LINKS:[\s\S]*?\]\]/g, '').trim();
 
     if (reco) {
       // Se reco è un array di link multipli
