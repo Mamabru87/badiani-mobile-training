@@ -51,6 +51,7 @@
       this.isTyping = false;
       this.currentStreamingBubble = null;
       this.currentStreamingText = '';
+      this.messageCompleted = false; // Flag per prevenire doppi puntini
 
       // Track last user message so fallback link inference can use real intent.
       this.lastUserMessage = '';
@@ -132,6 +133,9 @@
       const message = sanitize(this.chatInput.value);
       if (!message) return;
 
+      // Reset the completion flag for the new message
+      this.messageCompleted = false;
+
       // Keep the latest user intent for coherent link inference.
       this.lastUserMessage = message;
 
@@ -211,6 +215,12 @@
     handleStreamChunk(chunk) {
       const c = String(chunk ?? '');
       if (!c) return;
+
+      // Se il messaggio è già stato completato, ignora chunk aggiuntivi
+      if (this.messageCompleted) {
+        console.log('ℹ️ Chunk ricevuto dopo completamento, ignorato');
+        return;
+      }
 
       // Se non c'è ancora una bolla, crea il contenitore per i puntini di caricamento
       if (!this.currentStreamingBubble) {
@@ -298,6 +308,7 @@
 
         this.currentStreamingBubble = null;
         this.currentStreamingText = '';
+        this.messageCompleted = true; // Marca il messaggio come completato
         this.playSynthSound('received');
         this.scrollToBottom(true);
       } else {

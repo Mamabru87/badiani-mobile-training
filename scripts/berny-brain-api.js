@@ -724,6 +724,49 @@ class BernyBrainAPI {
     return null;
   }
 
+  // Mappa di tutti i prodotti specifici disponibili
+  // Formato: { nome: '', alias: [], href: '', label: '' }
+  getProductCatalog() {
+    return [
+      // Bar & Drinks - Caffetteria
+      { name: 'espresso', aliases: ['espresso'], href: 'caffe.html?q=espresso-single', label: '☕ Apri Espresso Single' },
+      { name: 'americano', aliases: ['americano'], href: 'caffe.html?q=americano', label: '☕ Apri Americano' },
+      { name: 'cappuccino', aliases: ['cappuccino'], href: 'caffe.html?q=cappuccino', label: '☕ Apri Cappuccino' },
+      { name: 'macchiato', aliases: ['macchiato'], href: 'caffe.html?q=macchiato-single', label: '☕ Apri Macchiato' },
+      { name: 'flat white', aliases: ['flat white', 'flat-white'], href: 'caffe.html?q=flat-white', label: '☕ Apri Flat White' },
+      { name: 'mocha', aliases: ['mocha', 'mocca'], href: 'caffe.html?q=mocha', label: '☕ Apri Mocha' },
+      { name: 'matcha', aliases: ['matcha', 'tè verde'], href: 'caffe.html?q=matcha-latte', label: '🍵 Apri Matcha Latte' },
+      { name: 'affogato', aliases: ['affogato'], href: 'caffe.html?q=affogato', label: '☕ Apri Affogato' },
+      
+      // Bar & Drinks - Smoothies
+      { name: 'smoothie giallo', aliases: ['smoothie giallo', 'tropical', 'passion', 'mango'], href: 'caffe.html?q=smoothie-giallo-passion', label: '🍹 Apri Smoothie Giallo Passion' },
+      { name: 'smoothie rosso', aliases: ['smoothie rosso', 'antioxidant', 'berry', 'frutti di bosco'], href: 'caffe.html?q=smoothie-rosso-berry', label: '🍹 Apri Smoothie Rosso Berry' },
+      { name: 'smoothie verde', aliases: ['smoothie verde', 'detox', 'green power', 'spinaci'], href: 'caffe.html?q=smoothie-verde-boost', label: '🍹 Apri Smoothie Verde Boost' },
+      
+      // Gelato Lab
+      { name: 'buontalenti', aliases: ['buontalenti'], href: 'gelato-lab.html?q=buontalenti', label: '🍦 Apri Buontalenti' },
+      { name: 'gelato', aliases: ['gelato', 'gusto', 'flavour', 'flavor'], href: 'gelato-lab.html', label: '🍦 Apri Gelato Lab' },
+      
+      // Sweet Treats
+      { name: 'waffle', aliases: ['waffle', 'waffel'], href: 'sweet-treats.html?q=waffle', label: '🧇 Apri Waffle' },
+      { name: 'crepe', aliases: ['crepe', 'crêpe', 'pancake'], href: 'sweet-treats.html?q=crepe', label: '🧇 Apri Crepe' },
+      { name: 'pancake', aliases: ['pancake'], href: 'sweet-treats.html?q=pancake', label: '🧇 Apri Pancake' },
+      
+      // Pastries
+      { name: 'cakes', aliases: ['cake', 'torta', 'torte', 'fetta'], href: 'pastries.html?q=cakes', label: '🎂 Apri Cakes' },
+      
+      // Festive
+      { name: 'churro', aliases: ['churro', 'churros'], href: 'festive.html?q=churro', label: '🎄 Apri Churro' },
+      { name: 'panettone', aliases: ['panettone', 'pandoro'], href: 'festive.html?q=panettone', label: '🎄 Apri Panettone' },
+      
+      // Story Orbit
+      { name: 'story', aliases: ['story', 'storia', 'badiani', 'firenze', 'origine'], href: 'story-orbit.html?q=story', label: '🌟 Apri Story Orbit' },
+      
+      // Slitti & Yo-Yo
+      { name: 'slitti', aliases: ['slitti', 'cioccolato', 'yoyo', 'yo-yo'], href: 'slitti-yoyo.html', label: '🍫 Apri Slitti & Yo-Yo' }
+    ];
+  }
+
   // Nuova funzione: cerca TUTTI i link rilevanti per il messaggio dell'utente
   // Ritorna un array di link con label
   inferMultipleRecommendations(userMessage, assistantMessage = '') {
@@ -738,7 +781,7 @@ class BernyBrainAPI {
       return !!(n && hay && hay.includes(n));
     };
 
-    // I 3 smoothies disponibili
+    // I 3 smoothies disponibili (per scelta random se non specifico)
     const smoothiesOptions = [
       { href: 'caffe.html?q=smoothie-giallo-passion', label: '🍹 Apri Smoothie Giallo Passion' },
       { href: 'caffe.html?q=smoothie-rosso-berry', label: '🍹 Apri Smoothie Rosso Berry' },
@@ -764,7 +807,7 @@ class BernyBrainAPI {
       { href: 'gelato-lab.html', keys: ['gelato', 'gusto', 'flavour', 'flavor', 'ricetta'], label: '🍦 Apri scheda Gelato Lab' },
     ];
 
-    // Verifica quali link sono rilevanti
+    // Step 1: Verifica quali categorie sono rilevanti
     topicCandidates.forEach((cand) => {
       if (seenHrefs.has(cand.href)) return; // Evita duplicati
       
@@ -784,6 +827,25 @@ class BernyBrainAPI {
             });
             seenHrefs.add(cand.relatedLink.href);
           }
+          break;
+        }
+      }
+    });
+
+    // Step 2: Cerca prodotti SPECIFICI menzionati nel messaggio di Berny
+    const catalog = this.getProductCatalog();
+    catalog.forEach((product) => {
+      if (seenHrefs.has(product.href)) return; // Evita duplicati
+      
+      // Controlla tutti gli alias del prodotto
+      for (const alias of product.aliases) {
+        if (hasIn(msgB, alias)) { // Cerca nel messaggio di Berny (assistantMessage)
+          results.push({
+            url: product.href,
+            label: product.label
+          });
+          seenHrefs.add(product.href);
+          console.log(`✅ Found product "${product.name}" in response`);
           break;
         }
       }
