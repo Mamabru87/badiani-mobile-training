@@ -381,6 +381,9 @@
           }
         }
 
+        // Safety cap: max 3 buttons.
+        if (actionLinks.length > 3) actionLinks = actionLinks.slice(0, 3);
+
         // Remove typing dots once final content is rendered.
         try { this.currentStreamingDotsEl?.remove?.(); } catch {}
 

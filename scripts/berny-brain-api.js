@@ -139,6 +139,66 @@ class BernyBrainAPI {
     this.init();
   }
 
+  // Keep CTAs compact: 0..3 links max.
+  // Heuristic: if a "parameters/production" style link exists, prefer including it.
+  limitLinks(recos, max = 3) {
+    const list = Array.isArray(recos) ? recos.filter(Boolean) : [];
+    const limit = Math.max(0, Number(max) || 0);
+    if (!limit) return [];
+    if (list.length <= limit) return list;
+
+    const norm = (s) => this.normalizeText(String(s || ''));
+    const isParams = (r) => {
+      const href = norm(r?.href || r?.url || '');
+      const label = norm(r?.label || '');
+      return (
+        href.includes('parametri') ||
+        href.includes('produzione') ||
+        href.includes('production') ||
+        label.includes('parametri') ||
+        label.includes('produzione') ||
+        label.includes('production')
+      );
+    };
+
+    // Start with the first N.
+    const out = list.slice(0, limit);
+
+    // If the limited set has no params link but the full set has one, swap it in.
+    const outHasParams = out.some(isParams);
+    if (!outHasParams) {
+      const paramsCandidate = list.find(isParams);
+      if (paramsCandidate) {
+        // Replace the last slot to keep ordering mostly stable.
+        out[limit - 1] = paramsCandidate;
+      }
+    }
+
+    // De-dup by href/url just in case swapping introduced duplicates.
+    const seen = new Set();
+    const deduped = [];
+    for (const r of out) {
+      const key = String(r?.href || r?.url || '').trim();
+      if (!key) continue;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      deduped.push(r);
+    }
+
+    // If dedupe reduced items, refill from original list (still respecting max).
+    if (deduped.length < limit) {
+      for (const r of list) {
+        const key = String(r?.href || r?.url || '').trim();
+        if (!key || seen.has(key)) continue;
+        seen.add(key);
+        deduped.push(r);
+        if (deduped.length >= limit) break;
+      }
+    }
+
+    return deduped.slice(0, limit);
+  }
+
   // ------------------------------
   // User context helpers
   // ------------------------------
@@ -1285,14 +1345,16 @@ class BernyBrainAPI {
     if (reco) {
       // Se reco è un array di link multipli
       if (Array.isArray(reco) && reco.length > 0) {
+        // Cap to max 3 links.
+        const limitedReco = this.limitLinks(reco, 3);
         console.log('🔗 applyRecommendationToResponse - Multiple links detected:', reco);
-        const linksJson = JSON.stringify(reco);
+        const linksJson = JSON.stringify(limitedReco);
         const linksStr = linksJson.slice(1, -1);
         out = `${out} [[LINKS:[${linksStr}]]]`;
         console.log('📎 Applied LINKS tag:', out.substring(Math.max(0, out.length - 100)));
         // Salva il primo come recommendation principale
-        if (reco[0] && reco[0].href) {
-          this.saveLastRecommendation({ href: reco[0].href });
+        if (limitedReco[0] && limitedReco[0].href) {
+          this.saveLastRecommendation({ href: limitedReco[0].href });
         }
       } else if (reco && reco.href) {
         // Link singolo
