@@ -1828,11 +1828,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (c) {
               try { onChunk(c); } catch {}
               i += chunkSize;
-              window.setTimeout(tick, 35);
+              // Ritmo più lento per un typing naturale
+              window.setTimeout(tick, 60);
             } else {
               if (typeof onComplete === 'function') onComplete(text, sourceLabel);
             }
           };
+
           tick();
           return;
         }

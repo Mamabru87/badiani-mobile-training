@@ -245,8 +245,11 @@
         this.showTypingIndicatorInBubble(bubble);
       }
 
-      // Accumula il testo senza mostrarlo
+      // Accumula il testo e mostra progressivamente per effetto "typing"
       this.currentStreamingText += c;
+      if (this.currentStreamingBubble) {
+        this.currentStreamingBubble.textContent = this.currentStreamingText;
+      }
       this.scrollToBottom(false);
     }
 
@@ -550,38 +553,31 @@
       }
 
       // Controlla prima per link multipli [[LINKS:[...]]], robust anche con virgole e spazi
-      const multiStart = cleanText.indexOf('[[LINKS:');
-      if (multiStart >= 0) {
-        const multiEnd = cleanText.indexOf(']]', multiStart);
-        if (multiEnd > multiStart) {
-          const rawPayload = cleanText.substring(multiStart + '[[LINKS:'.length, multiEnd).trim();
-          try {
-            const normalized = rawPayload.replace(/\s+/g, ' ');
-            const jsonStr = normalized.startsWith('[') ? normalized : `[${normalized}]`;
-            console.log('🔗 Parsing LINKS JSON:', jsonStr);
-            links = JSON.parse(jsonStr);
-            console.log('✅ Parsed links:', links);
-          } catch (e) {
-            console.warn('❌ Failed to parse LINKS JSON:', e, 'String was:', rawPayload);
-            links = null;
-          }
-          // Rimuovi comunque il tag dal testo anche se il parse fallisce
-          cleanText = (cleanText.slice(0, multiStart) + cleanText.slice(multiEnd + 2)).trim();
+      const multiMatch = cleanText.match(/\[\[LINKS:([\s\S]*?)\]\]/);
+      if (multiMatch) {
+        const rawPayload = (multiMatch[1] || '').trim();
+        try {
+          const normalized = rawPayload.replace(/\s+/g, ' ');
+          const jsonStr = normalized.startsWith('[') ? normalized : `[${normalized}]`;
+          console.log('🔗 Parsing LINKS JSON:', jsonStr);
+          links = JSON.parse(jsonStr);
+          console.log('✅ Parsed links:', links);
+        } catch (e) {
+          // Non bloccare il rendering: se il JSON è sporco, ignora i link e prosegui
+          links = null;
+          console.warn('⚠️ LINKS tag ignorato per parse fallita');
         }
+        // Rimuovi SEMPRE il tag dal testo per non troncare le frasi
+        cleanText = cleanText.replace(multiMatch[0], '').trim();
       }
 
       // Se non ci sono link multipli, controlla per link singolo
       if (!links) {
-        const singleStart = cleanText.indexOf('[[LINK:');
-        if (singleStart >= 0) {
-          const singleEnd = cleanText.indexOf(']]', singleStart);
-          if (singleEnd > singleStart) {
-            link = cleanText.substring(singleStart + '[[LINK:'.length, singleEnd).trim();
-            cleanText = (cleanText.slice(0, singleStart) + cleanText.slice(singleEnd + 2)).trim();
-          } else {
-            // Tag malformato: rimuovilo
-            cleanText = (cleanText.slice(0, singleStart) + cleanText.slice(singleStart + '[[LINK:'.length)).trim();
-          }
+        const singleMatch = cleanText.match(/\[\[LINK:([\s\S]*?)\]\]/);
+        if (singleMatch) {
+          link = (singleMatch[1] || '').trim();
+          // Rimuovi comunque il tag dal testo
+          cleanText = cleanText.replace(singleMatch[0], '').trim();
         }
       }
 
