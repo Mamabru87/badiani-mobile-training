@@ -10000,6 +10000,8 @@ toggles.forEach((button) => {
 
     // Remember where the user was, so closing the modal does not jump the page.
     // Also keep the carousel horizontal position stable.
+    // IMPORTANT: Capture the card rect BEFORE locking scroll so getBoundingClientRect
+    // returns correct values before body becomes position:fixed.
     const openerRestore = (() => {
       try {
         const getEffectiveScrollY = () => {
@@ -10026,15 +10028,25 @@ toggles.forEach((button) => {
           }
         };
         const track = card.closest('[data-carousel-track]');
+        // Capture card bounding rect now, BEFORE body scroll lock changes position:fixed
+        const cardRect = card.getBoundingClientRect();
+        const viewCx = (window.innerWidth || document.documentElement.clientWidth || 0) / 2;
+        const viewCy = (window.innerHeight || document.documentElement.clientHeight || 0) / 2;
         return {
           scrollY: getEffectiveScrollY(),
           track,
           trackScrollLeft: track ? track.scrollLeft : 0,
           focusEl: button,
-          cardId: card && card.id ? card.id : null
+          cardId: card && card.id ? card.id : null,
+          // Pre-calculated animation values for FLIP effect
+          cardRect: cardRect,
+          cardCx: cardRect.left + cardRect.width / 2,
+          cardCy: cardRect.top + cardRect.height / 2,
+          viewCx: viewCx,
+          viewCy: viewCy
         };
       } catch (e) {
-        return { scrollY: window.pageYOffset, track: null, trackScrollLeft: 0, focusEl: button, cardId: null };
+        return { scrollY: window.pageYOffset, track: null, trackScrollLeft: 0, focusEl: button, cardId: null, cardRect: null };
       }
     })();
 
@@ -12277,6 +12289,7 @@ toggles.forEach((button) => {
 
     // Animate modal from the originating card position (so it opens "in front of"
     // the carousel/card instead of feeling like it appears from the top).
+    // Use the pre-captured rect from openerRestore (captured BEFORE body scroll lock).
     try {
       const prefersReducedMotion = (() => {
         try {
@@ -12286,14 +12299,10 @@ toggles.forEach((button) => {
         }
       })();
 
-      if (!prefersReducedMotion) {
-        const rect = card.getBoundingClientRect();
-        const cardCx = rect.left + rect.width / 2;
-        const cardCy = rect.top + rect.height / 2;
-        const viewCx = (window.innerWidth || document.documentElement.clientWidth || 0) / 2;
-        const viewCy = (window.innerHeight || document.documentElement.clientHeight || 0) / 2;
-        const dx = cardCx - viewCx;
-        const dy = cardCy - viewCy;
+      if (!prefersReducedMotion && openerRestore && openerRestore.cardRect) {
+        // Use pre-captured values from before bodyScrollLock.lock()
+        const dx = openerRestore.cardCx - openerRestore.viewCx;
+        const dy = openerRestore.cardCy - openerRestore.viewCy;
 
         overlay.dataset.animateFromCard = 'true';
         overlay.style.setProperty('--card-from-x', `${Math.round(dx)}px`);
