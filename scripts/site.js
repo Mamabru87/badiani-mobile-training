@@ -7956,6 +7956,135 @@ const gamification = (() => {
       .sort(() => Math.random() - 0.5);
   }
 
+  // ============================================================
+  // BERNY-POWERED ADAPTIVE MINI QUIZ
+  // Generate questions dynamically based on studied content
+  // ============================================================
+
+  /**
+   * Recupera il contenuto delle schede studiate (con stella oro) dall'utente.
+   * Ritorna un array di oggetti con pageSlug, cardTitle, tabTitle e content.
+   */
+  function getStudiedCardsContent() {
+    const tabContextToday = state.openedTabContextToday || {};
+    const studiedContent = [];
+
+    // Recupera tutte le schede aperte oggi
+    Object.entries(tabContextToday).forEach(([key, entry]) => {
+      if (entry && entry.pageSlug && entry.content) {
+        studiedContent.push({
+          pageSlug: entry.pageSlug,
+          cardTitle: entry.cardTitle || '',
+          tabTitle: entry.tabTitle || '',
+          content: entry.content || '',
+          timestamp: entry.ts || Date.now()
+        });
+      }
+    });
+
+    // Ordina per timestamp (le più recenti prima)
+    studiedContent.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+    console.log(`📚 Berny: trovate ${studiedContent.length} schede studiate per il quiz`);
+    return studiedContent;
+  }
+
+  /**
+   * Chiede a Berny di generare una domanda basata sul contenuto studiato.
+   * Ritorna un oggetto con la struttura compatibile col sistema di quiz esistente.
+   */
+  async function generateBernyQuizQuestion() {
+    try {
+      const studiedCards = getStudiedCardsContent();
+      
+      if (!studiedCards || studiedCards.length === 0) {
+        console.warn('⚠️ Nessuna scheda studiata trovata, fallback a domande standard');
+        return null;
+      }
+
+      // Limita il contesto alle ultime 5 schede per non sovraccaricare Berny
+      const recentCards = studiedCards.slice(0, 5);
+      
+      // Costruisci il contesto per Berny
+      const contextSummary = recentCards.map((card, idx) => {
+        const snippet = (card.content || '').substring(0, 300); // primi 300 caratteri
+        return `${idx + 1}. ${card.cardTitle || card.tabTitle}\n${snippet}...`;
+      }).join('\n\n');
+
+      // Prompt per Berny
+      const prompt = `Hai appena studiato questi contenuti:
+
+${contextSummary}
+
+Genera una domanda a scelta multipla (4 opzioni) per verificare la comprensione. 
+La domanda deve essere:
+- Specifica e basata sui contenuti studiati
+- Di difficoltà facile-media
+- Con 4 opzioni di risposta (A, B, C, D)
+- Una sola risposta corretta
+
+Rispondi in formato JSON esatto:
+{
+  "question": "testo della domanda",
+  "options": ["opzione A", "opzione B", "opzione C", "opzione D"],
+  "correct": 0,
+  "explanation": "spiegazione della risposta corretta"
+}
+
+Rispondi SOLO con il JSON, niente altro.`;
+
+      // Chiama Berny API
+      if (!window.bernyBrain || typeof window.bernyBrain.processMessage !== 'function') {
+        console.warn('⚠️ Berny Brain API non disponibile');
+        return null;
+      }
+
+      console.log('🧠 Berny: generazione domanda in corso...');
+      const response = await window.bernyBrain.processMessage(prompt);
+      
+      if (!response) {
+        console.warn('⚠️ Berny non ha risposto correttamente');
+        return null;
+      }
+
+      // Estrai il JSON dalla risposta
+      let jsonText = String(response).trim();
+      
+      // Rimuovi eventuali markdown code blocks
+      if (jsonText.startsWith('```')) {
+        jsonText = jsonText.replace(/```json\s*/gi, '').replace(/```\s*$/gi, '');
+      }
+      
+      const questionData = JSON.parse(jsonText);
+      
+      // Valida la struttura
+      if (!questionData.question || !Array.isArray(questionData.options) || 
+          questionData.options.length !== 4 || typeof questionData.correct !== 'number') {
+        console.warn('⚠️ Formato domanda Berny non valido');
+        return null;
+      }
+
+      // Converti nel formato del sistema quiz esistente
+      const bernyQuestion = {
+        id: `berny-${Date.now()}`,
+        topic: 'Berny Adaptive',
+        question: questionData.question,
+        options: questionData.options,
+        correct: questionData.correct,
+        explanation: questionData.explanation || '',
+        generatedByBerny: true,
+        basedOnCards: recentCards.map(c => c.cardTitle || c.tabTitle).filter(Boolean)
+      };
+
+      console.log('✅ Berny: domanda generata con successo', bernyQuestion);
+      return bernyQuestion;
+
+    } catch (error) {
+      console.error('❌ Errore nella generazione domanda Berny:', error);
+      return null;
+    }
+  }
+
   // Draw questions from a per-mode shuffle bag.
   // Guarantees: no repeats until the pool is exhausted (bag empty), and no skipped leftovers
   // when count > remaining (it wraps to a new shuffled bag).
@@ -8793,124 +8922,221 @@ const gamification = (() => {
     ensureDailyState();
     if (state.quizTokens < STARS_FOR_QUIZ) return;
 
-    // Get super-easy questions filtered by visited tabs (adaptive mini quiz)
-    const topicQuestions = getSuperEasyQuestionsForVisitedTabs();
-    const questions = pickQuestionsFromBag('mini-sm', topicQuestions, 1).map(localizeQuizQuestion);
-    if (!questions.length) return;
+    // Mostra un loading mentre Berny genera la domanda
+    const loadingContainer = document.createElement('div');
+    loadingContainer.className = 'reward-modal berny-quiz-loading';
+    loadingContainer.innerHTML = `
+      <div class="berny-avatar-section">
+        <div class="berny-avatar-circle">
+          <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+            <circle cx="30" cy="30" r="28" fill="#E30613" opacity="0.1"/>
+            <circle cx="30" cy="30" r="24" fill="#E30613"/>
+            <path d="M20 28 Q 25 23, 30 28 T 40 28" stroke="white" stroke-width="2" fill="none"/>
+            <circle cx="22" cy="24" r="2" fill="white"/>
+            <circle cx="38" cy="24" r="2" fill="white"/>
+          </svg>
+        </div>
+      </div>
+      <h3 class="reward-modal__title" style="margin-top: 1rem;">Berny sta pensando...</h3>
+      <p class="reward-modal__text">Sto analizzando cosa hai studiato per creare una domanda personalizzata 🧠</p>
+      <div class="berny-loading-dots">
+        <span>.</span><span>.</span><span>.</span>
+      </div>
+    `;
+    
+    openOverlay(loadingContainer, { lockClose: true });
 
-    const handleMiniSuccess = () => {
-      state.testMeCredits = Math.max(0, (state.testMeCredits || 0) + 1);
-      saveState();
-      updateUI();
+    // Tenta di generare domanda con Berny in modo asincrono
+    (async () => {
+      let questions = [];
+      let bernyGenerated = false;
+      let bernyIntro = tr('quiz.mini.intro', null, '1 domanda rapida. Sbagli = -3 stelline. Giusto = sblocchi "Test me".');
 
-      const container = document.createElement('div');
-      container.className = 'reward-modal';
-      const title = document.createElement('h3');
-      title.className = 'reward-modal__title';
-      title.textContent = tr('quiz.mini.success.title', null, 'Mini quiz superato!');
-      const text = document.createElement('p');
-      text.className = 'reward-modal__text';
-      text.textContent = isCooldownActive()
-        ? tr('quiz.mini.success.text.cooldown', { time: formatDuration(getCooldownRemaining()) }, `Hai sbloccato �Test me�, ma hai gi� un gelato in cooldown. Torna tra ${formatDuration(getCooldownRemaining())} per provarci.`)
-        : tr('quiz.mini.success.text.ready', null, 'Hai sbloccato �Test me�: � il quiz pi� difficile che assegna il gelato.');
-      const actions = document.createElement('div');
-      actions.className = 'reward-modal__actions';
-
-      const later = document.createElement('button');
-      later.type = 'button';
-      later.className = 'reward-action secondary';
-      later.textContent = tr('quiz.mini.success.cta.later', null, 'Pi� tardi');
-      later.addEventListener('click', closeOverlay);
-      actions.appendChild(later);
-
-      if (!isCooldownActive()) {
-        const go = document.createElement('button');
-        go.type = 'button';
-        go.className = 'reward-action primary';
-        go.textContent = tr('quiz.mini.success.cta.start', null, 'Inizia Test me');
-        go.dataset.overlayFocus = 'true';
-        go.addEventListener('click', () => {
-          closeOverlay({ force: true });
-          showTestMeQuiz();
-        });
-        actions.appendChild(go);
-      } else {
-        const ok = document.createElement('button');
-        ok.type = 'button';
-        ok.className = 'reward-action primary';
-        ok.textContent = tr('quiz.mini.success.cta.ok', null, 'Ok');
-        ok.dataset.overlayFocus = 'true';
-        ok.addEventListener('click', closeOverlay);
-        actions.appendChild(ok);
+      try {
+        const bernyQuestion = await generateBernyQuizQuestion();
+        
+        if (bernyQuestion) {
+          questions = [bernyQuestion];
+          bernyGenerated = true;
+          
+          // Messaggio personalizzato di Berny
+          const cardsStudied = bernyQuestion.basedOnCards || [];
+          if (cardsStudied.length > 0) {
+            const cardsList = cardsStudied.slice(0, 3).join(', ');
+            bernyIntro = `Fammi vedere cosa hai studiato! Ho preparato una domanda su: ${cardsList}`;
+          } else {
+            bernyIntro = 'Fammi vedere cosa hai studiato! Ho preparato una domanda personalizzata per te.';
+          }
+          
+          console.log('✅ Usando domanda generata da Berny');
+        }
+      } catch (error) {
+        console.warn('⚠️ Errore nella generazione Berny, uso fallback:', error);
       }
 
-      container.append(title, text, actions);
-      openOverlay(container);
-    };
+      // Fallback a domande standard se Berny non ha generato nulla
+      if (!bernyGenerated || questions.length === 0) {
+        console.log('📚 Fallback a domande standard del pool');
+        const topicQuestions = getSuperEasyQuestionsForVisitedTabs();
+        questions = pickQuestionsFromBag('mini-sm', topicQuestions, 1).map(localizeQuizQuestion);
+        bernyIntro = tr('quiz.mini.intro', null, '1 domanda rapida. Sbagli = -3 stelline. Giusto = sblocchi "Test me".');
+      }
 
-    const handleMiniFail = (question) => {
-      // Apply the penalty
-      applyMiniQuizPenalty();
-
-      // Log the mistake so it appears under �Errori recenti� in the Hub.
-      // Then open the same review modal used elsewhere (with direct CTA to the right card).
-      try {
-        if (!state.history) state.history = { quiz: [] };
-        if (!Array.isArray(state.history.quiz)) state.history.quiz = [];
-        const review = buildQuizReview(question);
-        const lastItem = {
-          ts: Date.now(),
-          correct: false,
-          prompt: review.prompt,
-          qid: question?.id || null,
-          qtype: 'mini',
-          correctText: review.correctText,
-          explanation: review.explanation,
-          suggestion: review.suggestion,
-          specHref: review.specHref,
-          specLabel: review.specLabel,
-        };
-        state.history.quiz.push(lastItem);
-        if (state.history.quiz.length > 300) state.history.quiz = state.history.quiz.slice(-300);
-        saveState();
-        updateUI();
-
-        // Swap the overlay content to the review (fast learning loop).
-        openWrongReviewModal(lastItem);
+      if (!questions.length) {
+        closeOverlay();
+        showToast('Impossibile caricare domande per il quiz', { type: 'error' });
         return;
-      } catch (e) {}
+      }
 
-      // Fallback (legacy)
-      const container = document.createElement('div');
-      container.className = 'reward-modal';
-      const title = document.createElement('h3');
-      title.className = 'reward-modal__title';
-      title.textContent = tr('quiz.mini.fail.title', null, 'Mini quiz perso: -3 stelline');
-      const text = document.createElement('p');
-      text.className = 'reward-modal__text';
-      text.textContent = tr('quiz.mini.fail.text', null, 'Niente panico: riparti e ritenta. Al prossimo set di 3 stelline rifai il mini quiz.');
-      const actions = document.createElement('div');
-      actions.className = 'reward-modal__actions';
-      const ok = document.createElement('button');
-      ok.type = 'button';
-      ok.className = 'reward-action primary';
-      ok.textContent = tr('quiz.mini.fail.cta', null, 'Ok');
-      ok.dataset.overlayFocus = 'true';
-      ok.addEventListener('click', closeOverlay);
-      actions.appendChild(ok);
-      container.append(title, text, actions);
-      openOverlay(container);
-    };
+      // Chiudi il loading
+      closeOverlay();
 
-    startQuizSession({
-      modeKey: 'mini',
-      title: tr('quiz.mini.title', null, 'Mini quiz � 1 domanda'),
-      introText: tr('quiz.mini.intro', null, '1 domanda rapida. Sbagli = -3 stelline. Giusto = sblocchi "Test me".'),
-      questions,
-      theme: 'default',
-      onSuccess: handleMiniSuccess,
-      onFail: handleMiniFail,
-    });
+      // Aspetta un attimo per la transizione
+      setTimeout(() => {
+        const handleMiniSuccess = () => {
+          state.testMeCredits = Math.max(0, (state.testMeCredits || 0) + 1);
+          saveState();
+          updateUI();
+
+          const container = document.createElement('div');
+          container.className = 'reward-modal';
+          
+          // Se la domanda era di Berny, mostra un messaggio speciale
+          if (bernyGenerated) {
+            container.innerHTML = `
+              <div class="berny-avatar-section">
+                <div class="berny-avatar-circle berny-success">
+                  <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                    <circle cx="30" cy="30" r="28" fill="#4CAF50" opacity="0.1"/>
+                    <circle cx="30" cy="30" r="24" fill="#4CAF50"/>
+                    <path d="M20 28 Q 25 33, 30 28 T 40 28" stroke="white" stroke-width="2" fill="none"/>
+                    <circle cx="22" cy="22" r="2" fill="white"/>
+                    <circle cx="38" cy="22" r="2" fill="white"/>
+                  </svg>
+                </div>
+              </div>
+            `;
+          }
+          
+          const title = document.createElement('h3');
+          title.className = 'reward-modal__title';
+          title.textContent = bernyGenerated 
+            ? 'Ottimo lavoro! 🎉' 
+            : tr('quiz.mini.success.title', null, 'Mini quiz superato!');
+          
+          const text = document.createElement('p');
+          text.className = 'reward-modal__text';
+          
+          if (bernyGenerated) {
+            text.textContent = isCooldownActive()
+              ? `Hai studiato bene! Ho sbloccato "Test me" ma c'è già un gelato in cooldown. Torna tra ${formatDuration(getCooldownRemaining())}.`
+              : 'Hai studiato bene! Ho sbloccato "Test me": è il quiz più difficile che assegna il gelato.';
+          } else {
+            text.textContent = isCooldownActive()
+              ? tr('quiz.mini.success.text.cooldown', { time: formatDuration(getCooldownRemaining()) }, `Hai sbloccato "Test me", ma hai già un gelato in cooldown. Torna tra ${formatDuration(getCooldownRemaining())} per provarci.`)
+              : tr('quiz.mini.success.text.ready', null, 'Hai sbloccato "Test me": è il quiz più difficile che assegna il gelato.');
+          }
+          
+          const actions = document.createElement('div');
+          actions.className = 'reward-modal__actions';
+
+          const later = document.createElement('button');
+          later.type = 'button';
+          later.className = 'reward-action secondary';
+          later.textContent = tr('quiz.mini.success.cta.later', null, 'Più tardi');
+          later.addEventListener('click', closeOverlay);
+          actions.appendChild(later);
+
+          if (!isCooldownActive()) {
+            const go = document.createElement('button');
+            go.type = 'button';
+            go.className = 'reward-action primary';
+            go.textContent = tr('quiz.mini.success.cta.start', null, 'Inizia Test me');
+            go.dataset.overlayFocus = 'true';
+            go.addEventListener('click', () => {
+              closeOverlay({ force: true });
+              showTestMeQuiz();
+            });
+            actions.appendChild(go);
+          } else {
+            const ok = document.createElement('button');
+            ok.type = 'button';
+            ok.className = 'reward-action primary';
+            ok.textContent = tr('quiz.mini.success.cta.ok', null, 'Ok');
+            ok.dataset.overlayFocus = 'true';
+            ok.addEventListener('click', closeOverlay);
+            actions.appendChild(ok);
+          }
+
+          container.append(title, text, actions);
+          openOverlay(container);
+        };
+
+        const handleMiniFail = (question) => {
+          // Apply the penalty
+          applyMiniQuizPenalty();
+
+          // Log the mistake so it appears under "Errori recenti" in the Hub.
+          // Then open the same review modal used elsewhere (with direct CTA to the right card).
+          try {
+            if (!state.history) state.history = { quiz: [] };
+            if (!Array.isArray(state.history.quiz)) state.history.quiz = [];
+            const review = buildQuizReview(question);
+            const lastItem = {
+              ts: Date.now(),
+              correct: false,
+              prompt: review.prompt,
+              qid: question?.id || null,
+              qtype: bernyGenerated ? 'mini-berny' : 'mini',
+              correctText: review.correctText,
+              explanation: review.explanation,
+              suggestion: review.suggestion,
+              specHref: review.specHref,
+              specLabel: review.specLabel,
+            };
+            state.history.quiz.push(lastItem);
+            if (state.history.quiz.length > 300) state.history.quiz = state.history.quiz.slice(-300);
+            saveState();
+            updateUI();
+
+            // Swap the overlay content to the review (fast learning loop).
+            openWrongReviewModal(lastItem);
+            return;
+          } catch (e) {}
+
+          // Fallback (legacy)
+          const container = document.createElement('div');
+          container.className = 'reward-modal';
+          const title = document.createElement('h3');
+          title.className = 'reward-modal__title';
+          title.textContent = tr('quiz.mini.fail.title', null, 'Mini quiz perso: -3 stelline');
+          const text = document.createElement('p');
+          text.className = 'reward-modal__text';
+          text.textContent = tr('quiz.mini.fail.text', null, 'Niente panico: riparti e ritenta. Al prossimo set di 3 stelline rifai il mini quiz.');
+          const actions = document.createElement('div');
+          actions.className = 'reward-modal__actions';
+          const ok = document.createElement('button');
+          ok.type = 'button';
+          ok.className = 'reward-action primary';
+          ok.textContent = tr('quiz.mini.fail.cta', null, 'Ok');
+          ok.dataset.overlayFocus = 'true';
+          ok.addEventListener('click', closeOverlay);
+          actions.appendChild(ok);
+          container.append(title, text, actions);
+          openOverlay(container);
+        };
+
+        startQuizSession({
+          modeKey: 'mini',
+          title: bernyGenerated ? '🧠 Berny Quiz' : tr('quiz.mini.title', null, 'Mini quiz • 1 domanda'),
+          introText: bernyIntro,
+          questions,
+          theme: bernyGenerated ? 'berny' : 'default',
+          onSuccess: handleMiniSuccess,
+          onFail: handleMiniFail,
+        });
+      }, 300);
+    })();
   }
 
   // Backward compatibility: older flows may still refer to showQuiz().

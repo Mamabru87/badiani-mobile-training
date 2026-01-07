@@ -2209,8 +2209,30 @@ h4 {
 }
 
 .reward-overlay__panel.is-wide {
-  width: min(720px, 96vw);
-  text-align: center;
+  width: min(680px, 95vw);
+  height: min(85vh, 680px);
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  padding: 28px;
+  overflow: auto;
+}
+
+/* Responsivo webapp: ridimensiona su viewport piccoli */
+@media (max-width: 768px) {
+  .reward-overlay__panel.is-wide {
+    width: min(92vw, 540px);
+    height: min(90vh, 620px);
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .reward-overlay__panel.is-wide {
+    width: min(96vw, 440px);
+    height: min(92vh, 600px);
+    padding: 16px;
+  }
 }
 
 .reward-overlay__close {
@@ -2250,6 +2272,98 @@ h4 {
   gap: 12px;
   flex-wrap: wrap;
   margin-top: 30px;
+}
+
+/* ============================================================
+   BERNY QUIZ INTEGRATION - Avatar & Loading Animation
+   ============================================================ */
+
+.berny-avatar-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: -10px;
+  margin-bottom: 8px;
+}
+
+.berny-avatar-circle {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: bernyPulse 2s ease-in-out infinite;
+}
+
+.berny-avatar-circle.berny-success {
+  animation: bernyBounce 0.6s ease-out;
+}
+
+@keyframes bernyPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes bernyBounce {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.berny-loading-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+  font-size: 32px;
+  color: var(--brand-rose);
+  line-height: 1;
+}
+
+.berny-loading-dots span {
+  animation: bernyDotBounce 1.4s ease-in-out infinite;
+}
+
+.berny-loading-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.berny-loading-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes bernyDotBounce {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+}
+
+.berny-quiz-loading {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.berny-quiz-loading .reward-modal__text {
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 /* ============================================================
@@ -4119,9 +4233,10 @@ h4 {
 
 .wrong-log__list {
   margin-top: 12px;
-  max-height: min(62vh, 520px);
+  max-height: calc(100vh - 400px);
   overflow: auto;
   padding-right: 4px;
+  flex: 1 1 auto;
 }
 
 .wrong-log__hint {
