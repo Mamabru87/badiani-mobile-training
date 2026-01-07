@@ -1,6 +1,84 @@
 document.documentElement.classList.add('has-js');
 
 // ============================================================
+// GLOBAL: DISABLE PAGE ZOOM (mobile double-tap / pinch + desktop ctrl+wheel)
+// Requested behavior: the site must stay fixed; no zoom.
+// ============================================================
+(() => {
+  if (window.__badianiZoomLockInit) return;
+  window.__badianiZoomLockInit = true;
+
+  const prevent = (e) => {
+    try { e.preventDefault(); } catch {}
+  };
+
+  try { document.addEventListener('gesturestart', prevent, { passive: false }); } catch {}
+  try { document.addEventListener('gesturechange', prevent, { passive: false }); } catch {}
+  try { document.addEventListener('gestureend', prevent, { passive: false }); } catch {}
+  try { document.addEventListener('dblclick', prevent, { passive: false }); } catch {}
+  // Prevent trackpad / ctrl+wheel zoom on desktop browsers.
+  try {
+    window.addEventListener('wheel', (e) => {
+      if (e && e.ctrlKey) prevent(e);
+    }, { passive: false });
+  } catch {}
+})();
+
+// ============================================================
+// GLOBAL: DISABLE COPY/PASTE OF CONTENT (best effort)
+// Notes: this cannot stop screenshots or devtools, but it prevents normal copy actions.
+// ============================================================
+(() => {
+  if (window.__badianiCopyLockInit) return;
+  window.__badianiCopyLockInit = true;
+
+  const isEditable = (t) => {
+    try {
+      const el = (t && t.nodeType === 1) ? t : null;
+      if (!el) return false;
+      // Allow normal editing behavior in form fields and explicitly whitelisted nodes.
+      return !!el.closest('input, textarea, select, [contenteditable=""], [contenteditable="true"], [data-allow-copy], .allow-copy');
+    } catch {
+      return false;
+    }
+  };
+
+  const hardBlock = (e) => {
+    try { e.preventDefault(); } catch {}
+    try { e.stopPropagation(); } catch {}
+  };
+
+  // Block clipboard operations everywhere.
+  try { document.addEventListener('copy', hardBlock, { capture: true }); } catch {}
+  try { document.addEventListener('cut', hardBlock, { capture: true }); } catch {}
+  try { document.addEventListener('paste', hardBlock, { capture: true }); } catch {}
+
+  // Block selection start on non-editable elements.
+  try {
+    document.addEventListener('selectstart', (e) => {
+      if (isEditable(e.target)) return;
+      hardBlock(e);
+    }, { capture: true, passive: false });
+  } catch {}
+
+  // Block drag-copy (text/images) on non-editable elements.
+  try {
+    document.addEventListener('dragstart', (e) => {
+      if (isEditable(e.target)) return;
+      hardBlock(e);
+    }, { capture: true, passive: false });
+  } catch {}
+
+  // Disable context menu on non-editable elements (prevents "Copy" menu on mobile/desktop).
+  try {
+    document.addEventListener('contextmenu', (e) => {
+      if (isEditable(e.target)) return;
+      hardBlock(e);
+    }, { capture: true, passive: false });
+  } catch {}
+})();
+
+// ============================================================
 // STORAGE ADAPTER + PROFILE API (stability layer)
 // - Centralizes JSON parsing, safe storage access, and profile consistency.
 // - Does NOT change any DOM hooks; it only makes persistence more reliable.
@@ -7005,7 +7083,44 @@ const gamification = (() => {
     if (!cardId) return;
     if (!state.openedTabsToday) state.openedTabsToday = {};
     const tabId = `${cardId}::${slugify(tabTitle)}`;
-    const alreadyOpened = !!state.openedTabsToday[tabId];
+    const alreadyOpenedStrict = !!state.openedTabsToday[tabId];
+    let alreadyOpened = alreadyOpenedStrict;
+    // Backward/robust check: if card IDs were unstable in the past (e.g. generated with a serial),
+    // detect already-opened tabs by labels (pageSlug + cardTitle + tabTitle) and migrate.
+    let matchedEntry = null;
+    if (!alreadyOpened && state.openedTabsToday && typeof state.openedTabsToday === 'object') {
+      try {
+        const pageSlug = getPageSlug();
+        const cardTitle = String((card.querySelector('h3')?.textContent || '')).trim();
+        const tabLabel = String(tabTitle || '').trim();
+        const norm = (s) => String(s || '').trim().toLowerCase();
+        const want = { pageSlug: norm(pageSlug), cardTitle: norm(cardTitle), tabTitle: norm(tabLabel) };
+        const opened = state.openedTabsToday;
+        for (const [k, v] of Object.entries(opened)) {
+          if (!k || !v || typeof v !== 'object') continue;
+          const got = {
+            pageSlug: norm(v.pageSlug || ''),
+            cardTitle: norm(v.cardTitle || ''),
+            tabTitle: norm(v.tabTitle || ''),
+          };
+          if (got.pageSlug && got.pageSlug !== want.pageSlug) continue;
+          if (got.cardTitle !== want.cardTitle) continue;
+          if (got.tabTitle !== want.tabTitle) continue;
+          matchedEntry = v;
+          alreadyOpened = true;
+          break;
+        }
+      } catch (e) {
+        matchedEntry = null;
+      }
+    }
+    // If we found a match via labels, write an alias under the new stable tabId.
+    if (!alreadyOpenedStrict && alreadyOpened && matchedEntry) {
+      try {
+        state.openedTabsToday[tabId] = matchedEntry;
+        saveState();
+      } catch (e) {}
+    }
     if (!alreadyOpened) {
       // Store a richer entry (ts + labels). Backward compatible: normalizeOpenedEntryTs() handles objects.
       const pageSlug = getPageSlug();
@@ -7309,7 +7424,6 @@ const gamification = (() => {
 
   function getCardId(card) {
     if (card.dataset.rewardId) return card.dataset.rewardId;
-    cardSerial += 1;
     const pageSlug = getPageSlug();
 
     // Prefer a stable DOM id when present (most cards have id="card-..." in HTML).
@@ -7322,8 +7436,23 @@ const gamification = (() => {
       return uid;
     }
 
-    const title = card.querySelector('h3')?.textContent?.trim().toLowerCase().replace(/[^a-z0-9]+/gi, '-') || 'card';
-    const uid = `${pageSlug}-${title}-${cardSerial}`;
+    // Fallback: ensure IDs are stable across reloads even when cards have no DOM id.
+    // IMPORTANT: do NOT depend on the order in which getCardId() is called (that breaks
+    // persistence of opened tabs/checkmarks when navigating away and back).
+    // Use the DOM order of cards on the page as a stable index.
+    try {
+      const cards = Array.from(document.querySelectorAll('.guide-card'));
+      const idx = cards.indexOf(card);
+      if (idx >= 0) {
+        const uid = `${pageSlug}-card-${idx + 1}`;
+        card.dataset.rewardId = uid;
+        return uid;
+      }
+    } catch (e) {}
+
+    // Last resort: keep a per-session serial to avoid crashes, but this is not stable.
+    cardSerial += 1;
+    const uid = `${pageSlug}-card-${cardSerial}`;
     card.dataset.rewardId = uid;
     return uid;
   }
@@ -7338,8 +7467,45 @@ const gamification = (() => {
       ?.replace(/\.[^/.]+$/, '') || 'index';
   }
 
+  function getRewardableGuideCardsInDom() {
+    // Rewardable cards are the interactive guide cards: they expose a toggle button and details.
+    // Some pages/cards may miss `data-carousel-item`, so we avoid relying on that attribute.
+    try {
+      return Array.from(document.querySelectorAll('.guide-card'))
+        .filter((card) => {
+          if (!card || !(card instanceof HTMLElement)) return false;
+          // Exclude modal clones/overlays if any exist in DOM.
+          if (card.closest('.card-modal, .card-modal-overlay, .reward-overlay, [data-overlay-content]')) return false;
+          const hasToggle = !!card.querySelector('[data-toggle-card]');
+          const hasDetails = !!card.querySelector('.details');
+          return hasToggle && hasDetails;
+        });
+    } catch (e) {
+      return [];
+    }
+  }
+
   function getPageStarCount() {
     const slug = getPageSlug();
+
+    // Prefer DOM-based counting for regular guide pages to avoid over-counting when
+    // openedToday contains legacy ids (pre-stable-id) for the same card.
+    if (slug !== 'story-orbit') {
+      try {
+        const cards = getRewardableGuideCardsInDom();
+        const uniqueOpened = new Set();
+        cards.forEach((card) => {
+          try {
+            const id = getCardId(card);
+            if (id && state.openedToday && state.openedToday[id]) uniqueOpened.add(id);
+          } catch (e) {}
+        });
+        return uniqueOpened.size;
+      } catch (e) {
+        // fall through to legacy counting below
+      }
+    }
+
     // Conta schede UNICHE aperte oggi (non duplicate).
     // Use a stable base id (strip the trailing serial) to avoid over-counting
     // when card ids are generated in different order across reloads.
@@ -7376,14 +7542,58 @@ const gamification = (() => {
         return Math.max(0, chapters + 1);
       }
 
-      const cards = document.querySelectorAll('.guide-card[data-carousel-item]');
-      return cards.length;
+      return getRewardableGuideCardsInDom().length;
     } catch {
       return 0;
     }
   }
 
+  // If older builds generated non-stable card ids (serial-dependent), users can end up with
+  // duplicate "opened" entries after we introduced stable ids.
+  // This causes the per-page badge (opened/total) to over-count.
+  // Fix: for the CURRENT page only, drop openedToday keys that don't map to any card in DOM.
+  function reconcileOpenedTodayForCurrentPage() {
+    try {
+      ensureDailyState();
+      const slug = getPageSlug();
+      if (!slug) return;
+      if (slug === 'story-orbit') return;
+      if (!state.openedToday || typeof state.openedToday !== 'object') return;
+
+      const rewardableCards = getRewardableGuideCardsInDom();
+
+      const currentIds = new Set();
+      rewardableCards.forEach((card) => {
+        try {
+          const id = getCardId(card);
+          if (id) currentIds.add(id);
+        } catch (e) {}
+      });
+      if (!currentIds.size) return;
+
+      let changed = false;
+      Object.keys(state.openedToday || {}).forEach((key) => {
+        if (!key || typeof key !== 'string') return;
+        if (!key.startsWith(`${slug}-`)) return;
+        if (currentIds.has(key)) return;
+        // This is most likely a legacy id for a card that now has a stable id.
+        try {
+          delete state.openedToday[key];
+          changed = true;
+        } catch (e) {}
+      });
+
+      if (changed) {
+        saveState();
+      }
+    } catch (e) {
+      // no-op
+    }
+  }
+
   function updatePageBadges() {
+    // Optional hygiene: remove legacy opened keys for this page so the badge stays sane.
+    try { reconcileOpenedTodayForCurrentPage(); } catch (e) {}
     const count = getPageStarCount();
     const total = getTotalPageCards();
     document.querySelectorAll('[data-page-stars]').forEach((el) => {
@@ -7402,12 +7612,16 @@ const gamification = (() => {
   try {
     window.addEventListener('i18nUpdated', () => {
       try { updatePageBadges(); } catch (e) {}
+      // i18n can rewrite button contents (innerHTML) and wipe our inline indicators.
+      // Re-apply card checks after translations so the pink checkmarks stay visible.
+      try { updateCardChecks(); } catch (e) {}
     });
   } catch (e) {}
 
   try {
     document.addEventListener('badiani:lang-changed', () => {
       try { updatePageBadges(); } catch (e) {}
+      try { updateCardChecks(); } catch (e) {}
     });
   } catch (e) {}
 
@@ -9284,6 +9498,54 @@ const gamification = (() => {
       try {
         ensureDailyState();
         return !!(tabId && state.openedTabsToday && state.openedTabsToday[tabId]);
+      } catch (e) {
+        return false;
+      }
+    },
+    // Preferred: checks tab opened status for a specific card+tabTitle and auto-migrates
+    // older entries that were saved under unstable card ids.
+    isTabOpenedFor(card, tabTitle) {
+      try {
+        ensureDailyState();
+        if (!card || !tabTitle) return false;
+
+        const cardId = getCardId(card);
+        if (!cardId) return false;
+        const tabId = `${cardId}::${slugify(tabTitle)}`;
+        if (state.openedTabsToday && state.openedTabsToday[tabId]) return true;
+
+        // Fallback label match
+        const pageSlug = getPageSlug();
+        const cardTitle = String((card.querySelector('h3')?.textContent || '')).trim();
+        const tabLabel = String(tabTitle || '').trim();
+        const norm = (s) => String(s || '').trim().toLowerCase();
+        const want = { pageSlug: norm(pageSlug), cardTitle: norm(cardTitle), tabTitle: norm(tabLabel) };
+
+        const opened = (state.openedTabsToday && typeof state.openedTabsToday === 'object') ? state.openedTabsToday : {};
+        let matchedEntry = null;
+        for (const [k, v] of Object.entries(opened)) {
+          if (!k || !v || typeof v !== 'object') continue;
+          const got = {
+            pageSlug: norm(v.pageSlug || ''),
+            cardTitle: norm(v.cardTitle || ''),
+            tabTitle: norm(v.tabTitle || ''),
+          };
+          if (got.pageSlug && got.pageSlug !== want.pageSlug) continue;
+          if (got.cardTitle !== want.cardTitle) continue;
+          if (got.tabTitle !== want.tabTitle) continue;
+          matchedEntry = v;
+          break;
+        }
+        if (matchedEntry) {
+          // Migrate for future strict lookups.
+          try {
+            if (!state.openedTabsToday) state.openedTabsToday = {};
+            state.openedTabsToday[tabId] = matchedEntry;
+            saveState();
+          } catch (e) {}
+          return true;
+        }
+        return false;
       } catch (e) {
         return false;
       }
@@ -11588,7 +11850,9 @@ toggles.forEach((button) => {
 
           const tabIdLocal = (gamification?.getTabIdFor ? gamification.getTabIdFor(card, title) : '') || `${cardId}::${String(title || '').toLowerCase().replace(/[^a-z0-9]+/gi, '-').replace(/^-+|-+$/g, '') || 'tab'}`;
           header.dataset.tabId = tabIdLocal;
-          const alreadyOpened = gamification?.isTabOpened ? gamification.isTabOpened(tabIdLocal) : false;
+          const alreadyOpened = gamification?.isTabOpenedFor
+            ? gamification.isTabOpenedFor(card, title)
+            : (gamification?.isTabOpened ? gamification.isTabOpened(tabIdLocal) : false);
           const cardStatus = gamification?.getCardCrystalStatus
             ? gamification.getCardCrystalStatus(cardId)
             : { crystals: 0, converted: false };
@@ -12326,7 +12590,9 @@ toggles.forEach((button) => {
 
             const tabIdLocal = (gamification?.getTabIdFor ? gamification.getTabIdFor(card, titleText) : '') || `${cardId}::${String(titleText || '').toLowerCase().replace(/[^a-z0-9]+/gi, '-').replace(/^-+|-+$/g, '') || 'tab'}`;
             header.dataset.tabId = tabIdLocal;
-            const alreadyOpened = gamification?.isTabOpened ? gamification.isTabOpened(tabIdLocal) : false;
+            const alreadyOpened = gamification?.isTabOpenedFor
+              ? gamification.isTabOpenedFor(card, titleText)
+              : (gamification?.isTabOpened ? gamification.isTabOpened(tabIdLocal) : false);
             const cardStatus = gamification?.getCardCrystalStatus
               ? gamification.getCardCrystalStatus(cardId)
               : { crystals: 0, converted: false };
@@ -14986,23 +15252,13 @@ document.addEventListener("DOMContentLoaded", () => {
       closeBtn?.focus?.({ preventScroll: true });
     } catch {}
 
-    // (Re)bind ended behavior: play twice (repeat once) then close.
+    // (Re)bind ended behavior: close automatically when the video ends.
     if (video) {
       try {
         if (endedHandler) video.removeEventListener('ended', endedHandler);
       } catch {}
       playCycles = 0;
       endedHandler = () => {
-        // First end -> replay once. Second end -> close.
-        if (playCycles === 0) {
-          playCycles = 1;
-          try {
-            video.currentTime = 0;
-            const p = video.play();
-            if (p && typeof p.catch === 'function') p.catch(() => {});
-          } catch {}
-          return;
-        }
         close();
       };
       try { video.addEventListener('ended', endedHandler); } catch {}
