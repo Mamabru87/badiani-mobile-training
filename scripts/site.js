@@ -4055,6 +4055,114 @@ const gamification = (() => {
       });
     });
   };
+
+  // ============================================
+  // QUIZ AUDIO FEEDBACK
+  // ============================================
+
+  const playQuizStartSound = () => {
+    withRunningAudioContext((ac) => {
+      const now = ac.currentTime;
+      const startAt = now + 0.03;
+
+      // Tre note crescenti "bin bin bin" - Do Mi Sol (C-E-G)
+      const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+      
+      notes.forEach((freq, i) => {
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
+        
+        osc.connect(gain);
+        gain.connect(ac.destination);
+        
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, startAt + (i * 0.15));
+        
+        gain.gain.setValueAtTime(0.0001, startAt + (i * 0.15));
+        gain.gain.exponentialRampToValueAtTime(0.35, startAt + (i * 0.15) + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, startAt + (i * 0.15) + 0.12);
+        
+        osc.start(startAt + (i * 0.15));
+        osc.stop(startAt + (i * 0.15) + 0.12);
+      });
+    });
+  };
+
+  const playQuizCorrectSound = () => {
+    withRunningAudioContext((ac) => {
+      const now = ac.currentTime;
+      const startAt = now + 0.03;
+
+      // Suono di successo - arpeggio ascendente brillante
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      
+      osc.connect(gain);
+      gain.connect(ac.destination);
+      
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(880, startAt); // A5
+      osc.frequency.exponentialRampToValueAtTime(1760, startAt + 0.15); // A6
+      
+      gain.gain.setValueAtTime(0.0001, startAt);
+      gain.gain.exponentialRampToValueAtTime(0.45, startAt + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.25);
+      
+      osc.start(startAt);
+      osc.stop(startAt + 0.25);
+    });
+  };
+
+  const playQuizWrongSound = () => {
+    withRunningAudioContext((ac) => {
+      const now = ac.currentTime;
+      const startAt = now + 0.03;
+
+      // Suono di errore - tono discendente con vibrato
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      
+      osc.connect(gain);
+      gain.connect(ac.destination);
+      
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(440, startAt); // A4
+      osc.frequency.exponentialRampToValueAtTime(220, startAt + 0.2); // A3
+      
+      gain.gain.setValueAtTime(0.0001, startAt);
+      gain.gain.exponentialRampToValueAtTime(0.38, startAt + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.30);
+      
+      osc.start(startAt);
+      osc.stop(startAt + 0.30);
+    });
+  };
+
+  const playQuizLaterSound = () => {
+    withRunningAudioContext((ac) => {
+      const now = ac.currentTime;
+      const startAt = now + 0.03;
+
+      // Suono di chiusura - simile a modal close ma più morbido
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      
+      osc.connect(gain);
+      gain.connect(ac.destination);
+      
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(520, startAt);
+      osc.frequency.exponentialRampToValueAtTime(340, startAt + 0.08);
+      
+      gain.gain.setValueAtTime(0.0001, startAt);
+      gain.gain.exponentialRampToValueAtTime(0.24, startAt + 0.014);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.14);
+      
+      osc.start(startAt);
+      osc.stop(startAt + 0.14);
+    });
+  };
+
   const BONUS_POINTS_PER_FULL_SET = 5;
   const GELATO_COOLDOWN = 24 * 60 * 60 * 1000;
   const GELATO_GOAL = 3;
@@ -8485,6 +8593,7 @@ const gamification = (() => {
     observer.observe(document.body, { childList: true, subtree: true });
 
     later.addEventListener('click', () => {
+      playQuizLaterSound(); // Suono di chiusura
       sessionActive = false;
       cleanupTimers();
       if (typeof onCancel === 'function') {
@@ -8802,6 +8911,14 @@ const gamification = (() => {
           disableAll();
           const isCorrect = Number.isInteger(correctIndex) && optionIndex === correctIndex;
           btn.classList.add(isCorrect ? 'is-correct' : 'is-wrong');
+          
+          // Suono feedback immediato
+          if (isCorrect) {
+            playQuizCorrectSound();
+          } else {
+            playQuizWrongSound();
+          }
+          
           if (!isCorrect) {
             setTimeout(() => fail(question), 400);
             return;
@@ -8910,6 +9027,14 @@ const gamification = (() => {
             disableAll();
             const isCorrect = Number.isInteger(correctIndex) && optionIndex === correctIndex;
             btn.classList.add(isCorrect ? 'is-correct' : 'is-wrong');
+            
+            // Suono feedback immediato
+            if (isCorrect) {
+              playQuizCorrectSound();
+            } else {
+              playQuizWrongSound();
+            }
+            
             if (!isCorrect) {
               setTimeout(() => fail(question), 400);
               return;
@@ -9160,9 +9285,12 @@ const gamification = (() => {
       // Chiudi il loading
       closeOverlay();
 
-      // Aspetta un attimo per la transizione
+      // Aspetta un attimo per la transizione e suona il jingle di start
       setTimeout(() => {
+        playQuizStartSound(); // Suono "bin bin bin" crescente
+
         const handleMiniSuccess = () => {
+          playQuizCorrectSound(); // Suono di successo
           state.testMeCredits = Math.max(0, (state.testMeCredits || 0) + 1);
           saveState();
           updateUI();
@@ -9242,6 +9370,7 @@ const gamification = (() => {
         };
 
         const handleMiniFail = (question) => {
+          playQuizWrongSound(); // Suono di errore
           // Apply the penalty
           applyMiniQuizPenalty();
 
