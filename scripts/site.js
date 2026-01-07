@@ -7991,57 +7991,104 @@ const gamification = (() => {
 
   /**
    * Chiede a Berny di generare una domanda basata sul contenuto studiato.
-   * Ritorna un oggetto con la struttura compatibile col sistema di quiz esistente.
+   * VERSIONE MOCK LOCALE - NON dipende da API esterne!
+   * Perfetta per testing. Switchare a API reale quando pronto.
    */
   async function generateBernyQuizQuestion() {
     try {
-      // Per ora, ritorna null per usare il fallback standard ma con tema Berny
-      // Questo rende il quiz sempre attivo con lo stile Berny
-      console.log('💡 Berny: modalità fallback (API non ancora implementata)');
-      return null;
-      
-      // CODICE FUTURO PER INTEGRAZIONE COMPLETA CON GEMINI:
-      /*
       const studiedCards = getStudiedCardsContent();
       
+      // Se non ci sono schede, return null per fallback standard
       if (!studiedCards || studiedCards.length === 0) {
-        console.warn('⚠️ Nessuna scheda studiata trovata');
+        console.log('📝 Nessuna scheda studiata, uso fallback');
         return null;
       }
 
-      const recentCards = studiedCards.slice(0, 5);
-      const contextSummary = recentCards.map((card, idx) => {
-        const snippet = (card.content || '').substring(0, 300);
-        return `${idx + 1}. ${card.cardTitle || card.tabTitle}\n${snippet}...`;
-      }).join('\n\n');
-
-      const prompt = `Genera una domanda MC su: ${contextSummary}`;
-
-      if (!window.bernyBrain || typeof window.bernyBrain.processMessage !== 'function') {
-        console.warn('⚠️ Berny Brain API non disponibile');
-        return null;
-      }
-
-      const response = await window.bernyBrain.processMessage(prompt);
-      if (!response) return null;
-
-      const jsonText = String(response).trim();
-      const questionData = JSON.parse(jsonText);
+      const recentCards = studiedCards.slice(0, 3);
+      const cardTitles = recentCards.map(c => c.cardTitle || c.tabTitle).filter(Boolean);
       
-      return {
+      console.log(`✅ Berny MOCK: generando domanda su [${cardTitles.join(', ')}]`);
+
+      // BANCA DOMANDE MOCK - associate ai topic comuni
+      const mockQuestions = {
+        'caffe': [
+          {
+            question: 'Qual è la temperatura ideale per l\'estrazione di un espresso?',
+            options: ['70°C', '88-92°C', '110°C', '60°C'],
+            correct: 1,
+            explanation: 'La temperatura ottimale è tra 88-92°C.'
+          },
+          {
+            question: 'Quanto tempo deve durare l\'estrazione?',
+            options: ['10-15 sec', '25-30 sec', '5 sec', '60 sec'],
+            correct: 1,
+            explanation: 'Un buon espresso richiede 25-30 secondi di estrazione.'
+          }
+        ],
+        'gelato-lab': [
+          {
+            question: 'A quale temperatura si conserva il gelato?',
+            options: ['-5°C', '-8°C', '-14°C', '-20°C'],
+            correct: 2,
+            explanation: 'La temperatura è -8°C a -14°C.'
+          }
+        ],
+        'pastries': [
+          {
+            question: 'Quale è la temperatura per la lievitazione?',
+            options: ['15°C', '25-27°C', '35°C', '45°C'],
+            correct: 1,
+            explanation: 'La temperatura ottimale è 25-27°C.'
+          }
+        ],
+        'sweet-treats': [
+          {
+            question: 'Quale zucchero dona brillantezza?',
+            options: ['Grezzo', 'Canna', 'Semolato', 'A velo'],
+            correct: 2,
+            explanation: 'Lo zucchero semolato crea una finitura brillante.'
+          }
+        ]
+      };
+
+      // Raccogli domande dai topic visitati
+      const possibleQuestions = [];
+      recentCards.forEach(card => {
+        const topic = card.pageSlug;
+        if (mockQuestions[topic]) {
+          possibleQuestions.push(...mockQuestions[topic]);
+        }
+      });
+
+      // Se nessun topic specifico, usa generica
+      if (possibleQuestions.length === 0) {
+        possibleQuestions.push({
+          question: `Cosa hai imparato da "${cardTitles[0]}"?`,
+          options: ['Poco', 'Molto', 'Abbastanza', 'Nulla'],
+          correct: 1,
+          explanation: 'Ottimo! Hai imparato molte informazioni importanti.'
+        });
+      }
+
+      // Scegli casualmente
+      const q = possibleQuestions[Math.floor(Math.random() * possibleQuestions.length)];
+
+      const bernyQuestion = {
         id: `berny-${Date.now()}`,
         topic: 'Berny Adaptive',
-        question: questionData.question,
-        options: questionData.options,
-        correct: questionData.correct,
-        explanation: questionData.explanation || '',
+        question: q.question,
+        options: q.options,
+        correct: q.correct,
+        explanation: q.explanation,
         generatedByBerny: true,
-        basedOnCards: recentCards.map(c => c.cardTitle || c.tabTitle).filter(Boolean)
+        basedOnCards: cardTitles
       };
-      */
+
+      console.log('🎯 Berny MOCK: ' + q.question);
+      return bernyQuestion;
 
     } catch (error) {
-      console.error('❌ Errore generazione domanda:', error);
+      console.error('❌ Errore Berny:', error);
       return null;
     }
   }
@@ -8358,13 +8405,7 @@ const gamification = (() => {
       bernyHeader.className = 'berny-quiz-header';
       bernyHeader.innerHTML = `
         <div class="berny-quiz-avatar">
-          <svg width="48" height="48" viewBox="0 0 60 60" fill="none">
-            <circle cx="30" cy="30" r="28" fill="#E30613" opacity="0.15"/>
-            <circle cx="30" cy="30" r="24" fill="#E30613"/>
-            <path d="M20 28 Q 25 23, 30 28 T 40 28" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-            <circle cx="22" cy="24" r="2.5" fill="white"/>
-            <circle cx="38" cy="24" r="2.5" fill="white"/>
-          </svg>
+          <img src="assets/avatars/berni%20avatar.png" alt="Berny" loading="lazy" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" />
         </div>
         <div class="berny-quiz-info">
           <h3 class="berny-quiz-name">Berny</h3>
@@ -8702,6 +8743,15 @@ const gamification = (() => {
     };
 
     const renderClassicStep = () => {
+      // Se è il primo step di un quiz Berny, mostra l'animazione di typing
+      if (isBernyQuiz && currentIndex === 0) {
+        renderClassicStepWithBernyAnimation();
+      } else {
+        renderClassicStepNormal();
+      }
+    };
+
+    const renderClassicStepNormal = () => {
       const question = questions[currentIndex];
 
       // Ensure we have a correct index even for i18n-driven pools (e.g. sm-*).
@@ -8772,6 +8822,114 @@ const gamification = (() => {
 
       card.append(stepLabel, prompt, options);
       stage.appendChild(card);
+    };
+
+    const renderClassicStepWithBernyAnimation = () => {
+      const question = questions[currentIndex];
+      const correctIndex = getCorrectIndex(question);
+      stage.innerHTML = '';
+      cleanupTimers();
+
+      const card = document.createElement('div');
+      card.className = 'quiz-card';
+
+      const stepLabel = document.createElement('p');
+      stepLabel.className = 'quiz-step';
+      stepLabel.textContent = `${tr('quiz.question')} ${currentIndex + 1}/${questions.length}`;
+
+      // FASE 1: Chat bubble con typing animation
+      const typingContainer = document.createElement('div');
+      typingContainer.style.minHeight = '60px';
+
+      // Frasi casuali di Berny
+      const bernyQueries = [
+        'Vediamo che domanda potrei farti...',
+        'Vediamo cosa hai studiato...',
+        'Fammi vedere che hai capito...',
+        'Eccone una per te...',
+      ];
+      const randomQuery = bernyQueries[Math.floor(Math.random() * bernyQueries.length)];
+
+      const typingText = document.createElement('p');
+      typingText.className = 'berny-typing-text typing';
+      typingText.textContent = randomQuery;
+      typingContainer.appendChild(typingText);
+
+      // FASE 2: Puntini di sospensione (dopo ~1.8s)
+      const dotsContainer = document.createElement('div');
+      dotsContainer.style.opacity = '0';
+      dotsContainer.style.transition = 'opacity 0.3s ease';
+      const dots = document.createElement('div');
+      dots.className = 'berny-dots';
+      ['.', '.', '.'].forEach((dot, i) => {
+        const span = document.createElement('span');
+        span.className = 'berny-dot';
+        span.textContent = '.';
+        dots.appendChild(span);
+      });
+      dotsContainer.appendChild(dots);
+      typingContainer.appendChild(dotsContainer);
+
+      card.appendChild(stepLabel);
+      card.appendChild(typingContainer);
+      stage.appendChild(card);
+
+      // FASE 3: Mostra domanda per 1 secondo
+      timerId = setTimeout(() => {
+        if (!sessionActive) return;
+        dotsContainer.style.opacity = '1';
+      }, 1800);
+
+      // FASE 4: Mostri le opzioni con fade-in (dopo ~1 secondo)
+      timerId = setTimeout(() => {
+        if (!sessionActive) return;
+        // Rimuovi il typing container
+        typingContainer.style.display = 'none';
+
+        // Crea le opzioni con animazione
+        const prompt = document.createElement('p');
+        prompt.className = 'quiz-prompt';
+        prompt.textContent = question.question;
+
+        const options = document.createElement('div');
+        options.className = 'quiz-options';
+
+        const disableAll = () => {
+          options.querySelectorAll('button').forEach((btn) => {
+            btn.disabled = true;
+          });
+        };
+
+        (question.options || []).forEach((option, optionIndex) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'quiz-option';
+          btn.textContent = option;
+          btn.addEventListener('click', () => {
+            if (!sessionActive) return;
+            disableAll();
+            const isCorrect = Number.isInteger(correctIndex) && optionIndex === correctIndex;
+            btn.classList.add(isCorrect ? 'is-correct' : 'is-wrong');
+            if (!isCorrect) {
+              setTimeout(() => fail(question), 400);
+              return;
+            }
+            if (currentIndex === questions.length - 1) {
+              setTimeout(() => finishSuccess(), 600);
+            } else {
+              setTimeout(() => {
+                markProgress(currentIndex, true);
+                currentIndex += 1;
+                markProgress(currentIndex, false);
+                renderStep();
+              }, 500);
+            }
+          });
+          options.appendChild(btn);
+        });
+
+        card.append(prompt, options);
+      }, 2800);
     };
 
     const renderFlashStep = () => {
@@ -9211,6 +9369,30 @@ const gamification = (() => {
     if (!Array.isArray(state.history.quiz)) state.history.quiz = [];
 
     const review = buildQuizReview(question);
+    
+    // Se la domanda è stata generata da Berny, aggiungi i dati della scheda originale
+    const bernyMetadata = {};
+    if (question?.generatedByBerny && question?.basedOnCards && Array.isArray(question.basedOnCards)) {
+      bernyMetadata.generatedByBerny = true;
+      bernyMetadata.basedOnCards = question.basedOnCards;
+      console.log('📝 Berny: Utente ha sbagliato su:', question.basedOnCards);
+      
+      // INVIA FEEDBACK A BERNY - Log dell'errore per migliorare le domande future
+      if (window.bernyBrain && typeof window.bernyBrain.logError === 'function') {
+        try {
+          window.bernyBrain.logError({
+            cardsTopic: question.basedOnCards,
+            question: review.prompt,
+            userFailed: true,
+            correctAnswer: review.correctText,
+            timestamp: Date.now()
+          });
+        } catch (e) {
+          console.warn('⚠️ Errore nel feedback a Berny:', e);
+        }
+      }
+    }
+
     state.history.quiz.push({
       ts: Date.now(),
       correct: false,
@@ -9222,10 +9404,17 @@ const gamification = (() => {
       suggestion: review.suggestion,
       specHref: review.specHref,
       specLabel: review.specLabel,
+      ...bernyMetadata,
     });
     if (state.history.quiz.length > 300) state.history.quiz = state.history.quiz.slice(-300);
     saveState();
     updateUI();
+
+    // Se errore Berny, aggiungi il link alla scheda originale per la revisione
+    let revisionsLinks = '';
+    if (bernyMetadata.generatedByBerny && bernyMetadata.basedOnCards?.length > 0) {
+      revisionsLinks = '&revisions=' + encodeURIComponent(JSON.stringify(bernyMetadata.basedOnCards));
+    }
 
     const prompt = encodeURIComponent(review.prompt || '');
     const answer = encodeURIComponent(review.correctText || '');
@@ -9233,7 +9422,7 @@ const gamification = (() => {
     const tip = encodeURIComponent(review.suggestion || '');
     const spec = encodeURIComponent(review.specHref || '');
     const specLabel = encodeURIComponent(review.specLabel || '');
-    const target = `quiz-solution.html?prompt=${prompt}&answer=${answer}&explain=${explain}&tip=${tip}&spec=${spec}&specLabel=${specLabel}`;
+    const target = `quiz-solution.html?prompt=${prompt}&answer=${answer}&explain=${explain}&tip=${tip}&spec=${spec}&specLabel=${specLabel}${revisionsLinks}`;
     window.location.href = target;
   }
 

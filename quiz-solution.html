@@ -56,12 +56,45 @@
       line-height: 1.65;
       font-size: 16px;
     }
-    .solution-note strong { color: var(--brand-blue-deep); }
-    .solution-actions {
+    .solution-revisions {
+      margin-top: 20px;
+      padding: 16px;
+      border-radius: 12px;
+      background: rgba(227, 6, 19, 0.06);
+      border-left: 4px solid #E30613;
+    }
+    .solution-revisions-title {
+      font-weight: 600;
+      color: #E30613;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+    }
+    .solution-revisions-list {
       display: flex;
-      gap: 12px;
-      margin-top: 22px;
-      flex-wrap: wrap;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .solution-revisions-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: #fff;
+      border: 1px solid #E30613;
+      color: #E30613;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.15s ease;
+    }
+    .solution-revisions-link:hover {
+      background: #E30613;
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(227, 6, 19, 0.24);
     }
     .solution-actions a {
       display: inline-flex;
@@ -89,6 +122,10 @@
     <div class="solution-answer" data-solution-answer data-i18n="quizSolution.loadingAnswer">Caricamento risposta corretta...</div>
     <div class="solution-note" data-solution-explain hidden><strong data-i18n="quizSolution.explainLabel">Spiegazione:</strong> <span data-solution-explain-text></span></div>
     <div class="solution-note" data-solution-tip hidden><strong data-i18n="quizSolution.tipLabel">Suggerimento:</strong> <span data-solution-tip-text></span></div>
+    <div class="solution-revisions" data-solution-revisions hidden>
+      <div class="solution-revisions-title">📚 Berny consiglia di rivedere:</div>
+      <div class="solution-revisions-list" data-solution-revisions-list></div>
+    </div>
     <div class="solution-actions">
       <a href="index.html" data-i18n="quizSolution.backHub">⬅ Torna all'hub</a>
       <a href="#" data-solution-spec hidden data-i18n="quizSolution.openSpecs">📖 Apri specifiche</a>
@@ -115,6 +152,8 @@
       const tip = params.get('tip');
       const spec = params.get('spec');
       const specLabel = params.get('specLabel');
+      const revisions = params.get('revisions');
+      
       const questionEl = document.querySelector('[data-solution-question]');
       const answerEl = document.querySelector('[data-solution-answer]');
       const explainWrap = document.querySelector('[data-solution-explain]');
@@ -122,6 +161,9 @@
       const tipWrap = document.querySelector('[data-solution-tip]');
       const tipText = document.querySelector('[data-solution-tip-text]');
       const specLink = document.querySelector('[data-solution-spec]');
+      const revisionsWrap = document.querySelector('[data-solution-revisions]');
+      const revisionsList = document.querySelector('[data-solution-revisions-list]');
+      
       if (q && a) {
         questionEl.textContent = decodeURIComponent(q);
         answerEl.textContent = t('quizSolution.correctAnswerPrefix', null, 'Risposta corretta:') + ' ' + decodeURIComponent(a);
@@ -146,6 +188,39 @@
               }
             }
             specLink.hidden = false;
+          }
+        }
+        
+        // Mostra le schede di revisione consigliate da Berny
+        if (revisions && revisionsWrap && revisionsList) {
+          try {
+            const cardNames = JSON.parse(decodeURIComponent(revisions));
+            if (Array.isArray(cardNames) && cardNames.length > 0) {
+              // Mappa il nome della scheda ai file corretti
+              const cardLinks = {
+                'Caffè': { href: 'caffe.html', label: '☕ Torna a Caffè' },
+                'Gelato Lab': { href: 'gelato-lab.html', label: '🍦 Torna a Gelato Lab' },
+                'Dolciumi': { href: 'sweet-treats.html', label: '🍰 Torna a Dolciumi' },
+                'Paste': { href: 'pastries.html', label: '🥐 Torna a Paste' },
+                'Slitti Yoyo': { href: 'slitti-yoyo.html', label: '🍫 Torna a Slitti Yoyo' },
+                'Festivo': { href: 'festive.html', label: '🎄 Torna a Festivo' },
+              };
+              
+              revisionsList.innerHTML = '';
+              cardNames.forEach(cardName => {
+                const linkInfo = cardLinks[cardName] || { href: 'index.html', label: `📖 ${cardName}` };
+                const link = document.createElement('a');
+                link.href = linkInfo.href;
+                link.className = 'solution-revisions-link';
+                link.textContent = linkInfo.label;
+                revisionsList.appendChild(link);
+              });
+              
+              revisionsWrap.hidden = false;
+              console.log('✅ Berny: Schede di revisione consigliate:', cardNames);
+            }
+          } catch (e) {
+            console.warn('⚠️ Errore parsing schede revisione:', e);
           }
         }
       } else {

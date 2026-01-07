@@ -2850,6 +2850,115 @@ h4 {
   font-weight: 600;
 }
 
+/* ============================================================
+   BERNY TYPING & DYNAMIC ANIMATION
+   ============================================================ */
+
+.berny-typing-text {
+  min-height: 42px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+@keyframes bernyType {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.berny-typing-text.typing {
+  animation: bernyType 1.8s steps(40, end) forwards;
+  overflow: hidden;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Puntini di sospensione animati */
+.berny-dots {
+  font-size: 16px;
+  letter-spacing: 2px;
+  color: var(--ink);
+  font-weight: 600;
+  height: 24px;
+  display: flex;
+  align-items: center;
+}
+
+@keyframes beryDotPulse {
+  0%, 20% { opacity: 0.4; }
+  50% { opacity: 1; }
+  100% { opacity: 0.4; }
+}
+
+.berny-dot {
+  display: inline-block;
+  animation: beryDotPulse 1.4s infinite;
+}
+
+.berny-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.berny-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* Domanda in preview (solo testo, senza opzioni) */
+.berny-question-preview {
+  opacity: 0;
+  animation: fadeInShort 0.3s ease 0.2s forwards;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+@keyframes fadeInShort {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Opzioni appaiono con fade-in staggerato */
+.quiz-option {
+  opacity: 0;
+  animation: optionFadeIn 0.4s ease forwards;
+}
+
+.quiz-option:nth-child(1) {
+  animation-delay: 1.8s;
+}
+
+.quiz-option:nth-child(2) {
+  animation-delay: 2.1s;
+}
+
+.quiz-option:nth-child(3) {
+  animation-delay: 2.4s;
+}
+
+.quiz-option:nth-child(4) {
+  animation-delay: 2.7s;
+}
+
+@keyframes optionFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Stile speciale per quiz screen Berny */
 .quiz-screen--berny .quiz-card {
   border-color: rgba(227, 6, 19, 0.25);
