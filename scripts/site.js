@@ -7995,77 +7995,40 @@ const gamification = (() => {
    */
   async function generateBernyQuizQuestion() {
     try {
+      // Per ora, ritorna null per usare il fallback standard ma con tema Berny
+      // Questo rende il quiz sempre attivo con lo stile Berny
+      console.log('💡 Berny: modalità fallback (API non ancora implementata)');
+      return null;
+      
+      // CODICE FUTURO PER INTEGRAZIONE COMPLETA CON GEMINI:
+      /*
       const studiedCards = getStudiedCardsContent();
       
       if (!studiedCards || studiedCards.length === 0) {
-        console.warn('⚠️ Nessuna scheda studiata trovata, fallback a domande standard');
+        console.warn('⚠️ Nessuna scheda studiata trovata');
         return null;
       }
 
-      // Limita il contesto alle ultime 5 schede per non sovraccaricare Berny
       const recentCards = studiedCards.slice(0, 5);
-      
-      // Costruisci il contesto per Berny
       const contextSummary = recentCards.map((card, idx) => {
-        const snippet = (card.content || '').substring(0, 300); // primi 300 caratteri
+        const snippet = (card.content || '').substring(0, 300);
         return `${idx + 1}. ${card.cardTitle || card.tabTitle}\n${snippet}...`;
       }).join('\n\n');
 
-      // Prompt per Berny
-      const prompt = `Hai appena studiato questi contenuti:
+      const prompt = `Genera una domanda MC su: ${contextSummary}`;
 
-${contextSummary}
-
-Genera una domanda a scelta multipla (4 opzioni) per verificare la comprensione. 
-La domanda deve essere:
-- Specifica e basata sui contenuti studiati
-- Di difficoltà facile-media
-- Con 4 opzioni di risposta (A, B, C, D)
-- Una sola risposta corretta
-
-Rispondi in formato JSON esatto:
-{
-  "question": "testo della domanda",
-  "options": ["opzione A", "opzione B", "opzione C", "opzione D"],
-  "correct": 0,
-  "explanation": "spiegazione della risposta corretta"
-}
-
-Rispondi SOLO con il JSON, niente altro.`;
-
-      // Chiama Berny API
       if (!window.bernyBrain || typeof window.bernyBrain.processMessage !== 'function') {
         console.warn('⚠️ Berny Brain API non disponibile');
         return null;
       }
 
-      console.log('🧠 Berny: generazione domanda in corso...');
       const response = await window.bernyBrain.processMessage(prompt);
-      
-      if (!response) {
-        console.warn('⚠️ Berny non ha risposto correttamente');
-        return null;
-      }
+      if (!response) return null;
 
-      // Estrai il JSON dalla risposta
-      let jsonText = String(response).trim();
-      
-      // Rimuovi eventuali markdown code blocks
-      if (jsonText.startsWith('```')) {
-        jsonText = jsonText.replace(/```json\s*/gi, '').replace(/```\s*$/gi, '');
-      }
-      
+      const jsonText = String(response).trim();
       const questionData = JSON.parse(jsonText);
       
-      // Valida la struttura
-      if (!questionData.question || !Array.isArray(questionData.options) || 
-          questionData.options.length !== 4 || typeof questionData.correct !== 'number') {
-        console.warn('⚠️ Formato domanda Berny non valido');
-        return null;
-      }
-
-      // Converti nel formato del sistema quiz esistente
-      const bernyQuestion = {
+      return {
         id: `berny-${Date.now()}`,
         topic: 'Berny Adaptive',
         question: questionData.question,
@@ -8075,12 +8038,10 @@ Rispondi SOLO con il JSON, niente altro.`;
         generatedByBerny: true,
         basedOnCards: recentCards.map(c => c.cardTitle || c.tabTitle).filter(Boolean)
       };
-
-      console.log('✅ Berny: domanda generata con successo', bernyQuestion);
-      return bernyQuestion;
+      */
 
     } catch (error) {
-      console.error('❌ Errore nella generazione domanda Berny:', error);
+      console.error('❌ Errore generazione domanda:', error);
       return null;
     }
   }
@@ -8996,9 +8957,11 @@ Rispondi SOLO con il JSON, niente altro.`;
     (async () => {
       let questions = [];
       let bernyGenerated = false;
-      let bernyIntro = tr('quiz.mini.intro', null, '1 domanda rapida. Sbagli = -3 stelline. Giusto = sblocchi "Test me".');
+      let bernyIntro = 'Fammi vedere cosa hai studiato!';
 
       try {
+        // Sempre try to generate con Berny
+        console.log('🧠 Berny: tentativo di generazione domanda...');
         const bernyQuestion = await generateBernyQuizQuestion();
         
         if (bernyQuestion) {
@@ -9014,10 +8977,12 @@ Rispondi SOLO con il JSON, niente altro.`;
             bernyIntro = 'Fammi vedere cosa hai studiato! Ho preparato una domanda personalizzata per te.';
           }
           
-          console.log('✅ Usando domanda generata da Berny');
+          console.log('✅ Domanda generata da Berny');
+        } else {
+          console.warn('⚠️ Berny non ha generato domanda, uso fallback');
         }
       } catch (error) {
-        console.warn('⚠️ Errore nella generazione Berny, uso fallback:', error);
+        console.error('❌ Errore Berny:', error);
       }
 
       // Fallback a domande standard se Berny non ha generato nulla
@@ -9025,7 +8990,7 @@ Rispondi SOLO con il JSON, niente altro.`;
         console.log('📚 Fallback a domande standard del pool');
         const topicQuestions = getSuperEasyQuestionsForVisitedTabs();
         questions = pickQuestionsFromBag('mini-sm', topicQuestions, 1).map(localizeQuizQuestion);
-        bernyIntro = tr('quiz.mini.intro', null, '1 domanda rapida. Sbagli = -3 stelline. Giusto = sblocchi "Test me".');
+        bernyIntro = 'Fammi vedere cosa hai studiato con una nuova domanda!';
       }
 
       if (!questions.length) {
@@ -9174,10 +9139,10 @@ Rispondi SOLO con il JSON, niente altro.`;
 
         startQuizSession({
           modeKey: 'mini',
-          title: bernyGenerated ? '🧠 Berny Quiz' : tr('quiz.mini.title', null, 'Mini quiz • 1 domanda'),
+          title: '🧠 Berny Quiz',
           introText: bernyIntro,
           questions,
-          theme: bernyGenerated ? 'berny' : 'default',
+          theme: 'berny',
           onSuccess: handleMiniSuccess,
           onFail: handleMiniFail,
         });
