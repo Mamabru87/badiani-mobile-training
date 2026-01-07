@@ -5,69 +5,33 @@
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     let audioCtx;
 
-    // Initialize Audio Context on first interaction
+    // Initialize Audio Context only after a trusted user gesture
     function initAudio() {
-        if (!audioCtx) {
-            audioCtx = new AudioContext();
-        }
-        if (audioCtx.state === 'suspended') {
-            audioCtx.resume();
+        try {
+            if (!window.__badianiUserGesture) return false;
+            if (!AudioContext) return false;
+            if (!audioCtx) {
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume().catch(() => {});
+            }
+            return true;
+        } catch (_) {
+            return false;
         }
     }
 
     // Sound: Soft "Pop" (Bubble)
     function playGelatoPop() {
-        if (!audioCtx) return;
-        
-        const t = audioCtx.currentTime;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-
-        // Bubble sound: Sine wave sweeping up quickly
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(200, t);
-        osc.frequency.exponentialRampToValueAtTime(400, t + 0.1);
-        
-        // Envelope: Attack -> Decay
-        gain.gain.setValueAtTime(0, t);
-        gain.gain.linearRampToValueAtTime(0.15, t + 0.02);
-        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
-
-        osc.start(t);
-        osc.stop(t + 0.3);
+        // Silenziato per evitare suoni involontari
+        return;
     }
 
     // Sound: Soft "Whoosh" (Slide)
     function playGelatoSlide() {
-        if (!audioCtx) return;
-
-        const t = audioCtx.currentTime;
-        const noiseBuffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.2, audioCtx.sampleRate);
-        const output = noiseBuffer.getChannelData(0);
-        for (let i = 0; i < noiseBuffer.length; i++) {
-            output[i] = Math.random() * 2 - 1;
-        }
-
-        const noise = audioCtx.createBufferSource();
-        noise.buffer = noiseBuffer;
-        
-        const filter = audioCtx.createBiquadFilter();
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(400, t);
-        filter.frequency.linearRampToValueAtTime(100, t + 0.2);
-
-        const gain = audioCtx.createGain();
-        gain.gain.setValueAtTime(0.05, t);
-        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
-
-        noise.connect(filter);
-        filter.connect(gain);
-        gain.connect(audioCtx.destination);
-
-        noise.start(t);
+        // Silenziato
+        return;
     }
 
     // IMPORTANT:
@@ -84,26 +48,22 @@
         let lastScrollX = track.scrollLeft;
 
         track.addEventListener('scroll', () => {
-            initAudio();
+            if (!initAudio()) return;
 
-            // Detect significant movement for optional "slide" sound
+            // Nessun suono su scroll (slide/pop disabilitati)
             const currentScrollX = track.scrollLeft;
-            if (Math.abs(currentScrollX - lastScrollX) > 50) {
-                // playGelatoSlide(); // Optional; keep disabled to avoid noise.
-                lastScrollX = currentScrollX;
-            }
+            lastScrollX = currentScrollX;
 
             window.clearTimeout(isScrolling);
             isScrolling = setTimeout(() => {
-                playGelatoPop();
+                // silenziato
             }, 120);
         }, { passive: true });
 
-        // Add click feedback to buttons inside cards
+        // Disabilita feedback click sulle card del cockpit
         track.querySelectorAll('.btn, .stat').forEach(btn => {
             btn.addEventListener('click', () => {
-                initAudio();
-                playGelatoPop();
+                // nessun suono
             });
         });
     }

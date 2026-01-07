@@ -15029,6 +15029,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       let lastCardIndex = 0;
         let isScrolling = false;
+        let hasInitializedIndex = false;
 
         carousel.addEventListener('scroll', () => {
             if (!isScrolling) {
@@ -15049,6 +15050,13 @@ document.addEventListener("DOMContentLoaded", () => {
             const cardWidth = firstCard.offsetWidth + gap; 
             const scrollPos = element.scrollLeft;
             const currentIndex = Math.round(scrollPos / cardWidth);
+
+            // Salta il primo rilevamento per evitare suono all'apertura
+            if (!hasInitializedIndex) {
+              lastCardIndex = currentIndex;
+              hasInitializedIndex = true;
+              return;
+            }
 
             if (currentIndex !== lastCardIndex) {
               const silentTick = element.dataset.silentTick === '1';
