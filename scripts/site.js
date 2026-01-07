@@ -8272,6 +8272,12 @@ const gamification = (() => {
             options: ['10-15 sec', '25-30 sec', '5 sec', '60 sec'],
             correct: 1,
             explanation: 'Un buon espresso richiede 25-30 secondi di estrazione.'
+          },
+          {
+            question: 'A quale temperatura si monta il latte per il cappuccino?',
+            options: ['55°C', '65°C', '75°C', '85°C'],
+            correct: 1,
+            explanation: 'La temperatura ideale è circa 65°C per avere microfoam perfetta.'
           }
         ],
         'gelato-lab': [
@@ -8280,6 +8286,12 @@ const gamification = (() => {
             options: ['-5°C', '-8°C', '-14°C', '-20°C'],
             correct: 2,
             explanation: 'La temperatura è -8°C a -14°C.'
+          },
+          {
+            question: 'Quanto dura il gelato dopo l\'apertura della vaschetta?',
+            options: ['1 giorno', '3 giorni', '7 giorni', '14 giorni'],
+            correct: 1,
+            explanation: 'Dopo apertura, il gelato va consumato entro 24-48 ore per qualità.'
           }
         ],
         'pastries': [
@@ -8288,6 +8300,12 @@ const gamification = (() => {
             options: ['15°C', '25-27°C', '35°C', '45°C'],
             correct: 1,
             explanation: 'La temperatura ottimale è 25-27°C.'
+          },
+          {
+            question: 'Quanto tempo di riposo serve per i croissant?',
+            options: ['30 min', '1 ora', '2 ore', '4 ore'],
+            correct: 2,
+            explanation: 'I croissant necessitano di almeno 2 ore di riposo in frigo.'
           }
         ],
         'sweet-treats': [
@@ -8296,6 +8314,34 @@ const gamification = (() => {
             options: ['Grezzo', 'Canna', 'Semolato', 'A velo'],
             correct: 2,
             explanation: 'Lo zucchero semolato crea una finitura brillante.'
+          },
+          {
+            question: 'A quale temperatura si servono i waffle?',
+            options: ['Freddi', 'Tiepidi', 'Caldi', 'Bollenti'],
+            correct: 2,
+            explanation: 'I waffle vanno serviti caldi per mantenere la croccantezza.'
+          }
+        ],
+        'festive': [
+          {
+            question: 'A quale temperatura si frigge il churro?',
+            options: ['150°C', '170°C', '190°C', '210°C'],
+            correct: 1,
+            explanation: 'La temperatura ideale per friggere i churros è 170-180°C.'
+          },
+          {
+            question: 'Quanto tempo si conserva il panettone dopo apertura?',
+            options: ['1 giorno', '3 giorni', '5 giorni', '7 giorni'],
+            correct: 1,
+            explanation: 'Il panettone va consumato entro 2-3 giorni dall\'apertura.'
+          }
+        ],
+        'slitti-yoyo': [
+          {
+            question: 'Qual è la caratteristica principale del cioccolato Slitti?',
+            options: ['Economico', 'Artigianale', 'Industriale', 'Sintetico'],
+            correct: 1,
+            explanation: 'Slitti produce cioccolato artigianale di alta qualità.'
           }
         ]
       };
@@ -8309,14 +8355,10 @@ const gamification = (() => {
         }
       });
 
-      // Se nessun topic specifico, usa generica
+      // Se nessuna domanda trovata per i topic studiati, usa fallback standard
       if (possibleQuestions.length === 0) {
-        possibleQuestions.push({
-          question: `Cosa hai imparato da "${cardNames[0]}"?`,
-          options: ['Poco', 'Molto', 'Abbastanza', 'Nulla'],
-          correct: 1,
-          explanation: 'Ottimo! Hai imparato molte informazioni importanti.'
-        });
+        console.log('⚠️ Berny: nessuna domanda mock per i topic studiati, uso fallback');
+        return null; // Fa usare il pool standard di domande
       }
 
       // Scegli casualmente
@@ -8648,6 +8690,10 @@ const gamification = (() => {
     // Se è un quiz Berny, mostra l'avatar e uno stile chat
     const isBernyQuiz = theme === 'berny' || (questions[0] && questions[0].generatedByBerny);
     
+    // Array per memorizzare i messaggi della chat
+    let chatMessages = [];
+    let chatContainer = null;
+    
     if (isBernyQuiz) {
       // Header con avatar Berny
       const bernyHeader = document.createElement('div');
@@ -8663,16 +8709,15 @@ const gamification = (() => {
       `;
       wrapper.appendChild(bernyHeader);
       
-      // Messaggio di Berny in stile chat bubble
-      const bernyMessage = document.createElement('div');
-      bernyMessage.className = 'berny-chat-bubble';
-      bernyMessage.innerHTML = `
-        <div class="berny-chat-text">
-          <p><strong>${title || '🧠 Quiz Personalizzato'}</strong></p>
-          <p>${introText || 'Ho preparato una domanda basata su quello che hai studiato!'}</p>
-        </div>
-      `;
-      wrapper.appendChild(bernyMessage);
+      // Chat container (sostituisce il messaggio introduttivo)
+      chatContainer = document.createElement('div');
+      chatContainer.className = 'berny-chat-container';
+      chatContainer.style.cssText = 'max-height: 200px; overflow-y: auto; padding: 12px; background: rgba(236, 65, 140, 0.05); border-radius: 12px; margin-bottom: 16px; scroll-behavior: smooth;';
+      
+      // Messaggio iniziale
+      addBernyMessage('Andiamo! Vediamo cosa hai studiato... 🎯');
+      
+      wrapper.appendChild(chatContainer);
     } else {
       // Header normale per quiz standard
       const heading = document.createElement('h3');
@@ -8684,6 +8729,24 @@ const gamification = (() => {
       intro.textContent = introText || 'Rispondi correttamente a tutte le domande per vincere.';
       wrapper.appendChild(intro);
     }
+    
+    // Funzione per aggiungere un messaggio alla chat
+    const addBernyMessage = (text) => {
+      if (!chatContainer) return;
+      
+      const messageEl = document.createElement('div');
+      messageEl.className = 'berny-chat-message';
+      messageEl.style.cssText = 'background: white; padding: 10px 14px; border-radius: 16px; margin-bottom: 8px; border-left: 3px solid #E30613; font-size: 14px; line-height: 1.5; animation: bernyMessageSlide 0.3s ease;';
+      messageEl.textContent = text;
+      
+      chatContainer.appendChild(messageEl);
+      chatMessages.push(text);
+      
+      // Scroll automatico in basso
+      setTimeout(() => {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }, 100);
+    };
     
     const progress = document.createElement('div');
     progress.className = 'quiz-progress';
@@ -9061,6 +9124,24 @@ const gamification = (() => {
           // Suono feedback immediato
           if (isCorrect) {
             playQuizCorrectSound();
+            
+            // Aggiungi commento casuale di Berny dopo risposta corretta
+            if (isBernyQuiz) {
+              const bernyComments = [
+                'Ottimo! 👏',
+                'Esatto! Continua così! 💪',
+                'Perfetto! Lo sapevo! ✨',
+                'Grande! Stai andando benissimo! 🎯',
+                'Bravo! Hai studiato bene! 📚',
+                'Corretto! Sei sulla strada giusta! 🚀',
+                'Fantastico! Un\'altra giusta! 🌟',
+                'Ben fatto! Avanti così! 💫',
+              ];
+              const randomComment = bernyComments[Math.floor(Math.random() * bernyComments.length)];
+              setTimeout(() => {
+                addBernyMessage(randomComment);
+              }, 300);
+            }
           } else {
             playQuizWrongSound();
           }
@@ -9076,6 +9157,27 @@ const gamification = (() => {
               markProgress(currentIndex, true);
               currentIndex += 1;
               markProgress(currentIndex, false);
+              
+              // Prima di mostrare la domanda successiva, Berny "pensa"
+              if (isBernyQuiz && currentIndex === 2) {
+                // Prima della domanda difficile
+                setTimeout(() => {
+                  addBernyMessage('Ora una domanda più difficile... 🤔');
+                }, 200);
+              } else if (isBernyQuiz) {
+                // Tra le domande normali
+                const thinkingMessages = [
+                  'Vediamo la prossima...',
+                  'Andiamo avanti...',
+                  'Ecco un\'altra...',
+                  'Prossima domanda...',
+                ];
+                const thinkMsg = thinkingMessages[Math.floor(Math.random() * thinkingMessages.length)];
+                setTimeout(() => {
+                  addBernyMessage(thinkMsg);
+                }, 200);
+              }
+              
               renderStep();
             }, 500);
           }
