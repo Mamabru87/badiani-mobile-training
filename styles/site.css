@@ -1368,14 +1368,10 @@ body.page-home {
 }
 
 body.no-scroll {
-  overflow: hidden !important;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-  /* top is set dynamically by JS to -scrollY to prevent visual jump */
+  /* Scroll lock WITHOUT position:fixed to avoid visual jumps */
+  /* overflow and paddingRight are set inline by JS */
+  touch-action: none;
+  -webkit-overflow-scrolling: auto;
 }
 
 /* Alternative scroll lock for non-iOS: avoids the fixed-body strategy (which can

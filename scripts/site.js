@@ -692,17 +692,19 @@ const bodyScrollLock = (() => {
       if (locks === 1) {
         scrollPosition = getEffectiveScrollY();
 
-        // Prefer overflow-based locking on non-iOS: it avoids any visible scroll
-        // jump/snap and does not require restoration.
-        if (!isIOSLike) {
-          try { document.documentElement.classList.add('no-scroll-overflow'); } catch {}
-          try { document.body.classList.add('no-scroll-overflow'); } catch {}
-          return;
-        }
-
-        // iOS/iPadOS: overflow hidden is unreliable; use the fixed-body strategy.
-        document.body.style.top = `-${scrollPosition}px`;
+        // NUOVO APPROCCIO: Non spostare il body, solo bloccare lo scroll
+        // Questo evita che il contenuto "salti" quando diventa position:fixed
+        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+        
+        document.body.style.overflow = 'hidden';
+        document.body.style.paddingRight = `${scrollbarWidth}px`;
+        document.body.style.position = 'relative'; // Mantiene il layout normale
+        
+        // Previeni scroll su iOS
         document.body.classList.add('no-scroll');
+        
+        // Salva la posizione attuale per il restore
+        document.body.dataset.scrollPosition = scrollPosition;
       }
     },
     unlock(targetScrollY) {
@@ -713,40 +715,36 @@ const bodyScrollLock = (() => {
 
       locks = Math.max(0, locks - 1);
       if (locks === 0) {
-        // Overflow mode (non-iOS): just remove the lock classes. No scrollTo.
-        if (!isIOSLike) {
-          try { document.documentElement.classList.remove('no-scroll-overflow'); } catch {}
-          try { document.body.classList.remove('no-scroll-overflow'); } catch {}
-          return;
-        }
-
+        const savedPosition = parseInt(document.body.dataset.scrollPosition || '0', 10);
         const nextY = typeof targetScrollY === 'number' && Number.isFinite(targetScrollY)
           ? targetScrollY
-          : scrollPosition;
+          : (savedPosition || scrollPosition);
 
-        // Critical ordering:
-        // 1) Set the *document* scroll position while the body is still fixed.
-        //    This avoids a brief snap to 0 when removing position:fixed.
-        // 2) Unfix body.
-        // 3) Re-apply on next frame to win against any competing scroll.
-        try { window.scrollTo(0, nextY); } catch (e) {}
-
+        // Rimuovi gli stili di lock
         document.body.classList.remove('no-scroll');
-        document.body.style.top = '';
-
-        try {
-          requestAnimationFrame(() => {
-            try { window.scrollTo(0, nextY); } catch (err) {}
-          });
+        document.body.style.overflow = '';
+        document.body.style.paddingRight = '';
+        document.body.style.position = '';
+        document.body.removeAttribute('data-scroll-position');
+        
+        // La posizione di scroll dovrebbe essere già quella corretta
+        // (non abbiamo mai spostato il body con position:fixed)
+        // Ma facciamo un restore di sicurezza
+        try { 
+          if (window.scrollY !== nextY) {
+            window.scrollTo(0, nextY); 
+          }
         } catch (e) {}
       }
     },
     forceUnlock() {
       locks = 0;
-      try { document.documentElement.classList.remove('no-scroll-overflow'); } catch {}
-      try { document.body.classList.remove('no-scroll-overflow'); } catch {}
       document.body.classList.remove('no-scroll');
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+      document.body.style.position = '';
       document.body.style.top = '';
+      document.body.removeAttribute('data-scroll-position');
     }
   };
 })();
@@ -10050,15 +10048,48 @@ toggles.forEach((button) => {
       }
     })();
 
-    bodyScrollLock.lock();
-    
-    // Crea overlay
+    // === DIAGNOSTIC LOGGING: Scroll positions ===
+    const logScrollState = (label) => {
+      try {
+        const state = {
+          label,
+          windowScrollY: window.scrollY || window.pageYOffset || 0,
+          docElementScrollTop: document.documentElement ? document.documentElement.scrollTop : 0,
+          bodyScrollTop: document.body ? document.body.scrollTop : 0,
+          bodyStyleTop: document.body ? document.body.style.top : 'not set',
+          bodyPosition: document.body ? window.getComputedStyle(document.body).position : 'unknown'
+        };
+        // Check for app shell scrollers
+        const appShells = ['#app', 'main', '.layout', '.page', '[data-scroll-container]'];
+        appShells.forEach((selector) => {
+          const el = document.querySelector(selector);
+          if (el) {
+            state[`scroller_${selector}`] = el.scrollTop || 0;
+          }
+        });
+        console.group(`🔍 [BADIANI SCROLL DEBUG] ${label}`);
+        console.table(state);
+        console.groupEnd();
+      } catch (e) {
+        console.error('Failed to log scroll state:', e);
+      }
+    };
+
+    // Crea overlay PRIMA di lockare lo scroll, così eredita la posizione corretta del viewport
     const overlay = document.createElement('div');
     overlay.className = 'card-modal-overlay';
     
     // Crea modal
     const modal = document.createElement('div');
     modal.className = 'card-modal';
+
+    // Log BEFORE body scroll lock
+    logScrollState('BEFORE bodyScrollLock.lock()');
+
+    bodyScrollLock.lock();
+
+    // Log AFTER body scroll lock
+    logScrollState('AFTER bodyScrollLock.lock()');
     
     // Crea header modal con pillole cristalli
     const modalHeader = document.createElement('div');
@@ -12514,6 +12545,9 @@ toggles.forEach((button) => {
       if (modalClosed) return;
       modalClosed = true;
 
+      // === DIAGNOSTIC LOGGING: Scroll at close start ===
+      logScrollState('CLOSE START (before any changes)');
+
       // === SCROLL BOUNCE FIX ===
       // Defer all DOM updates (especially updateCardChecks) during close to prevent layout shifts
       window.__badianiDeferDOMUpdates = true;
@@ -12528,7 +12562,7 @@ toggles.forEach((button) => {
 
       // Suppress any guide-card auto-scroll that could be triggered immediately after
       // the modal is removed (mouseenter/click quirks, layout shifts, etc.).
-      try { window.__badianiSuppressCardAutoScrollUntil = Date.now() + 900; } catch (e) {}
+      try { window.__badianiSuppressCardAutoScrollUntil = Date.now() + 1500; } catch (e) {}
 
       // === Phase 1: Start 3D close animation (modal stays visible, overlay stays opaque) ===
       // Add the 3D closing class to trigger the CSS animation on the modal card.
@@ -12550,7 +12584,9 @@ toggles.forEach((button) => {
 
         // Unlock scroll and restore exact scroll position.
         try {
+          logScrollState('BEFORE bodyScrollLock.unlock()');
           bodyScrollLock.unlock(openerRestore && typeof openerRestore.scrollY === 'number' ? openerRestore.scrollY : undefined);
+          logScrollState('AFTER bodyScrollLock.unlock()');
         } catch (e) {
           try { bodyScrollLock.unlock(); } catch (err) {}
         }
@@ -12566,7 +12602,9 @@ toggles.forEach((button) => {
         // Restore exact scroll position again (double-check).
         try {
           if (openerRestore && typeof openerRestore.scrollY === 'number') {
+            logScrollState('BEFORE window.scrollTo() restore');
             window.scrollTo(0, openerRestore.scrollY);
+            logScrollState('AFTER window.scrollTo() restore');
           }
         } catch (e) {}
 
@@ -12584,17 +12622,22 @@ toggles.forEach((button) => {
           try { overlay.remove(); } catch (e) {}
 
           // Restore focus to the trigger element WITHOUT triggering scroll.
+          // DISABLED: focus on card triggers auto-scroll events that cause unwanted page jump.
+          // The scroll position has already been restored, so skip focus restoration.
           try {
             const focusTarget = openerRestore && openerRestore.focusEl;
-            if (focusTarget && typeof focusTarget.focus === 'function') {
-              focusTarget.focus({ preventScroll: true });
-            }
+            // Do NOT focus - it triggers click/mouseenter handlers that scroll the page
+            // if (focusTarget && typeof focusTarget.focus === 'function') {
+            //   focusTarget.focus({ preventScroll: true });
+            // }
           } catch (e) {}
 
           // Final scroll position safety net.
           try {
             if (openerRestore && typeof openerRestore.scrollY === 'number') {
+              logScrollState('BEFORE final safety net scrollTo()');
               window.scrollTo(0, openerRestore.scrollY);
+              logScrollState('AFTER final safety net scrollTo() - CLOSE COMPLETE');
             }
           } catch (e) {}
 
