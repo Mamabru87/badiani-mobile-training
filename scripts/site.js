@@ -802,29 +802,56 @@ const tr = (key, vars, fallback) => {
   return String(key || '');
 };
 
-// Mostra nickname utente nella barra
-window.addEventListener('DOMContentLoaded', function() {
+// Mostra nickname e avatar utente nella barra
+const refreshNicknameBar = (profile) => {
   try {
-    const user = window.BadianiProfile?.getActive?.() || null;
     const bar = document.getElementById('user-nickname-bar');
     const nick = document.getElementById('nickname-display');
-    if (user && bar && nick) {
-      nick.textContent = user.nickname;
-      bar.style.display = 'flex';
-    }
-  } catch {}
-});
+    const avatar = document.getElementById('nav-avatar');
+    const savedAvatar = (() => {
+      try { return localStorage.getItem('badiani_user_avatar') || ''; } catch { return ''; }
+    })();
 
-// Live update nickname bar if profile changes while the app is open.
-document.addEventListener('badiani:profile-updated', (e) => {
-  try {
-    const profile = e?.detail?.profile;
-    const bar = document.getElementById('user-nickname-bar');
-    const nick = document.getElementById('nickname-display');
+    if (avatar) {
+      if (savedAvatar) {
+        avatar.src = savedAvatar;
+        avatar.style.display = 'block';
+      } else {
+        avatar.removeAttribute('src');
+        avatar.style.display = 'none';
+      }
+    }
+
     if (!bar || !nick) return;
     if (profile && profile.nickname) {
       nick.textContent = profile.nickname;
       bar.style.display = 'flex';
+    } else {
+      bar.style.display = 'none';
+    }
+  } catch {}
+};
+
+window.addEventListener('DOMContentLoaded', function() {
+  const user = window.BadianiProfile?.getActive?.() || null;
+  refreshNicknameBar(user);
+});
+
+// Live update nickname bar if profile changes while the app is open.
+document.addEventListener('badiani:profile-updated', (e) => {
+  const profile = e?.detail?.profile;
+  refreshNicknameBar(profile);
+});
+
+// Keep nav avatar in sync with avatar creator
+window.addEventListener('avatar-updated', (e) => {
+  try {
+    const data = e?.detail || '';
+    if (!data) return;
+    const avatar = document.getElementById('nav-avatar');
+    if (avatar) {
+      avatar.src = data;
+      avatar.style.display = 'block';
     }
   } catch {}
 });
@@ -3638,29 +3665,12 @@ const gamification = (() => {
       window.__badianiUserGesture = true;
     } catch {}
 
-    const ac = (() => {
-      // Temporarily allow creation now that we have a gesture.
-      const AudioCtor = window.AudioContext || window.webkitAudioContext;
-      if (!AudioCtor) return null;
-      if (!audioContext) audioContext = new AudioCtor();
-      return audioContext;
-    })();
-    if (!ac) return;
-    // IMPORTANT: Register the unlocker in CAPTURE phase (below), because some
-    // UI handlers call stopPropagation() which would otherwise prevent unlock.
-    if (ac.state === 'suspended') {
-      ac.resume().then(() => {
-        // Remove listeners once unlocked
-        ['click', 'touchstart', 'keydown'].forEach((evt) =>
-          document.removeEventListener(evt, unlockAudioContext, true)
-        );
-      }).catch(() => {});
-    } else if (ac.state === 'running') {
-      // Already unlocked; clean up listeners.
-      ['click', 'touchstart', 'keydown'].forEach((evt) =>
-        document.removeEventListener(evt, unlockAudioContext, true)
-      );
-    }
+    // Do NOT create/resume AudioContext here.
+    // Some environments (VS Code preview/iframes) treat this as non-gesture and warn.
+    // We'll only create/resume when we actually play a sound.
+    ['pointerdown', 'click', 'touchstart', 'keydown'].forEach((name) =>
+      document.removeEventListener(name, unlockAudioContext, true)
+    );
   };
   // Use capture so unlock still fires even if inner handlers stop propagation.
   // Also include pointerdown (more consistent as the "first gesture" on mobile).
@@ -3832,23 +3842,54 @@ const gamification = (() => {
     });
   };
 
-  const playStarChime = (level = 1) => {
+  const playStarChime = (level = 1, evt = null) => {
     try {
+      // Some pages/components register capture listeners that call stopImmediatePropagation().
+      // If that happens, our global unlock listener might not run, leaving sounds muted.
+      // When we *do* have the trusted user event that caused the reward, use it here.
+      try {
+        if (evt && evt.isTrusted === false) {
+          // Don't unlock on synthetic events.
+        } else if (evt) {
+          window.__badianiUserGesture = true;
+        }
+      } catch {}
+
       withRunningAudioContext((ac) => {
         const now = ac.currentTime;
         const startAt = now + 0.03;
+        // Louder + more "tadadaaan" while staying short and non-harsh.
+        // Use a light compressor so it reads on phone speakers without clipping.
         const masterGain = ac.createGain();
-        masterGain.connect(ac.destination);
-        // Softer "victory" mini-melody (less high + less electronic)
-        // Keep it short and game-y: arpeggio + tiny lift + final chord.
-        const intensity = Math.max(0.85, Math.min(1.25, 0.95 + (Number(level) || 1) * 0.05));
-        masterGain.gain.value = 0.11 * intensity;
+        const comp = ac.createDynamicsCompressor();
+        masterGain.connect(comp);
+        comp.connect(ac.destination);
 
-        const scheduleNote = (freq, tOffset, dur, type = 'triangle', peak = 0.22) => {
+        // Fanfare intensity: level 1..4 from the star-set logic.
+        const baseLevel = Math.max(1, Math.min(6, Number(level) || 1));
+        const intensity = Math.max(0.9, Math.min(1.6, 1.05 + baseLevel * 0.10));
+
+        // Compressor tuning (gentle, punchy)
+        try {
+          comp.threshold.setValueAtTime(-22, startAt);
+          comp.knee.setValueAtTime(18, startAt);
+          comp.ratio.setValueAtTime(6, startAt);
+          comp.attack.setValueAtTime(0.003, startAt);
+          comp.release.setValueAtTime(0.12, startAt);
+        } catch {}
+
+        // Base loudness (compressor will keep it clean)
+        // Nudge up so the star win clearly sits above the crystal "fiu".
+        masterGain.gain.value = 0.33 * intensity;
+
+        const scheduleNote = (freq, tOffset, dur, type = 'triangle', peak = 0.46, detuneCents = 0) => {
           const osc = ac.createOscillator();
           const g = ac.createGain();
           osc.type = type;
           osc.frequency.setValueAtTime(freq, startAt + tOffset);
+          if (detuneCents) {
+            try { osc.detune.setValueAtTime(detuneCents, startAt + tOffset); } catch {}
+          }
           osc.connect(g);
           g.connect(masterGain);
 
@@ -3862,20 +3903,33 @@ const gamification = (() => {
           osc.stop(t1 + 0.01);
         };
 
-        // Melody (C major): C4 E4 G4 C5 D5 E5 (quick, friendly)
-        const melody = [261.63, 329.63, 392.00, 523.25, 587.33, 659.25];
-        melody.forEach((f, i) => {
-          scheduleNote(f, i * 0.085, 0.09, 'triangle', 0.20);
+        // "Ta-da-daaaan" fanfare (C major-ish): G4 A4 B4 C5 then a bright lift and final chord.
+        // Frequencies: G4 392, A4 440, B4 493.88, C5 523.25, D5 587.33, E5 659.25, G5 783.99, C6 1046.50
+        const fanfare = [392.00, 440.00, 493.88, 523.25, 587.33, 659.25, 783.99];
+        fanfare.forEach((f, i) => {
+          const t = i * 0.075;
+          const dur = (i < 3) ? 0.075 : 0.10;
+          scheduleNote(f, t, dur, 'triangle', 0.34);
         });
 
-        // Final chord (C major): C4 + E4 + G4 (+ a soft C5)
-        const chordAt = melody.length * 0.085 + 0.02;
-        [261.63, 329.63, 392.00].forEach((f) => scheduleNote(f, chordAt, 0.22, 'sine', 0.12));
-        scheduleNote(523.25, chordAt, 0.22, 'triangle', 0.10);
+        // Final chord: C major with octave sparkle + low "boom"
+        const chordAt = fanfare.length * 0.075 + 0.02;
 
-        // Envelope (very gentle global tail)
-        masterGain.gain.setValueAtTime(0.11 * intensity, startAt);
-        masterGain.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.95);
+        // Low "boom" (C3) for that victory weight
+        scheduleNote(130.81, chordAt, 0.28, 'sine', 0.28);
+
+        // Main chord tones (C5-E5-G5) slightly detuned for richness
+        const chordTones = [523.25, 659.25, 783.99];
+        chordTones.forEach((f) => {
+          scheduleNote(f, chordAt, 0.34, 'sine', 0.22, -6);
+          scheduleNote(f, chordAt, 0.34, 'sine', 0.22, +6);
+        });
+        // Add a bright C6 cap (very short)
+        scheduleNote(1046.50, chordAt + 0.02, 0.16, 'triangle', 0.18);
+
+        // Global envelope tail (a bit longer, more "ta-daaaan")
+        masterGain.gain.setValueAtTime(0.33 * intensity, startAt);
+        masterGain.gain.exponentialRampToValueAtTime(0.0001, startAt + 1.25);
 
       });
 
@@ -7169,9 +7223,9 @@ const gamification = (() => {
     const celebrateSet = state.quizTokens % STARS_FOR_QUIZ === 0;
     const noteLevel = celebrateSet ? 4 : ((state.quizTokens - 1) % STARS_FOR_QUIZ) + 1;
     if (animateFromCrystal) {
-      playCrystalMergeToStarAnimation(source, celebrateSet, noteLevel);
+      playCrystalMergeToStarAnimation(source, celebrateSet, noteLevel, evt);
     } else {
-      playStarAnimation(source, celebrateSet, noteLevel);
+      playStarAnimation(source, celebrateSet, noteLevel, { evt });
     }
     applyStarThresholds();
     const challengeTriggered = maybeTriggerChallenge();
@@ -8920,9 +8974,9 @@ const gamification = (() => {
     playCrystalPing(source, evt);
   }
 
-  function playCrystalMergeToStarAnimation(source, celebrateSet = false, noteLevel = 1) {
+  function playCrystalMergeToStarAnimation(source, celebrateSet = false, noteLevel = 1, evt = null) {
     if (!hubNodes.starValue) {
-      playStarAnimation(source, celebrateSet, noteLevel);
+      playStarAnimation(source, celebrateSet, noteLevel, { evt });
       return;
     }
     const { x: startX, y: startY } = getOriginPoint(source);
@@ -8949,7 +9003,7 @@ const gamification = (() => {
 
     const fakeRect = { left: startX, top: startY, width: 0, height: 0 };
     setTimeout(() => {
-      playStarAnimation(source, celebrateSet, noteLevel, { startRect: fakeRect, variant: 'from-crystal' });
+      playStarAnimation(source, celebrateSet, noteLevel, { startRect: fakeRect, variant: 'from-crystal', evt });
     }, 260);
   }
 
@@ -8970,16 +9024,19 @@ const gamification = (() => {
   }
 
   function playStarAnimation(source, celebrateSet = false, noteLevel = 1, options = {}) {
+    // Always play the victory chime even if the hub UI nodes aren't present on this page.
+    // (Some pages don't render the cockpit counters, but still award stars.)
+    const safeOptions = (options && typeof options === 'object') ? options : {};
+    playStarChime(noteLevel, safeOptions.evt || null);
     if (!hubNodes.starValue) return;
-    playStarChime(noteLevel);
     const rectEnd = hubNodes.starValue.getBoundingClientRect();
-    const originRect = options.startRect || null;
+    const originRect = safeOptions.startRect || null;
     const origin = originRect
       ? {
           x: originRect.left + (originRect.width || 0) / 2,
           y: originRect.top + (originRect.height || 0) / 2,
         }
-      : getOriginPoint(source);
+      : getOriginPoint(source, safeOptions.evt || null);
     const startX = origin.x;
     const startY = origin.y;
     const endX = rectEnd.left + rectEnd.width / 2;
@@ -8991,10 +9048,10 @@ const gamification = (() => {
 
     const star = document.createElement('span');
     star.className = 'star-flight';
-    if (options.variant === 'from-crystal') {
+    if (safeOptions.variant === 'from-crystal') {
       star.classList.add('star-flight--from-crystal');
     }
-    const icon = options.icon || (celebrateSet ? '🌟' : '⭐');
+    const icon = safeOptions.icon || (celebrateSet ? '🌟' : '⭐');
     star.textContent = icon;
     getFxLayer().appendChild(star);
 
@@ -14680,7 +14737,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (evt && evt.isTrusted === false) return;
       window.__badianiUserGesture = true;
     } catch {}
-        BadianiSound.init();
         document.removeEventListener('click', unlockAudio);
         document.removeEventListener('touchstart', unlockAudio);
     };

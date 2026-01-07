@@ -86,11 +86,11 @@
 
   --carousel-track-gap: 24px;
   --carousel-track-pad-inline: 28px;
-  --carousel-track-pad-bottom: 40px;
+  --carousel-track-pad-bottom: 28px;
   --carousel-card-basis: clamp(260px, 85vw, 320px);
 
   /* Vertical spacing between consecutive carousel sections */
-  --carousel-section-gap: 40px;
+  --carousel-section-gap: 28px;
 
   --carousel-indicators-gap: 6px;
   --carousel-indicators-padding-block: 6px;
@@ -140,10 +140,10 @@
 
     --carousel-track-gap: 16px;
     --carousel-track-pad-inline: 16px;
-    --carousel-track-pad-bottom: 10px;
+    --carousel-track-pad-bottom: 7px;
     --carousel-card-basis: clamp(260px, 85vw, 320px);
 
-    --carousel-section-gap: 10px;
+    --carousel-section-gap: 7px;
 
     --carousel-indicators-max-width: 190px;
     --carousel-indicators-gap: 5px;
@@ -183,10 +183,10 @@
 
     --carousel-track-gap: 12px;
     --carousel-track-pad-inline: 12px;
-    --carousel-track-pad-bottom: 8px;
+    --carousel-track-pad-bottom: 6px;
     --carousel-card-basis: clamp(260px, 85vw, 320px);
 
-    --carousel-section-gap: 8px;
+    --carousel-section-gap: 6px;
 
     --carousel-indicators-max-width: 170px;
     --carousel-indicator-width: 8px;
@@ -292,6 +292,12 @@ body.page-home {
   background-color: #ffffff;
 }
 
+/* Hub layout: hero (Orbit kopilot) full-width, cockpit carousel below it, Berny under. */
+.page-home .hub-cockpit-wrap {
+  margin-top: 14px;
+  padding-inline: 6px;
+}
+
 /* Prevent grid children from forcing horizontal overflow (clipped content). */
 .page-home .hero > * {
   min-width: 0;
@@ -360,6 +366,18 @@ body.page-home {
   display: none;
   align-items: center;
   margin-left: auto;
+}
+
+.user-nav-avatar {
+  display: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 1px solid rgba(33, 64, 152, 0.16);
+  background: rgba(33, 64, 152, 0.06);
+  box-shadow: 0 6px 12px rgba(15, 33, 84, 0.08);
+  flex-shrink: 0;
 }
 
 .user-nickname-pill {
@@ -495,15 +513,15 @@ body.page-home {
 
 .hub-card {
   /* Structure & Spacing */
-  padding: 24px;
-  gap: 16px;
+  padding: 10px;
+  gap: 8px;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   text-align: center;
-  min-height: 260px; /* Square-ish aspect ratio */
+  min-height: 180px; /* Square-ish aspect ratio */
   aspect-ratio: 1 / 1;
   width: 100%;
 
@@ -530,7 +548,7 @@ body.page-home {
 
 /* Typography Polish */
 .hub-card__top {
-  font-size: 12px;
+  font-size: 9px;
   text-transform: uppercase;
   letter-spacing: 0.15em;
   font-weight: 700;
@@ -540,7 +558,7 @@ body.page-home {
 }
 
 .hub-card__title {
-  font-size: 16px;
+  font-size: 11px;
   font-weight: 600;
   color: var(--brand-blue);
   margin: 0;
@@ -556,7 +574,7 @@ body.page-home {
 }
 
 .hub-card__big-text {
-  font-size: 48px;
+  font-size: 30px;
   font-weight: 800;
   line-height: 1;
   color: var(--brand-rose); /* Pink for numbers */
@@ -629,14 +647,14 @@ body.page-home {
 }
 
 .hub-card .stat-label {
-  font-size: 9px;
+  font-size: 8px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--brand-gray-soft);
 }
 
 .hub-card .stat-value {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--brand-blue);
 }
@@ -1180,6 +1198,11 @@ body.page-home {
   .page-home .hero {
     grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
     align-items: start;
+  }
+
+  /* Hub: orbit hero is now single column (cockpit moved below). */
+  .page-home .hero.hero--orbit {
+    grid-template-columns: 1fr;
   }
 
   /* Dashboard hero is not the old two-column layout (hero-focus + aside). */
@@ -4938,19 +4961,19 @@ section.carousel:last-of-type {
   align-items: center;
   justify-content: space-between;
   padding: var(--carousel-header-padding-block) var(--carousel-header-padding-inline);
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(14px);
-  border: 1px solid rgba(33, 64, 152, 0.14);
-  border-radius: var(--carousel-header-radius);
+  background: transparent;
+  backdrop-filter: none;
+  border: none;
+  border-radius: 0;
   position: sticky;
   top: calc(var(--nav-height) + var(--nav-gap));
   z-index: 900;
   gap: 16px;
   margin: 0 var(--carousel-header-margin-inline);
-  box-shadow: 0 10px 22px rgba(15, 33, 84, 0.08);
+  box-shadow: none;
   cursor: pointer;
   overflow: hidden;
-  transition: box-shadow var(--anim-fast) ease, border-color var(--anim-fast) ease, background var(--anim-fast) ease;
+  transition: opacity 0.3s ease;
   touch-action: pan-y;
 }
 
@@ -4990,13 +5013,13 @@ section.carousel:last-of-type {
 }
 
 .carousel-title {
-  font-size: var(--carousel-title-size);
-  font-weight: 700;
+  font-size: 15px;
+  font-weight: 600;
   color: var(--brand-blue);
-  transition: color 400ms cubic-bezier(0.4, 0, 0.2, 1), transform 320ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: color 0.3s ease;
   margin: 0;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  text-transform: none;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -5008,13 +5031,7 @@ section.carousel:last-of-type {
 }
 
 .carousel-category {
-  font-size: var(--carousel-category-size);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: var(--brand-blue);
-  opacity: 0.7;
-  font-family: var(--font-medium);
+  display: none;
 }
 
 /* Right side unit: counter + indicators */
@@ -5026,75 +5043,101 @@ section.carousel:last-of-type {
 }
 
 .carousel-counter {
-  font-family: var(--font-medium);
-  font-size: 11px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: rgba(33, 64, 152, 0.78);
-  padding: 6px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(33, 64, 152, 0.12);
-  background: rgba(255, 255, 255, 0.75);
-  box-shadow: 0 8px 16px rgba(15, 33, 84, 0.06);
-  white-space: nowrap;
+  display: none;
 }
 
 .carousel-indicators {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: var(--carousel-indicators-gap);
+  gap: 2px;
   flex-wrap: nowrap;
   min-width: 0;
-  max-width: var(--carousel-indicators-max-width);
-  overflow: hidden;
-  padding: var(--carousel-indicators-padding-block) var(--carousel-indicators-padding-inline);
-  border-radius: 999px;
-  border: 1px solid rgba(33, 64, 152, 0.10);
-  background: rgba(255, 255, 255, 0.66);
-  box-shadow: 0 8px 18px rgba(15, 33, 84, 0.06);
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  max-width: none;
+  overflow: visible;
+  padding: 4px 0;
+  border-radius: 0;
+  border: none;
+  background: white;
+  box-shadow: none;
+  -webkit-mask-image: none;
+  mask-image: none;
 }
 
 .carousel-indicator {
   position: relative;
-  flex: 0 0 var(--carousel-indicator-width);
-  height: var(--carousel-indicator-height);
-  border-radius: 999px;
-  background: rgba(33, 64, 152, 0.18);
+  flex: 0 0 auto;
+  width: 2px;
+  height: 10px;
+  border-radius: 2px;
+  background: rgba(33, 64, 152, 0.25);
   cursor: pointer;
-  overflow: hidden;
+  overflow: visible;
   transform: none;
-  transition: transform 220ms ease, background 220ms ease, opacity 220ms ease;
-  opacity: 0.9;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 1;
 }
 
 .carousel-indicator::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, rgba(236, 65, 140, 0.0), rgba(236, 65, 140, 0.4));
+  background: transparent;
   opacity: 0;
-  transition: opacity 220ms ease;
+  transition: opacity 0.3s ease;
 }
 
 .carousel-indicator:hover {
-  background: rgba(236, 65, 140, 0.28);
+  background: rgba(33, 64, 152, 0.4);
+  height: 13px;
 }
 
 .carousel-indicator:hover::after {
-  opacity: 0.4;
+  opacity: 0;
 }
 
 .carousel-indicator.is-active {
-  transform: scaleX(var(--carousel-indicator-active-scale));
+  width: 2px;
+  height: 16px;
+  transform: none;
   background: var(--brand-blue);
   opacity: 1;
+  animation: indicatorExpand 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes indicatorExpand {
+  0% {
+    height: 8px;
+    opacity: 0.6;
+  }
+  100% {
+    height: 16px;
+    opacity: 1;
+  }
 }
 
 .carousel-indicator.is-active::after {
-  opacity: 0.7;
+  opacity: 0;
+}
+
+/* Global: force white header/nav background for non-hub carousels */
+.carousel:not(.carousel--cockpit) .carousel-header,
+.carousel:not(.carousel--cockpit) .carousel-header__meta,
+.carousel:not(.carousel--cockpit) .carousel-indicators {
+  background: #fff !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.carousel:not(.carousel--cockpit) .carousel-header::before,
+.carousel:not(.carousel--cockpit) .carousel-header:hover::before {
+  background: none !important;
+  opacity: 0 !important;
+}
+
+.carousel:not(.carousel--cockpit) .carousel-header:hover {
+  background: #fff !important;
 }
 
 .carousel-track {
@@ -7730,6 +7773,25 @@ body.page-product .badge {
   object-fit: contain;
 }
 
+/* Non-hub / non-story: media sempre quadrata e spazi compatti sotto la foto */
+.carousel:not(.carousel--cockpit):not(.story-carousel) .guide-media,
+.carousel:not(.carousel--cockpit):not(.story-carousel) .guide-media picture,
+.carousel:not(.carousel--cockpit):not(.story-carousel) .guide-media img {
+  aspect-ratio: 1 / 1;
+  height: auto;
+  max-height: 150px;
+  object-fit: contain;
+}
+
+.carousel:not(.carousel--cockpit):not(.story-carousel) .guide-media {
+  margin-bottom: 6px;
+}
+
+.carousel:not(.carousel--cockpit):not(.story-carousel) {
+  margin-top: 6px;
+  margin-bottom: 18px;
+}
+
 .gallery {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -8210,7 +8272,7 @@ body.page-home {
 /* Hub: make the Playbook column slimmer and give more room to the Cockpit. */
 @media (min-width: 721px) {
   .page-home .hero.hero--orbit {
-    grid-template-columns: minmax(300px, 0.72fr) minmax(0, 1.28fr);
+    grid-template-columns: 1fr;
   }
 }
 
@@ -8228,9 +8290,43 @@ body.page-home {
   z-index: 2;
 }
 
+/* Hub: the Orbit hero now contains only the playbook panel.
+   The base `.hero` grid uses `auto-fit` columns, which would leave an empty column.
+   Force a single column so the “Training Orbit” panel is full-width (no white void). */
+.page-home .hero.hero--orbit {
+  grid-template-columns: 1fr;
+}
+
 .page-home .hero-focus {
   padding: 18px 18px;
   box-shadow: none;
+}
+
+/* Make Training Orbit panel compact and horizontal on desktop */
+@media (min-width: 721px) {
+  .page-home .hero-focus {
+    max-width: 720px;
+    padding: 14px 20px;
+  }
+  .page-home .hero h1 {
+    font-size: 26px;
+    margin-bottom: 4px;
+  }
+  .page-home .hero-lede {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  .page-home .hero-eyebrow {
+    font-size: 10px;
+    margin-bottom: 2px;
+  }
+  .page-home .badge {
+    margin-bottom: 2px;
+  }
+  .page-home .hero-actions {
+    margin-top: 8px;
+    gap: 8px;
+  }
 }
 
 .page-home .hero-lede {
@@ -9318,6 +9414,7 @@ body.page-home {
 .menu-drawer__close {
   width: 36px;
   height: 36px;
+  padding: 0;
   border-radius: 0;
   border: 1px solid rgba(236, 65, 140, 0.55);
   background: var(--brand-rose);
@@ -9325,8 +9422,13 @@ body.page-home {
   cursor: pointer;
   display: grid;
   place-items: center;
+  justify-items: center;
+  align-items: center;
   transition: all var(--anim-fast) ease;
   flex-shrink: 0;
+  position: relative;
+  --x-icon-size: 18px;
+  --x-icon-thickness: 2.4px;
 }
 
 .menu-drawer__close:hover,
@@ -9409,8 +9511,16 @@ body.page-home {
    ========================= */
 
 .menu-drawer__footer {
-  padding: 12px 18px 18px;
+  padding: 8px 12px 8px;
   border-top: 1px solid var(--border-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.menu-drawer__footer > * {
+  margin: 0;
+  width: 100%;
 }
 
 .menu-lang {
@@ -9496,7 +9606,16 @@ body.page-home {
 }
 
 .menu-lang--panel {
-  margin-top: 14px;
+  margin-top: 0;
+}
+
+.menu-drawer__footer details,
+.menu-drawer__footer .menu-lang,
+.menu-drawer__footer a,
+.menu-drawer__footer button,
+.menu-drawer__footer .menu-lang__summary {
+  width: 100%;
+  margin: 0;
 }
 
 @media (max-width: 420px) {
@@ -9515,7 +9634,7 @@ body.page-home {
 
   .menu-drawer__panel {
     /* Sheet on small tablets / big phones. */
-    width: min(360px, 92vw);
+    width: min(240px, 84vw);
   }
 
   .menu-categories a {
@@ -9527,7 +9646,7 @@ body.page-home {
 /* Phones: the drawer should be full-width for easy tapping. (Overrides the 860px sheet rule above.) */
 @media (max-width: 600px) {
   .menu-drawer__panel {
-    width: 100%;
+    width: min(240px, 88vw);
   }
 }
 
@@ -9681,7 +9800,7 @@ body.page-home {
   }
 }
 
-/* --- PATCH: Orbit hero 2-column mobile (Dec 2025) --- */
+/* --- PATCH: Orbit hero always single column (Jan 2026) --- */
 @media (max-width: 720px) {
   /* Give ourselves every pixel we can on small screens */
   .page-home main {
@@ -9689,20 +9808,13 @@ body.page-home {
     padding-inline: 6px;
   }
 
-  /* Keep Playbook + Cockpit side-by-side on mobile */
+  /* Hero Orbit stays single column on mobile too */
   .page-home .hero.hero--orbit {
-    grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
+    grid-template-columns: 1fr;
     gap: 10px;
     padding: 12px 0 10px;
     padding-inline: 0;
-    /* Keep both columns compact (no forced equal-height stretch) */
     align-items: start;
-  }
-
-  .page-home .hero-focus,
-  .page-home .hero-aside {
-    min-width: 0;
-    align-self: start;
   }
 
   .page-home .hero-focus {
@@ -9856,7 +9968,7 @@ body.page-home {
 .page-home .carousel--cockpit {
   background: #fff;
   border-radius: var(--radius-lg);
-  padding: 16px;
+  padding: 8px;
   max-width: 100%;
   min-width: 0;
   overflow-x: hidden;
@@ -9864,12 +9976,14 @@ body.page-home {
 }
 
 .page-home .carousel--cockpit .carousel-header {
-  display: none !important; /* Hub: mostra solo le schede scorribili */
+  display: none !important;
 }
 
-.page-home .carousel--cockpit .carousel-indicators,
-.page-home .carousel--cockpit .carousel-counter,
 .page-home .carousel--cockpit .carousel-header__meta {
+  display: none !important;
+}
+
+.page-home .carousel--cockpit .carousel-counter {
   display: none !important;
 }
 
@@ -9885,7 +9999,7 @@ body.page-home {
 }
 
 .page-home .carousel--cockpit .carousel-track {
-  gap: 10px;
+  gap: 4px;
   /* Cockpit cards manage their own sizing via aspect-ratio/min-height.
      Don't stretch them to the tallest card. */
   align-items: flex-start;
@@ -9894,14 +10008,19 @@ body.page-home {
 .page-home .carousel--cockpit .carousel-track [data-carousel-item] {
   flex: 0 0 auto;
   /* Prefer relative units: stable under resize, no fixed px widths. */
-  width: clamp(14.5rem, 46vw, 18.5rem);
+  width: clamp(8rem, 22vw, 10rem);
   min-width: 0;
 }
 
 /* Hub cockpit: cards should be slim + tall (not square). */
 .page-home .carousel--cockpit .hub-card[data-carousel-item] {
-  aspect-ratio: 2 / 3;
-  min-height: 320px;
+  aspect-ratio: auto;
+  min-height: 210px;
+  padding: 12px;
+  gap: 10px;
+  width: clamp(8.5rem, 46vw, 10.5rem);
+  max-height: 240px;
+  overflow: visible;
 }
 
 .page-home .carousel--cockpit .summary-card {
@@ -9914,7 +10033,66 @@ body.page-home {
 
 /* Cockpit cards: keep stats compact on narrow viewports (avoid tall single-column stacks). */
 .page-home .carousel--cockpit .summary-stats {
-  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.page-home .carousel--cockpit .summary-stats .stat {
+  padding: 10px 12px;
+  border-radius: 14px;
+  gap: 4px;
+  width: 100%;
+}
+
+.page-home .carousel--cockpit .summary-stats .stat-label {
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+}
+
+.page-home .carousel--cockpit .summary-stats .stat-value {
+  font-size: 19px;
+  line-height: 1.1;
+}
+
+/* Profile card: hide gelato flavour (password) and tighten spacing */
+.page-home .carousel--cockpit .hub-card--profile [data-profile-gelato] {
+  display: none;
+}
+
+.page-home .carousel--cockpit .hub-card--profile .hub-card__center {
+  gap: 6px;
+}
+
+/* Limit mistakes card height and show only the latest item in preview */
+.page-home .carousel--cockpit .hub-card--list .summary-list[hidden] {
+  display: block !important;
+}
+
+.page-home .carousel--cockpit .hub-card--list .summary-list {
+  list-style: none;
+  padding: 0;
+  margin: 6px 0 0;
+  max-height: 68px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.page-home .carousel--cockpit .hub-card--list .summary-list li:not(:first-child) {
+  display: none;
+}
+
+.page-home .carousel--cockpit .hub-card--list .summary-list__btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0;
+  font-size: 11px;
+  line-height: 1.35;
+  color: var(--brand-blue-deep);
+  background: transparent;
+  border: none;
+  white-space: normal;
 }
 
 /* ==========================================================================
@@ -9931,9 +10109,11 @@ body.page-home {
     padding: 0 4px;
   }
 
-  .page-home .carousel--cockpit .carousel-header__title-block {
-    gap: 2px;
-  }
+.page-home .carousel--cockpit .carousel-header__title-block {
+  background: white;
+  padding: 0;
+  gap: 0;
+}
 
   .page-home .carousel--cockpit .summary-eyebrow {
     font-size: 11px;
@@ -9961,8 +10141,12 @@ body.page-home {
   }
 
   .page-home .carousel--cockpit .carousel-track [data-carousel-item] {
-    width: clamp(12.75rem, 68vw, 16rem);
+    width: clamp(7.5rem, 44vw, 9.5rem);
     min-width: 0;
+  }
+
+  .page-home .carousel--cockpit .hub-card[data-carousel-item] {
+    min-height: 160px;
   }
 
   .page-home .carousel--cockpit .summary-card {
@@ -10683,10 +10867,10 @@ body.page-home {
 
 body.page-product {
   /* Reduce gap between carousel sections significantly */
-  --carousel-section-gap: 12px;
+  --carousel-section-gap: 8px;
 
   /* Reduce excess space after each carousel track (product pages feel tighter) */
-  --carousel-track-pad-bottom: 14px;
+  --carousel-track-pad-bottom: 10px;
 
   /* Pull the carousel stack upward on product pages (less empty space before cards). */
   --carousel-sticky-offset-desktop: 34px;
@@ -10712,9 +10896,9 @@ body.page-product .hero-card {
   padding: 20px; /* Reduce from 32px */
 }
 
-/* Product pages: keep the hero image big, but avoid an overly tall (square) hero. */
+/* Product pages (non-hub, non-story): visual hero square */
 body.page-product .hero-card.visual {
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 1 / 1;
 }
 
 body.page-product .hero h1 {
@@ -10745,7 +10929,7 @@ body.page-product .hero + .carousel .carousel-header {
   }
 
   body.page-product .hero-card.visual {
-    aspect-ratio: 3 / 2;
+    aspect-ratio: 1 / 1;
   }
 }
 
@@ -10791,8 +10975,8 @@ body.page-product .hero + .carousel .carousel-header {
   left: auto;
   bottom: 0;
   height: 100dvh;
-  width: 380px;
-  max-width: min(380px, 92vw);
+  width: 256px;
+  max-width: min(256px, 80vw);
   border-radius: 0;
   border-left: 1px solid rgba(33, 64, 152, 0.10);
   background: #ffffff;
@@ -10809,8 +10993,8 @@ body.page-product .hero + .carousel .carousel-header {
 
 @media (max-width: 480px) {
   .menu-drawer .menu-drawer__panel {
-    width: 340px;
-    max-width: min(340px, 92vw);
+    width: 240px;
+    max-width: min(240px, 88vw);
   }
 }
 
