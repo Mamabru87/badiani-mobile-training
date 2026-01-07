@@ -2520,11 +2520,12 @@ h4 {
 
 @media (max-width: 560px) {
   .berny-guide-panel {
-    width: 100%;
-    /* Su mobile preferiamo sfruttare tutta l'altezza disponibile */
-    height: calc(100vh - 28px);
+    /* Video verticale su mobile: pannello portrait, centrato */
+    aspect-ratio: 9 / 16;
+    height: 80vh;
     max-height: calc(100vh - 28px);
-    aspect-ratio: auto;
+    width: auto;
+    max-width: 92vw;
     border-radius: var(--radius-lg);
   }
 }

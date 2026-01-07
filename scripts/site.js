@@ -3697,7 +3697,97 @@ const gamification = (() => {
   let audioContext = null;
   let audioUnlocked = false;
 
+  // ============================================================
+  // SHARED AUDIO ENGINE
+  // - Single AudioContext for the whole app (avoids iOS/Android weirdness)
+  // - Master gain + gentle compressor to keep volume stable
+  // ============================================================
+  const getSharedAudio = () => {
+    try {
+      const existing = window.BadianiAudio;
+      if (existing && typeof existing.getContext === 'function' && typeof existing.getOutput === 'function') {
+        return existing;
+      }
+    } catch {}
+
+    const api = {
+      ctx: null,
+      masterGain: null,
+      masterComp: null,
+      getContext: function(options = {}) {
+        const { requireGesture = true } = options || {};
+        const AudioCtor = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtor) return null;
+        if (requireGesture && !window.__badianiUserGesture) return null;
+        if (!this.ctx) {
+          try {
+            this.ctx = new AudioCtor();
+          } catch (e) {
+            console.warn('[audio] Impossibile creare AudioContext:', e);
+            return null;
+          }
+        }
+        return this.ctx;
+      },
+      ensureRunning: function() {
+        const ctx = this.getContext({ requireGesture: false });
+        if (!ctx) return null;
+        if (ctx.state === 'suspended') {
+          try {
+            ctx.resume().catch(() => {});
+          } catch {}
+        }
+        return ctx;
+      },
+      ensureGraph: function(ctx) {
+        if (!ctx) return;
+        if (this.masterGain && this.masterComp) return;
+
+        try {
+          this.masterGain = ctx.createGain();
+          this.masterComp = ctx.createDynamicsCompressor();
+
+          // Gentle limiting: reduces perceived "volume drop" by avoiding clipping/ducking.
+          try {
+            this.masterComp.threshold.setValueAtTime(-18, ctx.currentTime);
+            this.masterComp.knee.setValueAtTime(16, ctx.currentTime);
+            this.masterComp.ratio.setValueAtTime(4, ctx.currentTime);
+            this.masterComp.attack.setValueAtTime(0.004, ctx.currentTime);
+            this.masterComp.release.setValueAtTime(0.10, ctx.currentTime);
+          } catch {}
+
+          this.masterGain.gain.value = 1;
+          this.masterGain.connect(this.masterComp);
+          this.masterComp.connect(ctx.destination);
+        } catch (e) {
+          // If graph creation fails, fallback to direct destination.
+          this.masterGain = null;
+          this.masterComp = null;
+        }
+      },
+      getOutput: function(ctx = null) {
+        const c = ctx || this.getContext({ requireGesture: false });
+        if (!c) return null;
+        this.ensureGraph(c);
+        return this.masterGain || c.destination;
+      }
+    };
+
+    try { window.BadianiAudio = api; } catch {}
+    return api;
+  };
+
+  const sharedAudio = getSharedAudio();
+
   const getOrCreateAudioContext = () => {
+    // Prefer the shared app-wide context.
+    const ctx = sharedAudio.getContext({ requireGesture: false });
+    if (ctx) {
+      audioContext = ctx;
+      return ctx;
+    }
+
+    // Fallback (should rarely happen): keep legacy behavior.
     const AudioCtor = window.AudioContext || window.webkitAudioContext;
     if (!AudioCtor) return null;
     if (!audioContext) {
@@ -3717,6 +3807,9 @@ const gamification = (() => {
     try {
       const ac = getOrCreateAudioContext();
       if (!ac) return;
+
+      // Ensure shared graph exists and the context is running.
+      try { sharedAudio.ensureGraph(ac); } catch {}
 
       const run = () => {
         try { 
@@ -3792,8 +3885,10 @@ const gamification = (() => {
       const osc = ac.createOscillator();
       const gain = ac.createGain();
 
+      const out = sharedAudio.getOutput(ac) || ac.destination;
+
       osc.connect(gain);
-      gain.connect(ac.destination);
+      gain.connect(out);
 
       // Legacy UI Pop (kept as-is so other existing sounds/flows remain unchanged)
       osc.type = 'sine';
@@ -3818,8 +3913,10 @@ const gamification = (() => {
       const osc = ac.createOscillator();
       const gain = ac.createGain();
 
+      const out = sharedAudio.getOutput(ac) || ac.destination;
+
       osc.connect(gain);
-      gain.connect(ac.destination);
+      gain.connect(out);
 
       // "Bip" open
       osc.type = 'sine';
@@ -3842,8 +3939,10 @@ const gamification = (() => {
       const osc = ac.createOscillator();
       const gain = ac.createGain();
 
+      const out = sharedAudio.getOutput(ac) || ac.destination;
+
       osc.connect(gain);
-      gain.connect(ac.destination);
+      gain.connect(out);
 
       // "Bop" close
       osc.type = 'triangle';
@@ -3866,8 +3965,10 @@ const gamification = (() => {
       const osc = ac.createOscillator();
       const gain = ac.createGain();
 
+      const out = sharedAudio.getOutput(ac) || ac.destination;
+
       osc.connect(gain);
-      gain.connect(ac.destination);
+      gain.connect(out);
 
       // "Bip" (modal open): a touch more present than tabs
       osc.type = 'sine';
@@ -3894,8 +3995,10 @@ const gamification = (() => {
       const osc = ac.createOscillator();
       const gain = ac.createGain();
 
+      const out = sharedAudio.getOutput(ac) || ac.destination;
+
       osc.connect(gain);
-      gain.connect(ac.destination);
+      gain.connect(out);
 
       // "Bop" (modal close): slightly lower and a bit longer
       osc.type = 'triangle';
@@ -3923,10 +4026,12 @@ const gamification = (() => {
       const filter = ac.createBiquadFilter();
       const gain = ac.createGain();
 
+      const out = sharedAudio.getOutput(ac) || ac.destination;
+
       // Soft chain: osc -> gentle low-pass -> gain -> destination
       osc.connect(filter);
       filter.connect(gain);
-      gain.connect(ac.destination);
+      gain.connect(out);
 
       // Crystal pickup "Fiu": quick airy sweep (fast like the current cue)
       // Use a short downward glide + tight envelope.
@@ -3965,25 +4070,14 @@ const gamification = (() => {
       withRunningAudioContext((ac) => {
         const now = ac.currentTime;
         const startAt = now + 0.03;
-        // Louder + more "tadadaaan" while staying short and non-harsh.
-        // Use a light compressor so it reads on phone speakers without clipping.
+        // Route everything through the shared master chain to keep volume consistent.
+        const out = sharedAudio.getOutput(ac) || ac.destination;
         const masterGain = ac.createGain();
-        const comp = ac.createDynamicsCompressor();
-        masterGain.connect(comp);
-        comp.connect(ac.destination);
+        masterGain.connect(out);
 
         // Fanfare intensity: level 1..4 from the star-set logic.
         const baseLevel = Math.max(1, Math.min(6, Number(level) || 1));
         const intensity = Math.max(0.9, Math.min(1.6, 1.05 + baseLevel * 0.10));
-
-        // Compressor tuning (gentle, punchy)
-        try {
-          comp.threshold.setValueAtTime(-22, startAt);
-          comp.knee.setValueAtTime(18, startAt);
-          comp.ratio.setValueAtTime(6, startAt);
-          comp.attack.setValueAtTime(0.003, startAt);
-          comp.release.setValueAtTime(0.12, startAt);
-        } catch {}
 
         // Base loudness (compressor will keep it clean)
         // Nudge up so the star win clearly sits above the crystal "fiu".
@@ -4051,8 +4145,10 @@ const gamification = (() => {
       const startAt = now + 0.03;
       const oscillator = ac.createOscillator();
       const gainNode = ac.createGain();
+
+      const out = sharedAudio.getOutput(ac) || ac.destination;
       oscillator.connect(gainNode);
-      gainNode.connect(ac.destination);
+      gainNode.connect(out);
       oscillator.frequency.setValueAtTime(600, startAt);
       oscillator.frequency.exponentialRampToValueAtTime(900, startAt + 0.08);
       oscillator.type = 'sine';
@@ -4071,8 +4167,10 @@ const gamification = (() => {
       [0, 0.15, 0.3].forEach((offset) => {
         const osc = ac.createOscillator();
         const gain = ac.createGain();
+
+        const out = sharedAudio.getOutput(ac) || ac.destination;
         osc.connect(gain);
-        gain.connect(ac.destination);
+        gain.connect(out);
         osc.frequency.setValueAtTime(800 + offset * 400, startAt + offset);
         osc.frequency.exponentialRampToValueAtTime(1600 + offset * 600, startAt + offset + 0.12);
         osc.type = 'sine';
@@ -4100,9 +4198,11 @@ const gamification = (() => {
       notes.forEach((freq, i) => {
         const osc = ac.createOscillator();
         const gain = ac.createGain();
+
+        const out = sharedAudio.getOutput(ac) || ac.destination;
         
         osc.connect(gain);
-        gain.connect(ac.destination);
+        gain.connect(out);
         
         osc.type = 'sine';
         osc.frequency.setValueAtTime(freq, startAt + (i * 0.15));
@@ -4125,9 +4225,11 @@ const gamification = (() => {
       // Suono di successo - arpeggio ascendente brillante
       const osc = ac.createOscillator();
       const gain = ac.createGain();
+
+      const out = sharedAudio.getOutput(ac) || ac.destination;
       
       osc.connect(gain);
-      gain.connect(ac.destination);
+      gain.connect(out);
       
       osc.type = 'sine';
       osc.frequency.setValueAtTime(880, startAt); // A5
@@ -4150,9 +4252,11 @@ const gamification = (() => {
       // Suono di errore - tono discendente con vibrato
       const osc = ac.createOscillator();
       const gain = ac.createGain();
+
+      const out = sharedAudio.getOutput(ac) || ac.destination;
       
       osc.connect(gain);
-      gain.connect(ac.destination);
+      gain.connect(out);
       
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(440, startAt); // A4
@@ -4175,9 +4279,11 @@ const gamification = (() => {
       // Suono di chiusura - simile a modal close ma più morbido
       const osc = ac.createOscillator();
       const gain = ac.createGain();
+
+      const out = sharedAudio.getOutput(ac) || ac.destination;
       
       osc.connect(gain);
-      gain.connect(ac.destination);
+      gain.connect(out);
       
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(520, startAt);
@@ -14885,24 +14991,19 @@ const initCarousels = () => {
   if (!carouselEls.length) return;
 
   const dialSound = (() => {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContextClass) {
-      return { play: () => {} };
-    }
-
-    let ctx;
     let buffer;
 
-    const ensureContext = () => {
-      // Do not create/resume AudioContext before a user gesture.
-      if (!window.__badianiUserGesture) return null;
-      if (!ctx) {
-        ctx = new AudioContextClass();
-      }
+    const ensure = () => {
+      // Shared audio engine (single context) to avoid mobile lag/ducking.
+      const api = window.BadianiAudio;
+      const ctx = api?.getContext?.({ requireGesture: true }) || null;
+      if (!ctx) return null;
+      try { api?.ensureGraph?.(ctx); } catch {}
       if (ctx.state === 'suspended') {
         ctx.resume().catch(() => {});
       }
-      return ctx;
+      const out = api?.getOutput?.(ctx) || ctx.destination;
+      return { ctx, out };
     };
 
     const buildBuffer = (context) => {
@@ -14919,11 +15020,15 @@ const initCarousels = () => {
 
     return {
       play: () => {
-        const context = ensureContext();
-        if (!context) return;
-        if (!buffer) {
+        const info = ensure();
+        const context = info?.ctx;
+        const out = info?.out;
+        if (!context || !out) return;
+
+        if (!buffer || buffer.sampleRate !== context.sampleRate) {
           buffer = buildBuffer(context);
         }
+
         const source = context.createBufferSource();
         source.buffer = buffer;
 
@@ -14938,7 +15043,7 @@ const initCarousels = () => {
 
         source.connect(filter);
         filter.connect(gain);
-        gain.connect(context.destination);
+        gain.connect(out);
 
         source.start();
       }
@@ -16213,38 +16318,84 @@ window.BadianiGamificationHelper = {
 // SOUND FX ENGINE (AudioContext - No External Files)
 // ============================================================
 const BadianiSound = {
-    ctx: null,
-    // Restore the file-based audio for the scroll tick as requested
-    clickAudio: new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"),
+    _lastTickAt: 0,
+    _tickBuffer: null,
 
-    init: function() {
-    // Do not create AudioContext until after a real user gesture.
-    if (!window.__badianiUserGesture) return;
-        if (!this.ctx) {
-            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-        }
-        if (this.ctx.state === 'suspended') {
-            this.ctx.resume().catch(() => {});
-        }
-        // Configure the click audio settings
-        this.clickAudio.volume = 0.2;
-        this.clickAudio.playbackRate = 1.5;
+    _ensure: function() {
+      if (!window.__badianiUserGesture) return null;
+      const api = window.BadianiAudio;
+      const ctx = api?.getContext?.({ requireGesture: true }) || null;
+      if (!ctx) return null;
+      try { api?.ensureGraph?.(ctx); } catch {}
+      if (ctx.state === 'suspended') {
+        ctx.resume().catch(() => {});
+      }
+      const out = api?.getOutput?.(ctx) || ctx.destination;
+      return { ctx, out };
     },
+
+    _ensureTickBuffer: function(ctx) {
+      if (!ctx) return;
+      if (this._tickBuffer && this._tickBuffer.sampleRate === ctx.sampleRate) return;
+
+      // Short filtered noise click (replaces remote MP3 -> no network lag, stable volume)
+      const duration = 0.045;
+      const sr = ctx.sampleRate;
+      const buf = ctx.createBuffer(1, Math.max(1, Math.floor(sr * duration)), sr);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < data.length; i += 1) {
+        const x = i / data.length;
+        const decay = Math.pow(1 - x, 3.2);
+        data[i] = (Math.random() * 2 - 1) * decay;
+      }
+      this._tickBuffer = buf;
+    },
+
     playTick: function() {
-      if (!window.__badianiUserGesture) return;
-        // Use the MP3 file logic for the scroll tick
-        this.clickAudio.currentTime = 0;
-        this.clickAudio.play().catch(() => {});
+      const info = this._ensure();
+      const ctx = info?.ctx;
+      const out = info?.out;
+      if (!ctx || !out) return;
+
+      // Throttle: prevents rapid-fire triggering that can sound like lag/ducking.
+      const nowMs = performance.now();
+      if (nowMs - this._lastTickAt < 55) return;
+      this._lastTickAt = nowMs;
+
+      this._ensureTickBuffer(ctx);
+      if (!this._tickBuffer) return;
+
+      const t = ctx.currentTime;
+      const src = ctx.createBufferSource();
+      src.buffer = this._tickBuffer;
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'highpass';
+      filter.frequency.setValueAtTime(900, t);
+
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0.12, t);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.06);
+
+      src.connect(filter);
+      filter.connect(gain);
+      gain.connect(out);
+
+      try { src.start(t); } catch { try { src.start(); } catch {} }
     },
+
     playBlup: function() {
-      if (!window.__badianiUserGesture) return;
-        this.init();
-        const t = this.ctx.currentTime;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
+      const info = this._ensure();
+      const ctx = info?.ctx;
+      const out = info?.out;
+      if (!ctx || !out) return;
+
+        const t = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
         
         osc.connect(gain);
-        gain.connect(this.ctx.destination);
+        gain.connect(out);
         
         // Bubble pop (Rising sine wave)
         osc.type = 'sine';
@@ -16266,6 +16417,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       if (evt && evt.isTrusted === false) return;
       window.__badianiUserGesture = true;
+      try { window.BadianiAudio?.ensureRunning?.(); } catch {}
     } catch {}
         document.removeEventListener('click', unlockAudio);
         document.removeEventListener('touchstart', unlockAudio);
