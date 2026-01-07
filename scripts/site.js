@@ -3591,212 +3591,267 @@ const gamification = (() => {
 
   let audioContext = null;
 
-  // Global audio unlocker to ensure context is ready on first touch
-  const unlockAudioContext = () => {
+  const getOrCreateAudioContext = () => {
     const AudioCtor = window.AudioContext || window.webkitAudioContext;
-    if (!AudioCtor) return;
-    
+    if (!AudioCtor) return null;
     if (!audioContext) {
       audioContext = new AudioCtor();
     }
-    if (audioContext.state === 'suspended') {
-      audioContext.resume().then(() => {
+    return audioContext;
+  };
+
+  // Ensure the AudioContext is actually running BEFORE we schedule oscillators.
+  // Otherwise (especially on iOS) resume() may resolve after the sound already ended.
+  const withRunningAudioContext = (fn) => {
+    try {
+      const ac = getOrCreateAudioContext();
+      if (!ac) return;
+
+      const run = () => {
+        try { fn(ac); } catch (e) {}
+      };
+
+      if (ac.state === 'suspended') {
+        const p = ac.resume();
+        if (p && typeof p.then === 'function') {
+          p.then(run).catch(() => {});
+        } else {
+          run();
+        }
+        return;
+      }
+
+      run();
+    } catch (e) {}
+  };
+
+  // Global audio unlocker to ensure context is ready on first touch
+  const unlockAudioContext = () => {
+    const ac = getOrCreateAudioContext();
+    if (!ac) return;
+    // IMPORTANT: Register the unlocker in CAPTURE phase (below), because some
+    // UI handlers call stopPropagation() which would otherwise prevent unlock.
+    if (ac.state === 'suspended') {
+      ac.resume().then(() => {
         // Remove listeners once unlocked
-        ['click', 'touchstart', 'keydown'].forEach(evt => 
-          document.removeEventListener(evt, unlockAudioContext)
+        ['click', 'touchstart', 'keydown'].forEach((evt) =>
+          document.removeEventListener(evt, unlockAudioContext, true)
         );
       }).catch(() => {});
+    } else if (ac.state === 'running') {
+      // Already unlocked; clean up listeners.
+      ['click', 'touchstart', 'keydown'].forEach((evt) =>
+        document.removeEventListener(evt, unlockAudioContext, true)
+      );
     }
   };
-  ['click', 'touchstart', 'keydown'].forEach(evt => 
-    document.addEventListener(evt, unlockAudioContext)
+  // Use capture so unlock still fires even if inner handlers stop propagation.
+  ['click', 'touchstart', 'keydown'].forEach((evt) =>
+    document.addEventListener(evt, unlockAudioContext, true)
   );
 
   const playTabOpenSound = () => {
-    try {
-      const AudioCtor = window.AudioContext || window.webkitAudioContext;
-      if (!AudioCtor) return;
+    withRunningAudioContext((ac) => {
+      const now = ac.currentTime;
+      const startAt = now + 0.03;
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
 
-      if (!audioContext) {
-        audioContext = new AudioCtor();
-      }
-      if (audioContext.state === 'suspended') {
-        audioContext.resume().catch(() => {});
-      }
-      
-      const now = audioContext.currentTime;
-      const osc = audioContext.createOscillator();
-      const gain = audioContext.createGain();
-      
       osc.connect(gain);
-      gain.connect(audioContext.destination);
-      
-      // "Cute" UI Pop: High pitch sine wave
+      gain.connect(ac.destination);
+
+      // Legacy UI Pop (kept as-is so other existing sounds/flows remain unchanged)
       osc.type = 'sine';
-      
-      // Pitch envelope: Quick rise (chirp)
-      osc.frequency.setValueAtTime(800, now);
-      osc.frequency.exponentialRampToValueAtTime(1400, now + 0.1);
-      
-      // Volume envelope: Fast attack, fast decay
-      gain.gain.setValueAtTime(0, now);
-      gain.gain.linearRampToValueAtTime(0.6, now + 0.02); // Louder attack
-      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
-      
-      osc.start(now);
-      osc.stop(now + 0.2);
-    } catch (e) {}
+      osc.frequency.setValueAtTime(800, startAt);
+      osc.frequency.exponentialRampToValueAtTime(1400, startAt + 0.1);
+
+      gain.gain.setValueAtTime(0.0001, startAt);
+      gain.gain.exponentialRampToValueAtTime(0.65, startAt + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.22);
+
+      osc.start(startAt);
+      osc.stop(startAt + 0.22);
+    });
+  };
+
+  // Dedicated card open/close feedback requested ("bip" on open, "bop" on close).
+  // Kept separate from reward/crystal sounds.
+  const playCardOpenBip = () => {
+    withRunningAudioContext((ac) => {
+      const now = ac.currentTime;
+      const startAt = now + 0.03;
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+
+      osc.connect(gain);
+      gain.connect(ac.destination);
+
+      // "Bip" open (slightly longer + louder to be reliably audible on mobile + laptop speakers)
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(920, startAt);
+      osc.frequency.exponentialRampToValueAtTime(1420, startAt + 0.06);
+
+      gain.gain.setValueAtTime(0.0001, startAt);
+      gain.gain.exponentialRampToValueAtTime(0.40, startAt + 0.010);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.13);
+
+      osc.start(startAt);
+      osc.stop(startAt + 0.13);
+
+      if (window.__badianiDebugAudio) {
+        console.log('[audio] card open bip', { state: ac.state });
+      }
+    });
+  };
+
+  const playCardCloseBop = () => {
+    withRunningAudioContext((ac) => {
+      const now = ac.currentTime;
+      const startAt = now + 0.03;
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+
+      osc.connect(gain);
+      gain.connect(ac.destination);
+
+      // "Bop" close (a touch lower + longer)
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(640, startAt);
+      osc.frequency.exponentialRampToValueAtTime(360, startAt + 0.08);
+
+      gain.gain.setValueAtTime(0.0001, startAt);
+      gain.gain.exponentialRampToValueAtTime(0.34, startAt + 0.012);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.14);
+
+      osc.start(startAt);
+      osc.stop(startAt + 0.14);
+
+      if (window.__badianiDebugAudio) {
+        console.log('[audio] card close bop', { state: ac.state });
+      }
+    });
   };
 
   const playModalOpenSound = () => {
-    try {
-      const AudioCtor = window.AudioContext || window.webkitAudioContext;
-      if (!AudioCtor) return;
+    withRunningAudioContext((ac) => {
+      const now = ac.currentTime;
+      const startAt = now + 0.03;
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
 
-      if (!audioContext) {
-        audioContext = new AudioCtor();
-      }
-      if (audioContext.state === 'suspended') {
-        audioContext.resume().catch(() => {});
-      }
-      
-      const now = audioContext.currentTime;
-      const osc = audioContext.createOscillator();
-      const gain = audioContext.createGain();
-      
       osc.connect(gain);
-      gain.connect(audioContext.destination);
-      
-      // "Bup" sound: Warm, friendly pop
+      gain.connect(ac.destination);
+
+      // "Bip" (modal open): a touch more present than tabs
       osc.type = 'sine';
-      
-      // Pitch: Start medium, quick rise
-      osc.frequency.setValueAtTime(600, now);
-      osc.frequency.exponentialRampToValueAtTime(1000, now + 0.06);
-      
-      // Volume: Strong and clear
-      gain.gain.setValueAtTime(0, now);
-      gain.gain.linearRampToValueAtTime(0.3, now + 0.01);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
-      
-      osc.start(now);
-      osc.stop(now + 0.15);
-      
-      console.log('🔊 Modal OPEN sound played');
-    } catch (e) {
-      console.error('Modal open sound error:', e);
-    }
+      osc.frequency.setValueAtTime(980, startAt);
+      osc.frequency.exponentialRampToValueAtTime(1260, startAt + 0.06);
+
+      gain.gain.setValueAtTime(0.0001, startAt);
+      gain.gain.exponentialRampToValueAtTime(0.28, startAt + 0.012);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.10);
+
+      osc.start(startAt);
+      osc.stop(startAt + 0.10);
+
+      if (window.__badianiDebugAudio) {
+        console.log('[audio] modal open', { state: ac.state });
+      }
+    });
   };
 
   const playModalCloseSound = () => {
-    try {
-      const AudioCtor = window.AudioContext || window.webkitAudioContext;
-      if (!AudioCtor) return;
+    withRunningAudioContext((ac) => {
+      const now = ac.currentTime;
+      const startAt = now + 0.03;
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
 
-      if (!audioContext) {
-        audioContext = new AudioCtor();
-      }
-      if (audioContext.state === 'suspended') {
-        audioContext.resume().catch(() => {});
-      }
-      
-      const now = audioContext.currentTime;
-      const osc = audioContext.createOscillator();
-      const gain = audioContext.createGain();
-      
       osc.connect(gain);
-      gain.connect(audioContext.destination);
-      
-      // "Boop" sound: Lower pitch, soft close
-      osc.type = 'sine';
-      
-      // Pitch: Start high, quick drop
-      osc.frequency.setValueAtTime(900, now);
-      osc.frequency.exponentialRampToValueAtTime(500, now + 0.08);
-      
-      // Volume: Soft and quick
-      gain.gain.setValueAtTime(0, now);
-      gain.gain.linearRampToValueAtTime(0.2, now + 0.01);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
-      
-      osc.start(now);
-      osc.stop(now + 0.12);
-      
-      console.log('🔊 Modal CLOSE sound played');
-    } catch (e) {
-      console.error('Modal close sound error:', e);
-    }
+      gain.connect(ac.destination);
+
+      // "Bop" (modal close): slightly lower and a bit longer
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(520, startAt);
+      osc.frequency.exponentialRampToValueAtTime(360, startAt + 0.07);
+
+      gain.gain.setValueAtTime(0.0001, startAt);
+      gain.gain.exponentialRampToValueAtTime(0.26, startAt + 0.014);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.12);
+
+      osc.start(startAt);
+      osc.stop(startAt + 0.12);
+
+      if (window.__badianiDebugAudio) {
+        console.log('[audio] modal close', { state: ac.state });
+      }
+    });
   };
 
   const playCrystalSound = () => {
-    try {
-      const AudioCtor = window.AudioContext || window.webkitAudioContext;
-      if (!AudioCtor) return;
-      if (!audioContext) audioContext = new AudioCtor();
-      if (audioContext.state === 'suspended') audioContext.resume().catch(() => {});
-
-      const now = audioContext.currentTime;
-      const osc = audioContext.createOscillator();
-      const gain = audioContext.createGain();
+    withRunningAudioContext((ac) => {
+      const now = ac.currentTime;
+      const startAt = now + 0.03;
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
 
       osc.connect(gain);
-      gain.connect(audioContext.destination);
+      gain.connect(ac.destination);
 
       // Crystal "Ting": High pitch sine with bell-like decay
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(1800, now);
-      osc.frequency.exponentialRampToValueAtTime(2200, now + 0.1);
+      osc.frequency.setValueAtTime(1800, startAt);
+      osc.frequency.exponentialRampToValueAtTime(2200, startAt + 0.1);
 
-      gain.gain.setValueAtTime(0, now);
-      gain.gain.linearRampToValueAtTime(0.4, now + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+      gain.gain.setValueAtTime(0.0001, startAt);
+      gain.gain.exponentialRampToValueAtTime(0.45, startAt + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.5);
 
-      osc.start(now);
-      osc.stop(now + 0.5);
-    } catch (e) {}
+      osc.start(startAt);
+      osc.stop(startAt + 0.5);
+    });
   };
 
   const playStarChime = (level = 1) => {
     try {
-      if (!audioContext) {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      if (audioContext.state === 'suspended') audioContext.resume();
-
-      const now = audioContext.currentTime;
-      const masterGain = audioContext.createGain();
-      masterGain.connect(audioContext.destination);
-      masterGain.gain.value = 0.15;
+      withRunningAudioContext((ac) => {
+        const now = ac.currentTime;
+        const startAt = now + 0.03;
+        const masterGain = ac.createGain();
+        masterGain.connect(ac.destination);
+        masterGain.gain.value = 0.15;
 
       // Nintendo-style "Get Item" fanfare (Square waves)
       // Arpeggio: C5, E5, G5, C6
       const notes = [523.25, 659.25, 783.99, 1046.50]; 
       
-      notes.forEach((freq, i) => {
-        const osc = audioContext.createOscillator();
+        notes.forEach((freq, i) => {
+          const osc = ac.createOscillator();
         osc.type = 'square'; 
         osc.frequency.value = freq;
         osc.connect(masterGain);
         
-        const start = now + (i * 0.08);
+          const start = startAt + (i * 0.08);
         const dur = 0.1;
         
         osc.start(start);
         osc.stop(start + dur);
-      });
+        });
       
       // Final sustain note
-      const finalOsc = audioContext.createOscillator();
+        const finalOsc = ac.createOscillator();
       finalOsc.type = 'triangle';
       finalOsc.frequency.value = 1046.50; // C6
       finalOsc.connect(masterGain);
-      finalOsc.start(now + 0.32);
-      finalOsc.stop(now + 0.8);
+        finalOsc.start(startAt + 0.32);
+        finalOsc.stop(startAt + 0.8);
       
       // Envelope
-      masterGain.gain.setValueAtTime(0.15, now);
-      masterGain.gain.setValueAtTime(0.15, now + 0.4);
-      masterGain.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
+        masterGain.gain.setValueAtTime(0.15, startAt);
+        masterGain.gain.setValueAtTime(0.15, startAt + 0.4);
+        masterGain.gain.exponentialRampToValueAtTime(0.01, startAt + 0.8);
+
+      });
 
     } catch (error) {
       console.warn('Audio playback not available', error);
@@ -3804,49 +3859,43 @@ const gamification = (() => {
   };
 
   const playGelatoPop = () => {
-    try {
-      if (!audioContext) {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      const now = audioContext.currentTime;
-      const oscillator = audioContext.createOscillator();
-      const gainNode = audioContext.createGain();
+    withRunningAudioContext((ac) => {
+      const now = ac.currentTime;
+      const startAt = now + 0.03;
+      const oscillator = ac.createOscillator();
+      const gainNode = ac.createGain();
       oscillator.connect(gainNode);
-      gainNode.connect(audioContext.destination);
-      oscillator.frequency.setValueAtTime(600, now);
-      oscillator.frequency.exponentialRampToValueAtTime(900, now + 0.08);
+      gainNode.connect(ac.destination);
+      oscillator.frequency.setValueAtTime(600, startAt);
+      oscillator.frequency.exponentialRampToValueAtTime(900, startAt + 0.08);
       oscillator.type = 'sine';
-      gainNode.gain.setValueAtTime(0.2, now);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-      oscillator.start(now);
-      oscillator.stop(now + 0.3);
-    } catch (error) {
-      console.warn('Audio playback not available', error);
-    }
+      gainNode.gain.setValueAtTime(0.0001, startAt);
+      gainNode.gain.exponentialRampToValueAtTime(0.25, startAt + 0.02);
+      gainNode.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.3);
+      oscillator.start(startAt);
+      oscillator.stop(startAt + 0.3);
+    });
   };
 
   const playBonusTwinkle = () => {
-    try {
-      if (!audioContext) {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      const now = audioContext.currentTime;
+    withRunningAudioContext((ac) => {
+      const now = ac.currentTime;
+      const startAt = now + 0.03;
       [0, 0.15, 0.3].forEach((offset) => {
-        const osc = audioContext.createOscillator();
-        const gain = audioContext.createGain();
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
         osc.connect(gain);
-        gain.connect(audioContext.destination);
-        osc.frequency.setValueAtTime(800 + offset * 400, now + offset);
-        osc.frequency.exponentialRampToValueAtTime(1600 + offset * 600, now + offset + 0.12);
+        gain.connect(ac.destination);
+        osc.frequency.setValueAtTime(800 + offset * 400, startAt + offset);
+        osc.frequency.exponentialRampToValueAtTime(1600 + offset * 600, startAt + offset + 0.12);
         osc.type = 'sine';
-        gain.gain.setValueAtTime(0.12, now + offset);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + offset + 0.5);
-        osc.start(now + offset);
-        osc.stop(now + offset + 0.5);
+        gain.gain.setValueAtTime(0.0001, startAt + offset);
+        gain.gain.exponentialRampToValueAtTime(0.14, startAt + offset + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, startAt + offset + 0.5);
+        osc.start(startAt + offset);
+        osc.stop(startAt + offset + 0.5);
       });
-    } catch (error) {
-      console.warn('Audio playback not available', error);
-    }
+    });
   };
   const BONUS_POINTS_PER_FULL_SET = 5;
   const GELATO_COOLDOWN = 24 * 60 * 60 * 1000;
@@ -11547,9 +11596,15 @@ toggles.forEach((button) => {
         header.addEventListener('click', (event) => {
           const willExpand = !item.classList.contains('is-open');
 
+          // Small audio feedback on open/close (user-initiated).
+          // Note: silent open-all mode calls setOpen() directly, so it won't spam sounds.
+          try {
+            if (willExpand) playCardOpenBip();
+            else playCardCloseBop();
+          } catch (e) {}
+
           // Accordion behavior: only one tab open at a time.
           if (willExpand && !allowMultiOpenTabs) {
-            try { playTabOpenSound(); } catch (e) {}
             try {
               accordion.querySelectorAll('.accordion-item.is-open').forEach((openItem) => {
                 if (openItem === item) return;
