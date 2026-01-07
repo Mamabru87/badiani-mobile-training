@@ -12338,7 +12338,7 @@ toggles.forEach((button) => {
         overlay.dataset.animateFromCard = 'true';
         overlay.style.setProperty('--card-from-x', `${Math.round(dx)}px`);
         overlay.style.setProperty('--card-from-y', `${Math.round(dy)}px`);
-        overlay.style.setProperty('--card-from-scale', '0.92');
+        overlay.style.setProperty('--card-from-scale', '0.28'); // Match keyframe start scale
       }
     } catch (e) {}
 
@@ -12574,8 +12574,8 @@ toggles.forEach((button) => {
         }
       } catch (e) {}
 
-      // Duration of the 3D close animation (matches CSS transition).
-      const CLOSE_ANIM_DURATION_MS = 350;
+      // Duration of the card putdown animation (matches CSS keyframe duration).
+      const CLOSE_ANIM_DURATION_MS = 650;
 
       // === Phase 2: After 3D animation completes, unlock scroll and restore focus ===
       setTimeout(() => {
