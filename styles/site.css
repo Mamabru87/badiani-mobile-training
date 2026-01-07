@@ -2357,13 +2357,34 @@ h4 {
 
 .berny-quiz-loading {
   text-align: center;
-  padding: 40px 20px;
+  padding: 24px 16px;
+  min-height: auto;
+  max-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.berny-avatar-loading {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2px solid #E30613;
+  object-fit: cover;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.9; }
 }
 
 .berny-quiz-loading .reward-modal__text {
   color: var(--ink-soft);
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 13px;
+  line-height: 1.4;
+  display: none;
 }
 
 /* ============================================================

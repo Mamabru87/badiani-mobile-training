@@ -194,9 +194,12 @@
         // Mostra le schede di revisione consigliate da Berny
         if (revisions && revisionsWrap && revisionsList) {
           try {
+            console.log('📚 Parsing revisions:', revisions);
             const cardNames = JSON.parse(decodeURIComponent(revisions));
+            console.log('📚 Parsed cardNames:', cardNames);
+            
             if (Array.isArray(cardNames) && cardNames.length > 0) {
-              // Mappa il nome della scheda ai file corretti
+              // Mappa il nome della scheda ai file corretti (DEVE CORRISPONDERE a site.js slugToCardName)
               const cardLinks = {
                 'Caffè': { href: 'caffe.html', label: '☕ Torna a Caffè' },
                 'Gelato Lab': { href: 'gelato-lab.html', label: '🍦 Torna a Gelato Lab' },
@@ -207,21 +210,40 @@
               };
               
               revisionsList.innerHTML = '';
+              let linksCreated = 0;
+              
               cardNames.forEach(cardName => {
-                const linkInfo = cardLinks[cardName] || { href: 'index.html', label: `📖 ${cardName}` };
-                const link = document.createElement('a');
-                link.href = linkInfo.href;
-                link.className = 'solution-revisions-link';
-                link.textContent = linkInfo.label;
-                revisionsList.appendChild(link);
+                const trimmedName = (cardName || '').trim();
+                const linkInfo = cardLinks[trimmedName];
+                
+                if (linkInfo) {
+                  const link = document.createElement('a');
+                  link.href = linkInfo.href;
+                  link.className = 'solution-revisions-link';
+                  link.textContent = linkInfo.label;
+                  revisionsList.appendChild(link);
+                  linksCreated++;
+                  console.log(`✅ Link creato per: ${trimmedName} -> ${linkInfo.href}`);
+                } else {
+                  console.warn(`⚠️ Nome scheda non mappato: "${trimmedName}"`);
+                }
               });
               
-              revisionsWrap.hidden = false;
-              console.log('✅ Berny: Schede di revisione consigliate:', cardNames);
+              if (linksCreated > 0) {
+                revisionsWrap.hidden = false;
+                console.log(`✅ Berny: ${linksCreated} schede di revisione consigliate`);
+              } else {
+                console.warn('⚠️ Nessun link creato - nomi non mappati');
+                revisionsWrap.hidden = true;
+              }
+            } else {
+              console.warn('⚠️ cardNames non è un array o è vuoto:', cardNames);
             }
           } catch (e) {
-            console.warn('⚠️ Errore parsing schede revisione:', e);
+            console.error('❌ Errore parsing schede revisione:', e.message, 'revisions:', revisions);
           }
+        } else {
+          console.log('ℹ️ Nessun parametro revisions trovato');
         }
       } else {
         questionEl.textContent = t('quizSolution.noQuestion', null, 'Nessuna domanda ricevuta.');

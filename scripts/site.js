@@ -8140,9 +8140,23 @@ const gamification = (() => {
       }
 
       const recentCards = studiedCards.slice(0, 3);
-      const cardTitles = recentCards.map(c => c.cardTitle || c.tabTitle).filter(Boolean);
       
-      console.log(`✅ Berny MOCK: generando domanda su [${cardTitles.join(', ')}]`);
+      // Mappa slug ai nomi corretti per le revisioni (DEVE CORRISPONDERE a quiz-solution.html)
+      const slugToCardName = {
+        'caffe': 'Caffè',
+        'gelato-lab': 'Gelato Lab',
+        'sweet-treats': 'Dolciumi',
+        'pastries': 'Paste',
+        'slitti-yoyo': 'Slitti Yoyo',
+        'festive': 'Festivo'
+      };
+      
+      // Normalizza i titoli usando i slug
+      const cardNames = recentCards
+        .map(c => slugToCardName[c.pageSlug] || c.cardTitle || c.tabTitle)
+        .filter(Boolean);
+      
+      console.log(`✅ Berny MOCK: generando domanda su [${cardNames[0]}]`);
 
       // BANCA DOMANDE MOCK - associate ai topic comuni
       const mockQuestions = {
@@ -8198,7 +8212,7 @@ const gamification = (() => {
       // Se nessun topic specifico, usa generica
       if (possibleQuestions.length === 0) {
         possibleQuestions.push({
-          question: `Cosa hai imparato da "${cardTitles[0]}"?`,
+          question: `Cosa hai imparato da "${cardNames[0]}"?`,
           options: ['Poco', 'Molto', 'Abbastanza', 'Nulla'],
           correct: 1,
           explanation: 'Ottimo! Hai imparato molte informazioni importanti.'
@@ -8216,7 +8230,7 @@ const gamification = (() => {
         correct: q.correct,
         explanation: q.explanation,
         generatedByBerny: true,
-        basedOnCards: cardTitles
+        basedOnCards: cardNames
       };
 
       console.log('🎯 Berny MOCK: ' + q.question);
@@ -9362,23 +9376,10 @@ const gamification = (() => {
     loadingContainer.className = 'reward-modal berny-quiz-loading';
     loadingContainer.innerHTML = `
       <div class="berny-avatar-section">
-        <div class="berny-avatar-circle">
-          <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
-            <circle cx="30" cy="30" r="28" fill="#E30613" opacity="0.1"/>
-            <circle cx="30" cy="30" r="24" fill="#E30613"/>
-            <path d="M20 28 Q 25 23, 30 28 T 40 28" stroke="white" stroke-width="2" fill="none"/>
-            <circle cx="22" cy="24" r="2" fill="white"/>
-            <circle cx="38" cy="24" r="2" fill="white"/>
-            <circle cx="30" cy="30" r="1" fill="white" opacity="0.6">
-              <animate attributeName="r" values="1;3;1" dur="1s" repeatCount="indefinite"/>
-              <animate attributeName="opacity" values="0.6;1;0.6" dur="1s" repeatCount="indefinite"/>
-            </circle>
-          </svg>
-        </div>
+        <img src="assets/avatars/berni%20avatar.png" alt="Berny" class="berny-avatar-loading" />
       </div>
-      <h3 class="reward-modal__title" style="margin-top: 1rem; color: #E30613;">🧠 Berny sta pensando...</h3>
-      <p class="reward-modal__text">Sto analizzando cosa hai studiato per creare una domanda personalizzata per te!</p>
-      <div class="berny-loading-dots">
+      <h3 class="reward-modal__title" style="margin-top: 0.5rem; color: #E30613; font-size: 18px;">Berny sta pensando...</h3>
+      <div class="berny-loading-dots" style="margin-top: 0.5rem;">
         <span>.</span><span>.</span><span>.</span>
       </div>
     `;
@@ -9399,16 +9400,7 @@ const gamification = (() => {
         if (bernyQuestion) {
           questions = [bernyQuestion];
           bernyGenerated = true;
-          
-          // Messaggio personalizzato di Berny
-          const cardsStudied = bernyQuestion.basedOnCards || [];
-          if (cardsStudied.length > 0) {
-            const cardsList = cardsStudied.slice(0, 3).join(', ');
-            bernyIntro = `Fammi vedere cosa hai studiato! Ho preparato una domanda su: ${cardsList}`;
-          } else {
-            bernyIntro = 'Fammi vedere cosa hai studiato! Ho preparato una domanda personalizzata per te.';
-          }
-          
+          bernyIntro = 'Andiamo! Ho preparato una domanda per te.';
           console.log('✅ Domanda generata da Berny');
         } else {
           console.warn('⚠️ Berny non ha generato domanda, uso fallback');
@@ -9422,7 +9414,7 @@ const gamification = (() => {
         console.log('📚 Fallback a domande standard del pool');
         const topicQuestions = getSuperEasyQuestionsForVisitedTabs();
         questions = pickQuestionsFromBag('mini-sm', topicQuestions, 1).map(localizeQuizQuestion);
-        bernyIntro = 'Fammi vedere cosa hai studiato con una nuova domanda!';
+        bernyIntro = 'Andiamo! Ho preparato una domanda per te.';
       }
 
       if (!questions.length) {
