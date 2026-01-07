@@ -5497,6 +5497,26 @@ section.carousel:last-of-type {
   transition: opacity 300ms ease;
 }
 
+/* While closing, keep the overlay intercepting input during the fade-out.
+   (Prevents click-through + helps hide any transient scroll snap on unlock.) */
+.card-modal-overlay.is-closing {
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 300ms ease;
+}
+
+/* Closing (phase 1): keep overlay fully opaque while the modal animates out.
+   This hides any transient scroll adjustments triggered by unlocking. */
+.card-modal-overlay.is-hiding {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.card-modal-overlay.is-hiding .card-modal {
+  transform: scale(0.94) translateY(30px);
+}
+
 .card-modal {
   background: var(--paper);
   border-radius: var(--radius-lg);

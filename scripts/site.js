@@ -644,25 +644,73 @@ document.documentElement.classList.add('has-js');
 const bodyScrollLock = (() => {
   let locks = 0;
   let scrollPosition = 0;
+
+  const getEffectiveScrollY = () => {
+    try {
+      const y = window.pageYOffset;
+      if (typeof y === 'number' && y > 0) return y;
+    } catch {}
+
+    try {
+      const de = document.documentElement;
+      const y2 = de ? de.scrollTop : 0;
+      if (typeof y2 === 'number' && y2 > 0) return y2;
+    } catch {}
+
+    try {
+      const y3 = document.body ? document.body.scrollTop : 0;
+      if (typeof y3 === 'number' && y3 > 0) return y3;
+    } catch {}
+
+    // If the body is currently fixed (no-scroll), window.pageYOffset can read as 0.
+    // In that case recover the position from body.style.top (e.g. "-123px").
+    try {
+      const top = String(document.body?.style?.top || '').trim();
+      if (!top) return 0;
+      const n = parseInt(top, 10);
+      if (!Number.isFinite(n)) return 0;
+      return Math.abs(n);
+    } catch {
+      return 0;
+    }
+  };
+
   return {
     lock() {
       locks += 1;
       if (locks === 1) {
-        scrollPosition = window.pageYOffset;
+        scrollPosition = getEffectiveScrollY();
         document.body.style.top = `-${scrollPosition}px`;
         document.body.classList.add('no-scroll');
       }
     },
     unlock(targetScrollY) {
+      // If nothing is locked, do NOT run side effects.
+      // (Some callers may "unlock" defensively; restoring scroll in that case
+      // can incorrectly jump the page to the top.)
+      if (locks === 0) return;
+
       locks = Math.max(0, locks - 1);
       if (locks === 0) {
-        document.body.classList.remove('no-scroll');
-        document.body.style.top = '';
-
         const nextY = typeof targetScrollY === 'number' && Number.isFinite(targetScrollY)
           ? targetScrollY
           : scrollPosition;
-        window.scrollTo(0, nextY);
+
+        // Critical ordering:
+        // 1) Set the *document* scroll position while the body is still fixed.
+        //    This avoids a brief snap to 0 when removing position:fixed.
+        // 2) Unfix body.
+        // 3) Re-apply on next frame to win against any competing scroll.
+        try { window.scrollTo(0, nextY); } catch (e) {}
+
+        document.body.classList.remove('no-scroll');
+        document.body.style.top = '';
+
+        try {
+          requestAnimationFrame(() => {
+            try { window.scrollTo(0, nextY); } catch (err) {}
+          });
+        } catch (e) {}
       }
     },
     forceUnlock() {
@@ -9909,9 +9957,32 @@ toggles.forEach((button) => {
     // Also keep the carousel horizontal position stable.
     const openerRestore = (() => {
       try {
+        const getEffectiveScrollY = () => {
+          try {
+            const y = window.pageYOffset;
+            if (typeof y === 'number' && y > 0) return y;
+          } catch (e) {}
+          try {
+            const y2 = document.documentElement ? document.documentElement.scrollTop : 0;
+            if (typeof y2 === 'number' && y2 > 0) return y2;
+          } catch (e) {}
+          try {
+            const y3 = document.body ? document.body.scrollTop : 0;
+            if (typeof y3 === 'number' && y3 > 0) return y3;
+          } catch (e) {}
+          try {
+            const top = String(document.body?.style?.top || '').trim();
+            if (!top) return 0;
+            const n = parseInt(top, 10);
+            if (!Number.isFinite(n)) return 0;
+            return Math.abs(n);
+          } catch (e) {
+            return 0;
+          }
+        };
         const track = card.closest('[data-carousel-track]');
         return {
-          scrollY: window.pageYOffset,
+          scrollY: getEffectiveScrollY(),
           track,
           trackScrollLeft: track ? track.scrollLeft : 0,
           focusEl: button,
@@ -12362,49 +12433,64 @@ toggles.forEach((button) => {
       try { modal.removeEventListener('touchend', onModalTouchEnd); } catch (e) {}
       try { modal.removeEventListener('touchcancel', onModalTouchEnd); } catch (e) {}
 
-      overlay.classList.remove('is-visible');
+      // Suppress any guide-card auto-scroll that could be triggered immediately after
+      // the modal is removed (mouseenter/click quirks, layout shifts, etc.).
+      try { window.__badianiSuppressCardAutoScrollUntil = Date.now() + 900; } catch (e) {}
+
+      // Closing strategy:
+      // 1) Keep the overlay fully opaque while the modal shrinks out.
+      // 2) Unlock scroll while still covered, so any transient snap is not visible.
+      // 3) Only then fade out the overlay.
+      try { overlay.classList.add('is-hiding'); } catch (e) {}
+
+      // Unlock while still covered.
+      try {
+        bodyScrollLock.unlock(openerRestore && typeof openerRestore.scrollY === 'number' ? openerRestore.scrollY : undefined);
+      } catch (e) {
+        try { bodyScrollLock.unlock(); } catch (err) {}
+      }
+
+      // Restore carousel alignment (no extra vertical scroll).
+      try {
+        const restore = openerRestore || null;
+        requestAnimationFrame(() => {
+          try {
+            if (restore && restore.track && typeof restore.trackScrollLeft === 'number') {
+              restore.track.scrollLeft = restore.trackScrollLeft;
+            }
+          } catch (e) {}
+        });
+      } catch (e) {}
+
+      // Now fade out the overlay (but keep it intercepting input during fade).
+      setTimeout(() => {
+        try { overlay.classList.add('is-closing'); } catch (e) {}
+        try { overlay.classList.remove('is-visible'); } catch (e) {}
+        try { overlay.classList.remove('is-hiding'); } catch (e) {}
+      }, 80);
+
       setTimeout(() => {
         try { document.removeEventListener('badiani:crystals-updated', handleCrystalUpdate); } catch (e) {}
         try { document.removeEventListener('badiani:toast-shown', handleToastShown); } catch (e) {}
-        overlay.remove();
-        // Restore the opener position without a visible "bounce".
-        // Important: do it in ONE scroll restore (inside unlock), not unlock() + scrollTo().
-        try {
-          bodyScrollLock.unlock(openerRestore && typeof openerRestore.scrollY === 'number' ? openerRestore.scrollY : undefined);
-        } catch (e) {
-          try { bodyScrollLock.unlock(); } catch (err) {}
-        }
-
-        // Restore carousel alignment + focus (no extra vertical scroll).
-        try {
-          const restore = openerRestore || null;
-          requestAnimationFrame(() => {
-            try {
-              if (restore && restore.track && typeof restore.trackScrollLeft === 'number') {
-                restore.track.scrollLeft = restore.trackScrollLeft;
-              }
-            } catch (e) {}
-            try {
-              if (restore && restore.focusEl && typeof restore.focusEl.focus === 'function') {
-                restore.focusEl.focus({ preventScroll: true });
-              }
-            } catch (e) {
-              try { openerRestore?.focusEl?.focus?.(); } catch (err) {}
-            }
-          });
-        } catch (e) {}
-      }, 300);
+        try { overlay.remove(); } catch (e) {}
+      }, 440);
     };
     
     // Click su overlay (fuori dal modal)
     overlay.addEventListener('click', (e) => {
+      try { e.preventDefault(); } catch (err) {}
+      try { e.stopPropagation(); } catch (err) {}
       if (e.target === overlay) {
         closeModal();
       }
     });
     
     // Click su bottone close
-    closeBtn.addEventListener('click', closeModal);
+    closeBtn.addEventListener('click', (e) => {
+      try { e.preventDefault(); } catch (err) {}
+      try { e.stopPropagation(); } catch (err) {}
+      closeModal();
+    });
 
     // Swipe down (pull) to close on touch devices.
     try {
@@ -13917,6 +14003,9 @@ const initGuideCardAutoScroll = () => {
       // Click: keep the card focused and auto-scroll the page to show its content.
       card.addEventListener('click', (event) => {
         try {
+          try {
+            if (window.__badianiSuppressCardAutoScrollUntil && Date.now() < window.__badianiSuppressCardAutoScrollUntil) return;
+          } catch (e) {}
           if (moved) return;
           if (document.body.classList.contains('is-dragging-carousel')) return;
           if (isInteractiveTarget(event.target)) return;
@@ -13951,6 +14040,9 @@ const initGuideCardAutoScroll = () => {
       if (supportsHover) {
         card.addEventListener('mouseenter', () => {
           try {
+            try {
+              if (window.__badianiSuppressCardAutoScrollUntil && Date.now() < window.__badianiSuppressCardAutoScrollUntil) return;
+            } catch (e) {}
             if (document.body.classList.contains('is-dragging-carousel')) return;
             clearHoverTimer(card);
             const spec = card.querySelector('.stat-list');
