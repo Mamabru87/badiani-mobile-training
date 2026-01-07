@@ -3648,6 +3648,86 @@ const gamification = (() => {
     } catch (e) {}
   };
 
+  const playModalOpenSound = () => {
+    try {
+      const AudioCtor = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtor) return;
+
+      if (!audioContext) {
+        audioContext = new AudioCtor();
+      }
+      if (audioContext.state === 'suspended') {
+        audioContext.resume().catch(() => {});
+      }
+      
+      const now = audioContext.currentTime;
+      const osc = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      
+      osc.connect(gain);
+      gain.connect(audioContext.destination);
+      
+      // "Bup" sound: Warm, friendly pop
+      osc.type = 'sine';
+      
+      // Pitch: Start medium, quick rise
+      osc.frequency.setValueAtTime(600, now);
+      osc.frequency.exponentialRampToValueAtTime(1000, now + 0.06);
+      
+      // Volume: Strong and clear
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(0.3, now + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+      
+      osc.start(now);
+      osc.stop(now + 0.15);
+      
+      console.log('🔊 Modal OPEN sound played');
+    } catch (e) {
+      console.error('Modal open sound error:', e);
+    }
+  };
+
+  const playModalCloseSound = () => {
+    try {
+      const AudioCtor = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtor) return;
+
+      if (!audioContext) {
+        audioContext = new AudioCtor();
+      }
+      if (audioContext.state === 'suspended') {
+        audioContext.resume().catch(() => {});
+      }
+      
+      const now = audioContext.currentTime;
+      const osc = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      
+      osc.connect(gain);
+      gain.connect(audioContext.destination);
+      
+      // "Boop" sound: Lower pitch, soft close
+      osc.type = 'sine';
+      
+      // Pitch: Start high, quick drop
+      osc.frequency.setValueAtTime(900, now);
+      osc.frequency.exponentialRampToValueAtTime(500, now + 0.08);
+      
+      // Volume: Soft and quick
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(0.2, now + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+      
+      osc.start(now);
+      osc.stop(now + 0.12);
+      
+      console.log('🔊 Modal CLOSE sound played');
+    } catch (e) {
+      console.error('Modal close sound error:', e);
+    }
+  };
+
   const playCrystalSound = () => {
     try {
       const AudioCtor = window.AudioContext || window.webkitAudioContext;
@@ -9989,6 +10069,13 @@ toggles.forEach((button) => {
     try { event.preventDefault(); } catch (e) {}
     try { event.stopPropagation(); } catch (e) {}
 
+    // Play open sound immediately
+    try {
+      playModalOpenSound();
+    } catch (err) {
+      console.error('Failed to play open sound:', err);
+    }
+
     const card = button.closest('.guide-card');
     if (!card) return;
     const details = card.querySelector('.details');
@@ -12545,6 +12632,13 @@ toggles.forEach((button) => {
       if (modalClosed) return;
       modalClosed = true;
 
+      // Play close sound immediately
+      try {
+        playModalCloseSound();
+      } catch (err) {
+        console.error('Failed to play close sound:', err);
+      }
+
       // === DIAGNOSTIC LOGGING: Scroll at close start ===
       logScrollState('CLOSE START (before any changes)');
 
@@ -12574,8 +12668,8 @@ toggles.forEach((button) => {
         }
       } catch (e) {}
 
-      // Duration of the card putdown animation (matches CSS keyframe duration).
-      const CLOSE_ANIM_DURATION_MS = 650;
+      // Duration matches CSS animation: modalCloseToCard keyframe (420ms)
+      const CLOSE_ANIM_DURATION_MS = 420;
 
       // === Phase 2: After 3D animation completes, unlock scroll and restore focus ===
       setTimeout(() => {
@@ -12658,7 +12752,7 @@ toggles.forEach((button) => {
               } catch (e) {}
             }
           }, 100);
-        }, 320);
+        }, 320); // Wait for backdrop fade after modal animation
       }, CLOSE_ANIM_DURATION_MS);
     };
     

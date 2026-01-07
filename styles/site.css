@@ -5560,182 +5560,305 @@ section.carousel:last-of-type {
 }
 
 /* ============================================================
-   REALISTIC CARD PICKUP ANIMATION - Open from card position
-   Simulates a physical card being picked up, lifted, and expanded
+   PREMIUM APPLE-STYLE MODAL ANIMATION SYSTEM
+   Card → Modal morph with FLIP technique + spring physics
    ============================================================ */
-@keyframes cardPickupOpen {
+
+/* Modal overlay: viewport-fixed portal */
+.card-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow-y: auto;
+  
+  /* Backdrop: starts invisible */
+  background: rgba(15, 33, 84, 0);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  
+  /* Initial state: hidden */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  
+  /* GPU acceleration */
+  will-change: opacity, backdrop-filter;
+  transform: translateZ(0);
+}
+
+/* Pre-render state: make visible but transparent so transforms can animate */
+.card-modal-overlay.is-prepared {
+  visibility: visible;
+  pointer-events: none;
+  opacity: 0;
+  background: rgba(15, 33, 84, 0);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+}
+
+/* Open state: backdrop fades in with gentle blur */
+.card-modal-overlay.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  background: rgba(15, 33, 84, 0.45);
+  backdrop-filter: blur(8px) saturate(1.1);
+  -webkit-backdrop-filter: blur(8px) saturate(1.1);
+  transition: background 480ms cubic-bezier(0.32, 0.72, 0, 1),
+              backdrop-filter 480ms cubic-bezier(0.32, 0.72, 0, 1),
+              opacity 320ms ease-out;
+}
+
+/* Closing state: backdrop fades out */
+.card-modal-overlay.is-closing,
+.card-modal-overlay.is-closing-3d {
+  visibility: visible;
+  pointer-events: none;
+  background: rgba(15, 33, 84, 0);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  transition: background 380ms cubic-bezier(0.4, 0, 0.6, 1),
+              backdrop-filter 380ms cubic-bezier(0.4, 0, 0.6, 1),
+              opacity 280ms ease-in;
+}
+
+/* Modal content container */
+.card-modal {
+  position: relative;
+  background: var(--paper);
+  width: min(1000px, 96vw);
+  max-height: min(92vh, 1200px);
+  max-height: min(92dvh, 1200px);
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 0;
+  border: 1px solid var(--border-strong);
+  overflow: hidden;
+  
+  /* GPU optimization */
+  will-change: transform, opacity, border-radius, box-shadow;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  
+  /* Default state (no animation) */
+  transform-origin: center center;
+}
+
+/* ============================================================
+   PHASE 1: OPEN ANIMATION (Card → Modal) - Apple Spring Style
+   Duration: 520ms total
+   ============================================================ */
+
+@keyframes modalOpenFromCard {
+  /* Frame 1: Card at origin (FLIP First/Last) */
   0% {
-    /* Start: card in carousel position, flat */
-    transform: translate(var(--card-from-x, 0), var(--card-from-y, 0)) 
-               scale(0.28) 
-               rotate(0deg);
-    opacity: 0.7;
-    box-shadow: 0 2px 8px rgba(15, 33, 84, 0.15);
-    filter: brightness(1);
+    transform: translate3d(var(--card-from-x, 0), var(--card-from-y, 0), 0) 
+               scale(var(--card-from-scale, 0.28));
+    opacity: 0.88;
+    border-radius: var(--radius-md, 12px); /* Card radius */
+    box-shadow: 0 4px 12px rgba(15, 33, 84, 0.15),
+                0 2px 4px rgba(15, 33, 84, 0.1);
   }
   
-  15% {
-    /* Lift: card rises slightly with subtle rotation */
-    transform: translate(var(--card-from-x, 0), calc(var(--card-from-y, 0) - 8px)) 
-               scale(0.32) 
-               rotate(-1deg);
-    opacity: 0.85;
-    box-shadow: 0 12px 30px rgba(15, 33, 84, 0.25);
-    filter: brightness(1.02);
-  }
-  
-  30% {
-    /* Pull: card moves toward center, continues lifting */
-    transform: translate(calc(var(--card-from-x, 0) * 0.6), calc(var(--card-from-y, 0) * 0.7 - 15px)) 
-               scale(0.45) 
-               rotate(-0.5deg);
+  /* Frame 2: Lift phase - card rises with subtle scale up */
+  12% {
+    transform: translate3d(
+      calc(var(--card-from-x, 0) * 0.98), 
+      calc(var(--card-from-y, 0) - 6px), 
+      0
+    ) scale(calc(var(--card-from-scale, 0.28) * 1.08));
     opacity: 0.92;
-    box-shadow: 0 20px 45px rgba(15, 33, 84, 0.3);
-    filter: brightness(1.04);
+    border-radius: var(--radius-md, 12px);
+    box-shadow: 0 12px 28px rgba(15, 33, 84, 0.22),
+                0 6px 12px rgba(15, 33, 84, 0.15);
   }
   
-  50% {
-    /* Expand: rapid expansion begins */
-    transform: translate(calc(var(--card-from-x, 0) * 0.2), calc(var(--card-from-y, 0) * 0.3 - 10px)) 
-               scale(0.72) 
-               rotate(0deg);
-    opacity: 0.98;
-    box-shadow: 0 30px 60px rgba(15, 33, 84, 0.35);
-    filter: brightness(1.05);
+  /* Frame 3: Acceleration - moving toward center */
+  28% {
+    transform: translate3d(
+      calc(var(--card-from-x, 0) * 0.55), 
+      calc(var(--card-from-y, 0) * 0.65), 
+      0
+    ) scale(0.52);
+    opacity: 0.96;
+    border-radius: calc(var(--radius-md, 12px) * 1.1);
+    box-shadow: 0 18px 42px rgba(15, 33, 84, 0.26),
+                0 8px 18px rgba(15, 33, 84, 0.18);
   }
   
-  75% {
-    /* Almost there: slight overshoot */
-    transform: translate(0, 0) 
-               scale(1.02) 
-               rotate(0deg);
+  /* Frame 4: Rapid expansion */
+  52% {
+    transform: translate3d(
+      calc(var(--card-from-x, 0) * 0.18), 
+      calc(var(--card-from-y, 0) * 0.22), 
+      0
+    ) scale(0.88);
     opacity: 1;
-    box-shadow: 0 40px 80px rgba(15, 33, 84, 0.38);
-    filter: brightness(1.02);
+    border-radius: var(--radius-lg, 16px);
+    box-shadow: 0 28px 64px rgba(15, 33, 84, 0.28),
+                0 12px 24px rgba(15, 33, 84, 0.2);
   }
   
+  /* Frame 5: Overshoot (spring effect) */
+  76% {
+    transform: translate3d(0, 0, 0) scale(1.015);
+    opacity: 1;
+    border-radius: var(--radius-lg, 16px);
+    box-shadow: 0 32px 72px rgba(15, 33, 84, 0.24),
+                0 14px 28px rgba(15, 33, 84, 0.18);
+  }
+  
+  /* Frame 6: Settle (spring bounce back) */
   100% {
-    /* Settle: final position with subtle bounce back */
-    transform: translate(0, 0) 
-               scale(1) 
-               rotate(0deg);
+    transform: translate3d(0, 0, 0) scale(1);
     opacity: 1;
-    box-shadow: 0 35px 70px rgba(15, 33, 84, 0.35);
-    filter: brightness(1);
+    border-radius: var(--radius-lg, 16px);
+    box-shadow: 0 28px 64px rgba(15, 33, 84, 0.22),
+                0 12px 24px rgba(15, 33, 84, 0.16);
   }
 }
 
 /* ============================================================
-   REALISTIC CARD PUTDOWN ANIMATION - Close back to card position
-   Simulates a physical card being contracted, lowered, and placed back
+   PHASE 2: CLOSE ANIMATION (Modal → Card) - Apple Spring Style
+   Duration: 420ms total
    ============================================================ */
-@keyframes cardPutdownClose {
+
+@keyframes modalCloseToCard {
+  /* Frame 1: Modal at full size */
   0% {
-    /* Start: full size modal */
-    transform: translate(0, 0) 
-               scale(1) 
-               rotate(0deg);
+    transform: translate3d(0, 0, 0) scale(1);
     opacity: 1;
-    box-shadow: 0 35px 70px rgba(15, 33, 84, 0.35);
-    filter: brightness(1);
+    border-radius: var(--radius-lg, 16px);
+    box-shadow: 0 28px 64px rgba(15, 33, 84, 0.22),
+                0 12px 24px rgba(15, 33, 84, 0.16);
   }
   
-  20% {
-    /* Prepare: slight scale down with micro rotation */
-    transform: translate(0, 2px) 
-               scale(0.98) 
-               rotate(0.3deg);
+  /* Frame 2: Prepare - subtle scale down */
+  16% {
+    transform: translate3d(0, 2px, 0) scale(0.985);
     opacity: 1;
-    box-shadow: 0 32px 65px rgba(15, 33, 84, 0.32);
-    filter: brightness(0.98);
+    border-radius: var(--radius-lg, 16px);
+    box-shadow: 0 24px 56px rgba(15, 33, 84, 0.2),
+                0 10px 20px rgba(15, 33, 84, 0.14);
   }
   
-  40% {
-    /* Contract: rapid shrinking begins */
-    transform: translate(calc(var(--card-from-x, 0) * 0.15), calc(var(--card-from-y, 0) * 0.25)) 
-               scale(0.68) 
-               rotate(0.5deg);
-    opacity: 0.96;
-    box-shadow: 0 25px 50px rgba(15, 33, 84, 0.28);
-    filter: brightness(0.99);
+  /* Frame 3: Contract - rapid shrinking begins */
+  38% {
+    transform: translate3d(
+      calc(var(--card-from-x, 0) * 0.22), 
+      calc(var(--card-from-y, 0) * 0.28), 
+      0
+    ) scale(0.68);
+    opacity: 0.98;
+    border-radius: calc(var(--radius-lg, 16px) * 0.9);
+    box-shadow: 0 16px 38px rgba(15, 33, 84, 0.18),
+                0 8px 16px rgba(15, 33, 84, 0.12);
   }
   
-  60% {
-    /* Move back: returning to origin position */
-    transform: translate(calc(var(--card-from-x, 0) * 0.5), calc(var(--card-from-y, 0) * 0.6 + 5px)) 
-               scale(0.42) 
-               rotate(-0.3deg);
-    opacity: 0.88;
-    box-shadow: 0 18px 35px rgba(15, 33, 84, 0.22);
-    filter: brightness(0.96);
+  /* Frame 4: Return - moving back to origin */
+  62% {
+    transform: translate3d(
+      calc(var(--card-from-x, 0) * 0.72), 
+      calc(var(--card-from-y, 0) * 0.78), 
+      0
+    ) scale(0.38);
+    opacity: 0.92;
+    border-radius: var(--radius-md, 12px);
+    box-shadow: 0 10px 24px rgba(15, 33, 84, 0.14),
+                0 4px 10px rgba(15, 33, 84, 0.1);
   }
   
-  80% {
-    /* Lower: card descending to carousel level */
-    transform: translate(calc(var(--card-from-x, 0) * 0.85), calc(var(--card-from-y, 0) * 0.92 + 3px)) 
-               scale(0.32) 
-               rotate(-0.8deg);
-    opacity: 0.75;
-    box-shadow: 0 8px 20px rgba(15, 33, 84, 0.18);
-    filter: brightness(0.98);
+  /* Frame 5: Descend - lowering to card level */
+  84% {
+    transform: translate3d(
+      calc(var(--card-from-x, 0) * 0.94), 
+      calc(var(--card-from-y, 0) * 0.96), 
+      0
+    ) scale(calc(var(--card-from-scale, 0.28) * 1.04));
+    opacity: 0.82;
+    border-radius: var(--radius-md, 12px);
+    box-shadow: 0 6px 16px rgba(15, 33, 84, 0.12),
+                0 2px 6px rgba(15, 33, 84, 0.08);
   }
   
+  /* Frame 6: Land - settle into card position */
   100% {
-    /* Place: card settles into original position */
-    transform: translate(var(--card-from-x, 0), var(--card-from-y, 0)) 
-               scale(0.28) 
-               rotate(0deg);
+    transform: translate3d(var(--card-from-x, 0), var(--card-from-y, 0), 0) 
+               scale(var(--card-from-scale, 0.28));
     opacity: 0;
-    box-shadow: 0 2px 8px rgba(15, 33, 84, 0.1);
-    filter: brightness(1);
+    border-radius: var(--radius-md, 12px);
+    box-shadow: 0 4px 12px rgba(15, 33, 84, 0.1),
+                0 2px 4px rgba(15, 33, 84, 0.06);
   }
 }
 
-/* Apply pickup animation on open */
+/* ============================================================
+   ANIMATION STATES - Apply keyframes with proper timing
+   ============================================================ */
+
+/* Open: Apply animation only when card position is known */
 .card-modal-overlay[data-animate-from-card="true"] .card-modal {
-  animation: cardPickupOpen 700ms cubic-bezier(0.34, 1.1, 0.64, 1) forwards;
+  animation: modalOpenFromCard 520ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
 }
 
-/* Apply putdown animation on close */
-.card-modal-overlay.is-closing-3d[data-animate-from-card="true"] .card-modal {
-  animation: cardPutdownClose 650ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+/* Close: Apply reverse animation */
+.card-modal-overlay.is-closing-3d[data-animate-from-card="true"] .card-modal,
+.card-modal-overlay.is-closing[data-animate-from-card="true"] .card-modal {
+  animation: modalCloseToCard 420ms cubic-bezier(0.4, 0, 0.6, 1) forwards;
 }
 
-/* Overlay fade during close */
-.card-modal-overlay.is-closing-3d {
-  background: rgba(15, 33, 84, 0);
-  backdrop-filter: blur(0px);
-  transition: background 650ms cubic-bezier(0.4, 0, 0.2, 1),
-              backdrop-filter 650ms cubic-bezier(0.4, 0, 0.2, 1);
-}
+/* ============================================================
+   FALLBACK: No animation data (shouldn't happen, but graceful)
+   ============================================================ */
 
-/* Fallback for non-animating scenarios */
 .card-modal-overlay:not([data-animate-from-card="true"]) .card-modal {
-  transform: scale(0.94) translateY(30px);
   opacity: 0;
-  transition: transform 500ms cubic-bezier(0.34, 1.1, 0.64, 1),
-              opacity 400ms ease;
+  transform: scale(0.96) translateY(20px);
+  transition: transform 380ms cubic-bezier(0.32, 0.72, 0, 1),
+              opacity 280ms ease-out;
 }
 
 .card-modal-overlay.is-visible:not([data-animate-from-card="true"]) .card-modal {
-  transform: scale(1) translateY(0);
   opacity: 1;
+  transform: scale(1) translateY(0);
 }
 
-/* Reduced motion: disable complex animations */
+/* ============================================================
+   REDUCED MOTION: Respect accessibility preferences
+   ============================================================ */
+
 @media (prefers-reduced-motion: reduce) {
   .card-modal-overlay {
-    transition: opacity 200ms ease, visibility 0s linear 200ms;
+    transition: opacity 180ms ease, visibility 0s linear 180ms !important;
   }
   
   .card-modal {
     animation: none !important;
-    transition: opacity 200ms ease, transform 200ms ease !important;
+    transition: opacity 180ms ease, transform 180ms ease !important;
   }
   
+  /* Simplified open */
+  .card-modal-overlay[data-animate-from-card="true"] .card-modal {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  
+  .card-modal-overlay.is-visible[data-animate-from-card="true"] .card-modal {
+    opacity: 1;
+    transform: scale(1);
+  }
+  
+  /* Simplified close */
+  .card-modal-overlay.is-closing .card-modal,
   .card-modal-overlay.is-closing-3d .card-modal {
     opacity: 0;
-    transform: scale(0.95);
+    transform: scale(0.96);
   }
 }
 
