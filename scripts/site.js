@@ -6481,7 +6481,20 @@ const gamification = (() => {
     const localizedQuestion = localizeQuizQuestion(question);
     const prompt = localizedQuestion?.question || '';
     const correctText = getCorrectAnswerText(localizedQuestion);
-    const spec = guessSpecFromPrompt(prompt);
+    
+    // Se è una domanda di Berny, usa basedOnCards per trovare lo spec corretto
+    let spec = null;
+    if (question?.generatedByBerny && question?.basedOnCards && Array.isArray(question.basedOnCards) && question.basedOnCards.length > 0) {
+      // Passa sia il nome della scheda che la domanda per trovare la card specifica
+      spec = getBernyCardSpec(question.basedOnCards[0], prompt);
+      console.log(`✅ Berny: Using card spec for "${question.basedOnCards[0]}"`, spec);
+    }
+    
+    // Fallback: indovina dallo prompt
+    if (!spec) {
+      spec = guessSpecFromPrompt(prompt);
+    }
+    
     const customExplain = (localizedQuestion && (localizedQuestion.explain ?? localizedQuestion.explanation)) ?? '';
     const customTip = (localizedQuestion && (localizedQuestion.tip ?? localizedQuestion.suggestion)) ?? '';
     return {
@@ -6492,6 +6505,93 @@ const gamification = (() => {
       specHref: spec?.href || 'index.html',
       specLabel: spec?.label || tr('review.openSpec', null, 'Apri specifiche'),
     };
+  }
+
+  function getBernyCardSpec(cardName, question = '') {
+    // Mappa i nomi delle schede ai loro link diretti e card ID specifiche
+    // La domanda aiuta a identificare quale card specifica aprire
+    const p = String(question || '').toLowerCase();
+    
+    const cardSpecMap = {
+      'Caffè': {
+        default: { href: 'caffe.html', label: '☕ Torna a Caffè' },
+        keywords: {
+          'temperatura': { href: 'caffe.html?q=cappuccino', label: '☕ Apri Cappuccino' },
+          'estrazione': { href: 'caffe.html?q=espresso-single', label: '☕ Apri Espresso' },
+          'latte': { href: 'caffe.html?q=iced-latte', label: '☕ Apri Iced Latte' },
+        }
+      },
+      'Gelato Lab': {
+        default: { href: 'gelato-lab.html', label: '🍦 Torna a Gelato Lab' },
+        keywords: {
+          'temperatura': { href: 'gelato-lab.html?q=shelf-life-treats-dopo-esposizione', label: '🍦 Apri Shelf Life' },
+          'conserva': { href: 'gelato-lab.html?q=shelf-life-treats-dopo-esposizione', label: '🍦 Apri Shelf Life' },
+          'vaschetta': { href: 'gelato-lab.html?q=boxes', label: '🍦 Apri Gelato Boxes' },
+        }
+      },
+      'Dolciumi': {
+        default: { href: 'sweet-treats.html', label: '🍰 Torna a Dolciumi' },
+        keywords: {
+          'zucchero': { href: 'sweet-treats.html?q=waffles', label: '🍰 Apri Waffles' },
+          'brillantezza': { href: 'sweet-treats.html?q=waffles', label: '🍰 Apri Waffles' },
+        }
+      },
+      'Paste': {
+        default: { href: 'pastries.html', label: '🥐 Torna a Paste' },
+        keywords: {
+          'lievitazione': { href: 'pastries.html?q=croissants', label: '🥐 Apri Croissants' },
+          'temperatura': { href: 'pastries.html?q=croissants', label: '🥐 Apri Croissants' },
+          'croissant': { href: 'pastries.html?q=croissants', label: '🥐 Apri Croissants' },
+          'scone': { href: 'pastries.html?q=scones', label: '🥐 Apri Scones' },
+          'brownie': { href: 'pastries.html?q=brownie', label: '🥐 Apri Brownie' },
+        }
+      },
+      'Slitti Yoyo': {
+        default: { href: 'slitti-yoyo.html', label: '🍫 Torna a Slitti Yoyo' },
+        keywords: {
+          'slitti': { href: 'slitti-yoyo.html?q=slitti-timeline', label: '🍫 Apri Timeline' },
+          'yoyo': { href: 'slitti-yoyo.html?q=slitti-timeline', label: '🍫 Apri Timeline' },
+        }
+      },
+      'Festivo': {
+        default: { href: 'festive.html', label: '🎄 Torna a Festivo' },
+        keywords: {
+          'panettone': { href: 'festive.html?q=panettone-classico', label: '🎄 Apri Panettone' },
+          'pandoro': { href: 'festive.html?q=pandoro-classico', label: '🎄 Apri Pandoro' },
+          'churro': { href: 'festive.html?q=churros', label: '🎄 Apri Churros' },
+          'vin brulé': { href: 'festive.html?q=mulled-wine-vin-brul', label: '🎄 Apri Mulled Wine' },
+        }
+      },
+      'Story Orbit': {
+        default: { href: 'story-orbit.html', label: '🌍 Torna a Story Orbit' },
+        keywords: {
+          'storia': { href: 'story-orbit.html?q=story', label: '🌍 Apri Story' },
+          'firenze': { href: 'story-orbit.html?q=story', label: '🌍 Apri Story' },
+        }
+      },
+    };
+    
+    const trimmed = (cardName || '').trim();
+    const cardMap = cardSpecMap[trimmed];
+    
+    if (!cardMap) {
+      console.warn(`⚠️ Berny: Card name not found in spec map: "${trimmed}"`);
+      return null;
+    }
+    
+    // Prova a trovare una card specifica basata sulla domanda
+    if (cardMap.keywords && p) {
+      for (const [keyword, spec] of Object.entries(cardMap.keywords)) {
+        if (p.includes(keyword.toLowerCase())) {
+          console.log(`✅ Berny: Found specific card for keyword "${keyword}":`, spec);
+          return spec;
+        }
+      }
+    }
+    
+    // Fallback al default della scheda
+    console.log(`ℹ️ Berny: Using default card for "${trimmed}":`, cardMap.default);
+    return cardMap.default;
   }
 
   function buildChallengeReview(challenge) {
