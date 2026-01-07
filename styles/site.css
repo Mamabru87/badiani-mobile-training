@@ -5570,6 +5570,54 @@ section.carousel:last-of-type {
   transform: translate(var(--card-from-x, 0px), var(--card-from-y, 30px)) scale(var(--card-from-scale, 0.94));
 }
 
+/* ============================================================
+   3D Card-Like Close Animation
+   Plays a perspective-based flip/shrink when closing the modal.
+   ============================================================ */
+@keyframes cardModal3DClose {
+  0% {
+    opacity: 1;
+    transform: perspective(1200px) rotateX(0deg) scale(1) translateY(0);
+  }
+  40% {
+    opacity: 1;
+    transform: perspective(1200px) rotateX(-8deg) scale(0.96) translateY(12px);
+  }
+  100% {
+    opacity: 0;
+    transform: perspective(1200px) rotateX(-15deg) scale(0.88) translateY(40px);
+  }
+}
+
+.card-modal-overlay.is-closing-3d {
+  /* Keep overlay fully visible while the 3D animation plays */
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.card-modal-overlay.is-closing-3d .card-modal {
+  animation: cardModal3DClose 350ms cubic-bezier(0.4, 0, 0.6, 1) forwards;
+  transform-origin: center center;
+  /* Disable default transition during animation to avoid conflicts */
+  transition: none;
+}
+
+/* When returning to card AND closing with 3D, prioritize the 3D animation */
+.card-modal-overlay.is-closing-3d.is-returning .card-modal {
+  animation: cardModal3DClose 350ms cubic-bezier(0.4, 0, 0.6, 1) forwards;
+}
+
+/* Reduced motion: skip the 3D animation, just fade */
+@media (prefers-reduced-motion: reduce) {
+  .card-modal-overlay.is-closing-3d .card-modal {
+    animation: none;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 200ms ease, transform 200ms ease;
+  }
+}
+
 @media (max-width: 900px) {
   .card-modal-overlay {
     /* On mobile, keep modal anchored to the top so content is reachable; respect safe areas. */

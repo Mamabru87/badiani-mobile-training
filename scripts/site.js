@@ -5645,6 +5645,11 @@ const gamification = (() => {
   }
 
   function updateCardChecks() {
+    // Defer DOM updates during modal close to prevent scroll bounce
+    if (window.__badianiDeferDOMUpdates) {
+      window.__badianiPendingCardChecks = true;
+      return;
+    }
     const cards = document.querySelectorAll('.guide-card');
     if (!cards.length) return;
     cards.forEach((card) => {
@@ -9019,7 +9024,7 @@ const gamification = (() => {
     return `${hours}:${minutes}:${seconds}`;
   }
 
-  return {
+  const publicApi = {
     getCardIdFor(card) {
       try {
         if (!card) return '';
@@ -9080,6 +9085,16 @@ const gamification = (() => {
       recordTabOpen(card, tabTitle, source, totalTabsCount, evt);
     },
   };
+
+  // === SCROLL BOUNCE FIX ===
+  // Listen for safe modal close event and run deferred updateCardChecks
+  try {
+    document.addEventListener('badiani:modal-closed-safe', () => {
+      try { updateCardChecks(); } catch (e) {}
+    });
+  } catch (e) {}
+
+  return publicApi;
 })();
 
 const sectionMenus = document.querySelectorAll('[data-section-menu]');
@@ -12490,12 +12505,10 @@ toggles.forEach((button) => {
       if (modalClosed) return;
       modalClosed = true;
 
-      // If the modal was opened from a card position, return to it visually.
-      try {
-        if (overlay && overlay.dataset && overlay.dataset.animateFromCard === 'true') {
-          overlay.classList.add('is-returning');
-        }
-      } catch (e) {}
+      // === SCROLL BOUNCE FIX ===
+      // Defer all DOM updates (especially updateCardChecks) during close to prevent layout shifts
+      window.__badianiDeferDOMUpdates = true;
+      window.__badianiPendingCardChecks = false;
 
       // Cleanup listeners (important: ESC listener would otherwise accumulate).
       try { document.removeEventListener('keydown', handleEsc); } catch (e) {}
@@ -12508,43 +12521,93 @@ toggles.forEach((button) => {
       // the modal is removed (mouseenter/click quirks, layout shifts, etc.).
       try { window.__badianiSuppressCardAutoScrollUntil = Date.now() + 900; } catch (e) {}
 
-      // Closing strategy:
-      // 1) Keep the overlay fully opaque while the modal shrinks out.
-      // 2) Unlock scroll while still covered, so any transient snap is not visible.
-      // 3) Only then fade out the overlay.
-      try { overlay.classList.add('is-hiding'); } catch (e) {}
-
-      // Unlock while still covered.
+      // === Phase 1: Start 3D close animation (modal stays visible, overlay stays opaque) ===
+      // Add the 3D closing class to trigger the CSS animation on the modal card.
+      try { overlay.classList.add('is-closing-3d'); } catch (e) {}
+      // If the modal was opened from a card position, return to it visually.
       try {
-        bodyScrollLock.unlock(openerRestore && typeof openerRestore.scrollY === 'number' ? openerRestore.scrollY : undefined);
-      } catch (e) {
-        try { bodyScrollLock.unlock(); } catch (err) {}
-      }
-
-      // Restore carousel alignment (no extra vertical scroll).
-      try {
-        const restore = openerRestore || null;
-        requestAnimationFrame(() => {
-          try {
-            if (restore && restore.track && typeof restore.trackScrollLeft === 'number') {
-              restore.track.scrollLeft = restore.trackScrollLeft;
-            }
-          } catch (e) {}
-        });
+        if (overlay && overlay.dataset && overlay.dataset.animateFromCard === 'true') {
+          overlay.classList.add('is-returning');
+        }
       } catch (e) {}
 
-      // Now fade out the overlay (but keep it intercepting input during fade).
-      setTimeout(() => {
-        try { overlay.classList.add('is-closing'); } catch (e) {}
-        try { overlay.classList.remove('is-visible'); } catch (e) {}
-        try { overlay.classList.remove('is-hiding'); } catch (e) {}
-      }, 80);
+      // Duration of the 3D close animation (matches CSS transition).
+      const CLOSE_ANIM_DURATION_MS = 350;
 
+      // === Phase 2: After 3D animation completes, unlock scroll and restore focus ===
       setTimeout(() => {
-        try { document.removeEventListener('badiani:crystals-updated', handleCrystalUpdate); } catch (e) {}
-        try { document.removeEventListener('badiani:toast-shown', handleToastShown); } catch (e) {}
-        try { overlay.remove(); } catch (e) {}
-      }, 440);
+        // Keep overlay covering the page while we unlock scroll to hide any transient snap.
+        try { overlay.classList.add('is-hiding'); } catch (e) {}
+
+        // Unlock scroll and restore exact scroll position.
+        try {
+          bodyScrollLock.unlock(openerRestore && typeof openerRestore.scrollY === 'number' ? openerRestore.scrollY : undefined);
+        } catch (e) {
+          try { bodyScrollLock.unlock(); } catch (err) {}
+        }
+
+        // Restore carousel horizontal alignment (no extra vertical scroll).
+        try {
+          const restore = openerRestore || null;
+          if (restore && restore.track && typeof restore.trackScrollLeft === 'number') {
+            restore.track.scrollLeft = restore.trackScrollLeft;
+          }
+        } catch (e) {}
+
+        // Restore exact scroll position again (double-check).
+        try {
+          if (openerRestore && typeof openerRestore.scrollY === 'number') {
+            window.scrollTo(0, openerRestore.scrollY);
+          }
+        } catch (e) {}
+
+        // === Phase 3: Fade out overlay ===
+        requestAnimationFrame(() => {
+          try { overlay.classList.add('is-closing'); } catch (e) {}
+          try { overlay.classList.remove('is-visible'); } catch (e) {}
+          try { overlay.classList.remove('is-hiding'); } catch (e) {}
+        });
+
+        // === Phase 4: Remove overlay and restore focus WITHOUT scrolling ===
+        setTimeout(() => {
+          try { document.removeEventListener('badiani:crystals-updated', handleCrystalUpdate); } catch (e) {}
+          try { document.removeEventListener('badiani:toast-shown', handleToastShown); } catch (e) {}
+          try { overlay.remove(); } catch (e) {}
+
+          // Restore focus to the trigger element WITHOUT triggering scroll.
+          try {
+            const focusTarget = openerRestore && openerRestore.focusEl;
+            if (focusTarget && typeof focusTarget.focus === 'function') {
+              focusTarget.focus({ preventScroll: true });
+            }
+          } catch (e) {}
+
+          // Final scroll position safety net.
+          try {
+            if (openerRestore && typeof openerRestore.scrollY === 'number') {
+              window.scrollTo(0, openerRestore.scrollY);
+            }
+          } catch (e) {}
+
+          // === SCROLL BOUNCE FIX ===
+          // Clear defer flag and run any pending DOM updates AFTER scroll is restored.
+          // Use a short delay to ensure scroll is stable before allowing DOM changes.
+          setTimeout(() => {
+            window.__badianiDeferDOMUpdates = false;
+            if (window.__badianiPendingCardChecks) {
+              window.__badianiPendingCardChecks = false;
+              try {
+                // Re-run updateCardChecks now that scroll is stable
+                if (typeof gamification !== 'undefined' && gamification) {
+                  // Trigger a lightweight UI refresh
+                  const evt = new CustomEvent('badiani:modal-closed-safe');
+                  document.dispatchEvent(evt);
+                }
+              } catch (e) {}
+            }
+          }, 100);
+        }, 320);
+      }, CLOSE_ANIM_DURATION_MS);
     };
     
     // Click su overlay (fuori dal modal)
