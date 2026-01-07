@@ -3594,6 +3594,9 @@ const gamification = (() => {
   const getOrCreateAudioContext = () => {
     const AudioCtor = window.AudioContext || window.webkitAudioContext;
     if (!AudioCtor) return null;
+    // Never create AudioContext before a user gesture (Chrome/iOS autoplay policy).
+    // This flag is set in unlockAudioContext (capture listener) on the first trusted gesture.
+    if (!window.__badianiUserGesture) return null;
     if (!audioContext) {
       audioContext = new AudioCtor();
     }
@@ -3604,6 +3607,8 @@ const gamification = (() => {
   // Otherwise (especially on iOS) resume() may resolve after the sound already ended.
   const withRunningAudioContext = (fn) => {
     try {
+      // Avoid autoplay warnings: do nothing until the user has interacted.
+      if (!window.__badianiUserGesture) return;
       const ac = getOrCreateAudioContext();
       if (!ac) return;
 
@@ -3626,8 +3631,20 @@ const gamification = (() => {
   };
 
   // Global audio unlocker to ensure context is ready on first touch
-  const unlockAudioContext = () => {
-    const ac = getOrCreateAudioContext();
+  const unlockAudioContext = (evt) => {
+    try {
+      // Only count trusted user gestures.
+      if (evt && evt.isTrusted === false) return;
+      window.__badianiUserGesture = true;
+    } catch {}
+
+    const ac = (() => {
+      // Temporarily allow creation now that we have a gesture.
+      const AudioCtor = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtor) return null;
+      if (!audioContext) audioContext = new AudioCtor();
+      return audioContext;
+    })();
     if (!ac) return;
     // IMPORTANT: Register the unlocker in CAPTURE phase (below), because some
     // UI handlers call stopPropagation() which would otherwise prevent unlock.
@@ -3646,7 +3663,8 @@ const gamification = (() => {
     }
   };
   // Use capture so unlock still fires even if inner handlers stop propagation.
-  ['click', 'touchstart', 'keydown'].forEach((evt) =>
+  // Also include pointerdown (more consistent as the "first gesture" on mobile).
+  ['pointerdown', 'click', 'touchstart', 'keydown'].forEach((evt) =>
     document.addEventListener(evt, unlockAudioContext, true)
   );
 
@@ -3686,21 +3704,17 @@ const gamification = (() => {
       osc.connect(gain);
       gain.connect(ac.destination);
 
-      // "Bip" open (slightly longer + louder to be reliably audible on mobile + laptop speakers)
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(920, startAt);
-      osc.frequency.exponentialRampToValueAtTime(1420, startAt + 0.06);
+      // "Bip" open
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1050, startAt);
+      osc.frequency.exponentialRampToValueAtTime(1280, startAt + 0.05);
 
       gain.gain.setValueAtTime(0.0001, startAt);
-      gain.gain.exponentialRampToValueAtTime(0.40, startAt + 0.010);
-      gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.13);
+      gain.gain.exponentialRampToValueAtTime(0.24, startAt + 0.012);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.085);
 
       osc.start(startAt);
-      osc.stop(startAt + 0.13);
-
-      if (window.__badianiDebugAudio) {
-        console.log('[audio] card open bip', { state: ac.state });
-      }
+      osc.stop(startAt + 0.085);
     });
   };
 
@@ -3714,21 +3728,17 @@ const gamification = (() => {
       osc.connect(gain);
       gain.connect(ac.destination);
 
-      // "Bop" close (a touch lower + longer)
+      // "Bop" close
       osc.type = 'triangle';
-      osc.frequency.setValueAtTime(640, startAt);
-      osc.frequency.exponentialRampToValueAtTime(360, startAt + 0.08);
+      osc.frequency.setValueAtTime(520, startAt);
+      osc.frequency.exponentialRampToValueAtTime(380, startAt + 0.06);
 
       gain.gain.setValueAtTime(0.0001, startAt);
-      gain.gain.exponentialRampToValueAtTime(0.34, startAt + 0.012);
-      gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.14);
+      gain.gain.exponentialRampToValueAtTime(0.22, startAt + 0.014);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.10);
 
       osc.start(startAt);
-      osc.stop(startAt + 0.14);
-
-      if (window.__badianiDebugAudio) {
-        console.log('[audio] card close bop', { state: ac.state });
-      }
+      osc.stop(startAt + 0.10);
     });
   };
 
@@ -3793,22 +3803,32 @@ const gamification = (() => {
       const now = ac.currentTime;
       const startAt = now + 0.03;
       const osc = ac.createOscillator();
+      const filter = ac.createBiquadFilter();
       const gain = ac.createGain();
 
-      osc.connect(gain);
+      // Soft chain: osc -> gentle low-pass -> gain -> destination
+      osc.connect(filter);
+      filter.connect(gain);
       gain.connect(ac.destination);
 
-      // Crystal "Ting": High pitch sine with bell-like decay
+      // Crystal pickup "Fiu": quick airy sweep (fast like the current cue)
+      // Use a short downward glide + tight envelope.
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(1800, startAt);
-      osc.frequency.exponentialRampToValueAtTime(2200, startAt + 0.1);
+      osc.frequency.setValueAtTime(2100, startAt);
+      osc.frequency.exponentialRampToValueAtTime(1100, startAt + 0.11);
+
+      // Smooth/soften the timbre (avoid harsh "laser" highs).
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(1600, startAt);
+      filter.frequency.exponentialRampToValueAtTime(900, startAt + 0.12);
+      filter.Q.setValueAtTime(0.7, startAt);
 
       gain.gain.setValueAtTime(0.0001, startAt);
-      gain.gain.exponentialRampToValueAtTime(0.45, startAt + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.5);
+      gain.gain.exponentialRampToValueAtTime(0.18, startAt + 0.012);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.14);
 
       osc.start(startAt);
-      osc.stop(startAt + 0.5);
+      osc.stop(startAt + 0.14);
     });
   };
 
@@ -3819,37 +3839,43 @@ const gamification = (() => {
         const startAt = now + 0.03;
         const masterGain = ac.createGain();
         masterGain.connect(ac.destination);
-        masterGain.gain.value = 0.15;
+        // Softer "victory" mini-melody (less high + less electronic)
+        // Keep it short and game-y: arpeggio + tiny lift + final chord.
+        const intensity = Math.max(0.85, Math.min(1.25, 0.95 + (Number(level) || 1) * 0.05));
+        masterGain.gain.value = 0.11 * intensity;
 
-      // Nintendo-style "Get Item" fanfare (Square waves)
-      // Arpeggio: C5, E5, G5, C6
-      const notes = [523.25, 659.25, 783.99, 1046.50]; 
-      
-        notes.forEach((freq, i) => {
+        const scheduleNote = (freq, tOffset, dur, type = 'triangle', peak = 0.22) => {
           const osc = ac.createOscillator();
-        osc.type = 'square'; 
-        osc.frequency.value = freq;
-        osc.connect(masterGain);
-        
-          const start = startAt + (i * 0.08);
-        const dur = 0.1;
-        
-        osc.start(start);
-        osc.stop(start + dur);
+          const g = ac.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, startAt + tOffset);
+          osc.connect(g);
+          g.connect(masterGain);
+
+          const t0 = startAt + tOffset;
+          const t1 = t0 + Math.max(0.01, dur);
+          g.gain.setValueAtTime(0.0001, t0);
+          g.gain.exponentialRampToValueAtTime(Math.max(0.05, peak), t0 + 0.012);
+          g.gain.exponentialRampToValueAtTime(0.0001, t1);
+
+          osc.start(t0);
+          osc.stop(t1 + 0.01);
+        };
+
+        // Melody (C major): C4 E4 G4 C5 D5 E5 (quick, friendly)
+        const melody = [261.63, 329.63, 392.00, 523.25, 587.33, 659.25];
+        melody.forEach((f, i) => {
+          scheduleNote(f, i * 0.085, 0.09, 'triangle', 0.20);
         });
-      
-      // Final sustain note
-        const finalOsc = ac.createOscillator();
-      finalOsc.type = 'triangle';
-      finalOsc.frequency.value = 1046.50; // C6
-      finalOsc.connect(masterGain);
-        finalOsc.start(startAt + 0.32);
-        finalOsc.stop(startAt + 0.8);
-      
-      // Envelope
-        masterGain.gain.setValueAtTime(0.15, startAt);
-        masterGain.gain.setValueAtTime(0.15, startAt + 0.4);
-        masterGain.gain.exponentialRampToValueAtTime(0.01, startAt + 0.8);
+
+        // Final chord (C major): C4 + E4 + G4 (+ a soft C5)
+        const chordAt = melody.length * 0.085 + 0.02;
+        [261.63, 329.63, 392.00].forEach((f) => scheduleNote(f, chordAt, 0.22, 'sine', 0.12));
+        scheduleNote(523.25, chordAt, 0.22, 'triangle', 0.10);
+
+        // Envelope (very gentle global tail)
+        masterGain.gain.setValueAtTime(0.11 * intensity, startAt);
+        masterGain.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.95);
 
       });
 
@@ -9211,6 +9237,14 @@ const gamification = (() => {
     handleTabOpen(card, tabTitle, source, totalTabsCount, evt) {
       recordTabOpen(card, tabTitle, source, totalTabsCount, evt);
     },
+
+    // Audio helpers (kept behind the gamification module to avoid leaking globals)
+    playModalOpenSound() {
+      try { playModalOpenSound(); } catch (e) {}
+    },
+    playModalCloseSound() {
+      try { playModalCloseSound(); } catch (e) {}
+    },
   };
 
   // === SCROLL BOUNCE FIX ===
@@ -10120,7 +10154,7 @@ toggles.forEach((button) => {
 
     // Play open sound immediately
     try {
-      playModalOpenSound();
+      gamification?.playModalOpenSound?.();
     } catch (err) {
       console.error('Failed to play open sound:', err);
     }
@@ -12689,7 +12723,7 @@ toggles.forEach((button) => {
 
       // Play close sound immediately
       try {
-        playModalCloseSound();
+        gamification?.playModalCloseSound?.();
       } catch (err) {
         console.error('Failed to play close sound:', err);
       }
@@ -13283,6 +13317,8 @@ const initCarousels = () => {
     let buffer;
 
     const ensureContext = () => {
+      // Do not create/resume AudioContext before a user gesture.
+      if (!window.__badianiUserGesture) return null;
       if (!ctx) {
         ctx = new AudioContextClass();
       }
@@ -14595,6 +14631,8 @@ const BadianiSound = {
     clickAudio: new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"),
 
     init: function() {
+    // Do not create AudioContext until after a real user gesture.
+    if (!window.__badianiUserGesture) return;
         if (!this.ctx) {
             this.ctx = new (window.AudioContext || window.webkitAudioContext)();
         }
@@ -14606,11 +14644,13 @@ const BadianiSound = {
         this.clickAudio.playbackRate = 1.5;
     },
     playTick: function() {
+      if (!window.__badianiUserGesture) return;
         // Use the MP3 file logic for the scroll tick
         this.clickAudio.currentTime = 0;
         this.clickAudio.play().catch(() => {});
     },
     playBlup: function() {
+      if (!window.__badianiUserGesture) return;
         this.init();
         const t = this.ctx.currentTime;
         const osc = this.ctx.createOscillator();
@@ -14635,7 +14675,11 @@ const BadianiSound = {
 
 document.addEventListener("DOMContentLoaded", () => {
     // Initialize audio context on first interaction to unlock it
-    const unlockAudio = () => {
+  const unlockAudio = (evt) => {
+    try {
+      if (evt && evt.isTrusted === false) return;
+      window.__badianiUserGesture = true;
+    } catch {}
         BadianiSound.init();
         document.removeEventListener('click', unlockAudio);
         document.removeEventListener('touchstart', unlockAudio);
@@ -14672,7 +14716,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (currentIndex !== lastCardIndex) {
                 BadianiSound.playTick();
-                if (navigator.vibrate) navigator.vibrate(5);
+              if (window.__badianiUserGesture && navigator.vibrate) navigator.vibrate(5);
                 lastCardIndex = currentIndex;
             }
         }
@@ -14684,7 +14728,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const triggerBlup = () => {
         BadianiSound.playBlup();
-        if (navigator.vibrate) navigator.vibrate(8);
+      if (window.__badianiUserGesture && navigator.vibrate) navigator.vibrate(8);
     };
 
     menuButtons.forEach(btn => btn.addEventListener('click', triggerBlup));
