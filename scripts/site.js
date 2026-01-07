@@ -653,12 +653,16 @@ const bodyScrollLock = (() => {
         document.body.classList.add('no-scroll');
       }
     },
-    unlock() {
+    unlock(targetScrollY) {
       locks = Math.max(0, locks - 1);
       if (locks === 0) {
         document.body.classList.remove('no-scroll');
         document.body.style.top = '';
-        window.scrollTo(0, scrollPosition);
+
+        const nextY = typeof targetScrollY === 'number' && Number.isFinite(targetScrollY)
+          ? targetScrollY
+          : scrollPosition;
+        window.scrollTo(0, nextY);
       }
     },
     forceUnlock() {
@@ -7017,6 +7021,17 @@ const gamification = (() => {
     if (card.dataset.rewardId) return card.dataset.rewardId;
     cardSerial += 1;
     const pageSlug = getPageSlug();
+
+    // Prefer a stable DOM id when present (most cards have id="card-..." in HTML).
+    // This keeps tracking consistent across reloads and language changes.
+    const domIdRaw = String(card.getAttribute('id') || '').trim();
+    if (domIdRaw) {
+      const domId = domIdRaw.toLowerCase();
+      const uid = `${pageSlug}-${domId}`;
+      card.dataset.rewardId = uid;
+      return uid;
+    }
+
     const title = card.querySelector('h3')?.textContent?.trim().toLowerCase().replace(/[^a-z0-9]+/gi, '-') || 'card';
     const uid = `${pageSlug}-${title}-${cardSerial}`;
     card.dataset.rewardId = uid;
@@ -7040,7 +7055,10 @@ const gamification = (() => {
     // when card ids are generated in different order across reloads.
     const normalizeBaseId = (id) => {
       try {
-        return String(id || '').replace(/-\d+$/g, '');
+        const raw = String(id || '');
+        // New stable format uses "<slug>-card-...". Keep it as-is.
+        if (raw.includes(`-${'card-'.toLowerCase()}`)) return raw;
+        return raw.replace(/-\d+$/g, '');
       } catch {
         return '';
       }
@@ -7056,29 +7074,52 @@ const gamification = (() => {
   }
 
   function getTotalPageCards() {
-    // Total rewardable cards per page. Used for the on-page badge: ? Stelle: x/y
-    // Keep in sync with the actual DOM cards (data-carousel-item).
-    const totalsMap = {
-      'operations': 11,
-      'caffe': 29,
-      'sweet-treats': 14,
-      'pastries': 10,
-      'slitti-yoyo': 11,
-      'gelato-lab': 10,
-      'festive': 12,
-      'story-orbit': 5    // 4 capitoli + 1 bonus (apertura pagina) = 5 step
-    };
-    const slug = getPageSlug();
-    return totalsMap[slug] || 0;
+    // Total rewardable cards per page (redeemable stars).
+    // Prefer real DOM counts so it stays correct when we add/remove cards.
+    try {
+      const slug = getPageSlug();
+
+      // Story Orbit uses a different structure than guide cards.
+      if (slug === 'story-orbit') {
+        const chapters = document.querySelectorAll('.story-card[data-story-card]').length;
+        // Keep legacy behavior: 4 chapters + 1 bonus for opening/engagement.
+        return Math.max(0, chapters + 1);
+      }
+
+      const cards = document.querySelectorAll('.guide-card[data-carousel-item]');
+      return cards.length;
+    } catch {
+      return 0;
+    }
   }
 
   function updatePageBadges() {
     const count = getPageStarCount();
     const total = getTotalPageCards();
     document.querySelectorAll('[data-page-stars]').forEach((el) => {
+      // IMPORTANT: these badges are dynamic; remove static i18n markers so the
+      // i18n engine doesn't overwrite them on DOMContentLoaded/language switch.
+      try {
+        el.removeAttribute('data-i18n');
+        el.removeAttribute('data-i18n-html');
+      } catch (e) {}
       el.textContent = tr('page.starsBadge', { count, total }, `\u2605 Stelle: ${count}/${total}`);
     });
   }
+
+  // After i18n applies translations (DOMContentLoaded + language switches), refresh the
+  // dynamic per-page stars badge so it remains accurate.
+  try {
+    window.addEventListener('i18nUpdated', () => {
+      try { updatePageBadges(); } catch (e) {}
+    });
+  } catch (e) {}
+
+  try {
+    document.addEventListener('badiani:lang-changed', () => {
+      try { updatePageBadges(); } catch (e) {}
+    });
+  } catch (e) {}
 
   function getAvailableSets() {
     return Math.floor(state.quizTokens / STARS_FOR_QUIZ);
@@ -9853,12 +9894,33 @@ toggles.forEach((button) => {
   } catch (e) {}
 
   button.addEventListener('click', (event) => {
+    // Prevent default navigation/scroll jumps (e.g. <a href="#"> or implicit form submit).
+    try { event.preventDefault(); } catch (e) {}
+    try { event.stopPropagation(); } catch (e) {}
+
     const card = button.closest('.guide-card');
     if (!card) return;
     const details = card.querySelector('.details');
     if (!details) return;
     const cardTitle = card.querySelector('h3')?.textContent || '';
     const cardId = (gamification?.getCardIdFor ? gamification.getCardIdFor(card) : '') || card.dataset.rewardId || cardTitle;
+
+    // Remember where the user was, so closing the modal does not jump the page.
+    // Also keep the carousel horizontal position stable.
+    const openerRestore = (() => {
+      try {
+        const track = card.closest('[data-carousel-track]');
+        return {
+          scrollY: window.pageYOffset,
+          track,
+          trackScrollLeft: track ? track.scrollLeft : 0,
+          focusEl: button,
+          cardId: card && card.id ? card.id : null
+        };
+      } catch (e) {
+        return { scrollY: window.pageYOffset, track: null, trackScrollLeft: 0, focusEl: button, cardId: null };
+      }
+    })();
 
     bodyScrollLock.lock();
     
@@ -10145,7 +10207,86 @@ toggles.forEach((button) => {
       const tagsClone = tags.cloneNode(true);
       sidebarFragment.appendChild(tagsClone);
     }
+    const tidyInline = (value) => String(value || '').replace(/\s+/g, ' ').trim();
+
+    // --- Panoramica (extended in modal, short on card) ---
+    // Prefer a dedicated i18n key: replace trailing `.desc` with `.overview`.
+    // Fallback: auto-generate a longer product/ops description (no meta sections like
+    // “Focus / cosa troverai / perché conta / come usarlo”).
     let introClone = null;
+    let overviewTabContent = null;
+    const introI18nKey = intro
+      ? (intro.getAttribute('data-i18n-html') || intro.getAttribute('data-i18n') || '')
+      : '';
+    const overviewI18nKey = (introI18nKey && /\.desc$/i.test(introI18nKey))
+      ? introI18nKey.replace(/\.desc$/i, '.overview')
+      : '';
+
+    const titleTextForOverview = tidyInline(card.querySelector('h3')?.textContent || '');
+    const descTextForOverview = tidyInline(intro?.textContent || '');
+    const buildExtendedFromStats = () => {
+      try {
+        if (!statList) return '';
+        const items = Array.from(statList.querySelectorAll('li'))
+          .map((li) => tidyInline(li.textContent || ''))
+          .filter(Boolean);
+        if (!items.length) return '';
+
+        // Take a few key points and turn them into a readable paragraph.
+        const chosen = items.slice(0, 3).map((t) => t.replace(/[.\s]+$/g, '').trim());
+        const sentence = chosen.join('. ') + '.';
+        return sentence;
+      } catch (e) {
+        return '';
+      }
+    };
+
+    const extendedFromStats = buildExtendedFromStats();
+
+    if (overviewI18nKey) {
+      const custom = tr(overviewI18nKey, null, null);
+      if (custom && custom !== overviewI18nKey) {
+        try {
+          const wrap = document.createElement('div');
+          wrap.className = 'card-modal-overview';
+
+          const inner = document.createElement('div');
+          inner.className = 'card-modal-intro';
+          inner.innerHTML = String(custom);
+
+          wrap.appendChild(inner);
+          overviewTabContent = wrap;
+        } catch (e) {
+          overviewTabContent = null;
+        }
+      }
+    }
+
+    if (!overviewTabContent && (descTextForOverview || titleTextForOverview || extendedFromStats)) {
+      try {
+        const wrap = document.createElement('div');
+        wrap.className = 'card-modal-overview';
+
+        const inner = document.createElement('div');
+        inner.className = 'card-modal-intro';
+
+        const parts = [];
+        if (titleTextForOverview || descTextForOverview) {
+          parts.push(`<p><strong>${titleTextForOverview}</strong>${descTextForOverview ? ` — ${descTextForOverview}` : ''}</p>`);
+        }
+        if (extendedFromStats) {
+          parts.push(`<p>${extendedFromStats}</p>`);
+        }
+
+        inner.innerHTML = parts.filter(Boolean).join('');
+        wrap.appendChild(inner);
+        overviewTabContent = wrap;
+      } catch (e) {
+        overviewTabContent = null;
+      }
+    }
+
+    // Keep a clone of the short intro paragraph available as a last-resort fallback.
     if (intro) {
       introClone = intro.cloneNode(true);
       introClone.classList.add('card-modal-intro');
@@ -11298,8 +11439,10 @@ toggles.forEach((button) => {
           .filter((entry) => entry.items && entry.items.length >= 2);
       };
 
-      // Panoramica (intro) in tab for consistent learning flow.
-      if (introClone) {
+      // Panoramica (extended in modal, short on card).
+      if (overviewTabContent) {
+        createAccordionItem('Panoramica', overviewTabContent, false);
+      } else if (introClone) {
         const overview = document.createElement('div');
         overview.className = 'card-modal-overview';
         overview.appendChild(introClone);
@@ -11897,7 +12040,9 @@ toggles.forEach((button) => {
           requestAnimationFrame(() => setOpen(!!openByDefault));
         };
 
-        if (introClone) {
+        if (overviewTabContent) {
+          addFallbackAccordionItem('Panoramica', overviewTabContent, false);
+        } else if (introClone) {
           const overview = document.createElement('div');
           overview.className = 'card-modal-overview';
           overview.appendChild(introClone);
@@ -12091,7 +12236,26 @@ toggles.forEach((button) => {
     let swipeStartY = 0;
     let swipeArmed = false;
     let swipeScroller = null;
+    let swipeMode = null; // 'down' (top) | 'up' (bottom) | 'both' (non-scrollable)
     const SWIPE_CLOSE_THRESHOLD_PX = 72;
+
+    const isAtTop = (el) => {
+      try {
+        return !!el && el.scrollTop <= 0;
+      } catch (e) {
+        return false;
+      }
+    };
+
+    const isAtBottom = (el) => {
+      try {
+        if (!el) return false;
+        const slack = 2;
+        return el.scrollTop + el.clientHeight >= el.scrollHeight - slack;
+      } catch (e) {
+        return false;
+      }
+    };
 
     const resolveSwipeScroller = (target) => {
       try {
@@ -12108,10 +12272,35 @@ toggles.forEach((button) => {
         if (!e || !e.touches || e.touches.length !== 1) return;
         swipeScroller = resolveSwipeScroller(e.target);
         swipeStartY = e.touches[0].clientY;
-        swipeArmed = !!swipeScroller && (swipeScroller.scrollTop <= 0);
+        swipeMode = null;
+
+        if (!swipeScroller) {
+          swipeArmed = false;
+          return;
+        }
+
+        // Arm close when user tries to scroll past the edges:
+        // - at the top: pull down
+        // - at the bottom: push up
+        const atTop = isAtTop(swipeScroller);
+        const atBottom = isAtBottom(swipeScroller);
+
+        if (atTop && atBottom) {
+          swipeMode = 'both';
+          swipeArmed = true;
+        } else if (atTop) {
+          swipeMode = 'down';
+          swipeArmed = true;
+        } else if (atBottom) {
+          swipeMode = 'up';
+          swipeArmed = true;
+        } else {
+          swipeArmed = false;
+        }
       } catch (err) {
         swipeArmed = false;
         swipeScroller = null;
+        swipeMode = null;
       }
     };
 
@@ -12119,18 +12308,35 @@ toggles.forEach((button) => {
       try {
         if (modalClosed) return;
         if (!swipeArmed || !swipeScroller) return;
-        // If the user started scrolling inside the modal, do not treat it as a dismiss.
-        if (swipeScroller.scrollTop > 0) {
+        // If the user started scrolling away from the edge, do not treat it as a dismiss.
+        if (swipeMode === 'down' && !isAtTop(swipeScroller)) {
           swipeArmed = false;
           swipeScroller = null;
+          swipeMode = null;
+          return;
+        }
+        if (swipeMode === 'up' && !isAtBottom(swipeScroller)) {
+          swipeArmed = false;
+          swipeScroller = null;
+          swipeMode = null;
           return;
         }
         if (!e || !e.touches || e.touches.length !== 1) return;
         const dy = e.touches[0].clientY - swipeStartY;
-        if (dy > SWIPE_CLOSE_THRESHOLD_PX) {
+
+        if ((swipeMode === 'down' || swipeMode === 'both') && dy > SWIPE_CLOSE_THRESHOLD_PX) {
           closeModal();
           swipeArmed = false;
           swipeScroller = null;
+          swipeMode = null;
+          return;
+        }
+
+        if ((swipeMode === 'up' || swipeMode === 'both') && dy < -SWIPE_CLOSE_THRESHOLD_PX) {
+          closeModal();
+          swipeArmed = false;
+          swipeScroller = null;
+          swipeMode = null;
         }
       } catch (err) {}
     };
@@ -12138,6 +12344,7 @@ toggles.forEach((button) => {
     const onModalTouchEnd = () => {
       swipeArmed = false;
       swipeScroller = null;
+      swipeMode = null;
     };
 
     const handleEsc = (e) => {
@@ -12160,7 +12367,32 @@ toggles.forEach((button) => {
         try { document.removeEventListener('badiani:crystals-updated', handleCrystalUpdate); } catch (e) {}
         try { document.removeEventListener('badiani:toast-shown', handleToastShown); } catch (e) {}
         overlay.remove();
-        bodyScrollLock.unlock();
+        // Restore the opener position without a visible "bounce".
+        // Important: do it in ONE scroll restore (inside unlock), not unlock() + scrollTo().
+        try {
+          bodyScrollLock.unlock(openerRestore && typeof openerRestore.scrollY === 'number' ? openerRestore.scrollY : undefined);
+        } catch (e) {
+          try { bodyScrollLock.unlock(); } catch (err) {}
+        }
+
+        // Restore carousel alignment + focus (no extra vertical scroll).
+        try {
+          const restore = openerRestore || null;
+          requestAnimationFrame(() => {
+            try {
+              if (restore && restore.track && typeof restore.trackScrollLeft === 'number') {
+                restore.track.scrollLeft = restore.trackScrollLeft;
+              }
+            } catch (e) {}
+            try {
+              if (restore && restore.focusEl && typeof restore.focusEl.focus === 'function') {
+                restore.focusEl.focus({ preventScroll: true });
+              }
+            } catch (e) {
+              try { openerRestore?.focusEl?.focus?.(); } catch (err) {}
+            }
+          });
+        } catch (e) {}
       }, 300);
     };
     

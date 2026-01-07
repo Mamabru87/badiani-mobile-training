@@ -64,14 +64,14 @@
 
       'operations.cards.openingRoutine.tag1': 'Prep mattino',
       'operations.cards.openingRoutine.title': 'Routine apertura',
-      'operations.cards.openingRoutine.desc': 'Controllo temperature, pulizia vetri, riordino vaschette (FIFO) e verifica etichette. La vetrina è il primo biglietto da visita: deve essere impeccabile e ordinata.',
+      'operations.cards.openingRoutine.desc': 'Controlli apertura: temperature, vetri, ordine vaschette (FIFO) ed etichette. Obiettivo: vetrina pulita e leggibile.',
       'operations.cards.openingRoutine.stats': `<li>Temperature: -14/-15°C (registra su log HACCP)</li><li>Pulizia: vetri interni/esterni con prodotto specifico</li><li>Vaschette: riordina per colore/gusto, pulisci bordi vaschetta</li><li>Etichette: tutte presenti, dritte e pulite</li><li>Utensili: spatole pulite e in acqua corrente (se sistema a flusso continuo) o cambi frequenti</li>`,
       'operations.cards.openingRoutine.details': `<div class="steps"><span>1 · Registra temperature su log HACCP.</span><span>2 · Pulisci vetri e bordi vaschette.</span><span>3 · Verifica etichette e utensili pronti.</span></div><div class="tips">Se una vaschetta è quasi vuota, sostituiscila subito (non raschiare il fondo davanti al cliente).</div>`,
 
       'operations.cards.dailySetup.tag1': 'Display',
       'operations.cards.dailySetup.tag3': 'Visual',
       'operations.cards.dailySetup.title': 'Set-up giornaliero',
-      'operations.cards.dailySetup.desc': 'Cake stand con slice mancante, croissant su tray dedicati, brownies/puddings allineati.',
+      'operations.cards.dailySetup.desc': 'Allinea display (cakes, croissant, brownies/pudding) e prepara un “full look” prima del servizio.',
       'operations.cards.dailySetup.stats': `<li>Vetrina deve sembrare sempre piena</li><li>Label accanto al prodotto</li><li>Prima fetta di loaf esposta</li>`,
       'operations.cards.dailySetup.details': `<div class="steps"><span>1 - Posiziona cakes sui cake stand e rimuovi una fetta per mostrare l'interno.</span><span>2 - Disponi croissant in base ai gusti disponibili mantenendo le file pulite.</span><span>3 - Aggiorna etichette, verifica shelf life e riempi all'occorrenza.</span></div><div class="tips">Fotografa il set-up ideale e condividilo nel gruppo store per mantenere coerenza.</div>`,
 
@@ -79,7 +79,7 @@
       'operations.cards.warmPandoro.tag2': '10" per lato',
       'operations.cards.warmPandoro.tag3': 'Servizio',
       'operations.cards.warmPandoro.title': 'Servizio Caldo (Pandoro)',
-      'operations.cards.warmPandoro.desc': 'Pandoro scaldato: stessa tecnica del panettone. 10 secondi per lato sulla piastra crepe (senza olio). Tosta leggero per ravvivare la struttura. Servi immediatamente con pairing consigliato (crema mascarpone tiepida, gelato, sauce).',
+      'operations.cards.warmPandoro.desc': 'Tosta 10" per lato su piastra crepe (senza olio) e servi subito. Proponi pairing: crema mascarpone tiepida, gelato e sauce.',
       'operations.cards.warmPandoro.stats': `<li><strong>Chiedi preferenza al cliente:</strong> "Vuoi la versione tiepida?"</li><li><strong>Piastra crepe:</strong> pulita e asciutta, no olio</li><li><strong>Timing:</strong> 10 secondi per lato (non di più)</li><li><strong>Servizio immediato:</strong> impiatta subito per mantenere volume e calore</li><li><strong>Campioni:</strong> tieni piccoli triangoli per assaggiare durante le ore di punta (storytelling)</li><li><strong>Abbinamenti tiepidi:</strong> crema mascarpone calda, gelato freddo (contrasto), salsa cioccolato</li>`,
       'operations.cards.warmPandoro.details': `<div class="steps"><span>1 - Chiedi preferenza al cliente.</span><span>2 - Tosta e impiatta rapidamente per non perdere volume.</span><span>3 - Servi con pairing consigliato.</span></div><div class="tips">Campiona piccoli triangoli per raccontare prodotto nelle ore di traffico.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Opzione 1:</strong> "Vuoi la versione calda con gelato? Esperienza premium"</span><span><strong>Opzione 2:</strong> "Aggiungiamo crema mascarpone tiepida?"</span><span><strong>Opzione 3:</strong> "Chiedi SEMPRE preferenza calda/fredda per guidare upsell"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> 10 secondi per lato esatti, non di più o si secca. Impiatta veloce per non perdere volume soffice. Campiona triangolini nelle ore punta per stimolare ordini.</div>`,
 
@@ -87,33 +87,33 @@
       'operations.cards.packagingTakeAway.tag2': 'Treat box',
       'operations.cards.packagingTakeAway.tag3': 'Take away',
       'operations.cards.packagingTakeAway.title': 'Packaging take away',
-      'operations.cards.packagingTakeAway.desc': 'Per due panettoni: una sauce pot riempita 3/4, quattro angoli del treat box.',
+      'operations.cards.packagingTakeAway.desc': 'Treat box stabile: sauce pot 3/4 al centro e panettoni bloccati agli angoli. Etichetta e freezer fino al ritiro.',
       'operations.cards.packagingTakeAway.details': `<div class="steps"><span>1 - Inserisci sauce pot al centro, blocca i panettoni agli angoli.</span><span>2 - Chiudi con lid + tape, etichetta shelf life.</span><span>3 - Conserva in freezer finché il rider arriva.</span></div><div class="tips">Comunica al cliente autonomia termica e modalità di servizio.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Opzione 1:</strong> "Box da 4 mini invece di 2? Perfetto per famiglia"</span><span><strong>Opzione 2:</strong> "Aggiungiamo doppia salsa per variare gusti?"</span><span><strong>Opzione 3:</strong> "Con biglietto auguri brandizzato diventa regalo perfetto"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Sauce pot al centro per stabilità. Blocca i mini agli angoli. Etichetta shelf life e istruzioni servizio. Conserva in freezer fino consegna rider per mantenere qualità.</div>`,
 
       'operations.cards.vinMachineSetup.tag1': 'Setup',
       'operations.cards.vinMachineSetup.tag3': 'Tank',
       'operations.cards.vinMachineSetup.title': 'Allestimento macchina',
-      'operations.cards.vinMachineSetup.desc': 'Macchina Vin Brulé: riempire tank esterno con 600 ml d\'acqua senza superare il max, inserire contenitore interno.',
+      'operations.cards.vinMachineSetup.desc': 'Setup Vin Brulé: 600 ml d\'acqua nel tank esterno (max) e contenitore interno inserito. Poi riscalda e mantieni.',
       'operations.cards.vinMachineSetup.details': `<div class="steps"><span>1 - Versa 500/1000 ml di mix nel tank argento.</span><span>2 - Porta temperatura a livello 10 per 25-30 min; poi mantieni a 6-7.</span><span>3 - Usa il coperchio durante il mantenimento per evitare evaporazione.</span></div><div class="tips">Meglio scaldare piccoli lotti per garantire freschezza e aromi.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Visual appeal:</strong> "Setup macchina in area visibile per attirare ordini"</span><span><strong>Sampling:</strong> "Offri mini assaggi nelle ore punta per conversione"</span><span><strong>Bundle:</strong> "Mulled wine + mini panettone = combo festiva perfetta"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Tank esterno: 600ml acqua max. Livello 10 per 25-30 min riscaldamento, poi 6-7 mantenimento. Piccoli batch = freschezza. Coperchio evita evaporazione aromi.</div>`,
 
       'operations.cards.vinServiceClosing.tag1': 'Servizio',
       'operations.cards.vinServiceClosing.tag3': 'Chiusura',
       'operations.cards.vinServiceClosing.title': 'Service & chiusura',
-      'operations.cards.vinServiceClosing.desc': 'Vin Brulé: servi con mestolo, fetta d\'arancia e controllo shelf life.',
+      'operations.cards.vinServiceClosing.desc': 'Servi con mestolo e fetta d\'arancia; a fine turno travasa, raffredda, etichetta e riponi in frigo.',
       'operations.cards.vinServiceClosing.details': `<div class="steps"><span>1 - Riempire cup con mestolo, aggiungere fetta d\'arancia.</span><span>2 - A fine giornata travasa nel bricco, lascia raffreddare e copri con pellicola.</span><span>3 - Frigo + label (3 giorni dal primo warm-up; 30 giorni per mix non aperto).</span></div><div class="tips">Pulire tank, contenitore e esterno macchina ogni sera con acqua calda e detergente.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Opzione 1:</strong> "Vuoi aggiungere shot di rum per versione adulta?"</span><span><strong>Opzione 2:</strong> "Fetta d\'arancia fresca + cannella stick = presentazione Instagram"</span><span><strong>Opzione 3:</strong> "Racconta spezie natalizie e tradizione per valore percepito"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Servi con mestolo dedicato. Fetta arancia fresca sempre. Shelf life: 3 giorni da primo riscaldamento, 30 giorni mix chiuso. Pulizia tank ogni sera con acqua calda.</div>`,
 
       'operations.cards.tempKeyMap.tag1': 'Setting',
       'operations.cards.tempKeyMap.tag2': 'Temperature',
       'operations.cards.tempKeyMap.tag3': 'Quick ref',
       'operations.cards.tempKeyMap.title': 'Temperature chiave (quick map)',
-      'operations.cards.tempKeyMap.desc': 'Temperature chiave da tenere a mente per evitare prodotti fuori standard.',
+      'operations.cards.tempKeyMap.desc': 'Range temperature chiave per gelato e storage: controlla e registra per evitare fuori standard.',
       'operations.cards.tempKeyMap.stats': `<li>Gelato vetrina: -14/-15 °C (target)</li><li>Display freezer treats: almeno -14 e senza ghiaccio (defrost weekly)</li><li>Thermal storage box (gelato take-away): autonomia max 1 ora prima di tornare in freezer</li>`,
       'operations.cards.tempKeyMap.details': `<div class="steps"><span>1 · Se la temperatura è fuori range: avvisa subito e non “compensare” con service tricks.</span><span>2 · Sliding doors in posizione quando non busy per preservare -14/-15.</span><span>3 · Defrost e pulizia programmata = stabilità temperature.</span></div>`,
 
       'operations.cards.fifoLabels.tag1': 'Conservazione',
       'operations.cards.fifoLabels.tag3': 'Etichette',
       'operations.cards.fifoLabels.title': 'FIFO & etichette (regola d\'oro)',
-      'operations.cards.fifoLabels.desc': 'Ogni modulo “storage” in questo training ha un punto comune: FIFO + label chiare.',
+      'operations.cards.fifoLabels.desc': 'FIFO + etichette chiare: data/ora e scadenza sempre visibili. Senza label non si serve.',
       'operations.cards.fifoLabels.stats': `<li>Etichetta sempre: data preparazione/apertura + scadenza</li><li>First in, first out: usa prima ciò che scade prima</li><li>Se manca la label: non servire (chiedi al manager)</li>`,
       'operations.cards.fifoLabels.details': `<div class="steps"><span>1 · Controllo label a inizio turno.</span><span>2 · Controllo FIFO durante i refill.</span><span>3 · Controllo scadenze in chiusura.</span></div>`,
 
@@ -121,14 +121,14 @@
       'operations.cards.shelfLifeQuick.tag2': 'Prep',
       'operations.cards.shelfLifeQuick.tag3': 'Frigo',
       'operations.cards.shelfLifeQuick.title': 'Shelf life rapidi (mix & premade)',
-      'operations.cards.shelfLifeQuick.desc': 'Promemoria shelf life per controlli veloci durante apertura, refill e chiusura.',
+      'operations.cards.shelfLifeQuick.desc': 'Shelf life essenziali di mix e premade per controlli rapidi durante la giornata.',
       'operations.cards.shelfLifeQuick.stats': `<li>Crepe mix: 3 giorni (frigo) + riposo minimo 2 ore</li><li>Waffle mix (pre-packed): 2 giorni</li><li>Premade matcha: 1 giorno (incluso giorno di preparazione) → frigo</li><li>Mulled wine: 3 giorni dal primo warm-up (mix in macchina)</li>`,
       'operations.cards.shelfLifeQuick.details': `<div class="steps"><span>1 · Prepara batch “quanto serve”: meno sprechi, più qualità.</span><span>2 · Label sempre (data/ora).</span><span>3 · Oltre shelf life: elimina e rifai.</span></div>`,
 
       'operations.cards.takeAwayThermal.tag1': 'Packaging',
       'operations.cards.takeAwayThermal.tag2': 'Take away',
       'operations.cards.takeAwayThermal.title': 'Take-away: autonomia termica',
-      'operations.cards.takeAwayThermal.desc': 'La thermal storage box ha autonomia massima di 1 ora: poi il prodotto deve tornare in freezer.',
+      'operations.cards.takeAwayThermal.desc': 'Box termica: autonomia ~1 ora. Comunica al cliente di mettere in freezer appena possibile.',
       'operations.cards.takeAwayThermal.stats': `<li>Comunicalo sempre al cliente (qualità e sicurezza)</li><li>Consiglia freezer appena possibile</li><li>Evita soste “lunghe” fuori controllo (rider/attese)</li>`,
       'operations.cards.takeAwayThermal.details': `<div class="steps"><span>1 · “Questa box tiene circa 1 ora: poi freezer.”</span><span>2 · Offri bag termica se prevista dallo store.</span><span>3 · Per delivery: conserva in freezer fino al ritiro.</span></div>`,
 
@@ -136,7 +136,7 @@
       'operations.cards.cleaningSchedule.tag2': 'Settimanale',
       'operations.cards.cleaningSchedule.tag3': 'Routine',
       'operations.cards.cleaningSchedule.title': 'Schedule pulizie (giorno / settimana)',
-      'operations.cards.cleaningSchedule.desc': 'Chiusura e manutenzione programmata = performance costanti e meno imprevisti in servizio.',
+      'operations.cards.cleaningSchedule.desc': 'Routine pulizie giornaliere/settimanali per mantenere performance e ridurre imprevisti.',
       'operations.cards.cleaningSchedule.stats': `<li>Gelato vetrina: OFF ogni notte</li><li>Gelato vetrina: deep clean weekly</li><li>Filtri: cleaning weekly</li><li>Display freezer treats: defrost weekly (free of ice)</li>`,
       'operations.cards.cleaningSchedule.details': `<div class="steps"><span>1 · Segna la giornata di deep clean (non improvvisare).</span><span>2 · Pulisci prima che si accumuli: è più veloce.</span><span>3 · Dopo la pulizia: rimonta, sanitizza e lucida.</span></div>`,
 
@@ -152,56 +152,56 @@
       'slittiYoyo.carousel.ops.category': 'Apertura · Display · Dati tecnici · Storage · Chiusura',
 
       'slittiYoyo.cards.timeline.title': 'Timeline essenziale',
-      'slittiYoyo.cards.timeline.desc': 'Luciano Slitti apre come torrefazione nel 1969. Nel 1990 Andrea introduce il cioccolato e, insieme al fratello Daniele, conquista premi internazionali (Grand Prix 1994, Eurochocolate 1996, miglior chocolatier italiano 2008).',
+      'slittiYoyo.cards.timeline.desc': 'Heritage Slitti: da torrefazione (1969) a cioccolato premiato a livello internazionale. Perfetto per storytelling premium.',
       'slittiYoyo.cards.timeline.details': `<div class="steps"><span>1. Valorizza la selezione rigorosa di materie prime.</span><span>2. Racconta premi e heritage toscano per giustificare il posizionamento premium.</span><span>3. Invita il cliente ad assaggiare abbinando caffè o gelato.</span></div><div class="tips">Usa la palette blu/pink per creare piccole schede storytelling accanto all'esposizione.</div>`,
 
       'slittiYoyo.cards.tablets.title': 'Tavolette LatteNero & Gran Cacao',
-      'slittiYoyo.cards.tablets.desc': 'Tavolette Slitti in diversi profili di cacao (45%, 51%, 73%, 82%, 100%) + Caffè Latte aromatizzata con arabica tostata. Spiega il blend: cacao + cacao butter per morbidezza, equilibrio tra zuccheri e latte (nei profili più dolci).',
+      'slittiYoyo.cards.tablets.desc': 'Tavolette con diversi % di cacao + Coffee Milk all\'arabica. Guida il cliente tra profili e intensità.',
       'slittiYoyo.cards.tablets.stats': `<li>Profili disponibili: LatteNero (45%, 51%, 73%, 82%, 100%), Caffè Latte con arabica</li><li>Composizione: cacao selezionato + cacao butter + latte (nei profili LatteNero)</li><li>Conservazione: 16-18°C, lontano da luce diretta e odori forti</li>`,
       'slittiYoyo.cards.tablets.details': `<div class="steps"><span>1. Chiedi preferenza cliente (latte/dark).</span><span>2. Suggerisci pairing con espresso o cappuccino.</span><span>3. Ricorda la confezione regalo e shelf life lunga.</span></div><div class="tips">Esporre sample aperto per mostrare pattern; mantieni stock FIFO.</div>`,
 
       'slittiYoyo.cards.minicake.title': 'Minicake',
-      'slittiYoyo.cards.minicake.desc': 'Mini cake Slitti con materie prime d\'eccellenza: nocciole Tonda Gentile (Langhe) e mandorle Avola (Sicilia). Tre varianti: latte nocciole, fondente mix fruit, fondente mandorle. Servi a temperatura ambiente o leggermente tiepida.',
+      'slittiYoyo.cards.minicake.desc': 'Mini cake premium con Tonda Gentile e mandorla d\'Avola. Tre varianti, da servire a temperatura ambiente (o leggermente tiepida).',
       'slittiYoyo.cards.minicake.stats': `<li>Varianti: latte nocciole Langhe, fondente mix fruit, fondente mandorle Avola</li><li>Materie prime: Tonda Gentile Langhe DOP, mandorla Avola DOP (comunica origine)</li><li>Servizio: temperatura ambiente oppure 10 secondi microonde per esaltare profumi</li>`,
       'slittiYoyo.cards.minicake.details': `<div class="steps"><span>1. Spiega differenza ingredienti (Tonda Gentile, mandorla Avola).</span><span>2. Servi a temperatura ambiente o leggermente tiepida.</span><span>3. Consiglia accompagnamento con crema spalmabile Slittosa.</span></div>`,
 
       'slittiYoyo.cards.pralines.title': 'Praline & Dragée',
-      'slittiYoyo.cards.pralines.desc': 'Praline Origin e Irish Coffee (0,9% alc) + dragée su base di pistacchio, mandorla, nocciola, cranberry, arachidi caramel, amarene e arabica. Ogni dragée racconta la propria provenienza: Bronte, Avola, Langhe. Mantieni sempre temperatura fresca e luce bassa.',
+      'slittiYoyo.cards.pralines.desc': 'Praline e dragée assortiti con ingredienti d\'origine (Bronte, Avola, Langhe). Conserva al fresco e lontano dalla luce.',
       'slittiYoyo.cards.pralines.stats': `<li>Praline: Origin, Irish Coffee (0,9% alcol), Passion Fruit</li><li>Dragée: pistacchio Bronte, mandorla Avola DOP, nocciola Langhe, cranberry, arachidi caramel, amarene, arabica, zenzero</li><li>Provenienza: evidenzia su lavagnette (Bronte, Avola, Langhe) per valore</li>`,
       'slittiYoyo.cards.pralines.details': `<div class="steps"><span>1 · Mantieni temperatura fresca e luce bassa.</span><span>2 · Offri assaggio se apri una confezione campione.</span><span>3 · Pairing suggeriti: pistacchi con Pistachio Hot, ginger con chai.</span></div>`,
 
       'slittiYoyo.cards.spreads.title': 'Creme Slittosa / Riccosa / Gianera',
-      'slittiYoyo.cards.spreads.desc': 'Solo nocciole Tonda Gentile + cacao selezionato. Nocciola %: 37 (Slittosa), 51 (Riccosa), 57 (Gianera).',
+      'slittiYoyo.cards.spreads.desc': 'Creme spalmabili con Tonda Gentile e cacao: Slittosa 37%, Riccosa 51%, Gianera 57%.',
       'slittiYoyo.cards.spreads.stats': `<li>Composizione: solo nocciole Tonda Gentile + cacao (zero olio di palma)</li><li>Profili: Slittosa 37% (dolce), Riccosa 51% (equilibrio), Gianera 57% (intensa)</li><li>Display: mostra texture con spatola monouso per igiene</li>`,
       'slittiYoyo.cards.spreads.details': `<div class="steps"><span>1 · Mostra texture con spatola monouso per igiene.</span><span>2 · Suggerisci su crepe, waffle, panettone o gelato.</span><span>3 · Posizionamento strategico vicino cassa per impulse buy.</span></div>`,
 
       'slittiYoyo.cards.yoyo.title': 'Yo-Yo',
-      'slittiYoyo.cards.yoyo.desc': 'Due biscotti morbidi che racchiudono uno strato di gelato. Disponibile in vari gusti.',
+      'slittiYoyo.cards.yoyo.desc': 'Biscotto morbido farcito con gelato: snack “grab & go” da servire subito.',
       'slittiYoyo.cards.yoyo.stats': `<li>Conservazione: -18°C (freezer)</li><li>Servizio: Tovagliolino o piattino</li><li>Varianti: Classico, Pistacchio, Cioccolato</li>`,
       'slittiYoyo.cards.yoyo.details': `<div class="steps"><span>1 · Preleva dal freezer al momento dell'ordine.</span><span>2 · Servi immediatamente per evitare che il gelato si sciolga.</span><span>3 · Suggerisci come snack veloce o dessert da passeggio.</span></div>`,
 
       'slittiYoyo.ops.setupStation.title': 'Allestimento Yo-Yo (banco)',
-      'slittiYoyo.ops.setupStation.desc': 'Posiziona il Yo‑Yo in punto centrale sopra la vetrina gelato. L\'area deve restare senza briciole e va rifornita ogni volta: mai “vuoto” visivo.',
+      'slittiYoyo.ops.setupStation.desc': 'Yo‑Yo al centro sopra la vetrina: area sempre pulita e rifornita (mai vuoto visivo).',
       'slittiYoyo.ops.setupStation.stats': `<li>Posizionamento: centrale, sopra la gelato vetrina</li><li>Hygiene: superficie sempre free of crumbles</li><li>Replenish: riempi/rifornisci ogni volta (mai “vuoto” visivo)</li>`,
       'slittiYoyo.ops.setupStation.details': `<div class="steps"><span>1 · Pulisci l'area (zero briciole).</span><span>2 · Posiziona la stazione Yo-Yo in punto visibile e centrale.</span><span>3 · Prepara wafer/tool e guanti monouso per il servizio.</span></div><div class="tips">Il Yo-Yo vende anche “con gli occhi”: non lasciarlo mai disordinato.</div>`,
 
       'slittiYoyo.ops.stationTools.title': 'Stazione e strumenti (standard)',
-      'slittiYoyo.ops.stationTools.desc': 'Setup rapido per evitare rallentamenti e contaminazioni durante il rush.',
+      'slittiYoyo.ops.stationTools.desc': 'Stazione pronta = servizio veloce e pulito: guanti, tool e wafer già a portata.',
       'slittiYoyo.ops.stationTools.stats': `<li>Guanti: indossali prima di maneggiare wafer/Yo-Yo tool</li><li>Tool: appoggia Yo-Yo tool su un piatto con 2 wafer pronti</li><li>Flow: prepara wafer → gelato → chiusura, senza “giri” inutili</li>`,
       'slittiYoyo.ops.stationTools.details': `<div class="steps"><span>1 · Guanti on.</span><span>2 · Wafer sul tool, una base pronta.</span><span>3 · Chiudi subito dopo porzionatura per evitare overflow.</span></div><div class="tips">Ordine fisso = velocità e costanza tra team.</div>`,
 
       'slittiYoyo.ops.portioning.title': 'Porzionatura gelato Yo-Yo',
-      'slittiYoyo.ops.portioning.desc': 'Target porzione: 80–90 g. Il gelato deve restare dentro i wafer: niente overflow.',
+      'slittiYoyo.ops.portioning.desc': 'Porzione 80–90 g: gelato dentro i wafer, bordo pulito (zero overflow).',
       'slittiYoyo.ops.portioning.stats': `<li>Porzione target: 80–90 g</li><li>Scoop: usa il gelato con ice-cream scooper</li><li>Controllo: non overflow (è un difetto visivo + sporca la stazione)</li>`,
       'slittiYoyo.ops.portioning.details': `<div class="steps"><span>1 · Posiziona il gelato centralmente.</span><span>2 · Chiudi con il secondo wafer e verifica bordo pulito.</span><span>3 · Se sporchi: pulisci subito (non “rimandare”).</span></div><div class="tips">Precisione oggi = meno sprechi domani.</div>`,
 
       'slittiYoyo.ops.panStorage.title': 'Pan storage method (etichettatura)',
-      'slittiYoyo.ops.panStorage.desc': 'Se usi il “pan storage method”, il manuale richiede che sia sempre etichettato. Label chiare = meno errori e più controllo.',
+      'slittiYoyo.ops.panStorage.desc': 'Pan storage: etichetta sempre (data/contenuto). Label chiare = meno errori.',
       'slittiYoyo.ops.panStorage.stats': `<li>Etichetta: data + contenuto + responsabile (secondo standard store)</li><li>Non miscelare wafer diversi nello stesso contenitore</li><li>Controllo briciole: ogni refill = quick wipe</li>`,
       'slittiYoyo.ops.panStorage.details': `<div class="steps"><span>1 · Applica label sempre prima di mettere in posizione.</span><span>2 · Controlla integrità wafer (no rotti in vista).</span><span>3 · Refill = anche pulizia: togli crumbles e residui.</span></div>`,
 
       'slittiYoyo.ops.closing.title': 'Chiusura stazione Yo-Yo',
-      'slittiYoyo.ops.closing.desc': 'Ripristina una stazione pulita e pronta: riduce tempi in apertura e previene contaminazioni.',
+      'slittiYoyo.ops.closing.desc': 'Chiusura: pulisci, riordina e lascia la stazione “apertura‑ready”.',
       'slittiYoyo.ops.closing.stats': `<li>Rimuovi crumbles e residui dalla superficie e dagli strumenti</li><li>Riponi wafer e tool secondo procedura (con label se usi pan storage)</li><li>Check rapido: stazione “apertura-ready”</li>`,
       'slittiYoyo.ops.closing.details': `<div class="steps"><span>1 · Pulisci e asciuga strumenti e area.</span><span>2 · Riponi stock con label corrette.</span><span>3 · Lascia il piano libero e ordinato.</span></div>`,
 
@@ -211,32 +211,32 @@
       'slittiYoyo.footer.stats.origin': 'Origine',
 
       'caffe.cards.espressoSingle.title': 'Espresso Single',
-      'caffe.cards.espressoSingle.desc': 'L\'essenza del caffè. Estrazione perfetta per un gusto intenso, corpo rotondo e crema persistente.',
+      'caffe.cards.espressoSingle.desc': 'Un espresso intenso e bilanciato, con crema persistente.',
       'caffe.cards.espressoSingle.stats': `<li><strong>Dose:</strong> 1 shot in tazzina piccola</li><li><strong>Estrazione:</strong> 25-30 secondi</li><li><strong>Crema:</strong> Color nocciola, tigrata, elastica</li>`,
       'caffe.cards.espressoSingle.details': `<div class="steps"><span>1 · Pulisci e asciuga il portafiltro. Macina la dose al momento.</span><span>2 · Livella e pressa (tamping) in modo uniforme.</span><span>3 · Estrai e servi immediatamente (la crema svanisce in fretta).</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">🥡 Take Away (TW)</strong><img src="assets/products/espresso TW.png" alt="Espresso TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;"><p style="font-size: 0.9em;">Usa cup 4oz. Chiudi sempre con coperchio.</p></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Troubleshooting:</strong> Troppo veloce (&lt;20s)? Macinatura troppo grossa. Troppo lento (&gt;35s)? Macinatura troppo fine.</div>`,
 
       'caffe.cards.espressoDouble.title': 'Espresso Double',
-      'caffe.cards.espressoDouble.desc': 'Doppia dose di energia. Due shot estratti nello stesso tempo per un gusto più ricco.',
+      'caffe.cards.espressoDouble.desc': 'Due shot per un profilo più ricco e una carica extra.',
       'caffe.cards.espressoDouble.stats': `<li><strong>Dose:</strong> 2 shot in tazzina grande o bicchierino</li><li><strong>Estrazione:</strong> 25-30 secondi (flusso costante)</li><li><strong>Crema:</strong> Spessa e persistente</li>`,
       'caffe.cards.espressoDouble.details': `<div class="steps"><span>1 · Usa il filtro doppio. Macina dose doppia.</span><span>2 · Tamping deciso e uniforme.</span><span>3 · Estrai 2 shot in 25-30s.</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">🥡 Take Away (TW)</strong><img src="assets/products/espresso double TW.png" alt="Espresso Double TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;"><p style="font-size: 0.9em;">Usa cup 4oz o 8oz a richiesta. Coperchio obbligatorio.</p></div>`,
 
       'caffe.cards.espressoMacchiato.title': 'Espresso Macchiato',
-      'caffe.cards.espressoMacchiato.desc': 'Espresso "macchiato" con una piccola quantità di schiuma di latte calda.',
+      'caffe.cards.espressoMacchiato.desc': 'Espresso con una macchia di microfoam caldo.',
       'caffe.cards.espressoMacchiato.stats': `<li><strong>Base:</strong> 1 shot espresso</li><li><strong>Top:</strong> 1-2 cucchiaini di schiuma di latte</li><li><strong>Servizio:</strong> Tazzina espresso</li>`,
       'caffe.cards.espressoMacchiato.details': `<div class="steps"><span>1 · Prepara un espresso singolo.</span><span>2 · Monta una piccola quantità di latte (microfoam).</span><span>3 · Adagia delicatamente la schiuma al centro della crema ("macchia").</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">🥡 Take Away (TW)</strong><p style="font-size: 0.9em;">Disponibile in cup 4 oz. Chiudi sempre con coperchio.</p></div>`,
 
       'caffe.cards.doubleMacchiato.title': 'Double Macchiato',
-      'caffe.cards.doubleMacchiato.desc': 'Doppio espresso con una macchia di latte schiumato. Più intenso, stesso tocco di latte.',
+      'caffe.cards.doubleMacchiato.desc': 'Doppio espresso con microfoam: più corpo, stesso tocco di latte.',
       'caffe.cards.doubleMacchiato.stats': `<li><strong>Base:</strong> 2 shot espresso</li><li><strong>Top:</strong> Schiuma di latte (microfoam)</li><li><strong>Servizio:</strong> Tazza grande o bicchierino</li>`,
       'caffe.cards.doubleMacchiato.details': `<div class="steps"><span>1 · Prepara un doppio espresso.</span><span>2 · Aggiungi la schiuma di latte al centro.</span><span>3 · Servi immediatamente.</span></div>`,
 
       'caffe.cards.americano.title': 'Americano',
-      'caffe.cards.americano.desc': 'Acqua calda + espresso estratto direttamente in tazza. Disponibile in versione Take Away.',
+      'caffe.cards.americano.desc': 'Espresso allungato con acqua calda, disponibile anche take away.',
       'caffe.cards.americano.stats': `<li>Ricetta single: 8 oz acqua calda</li><li>Ricetta double: 12 oz acqua calda</li><li>Spazio di sicurezza: lascia 2 cm dalla sommità</li>`,
       'caffe.cards.americano.details': `<div class="steps"><span>1 · Riempi la tazza con acqua calda lasciando 2 cm.</span><span>2 · Estrai espresso direttamente in tazza o in beaker separato.</span><span>3 · Servi con piattino e spoon; integra latte a parte su richiesta.</span></div>`,
 
       'caffe.cards.cappuccino.title': 'Cappuccino',
-      'caffe.cards.cappuccino.desc': 'Espresso, latte caldo e schiuma fine. Texture vellutata senza bolle grandi.',
+      'caffe.cards.cappuccino.desc': 'Espresso con latte montato setoso e schiuma fine, senza bolle grandi.',
       'caffe.cards.cappuccino.stats': `<li>Formato: 8 oz (regular) / 12 oz (large)</li><li>Foam: circa 1/3 del volume</li><li>Temperatura: 65°C (sweet spot)</li>`,
       'caffe.cards.cappuccino.details': `<div class="steps"><span>1 · Espresso in tazza.</span><span>2 · Stretch 3-5s (aria), poi rolling (vortice) fino a microfoam.</span><span>3 · Versa controllando la schiuma; chiedi se desidera cacao.</span></div>`,
 
@@ -385,6 +385,15 @@
       'modal.tab.checklist': 'Checklist',
       'modal.tab.focus': 'Focus',
 
+      'modal.overview.auto.introHtml': `<p><strong>{{title}}</strong> — {{desc}}</p>`,
+      'modal.overview.auto.focusHtml': `<p><strong>Focus:</strong> {{tags}}</p>`,
+      'modal.overview.auto.factsSuffix': ' ({{count}} punti chiave)',
+      'modal.overview.auto.product.whatHtml': `<p><strong>Cosa troverai qui:</strong> contesto di prodotto, note di servizio e spunti di storytelling per proporre il pairing giusto in modo naturale{{facts}}.</p>`,
+      'modal.overview.auto.product.whyHtml': `<p><strong>Perché conta:</strong> una panoramica chiara accelera la vendita nei momenti di punta, aumenta la coerenza del team e rafforza la percezione premium.</p>`,
+      'modal.overview.auto.ops.whatHtml': `<p><strong>Cosa troverai qui:</strong> standard operativi e punti di controllo per mantenere banco pulito, tempi rapidi e qualità costante durante il servizio{{facts}}.</p>`,
+      'modal.overview.auto.ops.whyHtml': `<p><strong>Perché conta:</strong> una routine condivisa riduce errori, sprechi e rilavorazioni — e rende l’esperienza cliente più fluida.</p>`,
+      'modal.overview.auto.howHtml': `<p><strong>Come usarla:</strong> leggila prima del turno e usala come riferimento rapido quando imposti la postazione o spieghi l’offerta al cliente.</p>`,
+
       'modal.label.details': 'Dettagli',
       'modal.section.moreDetails': 'Altri dettagli',
 
@@ -403,23 +412,23 @@
       'gelatoLab.ops.title': 'Setup & Conservazione',
       'gelatoLab.ops.category': 'Apertura · Setting · Storage · Scampoli · Chiusura',
 
-      'gelatoLab.cards.cups.desc': 'Coppette in tre misure: Piccolo (1 gusto, 100 g), Medio (1-2 gusti, 140 g), Grande (1-3 gusti, 180 g). La chiave è dosare correttamente il gelato e compattarlo bene per eliminare bolle d\'aria e dare una presentazione uniforme.',
+      'gelatoLab.cards.cups.desc': 'Coppette small/medium/large con porzioni standard. Dosa e compatta bene per una finitura uniforme.',
       'gelatoLab.cards.cups.title': 'Coppette',
       'gelatoLab.cards.cups.stats': `<li>Pesatura: Piccolo 100-120g, Medio 160-200g, Grande 200-240g (controlla sempre)</li><li>Tecnica scoop: lineare + ball per look professionale</li><li>Compattamento: spingi il gelato sul lato della coppetta eliminando aria</li><li>Ammorbidimento spatola: scaldala passandola sul gelato per facilitare il prelievo</li><li>Completamento: offri sempre wafer e panna (upselling)</li><li>Temperatura ideale gelato: -14/-15°C (se più caldo è difficile da dosare)</li>`,
       'gelatoLab.cards.cups.details': `<div class="steps"><span>1 · Scalda spatola passando sul gusto per ammorbidirlo.</span><span>2 · Spingi gelato sul lato della coppetta eliminando aria.</span><span>3 · Offri wafer/panna e sorridi.</span></div><div class="tips">Bambini possono scegliere due gusti anche sul piccolo.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Opzione 1:</strong> "Vuoi passare al medio? Aggiungi un altro gusto e panna"</span><span><strong>Opzione 2:</strong> "Ti aggiungo panna montata e wafer croccante?"</span><span><strong>Opzione 3:</strong> "Con salsa al pistacchio diventa ancora più goloso"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Pesa sempre le coppette per rispettare range grammi. Usa tecnica "scoop lineare + ball" per look professionale. Temperatura gelato ideale: -14/-15°C.</div>`,
 
-      'gelatoLab.cards.cones.desc': 'Coni in tre varianti: Classico (1 gusto), Cioccolato o Gluten Free (1-2 gusti). Ogni cono va avvolto con tissue per grip e presentazione. Mantieni l\'area dei coni sempre pulita per evitare contaminazioni di sapori.',
+      'gelatoLab.cards.cones.desc': 'Cono classico, cioccolato o gluten free. Avvolgi con tissue e mantieni la zona coni sempre pulita.',
       'gelatoLab.cards.cones.title': 'Coni classici',
       'gelatoLab.cards.cones.stats': `<li>Avvolgimento: tissue sempre, per grip e look</li><li>Dosaggio: 1 ball per cono piccolo, 1-2 ball per coni speciali (choco/GF)</li><li>Posizionamento: appoggia la ball ruotando il cono per stabilità</li><li>Pulizia area: ogni 30 minuti elimina briciole (assorbono umidità)</li><li>Stock rotation: FIFO rigoroso (i coni assorbono umidità, usa quelli meno freschi prima)</li><li>Upgrade upsell: cono cioccolato (ricoperto dentro e fuori), panna montata</li>`,
       'gelatoLab.cards.cones.details': `<div class="steps"><span>1 · Avvolgi cono con tissue.</span><span>2 · Prepara ball e appoggiala ruotando.</span><span>3 · Proponi upgrade al cono choco o panna montata.</span></div><div class="tips">Mantieni l\'area dei coni pulita eliminando briciole.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Opzione 1:</strong> "Upgrade al cono cioccolato? è ricoperto dentro e fuori"</span><span><strong>Opzione 2:</strong> "Cono gluten-free disponibile (se presente)"</span><span><strong>Opzione 3:</strong> "Vuoi panna montata sopra per look Instagram?"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Pulisci area coni ogni 30 minuti per eliminare briciole. Rotazione stock: i coni assorbono umidità, usa FIFO rigoroso. Avvolgi sempre con tissue per grip.</div>`,
 
       'gelatoLab.cards.boxes.title': 'Gelato Boxes',
-      'gelatoLab.cards.boxes.desc': 'Gelato da asporto in box termici da 500/750/1000 ml. Ogni box mantiene il gelato al giusto stato per circa 1 ora se messo nella borsa termica. Comunica sempre al cliente di mettere subito in freezer a casa: il gelato cambia di consistenza quando si scongela.',
+      'gelatoLab.cards.boxes.desc': 'Box take-away 500/750/1000 ml: autonomia ~1 ora in borsa termica. Ricorda sempre: freezer appena possibile.',
       'gelatoLab.cards.boxes.stats': `<li>Piccolo: 500 ml (1-3 gusti)</li><li>Medio: 750 ml (1-4 gusti)</li><li>Grande: 1000 ml (1-5 gusti)</li><li>Ordine inserimento: inizia dai gusti più morbidi (sorbet prima) per evitare contaminazione sapori</li><li>Compattamento: elimina bene le bolle d\'aria, pulisci bordi con spatola prima di sigillare</li><li>Sigillatura: film + nastro Badiani, consegna in borsa termica</li><li>Autonomia: 1 ora in borsa termica; comunica sempre il freezer a casa per mantenere qualità</li>`,
       'gelatoLab.cards.boxes.details': `<div class="steps"><span>1 · Inserisci gusti iniziando dai più morbidi (sorbet prima per evitare contaminazioni).</span><span>2 · Compatta eliminando bolle d\'aria e pulisci bordi.</span><span>3 · Sigilla con film + nastro Badiani, consegna in borsa.</span></div><div class="tips">Upsell box più grande + pack 10 waffle o coni.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Opzione 1:</strong> "Il box grande da 1L ti fa provare più gusti diversi"</span><span><strong>Opzione 2:</strong> "Aggiungiamo pack di coni per servire a casa?"</span><span><strong>Opzione 3:</strong> "Con borsa termica mantieni tutto perfetto fino a 2 ore"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Compatta bene eliminando aria per evitare cristalli. Pulisci bordi prima di sigillare. Autonomia: 1h in borsa termica, comunica sempre al cliente di mettere subito in freezer.</div>`,
 
       'gelatoLab.cards.coppa.title': 'Coppa Badiani',
-      'gelatoLab.cards.coppa.desc': 'Tre boules di gelato in coppa di vetro, completate con panna montata, una salsa a scelta, mini cono e wafer Badiani. È la proposta “wow”: va costruita con ordine e servita subito per mantenere texture e pulizia del topping.',
+      'gelatoLab.cards.coppa.desc': 'Tre boules in coppa di vetro con panna, sauce, mini cono e wafer. Monta pulito e servi subito.',
       'gelatoLab.cards.coppa.stats': `<li>Base: coppa in vetro</li><li>Porzione: 3 scoops con scooper tondo (anche 3 gusti diversi)</li><li>Top: panna montata + swirl di sauce scelta</li><li>Finitura: mini cono + wafer Badiani</li><li>Servizio: cucchiaio in acciaio, consegna immediata</li>`,
       'gelatoLab.cards.coppa.details': `<div class="steps"><span>1 · Prendi una coppa di vetro e prepara i gusti con lo scooper tondo: 3 boules regolari (anche di gusti diversi).</span><span>2 · Completa con panna montata e uno swirl della sauce scelta (senza sporcare i bordi).</span><span>3 · Aggiungi mini cono + wafer Badiani e servi con cucchiaio in acciaio.</span></div><div class="tips">Proponi pairing con Slitti dragée per un dessert completo.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Opzione 1:</strong> "Vuoi aggiungere granella di nocciola tostata e dragée Slitti?"</span><span><strong>Opzione 2:</strong> "Con doppia salsa pistacchio e cioccolato diventa signature"</span><span><strong>Opzione 3:</strong> "Abbinamento perfetto: Coppa + espresso affogato style"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Usa bicchieri in vetro freddi per mantenere temperatura. Monta boules con scooper tondo per estetica uniforme. Servi immediatamente dopo guarnizione per evitare scioglimento panna.</div>`,
 
@@ -497,26 +506,26 @@
       'festive.cards.churros.title': 'Churros',
       'festive.cards.churros.tag1': 'Friggitrice 190 °C',
       'festive.cards.churros.tag2': '8 pezzi/porzione',
-      'festive.cards.churros.desc': 'Bastoncini di pastella fritta, croccanti fuori e morbidi dentro. Serviti caldi (8 pezzi) con zucchero e cannella.',
+      'festive.cards.churros.desc': 'Churros fritti: croccanti fuori e morbidi dentro. Servi 8 pezzi caldi con zucchero e cannella.',
       'festive.cards.churros.details': `<div class="steps"><span>1 - Prepara il mix zucchero/cannella in una teglia larga.</span><span>2 - Preleva 8 churros dal freezer, friggi 8-9 min finché dorati.</span><span>3 - Scola bene l'olio e passa i churros nel mix per una copertura uniforme.</span></div><div class="tips">Controlla costantemente i tempi per evitare centro crudo; sostituisci l'olio quando scurisce.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Batch doppio:</strong> "Vuoi 16 churros per condividere?"</span><span><strong>Combo salse:</strong> "Prova il mix pistacchio + cioccolato fondente"</span><span><strong>Bundle:</strong> "Churros + cioccolata calda = combo perfetta"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Temperatura olio critica: 190 °C esatti. Più bassa = unto, più alta = bruciato esterno/crudo interno. Sostituisci olio ogni 40 porzioni o quando scurisce.</div>`,
 
       'festive.cards.panettoneClassic.title': 'Panettone Classico',
       'festive.cards.panettoneClassic.tag1': 'Servizio a fetta',
       'festive.cards.panettoneClassic.tag2': '8 porzioni',
-      'festive.cards.panettoneClassic.desc': 'Il re delle feste. Ricetta tradizionale con uvetta e canditi, lievitazione naturale. Servito a fetta (1/8) su piatto dessert con posate.',
+      'festive.cards.panettoneClassic.desc': 'Panettone tradizionale con uvetta e canditi, lievitazione naturale. Servi 1/8 su piatto dessert con posate.',
       'festive.cards.panettoneClassic.stats': `<li>Taglio: verticale seguendo le 8 linee guida, coltello seghettato lungo</li><li>Porzioni: 8 spicchi uniformi per coerenza</li><li>Presentazione: piatto dessert + cutlery sempre</li><li>Campione visivo: tieni una fetta visibile al banco per stimolare ordini (storytelling visivo)</li><li>Abbinamenti suggeriti: gelato Buontalenti, salsa pistacchio, cioccolata calda</li>`,
       'festive.cards.panettoneClassic.details': `<div class="steps"><span>1 - Taglia verticale seguendo le linee guida.</span><span>2 - Disponi sul piatto con cutlery.</span><span>3 - Offri subito upsell: scoop Buontalenti + sauce o hot chocolate.</span></div><div class="tips">Campiona una delle 8 fette per storytelling e conversione vendite.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Opzione 1:</strong> "Fetta + scoop Buontalenti è il nostro abbinamento signature"</span><span><strong>Opzione 2:</strong> "Aggiungi salsa pistacchio per contrasto perfetto?"</span><span><strong>Opzione 3:</strong> "Con cioccolata calda diventa un momento di pura indulgenza"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Usa coltello seghettato lungo per taglio netto senza sbriciolare. 8 spicchi uniformi seguendo guida. Esponi fetta campione per stimolare ordini visivi.</div>`,
 
       'festive.cards.panettoneDark.title': 'Panettone Dark Chocolate',
       'festive.cards.panettoneDark.tag1': 'Opzione tiepida',
       'festive.cards.panettoneDark.tag2': 'Piastra crepe',
-      'festive.cards.panettoneDark.desc': 'Variante golosa con gocce di cioccolato fondente nell\'impasto. Ottimo servito tiepido (10\'\' su piastra) per sciogliere il cioccolato.',
+      'festive.cards.panettoneDark.desc': 'Panettone con gocce di fondente. Consiglia versione tiepida: 10" per lato su piastra crepe.',
       'festive.cards.panettoneDark.stats': `<li>Piastra crepe: pulita e asciutta (no olio)</li><li>Timing: 10 secondi per lato esatti (non di più o perde croccantezza)</li><li>Servizio immediato: servi subito dopo cottura</li><li>Abbinamenti: Dark Chocolate + salsa pistacchio (contrasto gourmet)</li><li>Upsell: gelato freddo + panettone caldo = contrasto di temperatura sensazionale</li>`,
       'festive.cards.panettoneDark.details': `<div class="steps"><span>1 - Posiziona la fetta sulla piastra crepe.</span><span>2 - Tosta 10 secondi per lato (no olio).</span><span>3 - Servi con sauce e Buontalenti se richiesto.</span></div><div class="tips">Chiedi sempre se lo vogliono tiepido: aumenta conversione e qualità percepita.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Opzione 1:</strong> "Provalo tiepido: il cioccolato si scioglie"</span><span><strong>Opzione 2:</strong> "Con scoop Buontalenti sopra fai il contrasto caldo/freddo"</span><span><strong>Opzione 3:</strong> "Aggiungiamo salsa pistacchio per un twist gourmet?"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> 10" per lato è lo standard: oltre si secca e perde fragranza. Piastra sempre pulita e asciutta.</div>`,
 
       'festive.cards.pandoroClassic.title': 'Pandoro Classico',
       'festive.cards.pandoroClassic.tag1': 'Zucchero a velo',
-      'festive.cards.pandoroClassic.desc': 'Soffice, burroso, a forma di stella a 8 punte. Servito con spolverata di zucchero a velo al momento.',
+      'festive.cards.pandoroClassic.desc': 'Pandoro soffice e burroso, a stella. Spolvera lo zucchero a velo al momento.',
       'festive.cards.pandoroClassic.stats': `<li><strong>Taglio:</strong> seguendo la guida a stella per 8 spicchi uniformi (effetto presentazione professionale)</li><li><strong>Zucchero a velo:</strong> SEMPRE al momento del servizio, non prima (effetto neve fresca visivamente)</li><li><strong>Piatto dessert + cutlery:</strong> sempre</li><li><strong>Temperatura:</strong> ambiente per massimo profumo</li><li><strong>Storytelling:</strong> "Lievitazione 36 ore con ingredienti premium" (giustifica valore)</li><li><strong>Abbinamenti suggeriti:</strong> gelato Buontalenti, salsa mascarpone o pistacchio</li>`,
       'festive.cards.pandoroClassic.details': `<div class="steps"><span>1 - Taglia seguendo la guida (A) per ottenere spicchi regolari.</span><span>2 - Disponi su piatto con cutlery.</span><span>3 - Spolvera zucchero a velo e proponi scoop Buontalenti + sauce pistacchio.</span></div><div class="tips">Zucchero a velo solo all\'ultimo secondo: effetto “neve fresca”.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Opzione 1:</strong> "Con scoop Buontalenti diventa il dessert signature"</span><span><strong>Opzione 2:</strong> "Aggiungiamo salsa mascarpone per effetto tiramisù?"</span><span><strong>Opzione 3:</strong> "Salsa pistacchio per un twist premium"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Taglio a stella: spicchi uniformi = look professionale. Mantieni il pandoro coperto tra un taglio e l\'altro.</div>`,
 
@@ -524,7 +533,7 @@
       'festive.cards.mulledWine.tag2': 'Spezie',
       'festive.cards.mulledWine.tag3': 'Arancia',
       'festive.cards.mulledWine.title': 'Mulled Wine (Vin Brulé)',
-      'festive.cards.mulledWine.desc': 'Bevanda calda speziata, servita con fetta d\'arancia. È la proposta “comfort” della stagione: racconta profumo e rituale, poi guida l\'upsell (mini panettone / churros / shot opzionali secondo store).',
+      'festive.cards.mulledWine.desc': 'Vin Brulé caldo e speziato con fetta d\'arancia. Storytelling + upsell (mini panettone/churros/shot secondo store).',
       'festive.cards.mulledWine.stats': `<li>Servizio: cup + mestolo dedicato</li><li>Garnish: fetta d\'arancia (sempre)</li><li>Timing: servi caldo, non bollente</li><li>Script: "È il nostro Vin Brulé speziato, perfetto da abbinare a un mini panettone"</li>`,
       'festive.cards.mulledWine.details': `<div class="steps"><span>1 - Presenta: profumo, spezie, fetta d\'arancia (rituale).</span><span>2 - Servi con mestolo dedicato e garnish.</span><span>3 - Proponi combo: mini panettone / churros / dolce caldo.</span></div><div class="tips">Parole chiave: “caldo, speziato, arancia, comfort”.</div>`,
 
@@ -532,7 +541,7 @@
       'festive.cards.warmServicePandoro.tag2': '10" per lato',
       'festive.cards.warmServicePandoro.tag3': 'Senza olio',
       'festive.cards.warmServicePandoro.title': 'Servizio Caldo (Pandoro)',
-      'festive.cards.warmServicePandoro.desc': 'Chiedi sempre se la fetta la vuole tiepida. Tosta 10 secondi per lato sulla piastra crepe (senza olio) e servi immediatamente.',
+      'festive.cards.warmServicePandoro.desc': 'Chiedi sempre tiepido: tosta 10" per lato su piastra crepe (senza olio) e servi subito.',
       'festive.cards.warmServicePandoro.stats': `<li>Piastra crepe: pulita e asciutta (mai olio)</li><li>Timing: 10 secondi per lato</li><li>Servizio immediato: impiatta subito per mantenere volume e calore</li>`,
       'festive.cards.warmServicePandoro.details': `<div class="steps"><span>1 · Chiedi preferenza calda/fredda.</span><span>2 · Tosta 10" + 10" (no oil).</span><span>3 · Impiatta e proponi pairing (gelato/sauce).</span></div><div class="tips">La fetta tiepida profuma e “vende” anche ai clienti vicini.</div>`,
 
@@ -590,63 +599,55 @@
       'sweetTreats.carousel.main.category': 'Dolci tentazioni',
 
       'sweetTreats.cards.crepeSauce.title': 'Crepe con Salsa',
-      'sweetTreats.cards.crepeSauce.desc': 'Crepe classica servita con una delle nostre salse signature (Pistacchio, Nocciola, Cioccolato). Base perfetta per ogni aggiunta.',
+      'sweetTreats.cards.crepeSauce.desc': 'Crepe con salsa signature (pistacchio, nocciola o cioccolato): base perfetta per extra.',
       'sweetTreats.cards.crepeSauce.stats': `<li><strong>Shelf life mix:</strong> 3 giorni (frigo)</li><li><strong>Riposo:</strong> almeno 2 ore (frigo)</li><li><strong>Cottura:</strong> 20s per lato</li>`,
       'sweetTreats.cards.crepeSauce.details': `<div class="steps"><span>1 · Stendi mix, gira quando dorata.</span><span>2 · Spalma la salsa su metà, chiudi a mezzaluna poi a ventaglio.</span><span>3 · Impiatta, zucchero a velo e drizzle di salsa sopra.</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">✨ Pro tip:</strong> La piastra deve essere ben calda ma non fumante. Il primo giro è spesso di test.</div>`,
 
       'sweetTreats.cards.buontalentiCrepe.title': 'Signature Buontalenti Crepe',
-      'sweetTreats.cards.buontalentiCrepe.desc': 'Il nostro best seller: Crepe con salsa a scelta e uno scoop di Buontalenti on top.',
+      'sweetTreats.cards.buontalentiCrepe.desc': 'Crepe con salsa a scelta + 1 scoop di Buontalenti on top.',
       'sweetTreats.cards.buontalentiCrepe.stats': `<li><strong>GELATO:</strong> 1 scoop Buontalenti (70g)</li><li><strong>Salsa:</strong> 30g interna + decorazione</li><li><strong>Servizio:</strong> Piatto dessert con posate</li>`,
       'sweetTreats.cards.buontalentiCrepe.details': `<div class="steps"><span>1 · Prepara la crepe con salsa come da standard.</span><span>2 · Piega a ventaglio e spolvera con zucchero a velo.</span><span>3 · Adagia lo scoop di Buontalenti sopra e finisci con salsa.</span></div><div class="tips">Aggiungi il GELATO solo all'ultimo secondo per evitare che si sciolga sulla crepe calda.</div>`,
 
       'sweetTreats.cards.waffles.title': 'Waffles',
-      'sweetTreats.cards.waffles.desc': 'Waffle dorato e croccante fuori, soffice dentro. Servito con salse, frutta o GELATO.',
+      'sweetTreats.cards.waffles.desc': 'Waffle dorato: servi con salse, frutta o gelato.',
       'sweetTreats.cards.waffles.stats': `<li><strong>Cottura:</strong> 2.5 min per lato (5 min tot)</li><li><strong>Riposo:</strong> 45s per croccantezza</li><li><strong>Batter:</strong> 1 scoop (177ml)</li>`,
       'sweetTreats.cards.waffles.details': `<div class="steps"><span>1 · Versa il mix nella piastra calda e chiudi.</span><span>2 · Cuoci 2.5 min, gira e cuoci altri 2.5 min.</span><span>3 · Lascia riposare su griglia 45s prima di decorare.</span></div><div class="tips">Il riposo è fondamentale: se servito subito risulta molle.</div>`,
 
       'sweetTreats.cards.pancake.title': 'Pancake Stack',
-      'sweetTreats.cards.pancake.desc': 'Torre di 3 pancake soffici. Serviti con sciroppo d\'acero, frutta fresca o salse Badiani.',
+      'sweetTreats.cards.pancake.desc': 'Stack da 3 pancake con sciroppo d\'acero, frutta o salse Badiani.',
       'sweetTreats.cards.pancake.stats': `<li><strong>Porzione:</strong> 3 pezzi</li><li><strong>Cottura:</strong> Fino a comparsa bolle</li><li><strong>Topping:</strong> Generoso</li>`,
       'sweetTreats.cards.pancake.details': `<div class="steps"><span>1 · Versa 3 dischi di impasto sulla piastra.</span><span>2 · Gira quando compaiono le bolle in superficie.</span><span>3 · Impila e decora abbondantemente.</span></div>`,
 
       'sweetTreats.cards.italianaPlain.title': 'Crepe Italiana (Plain)',
-      'sweetTreats.cards.italianaPlain.desc': 'Mozzarella, rucola e pomodorini su base classica. Fresca e leggera.',
+      'sweetTreats.cards.italianaPlain.desc': 'Crepe salata con mozzarella, rucola e pomodorini.',
       'sweetTreats.cards.italianaPlain.stats': `<li><strong>Base:</strong> Classica</li><li><strong>Ripieno:</strong> Mozzarella, rucola, pomodorini</li><li><strong>Condimento:</strong> Olio EVO, sale, origano</li>`,
       'sweetTreats.cards.italianaPlain.details': `<div class="steps"><span>1 · Cuoci la crepe e gira.</span><span>2 · Aggiungi mozzarella e fai sciogliere leggermente.</span><span>3 · Aggiungi rucola e pomodorini conditi, chiudi a portafoglio.</span></div>`,
 
       'sweetTreats.cards.italianaBeetroot.title': 'Crepe Italiana (Beetroot)',
-      'sweetTreats.cards.italianaBeetroot.desc': 'La variante colorata: impasto alla barbabietola per un look unico e un tocco dolce-terroso.',
+      'sweetTreats.cards.italianaBeetroot.desc': 'Base alla barbabietola: look rosso intenso e nota dolce-terrosa.',
       'sweetTreats.cards.italianaBeetroot.stats': `<li><strong>Base:</strong> Beetroot (Barbabietola)</li><li><strong>Ripieno:</strong> Mozzarella, rucola, pomodorini</li><li><strong>Visual:</strong> Colore rosso/viola intenso</li>`,
       'sweetTreats.cards.italianaBeetroot.details': `<div class="steps"><span>1 · Usa il mix beetroot (3g polvere per 250g mix).</span><span>2 · Procedi come per la classica Italiana.</span><span>3 · Il contrasto di colori è il punto di forza: lascia intravedere il ripieno.</span></div>`,
 
       'sweetTreats.cards.prosciuttoPlain.title': 'Crepe Prosciutto (Plain)',
-      'sweetTreats.cards.prosciuttoPlain.desc': 'Classica con Prosciutto Crudo, mozzarella e rucola.',
+      'sweetTreats.cards.prosciuttoPlain.desc': 'Crepe salata con prosciutto crudo, mozzarella e rucola.',
       'sweetTreats.cards.prosciuttoPlain.stats': `<li><strong>Base:</strong> Classica</li><li><strong>Ripieno:</strong> Crudo, mozzarella, rucola</li><li><strong>Servizio:</strong> Calda e filante</li>`,
       'sweetTreats.cards.prosciuttoPlain.details': `<div class="steps"><span>1 · Sciogli la mozzarella sulla crepe in cottura.</span><span>2 · Aggiungi il prosciutto a fine cottura per non cuocerlo troppo.</span><span>3 · Completa con rucola e chiudi.</span></div>`,
 
       'sweetTreats.cards.prosciuttoBeetroot.title': 'Crepe Prosciutto (Beetroot)',
-      'sweetTreats.cards.prosciuttoBeetroot.desc': 'Prosciutto Crudo su base alla barbabietola. Un twist moderno su un classico.',
+      'sweetTreats.cards.prosciuttoBeetroot.desc': 'Prosciutto crudo su base beetroot: twist moderno su un classico.',
       'sweetTreats.cards.prosciuttoBeetroot.stats': `<li><strong>Base:</strong> Beetroot</li><li><strong>Ripieno:</strong> Crudo, mozzarella, rucola</li><li><strong>Gusto:</strong> Sapido + dolce (impasto)</li>`,
       'sweetTreats.cards.prosciuttoBeetroot.details': `<div class="steps"><span>1 · Prepara la base beetroot.</span><span>2 · Farcisci generosamente.</span><span>3 · Servi tagliata a metà per mostrare gli strati.</span></div>`,
 
       'sweetTreats.cards.gelatoBurger.title': 'Gelato Burger',
-      'sweetTreats.cards.gelatoBurger.desc': 'Una scoop di gelato in una brioche morbida, chiusa a caldo in pochi secondi: effetto “wow” e servizio veloce.',
+      'sweetTreats.cards.gelatoBurger.desc': 'Brioche calda con 1 scoop di GELATO: chiusura rapida ed effetto “wow”.',
       'sweetTreats.cards.gelatoBurger.stats': `<li>Pane: Brioche bun leggermente scaldato</li><li>Gelato: 1 scoop (circa 70 g) a scelta</li><li>Sauce: 1 sola scelta (standard)</li>`,
       'sweetTreats.cards.gelatoBurger.details': `<div class="steps"><span>1 · Scalda leggermente la brioche (non tostare troppo).</span><span>2 · Inserisci una scoop di gelato (circa 70 g) e rifinisci con una sola salsa a scelta.</span><span>3 · Chiudi, servi subito e consiglia di mangiare come un panino.</span></div>`,
-
-      'sweetTreats.cards.prosciuttoBeetroot.desc': 'Prosciutto Crudo su base alla barbabietola. Un twist moderno su un classico.',
-      'sweetTreats.cards.prosciuttoBeetroot.stats': `<li><strong>Base:</strong> Beetroot</li><li><strong>Ripieno:</strong> Crudo, mozzarella, rucola</li><li><strong>Gusto:</strong> Sapido + dolce (impasto)</li>`,
-      'sweetTreats.cards.prosciuttoBeetroot.details': `<div class="steps"><span>1 · Prepara la base beetroot.</span><span>2 · Farcisci generosamente.</span><span>3 · Servi tagliata a metà per mostrare gli strati.</span></div>`,
-
-      'sweetTreats.cards.gelatoBurger.desc': 'Una scoop di GELATO in una brioche morbida, chiusa a caldo in pochi secondi: effetto “wow” e servizio veloce.',
-      'sweetTreats.cards.gelatoBurger.stats': `<li><strong>Pane:</strong> Brioche bun leggermente scaldato</li><li><strong>GELATO:</strong> 1 scoop (circa 70 g) a scelta</li><li><strong>Sauce:</strong> 1 sola scelta (standard)</li>`,
-      'sweetTreats.cards.gelatoBurger.details': `<div class="steps"><span>1 · Scalda leggermente la brioche (non tostare troppo).</span><span>2 · Inserisci una scoop di GELATO (circa 70 g) e rifinisci con una sola salsa a scelta.</span><span>3 · Chiudi, servi subito e consiglia di mangiare come un panino.</span></div>`,
 
       'sweetTreats.ops.title': 'Setup & Conservazione',
       'sweetTreats.ops.category': 'Apertura · Setting · Dati tecnici · Storage · Chiusura',
 
       'sweetTreats.ops.opening.title': 'Checklist apertura stazioni',
-      'sweetTreats.ops.opening.desc': 'Prima del servizio verifica che le macchine siano pronte e che mix/ingredienti siano in ordine. La Gelato Burger Machine va accesa all\'apertura e spenta alla chiusura.',
+      'sweetTreats.ops.opening.desc': 'Checklist apertura: macchine pronte, mix/ingredienti in ordine, stock etichettato. Gelato Burger Machine ON in apertura, OFF in chiusura.',
       'sweetTreats.ops.opening.stats': `<li>Waffle machine: accendi e attendi entrambe le luci verdi (READY + POWER)</li><li>Gelato Burger Machine: ON all'apertura; in genere pronta ~10 min dopo l'accensione</li><li>Crepe mix: deve aver riposato in frigo almeno 2 ore prima dell'uso</li>`,
       'sweetTreats.ops.opening.details': `<div class="steps"><span>1 · Accendi macchine e verifica che siano in temperatura/pronte.</span><span>2 · Controlla mix e scorte (etichette, FIFO, date).</span><span>3 · Prepara blue roll e bottiglie sauce per un banco pulito e veloce.</span></div><div class="tips">Obiettivo: zero attese al primo ordine e stazioni già “service ready”.</div>`,
 
@@ -686,27 +687,27 @@
       'pastries.carousel.main.category': 'Pasticceria da banco',
 
       'pastries.cards.cakes.alt': 'Fetta di torta Badiani',
-      'pastries.cards.cakes.desc': 'Chocolate (3g), Carrot (2g), Walnut (3g) rispettando 14 fette per torta.',
+      'pastries.cards.cakes.desc': 'Cakes: Chocolate (3 gg), Carrot (2 gg), Walnut (3 gg). Taglio standard: 14 fette.',
       'pastries.cards.cakes.stats': `<li>Usa il cake slicer come guida</li><li>Servi su piatto con posate</li><li>Upsell scoop Buontalenti + sauce</li>`,
       'pastries.cards.cakes.details': `<div class="steps"><span>1 → Posiziona il cutter e incidi le 14 porzioni.</span><span>2 → Servi la fetta su piatto e racconta pairing con GELATO.</span><span>3 → Se upsell riuscito, aggiungi scoop con milkshake scooper e drizzle sulla fetta.</span></div><div class="tips">Ricorda al team: tazza di cioccolata calda + cake crea combo premium.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💫 Upselling</strong><span><strong>Opzione 1:</strong> "Vuoi arricchire la fetta con uno scoop di Buontalenti?"</span><span><strong>Opzione 2:</strong> "Aggiungiamo un drizzle di salsa pistacchio o caramello?"</span><span><strong>Opzione 3:</strong> "La combo perfetta? Cake + cioccolata calda"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">✨ Pro tip:</strong> Conserva le cakes coperte con film tra un taglio e l'altro per evitare secchezza. Temperature ambiente: max 2 ore fuori frigo.</div>`,
 
       'pastries.cards.brownie.alt': 'Brownie Badiani',
-      'pastries.cards.brownie.desc': 'Taglio 4x3 (12 pezzi) e servizio su piatto con cutlery.',
+      'pastries.cards.brownie.desc': 'Brownie: taglio 4×3 (12 pezzi) e servizio su piatto con posate.',
       'pastries.cards.brownie.stats': `<li>Display su tray dedicato</li><li>Upsell GELATO + sauce</li><li>Comunicare shelf life</li>`,
       'pastries.cards.brownie.details': `<div class="steps"><span>1 - Taglia 12 pezzi uguali, esponi su vassoio.</span><span>2 - All'ordine, impiatta e offri scoop Buontalenti.</span><span>3 - Servi con drizzle sul brownie e sul gelato.</span></div><div class="tips">Ricorda di usare il round scooper per mantenere porzione perfetta.</div>`,
 
       'pastries.cards.loaf.alt': 'Banana Loaf',
-      'pastries.cards.loaf.desc': 'Ogni loaf deve fornire 10 fette. Servizio e upsell identici alle cakes.',
+      'pastries.cards.loaf.desc': 'Loaf: 10 fette per filone. Servizio come le cakes (piatto + upsell).',
       'pastries.cards.loaf.stats': `<li>Taglia spessori costanti</li><li>Servi con posate</li><li>Proponi sauce preferita</li>`,
       'pastries.cards.loaf.details': `<div class="steps"><span>1 - Taglia 10 slice uguali, esponi la prima.</span><span>2 - Aggiungi scoop + sauce se il cliente accetta.</span><span>3 - Mantieni il loaf avvolto quando non in uso.</span></div><div class="tips">Comunica shelf life sul label per facilitare i controlli HACCP.</div>`,
 
       'pastries.cards.croissants.alt': 'Croissant farcito',
-      'pastries.cards.croissants.desc': 'Croissant gia\' sfogliato, da farcire con la sauce richiesta dal cliente. Apri lateralmente, riempi e completa la presentazione su piatto con forchetta e coltello. Ricordati di riscaldare leggermente i croissant del giorno prima per ravvivare la fragranza.',
+      'pastries.cards.croissants.desc': 'Croissant da farcire con sauce: apri di lato, riempi e servi su piatto con posate. Se del giorno prima, scalda 8–10".',
       'pastries.cards.croissants.stats': `<li>Shelf life: 2 giorni dal defrost (controlla data)</li><li>Incisione: usa coltello seghettato, apri il lato in orizzontale</li><li>Riempimento: sac a poche per uniformita' e precisione</li><li>Presentazione: sauce inside + drizzle sopra, piatto pulito, posate sempre</li><li>Riscaldamento (se necessario): 8-10 secondi solo; mai oltre 15s (la farcitura si scioglie)</li>`,
       'pastries.cards.croissants.details': `<div class="steps"><span>1 - Incidi lato con coltello seghettato.</span><span>2 - Riempie interno e topping esterno con la stessa sauce.</span><span>3 - Impiatta, aggiungi posate e servi.</span></div><div class="tips">Comunica shelf life e rotazione: 2 giorni dal defrost.</div>`,
 
       'pastries.cards.scone.alt': 'Scone ripieno di GELATO',
-      'pastries.cards.scone.desc': 'Scalda 15 s nel gelato burger machine, farcisci con scoop Buontalenti e sauce.',
+      'pastries.cards.scone.desc': 'Scone: scalda 15" nella Gelato Burger Machine, farcisci con Buontalenti + sauce.',
       'pastries.cards.scone.stats': `<li>Taglia orizzontalmente</li><li>Usa milkshake scooper</li><li>Finitura pistacchio o cioccolato</li>`,
       'pastries.cards.scone.details': `<div class="steps"><span>1 - Riscalda 15 s.</span><span>2 - Taglia, inserisci scoop e richiudi.</span><span>3 - Sauce top, impiatta con posate.</span></div><div class="tips">Ricorda ai clienti la doppia consistenza caldo/freddo per valorizzare l'upsell.</div>`,
 
@@ -715,7 +716,7 @@
 
       'pastries.ops.display.title': 'Vetrina pastry (apertura)',
       'pastries.ops.display.alt': 'Vetrina pastry Badiani',
-      'pastries.ops.display.desc': 'Obiettivo apertura: vetrina piena, ordinata e leggibile. Label sempre accanto al tray corretto; le cakes sui cake stand con una fetta rimossa per mostrare l\'interno.',
+      'pastries.ops.display.desc': 'Apertura vetrina: piena, ordinata, leggibile. Label sempre sul tray corretto; cakes su cake stand con 1 fetta rimossa (visual interno).',
       'pastries.ops.display.stats': `<li>CAKES: cake stands + rimuovi 1 slice (visual interno)</li><li>CROISSANTS: su tray dedicati (file pulite)</li><li>BROWNIES/PUDDING/TARTS/SCONES: su tray, allineati</li><li>LOAF: taglia e mostra la prima fetta sul tray</li>`,
       'pastries.ops.display.details': `<div class="steps"><span>1 · Ripristina vetrina “full look” (senza buchi visivi).</span><span>2 · Metti le label accanto al tray giusto (mai generiche).</span><span>3 · Verifica FIFO e shelf life prima del primo servizio.</span></div><div class="tips">Coerenza visiva = vendite. Il banco “pieno” invita all'acquisto.</div>`,
 
@@ -1101,14 +1102,14 @@
 
       'operations.cards.openingRoutine.tag1': 'Morning prep',
       'operations.cards.openingRoutine.title': 'Opening routine',
-      'operations.cards.openingRoutine.desc': 'Temperature checks, glass cleaning, pan re-ordering (FIFO) and label verification. The display is your first business card: it must look spotless and tidy.',
+      'operations.cards.openingRoutine.desc': 'Opening checks: temperatures, clean glass, tidy pans (FIFO) and labels. Keep the display spotless.',
       'operations.cards.openingRoutine.stats': `<li>Temperature: -14/-15°C (record on HACCP log)</li><li>Cleaning: inside/outside glass with the appropriate product</li><li>Pans: reorder by colour/flavour; clean pan rims</li><li>Labels: all present, straight and clean</li><li>Tools: clean spatulas in running water (if continuous-flow system) or frequent swaps</li>`,
       'operations.cards.openingRoutine.details': `<div class="steps"><span>1 · Record temperatures on the HACCP log.</span><span>2 · Clean glass and pan rims.</span><span>3 · Check labels and make sure tools are ready.</span></div><div class="tips">If a pan is almost empty, replace it immediately (don\'t scrape the bottom in front of the guest).</div>`,
 
       'operations.cards.dailySetup.tag1': 'Display',
       'operations.cards.dailySetup.tag3': 'Visual',
       'operations.cards.dailySetup.title': 'Daily set-up',
-      'operations.cards.dailySetup.desc': 'Cake stand with one slice missing, croissants on dedicated trays, brownies/puddings aligned.',
+      'operations.cards.dailySetup.desc': 'Set a full look: cakes, croissants and brownies/puddings aligned and labelled.',
       'operations.cards.dailySetup.stats': `<li>The display should always look full</li><li>Label next to the product</li><li>First loaf slice on show</li>`,
       'operations.cards.dailySetup.details': `<div class="steps"><span>1 - Place cakes on cake stands and remove one slice to show the inside.</span><span>2 - Arrange croissants by the flavours available, keeping rows neat.</span><span>3 - Update labels, check shelf life and refill when needed.</span></div><div class="tips">Take a photo of the ideal set-up and share it in the store group to keep consistency.</div>`,
 
@@ -1116,7 +1117,7 @@
       'operations.cards.warmPandoro.tag2': '10" per side',
       'operations.cards.warmPandoro.tag3': 'Service',
       'operations.cards.warmPandoro.title': 'Warm service (Pandoro)',
-      'operations.cards.warmPandoro.desc': 'Warmed pandoro: same technique as panettone. 10 seconds per side on the crepe plate (no oil). Light toasting refreshes the structure. Serve immediately with the suggested pairing (warm mascarpone cream, GELATO, sauce).',
+      'operations.cards.warmPandoro.desc': 'Toast 10" per side on the crepe plate (no oil) and serve immediately. Suggest warm mascarpone cream, GELATO and sauce.',
       'operations.cards.warmPandoro.stats': `<li><strong>Ask the guest:</strong> "Would you like it warm?"</li><li><strong>Crepe plate:</strong> clean and dry, no oil</li><li><strong>Timing:</strong> 10 seconds per side (no longer)</li><li><strong>Immediate service:</strong> plate straight away to keep volume and warmth</li><li><strong>Sampling:</strong> keep small triangles for peak hours (storytelling)</li><li><strong>Warm pairings:</strong> warm mascarpone cream, cold GELATO (contrast), chocolate sauce</li>`,
       'operations.cards.warmPandoro.details': `<div class="steps"><span>1 - Ask the guest\'s preference.</span><span>2 - Toast and plate quickly to avoid losing volume.</span><span>3 - Serve with the recommended pairing.</span></div><div class="tips">Sample small triangles during busy hours to tell the product story.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Option 1:</strong> "Want it warm with GELATO? Premium experience"</span><span><strong>Option 2:</strong> "Shall we add warm mascarpone cream?"</span><span><strong>Option 3:</strong> "ALWAYS ask warm/cold preference to guide the upsell"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Exactly 10 seconds per side—longer dries it out. Plate fast to keep the soft volume. Sampling drives orders at peak times.</div>`,
 
@@ -1124,33 +1125,33 @@
       'operations.cards.packagingTakeAway.tag2': 'Treat box',
       'operations.cards.packagingTakeAway.tag3': 'Take away',
       'operations.cards.packagingTakeAway.title': 'Take-away packaging',
-      'operations.cards.packagingTakeAway.desc': 'For two panettoni: one sauce pot filled to 3/4, panettoni secured in the four corners of the treat box.',
+      'operations.cards.packagingTakeAway.desc': 'Stable treat box: sauce pot 3/4 in the centre, panettoni secured in the corners. Label and freeze until pick-up.',
       'operations.cards.packagingTakeAway.details': `<div class="steps"><span>1 - Place the sauce pot in the centre; lock the panettoni in the corners.</span><span>2 - Close with lid + tape; add shelf life label.</span><span>3 - Keep in the freezer until the rider arrives.</span></div><div class="tips">Tell the guest the thermal hold time and serving guidance.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Option 1:</strong> "Box of 4 minis instead of 2? Perfect for families"</span><span><strong>Option 2:</strong> "Add a second sauce to mix flavours?"</span><span><strong>Option 3:</strong> "With a branded greeting card it becomes the perfect gift"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Sauce pot in the centre for stability. Lock minis in the corners. Label shelf life + serving instructions. Keep in the freezer until pick-up to protect quality.</div>`,
 
       'operations.cards.vinMachineSetup.tag1': 'Setup',
       'operations.cards.vinMachineSetup.tag3': 'Tank',
       'operations.cards.vinMachineSetup.title': 'Machine set-up',
-      'operations.cards.vinMachineSetup.desc': 'Vin Brulé machine: fill the outer tank with 600 ml of water without exceeding max; insert the inner container.',
+      'operations.cards.vinMachineSetup.desc': 'Vin Brulé setup: 600 ml water in the outer tank (max) and insert the inner container.',
       'operations.cards.vinMachineSetup.details': `<div class="steps"><span>1 - Pour 500/1000 ml of mix into the silver tank.</span><span>2 - Heat at level 10 for 25–30 min; then hold at 6–7.</span><span>3 - Use the lid while holding to prevent evaporation.</span></div><div class="tips">Better to heat smaller batches to keep freshness and aroma.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Visual appeal:</strong> "Keep the machine in a visible area to drive orders"</span><span><strong>Sampling:</strong> "Offer mini samples at peak times for conversion"</span><span><strong>Bundle:</strong> "Mulled wine + mini panettone = perfect festive combo"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Outer tank: max 600 ml water. Level 10 for 25–30 min, then 6–7 holding. Small batches = fresher. Lid prevents aroma loss.</div>`,
 
       'operations.cards.vinServiceClosing.tag1': 'Service',
       'operations.cards.vinServiceClosing.tag3': 'Closing',
       'operations.cards.vinServiceClosing.title': 'Service & closing',
-      'operations.cards.vinServiceClosing.desc': 'Vin Brulé: serve with a ladle, an orange slice and shelf life control.',
+      'operations.cards.vinServiceClosing.desc': 'Serve with a ladle + orange slice; at closing, decant, cool, label and refrigerate.',
       'operations.cards.vinServiceClosing.details': `<div class="steps"><span>1 - Fill the cup with the ladle; add an orange slice.</span><span>2 - End of day: decant into a jug, let cool and cover with cling film.</span><span>3 - Fridge + label (3 days from first warm-up; 30 days for unopened mix).</span></div><div class="tips">Clean the tank, container and exterior every night with hot water and detergent.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Option 1:</strong> "Would you like to add a rum shot for an adult version?"</span><span><strong>Option 2:</strong> "Fresh orange slice + cinnamon stick = Instagram-ready"</span><span><strong>Option 3:</strong> "Tell the story of festive spices for perceived value"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Use a dedicated ladle. Fresh orange slice always. Shelf life: 3 days from first warm-up, 30 days unopened mix. Clean the tank nightly.</div>`,
 
       'operations.cards.tempKeyMap.tag1': 'Setting',
       'operations.cards.tempKeyMap.tag2': 'Temperatures',
       'operations.cards.tempKeyMap.tag3': 'Quick ref',
       'operations.cards.tempKeyMap.title': 'Key temperatures (quick map)',
-      'operations.cards.tempKeyMap.desc': 'Key temperatures to remember to avoid off-standard products.',
+      'operations.cards.tempKeyMap.desc': 'Key temperature ranges for gelato and storage—check and log to stay on standard.',
       'operations.cards.tempKeyMap.stats': `<li>Gelato display: -14/-15 °C (target)</li><li>Treats display freezer: at least -14 and ice-free (defrost weekly)</li><li>Thermal storage box (take-away gelato): max ~1 hour before returning to freezer</li>`,
       'operations.cards.tempKeyMap.details': `<div class="steps"><span>1 · If temperature is out of range: flag it immediately—don\'t “compensate” with service tricks.</span><span>2 · Keep sliding doors in position when not busy to preserve -14/-15.</span><span>3 · Scheduled defrost + cleaning = stable temperatures.</span></div>`,
 
       'operations.cards.fifoLabels.tag1': 'Storage',
       'operations.cards.fifoLabels.tag3': 'Labels',
       'operations.cards.fifoLabels.title': 'FIFO & labels (golden rule)',
-      'operations.cards.fifoLabels.desc': 'Every “storage” module in this training shares one common point: FIFO + clear labels.',
+      'operations.cards.fifoLabels.desc': 'FIFO + clear labels: prep/open date and expiry always visible. No label = do not serve.',
       'operations.cards.fifoLabels.stats': `<li>Always label: prep/opening date + expiry</li><li>First in, first out: use what expires first</li><li>No label: do not serve (ask the manager)</li>`,
       'operations.cards.fifoLabels.details': `<div class="steps"><span>1 · Check labels at the start of the shift.</span><span>2 · Check FIFO during refills.</span><span>3 · Check expiries at closing.</span></div>`,
 
@@ -1158,14 +1159,14 @@
       'operations.cards.shelfLifeQuick.tag2': 'Prep',
       'operations.cards.shelfLifeQuick.tag3': 'Fridge',
       'operations.cards.shelfLifeQuick.title': 'Quick shelf life (mix & premade)',
-      'operations.cards.shelfLifeQuick.desc': 'Shelf life reminders for quick checks during opening, refills and closing.',
+      'operations.cards.shelfLifeQuick.desc': 'Quick shelf-life reminders for mix and premade items.',
       'operations.cards.shelfLifeQuick.stats': `<li>Crepe mix: 3 days (fridge) + minimum 2 hours resting</li><li>Waffle mix (pre-packed): 2 days</li><li>Premade matcha: 1 day (including prep day) → fridge</li><li>Mulled wine: 3 days from first warm-up (mix in machine)</li>`,
       'operations.cards.shelfLifeQuick.details': `<div class="steps"><span>1 · Prep “what you need”: less waste, more quality.</span><span>2 · Always label (date/time).</span><span>3 · Past shelf life: discard and remake.</span></div>`,
 
       'operations.cards.takeAwayThermal.tag1': 'Packaging',
       'operations.cards.takeAwayThermal.tag2': 'Take away',
       'operations.cards.takeAwayThermal.title': 'Take-away: thermal hold',
-      'operations.cards.takeAwayThermal.desc': 'The thermal storage box holds for a maximum of 1 hour: after that, the product must go back to the freezer.',
+      'operations.cards.takeAwayThermal.desc': 'The thermal box holds about 1 hour—tell the guest to freeze it as soon as possible.',
       'operations.cards.takeAwayThermal.stats': `<li>Always tell the guest (quality and safety)</li><li>Recommend freezer as soon as possible</li><li>Avoid long waits outside control (riders/queues)</li>`,
       'operations.cards.takeAwayThermal.details': `<div class="steps"><span>1 · “This box holds for about 1 hour: then freezer.”</span><span>2 · Offer an insulated bag if your store has it.</span><span>3 · For delivery: keep in the freezer until pick-up.</span></div>`,
 
@@ -1173,7 +1174,7 @@
       'operations.cards.cleaningSchedule.tag2': 'Weekly',
       'operations.cards.cleaningSchedule.tag3': 'Routine',
       'operations.cards.cleaningSchedule.title': 'Cleaning schedule (daily / weekly)',
-      'operations.cards.cleaningSchedule.desc': 'Closing and planned maintenance = consistent performance and fewer service surprises.',
+      'operations.cards.cleaningSchedule.desc': 'Daily/weekly cleaning routine to keep performance consistent and reduce surprises.',
       'operations.cards.cleaningSchedule.stats': `<li>Gelato display: OFF every night</li><li>Gelato display: deep clean weekly</li><li>Filters: cleaning weekly</li><li>Treats display freezer: defrost weekly (ice-free)</li>`,
       'operations.cards.cleaningSchedule.details': `<div class="steps"><span>1 · Set the deep clean day (don\'t improvise).</span><span>2 · Clean before build-up: it\'s faster.</span><span>3 · After cleaning: reassemble, sanitise and polish.</span></div>`,
 
@@ -1189,56 +1190,56 @@
       'slittiYoyo.carousel.ops.category': 'Opening · Display · Tech data · Storage · Closing',
 
       'slittiYoyo.cards.timeline.title': 'Essential timeline',
-      'slittiYoyo.cards.timeline.desc': 'Luciano Slitti opens as a coffee roastery in 1969. In 1990 Andrea introduces chocolate and, together with his brother Daniele, wins international awards (Grand Prix 1994, Eurochocolate 1996, best Italian chocolatier 2008).',
+      'slittiYoyo.cards.timeline.desc': 'Slitti heritage: from roastery (1969) to award-winning chocolate. Great for premium storytelling.',
       'slittiYoyo.cards.timeline.details': `<div class="steps"><span>1. Highlight the strict selection of raw materials.</span><span>2. Share awards and Tuscan heritage to justify the premium positioning.</span><span>3. Invite guests to taste it with coffee or GELATO.</span></div><div class="tips">Use the blue/pink palette to create small storytelling cards next to the display.</div>`,
 
       'slittiYoyo.cards.tablets.title': 'LatteNero & Gran Cacao tablets',
-      'slittiYoyo.cards.tablets.desc': 'Slitti tablets in different cacao profiles (45%, 51%, 73%, 82%, 100%) plus a Coffee Milk bar flavoured with roasted arabica. Explain the blend: cacao + cocoa butter for smoothness, balance between sugars and milk (in the sweeter profiles).',
+      'slittiYoyo.cards.tablets.desc': 'Chocolate bars across different % cacao + Coffee Milk with arabica. Help guests pick a profile.',
       'slittiYoyo.cards.tablets.stats': `<li>Available profiles: LatteNero (45%, 51%, 73%, 82%, 100%), Coffee Milk with arabica</li><li>Composition: selected cacao + cocoa butter + milk (LatteNero profiles)</li><li>Storage: 16–18°C, away from direct light and strong odours</li>`,
       'slittiYoyo.cards.tablets.details': `<div class="steps"><span>1. Ask the guest\'s preference (milk/dark).</span><span>2. Suggest pairings with espresso or cappuccino.</span><span>3. Mention gift packaging and long shelf life.</span></div><div class="tips">Show an open sample to reveal the pattern; keep stock FIFO.</div>`,
 
       'slittiYoyo.cards.minicake.title': 'Mini cakes',
-      'slittiYoyo.cards.minicake.desc': 'Slitti mini cakes made with top ingredients: Tonda Gentile hazelnuts (Langhe) and Avola almonds (Sicily). Three variants: milk hazelnut, dark mix fruit, dark almond. Serve at room temperature or slightly warm.',
+      'slittiYoyo.cards.minicake.desc': 'Premium mini cakes with Tonda Gentile hazelnuts and Avola almonds. Serve room temp (or slightly warm).',
       'slittiYoyo.cards.minicake.stats': `<li>Variants: milk hazelnut (Langhe), dark mix fruit, dark almond (Avola)</li><li>Ingredients: Tonda Gentile hazelnut, Avola almond (share the origin)</li><li>Service: room temperature, or 10 seconds in the microwave to boost aromas</li>`,
       'slittiYoyo.cards.minicake.details': `<div class="steps"><span>1. Explain the ingredient difference (Tonda Gentile, Avola almond).</span><span>2. Serve at room temperature or slightly warm.</span><span>3. Recommend pairing with the Slittosa spread.</span></div>`,
 
       'slittiYoyo.cards.pralines.title': 'Pralines & dragée',
-      'slittiYoyo.cards.pralines.desc': 'Origin and Irish Coffee pralines (0.9% alc) plus dragée based on pistachio, almond, hazelnut, cranberry, caramel peanuts, amarena cherries and arabica. Each dragée tells a story of origin: Bronte, Avola, Langhe. Keep it cool and away from bright light.',
+      'slittiYoyo.cards.pralines.desc': 'Assorted pralines and dragée with origin ingredients (Bronte, Avola, Langhe). Store cool and away from light.',
       'slittiYoyo.cards.pralines.stats': `<li>Pralines: Origin, Irish Coffee (0.9% alcohol), Passion Fruit</li><li>Dragée: Bronte pistachio, Avola almond, Langhe hazelnut, cranberry, caramel peanuts, amarena, arabica, ginger</li><li>Origin: highlight on mini boards (Bronte, Avola, Langhe) for value</li>`,
       'slittiYoyo.cards.pralines.details': `<div class="steps"><span>1 · Keep it cool and in low light.</span><span>2 · Offer a taste if you open a sample pack.</span><span>3 · Suggested pairings: pistachio with Pistachio Hot; ginger with chai.</span></div>`,
 
       'slittiYoyo.cards.spreads.title': 'Slittosa / Riccosa / Gianera spreads',
-      'slittiYoyo.cards.spreads.desc': 'Only Tonda Gentile hazelnuts + selected cacao. Hazelnut %: 37 (Slittosa), 51 (Riccosa), 57 (Gianera).',
+      'slittiYoyo.cards.spreads.desc': 'Hazelnut spreads: Slittosa 37%, Riccosa 51%, Gianera 57%.',
       'slittiYoyo.cards.spreads.stats': `<li>Composition: only Tonda Gentile hazelnuts + cacao (zero palm oil)</li><li>Profiles: Slittosa 37% (sweet), Riccosa 51% (balanced), Gianera 57% (intense)</li><li>Display: show the texture with a disposable spatula (hygiene)</li>`,
       'slittiYoyo.cards.spreads.details': `<div class="steps"><span>1 · Show the texture with a disposable spatula (hygiene).</span><span>2 · Suggest on crepes, waffles, panettone or GELATO.</span><span>3 · Place near the till for impulse buy.</span></div>`,
 
       'slittiYoyo.cards.yoyo.title': 'Yo-Yo',
-      'slittiYoyo.cards.yoyo.desc': 'Two soft cookies with a layer of GELATO inside. Available in different flavours.',
+      'slittiYoyo.cards.yoyo.desc': 'Soft cookie filled with GELATO—grab & go, serve straight from the freezer.',
       'slittiYoyo.cards.yoyo.stats': `<li>Storage: -18°C (freezer)</li><li>Service: napkin or small plate</li><li>Variants: Classic, Pistachio, Chocolate</li>`,
       'slittiYoyo.cards.yoyo.details': `<div class="steps"><span>1 · Take from the freezer at the moment of the order.</span><span>2 · Serve immediately to prevent melting.</span><span>3 · Suggest it as a quick snack or walk-around dessert.</span></div>`,
 
       'slittiYoyo.ops.setupStation.title': 'Yo-Yo counter set-up',
-      'slittiYoyo.ops.setupStation.desc': 'Place the Yo‑Yo centrally above the gelato display. The area must stay crumb-free and be refilled every time: never leave a “visual empty”.',
+      'slittiYoyo.ops.setupStation.desc': 'Place Yo‑Yo centered above the gelato case. Keep the area crumb-free and always stocked (no visual gaps).',
       'slittiYoyo.ops.setupStation.stats': `<li>Placement: central, above the gelato display</li><li>Hygiene: surface always crumb-free</li><li>Replenish: refill every time (never a “visual empty”)</li>`,
       'slittiYoyo.ops.setupStation.details': `<div class="steps"><span>1 · Clean the area (zero crumbs).</span><span>2 · Place the Yo-Yo station centrally and clearly visible.</span><span>3 · Prepare wafers/tools and disposable gloves for service.</span></div><div class="tips">Yo-Yo sells with the eyes too: never let it look messy.</div>`,
 
       'slittiYoyo.ops.stationTools.title': 'Station & tools (standard)',
-      'slittiYoyo.ops.stationTools.desc': 'Fast set-up to avoid slowdowns and contamination during rush.',
+      'slittiYoyo.ops.stationTools.desc': 'Station ready = fast, clean service: gloves on, tool and wafers within reach.',
       'slittiYoyo.ops.stationTools.stats': `<li>Gloves: put them on before handling wafers/Yo-Yo tool</li><li>Tool: place the Yo-Yo tool on a plate with 2 wafers ready</li><li>Flow: wafer → GELATO → close, no unnecessary moves</li>`,
       'slittiYoyo.ops.stationTools.details': `<div class="steps"><span>1 · Gloves on.</span><span>2 · Wafer on the tool, one base ready.</span><span>3 · Close straight after portioning to avoid overflow.</span></div><div class="tips">Fixed order = speed and consistency across the team.</div>`,
 
       'slittiYoyo.ops.portioning.title': 'Yo-Yo gelato portioning',
-      'slittiYoyo.ops.portioning.desc': 'Target portion: 80–90 g. GELATO must stay inside the wafers: no overflow.',
+      'slittiYoyo.ops.portioning.desc': 'Portion 80–90 g: gelato stays inside the wafers, clean edge (no overflow).',
       'slittiYoyo.ops.portioning.stats': `<li>Target portion: 80–90 g</li><li>Scoop: portion the GELATO with an ice-cream scooper</li><li>Control: no overflow (visual defect + messy station)</li>`,
       'slittiYoyo.ops.portioning.details': `<div class="steps"><span>1 · Place the GELATO centrally.</span><span>2 · Close with the second wafer and keep the edge clean.</span><span>3 · If you spill: clean immediately (don\'t delay).</span></div><div class="tips">Precision today = less waste tomorrow.</div>`,
 
       'slittiYoyo.ops.panStorage.title': 'Pan storage method (labelling)',
-      'slittiYoyo.ops.panStorage.desc': 'If you use the “pan storage method”, the manual requires it to be labelled at all times. Clear labels = fewer errors and more control.',
+      'slittiYoyo.ops.panStorage.desc': 'Pan storage: label every pan (date/content). Clear labels = fewer mistakes.',
       'slittiYoyo.ops.panStorage.stats': `<li>Label: date + content + responsible person (as per store standard)</li><li>Do not mix different wafers in the same container</li><li>Crumb control: every refill = quick wipe</li>`,
       'slittiYoyo.ops.panStorage.details': `<div class="steps"><span>1 · Apply the label before placing it in position.</span><span>2 · Check wafer integrity (no broken ones on show).</span><span>3 · Refill = cleaning too: remove crumbs and residue.</span></div>`,
 
       'slittiYoyo.ops.closing.title': 'Yo-Yo station closing',
-      'slittiYoyo.ops.closing.desc': 'Reset a clean, ready-to-open station: it reduces opening time and prevents contamination.',
+      'slittiYoyo.ops.closing.desc': 'Closing: clean, reset and leave the station ready for opening.',
       'slittiYoyo.ops.closing.stats': `<li>Remove crumbs and residue from surfaces and tools</li><li>Store wafers and tools as per procedure (label if using pan storage)</li><li>Quick check: station “opening-ready”</li>`,
       'slittiYoyo.ops.closing.details': `<div class="steps"><span>1 · Clean and dry tools and area.</span><span>2 · Store stock with correct labels.</span><span>3 · Leave the counter clear and tidy.</span></div>`,
 
@@ -1248,32 +1249,32 @@
       'slittiYoyo.footer.stats.origin': 'Origin',
 
       'caffe.cards.espressoSingle.title': 'Espresso Single',
-      'caffe.cards.espressoSingle.desc': 'The essence of coffee. Perfect extraction for an intense taste, rounded body and a persistent crema.',
+      'caffe.cards.espressoSingle.desc': 'An intense, balanced espresso with a persistent crema.',
       'caffe.cards.espressoSingle.stats': `<li><strong>Dose:</strong> 1 shot in a small cup</li><li><strong>Extraction:</strong> 25-30 seconds</li><li><strong>Crema:</strong> Hazelnut colour, tiger-striped, elastic</li>`,
       'caffe.cards.espressoSingle.details': `<div class="steps"><span>1 · Clean and dry the portafilter. Grind the dose fresh.</span><span>2 · Level and tamp evenly.</span><span>3 · Extract and serve immediately (the crema fades quickly).</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">🥡 Take Away (TW)</strong><img src="assets/products/espresso TW.png" alt="Espresso TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;"><p style="font-size: 0.9em;">Use a 4oz cup. Always close with a lid.</p></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Troubleshooting:</strong> Too fast (&lt;20s)? Grind too coarse. Too slow (&gt;35s)? Grind too fine.</div>`,
 
       'caffe.cards.espressoDouble.title': 'Espresso Double',
-      'caffe.cards.espressoDouble.desc': 'Double energy. Two shots extracted at the same time for a richer taste.',
+      'caffe.cards.espressoDouble.desc': 'Two shots for a richer profile and extra kick.',
       'caffe.cards.espressoDouble.stats': `<li><strong>Dose:</strong> 2 shots in a large espresso cup or small glass</li><li><strong>Extraction:</strong> 25–30 seconds (steady flow)</li><li><strong>Crema:</strong> Thick and long-lasting</li>`,
       'caffe.cards.espressoDouble.details': `<div class="steps"><span>1 · Use the double filter. Grind a double dose.</span><span>2 · Tamp firmly and evenly.</span><span>3 · Pull 2 shots in 25–30s.</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">🥡 Take Away (TW)</strong><img src="assets/products/espresso double TW.png" alt="Espresso Double TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;"><p style="font-size: 0.9em;">Use a 4oz cup (or 8oz on request). Lid required.</p></div>`,
 
       'caffe.cards.espressoMacchiato.title': 'Espresso Macchiato',
-      'caffe.cards.espressoMacchiato.desc': 'Espresso “macchiato” with a small amount of hot milk foam.',
+      'caffe.cards.espressoMacchiato.desc': 'Espresso finished with a small dollop of hot microfoam.',
       'caffe.cards.espressoMacchiato.stats': `<li><strong>Base:</strong> 1 espresso shot</li><li><strong>Top:</strong> 1–2 teaspoons of milk foam</li><li><strong>Service:</strong> Espresso cup</li>`,
       'caffe.cards.espressoMacchiato.details': `<div class="steps"><span>1 · Pull a single espresso.</span><span>2 · Steam a small amount of milk (microfoam).</span><span>3 · Gently add the foam to the centre of the crema (the “macchia”).</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">🥡 Take Away (TW)</strong><p style="font-size: 0.9em;">Available in a 4oz cup. Always close with a lid.</p></div>`,
 
       'caffe.cards.doubleMacchiato.title': 'Double Macchiato',
-      'caffe.cards.doubleMacchiato.desc': 'Double espresso with a spot of foamed milk. More intense, same milk touch.',
+      'caffe.cards.doubleMacchiato.desc': 'Double espresso with microfoam—more body, same milk touch.',
       'caffe.cards.doubleMacchiato.stats': `<li><strong>Base:</strong> 2 espresso shots</li><li><strong>Top:</strong> Milk foam (microfoam)</li><li><strong>Service:</strong> Large cup or small glass</li>`,
       'caffe.cards.doubleMacchiato.details': `<div class="steps"><span>1 · Pull a double espresso.</span><span>2 · Add the milk foam to the centre.</span><span>3 · Serve immediately.</span></div>`,
 
       'caffe.cards.americano.title': 'Americano',
-      'caffe.cards.americano.desc': 'Hot water + espresso pulled into the cup. Available as Take Away.',
+      'caffe.cards.americano.desc': 'Espresso topped up with hot water, also available take away.',
       'caffe.cards.americano.stats': `<li>Single recipe: 8 oz hot water</li><li>Double recipe: 12 oz hot water</li><li>Safety gap: leave 2 cm from the top</li>`,
       'caffe.cards.americano.details': `<div class="steps"><span>1 · Fill the cup with hot water, leaving 2 cm.</span><span>2 · Pull the espresso into the cup (or into a separate beaker).</span><span>3 · Serve with saucer + spoon; offer milk on the side if requested.</span></div>`,
 
       'caffe.cards.cappuccino.title': 'Cappuccino',
-      'caffe.cards.cappuccino.desc': 'Espresso, steamed milk and fine foam. Velvety texture with no big bubbles.',
+      'caffe.cards.cappuccino.desc': 'Espresso with silky steamed milk and fine foam (no big bubbles).',
       'caffe.cards.cappuccino.stats': `<li>Size: 8 oz (regular) / 12 oz (large)</li><li>Foam: about 1/3 of the volume</li><li>Temperature: 65°C (sweet spot)</li>`,
       'caffe.cards.cappuccino.details': `<div class="steps"><span>1 · Pull espresso into the cup.</span><span>2 · Stretch for 3–5s (air), then roll (whirlpool) to microfoam.</span><span>3 · Pour controlling the foam; ask if they want cocoa.</span></div>`,
 
@@ -1298,17 +1299,17 @@
       'caffe.cards.chaiLatte.details': `<div class="steps"><span>1 · Pump chai syrup into the cup.</span><span>2 · (Dirty) Pull 1 shot and mix with the syrup.</span><span>3 · Steam milk and pour; finish with cinnamon.</span></div><div class="tips">Suggest Dirty Chai for guests who want spices + caffeine.</div>`,
 
       'caffe.cards.teaSelection.title': 'Tea Selection',
-      'caffe.cards.teaSelection.desc': 'Premium tea selection. Served with a teapot and an infusion timer for a perfect steep.',
+      'caffe.cards.teaSelection.desc': 'Premium tea served with a teapot and timer for the perfect steep.',
       'caffe.cards.teaSelection.stats': `<li>Water: 90–95°C (Black/Herbal), 80°C (Green)</li><li>Steep: 3–5 minutes</li><li>Service: teapot + cup + milk/lemon on the side</li>`,
       'caffe.cards.teaSelection.details': `<div class="steps"><span>1 · Warm the teapot and add the bag/infuser.</span><span>2 · Fill with water at the correct temperature.</span><span>3 · Serve with a timer and a small plate for the used bag.</span></div>`,
 
       'caffe.cards.afternoonTeaSet.title': 'Afternoon Tea Set',
-      'caffe.cards.afternoonTeaSet.desc': 'Selection of mini sweets, scones and sandwiches for the afternoon tea experience.',
+      'caffe.cards.afternoonTeaSet.desc': 'Afternoon tea stand with mini sweets, scones and sandwiches.',
       'caffe.cards.afternoonTeaSet.stats': `<li><strong>Includes:</strong> scones, finger sandwiches, mini pastries</li><li><strong>Drink:</strong> tea or Prosecco</li><li><strong>Service:</strong> 3-tier stand</li>`,
       'caffe.cards.afternoonTeaSet.details': `<div class="steps"><span>1 · Build the stand: savoury at the bottom, scones in the middle, sweets on top.</span><span>2 · Serve the tea or chosen drink.</span><span>3 · Explain the items at the table.</span></div>`,
 
       'caffe.cards.affogato.title': 'Affogato',
-      'caffe.cards.affogato.desc': 'GELATO “drowned” in espresso: serve 1 scoop of Buontalenti and pour a double espresso in front of the guest.',
+      'caffe.cards.affogato.desc': '1 scoop of Buontalenti topped with a double espresso poured in front of the guest.',
       'caffe.cards.affogato.stats': `<li>Chilled 8 oz glass</li><li>Double espresso</li><li>Serve immediately</li>`,
       'caffe.cards.affogato.details': `<div class="steps"><span>1 · Pre-chill the glass.</span><span>2 · Portion 70 g of Buontalenti.</span><span>3 · Pour the espresso in front of the guest for a little show.</span></div>`,
 
@@ -1318,22 +1319,22 @@
       'caffe.cards.whippedCoffee.details': `<div class="steps"><span>1 · Pull a single espresso.</span><span>2 · Pipe whipped cream into a neat dome.</span><span>3 · Serve immediately.</span></div>`,
 
       'caffe.cards.matchaLatte.title': 'Matcha Latte',
-      'caffe.cards.matchaLatte.desc': 'Ceremonial matcha green tea with steamed milk. Bright green colour and umami notes.',
+      'caffe.cards.matchaLatte.desc': 'Ceremonial matcha with steamed milk: bright green with umami notes.',
       'caffe.cards.matchaLatte.stats': `<li>Matcha dose: 2 g (or dedicated scoop)</li><li>Water: 30 ml hot (80°C) to dissolve</li><li>Milk: steamed like cappuccino</li>`,
       'caffe.cards.matchaLatte.details': `<div class="steps"><span>1 · Dissolve matcha with a little hot water using a whisk (chasen) or mixer.</span><span>2 · Steam milk for a silky microfoam.</span><span>3 · Pour milk onto the matcha base (latte art).</span></div><div class="tips">Avoid boiling water (it burns the matcha). The paste must be smooth with no lumps.</div>`,
 
       'caffe.cards.icedMatchaLatte.title': 'Iced Matcha Latte',
-      'caffe.cards.icedMatchaLatte.desc': 'Refreshing iced version. Matcha poured over milk and ice for a two-tone look.',
+      'caffe.cards.icedMatchaLatte.desc': 'Iced matcha poured over milk and ice for a two-tone look.',
       'caffe.cards.icedMatchaLatte.stats': `<li>Ice: fill the cup</li><li>Cold milk: 3/4 of the cup</li><li>Top: concentrated matcha base</li>`,
       'caffe.cards.icedMatchaLatte.details': `<div class="steps"><span>1 · Fill the cup with ice and cold milk.</span><span>2 · Prep a concentrated matcha with hot water.</span><span>3 · Pour matcha slowly on top to create layers.</span></div>`,
 
       'caffe.cards.matchaAffogato.title': 'Matcha Affogato',
-      'caffe.cards.matchaAffogato.desc': 'A scoop of Buontalenti affogato-style with a warm dose of ceremonial matcha.',
+      'caffe.cards.matchaAffogato.desc': '1 scoop of Buontalenti finished with a warm pour of ceremonial matcha.',
       'caffe.cards.matchaAffogato.stats': `<li>GELATO: 1 scoop Buontalenti</li><li>Matcha: standard concentrated dose</li><li>Service: pour at the table</li>`,
       'caffe.cards.matchaAffogato.details': `<div class="steps"><span>1 · Prepare the cup with the GELATO scoop.</span><span>2 · Prepare warm matcha in a small jug.</span><span>3 · Serve and pour the bright green matcha over the white GELATO.</span></div>`,
 
       'caffe.cards.dirtyMatcha.title': 'Dirty Matcha',
-      'caffe.cards.dirtyMatcha.desc': 'East meets West: Matcha Latte with an added espresso shot.',
+      'caffe.cards.dirtyMatcha.desc': 'Matcha Latte with an added espresso shot (East meets West).',
       'caffe.cards.dirtyMatcha.stats': `<li>Base: Matcha Latte (hot or iced)</li><li>Add-on: 1 espresso shot</li><li>Profile: energising and complex</li>`,
       'caffe.cards.dirtyMatcha.details': `<div class="steps"><span>1 · Make a standard Matcha Latte.</span><span>2 · Pull one espresso shot.</span><span>3 · Add the espresso (for iced, pour on top for layering).</span></div>`,
 
@@ -1353,17 +1354,17 @@
       'caffe.cards.pistachioIcedLatte.details': `<div class="steps"><span>1 · Add sauce/syrup to the cup (swirl the inside).</span><span>2 · Add ice and milk.</span><span>3 · Pour espresso on top.</span></div>`,
 
       'caffe.cards.smoothieGialloPassion.title': 'Smoothie Giallo Passion',
-      'caffe.cards.smoothieGialloPassion.desc': 'Tropical mix with mango, pineapple and passion fruit. Vibrant yellow colour.',
+      'caffe.cards.smoothieGialloPassion.desc': 'Tropical smoothie with mango, pineapple and passion fruit.',
       'caffe.cards.smoothieGialloPassion.stats': `<li>Base: apple/orange juice or coconut water</li><li>Fruit mix: Yellow pack</li><li>Blend: 30 seconds</li>`,
       'caffe.cards.smoothieGialloPassion.details': `<div class="steps"><span>1 · Pour the liquid base into the blender.</span><span>2 · Add the frozen fruit pack.</span><span>3 · Blend until smooth and serve with a wide straw.</span></div>`,
 
       'caffe.cards.smoothieRossoBerry.title': 'Smoothie Rosso Berry',
-      'caffe.cards.smoothieRossoBerry.desc': 'Berry explosion: strawberries, raspberries, blueberries. Sweet and tangy.',
+      'caffe.cards.smoothieRossoBerry.desc': 'Berry smoothie with strawberries, raspberries and blueberries—sweet and tangy.',
       'caffe.cards.smoothieRossoBerry.stats': `<li>Base: apple juice or milk (if requested)</li><li>Fruit mix: Red pack</li><li>Blend: 30 seconds</li>`,
       'caffe.cards.smoothieRossoBerry.details': `<div class="steps"><span>1 · Pour the liquid base into the blender.</span><span>2 · Add the frozen fruit pack.</span><span>3 · Blend until smooth.</span></div>`,
 
       'caffe.cards.smoothieVerdeBoost.title': 'Smoothie Verde Boost',
-      'caffe.cards.smoothieVerdeBoost.desc': 'Healthy mix with spinach, green apple, cucumber and ginger. Fresh and thirst-quenching.',
+      'caffe.cards.smoothieVerdeBoost.desc': 'Fresh smoothie with spinach, green apple, cucumber and ginger.',
       'caffe.cards.smoothieVerdeBoost.stats': `<li>Base: water or apple juice</li><li>Fruit/veg mix: Green pack</li><li>Blend: 30 seconds</li>`,
       'caffe.cards.smoothieVerdeBoost.details': `<div class="steps"><span>1 · Pour the liquid base into the blender.</span><span>2 · Add the green pack.</span><span>3 · Blend well to break down the fibres.</span></div>`,
 
@@ -1412,6 +1413,15 @@
       'modal.tab.checklist': 'Checklist',
       'modal.tab.focus': 'Focus',
 
+      'modal.overview.auto.introHtml': `<p><strong>{{title}}</strong> — {{desc}}</p>`,
+      'modal.overview.auto.focusHtml': `<p><strong>Focus:</strong> {{tags}}</p>`,
+      'modal.overview.auto.factsSuffix': ' ({{count}} key points)',
+      'modal.overview.auto.product.whatHtml': `<p><strong>What you’ll find:</strong> product context, service notes, and storytelling cues to recommend the right pairing naturally{{facts}}.</p>`,
+      'modal.overview.auto.product.whyHtml': `<p><strong>Why it matters:</strong> a clear overview speeds up the sale in peak moments, increases team consistency, and reinforces the premium perception.</p>`,
+      'modal.overview.auto.ops.whatHtml': `<p><strong>What you’ll find:</strong> operating standards and checkpoints to keep the counter clean, service fast, and quality consistent throughout the shift{{facts}}.</p>`,
+      'modal.overview.auto.ops.whyHtml': `<p><strong>Why it matters:</strong> a shared routine reduces errors, waste, and rework — and makes the guest experience smoother.</p>`,
+      'modal.overview.auto.howHtml': `<p><strong>How to use it:</strong> read it before your shift and keep it as a quick reference when setting up the station or explaining the offer to guests.</p>`,
+
       'modal.label.details': 'Details',
       'modal.section.moreDetails': 'More details',
 
@@ -1430,23 +1440,23 @@
       'gelatoLab.ops.title': 'Setup & Storage',
       'gelatoLab.ops.category': 'Opening · Setup · Storage · Scampoli · Closing',
 
-      'gelatoLab.cards.cups.desc': 'Cups in three sizes: Small (1 flavour, 100 g), Medium (1-2 flavours, 140 g), Large (1-3 flavours, 180 g). The key is portioning correctly and compacting well to remove air bubbles and keep the presentation uniform.',
+      'gelatoLab.cards.cups.desc': 'Three cup sizes (S/M/L) for 1–3 flavours. Portion cleanly and compact to remove air for a smooth, uniform finish.',
       'gelatoLab.cards.cups.title': 'Cups',
       'gelatoLab.cards.cups.stats': `<li>Weighing: Small 100-120g, Medium 160-200g, Large 200-240g (always check)</li><li>Scoop technique: linear + ball for a pro look</li><li>Compacting: press GELATO against the side of the cup to remove air</li><li>Warm the spatula: warm it on the GELATO to make scooping easier</li><li>Finish: always offer wafer and whipped cream (upsell)</li><li>Ideal GELATO temp: -14/-15°C (if warmer it\'s harder to portion)</li>`,
       'gelatoLab.cards.cups.details': `<div class="steps"><span>1 · Warm the spatula on the flavour to soften it.</span><span>2 · Press GELATO against the side of the cup to remove air.</span><span>3 · Offer wafer/cream and smile.</span></div><div class="tips">Kids can choose two flavours even on the small.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Option 1:</strong> "Want to go medium? Add another flavour and whipped cream"</span><span><strong>Option 2:</strong> "Shall I add whipped cream and a crunchy wafer?"</span><span><strong>Option 3:</strong> "With pistachio sauce it\'s even more irresistible"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Always weigh cups to stay within the gram range. Use the “linear scoop + ball” technique for a pro look. Ideal GELATO temp: -14/-15°C.</div>`,
 
-      'gelatoLab.cards.cones.desc': 'Cones in three options: Classic (1 flavour), Chocolate or Gluten Free (1-2 flavours). Every cone should be wrapped with tissue for grip and presentation. Keep the cone area clean to avoid flavour cross-contact.',
+      'gelatoLab.cards.cones.desc': 'Three cone options (Classic, Chocolate, Gluten Free) for 1–2 scoops. Always wrap with tissue and keep the cone station crumb-free.',
       'gelatoLab.cards.cones.title': 'Classic cones',
       'gelatoLab.cards.cones.stats': `<li>Wrap: tissue always, for grip and look</li><li>Portion: 1 ball for classic cone, 1-2 balls for special cones (choco/GF)</li><li>Placement: set the ball while rotating the cone for stability</li><li>Area clean: every 30 minutes remove crumbs (they absorb moisture)</li><li>Stock rotation: strict FIFO (cones absorb moisture—use older stock first)</li><li>Upgrade upsell: chocolate cone (coated inside/out), whipped cream</li>`,
       'gelatoLab.cards.cones.details': `<div class="steps"><span>1 · Wrap the cone with tissue.</span><span>2 · Prepare the ball and place it while rotating.</span><span>3 · Offer an upgrade to the choco cone or whipped cream.</span></div><div class="tips">Keep the cone area clean by removing crumbs.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Option 1:</strong> "Upgrade to the chocolate cone? It\'s coated inside and out"</span><span><strong>Option 2:</strong> "Gluten-free cone available (if in stock)"</span><span><strong>Option 3:</strong> "Add whipped cream on top for an Instagram look?"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Clean the cone area every 30 minutes. Stock rotation: cones absorb moisture, keep FIFO strict. Always wrap with tissue for grip.</div>`,
 
       'gelatoLab.cards.boxes.title': 'Gelato Boxes',
-      'gelatoLab.cards.boxes.desc': 'Take-away GELATO in insulated boxes of 500/750/1000 ml. Each box keeps GELATO in good condition for about 1 hour when placed in the thermal bag. Always tell the customer to put it straight into the freezer at home: GELATO changes texture when it melts.',
+      'gelatoLab.cards.boxes.desc': 'Take-away gelato boxes (500/750/1000 ml). Compact well, seal, use the thermal bag, and remind guests to freeze it ASAP at home.',
       'gelatoLab.cards.boxes.stats': `<li>Small: 500 ml (1-3 flavours)</li><li>Medium: 750 ml (1-4 flavours)</li><li>Large: 1000 ml (1-5 flavours)</li><li>Filling order: start with softer flavours (sorbet first) to avoid flavour cross-contact</li><li>Compacting: remove air bubbles; clean edges with the spatula before sealing</li><li>Seal: film + Badiani tape; hand over in thermal bag</li><li>Autonomy: ~1 hour in thermal bag; always remind customers about the freezer at home</li>`,
       'gelatoLab.cards.boxes.details': `<div class="steps"><span>1 · Add flavours starting from the softest (sorbet first to avoid cross-contact).</span><span>2 · Compact to remove air bubbles and clean the edges.</span><span>3 · Seal with film + Badiani tape and place in the bag.</span></div><div class="tips">Upsell a bigger box + a 10-pack of waffles or cones.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Option 1:</strong> "The 1L box lets you try more flavours"</span><span><strong>Option 2:</strong> "Shall we add a pack of cones to serve at home?"</span><span><strong>Option 3:</strong> "With a thermal bag, you can keep everything perfect for up to 2 hours"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Compact well to remove air and reduce ice crystals. Clean edges before sealing. Autonomy: ~1h in the thermal bag—always remind customers to freeze it ASAP.</div>`,
 
       'gelatoLab.cards.coppa.title': 'Badiani Cup',
-      'gelatoLab.cards.coppa.desc': 'Three scoops of GELATO in a glass cup, finished with whipped cream, a sauce of choice, a mini cone and a Badiani wafer. It\'s the “wow” option: build it in order and serve immediately to keep texture and toppings clean.',
+      'gelatoLab.cards.coppa.desc': 'Three scoops in a glass cup with whipped cream, sauce, mini cone and wafer. Build in order and serve immediately for a clean finish.',
       'gelatoLab.cards.coppa.stats': `<li>Base: glass cup</li><li>Portion: 3 scoops with a round scooper (can be 3 different flavours)</li><li>Top: whipped cream + a swirl of the chosen sauce</li><li>Finish: mini cone + Badiani wafer</li><li>Service: steel spoon, serve immediately</li>`,
       'gelatoLab.cards.coppa.details': `<div class="steps"><span>1 · Take a glass cup and scoop 3 regular balls (can be different flavours) with the round scooper.</span><span>2 · Finish with whipped cream and a swirl of the chosen sauce (keep the rim clean).</span><span>3 · Add the mini cone + Badiani wafer and serve with a steel spoon.</span></div><div class="tips">Suggest a pairing with Slitti dragée for a complete dessert.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Option 1:</strong> "Add toasted hazelnut crumble and Slitti dragée?"</span><span><strong>Option 2:</strong> "Double sauce (pistachio + chocolate) makes it signature"</span><span><strong>Option 3:</strong> "Perfect pairing: Coppa + espresso affogato style"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Use chilled glass cups to help keep temperature. Make uniform scoops with the round scooper. Serve immediately after topping to avoid whipped-cream melt.</div>`,
 
@@ -1471,7 +1481,7 @@
       'gelatoLab.ops.treatFreezer.details': `<div class="steps"><span>1 · Maximise space, keep FIFO.</span><span>2 · Remind customers these are GELATO products.</span><span>3 · Use the insulated box (1h autonomy) for take-away.</span></div><div class="tips">Weekly ice removal keeps visibility spotless.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Technique 1:</strong> "Keep treats at kids\' eye level for impulse sales"</span><span><strong>Technique 2:</strong> "Mixed box of pinguinos/cookies for parties (per local price list)"</span><span><strong>Technique 3:</strong> "Mini semifreddi are perfect last-minute desserts at home"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Keep the freezer consistently at -14°C. Remove ice weekly with a plastic spatula to avoid scratches. Always use gloves for hygienic handling.</div>`,
 
       'gelatoLab.ops.scampolo.title': 'Scampolo rule (1/4 pan)',
-      'gelatoLab.ops.scampolo.desc': 'When a flavour has less than 1/4 of a pan, it\'s a scampolo and must be replaced. You can integrate it little by little into the new pan, without exceeding 5–7 cm.',
+      'gelatoLab.ops.scampolo.desc': 'Less than 1/4 pan = scampolo: replace the pan. Integrate only small amounts into the new pan (max 5–7 cm total).',
       'gelatoLab.ops.scampolo.stats': `<li>Definition: &lt; 1/4 pan = scampolo</li><li>Addition: about 100 g at a time (about one scoop side)</li><li>Limit: max 5–7 cm of scampolo total</li>`,
       'gelatoLab.ops.scampolo.details': `<div class="steps"><span>1 · Take the scampolo from the scampoli freezer.</span><span>2 · Add small amounts and level (it must not “look added”).</span><span>3 · Don\'t exceed 5–7 cm of total scampolo.</span></div><div class="tips">Scampolo = waste control, but always keep the visual standard.</div>`,
 
@@ -1530,14 +1540,14 @@
       'festive.cards.panettoneClassic.title': 'Panettone Classico',
       'festive.cards.panettoneClassic.tag1': 'Slice service',
       'festive.cards.panettoneClassic.tag2': '8 portions',
-      'festive.cards.panettoneClassic.desc': 'The king of the holidays. Traditional recipe with raisins and candied fruit, naturally leavened. Served by the slice (1/8) on a dessert plate with cutlery.',
+      'festive.cards.panettoneClassic.desc': 'Traditional panettone with raisins and candied fruit. Served by the slice (1/8) on a dessert plate with cutlery.',
       'festive.cards.panettoneClassic.stats': `<li>Cut: vertical, following the 8 guide lines; long serrated knife</li><li>Portions: 8 even slices for consistency</li><li>Presentation: dessert plate + cutlery, always</li><li>Visual sample: keep one slice visible on the counter to boost orders (visual storytelling)</li><li>Suggested pairings: Buontalenti GELATO, pistachio sauce, hot chocolate</li>`,
       'festive.cards.panettoneClassic.details': `<div class="steps"><span>1 - Cut vertically following the guide lines.</span><span>2 - Plate with cutlery.</span><span>3 - Offer an upsell right away: Buontalenti scoop + sauce or hot chocolate.</span></div><div class="tips">Keep one of the 8 slices as a visual sample to support storytelling and conversion.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Option 1:</strong> "Slice + Buontalenti scoop is our signature pairing"</span><span><strong>Option 2:</strong> "Add pistachio sauce for the perfect contrast?"</span><span><strong>Option 3:</strong> "With hot chocolate it becomes pure indulgence"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Use a long serrated knife for a clean cut without crumbling. Keep slices uniform. Display a sample slice to trigger visual orders.</div>`,
 
       'festive.cards.panettoneDark.title': 'Panettone Dark Chocolate',
       'festive.cards.panettoneDark.tag1': 'Warm option',
       'festive.cards.panettoneDark.tag2': 'Crepe plate',
-      'festive.cards.panettoneDark.desc': 'A indulgent version with dark chocolate chips in the dough. Great served warm (10" on the plate) to soften the chocolate.',
+      'festive.cards.panettoneDark.desc': 'An indulgent panettone with dark chocolate chips. Great served warm (10" per side) to soften the chocolate.',
       'festive.cards.panettoneDark.stats': `<li>Crepe plate: clean and dry (no oil)</li><li>Timing: exactly 10 seconds per side (longer = loses crunch)</li><li>Serve immediately after warming</li><li>Pairing: Dark Chocolate + pistachio sauce (gourmet contrast)</li><li>Upsell: cold GELATO + warm panettone = amazing temperature contrast</li>`,
       'festive.cards.panettoneDark.details': `<div class="steps"><span>1 - Place the slice on the crepe plate.</span><span>2 - Toast for 10 seconds per side (no oil).</span><span>3 - Serve with sauce and Buontalenti if requested.</span></div><div class="tips">Always ask if they want it warm: it boosts conversion and perceived quality.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Option 1:</strong> "Try it warm: the chocolate melts"</span><span><strong>Option 2:</strong> "Add a Buontalenti scoop for the hot/cold contrast"</span><span><strong>Option 3:</strong> "Shall we add pistachio sauce for a gourmet twist?"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> 10" per side is the standard: over that it dries out. Keep the plate clean and dry.</div>`,
 
@@ -1551,7 +1561,7 @@
       'festive.cards.mulledWine.tag2': 'Spices',
       'festive.cards.mulledWine.tag3': 'Orange',
       'festive.cards.mulledWine.title': 'Mulled Wine (Vin Brulé)',
-      'festive.cards.mulledWine.desc': 'Spiced hot drink served with an orange slice. It\'s the season\'s “comfort” offer: tell the aroma + ritual story, then guide the upsell (mini panettone / churros / optional shots by store).',
+      'festive.cards.mulledWine.desc': 'Spiced Vin Brulé served hot with an orange slice. Sell the aroma and suggest a pairing (mini panettone or churros).',
       'festive.cards.mulledWine.stats': `<li>Service: cup + dedicated ladle</li><li>Garnish: orange slice (always)</li><li>Timing: serve hot, not boiling</li><li>Script: "Our spiced Vin Brulé—perfect paired with a mini panettone"</li>`,
       'festive.cards.mulledWine.details': `<div class="steps"><span>1 - Present it: aroma, spices, orange slice (ritual).</span><span>2 - Serve with the dedicated ladle and garnish.</span><span>3 - Suggest a combo: mini panettone / churros / warm dessert.</span></div><div class="tips">Key words: “hot, spiced, orange, comfort”.</div>`,
 
@@ -1616,7 +1626,7 @@
       'sweetTreats.carousel.main.category': 'Sweet temptations',
 
       'sweetTreats.cards.crepeSauce.title': 'Crepe with Sauce',
-      'sweetTreats.cards.crepeSauce.desc': 'Classic crepe served with one of our signature sauces (Pistachio, Hazelnut, Chocolate). The perfect base for any add-on.',
+      'sweetTreats.cards.crepeSauce.desc': 'Classic crepe served with one signature sauce (Pistachio, Hazelnut or Chocolate).',
       'sweetTreats.cards.crepeSauce.stats': `<li><strong>Mix shelf life:</strong> 3 days (fridge)</li><li><strong>Rest:</strong> at least 2 hours (fridge)</li><li><strong>Cooking:</strong> 20s per side</li>`,
       'sweetTreats.cards.crepeSauce.details': `<div class="steps"><span>1 · Spread the mix; flip when golden.</span><span>2 · Spread sauce on half, fold into a half-moon then into a fan.</span><span>3 · Plate, dust with icing sugar and drizzle sauce on top.</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">✨ Pro tip:</strong> The plate must be hot but not smoking. The first crepe is often a test run.</div>`,
 
@@ -1626,7 +1636,7 @@
       'sweetTreats.cards.buontalentiCrepe.details': `<div class="steps"><span>1 · Make the sauce crepe as per standard.</span><span>2 · Fold into a fan and dust with icing sugar.</span><span>3 · Place the Buontalenti scoop on top and finish with sauce.</span></div><div class="tips">Add the GELATO at the very last second so it doesn't melt on the warm crepe.</div>`,
 
       'sweetTreats.cards.waffles.title': 'Waffles',
-      'sweetTreats.cards.waffles.desc': 'Golden and crunchy outside, soft inside. Served with sauces, fruit or GELATO.',
+      'sweetTreats.cards.waffles.desc': 'Golden waffles: crunchy outside, soft inside—finish with sauces, fruit or gelato.',
       'sweetTreats.cards.waffles.stats': `<li><strong>Cook:</strong> 2.5 min per side (5 min total)</li><li><strong>Rest:</strong> 45s for crunch</li><li><strong>Batter:</strong> 1 scoop (177ml)</li>`,
       'sweetTreats.cards.waffles.details': `<div class="steps"><span>1 · Pour the mix into the hot plate and close.</span><span>2 · Cook 2.5 min, flip and cook another 2.5 min.</span><span>3 · Rest on a rack for 45s before decorating.</span></div><div class="tips">Resting is key: if served immediately it turns soft.</div>`,
 
@@ -1636,12 +1646,12 @@
       'sweetTreats.cards.pancake.details': `<div class="steps"><span>1 · Pour 3 rounds of batter onto the plate.</span><span>2 · Flip when bubbles appear on the surface.</span><span>3 · Stack and decorate generously.</span></div>`,
 
       'sweetTreats.cards.italianaPlain.title': 'Crepe Italiana (Plain)',
-      'sweetTreats.cards.italianaPlain.desc': 'Mozzarella, rocket and cherry tomatoes on a classic base. Fresh and light.',
+      'sweetTreats.cards.italianaPlain.desc': 'Savory crepe with mozzarella, rocket and cherry tomatoes.',
       'sweetTreats.cards.italianaPlain.stats': `<li><strong>Base:</strong> Classic</li><li><strong>Filling:</strong> Mozzarella, rocket, cherry tomatoes</li><li><strong>Finish:</strong> EVO oil, salt, oregano</li>`,
       'sweetTreats.cards.italianaPlain.details': `<div class="steps"><span>1 · Cook the crepe and flip.</span><span>2 · Add mozzarella and let it melt slightly.</span><span>3 · Add dressed rocket and cherry tomatoes; fold into a parcel.</span></div>`,
 
       'sweetTreats.cards.italianaBeetroot.title': 'Crepe Italiana (Beetroot)',
-      'sweetTreats.cards.italianaBeetroot.desc': 'The colourful version: beetroot batter for a unique look and a sweet-earthy note.',
+      'sweetTreats.cards.italianaBeetroot.desc': 'Beetroot batter version for a bold colour and a subtle sweet-earthy note.',
       'sweetTreats.cards.italianaBeetroot.stats': `<li><strong>Base:</strong> Beetroot</li><li><strong>Filling:</strong> Mozzarella, rocket, cherry tomatoes</li><li><strong>Visual:</strong> deep red/purple colour</li>`,
       'sweetTreats.cards.italianaBeetroot.details': `<div class="steps"><span>1 · Use the beetroot mix (3g powder per 250g mix).</span><span>2 · Build it like the classic Italiana.</span><span>3 · Colour contrast is the hero: let the filling show.</span></div>`,
 
@@ -1651,7 +1661,7 @@
       'sweetTreats.cards.prosciuttoPlain.details': `<div class="steps"><span>1 · Melt the mozzarella while the crepe is cooking.</span><span>2 · Add prosciutto at the end to avoid overcooking it.</span><span>3 · Finish with rocket and fold.</span></div>`,
 
       'sweetTreats.cards.prosciuttoBeetroot.title': 'Crepe Prosciutto (Beetroot)',
-      'sweetTreats.cards.prosciuttoBeetroot.desc': 'Prosciutto Crudo on a beetroot base. A modern twist on a classic.',
+      'sweetTreats.cards.prosciuttoBeetroot.desc': 'Prosciutto crudo, mozzarella and rocket on a beetroot crepe.',
       'sweetTreats.cards.prosciuttoBeetroot.stats': `<li><strong>Base:</strong> Beetroot</li><li><strong>Filling:</strong> Crudo, mozzarella, rocket</li><li><strong>Taste:</strong> savoury + sweet (batter)</li>`,
       'sweetTreats.cards.prosciuttoBeetroot.details': `<div class="steps"><span>1 · Prepare the beetroot base.</span><span>2 · Fill generously.</span><span>3 · Serve cut in half to show the layers.</span></div>`,
 
@@ -1705,7 +1715,7 @@
 
       'pastries.cards.cakes.title': 'Cakes',
       'pastries.cards.cakes.alt': 'Slice of Badiani cake',
-      'pastries.cards.cakes.desc': 'Chocolate (3g), Carrot (2g), Walnut (3g), always cut 14 slices per cake.',
+      'pastries.cards.cakes.desc': 'Counter cakes (Chocolate/Carrot/Walnut): cut 14 uniform slices per cake.',
       'pastries.cards.cakes.stats': `<li>Use the cake slicer as a guide</li><li>Serve on a plate with cutlery</li><li>Upsell a Buontalenti scoop + sauce</li>`,
       'pastries.cards.cakes.details': `<div class="steps"><span>1 → Place the cutter and score 14 portions.</span><span>2 → Serve the slice on a plate and suggest a pairing with GELATO.</span><span>3 → If the upsell lands, add one scoop with the milkshake scooper and drizzle sauce on the slice.</span></div><div class="tips">Team reminder: hot chocolate + cake is a premium combo.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💫 Upselling</strong><span><strong>Option 1:</strong> "Would you like to enrich your slice with a scoop of Buontalenti?"</span><span><strong>Option 2:</strong> "Shall we add a pistachio or caramel sauce drizzle?"</span><span><strong>Option 3:</strong> "Perfect combo? Cake + hot chocolate"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">✨ Pro tip:</strong> Keep cakes covered with film between cuts to avoid drying out. Room temp: max 2 hours out of the fridge.</div>`,
 
@@ -1723,7 +1733,7 @@
 
       'pastries.cards.croissants.title': 'Croissants',
       'pastries.cards.croissants.alt': 'Filled croissant',
-      'pastries.cards.croissants.desc': 'Pre-laminated croissant, filled with the sauce requested by the guest. Open from the side, fill, and finish the presentation on a plate with fork and knife. Remember to lightly warm yesterday\'s croissants to revive the fragrance.',
+      'pastries.cards.croissants.desc': 'Filled croissant with sauce of choice. Open from the side, fill, plate with cutlery; warm briefly if needed.',
       'pastries.cards.croissants.stats': `<li>Shelf life: 2 days from defrost (check date)</li><li>Cut: use a serrated knife; open the side horizontally</li><li>Filling: piping bag for consistency and precision</li><li>Presentation: sauce inside + drizzle on top, clean plate, cutlery always</li><li>Warming (if needed): 8–10 seconds only; never over 15s (filling melts)</li>`,
       'pastries.cards.croissants.details': `<div class="steps"><span>1 - Score the side with a serrated knife.</span><span>2 - Fill inside and top with the same sauce.</span><span>3 - Plate, add cutlery and serve.</span></div><div class="tips">Communicate shelf life and rotation: 2 days from defrost.</div>`,
 
@@ -4255,7 +4265,7 @@
 
       'operations.cards.openingRoutine.tag1': 'Prep mañana',
       'operations.cards.openingRoutine.title': 'Rutina de apertura',
-      'operations.cards.openingRoutine.desc': 'Control de temperaturas, limpieza de cristales, orden de cubetas (FIFO) y verificación de etiquetas. La vitrina es tu primera carta de presentación: debe estar impecable y ordenada.',
+      'operations.cards.openingRoutine.desc': 'Rutina de apertura: temperaturas, cristales, FIFO y etiquetas. La vitrina debe estar limpia y ordenada.',
       'operations.cards.openingRoutine.stats': `<li>Temperatura: -14/-15°C (registrar en log HACCP)</li><li>Limpieza: cristales interior/exterior con producto específico</li><li>Cubetas: reordenar por color/sabor; limpiar bordes</li><li>Etiquetas: todas presentes, rectas y limpias</li><li>Utensilios: espátulas limpias en agua corriente (si sistema) o cambios frecuentes</li>`,
       'operations.cards.openingRoutine.details': `<div class="steps"><span>1 · Registra las temperaturas en el log HACCP.</span><span>2 · Limpia cristales y bordes de cubetas.</span><span>3 · Verifica etiquetas y utensilios listos.</span></div><div class="tips">Si una cubeta está casi vacía, cámbiala enseguida (no rascar el fondo delante del cliente).</div>`,
 
@@ -4270,7 +4280,7 @@
       'operations.cards.warmPandoro.tag2': '10" por lado',
       'operations.cards.warmPandoro.tag3': 'Servicio',
       'operations.cards.warmPandoro.title': 'Servicio templado (Pandoro)',
-      'operations.cards.warmPandoro.desc': 'Pandoro templado: misma técnica que el panettone. 10 segundos por lado en la plancha de crepes (sin aceite). Sirve inmediatamente con el pairing recomendado (crema mascarpone templada, GELATO, salsa).',
+      'operations.cards.warmPandoro.desc': 'Pandoro templado: 10 s por lado en la plancha de crepes (sin aceite). Sirve al momento con el pairing recomendado.',
       'operations.cards.warmPandoro.stats': `<li><strong>Pregunta al cliente:</strong> "¿Lo quieres templado?"</li><li><strong>Plancha crepes:</strong> limpia y seca, sin aceite</li><li><strong>Timing:</strong> 10 segundos por lado</li><li><strong>Servicio inmediato:</strong> emplata enseguida para mantener volumen y calor</li><li><strong>Sampling:</strong> triángulos pequeños en horas punta</li><li><strong>Pairings:</strong> crema mascarpone caliente, GELATO frío (contraste), salsa chocolate</li>`,
       'operations.cards.warmPandoro.details': `<div class="steps"><span>1 - Pregunta la preferencia del cliente.</span><span>2 - Tuesta y emplata rápido para no perder volumen.</span><span>3 - Sirve con el pairing recomendado.</span></div><div class="tips">Ofrece pequeños triángulos en horas punta para storytelling.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Opción 1:</strong> "¿Versión templada con GELATO? Experiencia premium"</span><span><strong>Opción 2:</strong> "¿Añadimos crema mascarpone templada?"</span><span><strong>Opción 3:</strong> "Pregunta SIEMPRE templado/frío para guiar el upsell"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> 10 segundos por lado exactos. Emplata rápido para no perder volumen. El sampling aumenta conversiones.</div>`,
 
@@ -4401,21 +4411,21 @@
       'slittiYoyo.carousel.ops.category': 'Apertura · Display · Datos técnicos · Storage · Cierre',
 
       'slittiYoyo.cards.timeline.title': 'Timeline esencial',
-      'slittiYoyo.cards.timeline.desc': 'Luciano Slitti abre como tostador en 1969. En 1990 Andrea introduce el chocolate y, junto a su hermano Daniele, gana premios internacionales (Grand Prix 1994, Eurochocolate 1996, mejor chocolatero italiano 2008).',
+      'slittiYoyo.cards.timeline.desc': 'Historia rápida: Luciano (1969) y Andrea (1990). Premios: Grand Prix 1994, Eurochocolate 1996, mejor chocolatero italiano 2008.',
       'slittiYoyo.cards.timeline.details': `<div class="steps"><span>1. Valora la selección rigurosa de materias primas.</span><span>2. Cuenta premios y herencia toscana para justificar el posicionamiento premium.</span><span>3. Invita a probarlo con café o GELATO.</span></div><div class="tips">Usa la paleta azul/rosa para pequeñas tarjetas de storytelling junto al display.</div>`,
 
       'slittiYoyo.cards.tablets.title': 'Tabletas LatteNero & Gran Cacao',
-      'slittiYoyo.cards.tablets.desc': 'Tabletas Slitti en distintos perfiles de cacao (45%, 51%, 73%, 82%, 100%) + barra Coffee Milk aromatizada con arabica tostada. Explica el blend: cacao + cocoa butter para suavidad, equilibrio entre azúcares y leche (en perfiles más dulces).',
+      'slittiYoyo.cards.tablets.desc': 'Tabletas Slitti (45–100% cacao) + Coffee Milk con arabica. Explica perfiles: más cacao = más intenso; más leche/azúcar = más dulce.',
       'slittiYoyo.cards.tablets.stats': `<li>Perfiles disponibles: LatteNero (45%, 51%, 73%, 82%, 100%), Coffee Milk con arabica</li><li>Composición: cacao seleccionado + cocoa butter + leche (perfiles LatteNero)</li><li>Conservación: 16–18°C, lejos de luz directa y olores fuertes</li>`,
       'slittiYoyo.cards.tablets.details': `<div class="steps"><span>1. Pregunta la preferencia (leche/dark).</span><span>2. Sugiere pairing con espresso o cappuccino.</span><span>3. Recuerda packaging regalo y shelf life larga.</span></div><div class="tips">Muestra un sample abierto para ver el patrón; stock FIFO.</div>`,
 
       'slittiYoyo.cards.minicake.title': 'Mini cakes',
-      'slittiYoyo.cards.minicake.desc': 'Mini cakes Slitti con materias primas top: avellana Tonda Gentile (Langhe) y almendra Avola (Sicilia). Tres variantes: leche avellana, dark mix fruit, dark almendra. Sirve a temperatura ambiente o ligeramente templado.',
+      'slittiYoyo.cards.minicake.desc': 'Mini cakes Slitti con avellana Tonda Gentile y almendra de Avola. Tres variantes; servir a temperatura ambiente o ligeramente templado.',
       'slittiYoyo.cards.minicake.stats': `<li>Variantes: leche avellana Langhe, dark mix fruit, dark almendra Avola</li><li>Ingredientes: Tonda Gentile, almendra Avola (comunica origen)</li><li>Servicio: ambiente o 10 segundos microondas para aromas</li>`,
       'slittiYoyo.cards.minicake.details': `<div class="steps"><span>1. Explica la diferencia de ingredientes (Tonda Gentile, Avola).</span><span>2. Sirve a temperatura ambiente o ligeramente templado.</span><span>3. Recomienda con la crema Slittosa.</span></div>`,
 
       'slittiYoyo.cards.pralines.title': 'Pralines y dragée',
-      'slittiYoyo.cards.pralines.desc': 'Pralines Origin e Irish Coffee (0,9% alc) + dragée con pistacho, almendra, avellana, cranberry, caramel peanuts, amarena y arabica. Cada dragée cuenta origen: Bronte, Avola, Langhe. Mantén fresco y con poca luz.',
+      'slittiYoyo.cards.pralines.desc': 'Pralinés Origin/Irish Coffee + dragées (pistacho, almendra, avellana…). Mantén fresco y protegido de la luz.',
       'slittiYoyo.cards.pralines.stats': `<li>Pralines: Origin, Irish Coffee (0,9% alcohol), Passion Fruit</li><li>Dragée: pistacho Bronte, almendra Avola, avellana Langhe, cranberry, caramel peanuts, amarena, arabica, jengibre</li><li>Origen: destacar en mini pizarras (Bronte, Avola, Langhe)</li>`,
       'slittiYoyo.cards.pralines.details': `<div class="steps"><span>1 · Mantén temperatura fresca y luz baja.</span><span>2 · Ofrece un assaggio si abres un pack sample.</span><span>3 · Pairings: pistacho con Pistachio Hot; jengibre con chai.</span></div>`,
 
@@ -4430,27 +4440,27 @@
       'slittiYoyo.cards.yoyo.details': `<div class="steps"><span>1 · Saca del freezer en el momento del pedido.</span><span>2 · Sirve inmediatamente para evitar que se derrita.</span><span>3 · Sugiere como snack rápido o postre para llevar.</span></div>`,
 
       'slittiYoyo.ops.setupStation.title': 'Allestimento Yo-Yo (banco)',
-      'slittiYoyo.ops.setupStation.desc': 'Coloca el Yo‑Yo en el punto central sobre la vitrina de gelato. El área debe quedar sin migas y se repone siempre: nunca “vacío” visual.',
+      'slittiYoyo.ops.setupStation.desc': 'Coloca el Yo‑Yo centrado sobre la vitrina. Zona sin migas y siempre llena (sin huecos visuales).',
       'slittiYoyo.ops.setupStation.stats': `<li>Posición: central, sobre vitrina gelato</li><li>Higiene: superficie siempre sin migas</li><li>Replenish: reponer cada vez (nunca “vacío” visual)</li>`,
       'slittiYoyo.ops.setupStation.details': `<div class="steps"><span>1 · Limpia el área (cero migas).</span><span>2 · Coloca la estación Yo-Yo visible y central.</span><span>3 · Prepara wafers/herramienta y guantes para servicio.</span></div><div class="tips">Yo-Yo vende también con la vista: nunca desorden.</div>`,
 
       'slittiYoyo.ops.stationTools.title': 'Estación y herramientas (standard)',
-      'slittiYoyo.ops.stationTools.desc': 'Setup rápido para evitar ralentizaciones y contaminaciones en rush.',
+      'slittiYoyo.ops.stationTools.desc': 'Estación lista = servicio rápido y limpio: guantes, tool y wafers a mano.',
       'slittiYoyo.ops.stationTools.stats': `<li>Guantes: antes de tocar wafers/Yo-Yo tool</li><li>Tool: Yo-Yo tool en un plato con 2 wafers listos</li><li>Flow: wafer → GELATO → cierre, sin vueltas</li>`,
       'slittiYoyo.ops.stationTools.details': `<div class="steps"><span>1 · Guantes on.</span><span>2 · Wafer en el tool, base lista.</span><span>3 · Cierra justo después de porcionar (sin overflow).</span></div><div class="tips">Orden fijo = velocidad y consistencia.</div>`,
 
       'slittiYoyo.ops.portioning.title': 'Porcionado GELATO Yo-Yo',
-      'slittiYoyo.ops.portioning.desc': 'Porción objetivo: 80–90 g. El GELATO debe quedar dentro de los wafers: sin overflow.',
+      'slittiYoyo.ops.portioning.desc': 'Porción 80–90 g: el gelato queda dentro del wafer, borde limpio (sin overflow).',
       'slittiYoyo.ops.portioning.stats': `<li>Objetivo: 80–90 g</li><li>Scoop: usa ice-cream scooper</li><li>Control: sin overflow (defecto visual + ensucia estación)</li>`,
       'slittiYoyo.ops.portioning.details': `<div class="steps"><span>1 · Coloca el GELATO centrado.</span><span>2 · Cierra con el segundo wafer y borde limpio.</span><span>3 · Si ensucias: limpia al momento.</span></div><div class="tips">Precisión hoy = menos waste mañana.</div>`,
 
       'slittiYoyo.ops.panStorage.title': 'Pan storage method (etiquetado)',
-      'slittiYoyo.ops.panStorage.desc': 'Si usas el “pan storage method”, debe estar siempre etiquetado. Etiquetas claras = menos errores y más control.',
+      'slittiYoyo.ops.panStorage.desc': 'Pan storage: etiqueta siempre (fecha/contenido). Etiquetas claras = menos errores.',
       'slittiYoyo.ops.panStorage.stats': `<li>Etiqueta: fecha + contenido + responsable (según estándar store)</li><li>No mezclar wafers distintos en el mismo contenedor</li><li>Control migas: cada refill = quick wipe</li>`,
       'slittiYoyo.ops.panStorage.details': `<div class="steps"><span>1 · Aplica etiqueta antes de colocar.</span><span>2 · Controla integridad (no rotos a la vista).</span><span>3 · Refill = limpieza: quita migas y residuos.</span></div>`,
 
       'slittiYoyo.ops.closing.title': 'Cierre estación Yo-Yo',
-      'slittiYoyo.ops.closing.desc': 'Deja una estación limpia y lista: reduce tiempos de apertura y previene contaminaciones.',
+      'slittiYoyo.ops.closing.desc': 'Cierre: limpia, ordena y deja la estación lista para apertura.',
       'slittiYoyo.ops.closing.stats': `<li>Quita migas y residuos de superficie y herramientas</li><li>Guarda wafers y tool según procedimiento (con etiqueta si pan storage)</li><li>Check: estación “opening-ready”</li>`,
       'slittiYoyo.ops.closing.details': `<div class="steps"><span>1 · Limpia y seca área y herramientas.</span><span>2 · Guarda stock con etiquetas correctas.</span><span>3 · Deja el plano libre y ordenado.</span></div>`,
 
@@ -4624,6 +4634,15 @@
       'modal.tab.checklist': 'Checklist',
       'modal.tab.focus': 'Enfoque',
 
+      'modal.overview.auto.introHtml': `<p><strong>{{title}}</strong> — {{desc}}</p>`,
+      'modal.overview.auto.focusHtml': `<p><strong>Enfoque:</strong> {{tags}}</p>`,
+      'modal.overview.auto.factsSuffix': ' ({{count}} puntos clave)',
+      'modal.overview.auto.product.whatHtml': `<p><strong>Qué encontrarás:</strong> contexto del producto, notas de servicio y pistas de storytelling para recomendar el pairing adecuado de forma natural{{facts}}.</p>`,
+      'modal.overview.auto.product.whyHtml': `<p><strong>Por qué importa:</strong> una visión general clara acelera la venta en horas punta, mejora la consistencia del equipo y refuerza la percepción premium.</p>`,
+      'modal.overview.auto.ops.whatHtml': `<p><strong>Qué encontrarás:</strong> estándares operativos y puntos de control para mantener el banco limpio, el servicio rápido y la calidad constante durante el turno{{facts}}.</p>`,
+      'modal.overview.auto.ops.whyHtml': `<p><strong>Por qué importa:</strong> una rutina compartida reduce errores, desperdicio y retrabajo — y hace la experiencia del cliente más fluida.</p>`,
+      'modal.overview.auto.howHtml': `<p><strong>Cómo usarla:</strong> léela antes del turno y úsala como referencia rápida al preparar la estación o explicar la oferta al cliente.</p>`,
+
       'modal.label.details': 'Detalles',
       'modal.section.moreDetails': 'Más detalles',
 
@@ -4641,21 +4660,21 @@
       'gelatoLab.ops.title': 'Setup y conservación',
       'gelatoLab.ops.category': 'Apertura · Setup · Almacenaje · Scampoli · Cierre',
 
-      'gelatoLab.cards.cups.desc': 'Vasitos en tres tamaños: Pequeño (1 sabor, 100 g), Mediano (1-2 sabores, 140 g), Grande (1-3 sabores, 180 g). La clave es dosificar bien y compactar para eliminar burbujas de aire y mantener una presentación uniforme.',
+      'gelatoLab.cards.cups.desc': 'Tres tamaños de vaso (S/M/L) para 1–3 sabores. Dosifica y compacta para un acabado uniforme.',
       'gelatoLab.cards.cups.title': 'Vasitos',
       'gelatoLab.cards.cups.stats': `<li>Pesaje: Pequeño 100-120g, Mediano 160-200g, Grande 200-240g (verifica siempre)</li><li>Técnica de scoop: lineal + bola para un look profesional</li><li>Compactado: presiona el GELATO contra el lateral del vaso para quitar aire</li><li>Espátula: caliéntala sobre el GELATO para facilitar el servicio</li><li>Final: ofrece siempre wafer y nata montada (upselling)</li><li>Temp. ideal del GELATO: -14/-15°C (si está más caliente es más difícil dosificar)</li>`,
       'gelatoLab.cards.cups.details': `<div class="steps"><span>1 · Calienta la espátula sobre el sabor para ablandarlo.</span><span>2 · Presiona el GELATO contra el lateral del vaso para eliminar aire.</span><span>3 · Ofrece wafer/nata y sonríe.</span></div><div class="tips">Los niños pueden elegir dos sabores incluso en el tamaño pequeño.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Opción 1:</strong> "¿Quieres pasar a mediano? Añade otro sabor y nata"</span><span><strong>Opción 2:</strong> "¿Te añado nata montada y wafer crujiente?"</span><span><strong>Opción 3:</strong> "Con salsa de pistacho queda aún más goloso"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Pesa siempre para respetar el rango de gramos. Usa la técnica “scoop lineal + bola” para un look pro. Temp. ideal del GELATO: -14/-15°C.</div>`,
 
-      'gelatoLab.cards.cones.desc': 'Conos en tres variantes: Clásico (1 sabor), Chocolate o Gluten Free (1-2 sabores). Envuelve siempre el cono con tissue para agarre y presentación. Mantén la zona de conos limpia para evitar contaminación de sabores.',
+      'gelatoLab.cards.cones.desc': 'Tres tipos de cono (clásico, chocolate, sin gluten) para 1–2 bolas. Envuelve con tissue y mantén la zona limpia.',
       'gelatoLab.cards.cones.title': 'Conos clásicos',
       'gelatoLab.cards.cones.stats': `<li>Envoltorio: tissue siempre, para agarre y look</li><li>Dosificación: 1 bola para cono clásico, 1-2 bolas para conos especiales (choco/GF)</li><li>Colocación: apoya la bola girando el cono para estabilidad</li><li>Limpieza: cada 30 min elimina migas (absorben humedad)</li><li>Rotación: FIFO estricto (los conos absorben humedad; usa primero los menos frescos)</li><li>Upgrade: cono chocolate (recubierto dentro y fuera), nata montada</li>`,
       'gelatoLab.cards.cones.details': `<div class="steps"><span>1 · Envuelve el cono con tissue.</span><span>2 · Prepara la bola y colócala girando.</span><span>3 · Propón upgrade a cono choco o nata montada.</span></div><div class="tips">Mantén la zona de conos limpia eliminando migas.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Opción 1:</strong> "¿Upgrade al cono chocolate? Está recubierto por dentro y por fuera"</span><span><strong>Opción 2:</strong> "Cono gluten-free disponible (si hay)"</span><span><strong>Opción 3:</strong> "¿Añadimos nata montada arriba para look Instagram?"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Limpia la zona cada 30 min. FIFO estricto: los conos absorben humedad. Envuelve siempre con tissue para agarre.</div>`,
 
-      'gelatoLab.cards.boxes.desc': 'GELATO para llevar en cajas térmicas de 500/750/1000 ml. Cada caja mantiene el GELATO en buen estado ~1 hora si va dentro de la bolsa térmica. Recuerda al cliente que lo ponga en el congelador en casa lo antes posible: el GELATO cambia de textura al descongelarse.',
+      'gelatoLab.cards.boxes.desc': 'Cajas para llevar 500/750/1000 ml. Compacta, sella, usa bolsa térmica y recuerda congelar en casa cuanto antes.',
       'gelatoLab.cards.boxes.stats': `<li>Pequeño: 500 ml (1-3 sabores)</li><li>Mediano: 750 ml (1-4 sabores)</li><li>Grande: 1000 ml (1-5 sabores)</li><li>Orden: empieza por sabores más blandos (sorbet primero) para evitar contaminación</li><li>Compactado: elimina aire; limpia bordes con espátula antes de sellar</li><li>Sellado: film + cinta Badiani; entrega en bolsa térmica</li><li>Autonomía: ~1 hora; recuerda siempre el congelador en casa</li>`,
       'gelatoLab.cards.boxes.details': `<div class="steps"><span>1 · Añade sabores empezando por los más blandos (sorbet primero).</span><span>2 · Compacta para eliminar aire y limpia los bordes.</span><span>3 · Sella con film + cinta Badiani y colócalo en la bolsa.</span></div><div class="tips">Upsell: caja más grande + pack de 10 waffles o conos.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Opción 1:</strong> "La caja de 1L te permite probar más sabores"</span><span><strong>Opción 2:</strong> "¿Añadimos un pack de conos para servir en casa?"</span><span><strong>Opción 3:</strong> "Con bolsa térmica se mantiene perfecto hasta 2 horas"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Compacta bien para evitar cristales. Limpia bordes antes de sellar. Autonomía ~1h: recuerda congelador ASAP.</div>`,
 
-      'gelatoLab.cards.coppa.desc': 'Tres bolas de GELATO en copa de vidrio, con nata montada, una salsa a elección, mini cono y wafer Badiani. Es la opción “wow”: construye con orden y sirve enseguida para mantener textura y topping limpio.',
+      'gelatoLab.cards.coppa.desc': 'Tres bolas en copa de vidrio con nata, salsa, mini cono y wafer. Monta en orden y sirve al momento.',
       'gelatoLab.cards.coppa.stats': `<li>Base: copa de vidrio</li><li>Porción: 3 scoops con scooper redondo (pueden ser 3 sabores)</li><li>Top: nata montada + swirl de la salsa elegida</li><li>Final: mini cono + wafer Badiani</li><li>Servicio: cuchara de acero, entrega inmediata</li>`,
       'gelatoLab.cards.coppa.details': `<div class="steps"><span>1 · Usa una copa de vidrio y prepara 3 bolas regulares con scooper redondo.</span><span>2 · Completa con nata montada y un swirl de la salsa elegida (sin manchar el borde).</span><span>3 · Añade mini cono + wafer Badiani y sirve con cuchara de acero.</span></div><div class="tips">Sugiere pairing con Slitti dragée para un postre completo.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Opción 1:</strong> "¿Añadimos crumble de avellana tostada y dragée Slitti?"</span><span><strong>Opción 2:</strong> "Doble salsa (pistacho + chocolate) la hace signature"</span><span><strong>Opción 3:</strong> "Maridaje perfecto: Coppa + espresso affogato style"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Usa copas frías para mantener temperatura. Haz bolas uniformes. Sirve inmediatamente para evitar que la nata se derrita.</div>`,
 
@@ -4761,7 +4780,7 @@
       'festive.cards.mulledWine.tag2': 'Especias',
       'festive.cards.mulledWine.tag3': 'Naranja',
       'festive.cards.mulledWine.title': 'Vino caliente (Vin Brulé)',
-      'festive.cards.mulledWine.desc': 'Bebida caliente especiada, servida con una rodaja de naranja. Es la propuesta “comfort” de la temporada: cuenta aroma y ritual y luego guía el upsell (mini panettone / churros / shots opcionales según tienda).',
+      'festive.cards.mulledWine.desc': 'Bebida especiada servida caliente con rodaja de naranja. Cuenta el aroma y sugiere combo (mini panettone o churros).',
       'festive.cards.mulledWine.stats': `<li>Servicio: vaso + cucharón dedicado</li><li>Garnish: rodaja de naranja (siempre)</li><li>Timing: servir caliente, no hirviendo</li><li>Script: "Nuestro Vin Brulé especiado, perfecto con un mini panettone"</li>`,
       'festive.cards.mulledWine.details': `<div class="steps"><span>1 - Preséntalo: aroma, especias, naranja (ritual).</span><span>2 - Sirve con el cucharón dedicado y garnish.</span><span>3 - Propón combo: mini panettone / churros / postre caliente.</span></div><div class="tips">Palabras clave: “caliente, especiado, naranja, comfort”.</div>`,
 
@@ -4874,7 +4893,7 @@
       'sweetTreats.ops.category': 'Apertura · Ajustes · Datos técnicos · Almacenaje · Cierre',
 
       'sweetTreats.ops.opening.title': 'Checklist de apertura (estaciones)',
-      'sweetTreats.ops.opening.desc': 'Antes del servicio verifica que las máquinas estén listas y que mix/ingredientes estén en orden. La Gelato Burger Machine debe encenderse en apertura y apagarse en cierre.',
+      'sweetTreats.ops.opening.desc': 'Checklist de apertura: máquinas listas, mix/ingredientes en orden y stock etiquetado. Gelato Burger Machine ON al abrir, OFF al cerrar.',
       'sweetTreats.ops.opening.stats': `<li>Waffle machine: enciende y espera ambas luces verdes (READY + POWER)</li><li>Gelato Burger Machine: ON en apertura; normalmente lista ~10 min después</li><li>Crepe mix: debe reposar en frigo al menos 2 horas antes de usar</li>`,
       'sweetTreats.ops.opening.details': `<div class="steps"><span>1 · Enciende máquinas y confirma temperatura/listo.</span><span>2 · Revisa mixes y stock (etiquetas, FIFO, fechas).</span><span>3 · Prepara blue roll y botellas de sauce para una estación limpia y rápida.</span></div><div class="tips">Objetivo: cero espera en el primer pedido y estaciones ya “service ready”.</div>`,
 
@@ -4933,7 +4952,7 @@
 
       'pastries.cards.croissants.title': 'Croissants',
       'pastries.cards.croissants.alt': 'Croissant relleno',
-      'pastries.cards.croissants.desc': 'Croissant ya laminado, para rellenar con la sauce que pida el cliente. Abre lateralmente, rellena y completa la presentación en plato con tenedor y cuchillo. Recuerda calentar ligeramente los croissants del día anterior para recuperar fragancia.',
+      'pastries.cards.croissants.desc': 'Croissant relleno con la sauce elegida. Abre lateralmente, rellena y sirve en plato con cubiertos; calienta brevemente si hace falta.',
       'pastries.cards.croissants.stats': `<li>Shelf life: 2 días desde defrost (revisa fecha)</li><li>Corte: usa cuchillo de sierra; abre el lateral en horizontal</li><li>Relleno: manga pastelera para uniformidad y precisión</li><li>Presentación: sauce inside + drizzle arriba, plato limpio, cubiertos siempre</li><li>Calentado (si hace falta): solo 8–10 segundos; nunca más de 15s (el relleno se derrite)</li>`,
       'pastries.cards.croissants.details': `<div class="steps"><span>1 - Abre el lateral con cuchillo de sierra.</span><span>2 - Rellena interior y topping exterior con la misma sauce.</span><span>3 - Emplata, añade cubiertos y sirve.</span></div><div class="tips">Comunica shelf life y rotación: 2 días desde defrost.</div>`,
 
@@ -4948,7 +4967,7 @@
 
       'pastries.ops.display.title': 'Vitrina pastry (apertura)',
       'pastries.ops.display.alt': 'Vitrina pastry Badiani',
-      'pastries.ops.display.desc': 'Objetivo de apertura: vitrina llena, ordenada y legible. Label siempre junto al tray correcto; las cakes en cake stand con una porción retirada para mostrar el interior.',
+      'pastries.ops.display.desc': 'Apertura vitrina: llena, ordenada y legible. Label en el tray correcto; cakes en cake stand con 1 porción retirada (visual interior).',
       'pastries.ops.display.stats': `<li>CAKES: cake stands + retirar 1 slice (visual interior)</li><li>CROISSANTS: en trays dedicados (filas limpias)</li><li>BROWNIES/PUDDING/TARTS/SCONES: en tray, alineados</li><li>LOAF: cortar y mostrar la primera porción en el tray</li>`,
       'pastries.ops.display.details': `<div class="steps"><span>1 · Restablece un “full look” (sin huecos visibles).</span><span>2 · Coloca las label junto al tray correcto (nunca genéricas).</span><span>3 · Verifica FIFO e shelf life antes del primer servicio.</span></div><div class="tips">Consistencia visual = ventas. Un mostrador “lleno” invita a comprar.</div>`,
 
@@ -6035,7 +6054,7 @@
 
       'operations.cards.openingRoutine.tag1': 'Prep matin',
       'operations.cards.openingRoutine.title': 'Routine d\'ouverture',
-      'operations.cards.openingRoutine.desc': 'Contrôle des températures, nettoyage des vitres, réorganisation des bacs (FIFO) et vérification des étiquettes. La vitrine est votre première carte de visite : elle doit être impeccable.',
+      'operations.cards.openingRoutine.desc': 'Routine d\'ouverture : températures, vitres, FIFO et étiquettes. La vitrine doit être impeccable.',
       'operations.cards.openingRoutine.stats': `<li>Température : -14/-15°C (à noter sur le log HACCP)</li><li>Nettoyage : vitres intérieures/extérieures avec le produit adapté</li><li>Bacs : réorganiser par couleur/goût ; nettoyer les bords</li><li>Étiquettes : toutes présentes, droites et propres</li><li>Outils : spatules propres en eau courante (si système) ou changements fréquents</li>`,
       'operations.cards.openingRoutine.details': `<div class="steps"><span>1 · Note les températures sur le log HACCP.</span><span>2 · Nettoie vitres et bords de bacs.</span><span>3 · Vérifie étiquettes et outils prêts.</span></div><div class="tips">Si un bac est presque vide, remplace-le tout de suite (ne gratte pas le fond devant le client).</div>`,
 
@@ -6050,7 +6069,7 @@
       'operations.cards.warmPandoro.tag2': '10" par côté',
       'operations.cards.warmPandoro.tag3': 'Service',
       'operations.cards.warmPandoro.title': 'Service tiède (Pandoro)',
-      'operations.cards.warmPandoro.desc': 'Pandoro réchauffé : même technique que le panettone. 10 secondes par côté sur la plaque crêpe (sans huile). Servir immédiatement avec le pairing recommandé (crème mascarpone tiède, GELATO, sauce).',
+      'operations.cards.warmPandoro.desc': 'Pandoro réchauffé : 10 s par côté sur la plaque crêpe (sans huile). Servir immédiatement avec le pairing recommandé.',
       'operations.cards.warmPandoro.stats': `<li><strong>Demande au client :</strong> "Tu le veux tiède ?"</li><li><strong>Plaque crêpe :</strong> propre et sèche, sans huile</li><li><strong>Timing :</strong> 10 secondes par côté</li><li><strong>Service immédiat :</strong> dresse tout de suite</li><li><strong>Sampling :</strong> petits triangles aux heures de pointe</li><li><strong>Pairings :</strong> mascarpone tiède, GELATO froid, sauce chocolat</li>`,
       'operations.cards.warmPandoro.details': `<div class="steps"><span>1 - Demande la préférence du client.</span><span>2 - Toast et dresse rapidement.</span><span>3 - Sers avec le pairing recommandé.</span></div><div class="tips">Sampling aux heures de pointe = storytelling + conversion.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Option 1 :</strong> "Version tiède + GELATO = premium"</span><span><strong>Option 2 :</strong> "On ajoute la crème mascarpone tiède ?"</span><span><strong>Option 3 :</strong> "Toujours demander tiède/froid pour guider l\'upsell"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> 10" par côté, pas plus. Dressage rapide pour garder le volume.</div>`,
 
@@ -6181,21 +6200,21 @@
       'slittiYoyo.carousel.ops.category': 'Ouverture · Display · Données techniques · Storage · Fermeture',
 
       'slittiYoyo.cards.timeline.title': 'Timeline essentielle',
-      'slittiYoyo.cards.timeline.desc': 'Luciano Slitti ouvre comme torréfacteur en 1969. En 1990 Andrea introduit le chocolat et, avec son frère Daniele, remporte des prix internationaux (Grand Prix 1994, Eurochocolate 1996, meilleur chocolatier italien 2008).',
+      'slittiYoyo.cards.timeline.desc': 'Histoire rapide : Luciano (1969), Andrea (1990). Prix : Grand Prix 1994, Eurochocolate 1996, meilleur chocolatier italien 2008.',
       'slittiYoyo.cards.timeline.details': `<div class="steps"><span>1. Mets en avant la sélection rigoureuse des matières premières.</span><span>2. Raconte les prix et l\'héritage toscan pour justifier le premium.</span><span>3. Invite à goûter avec un café ou GELATO.</span></div><div class="tips">Utilise la palette bleu/rose pour de petites cartes storytelling près du display.</div>`,
 
       'slittiYoyo.cards.tablets.title': 'Tablettes LatteNero & Gran Cacao',
-      'slittiYoyo.cards.tablets.desc': 'Tablettes Slitti en différents profils de cacao (45%, 51%, 73%, 82%, 100%) + barre Coffee Milk aromatisée à l\'arabica torréfié. Explique le blend : cacao + cocoa butter pour la douceur, équilibre sucre/lait (profils plus doux).',
+      'slittiYoyo.cards.tablets.desc': 'Tablettes Slitti (45–100%) + Coffee Milk à l\'arabica. Profils : plus de cacao = plus intense ; plus de lait/sucre = plus doux.',
       'slittiYoyo.cards.tablets.stats': `<li>Profils : LatteNero (45%, 51%, 73%, 82%, 100%), Coffee Milk à l\'arabica</li><li>Composition : cacao sélectionné + cocoa butter + lait (LatteNero)</li><li>Conservation : 16–18°C, loin de la lumière directe et des odeurs fortes</li>`,
       'slittiYoyo.cards.tablets.details': `<div class="steps"><span>1. Demande la préférence (lait/dark).</span><span>2. Suggère un pairing avec espresso ou cappuccino.</span><span>3. Rappelle le packaging cadeau et la longue shelf life.</span></div><div class="tips">Expose un sample ouvert pour le motif ; stock FIFO.</div>`,
 
       'slittiYoyo.cards.minicake.title': 'Mini cakes',
-      'slittiYoyo.cards.minicake.desc': 'Mini cakes Slitti avec ingrédients d\'excellence : noisettes Tonda Gentile (Langhe) et amandes d\'Avola (Sicile). Trois variantes : lait-noisette, dark mix fruit, dark amande. À servir à température ambiante ou légèrement tiède.',
+      'slittiYoyo.cards.minicake.desc': 'Mini cakes Slitti (noisette Tonda Gentile, amande d\'Avola). Trois variantes ; à servir ambiante ou légèrement tiède.',
       'slittiYoyo.cards.minicake.stats': `<li>Variantes : lait-noisette Langhe, dark mix fruit, dark amande Avola</li><li>Ingrédients : Tonda Gentile, amande d\'Avola (communique l\'origine)</li><li>Service : ambiant ou 10" micro-ondes pour les arômes</li>`,
       'slittiYoyo.cards.minicake.details': `<div class="steps"><span>1. Explique la différence d\'ingrédients (Tonda Gentile, Avola).</span><span>2. Sers à température ambiante ou légèrement tiède.</span><span>3. Propose avec la crème Slittosa.</span></div>`,
 
       'slittiYoyo.cards.pralines.title': 'Pralines & dragée',
-      'slittiYoyo.cards.pralines.desc': 'Pralines Origin et Irish Coffee (0,9% alc) + dragée à base de pistache, amande, noisette, cranberry, caramel peanuts, amarena et arabica. Chaque dragée raconte une origine : Bronte, Avola, Langhe. À garder au frais et en faible lumière.',
+      'slittiYoyo.cards.pralines.desc': 'Pralines Origin/Irish Coffee + dragée (pistache, amande, noisette…). À garder au frais, à l\'abri de la lumière.',
       'slittiYoyo.cards.pralines.stats': `<li>Pralines : Origin, Irish Coffee (0,9% alcool), Passion Fruit</li><li>Dragée : pistache Bronte, amande Avola, noisette Langhe, cranberry, caramel peanuts, amarena, arabica, gingembre</li><li>Origine : à mettre en avant sur mini ardoises (Bronte, Avola, Langhe)</li>`,
       'slittiYoyo.cards.pralines.details': `<div class="steps"><span>1 · Température fraîche + lumière basse.</span><span>2 · Propose une dégustation si tu ouvres un pack sample.</span><span>3 · Pairings : pistache avec Pistachio Hot ; gingembre avec chai.</span></div>`,
 
@@ -6210,27 +6229,27 @@
       'slittiYoyo.cards.yoyo.details': `<div class="steps"><span>1 · Sortir du freezer au moment de la commande.</span><span>2 · Servir immédiatement pour éviter la fonte.</span><span>3 · Proposer comme snack rapide ou dessert à emporter.</span></div>`,
 
       'slittiYoyo.ops.setupStation.title': 'Allestimento Yo-Yo (banco)',
-      'slittiYoyo.ops.setupStation.desc': 'Place le Yo‑Yo au centre au-dessus de la vitrine gelato. Zone sans miettes et refill à chaque fois : jamais de “vide” visuel.',
+      'slittiYoyo.ops.setupStation.desc': 'Place le Yo‑Yo au centre au-dessus de la vitrine. Zone sans miettes et toujours remplie (zéro vide visuel).',
       'slittiYoyo.ops.setupStation.stats': `<li>Position : centrale, au-dessus de la vitrine gelato</li><li>Hygiène : surface toujours sans miettes</li><li>Replenish : refill à chaque fois (jamais de “vide” visuel)</li>`,
       'slittiYoyo.ops.setupStation.details': `<div class="steps"><span>1 · Nettoie la zone (zéro miettes).</span><span>2 · Place la station Yo-Yo visible et centrale.</span><span>3 · Prépare wafers/outils et gants jetables.</span></div><div class="tips">Yo-Yo se vend aussi “avec les yeux” : jamais désordonné.</div>`,
 
       'slittiYoyo.ops.stationTools.title': 'Station & outils (standard)',
-      'slittiYoyo.ops.stationTools.desc': 'Setup rapide pour éviter ralentissements et contaminations en rush.',
+      'slittiYoyo.ops.stationTools.desc': 'Station prête = service rapide et propre : gants, outil et wafers à portée.',
       'slittiYoyo.ops.stationTools.stats': `<li>Gants : avant de toucher wafers/Yo-Yo tool</li><li>Tool : Yo-Yo tool sur une assiette avec 2 wafers prêts</li><li>Flow : wafer → GELATO → fermeture, sans détour</li>`,
       'slittiYoyo.ops.stationTools.details': `<div class="steps"><span>1 · Gants on.</span><span>2 · Wafer sur le tool, base prête.</span><span>3 · Ferme juste après portioning (pas d\'overflow).</span></div><div class="tips">Ordre fixe = vitesse et cohérence.</div>`,
 
       'slittiYoyo.ops.portioning.title': 'Portionnage GELATO Yo-Yo',
-      'slittiYoyo.ops.portioning.desc': 'Portion cible : 80–90 g. Le GELATO doit rester dans les wafers : pas d\'overflow.',
+      'slittiYoyo.ops.portioning.desc': 'Portion 80–90 g : le gelato reste dans les wafers, bord propre (zéro overflow).',
       'slittiYoyo.ops.portioning.stats': `<li>Cible : 80–90 g</li><li>Scoop : portionner le GELATO avec ice-cream scooper</li><li>Contrôle : pas d\'overflow (défaut visuel + station sale)</li>`,
       'slittiYoyo.ops.portioning.details': `<div class="steps"><span>1 · Place le GELATO au centre.</span><span>2 · Ferme avec le second wafer et garde le bord propre.</span><span>3 · Si tu salis : nettoie tout de suite.</span></div><div class="tips">Précision aujourd\'hui = moins de waste demain.</div>`,
 
       'slittiYoyo.ops.panStorage.title': 'Pan storage method (étiquetage)',
-      'slittiYoyo.ops.panStorage.desc': 'Si tu utilises le “pan storage method”, il doit être étiqueté en permanence. Étiquettes claires = moins d\'erreurs et plus de contrôle.',
+      'slittiYoyo.ops.panStorage.desc': 'Pan storage : étiquette toujours (date/contenu). Étiquettes claires = moins d\'erreurs.',
       'slittiYoyo.ops.panStorage.stats': `<li>Étiquette : date + contenu + responsable (standard store)</li><li>Ne pas mélanger des wafers différents dans le même contenant</li><li>Contrôle miettes : chaque refill = quick wipe</li>`,
       'slittiYoyo.ops.panStorage.details': `<div class="steps"><span>1 · Applique l\'étiquette avant de mettre en place.</span><span>2 · Vérifie l\'intégrité (pas de cassés en vue).</span><span>3 · Refill = nettoyage : retire miettes et résidus.</span></div>`,
 
       'slittiYoyo.ops.closing.title': 'Fermeture station Yo-Yo',
-      'slittiYoyo.ops.closing.desc': 'Remets une station propre et prête : réduit le temps d\'ouverture et évite les contaminations.',
+      'slittiYoyo.ops.closing.desc': 'Clôture : nettoyer, ranger et laisser la station prête pour l\'ouverture.',
       'slittiYoyo.ops.closing.stats': `<li>Retire miettes et résidus des surfaces et outils</li><li>Range wafers et tool selon la procédure (label si pan storage)</li><li>Check : station “opening-ready”</li>`,
       'slittiYoyo.ops.closing.details': `<div class="steps"><span>1 · Nettoie et sèche zone et outils.</span><span>2 · Range le stock avec les bonnes étiquettes.</span><span>3 · Laisse le plan libre et net.</span></div>`,
 
@@ -7104,6 +7123,15 @@
       'modal.tab.checklist': 'Checklist',
       'modal.tab.focus': 'Focus',
 
+      'modal.overview.auto.introHtml': `<p><strong>{{title}}</strong> — {{desc}}</p>`,
+      'modal.overview.auto.focusHtml': `<p><strong>Focus :</strong> {{tags}}</p>`,
+      'modal.overview.auto.factsSuffix': ' ({{count}} points clés)',
+      'modal.overview.auto.product.whatHtml': `<p><strong>Ce que vous trouverez :</strong> contexte produit, notes de service et repères de storytelling pour recommander le bon pairing naturellement{{facts}}.</p>`,
+      'modal.overview.auto.product.whyHtml': `<p><strong>Pourquoi c’est important :</strong> un aperçu clair accélère la vente aux heures de pointe, améliore la cohérence d’équipe et renforce la perception premium.</p>`,
+      'modal.overview.auto.ops.whatHtml': `<p><strong>Ce que vous trouverez :</strong> standards opérationnels et points de contrôle pour garder le comptoir propre, le service rapide et la qualité constante pendant le shift{{facts}}.</p>`,
+      'modal.overview.auto.ops.whyHtml': `<p><strong>Pourquoi c’est important :</strong> une routine partagée réduit les erreurs, le gaspillage et les reprises — et rend l’expérience client plus fluide.</p>`,
+      'modal.overview.auto.howHtml': `<p><strong>Comment l’utiliser :</strong> lisez-la avant le shift et gardez-la comme référence rapide pour installer la station ou expliquer l’offre au client.</p>`,
+
       'modal.label.details': 'Détails',
       'modal.section.moreDetails': 'Autres détails',
 
@@ -7121,21 +7149,21 @@
       'gelatoLab.ops.title': 'Mise en place & conservation',
       'gelatoLab.ops.category': 'Ouverture · Setup · Stockage · Scampoli · Fermeture',
 
-      'gelatoLab.cards.cups.desc': 'Coupelles en trois tailles : Petit (1 parfum, 100 g), Moyen (1-2 parfums, 140 g), Grand (1-3 parfums, 180 g). La clé : doser correctement et bien compacter pour éliminer les bulles d\'air et garder une présentation uniforme.',
+      'gelatoLab.cards.cups.desc': 'Trois tailles de coupelles (S/M/L) pour 1–3 parfums. Doser et compacter pour une finition uniforme.',
       'gelatoLab.cards.cups.title': 'Coupelles',
       'gelatoLab.cards.cups.stats': `<li>Pesée : Petit 100-120g, Moyen 160-200g, Grand 200-240g (toujours vérifier)</li><li>Technique : scoop linéaire + boule pour un look pro</li><li>Compactage : presser le GELATO contre le côté de la coupelle</li><li>Spatule : la chauffer sur le GELATO pour faciliter le service</li><li>Final : proposer wafer et chantilly (upselling)</li><li>Temp. idéale du GELATO : -14/-15°C (plus chaud = plus difficile à portionner)</li>`,
       'gelatoLab.cards.cups.details': `<div class="steps"><span>1 · Chauffe la spatule sur le parfum pour l\'assouplir.</span><span>2 · Presse le GELATO contre le côté de la coupelle pour enlever l\'air.</span><span>3 · Propose wafer/chantilly et souris.</span></div><div class="tips">Les enfants peuvent choisir deux parfums même en petit.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Option 1 :</strong> "Passer au moyen ? Ajoute un parfum + chantilly"</span><span><strong>Option 2 :</strong> "J\'ajoute de la chantilly et un wafer croustillant ?"</span><span><strong>Option 3 :</strong> "Avec sauce pistache, c\'est encore plus gourmand"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Pèse toujours pour respecter la fourchette de grammes. Utilise “scoop linéaire + boule” pour un look pro. Temp. idéale du GELATO : -14/-15°C.</div>`,
 
-      'gelatoLab.cards.cones.desc': 'Cornets en trois variantes : Classique (1 parfum), Chocolat ou Gluten Free (1-2 parfums). Envelopper chaque cornet avec un tissue pour la prise en main et la présentation. Garder la zone cornets propre pour éviter les contaminations.',
+      'gelatoLab.cards.cones.desc': 'Trois cornets (classique, chocolat, sans gluten) pour 1–2 boules. Tissue obligatoire et zone cornets toujours propre.',
       'gelatoLab.cards.cones.title': 'Cornets classiques',
       'gelatoLab.cards.cones.stats': `<li>Envelopper : tissue toujours, pour grip et look</li><li>Portion : 1 boule pour cornet classique, 1-2 boules pour cornet spécial (choco/GF)</li><li>Placement : poser la boule en tournant le cornet</li><li>Propreté : toutes les 30 min enlever les miettes (humidité)</li><li>Rotation : FIFO strict (les cornets absorbent l\'humidité)</li><li>Upgrade : cornet chocolat (enrobé dedans/dehors), chantilly</li>`,
       'gelatoLab.cards.cones.details': `<div class="steps"><span>1 · Enveloppe le cornet avec un tissue.</span><span>2 · Prépare la boule et pose-la en tournant.</span><span>3 · Propose upgrade cornet choco ou chantilly.</span></div><div class="tips">Garde la zone cornets propre en retirant les miettes.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Option 1 :</strong> "Upgrade cornet chocolat ? Enrobé dedans et dehors"</span><span><strong>Option 2 :</strong> "Cornet gluten-free disponible (si en stock)"</span><span><strong>Option 3 :</strong> "Ajouter de la chantilly pour un look Instagram ?"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Nettoie la zone cornets toutes les 30 min. FIFO strict : les cornets prennent l\'humidité. Toujours envelopper avec tissue.</div>`,
 
-      'gelatoLab.cards.boxes.desc': 'GELATO à emporter en box isolées 500/750/1000 ml. Chaque box garde le GELATO en bon état ~1h dans le sac isotherme. Toujours rappeler au client de le mettre rapidement au freezer : le GELATO change de texture en fondant.',
+      'gelatoLab.cards.boxes.desc': 'Box à emporter 500/750/1000 ml. Bien compacter, sceller, sac isotherme, et rappeler de mettre au freezer au plus vite.',
       'gelatoLab.cards.boxes.stats': `<li>Petit : 500 ml (1-3 parfums)</li><li>Moyen : 750 ml (1-4 parfums)</li><li>Grand : 1000 ml (1-5 parfums)</li><li>Ordre : commencer par les parfums plus souples (sorbet d\'abord)</li><li>Compactage : enlever l\'air ; nettoyer les bords avant de sceller</li><li>Scellement : film + ruban Badiani, remettre dans sac isotherme</li><li>Autonomie : ~1h ; rappeler le freezer à la maison</li>`,
       'gelatoLab.cards.boxes.details': `<div class="steps"><span>1 · Ajouter les parfums en commençant par les plus souples (sorbet d\'abord).</span><span>2 · Compacter pour enlever l\'air et nettoyer les bords.</span><span>3 · Sceller avec film + ruban Badiani et mettre dans le sac.</span></div><div class="tips">Upsell : box plus grande + pack de 10 waffles ou cornets.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Option 1 :</strong> "La box 1L te permet de tester plus de parfums"</span><span><strong>Option 2 :</strong> "On ajoute un pack de cornets pour servir à la maison ?"</span><span><strong>Option 3 :</strong> "Avec un sac isotherme, tout reste parfait jusqu\'à 2h"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Bien compacter pour éviter les cristaux. Nettoyer les bords avant de sceller. Autonomie ~1h : rappeler freezer ASAP.</div>`,
 
-      'gelatoLab.cards.coppa.desc': 'Trois boules de GELATO en coupe en verre, avec chantilly, une sauce au choix, mini cornet et wafer Badiani. Option “wow” : monter dans l\'ordre et servir immédiatement pour garder la texture et un topping propre.',
+      'gelatoLab.cards.coppa.desc': 'Trois boules en coupe en verre avec chantilly, sauce, mini cornet et wafer. Monter dans l\'ordre et servir immédiatement.',
       'gelatoLab.cards.coppa.stats': `<li>Base : coupe en verre</li><li>Portion : 3 scoops avec cuillère ronde (peut être 3 parfums)</li><li>Top : chantilly + swirl de sauce</li><li>Finition : mini cornet + wafer Badiani</li><li>Service : cuillère inox, service immédiat</li>`,
       'gelatoLab.cards.coppa.details': `<div class="steps"><span>1 · Prendre une coupe en verre et former 3 boules régulières.</span><span>2 · Ajouter la chantilly et un swirl de sauce (bord propre).</span><span>3 · Ajouter mini cornet + wafer Badiani, servir avec cuillère inox.</span></div><div class="tips">Proposer un pairing avec Slitti dragée pour un dessert complet.</div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong><span><strong>Option 1 :</strong> "Ajouter crumble de noisette toastée + dragée Slitti ?"</span><span><strong>Option 2 :</strong> "Double sauce (pistache + chocolat) = signature"</span><span><strong>Option 3 :</strong> "Accord parfait : Coppa + espresso affogato style"</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Utiliser des coupes froides. Boules uniformes. Servir tout de suite pour éviter que la chantilly fonde.</div>`,
 
@@ -7241,7 +7269,7 @@
       'festive.cards.mulledWine.tag2': 'Épices',
       'festive.cards.mulledWine.tag3': 'Orange',
       'festive.cards.mulledWine.title': 'Vin chaud (Vin Brulé)',
-      'festive.cards.mulledWine.desc': 'Boisson chaude épicée, servie avec une tranche d\'orange. Offre “comfort” de saison : raconte l\'arôme + le rituel, puis guide l\'upsell (mini panettone / churros / shots optionnels selon store).',
+      'festive.cards.mulledWine.desc': 'Boisson chaude épicée (Vin Brulé) avec tranche d\'orange. Parle de l\'arôme et propose un combo (mini panettone ou churros).',
       'festive.cards.mulledWine.stats': `<li>Service : gobelet + louche dédiée</li><li>Garnish : tranche d\'orange (toujours)</li><li>Timing : servir chaud, pas bouillant</li><li>Script : "Notre Vin Brulé épicé, parfait avec un mini panettone"</li>`,
       'festive.cards.mulledWine.details': `<div class="steps"><span>1 - Présente : arôme, épices, orange (rituel).</span><span>2 - Sers avec la louche dédiée + garnish.</span><span>3 - Propose un combo : mini panettone / churros / dessert chaud.</span></div><div class="tips">Mots-clés : “chaud, épicé, orange, comfort”.</div>`,
 
@@ -7354,7 +7382,7 @@
       'sweetTreats.ops.category': 'Ouverture · Réglages · Données techniques · Stockage · Fermeture',
 
       'sweetTreats.ops.opening.title': 'Checklist ouverture (stations)',
-      'sweetTreats.ops.opening.desc': 'Avant le service, vérifie que les machines sont prêtes et que les mix/ingrédients sont en ordre. La Gelato Burger Machine doit être ON à l\'ouverture et OFF à la fermeture.',
+      'sweetTreats.ops.opening.desc': 'Checklist ouverture : machines prêtes, mix/ingrédients en ordre, stock étiqueté. Gelato Burger Machine ON à l\'ouverture, OFF à la fermeture.',
       'sweetTreats.ops.opening.stats': `<li>Waffle machine : allume et attends les deux lumières vertes (READY + POWER)</li><li>Gelato Burger Machine : ON à l'ouverture ; généralement prête ~10 min après</li><li>Crepe mix : doit reposer au frigo au moins 2 heures avant utilisation</li>`,
       'sweetTreats.ops.opening.details': `<div class="steps"><span>1 · Allume les machines et confirme qu'elles sont en température/prêtes.</span><span>2 · Vérifie mix et stocks (labels, FIFO, dates).</span><span>3 · Prépare blue roll et bouteilles de sauce pour une station propre et rapide.</span></div><div class="tips">Objectif : zéro attente au premier ordre et stations déjà “service ready”.</div>`,
 
@@ -7374,7 +7402,7 @@
       'sweetTreats.ops.portions.details': `<div class="steps"><span>1 · Utilise des scoops dédiés : réduit les variations entre opérateurs.</span><span>2 · Si c'est hors standard, corrige tout de suite (ne “compense” pas).</span><span>3 · Note les erreurs récurrentes : ce sont des points training.</span></div>`,
 
       'sweetTreats.ops.closing.title': 'Fermeture & nettoyage rapide',
-      'sweetTreats.ops.closing.desc': 'En fin de journée, réduit résidus et risques : sur la Gelato Burger Machine, utilise seulement blue-roll pour les gouttes de GELATO/sauce et pour enlever les miettes.',
+      'sweetTreats.ops.closing.desc': 'Clôture : réduire résidus et risques. Sur la Gelato Burger Machine, utiliser seulement blue-roll pour gouttes de gelato/sauce et miettes.',
       'sweetTreats.ops.closing.stats': `<li>Gelato Burger Machine : OFF à la fermeture ; surface sans résidus/particules</li><li>Waffle : enlève les résidus et prépare la station pour demain</li><li>Mix : remettre au frigo avec label (ou jeter si au-delà shelf life)</li>`,
       'sweetTreats.ops.closing.details': `<div class="steps"><span>1 · Éteins les machines et laisse refroidir en sécurité.</span><span>2 · Nettoie au blue-roll : pas d'huile sur les plaques Gelato Burger.</span><span>3 · Frigo + labels pour mix/ingrédients ; jette ce qui dépasse la shelf life.</span></div><div class="tips">Propre et sec aujourd'hui = ouverture plus rapide demain.</div>`,
 
@@ -7413,7 +7441,7 @@
 
       'pastries.cards.croissants.title': 'Croissants Garnis',
       'pastries.cards.croissants.alt': 'Croissant garni',
-      'pastries.cards.croissants.desc': 'Croissant déjà laminé, à garnir avec la sauce demandée. Ouvre sur le côté, remplis et termine la présentation sur assiette avec fourchette et couteau. Pense à réchauffer légèrement les croissants de la veille pour raviver la fragrance.',
+      'pastries.cards.croissants.desc': 'Croissant garni avec la sauce au choix. Ouvrir sur le côté, garnir, servir avec couverts ; réchauffer brièvement si besoin.',
       'pastries.cards.croissants.stats': `<li>Shelf life : 2 jours depuis le defrost (vérifie la date)</li><li>Découpe : couteau dentelé, ouverture latérale à l\'horizontale</li><li>Garniture : poche à douille pour uniformité et précision</li><li>Présentation : sauce inside + drizzle dessus, assiette propre, couverts toujours</li><li>Réchauffage (si besoin) : 8–10 secondes seulement ; jamais plus de 15s (la garniture fond)</li>`,
       'pastries.cards.croissants.details': `<div class="steps"><span>1 - Incise le côté avec un couteau dentelé.</span><span>2 - Garnis l\'intérieur et le topping avec la même sauce.</span><span>3 - Dresse, ajoute les couverts et sers.</span></div><div class="tips">Rappelle shelf life et rotation : 2 jours depuis le defrost.</div>`,
 
@@ -7428,7 +7456,7 @@
 
       'pastries.ops.display.title': 'Vitrine pastry (ouverture)',
       'pastries.ops.display.alt': 'Vitrine pastry Badiani',
-      'pastries.ops.display.desc': 'Objectif ouverture : vitrine pleine, ordonnée et lisible. Label toujours près du tray correct ; cakes sur cake stands avec une part retirée pour montrer l\'intérieur.',
+      'pastries.ops.display.desc': 'Ouverture vitrine : pleine, ordonnée, lisible. Label au bon tray ; cakes sur cake stand avec 1 part retirée (visual intérieur).',
       'pastries.ops.display.stats': `<li>CAKES: cake stands + retire 1 slice (visual intérieur)</li><li>CROISSANTS: trays dédiés (lignes propres)</li><li>BROWNIES/PUDDING/TARTS/SCONES: sur trays, alignés</li><li>LOAF: coupe et montre la première tranche sur le tray</li>`,
       'pastries.ops.display.details': `<div class="steps"><span>1 · Restaure un “full look” (sans trous visuels).</span><span>2 · Place les label près du bon tray (jamais génériques).</span><span>3 · Vérifie FIFO et shelf life avant le premier service.</span></div><div class="tips">Cohérence visuelle = ventes. Un comptoir “plein” donne envie.</div>`,
 

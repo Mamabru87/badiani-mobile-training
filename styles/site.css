@@ -105,6 +105,10 @@
   --guide-card-title-size: 24px;
   --guide-card-text-size: 15px;
 
+  /* Guide cards: keep descriptions uniform across the carousel */
+  --guide-card-title-lines: 2;
+  --guide-card-desc-lines: 3;
+
   --guide-media-padding: 8px;
   --guide-media-max-height: 210px;
 
@@ -5088,7 +5092,9 @@ section.carousel:last-of-type {
 .carousel-track {
   display: flex;
   flex-wrap: nowrap;
-  align-items: start;
+  /* Stretch cards to the same height (the tallest one), so carousels feel
+     visually consistent and avoid “white gaps” when focused cards differ. */
+  align-items: stretch;
   gap: var(--carousel-track-gap);
   overflow-x: auto;
   /* Cards scale/float slightly; keep their top shadows/transform from being clipped. */
@@ -5272,6 +5278,9 @@ section.carousel:last-of-type {
 
 .guide-card button[data-toggle-card] {
   align-self: stretch;
+  /* When carousel cards are stretched to equal height, keep CTA pinned to the bottom.
+     (Doesn't affect natural-height cards because auto margins collapse to 0.) */
+  margin-top: auto;
   border: 1px solid rgba(236, 65, 140, 0.26);
   background: rgba(236, 65, 140, 0.06);
   padding: var(--guide-toggle-padding-block) var(--guide-toggle-padding-inline);
@@ -6176,10 +6185,30 @@ section.carousel:last-of-type {
   color: var(--ink);
 }
 
+/* Clamp carousel card titles so the vertical rhythm stays consistent */
+.guide-card[data-carousel-item] > h3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--guide-card-title-lines);
+  overflow: hidden;
+}
+
 .guide-card p {
   color: var(--brand-gray-soft);
   font-size: 15px;
   line-height: 1.65;
+}
+
+/* Clamp only the summary paragraph (direct child) inside carousel cards.
+   Details / modal content should not be truncated. */
+.guide-card[data-carousel-item] > p {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--guide-card-desc-lines);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* Reserve space even for short copy so all cards feel equally tall */
+  min-height: calc(1.65em * var(--guide-card-desc-lines));
 }
 
 /*
@@ -7325,6 +7354,23 @@ body.page-product .badge {
   justify-content: center;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
+}
+
+/* In carousels, keep the media block height fixed so text/buttons align across cards. */
+.carousel-track .guide-media {
+  height: var(--guide-media-max-height);
+}
+
+.carousel-track .guide-media picture {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-track .guide-media img {
+  height: 100%;
+  max-height: 100%;
 }
 
 .guide-media.tall {
@@ -9496,6 +9542,9 @@ body.page-home {
 
 .page-home .carousel--cockpit .carousel-track {
   gap: 10px;
+  /* Cockpit cards manage their own sizing via aspect-ratio/min-height.
+     Don't stretch them to the tallest card. */
+  align-items: flex-start;
 }
 
 .page-home .carousel--cockpit .carousel-track [data-carousel-item] {
