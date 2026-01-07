@@ -3695,65 +3695,92 @@ const gamification = (() => {
   const storyOrbitStepCardId = (stepKey) => `story-orbit-step-${String(stepKey || 'step')}-1`;
 
   let audioContext = null;
+  let audioUnlocked = false;
 
   const getOrCreateAudioContext = () => {
     const AudioCtor = window.AudioContext || window.webkitAudioContext;
     if (!AudioCtor) return null;
-    // Never create AudioContext before a user gesture (Chrome/iOS autoplay policy).
-    // This flag is set in unlockAudioContext (capture listener) on the first trusted gesture.
-    if (!window.__badianiUserGesture) return null;
     if (!audioContext) {
-      audioContext = new AudioCtor();
+      try {
+        audioContext = new AudioCtor();
+      } catch (e) {
+        console.warn('[audio] Impossibile creare AudioContext:', e);
+        return null;
+      }
     }
     return audioContext;
   };
 
   // Ensure the AudioContext is actually running BEFORE we schedule oscillators.
-  // Otherwise (especially on iOS) resume() may resolve after the sound already ended.
+  // Force resume on EVERY sound attempt to handle mobile autoplay policies.
   const withRunningAudioContext = (fn) => {
     try {
-      // Avoid autoplay warnings: do nothing until the user has interacted.
-      if (!window.__badianiUserGesture) return;
       const ac = getOrCreateAudioContext();
       if (!ac) return;
 
       const run = () => {
-        try { fn(ac); } catch (e) {}
+        try { 
+          fn(ac); 
+          if (window.__badianiDebugAudio) {
+            console.log('[audio] suono riprodotto, stato:', ac.state);
+          }
+        } catch (e) {
+          console.warn('[audio] errore riproduzione:', e);
+        }
       };
 
+      // MOBILE FIX: Forza sempre resume se necessario
       if (ac.state === 'suspended') {
-        const p = ac.resume();
-        if (p && typeof p.then === 'function') {
-          p.then(run).catch(() => {});
-        } else {
-          run();
-        }
-        return;
+        ac.resume()
+          .then(() => {
+            audioUnlocked = true;
+            run();
+          })
+          .catch((err) => {
+            console.warn('[audio] resume fallito:', err);
+          });
+      } else {
+        audioUnlocked = true;
+        run();
       }
-
-      run();
-    } catch (e) {}
+    } catch (e) {
+      console.warn('[audio] errore generale:', e);
+    }
   };
 
-  // Global audio unlocker to ensure context is ready on first touch
+  // Global audio unlocker - più aggressivo per mobile
   const unlockAudioContext = (evt) => {
+    if (audioUnlocked) return; // Già sbloccato
+    
     try {
-      // Only count trusted user gestures.
+      // Solo eventi trusted
       if (evt && evt.isTrusted === false) return;
+      
       window.__badianiUserGesture = true;
-    } catch {}
-
-    // Do NOT create/resume AudioContext here.
-    // Some environments (VS Code preview/iframes) treat this as non-gesture and warn.
-    // We'll only create/resume when we actually play a sound.
-    ['pointerdown', 'click', 'touchstart', 'keydown'].forEach((name) =>
-      document.removeEventListener(name, unlockAudioContext, true)
-    );
+      
+      // MOBILE FIX: Crea e sblocca immediatamente l'AudioContext
+      const ac = getOrCreateAudioContext();
+      if (ac && ac.state === 'suspended') {
+        ac.resume()
+          .then(() => {
+            audioUnlocked = true;
+            console.log('[audio] AudioContext sbloccato con successo');
+          })
+          .catch(() => {
+            // Riprova alla prossima gesture
+          });
+      } else if (ac && ac.state === 'running') {
+        audioUnlocked = true;
+      }
+    } catch (e) {
+      console.warn('[audio] errore unlock:', e);
+    }
   };
-  // Use capture so unlock still fires even if inner handlers stop propagation.
-  // Also include pointerdown (more consistent as the "first gesture" on mobile).
-  ['pointerdown', 'click', 'touchstart', 'keydown'].forEach((evt) =>
-    document.addEventListener(evt, unlockAudioContext, true)
+
+  // MOBILE FIX: Aggiungi più eventi e usa capture per catturare ogni gesture
+  const unlockEvents = ['pointerdown', 'touchstart', 'touchend', 'click', 'keydown', 'mousedown'];
+  unlockEvents.forEach((evt) =>
+    document.addEventListener(evt, unlockAudioContext, { capture: true, passive: true })
   );
 
   const playTabOpenSound = () => {
