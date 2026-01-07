@@ -3749,9 +3749,8 @@ const gamification = (() => {
   };
 
   // Global audio unlocker - più aggressivo per mobile
+  // Ora usa NON passive per essere sicuri di eseguire prima che stopPropagation blocchi
   const unlockAudioContext = (evt) => {
-    if (audioUnlocked) return; // Già sbloccato
-    
     try {
       // Solo eventi trusted
       if (evt && evt.isTrusted === false) return;
@@ -3764,7 +3763,9 @@ const gamification = (() => {
         ac.resume()
           .then(() => {
             audioUnlocked = true;
-            console.log('[audio] AudioContext sbloccato con successo');
+            if (window.__badianiDebugAudio) {
+              console.log('[audio] AudioContext sbloccato con successo dopo:', evt.type);
+            }
           })
           .catch(() => {
             // Riprova alla prossima gesture
@@ -3777,11 +3778,12 @@ const gamification = (() => {
     }
   };
 
-  // MOBILE FIX: Aggiungi più eventi e usa capture per catturare ogni gesture
-  const unlockEvents = ['pointerdown', 'touchstart', 'touchend', 'click', 'keydown', 'mousedown'];
-  unlockEvents.forEach((evt) =>
-    document.addEventListener(evt, unlockAudioContext, { capture: true, passive: true })
-  );
+  // MOBILE FIX: Aggiungi più eventi e usa capture (true) NON-passive per essere certo di intercettare PRIMA di stopPropagation
+  const unlockEvents = ['pointerdown', 'pointerup', 'touchstart', 'touchend', 'click', 'keydown', 'mousedown'];
+  unlockEvents.forEach((evt) => {
+    document.addEventListener(evt, unlockAudioContext, { capture: true, passive: false });
+    window.addEventListener(evt, unlockAudioContext, { capture: true, passive: false });
+  });
 
   const playTabOpenSound = () => {
     withRunningAudioContext((ac) => {
