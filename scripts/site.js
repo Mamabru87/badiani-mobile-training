@@ -645,6 +645,17 @@ const bodyScrollLock = (() => {
   let locks = 0;
   let scrollPosition = 0;
 
+  const isIOSLike = (() => {
+    try {
+      const ua = String(navigator.userAgent || '');
+      const iOS = /iPad|iPhone|iPod/.test(ua);
+      const iPadOS = /Macintosh/.test(ua) && !!navigator.maxTouchPoints && navigator.maxTouchPoints > 1;
+      return iOS || iPadOS;
+    } catch {
+      return false;
+    }
+  })();
+
   const getEffectiveScrollY = () => {
     try {
       const y = window.pageYOffset;
@@ -680,6 +691,16 @@ const bodyScrollLock = (() => {
       locks += 1;
       if (locks === 1) {
         scrollPosition = getEffectiveScrollY();
+
+        // Prefer overflow-based locking on non-iOS: it avoids any visible scroll
+        // jump/snap and does not require restoration.
+        if (!isIOSLike) {
+          try { document.documentElement.classList.add('no-scroll-overflow'); } catch {}
+          try { document.body.classList.add('no-scroll-overflow'); } catch {}
+          return;
+        }
+
+        // iOS/iPadOS: overflow hidden is unreliable; use the fixed-body strategy.
         document.body.style.top = `-${scrollPosition}px`;
         document.body.classList.add('no-scroll');
       }
@@ -692,6 +713,13 @@ const bodyScrollLock = (() => {
 
       locks = Math.max(0, locks - 1);
       if (locks === 0) {
+        // Overflow mode (non-iOS): just remove the lock classes. No scrollTo.
+        if (!isIOSLike) {
+          try { document.documentElement.classList.remove('no-scroll-overflow'); } catch {}
+          try { document.body.classList.remove('no-scroll-overflow'); } catch {}
+          return;
+        }
+
         const nextY = typeof targetScrollY === 'number' && Number.isFinite(targetScrollY)
           ? targetScrollY
           : scrollPosition;
@@ -715,6 +743,8 @@ const bodyScrollLock = (() => {
     },
     forceUnlock() {
       locks = 0;
+      try { document.documentElement.classList.remove('no-scroll-overflow'); } catch {}
+      try { document.body.classList.remove('no-scroll-overflow'); } catch {}
       document.body.classList.remove('no-scroll');
       document.body.style.top = '';
     }
@@ -12225,6 +12255,38 @@ toggles.forEach((button) => {
     overlay.appendChild(modal);
     document.body.appendChild(overlay);
 
+    // Make the overlay renderable (but still invisible) so transform transitions
+    // can start from the "from card" position even on browsers that don't animate
+    // from visibility:hidden.
+    try { overlay.classList.add('is-prepared'); } catch (e) {}
+
+    // Animate modal from the originating card position (so it opens "in front of"
+    // the carousel/card instead of feeling like it appears from the top).
+    try {
+      const prefersReducedMotion = (() => {
+        try {
+          return !!window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        } catch (e) {
+          return false;
+        }
+      })();
+
+      if (!prefersReducedMotion) {
+        const rect = card.getBoundingClientRect();
+        const cardCx = rect.left + rect.width / 2;
+        const cardCy = rect.top + rect.height / 2;
+        const viewCx = (window.innerWidth || document.documentElement.clientWidth || 0) / 2;
+        const viewCy = (window.innerHeight || document.documentElement.clientHeight || 0) / 2;
+        const dx = cardCx - viewCx;
+        const dy = cardCy - viewCy;
+
+        overlay.dataset.animateFromCard = 'true';
+        overlay.style.setProperty('--card-from-x', `${Math.round(dx)}px`);
+        overlay.style.setProperty('--card-from-y', `${Math.round(dy)}px`);
+        overlay.style.setProperty('--card-from-scale', '0.92');
+      }
+    } catch (e) {}
+
     // Some mobile browsers can fail to render cloned <picture>/<img> nodes inside overlays
     // (especially when they were lazily loaded inside overflow containers).
     // Force a refresh + eager loading once the modal is in the DOM.
@@ -12278,7 +12340,9 @@ toggles.forEach((button) => {
     
     // Animazione apertura
     requestAnimationFrame(() => {
-      overlay.classList.add('is-visible');
+      requestAnimationFrame(() => {
+        overlay.classList.add('is-visible');
+      });
     });
 
     // Mobile: start from the top so the sidebar image is immediately visible.
@@ -12425,6 +12489,13 @@ toggles.forEach((button) => {
     const closeModal = () => {
       if (modalClosed) return;
       modalClosed = true;
+
+      // If the modal was opened from a card position, return to it visually.
+      try {
+        if (overlay && overlay.dataset && overlay.dataset.animateFromCard === 'true') {
+          overlay.classList.add('is-returning');
+        }
+      } catch (e) {}
 
       // Cleanup listeners (important: ESC listener would otherwise accumulate).
       try { document.removeEventListener('keydown', handleEsc); } catch (e) {}

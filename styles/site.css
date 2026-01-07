@@ -1373,6 +1373,14 @@ body.no-scroll {
   width: 100%;
   height: 100%;
 }
+
+/* Alternative scroll lock for non-iOS: avoids the fixed-body strategy (which can
+   cause visible snap/jump on some browsers). */
+html.no-scroll-overflow,
+body.no-scroll-overflow {
+  overflow: hidden !important;
+  height: 100%;
+}
 body.is-dragging-carousel {
   user-select: none;
 }
@@ -5490,6 +5498,15 @@ section.carousel:last-of-type {
   transition: opacity 300ms ease, visibility 0s linear 300ms;
 }
 
+/* Pre-visible state: render the overlay (so transforms can animate) but keep it
+   fully transparent and non-interactive. */
+.card-modal-overlay.is-prepared {
+  visibility: visible;
+  pointer-events: none;
+  opacity: 0;
+  transition: none;
+}
+
 .card-modal-overlay.is-visible {
   opacity: 1;
   visibility: visible;
@@ -5534,8 +5551,23 @@ section.carousel:last-of-type {
   overflow: hidden;
 }
 
+/* Open from the originating card position (JS sets CSS vars on the overlay). */
+.card-modal-overlay[data-animate-from-card="true"] .card-modal {
+  transform: translate(var(--card-from-x, 0px), var(--card-from-y, 30px)) scale(var(--card-from-scale, 0.94));
+}
+
 .card-modal-overlay.is-visible .card-modal {
   transform: scale(1) translateY(0);
+}
+
+/* When animating from card, visible state should settle to the center (identity transform). */
+.card-modal-overlay.is-visible[data-animate-from-card="true"] .card-modal {
+  transform: translate(0, 0) scale(1);
+}
+
+/* Close back towards the originating card position (without moving the page). */
+.card-modal-overlay.is-returning[data-animate-from-card="true"] .card-modal {
+  transform: translate(var(--card-from-x, 0px), var(--card-from-y, 30px)) scale(var(--card-from-scale, 0.94));
 }
 
 @media (max-width: 900px) {
