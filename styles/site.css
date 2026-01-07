@@ -53,13 +53,13 @@
   --font-medium: "supergroteskc-medlf", "Helvetica Neue", Arial, sans-serif;
   /* Sticky stack metrics (updated at runtime by scripts/site.js).
      Used to prevent the sticky nav from overlapping carousel sticky headers. */
-  --nav-height: 72px;
-  --nav-gap: 12px;
-  --carousel-sticky-offset-desktop: 52px;
-  --carousel-sticky-offset-mobile: 44px;
-
-    /* =====================================================================
-      Global spacing tokens
+    --nav-height: 72px;
+    --nav-gap: 12px;
+    --carousel-sticky-offset-desktop: 36px;
+    --nav-height: 72px;
+    --nav-gap: 12px;
+    --carousel-sticky-offset-desktop: 36px;
+    --carousel-sticky-offset-mobile: 31px;
       Keep desktop/tablet generous; mobile overrides below compact the UI.
       ===================================================================== */
     --space-1: 6px;
@@ -86,11 +86,11 @@
 
   --carousel-track-gap: 24px;
   --carousel-track-pad-inline: 28px;
-  --carousel-track-pad-bottom: 28px;
+  --carousel-track-pad-bottom: 20px;
   --carousel-card-basis: clamp(260px, 85vw, 320px);
 
   /* Vertical spacing between consecutive carousel sections */
-  --carousel-section-gap: 28px;
+  --carousel-section-gap: 20px;
 
   --carousel-indicators-gap: 6px;
   --carousel-indicators-padding-block: 6px;
@@ -140,10 +140,10 @@
 
     --carousel-track-gap: 16px;
     --carousel-track-pad-inline: 16px;
-    --carousel-track-pad-bottom: 7px;
+    --carousel-track-pad-bottom: 5px;
     --carousel-card-basis: clamp(260px, 85vw, 320px);
 
-    --carousel-section-gap: 7px;
+    --carousel-section-gap: 5px;
 
     --carousel-indicators-max-width: 190px;
     --carousel-indicators-gap: 5px;
@@ -183,10 +183,10 @@
 
     --carousel-track-gap: 12px;
     --carousel-track-pad-inline: 12px;
-    --carousel-track-pad-bottom: 6px;
+    --carousel-track-pad-bottom: 4px;
     --carousel-card-basis: clamp(260px, 85vw, 320px);
 
-    --carousel-section-gap: 6px;
+    --carousel-section-gap: 4px;
 
     --carousel-indicators-max-width: 170px;
     --carousel-indicator-width: 8px;
@@ -10867,14 +10867,19 @@ body.page-home {
 
 body.page-product {
   /* Reduce gap between carousel sections significantly */
-  --carousel-section-gap: 8px;
+  --carousel-section-gap: 6px;
 
   /* Reduce excess space after each carousel track (product pages feel tighter) */
-  --carousel-track-pad-bottom: 10px;
+  --carousel-track-pad-bottom: 7px;
 
   /* Pull the carousel stack upward on product pages (less empty space before cards). */
-  --carousel-sticky-offset-desktop: 34px;
-  --carousel-sticky-offset-mobile: 28px;
+  --carousel-sticky-offset-desktop: 8px;
+  --carousel-sticky-offset-mobile: 7px;
+}
+
+/* Product pages: tighten space between hero and first carousel */
+body.page-product section.carousel:not(.carousel--cockpit):not(.story-carousel) {
+  margin-top: 2px;
 }
 
 /* Compact Hero on product pages */
