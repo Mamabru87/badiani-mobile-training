@@ -13772,7 +13772,6 @@ const initCarousels = () => {
         indicator.dataset.index = index;
         indicator.addEventListener('click', (event) => {
           event.stopPropagation();
-          dialSound.play();
           goToIndex(index);
         });
         carouselIndicatorsContainer.appendChild(indicator);
@@ -14107,6 +14106,7 @@ const initCarousels = () => {
       if (!targetItem) return;
       applyState(targetIndex);
       const behavior = options.behavior || 'smooth';
+      const silentTick = Boolean(options.silentTick);
 
       // Center using real viewport geometry (robust across padding, scrollbars, rounding).
       const trackRect = carouselTrack.getBoundingClientRect();
@@ -14120,9 +14120,18 @@ const initCarousels = () => {
       targetLeft = Math.max(0, Math.min(maxLeft, targetLeft));
 
       try {
+        if (silentTick) carouselTrack.dataset.silentTick = '1';
         carouselTrack.scrollTo({ left: targetLeft, behavior });
       } catch (err) {
         carouselTrack.scrollLeft = targetLeft;
+      }
+
+      if (silentTick) {
+        window.setTimeout(() => {
+          try {
+            delete carouselTrack.dataset.silentTick;
+          } catch {}
+        }, behavior === 'smooth' ? 400 : 50);
       }
     };
 
@@ -14256,7 +14265,7 @@ const initCarousels = () => {
 
         // If already basically centered, don't move.
         if (Math.abs(delta) < 2) return;
-        goToIndex(idx);
+        goToIndex(idx, { silentTick: true });
       };
 
       carouselTrack.addEventListener(
@@ -14277,7 +14286,8 @@ const initCarousels = () => {
     };
 
     const headerNavigate = (direction) => {
-      dialSound.play();
+      // Suono completamente disabilitato per il carosello cockpit
+      // if (!isCockpit) dialSound.play();
       goToIndex(currentIndex + direction);
     };
 
@@ -15010,10 +15020,14 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener('touchstart', unlockAudio);
 
     // --- ⚙️ LOGICA DI SCATTO (CAROUSEL) ---
-    const carousels = document.querySelectorAll('.carousel--cockpit-grid, .carousel-track');
+    const carousels = document.querySelectorAll('.carousel-track');
 
     carousels.forEach(carousel => {
-        let lastCardIndex = 0;
+      // Identifica se è il cockpit (suono ora allineato agli altri caroselli)
+      const parentSection = carousel.closest('[data-carousel]');
+      const isCockpitCarousel = parentSection && parentSection.dataset.carousel === 'cockpit';
+
+      let lastCardIndex = 0;
         let isScrolling = false;
 
         carousel.addEventListener('scroll', () => {
@@ -15037,9 +15051,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const currentIndex = Math.round(scrollPos / cardWidth);
 
             if (currentIndex !== lastCardIndex) {
+              const silentTick = element.dataset.silentTick === '1';
+              if (!silentTick) {
                 BadianiSound.playTick();
-              if (window.__badianiUserGesture && navigator.vibrate) navigator.vibrate(5);
-                lastCardIndex = currentIndex;
+                if (window.__badianiUserGesture && navigator.vibrate) navigator.vibrate(5);
+              }
+              lastCardIndex = currentIndex;
             }
         }
     });

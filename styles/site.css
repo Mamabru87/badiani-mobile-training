@@ -700,9 +700,11 @@ body.page-home {
 
 
 .page-home [data-carousel="cockpit"] .cockpit-track [data-carousel-item].is-focused {
-  transform: translateY(-3px) scale(1.015);
+  /* Animazione e trasformazione disabilitate */
+  transform: none;
   border-color: rgba(33, 64, 152, 0.22);
   box-shadow: none;
+  transition: none; /* Disabilita tutte le transizioni per evitare animazioni */
 }
 
 /* Orbit cockpit: avoid duplicated title (header already shows focused card title) */
@@ -5151,6 +5153,28 @@ section.carousel:last-of-type {
   opacity: 0;
 }
 
+/* Minimal navigator: hide product names in sticky carousel header
+   (keep cockpit + story experiences unchanged). */
+.carousel:not(.carousel--cockpit):not(.story-carousel) .carousel-header__title-block {
+  display: none;
+}
+
+.carousel:not(.carousel--cockpit):not(.story-carousel) .carousel-header {
+  justify-content: center;
+  gap: 0;
+  min-height: 44px;
+}
+
+.carousel:not(.carousel--cockpit):not(.story-carousel) .carousel-header__meta {
+  margin: 0 auto;
+  align-items: center;
+}
+
+.carousel:not(.carousel--cockpit):not(.story-carousel) .carousel-indicators {
+  align-items: center;
+  justify-content: center;
+}
+
 /* Global: force white header/nav background for non-hub carousels */
 .carousel:not(.carousel--cockpit) .carousel-header,
 .carousel:not(.carousel--cockpit) .carousel-header__meta,
@@ -5617,7 +5641,7 @@ section.carousel:last-of-type {
 }
 
 .card-modal {
-  background: var(--paper);
+  background: linear-gradient(135deg, var(--paper) 0%, rgba(33,64,152,0.01) 100%);
   border-radius: var(--radius-lg);
   box-shadow: 0 20px 60px rgba(15, 33, 84, 0.2);
   width: min(1000px, 96vw);
@@ -5878,13 +5902,13 @@ section.carousel:last-of-type {
 
 /* Open: Apply animation only when card position is known */
 .card-modal-overlay[data-animate-from-card="true"] .card-modal {
-  animation: modalOpenFromCard 520ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+  animation: modalOpenFromCard 400ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
 }
 
 /* Close: Apply reverse animation */
 .card-modal-overlay.is-closing-3d[data-animate-from-card="true"] .card-modal,
 .card-modal-overlay.is-closing[data-animate-from-card="true"] .card-modal {
-  animation: modalCloseToCard 420ms cubic-bezier(0.4, 0, 0.6, 1) forwards;
+  animation: modalCloseToCard 320ms cubic-bezier(0.4, 0, 0.6, 1) forwards;
 }
 
 /* ============================================================
@@ -10911,6 +10935,8 @@ body.page-product {
 /* Product pages: tighten space between hero and first carousel */
 body.page-product section.carousel:not(.carousel--cockpit):not(.story-carousel) {
   margin-top: 2px;
+  /* Bring consecutive carousels closer together on product pages */
+  margin-bottom: 10px;
 }
 
 /* Compact Hero on product pages */
