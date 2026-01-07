@@ -8882,7 +8882,12 @@ const gamification = (() => {
       // Se è il primo step di un quiz Berny, mostra l'animazione di typing
       if (isBernyQuiz && currentIndex === 0) {
         renderClassicStepWithBernyAnimation();
-      } else {
+      } 
+      // Se è la terza domanda (index 2) in un quiz Berny, mostra suspance
+      else if (isBernyQuiz && currentIndex === 2) {
+        renderHardQuestionSuspense();
+      } 
+      else {
         renderClassicStepNormal();
       }
     };
@@ -9081,7 +9086,124 @@ const gamification = (() => {
         });
 
         card.append(prompt, options);
+        stage.appendChild(card);
       }, 2800);
+    };
+
+    const renderHardQuestionSuspense = () => {
+      const question = questions[currentIndex];
+      const correctIndex = getCorrectIndex(question);
+      stage.innerHTML = '';
+      cleanupTimers();
+
+      const card = document.createElement('div');
+      card.className = 'quiz-card';
+
+      const stepLabel = document.createElement('p');
+      stepLabel.className = 'quiz-step';
+      stepLabel.textContent = `${tr('quiz.question')} ${currentIndex + 1}/${questions.length} 🔥`;
+
+      // SUSPANCE: Berny avvisa della domanda difficile
+      const suspenseContainer = document.createElement('div');
+      suspenseContainer.style.minHeight = '80px';
+
+      // Frasi di suspance
+      const suspenseMessages = [
+        'Ora fammi fare una domanda più difficile...',
+        'Vediamo se sei pronto per la sfida finale...',
+        'Preparati, questa è tosta...',
+        'Ecco la domanda difficile...',
+      ];
+      const randomMessage = suspenseMessages[Math.floor(Math.random() * suspenseMessages.length)];
+
+      const typingText = document.createElement('p');
+      typingText.className = 'berny-typing-text typing';
+      typingText.style.color = '#E30613';
+      typingText.style.fontWeight = '600';
+      typingText.textContent = randomMessage;
+      suspenseContainer.appendChild(typingText);
+
+      // Puntini di sospensione
+      const dotsContainer = document.createElement('div');
+      dotsContainer.style.opacity = '0';
+      dotsContainer.style.transition = 'opacity 0.3s ease';
+      const dots = document.createElement('div');
+      dots.className = 'berny-dots';
+      ['.', '.', '.'].forEach(() => {
+        const span = document.createElement('span');
+        span.className = 'berny-dot';
+        span.textContent = '.';
+        dots.appendChild(span);
+      });
+      dotsContainer.appendChild(dots);
+      suspenseContainer.appendChild(dotsContainer);
+
+      card.appendChild(stepLabel);
+      card.appendChild(suspenseContainer);
+      stage.appendChild(card);
+
+      // Mostra puntini dopo il typing
+      timerId = setTimeout(() => {
+        if (!sessionActive) return;
+        dotsContainer.style.opacity = '1';
+      }, 2000);
+
+      // Dopo la suspance, mostra la domanda difficile
+      timerId = setTimeout(() => {
+        if (!sessionActive) return;
+        suspenseContainer.style.display = 'none';
+
+        const prompt = document.createElement('p');
+        prompt.className = 'quiz-prompt';
+        prompt.textContent = question.question;
+
+        const options = document.createElement('div');
+        options.className = 'quiz-options';
+
+        const disableAll = () => {
+          options.querySelectorAll('button').forEach((btn) => {
+            btn.disabled = true;
+          });
+        };
+
+        (question.options || []).forEach((option, optionIndex) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'quiz-option';
+          btn.textContent = option;
+          btn.addEventListener('click', () => {
+            if (!sessionActive) return;
+            disableAll();
+            const isCorrect = Number.isInteger(correctIndex) && optionIndex === correctIndex;
+            btn.classList.add(isCorrect ? 'is-correct' : 'is-wrong');
+            
+            // Suono feedback immediato
+            if (isCorrect) {
+              playQuizCorrectSound();
+            } else {
+              playQuizWrongSound();
+            }
+            
+            if (!isCorrect) {
+              setTimeout(() => fail(question), 400);
+              return;
+            }
+            if (currentIndex === questions.length - 1) {
+              setTimeout(() => finishSuccess(), 600);
+            } else {
+              setTimeout(() => {
+                markProgress(currentIndex, true);
+                currentIndex += 1;
+                markProgress(currentIndex, false);
+                renderStep();
+              }, 500);
+            }
+          });
+          options.appendChild(btn);
+        });
+
+        card.append(prompt, options);
+      }, 3500);
     };
 
     const renderFlashStep = () => {
@@ -9495,18 +9617,20 @@ const gamification = (() => {
     };
 
     // Get pools filtered by visited tabs (adaptive hard quiz)
-    const easyPool = getQuestionsForVisitedTabs();
+    // 2 domande facili + 1 difficile
     const superEasyPool = getSuperEasyQuestionsForVisitedTabs();
+    const easyPool = getQuestionsForVisitedTabs();
 
     const superEasyPicked = pickQuestionsFromBag('test-me-sm', superEasyPool, 2).map(localizeQuizQuestion);
     const easyPicked = pickQuestionsFromBag('test-me', easyPool, 1).map(localizeQuizQuestion);
     const picked = [...superEasyPicked, ...easyPicked];
+    
     startQuizSession({
       modeKey: 'test-me',
-      title: tr('quiz.testme.title', null, 'Test me � quiz avanzato'),
-      introText: tr('quiz.testme.intro', null, '3 domande. Perfetto = gelato. Sbagli = vai alla soluzione e riparti.'),
+      title: tr('quiz.testme.title', null, '🧠 Test me - Quiz avanzato'),
+      introText: tr('quiz.testme.intro', null, '2 domande facili, poi una più difficile. Perfetto = gelato!'),
       questions: picked,
-      theme: 'default',
+      theme: 'berny', // Usa tema Berny
       // default handlers => handleQuizSuccess / handleQuizWrong
       onCancel: restoreCredit,
     });
@@ -11502,7 +11626,7 @@ toggles.forEach((button) => {
 
         const parts = [];
         if (titleTextForOverview || descTextForOverview) {
-          parts.push(`<p><strong>${titleTextForOverview}</strong>${descTextForOverview ? ` — ${descTextForOverview}` : ''}</p>`);
+          parts.push(`<p><strong>${titleTextForOverview}</strong>${descTextForOverview ? ` ${descTextForOverview}` : ''}</p>`);
         }
         if (extendedFromStats) {
           parts.push(`<p>${extendedFromStats}</p>`);
