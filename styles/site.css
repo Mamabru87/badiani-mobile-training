@@ -58,6 +58,20 @@
   --carousel-sticky-offset-desktop: 52px;
   --carousel-sticky-offset-mobile: 44px;
 
+    /* =====================================================================
+      Global spacing tokens
+      Keep desktop/tablet generous; mobile overrides below compact the UI.
+      ===================================================================== */
+    --space-1: 6px;
+    --space-2: 10px;
+    --space-3: 16px;
+    --space-4: 24px;
+    --space-5: 32px;
+
+    /* Component-specific spacing hooks */
+    --hero-card-padding: 32px;
+    --page-bottom-pad: 80px;
+
   /* =====================================================================
      Carousel + guide cards sizing tokens
      (Used across ALL pages to keep mobile carousels compact and readable.)
@@ -103,8 +117,17 @@
 
 @media (max-width: 768px) {
   :root {
+    /* Global spacing: compact on mobile */
+    --space-1: 4px;
+    --space-2: 6px;
+    --space-3: 10px;
+    --space-4: 14px;
+    --space-5: 18px;
+    --hero-card-padding: 18px;
+    --page-bottom-pad: 56px;
+
     --carousel-header-margin-inline: 12px;
-    --carousel-header-padding-block: 12px;
+    --carousel-header-padding-block: 10px;
     --carousel-header-padding-inline: 14px;
     --carousel-header-radius: 16px;
 
@@ -113,14 +136,14 @@
 
     --carousel-track-gap: 16px;
     --carousel-track-pad-inline: 16px;
-    --carousel-track-pad-bottom: 32px;
+    --carousel-track-pad-bottom: 10px;
     --carousel-card-basis: clamp(260px, 85vw, 320px);
 
-    --carousel-section-gap: 32px;
+    --carousel-section-gap: 10px;
 
     --carousel-indicators-max-width: 190px;
     --carousel-indicators-gap: 5px;
-    --carousel-indicators-padding-block: 5px;
+    --carousel-indicators-padding-block: 3px;
     --carousel-indicators-padding-inline: 8px;
     --carousel-indicator-width: 9px;
     --carousel-indicator-height: 3px;
@@ -143,8 +166,12 @@
 
 @media (max-width: 480px) {
   :root {
+    /* Extra-tight phones */
+    --hero-card-padding: 16px;
+    --page-bottom-pad: 48px;
+
     --carousel-header-margin-inline: 10px;
-    --carousel-header-padding-block: 10px;
+    --carousel-header-padding-block: 8px;
     --carousel-header-padding-inline: 12px;
 
     --carousel-title-size: 15px;
@@ -152,10 +179,10 @@
 
     --carousel-track-gap: 12px;
     --carousel-track-pad-inline: 12px;
-    --carousel-track-pad-bottom: 24px;
+    --carousel-track-pad-bottom: 8px;
     --carousel-card-basis: clamp(260px, 85vw, 320px);
 
-    --carousel-section-gap: 24px;
+    --carousel-section-gap: 8px;
 
     --carousel-indicators-max-width: 170px;
     --carousel-indicator-width: 8px;
@@ -203,7 +230,7 @@ body {
   color: var(--ink-soft);
   font-size: 16px;
   line-height: 1.5;
-  padding: 0 0 80px;
+  padding: 0 0 var(--page-bottom-pad);
   position: relative;
   font-family: var(--font-regular);
   overflow-x: hidden;
@@ -3209,6 +3236,11 @@ h4 {
   background: #ffffff;
 }
 
+/* Mobile compact stack: hero + (first) carousels in one tight column */
+.hero-stack {
+  display: block;
+}
+
 /* Split hero (content pages): media + copy side-by-side on desktop, stacked on mobile.
    Keeps carousels outside this section untouched. */
 .hero--split {
@@ -3234,12 +3266,38 @@ h4 {
 }
 
 @media (max-width: 768px) {
+  .hero-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .hero-stack > .carousel {
+    /* Remove the default large section spacing inside the stack;
+       spacing is controlled by the stack gap + compact tokens. */
+    margin-bottom: 0;
+  }
+
   .hero--split {
     flex-direction: column;
+    gap: 4px;
+    padding: 6px 0 0;
   }
 
   .hero--split .hero-card.visual {
-    min-height: 220px;
+    min-height: 0;
+  }
+
+  /* Kill any “baseline gap” / extra whitespace under the hero media on phones. */
+  .hero--split .hero-card.visual > picture,
+  .hero--split .hero-card.visual > img {
+    display: block;
+    height: auto;
+  }
+
+  /* Tighten title + body copy spacing above the hero image. */
+  .hero h1 {
+    margin-bottom: 8px;
   }
 }
 
@@ -3495,7 +3553,7 @@ h4 {
 }
 
 .hero-card {
-  padding: 32px;
+  padding: var(--hero-card-padding);
   border-radius: var(--radius-xl);
   background: #ffffff;
   box-shadow: none;
