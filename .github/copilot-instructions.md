@@ -1,42 +1,125 @@
 # Badiani Training Orbit – AI guide
 
-## Stack and layout
-- Static multi-page site (no bundler/build); open HTML directly or via a simple static server. Core assets: `styles/site.css`, `scripts/site.js`.
-- Vanilla JS with IIFEs; no modules. DOM is driven by data attributes (e.g., `data-carousel`, `data-menu-*`, `data-toggle-card`). Preserve these hooks when editing.
-- Design tokens and typography live in `:root` of `styles/site.css` (brand blues/rose/gold, `--radius-*`, `--anim-*`, fonts SuperGrotesk). Keep new styles aligned to these variables.
+## Architecture overview
+**Static multi-page training app** (no bundler/build) with vanilla JS (IIFEs), localStorage-based state management, gamification system, and AI assistant (BERNY). Core modules:
+- `scripts/site.js` (16K lines): navigation, profile gate, gamification engine, carousels, overlays
+- `scripts/i18n.js` (8K lines): runtime i18n with 4 languages (it/en/es/fr)
+- `scripts/berny-brain-api.js`: Gemini integration (SDK or proxy mode) with embedded quiz questions
+- `scripts/berny-knowledge.js` + `berny-super-knowledge.js`: product KB and FAQ data
+- `styles/site.css` (11K lines): design tokens in `:root`, component styles, responsive layout
 
-## Pages and components
-- `index.html` is the hub (Orbit cockpit) showing performance, profile, history, and nav tokens injected by JS. Other modules: `caffe.html`, `sweet-treats.html`, `pastries.html`, `slitti-yoyo.html`, `gelato-lab.html`, `festive.html`, `story-orbit.html`.
-- Content pages use carousels: wrapper `section.carousel[data-carousel="…"]` with `data-carousel-track` and `article.guide-card[data-carousel-item]`. Cards include `.tag-row`, title, media, summary copy, optional `.stat-list`, a `data-toggle-card` button, and a `.details` block (steps/tips) that JS reveals.
-- Story Orbit uses `.story-experience` with `data-story-target/panel` buttons and fullscreen modal (`data-story-modal`). Match existing ARIA labels and classes when extending.
+## Critical DOM conventions
+**All JS relies on data attributes** – never remove these:
+- `data-carousel`, `data-carousel-track`, `data-carousel-item`: horizontal scroll carousels with snap
+- `data-toggle-card`: reveals `.details` block in guide cards
+- `data-menu-toggle`, `data-menu-drawer`, `data-menu-close`: burger menu + drawer
+- `data-popover-toggle/panel`: nav token popovers
+- `data-story-target/panel/modal`: Story Orbit fullscreen experience
 
+When adding content, clone existing structure exactly. Example guide card must include: `.tag-row`, title, media (`<picture>` with webp+jpg), summary, optional `.stat-list`, `.btn-ghost[data-toggle-card]`, `.details` block.
 
-## State, profiles, and gamification (scripts/site.js)
-- Profile gate blocks the app until a user is created/logged in; data lives in localStorage keys `badianiUser.profile.v1` and `badianiUser.profiles`. Changing nickname/gelato is done via overlay modals.
-- Gamification state is per profile under `badianiGamification.v3:<profileId>` (fallback `badianiGamification.v3`). `defaultState` defines stars, quiz tokens, progress, cooldowns, history, etc. Daily rollover resets stars/progress and snapshots to history.
-- Flow: opening cards increments stars; every 3 stars => quiz token; perfect quiz adds gelato; cooldown prevents back-to-back gelati (24h with reductions). Challenges trigger every 3 stars; wrong answers subtract stars/tokens. Audio cues (web audio) play on rewards.
-- UI updates via `updateUI`: nav tokens, cooldown hints, card checkmarks, summary stats (performance, wrong list, daily history). Avoid breaking selectors used there (`[data-*]` hooks listed above).
+## State management patterns
+**BadianiStorage** (lines 86-165 in site.js): JSON-safe localStorage/sessionStorage adapter with fallback. Use `BadianiStorage.getJSON(key, fallback)` / `setJSON(key, value)` instead of raw localStorage.
 
-## Navigation, search, overlays
-- Nav shell includes burger menu (drawer `[data-menu-drawer]`) and inline menu panel (`[data-menu-panel]`). JS manages aria-expanded/hidden and body scroll lock; keep markup consistent.
-- Search suggestions in the drawer come from `allProducts` in `site.js` (built from hardcoded arrays). Add new products there to make them searchable.
-- Popovers (nav tokens) use `data-popover-toggle/panel`; overlays use `openOverlay/closeOverlay` helpers and lock body scroll. Respect `data-lock-close` usage for quizzes/challenges.
+**Profile system** (BadianiProfile, lines 168-266): 
+- Active profile: `badianiUser.profile.v1` (nickname, gelato, id, timestamps)
+- Profile list: `badianiUser.profiles` (array)
+- API: `BadianiProfile.getActive()`, `setActive(profile)`, `updateActive(patch)`, `logout()`
 
-## Content authoring patterns
-- When adding guide cards, follow existing structure and tone (Italian training copy, concise steps, upselling tips). Include `data-page-stars` updates at the top hero to reflect card count.
-- Keep media as `<picture>` with webp + jpg fallbacks under `assets/`; follow existing naming (`assets/<section>-<item>.webp/jpg`).
-- Use inline HR separators and bolded labels in details as seen in current cards; avoid changing class names the JS relies on (`guide-card`, `details`, `btn-ghost`, etc.).
+**Gamification state** (lines 5011+): `badianiGamification.v3:<profileId>`
 
-## Styling and UX conventions
-- Homepage has special compact cockpit CSS (see `COCKPIT_COMPACT` block) and `.page-home` overrides; avoid removing those selectors if tweaking hero/cockpit.
-- Carousels rely on horizontal scrolling and snap; keep widths `min(420px, calc(100% - 20px))` when cloning cards to maintain scroll feel.
-- Accessibility: maintain aria labels on dialogs, menu buttons, story modal, and popovers; Escape closes drawers/overlays; focus is restored by JS.
+**Complete game rules**:
+- **Crystals**: 1 crystal per tab opened → 5 crystals = 1 star
+- **Stars**: earned by converting crystals (per-card tracking)
+- **Mini-quiz**: triggers every 3 stars → correct answer = 1 "Test me" credit
+- **"Test me" quiz**: 7 questions → perfect 7/7 = +1 gelato
+- **Gelato cooldown**: 24h (reducible to 12h at 30 stars total)
+- **Bonus points**: 65 stars = full loop completion → resets stars to 0 + awards +5 bonus points (convertible to cash/products)
+- **Challenge penalties**: wrong mini-quiz answer = -3 stars
+- **Weekly reset**: Sunday 00:00 resets stars/progress/crystals (`dayStamp` tracking), snapshots to history
 
-## Development workflow
-- No build/test commands; edit HTML/CSS/JS directly. Use cache-busting query params on hub (`?v=...`) when shipping static updates.
-- To validate behavior, open pages in a browser with localStorage enabled; clear relevant keys to test fresh profile (`badianiUser.*`, `badianiGamification.v3*`).
+**State tracking keys**:
+- `bonusPoints`: total bonus points earned (5 points per 65-star loop)
+- `cardCrystalConvertedAtToday`, `cardStarAwardedToday`: per-card crystal→star conversion
+- `openedTabsToday`, `openedTabContextToday`: tab open tracking with content snapshot
+- `testMeCredits`: number of "Test me" quiz access passes earned
+- `cooldownCuts`: `{ twelve: bool, thirty: bool }` for cooldown reductions
 
-## Quick references
-- Core logic: `scripts/site.js` (nav/drawer, search, profile gate, gamification, carousels, overlays).
+**Game rules displayed to users** (line 2710):
+```
+1 tab aperto = 1 cristallo
+5 cristalli = 1 stellina
+Ogni 3 stelline parte un mini quiz (1 domanda)
+Mini quiz giusto = sblocchi "Test me"
+"Test me" perfetto = +1 gelato e cooldown 24h (riducibile a 12h/30 stelline)
+Mini quiz sbagliato = -3 stelline
+65 stelline = loop completo → reset + 5 bonus points (cash/prodotti)
+Reset: domenica 00:00
+```
 
-- Styling system and tokens: `styles/site.css` (fonts, brand palette, layout for hero, carousels, cockpit).
+## i18n system
+**Runtime translation** via `data-i18n` / `data-i18n-html` / `data-i18n-attr` attributes. Language persists in `badianiUILang.v1` localStorage key. Dictionary lives in `scripts/i18n.js` (lines 10-8840). To add translations:
+1. Add key to all 4 language dicts (it/en/es/fr)
+2. Mark HTML: `<span data-i18n="yourKey">Fallback text</span>`
+3. Product names (Buontalenti, Slitti) are **not translated** unless explicitly keyed
+
+## BERNY AI assistant
+**Dual mode operation** (berny-brain-api.js):
+- **SDK mode**: requires user's own Gemini API key (stored in `berny_api_key`), loads `@google/generative-ai` via importmap
+- **Proxy mode**: uses Cloudflare Worker proxy at `proxyEndpoint` (config in `badianiBerny.config.v1`), requires optional `accessCode`
+
+Quiz questions embedded in `QUESTIONS_DB` object (lines 60-250) to avoid CORS on file://. Knowledge base split:
+- `berny-knowledge.js`: Italian default (products, procedures, FAQ)
+- `berny-super-knowledge.js`: generated by `build-tools/build_knowledge.py` (scans HTML/txt/quiz files)
+
+**Deep linking**: BERNY generates contextual card links in chat responses (format: `page.html?center=1#card-id`) to guide users directly to relevant training cards.
+
+Widget controller (`berny-widget-controller.js`) manages FAB button; UI logic in `berny-ui.js`.
+
+## Design tokens (styles/site.css :root)
+**Brand palette**: `--brand-blue: #214098`, `--brand-rose: #ec418c`, `--brand-gold: #f2be58`
+**Spacing scale**: `--space-1` through `--space-5` (6px to 32px)
+**Carousel sizing**: `--carousel-card-basis: clamp(260px, 85vw, 320px)`, `--carousel-track-gap: 24px`
+**Animations**: `--anim-fast: 180ms`, `--anim-slow: 420ms`
+**Typography**: SuperGrotesk fonts (Regular, Medium, MedLF)
+
+CSS uses these tokens consistently. New styles should reference existing variables, not hardcoded values.
+
+## Content authoring workflow
+1. Add cards to page HTML (clone existing `article.guide-card` structure)
+2. Update `data-page-stars` count in hero section to match card count
+3. Add media: `assets/<section>-<item>.webp` + `.jpg` fallback
+4. Update search catalog: add product to `allProducts` array in site.js (lines ~2400+)
+5. Add i18n keys for new content to all 4 language dicts
+6. Regenerate super-knowledge: `python build-tools/build_knowledge.py` (optional for BERNY context)
+
+**Tone**: Italian training copy, concise numbered steps, upselling tips in gold blocks, pro tips in rose blocks. See existing cards for HR separator patterns.
+
+## Development & debugging
+**No build step**: edit HTML/CSS/JS directly. Use `?v=YYYYMMDD` cache-busting query params.
+
+**Test profile reset**: clear these localStorage keys:
+```js
+localStorage.removeItem('badianiUser.profile.v1');
+localStorage.removeItem('badianiUser.profiles');
+localStorage.removeItem('badianiGamification.v3');
+```
+
+**Common selectors for UI updates**:
+- `[data-nav-tokens]`: quiz token display
+- `[data-cooldown-hint]`: gelato cooldown message
+- `[data-daily-performance]`: today's star count
+- `[data-summary]`: cockpit carousel on index.html
+
+**Security features** (site.js lines 6-76): 
+- Zoom lock (prevents pinch/ctrl+wheel zoom)
+- Copy protection (blocks copy/paste/drag/context menu except in form fields)
+- Whitelist editable zones with `data-allow-copy` attribute
+
+## Key files reference
+- `index.html`: hub/cockpit with live stats, profile, history
+- `scripts/site.js`: 16K lines – core engine (nav, gamification, carousels, overlays, profile gate)
+- `scripts/i18n.js`: 8K lines – runtime i18n, 4 languages
+- `scripts/berny-brain-api.js`: Gemini SDK/proxy, quiz system, recommendations
+- `styles/site.css`: 11K lines – tokens, components, responsive layout
+- `build-tools/build_knowledge.py`: scans project to generate berny-super-knowledge.js

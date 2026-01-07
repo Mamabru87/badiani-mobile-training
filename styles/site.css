@@ -49,8 +49,8 @@
   --anim-fast: 180ms;
   --anim-slow: 420ms;
   --slate: var(--brand-gray-soft);
-  --font-regular: "supergroteskc-medlf", "Helvetica Neue", Arial, sans-serif;
-  --font-medium: "supergroteskc-medlf", "Helvetica Neue", Arial, sans-serif;
+  --font-regular: "supergroteskc-medlf", Arial, sans-serif;
+  --font-medium: "supergroteskc-medlf", Arial, sans-serif;
   /* Sticky stack metrics (updated at runtime by scripts/site.js).
      Used to prevent the sticky nav from overlapping carousel sticky headers. */
     --nav-height: 72px;
@@ -2396,7 +2396,8 @@ h4 {
 .berny-guide-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(10, 14, 44, 0.8);
+  /* Sfondo esterno bianco (non nero) quando il video non riempie tutto */
+  background: rgba(255, 255, 255, 0.96);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -2415,13 +2416,15 @@ h4 {
 }
 
 .berny-guide-panel {
-  width: min(1100px, 100%);
+  /* Un pelo più piccolo su desktop e sempre centrato */
+  width: min(920px, 94vw);
   /* Mantieni un layout da video, centrato e senza "effetto gigantone" su desktop */
   aspect-ratio: 16 / 9;
   height: auto;
-  max-height: calc(100vh - 28px);
-  background: #000;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  /* Evita fullscreen “gigante” su schermi grandi */
+  max-height: 75vh;
+  background: #fff;
+  border: 1px solid rgba(33, 64, 152, 0.14);
   border-radius: var(--radius-xl);
   box-shadow: 0 40px 120px rgba(5, 10, 44, 0.55);
   overflow: hidden;
@@ -2478,7 +2481,8 @@ h4 {
 
 .berny-guide-body {
   position: relative;
-  background: #000;
+  /* Se il video lascia bande (object-fit: contain), devono essere bianche */
+  background: #fff;
   width: 100%;
   height: 100%;
 }
@@ -2490,7 +2494,7 @@ h4 {
   /* Mantieni rapporto e NON croppare: il video resta intero su ogni dispositivo */
   object-fit: contain;
   object-position: center center;
-  background: #000;
+  background: #fff;
 }
 
 .berny-guide-audio-hint {
@@ -6135,8 +6139,9 @@ section.carousel:last-of-type {
   border-radius: var(--radius-lg);
   box-shadow: 0 20px 60px rgba(15, 33, 84, 0.2);
   width: min(1000px, 96vw);
-  max-height: min(92vh, 1200px);
-  max-height: min(92dvh, 1200px);
+  /* Keep the modal fully inside the viewport (accounting for overlay padding). */
+  max-height: min(calc(100vh - 48px), 1200px);
+  max-height: min(calc(100dvh - 48px), 1200px);
   display: grid;
   grid-template-columns: 420px 1fr;
   grid-template-rows: auto 1fr;
@@ -6219,8 +6224,9 @@ section.carousel:last-of-type {
   position: relative;
   background: var(--paper);
   width: min(1000px, 96vw);
-  max-height: min(92vh, 1200px);
-  max-height: min(92dvh, 1200px);
+  /* Keep the modal fully inside the viewport (accounting for overlay padding). */
+  max-height: min(calc(100vh - 48px), 1200px);
+  max-height: min(calc(100dvh - 48px), 1200px);
   display: grid;
   grid-template-columns: 420px 1fr;
   grid-template-rows: auto 1fr;
@@ -6452,9 +6458,9 @@ section.carousel:last-of-type {
 
 @media (max-width: 900px) {
   .card-modal-overlay {
-    /* On mobile, keep modal anchored to the top so content is reachable; respect safe areas. */
-    align-items: flex-start;
-    padding: 0; /* Full screen feel */
+    /* On mobile, keep it centered and within safe-areas. */
+    align-items: center;
+    padding: calc(12px + env(safe-area-inset-top, 0px)) 12px calc(12px + env(safe-area-inset-bottom, 0px));
     /* Avoid double-scrolling (overlay + modal). The modal is the scroll container on mobile. */
     overflow-y: hidden;
   }
@@ -6463,10 +6469,10 @@ section.carousel:last-of-type {
     display: flex !important; /* Use flex column instead of grid for robust stacking */
     flex-direction: column !important;
     width: 100%;
-    height: 100dvh;
-    max-height: 100dvh;
-    border-radius: 0;
-    border: none;
+    height: auto;
+    max-height: calc(100dvh - 24px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-strong);
     margin: 0;
     overflow-x: hidden;
     overflow-y: auto; /* Main scroll container */
@@ -6477,7 +6483,7 @@ section.carousel:last-of-type {
      Use a 3-col grid so the title can shrink/clamp without pushing the chip off-screen. */
   .card-modal-header {
     flex: 0 0 auto; /* Don't shrink */
-    padding: calc(14px + env(safe-area-inset-top, 0px)) 16px 14px;
+    padding: 14px 16px;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -6491,6 +6497,16 @@ section.carousel:last-of-type {
     column-gap: 10px;
     row-gap: 0;
     grid-template-areas: "crystals title close";
+  }
+
+  /* Left header controls: study toggle + crystals chip */
+  .card-modal-left-controls {
+    grid-area: crystals;
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
   }
 
   .card-modal-header h3 {
@@ -6514,8 +6530,6 @@ section.carousel:last-of-type {
   }
 
   .card-modal-crystals {
-    grid-area: crystals;
-    justify-self: start;
     white-space: nowrap;
   }
 
@@ -6529,7 +6543,7 @@ section.carousel:last-of-type {
 
 @media (max-width: 600px) {
   .card-modal-header {
-    padding: calc(10px + env(safe-area-inset-top, 0px)) 12px 10px;
+    padding: 10px 12px;
     column-gap: 8px;
     row-gap: 8px;
     align-items: center;
@@ -6546,7 +6560,6 @@ section.carousel:last-of-type {
   }
 
   .card-modal-crystals {
-    grid-area: crystals;
     /* Scale with text: keep the chip compact and proportional. */
     font-size: 12px;
     padding: 0.38em 0.62em;
@@ -6567,6 +6580,86 @@ section.carousel:last-of-type {
     grid-area: close;
     width: 34px;
     height: 34px;
+  }
+}
+
+/* Header study toggle (open all tabs) */
+.card-modal .card-modal-study-toggle-wrap[hidden] {
+  display: none !important;
+}
+
+.card-modal .card-modal-study-toggle {
+  --eye-color: rgba(107, 112, 130, 0.92);
+  position: relative;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid rgba(15, 33, 84, 0.14);
+  background: rgba(15, 33, 84, 0.03);
+  box-shadow: none;
+  display: inline-grid;
+  place-items: center;
+  color: var(--eye-color);
+  cursor: pointer;
+  transition: background 180ms ease, border-color 180ms ease;
+}
+
+.card-modal .card-modal-study-toggle:hover {
+  background: rgba(15, 33, 84, 0.06);
+}
+
+.card-modal .card-modal-study-toggle:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(33, 64, 84, 0.14);
+}
+
+/* Eye icon: default = "eye closed" */
+.card-modal .card-modal-study-toggle::before {
+  content: "";
+  width: 18px;
+  height: 18px;
+  background-color: var(--eye-color);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2024%2024'%3E%3Cpath%20d%3D'M2.1%203.51L3.51%202.1l18.38%2018.38-1.41%201.41-2.33-2.33c-1.89.9-3.95%201.44-6.15%201.44-5%200-9-3-11-7%201.02-2.05%202.62-3.84%204.63-5.12L2.1%203.51zM12%206c-1.17%200-2.25.37-3.14%201l1.52%201.52c.45-.32.99-.52%201.62-.52%201.66%200%203%201.34%203%203%200%20.63-.2%201.17-.52%201.62l1.52%201.52c.63-.89%201-1.97%201-3.14%200-2.76-2.24-5-5-5zm0%2014c1.6%200%203.12-.34%204.49-.96l-2.06-2.06c-.73.36-1.55.56-2.43.56-2.76%200-5-2.24-5-5%200-.88.2-1.7.56-2.43L5.56%208.11C4.07%209.25%202.86%2010.96%202%2012c2%204%206%207%2010%207z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2024%2024'%3E%3Cpath%20d%3D'M2.1%203.51L3.51%202.1l18.38%2018.38-1.41%201.41-2.33-2.33c-1.89.9-3.95%201.44-6.15%201.44-5%200-9-3-11-7%201.02-2.05%202.62-3.84%204.63-5.12L2.1%203.51zM12%206c-1.17%200-2.25.37-3.14%201l1.52%201.52c.45-.32.99-.52%201.62-.52%201.66%200%203%201.34%203%203%200%20.63-.2%201.17-.52%201.62l1.52%201.52c.63-.89%201-1.97%201-3.14%200-2.76-2.24-5-5-5zm0%2014c1.6%200%203.12-.34%204.49-.96l-2.06-2.06c-.73.36-1.55.56-2.43.56-2.76%200-5-2.24-5-5%200-.88.2-1.7.56-2.43L5.56%208.11C4.07%209.25%202.86%2010.96%202%2012c2%204%206%207%2010%207z'/%3E%3C/svg%3E");
+}
+
+/* Closed state: add a tiny dash (linetta) */
+.card-modal .card-modal-study-toggle:not([aria-pressed="true"])::after {
+  content: "";
+  position: absolute;
+  bottom: 7px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--eye-color);
+  opacity: 0.85;
+}
+
+/* Open state: eye open + gold styling */
+.card-modal .card-modal-study-toggle[aria-pressed="true"] {
+  --eye-color: var(--brand-gold);
+  background: rgba(242, 190, 88, 0.14);
+  border-color: rgba(242, 190, 88, 0.55);
+}
+
+.card-modal .card-modal-study-toggle[aria-pressed="true"]::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2024%2024'%3E%3Cpath%20d%3D'M12%205c-5%200-9%203-11%207%202%204%206%207%2011%207s9-3%2011-7c-2-4-6-7-11-7zm0%2011a4%204%200%201%201%200-8%204%204%200%200%201%200%208z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2024%2024'%3E%3Cpath%20d%3D'M12%205c-5%200-9%203-11%207%202%204%206%207%2011%207s9-3%2011-7c-2-4-6-7-11-7zm0%2011a4%204%200%201%201%200-8%204%204%200%200%201%200%208z'/%3E%3C/svg%3E");
+}
+
+@media (max-width: 600px) {
+  .card-modal .card-modal-study-toggle {
+    width: 32px;
+    height: 32px;
   }
 }
 
@@ -6603,7 +6696,7 @@ section.carousel:last-of-type {
   }
 
   .card-modal-scroll-spacer {
-    height: 80px;
+    height: 56px;
   }
 }
 
@@ -6680,22 +6773,24 @@ section.carousel:last-of-type {
     grid-template-columns: auto minmax(0, 1fr) auto;
     grid-template-areas: "crystals title close";
     align-items: center;
-    padding: 28px 32px;
-    background: linear-gradient(135deg, rgba(33, 64, 152, 0.03), rgba(236, 65, 140, 0.02));
-    border-bottom: 2px solid var(--border);
-    gap: 20px;
+    padding: 32px 40px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(33, 64, 152, 0.02) 50%, rgba(236, 65, 140, 0.015) 100%);
+    border-bottom: 1px solid rgba(33, 64, 152, 0.08);
+    gap: 24px;
+    box-shadow: 0 2px 12px rgba(15, 33, 84, 0.04);
   }
 
   .card-modal-header h3 {
     grid-area: title;
     margin: 0;
-    font-size: 30px;
+    font-size: 32px;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.04em;
     font-family: var(--font-medium);
     color: var(--ink);
     text-align: center;
-    line-height: 1.3;
+    line-height: 1.25;
+    font-weight: 600;
   }
 
   .card-modal-crystals {
@@ -6712,36 +6807,44 @@ section.carousel:last-of-type {
 .card-modal-crystals {
   display: inline-flex;
   align-items: center;
-  /* Keep the chip sized by its text, not by hard px sizes. */
   font-size: 14px;
   line-height: 1;
-  gap: 0.45em;
-  padding: 0.42em 0.7em;
+  gap: 0.5em;
+  padding: 0.5em 0.85em;
   border-radius: 999px;
-  border: 1px solid var(--border);
-  background: rgba(33, 64, 152, 0.08);
-  box-shadow: 0 6px 12px rgba(15, 33, 84, 0.08);
+  border: 1.5px solid rgba(236, 65, 140, 0.12);
+  background: linear-gradient(135deg, rgba(236, 65, 140, 0.06) 0%, rgba(242, 190, 88, 0.03) 100%);
+  box-shadow: 0 4px 16px rgba(236, 65, 140, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
   color: var(--ink);
   font-family: var(--font-medium);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.03em;
   flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.card-modal-crystals:hover {
+  box-shadow: 0 6px 20px rgba(236, 65, 140, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  transform: translateY(-1px);
 }
 
 .card-modal-crystals__icon {
-  font-size: 1.15em;
+  font-size: 1.2em;
   color: var(--brand-rose);
+  filter: drop-shadow(0 1px 2px rgba(236, 65, 140, 0.2));
 }
 
 .card-modal-crystals__value {
-  font-size: 1em;
-  font-weight: 650;
+  font-size: 1.05em;
+  font-weight: 700;
+  color: var(--brand-rose);
 }
 
 .card-modal-crystals__suffix {
-  font-size: 0.78em;
+  font-size: 0.75em;
   text-transform: uppercase;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   color: var(--brand-gray-soft);
+  opacity: 0.85;
 }
 
 .card-modal-crystals.is-starred {
@@ -6836,24 +6939,24 @@ section.carousel:last-of-type {
 .card-modal-body {
   grid-column: 2;
   grid-row: 2;
-  padding: 36px;
+  padding: 28px;
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  gap: 32px;
-  font-size: 18px;
-  line-height: 1.8;
+  gap: 24px;
+  font-size: 16px;
+  line-height: 1.65;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
-  scrollbar-color: rgba(33, 64, 152, 0.3) transparent;
-  background: var(--paper);
+  scrollbar-color: rgba(33, 64, 152, 0.25) transparent;
+  background: #ffffff;
 }
 
 /* Extra space at the bottom so the last accordion section can be fully visible */
 .card-modal-scroll-spacer {
-  height: 160px;
+  height: 96px;
   flex: 0 0 auto;
   pointer-events: none;
 }
@@ -6861,23 +6964,23 @@ section.carousel:last-of-type {
 .card-modal-sidebar {
   grid-column: 1;
   grid-row: 2;
-  padding: 32px;
-  background: linear-gradient(180deg, rgba(33, 64, 152, 0.02), rgba(236, 65, 140, 0.01));
-  border-right: 1px solid var(--border);
+  padding: 28px;
+  background: linear-gradient(180deg, rgba(248, 249, 252, 1) 0%, rgba(255, 255, 255, 1) 100%);
+  border-right: 1px solid rgba(33, 64, 152, 0.08);
   min-height: 0;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 22px;
 }
 
 /* Revamp: modal specs panel */
 .modal-specs {
-  border: 1px solid rgba(33, 64, 152, 0.16);
-  border-radius: 18px;
-  background: linear-gradient(135deg, rgba(33, 64, 152, 0.04), rgba(236, 65, 140, 0.03));
-  padding: 18px;
-  box-shadow: 0 14px 34px rgba(15, 33, 84, 0.10);
+  border: 1px solid rgba(33, 64, 152, 0.1);
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(248, 250, 252, 1) 100%);
+  padding: 24px;
+  box-shadow: 0 4px 16px rgba(15, 33, 84, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 @media (max-width: 600px) {
@@ -6928,19 +7031,27 @@ section.carousel:last-of-type {
 
 .modal-specs__item {
   display: grid;
-  gap: 6px;
-  padding: 12px 12px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(33, 64, 152, 0.10);
+  gap: 8px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid rgba(33, 64, 152, 0.08);
+  box-shadow: 0 2px 4px rgba(15, 33, 84, 0.02);
+  transition: all 0.2s ease;
+}
+
+.modal-specs__item:hover {
+  border-color: rgba(33, 64, 152, 0.15);
+  box-shadow: 0 4px 8px rgba(15, 33, 84, 0.04);
+  transform: translateY(-1px);
 }
 
 .modal-specs__key {
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--brand-rose);
-  font-family: var(--font-medium);
+  font-family: "SuperGrotesk-Medium", Arial, sans-serif;
 }
 
 .modal-specs__value {
@@ -7325,10 +7436,11 @@ section.carousel:last-of-type {
 .steps {
   border-radius: 18px;
   background: linear-gradient(135deg, rgba(33, 64, 152, 0.05), rgba(33, 64, 152, 0.02));
-  border: 2px solid rgba(33, 64, 152, 0.12);
+  border: 2px solid var(--brand-rose);
   padding: 28px 26px;
-  font-size: 18px;
-  line-height: 1.85;
+  font-family: var(--font-regular);
+  font-size: 16px;
+  line-height: 1.7;
   display: grid;
   gap: 16px;
   position: relative;
@@ -7345,12 +7457,11 @@ section.carousel:last-of-type {
   }
 }
 
-.steps:not(:has(strong))::before {
-  content: "💗 PREPARAZIONE";
+.steps strong:first-child {
   display: block;
   margin-bottom: 16px;
-  font-family: var(--font-medium);
-  font-size: 15px;
+  font-family: "SuperGrotesk-Medium", Arial, sans-serif;
+  font-size: 13px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--brand-rose);
@@ -7359,22 +7470,21 @@ section.carousel:last-of-type {
 }
 
 .steps span {
-  padding-left: 20px;
-  border-left: 4px solid var(--brand-rose);
-  transition: transform 0.2s ease, border-color 0.2s ease;
-  font-size: 18px;
+  padding-left: 0;
+  transition: transform 0.2s ease;
+  font-size: 16px;
 }
 
 .steps span:hover {
   transform: translateX(4px);
-  border-left-color: var(--brand-gold);
 }
 .tips {
+  font-family: var(--font-regular);
   font-size: 16px;
-  line-height: 1.75;
+  line-height: 1.7;
   color: var(--ink);
   background: linear-gradient(135deg, rgba(242, 190, 88, 0.18), rgba(242, 190, 88, 0.08));
-  border-left: 4px solid var(--brand-gold);
+  border: 2px solid var(--brand-gold);
   border-radius: 14px;
   padding: 22px 22px;
   position: relative;
@@ -7390,11 +7500,10 @@ section.carousel:last-of-type {
   }
 }
 
-.tips:not(:has(strong))::before {
-  content: "💡 SUGGERIMENTI PRO";
+.tips strong:first-child {
   display: block;
   margin-bottom: 12px;
-  font-family: var(--font-medium);
+  font-family: "SuperGrotesk-Medium", Arial, sans-serif;
   font-size: 13px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -7404,8 +7513,9 @@ section.carousel:last-of-type {
 }
 
 .tips strong {
+  font-family: "SuperGrotesk-Medium", Arial, sans-serif;
   color: var(--brand-gold);
-  font-size: 15px;
+  font-size: 13px;
   letter-spacing: 0.04em;
 }
 
@@ -7519,9 +7629,9 @@ body.page-product .badge {
   line-height: 1.7;
   color: var(--ink);
   padding: 18px;
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(33, 64, 152, 0.04);
   border-radius: 12px;
-  border-left: 4px solid var(--brand-rose);
+  border: 2px solid var(--brand-blue);
   overflow-wrap: break-word;
   word-wrap: break-word;
   max-width: 100%;
@@ -7654,12 +7764,44 @@ body.page-product .badge {
   gap: 12px;
 }
 
+/* Modal-only: compact stacked tabs (no gaps when closed) */
+.card-modal .modal-accordion {
+  gap: 0;
+}
+
+.card-modal .modal-accordion .accordion-item {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Prevent double borders between stacked items */
+.card-modal .modal-accordion .accordion-item + .accordion-item {
+  border-top: 0;
+}
+
+/* Restore rounded corners only on the outer edges */
+.card-modal .modal-accordion .accordion-item:first-child {
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+}
+
+.card-modal .modal-accordion .accordion-item:last-child {
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
+}
+
 .accordion-item {
-  border: 1px solid rgba(33, 64, 152, 0.16);
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 8px 20px rgba(15, 33, 84, 0.08);
+  border: 1px solid rgba(33, 64, 152, 0.1);
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(15, 33, 84, 0.04), 0 8px 24px rgba(15, 33, 84, 0.03);
   overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.accordion-item:hover {
+  box-shadow: 0 4px 12px rgba(15, 33, 84, 0.06), 0 12px 32px rgba(15, 33, 84, 0.04);
+  border-color: rgba(33, 64, 152, 0.15);
 }
 
 .accordion-header {
@@ -7669,17 +7811,18 @@ body.page-product .badge {
   align-items: center;
   justify-content: space-between;
   gap: 14px;
-  padding: 14px 16px;
+  padding: 16px 20px;
   border: none;
   border-radius: 0;
   background: transparent;
-  font-size: 16px;
+  font-size: 15px;
   font-family: var(--font-medium);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ink);
   cursor: pointer;
   min-width: 0;
+  transition: all 0.2s ease;
 }
 
 @media (max-width: 600px) {
@@ -7690,13 +7833,13 @@ body.page-product .badge {
 }
 
 .accordion-header.tab-opened {
-  background: rgba(33, 64, 152, 0.03);
-  box-shadow: inset 3px 0 0 rgba(33, 64, 152, 0.22);
+  background: linear-gradient(90deg, rgba(33, 64, 152, 0.04) 0%, rgba(33, 64, 152, 0.01) 100%);
+  box-shadow: inset 4px 0 0 rgba(33, 64, 152, 0.3);
 }
 
 .accordion-header.tab-starred {
-  background: linear-gradient(135deg, rgba(242, 190, 88, 0.22), rgba(242, 190, 88, 0.08));
-  box-shadow: inset 3px 0 0 rgba(242, 190, 88, 0.72);
+  background: linear-gradient(90deg, rgba(242, 190, 88, 0.12) 0%, rgba(242, 190, 88, 0.03) 100%);
+  box-shadow: inset 4px 0 0 rgba(242, 190, 88, 0.6);
 }
 
 .accordion-title {
@@ -7741,13 +7884,14 @@ body.page-product .badge {
 .accordion-body {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.25s ease;
-  padding: 0 16px 0 16px;
-  background: rgba(255, 255, 255, 0.92);
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0 20px 0 20px;
+  background: rgba(255, 255, 255, 0.98);
 }
 
 .accordion-item.is-open .accordion-body {
-  padding: 0 16px 16px 16px;
+  padding: 0 20px 20px 20px;
+  border-top: 1px solid rgba(33, 64, 152, 0.06);
 }
 
 .accordion-group {
@@ -7761,33 +7905,15 @@ body.page-product .badge {
    ======================================================================== */
 
 .card-modal .modal-accordion .accordion-item {
-  /* Default topic palette (blue → rose) */
-  --tab-accent-rgb: 33, 64, 152;
-  --tab-accent2-rgb: 236, 65, 140;
-  --tab-accent: rgb(var(--tab-accent-rgb));
-  --tab-accent2: rgb(var(--tab-accent2-rgb));
-
   position: relative;
-  border-color: rgba(var(--tab-accent-rgb), 0.18);
-  background: rgba(255, 255, 255, 0.96);
-  border-radius: 16px;
-  box-shadow:
-    0 10px 24px rgba(15, 33, 84, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.7);
-}
-
-/* Left accent rail */
-.card-modal .modal-accordion .accordion-item::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: rgba(var(--tab-accent-rgb), 0.78);
-  border-radius: 16px 0 0 16px;
-  opacity: 1;
-  pointer-events: none;
+  border: 1px solid rgba(33, 64, 152, 0.08);
+  background: #ffffff;
+  /* Closed tabs should be compact and stack flush (no per-item rounding/shadow).
+     Rounding is reintroduced only on the first/last item via the rules above,
+     and the open state adds its own elevated shadow. */
+  border-radius: 0;
+  box-shadow: none;
+  overflow: hidden;
 }
 
 /* Topic mapping */
@@ -7857,6 +7983,8 @@ body.page-product .badge {
     background 220ms ease,
     box-shadow 220ms ease,
     color 180ms ease;
+  /* More compact headers inside modals */
+  padding: 14px 16px;
 }
 
 .card-modal .modal-accordion .accordion-header:hover {
@@ -7873,13 +8001,13 @@ body.page-product .badge {
 
 /* Keep the “opened/starred” state, but let topic accent lead the visual language */
 .card-modal .modal-accordion .accordion-header.tab-opened {
-  background: rgba(var(--tab-accent-rgb), 0.06);
-  box-shadow: inset 0 -1px 0 rgba(var(--tab-accent-rgb), 0.18);
+  background: rgba(33, 64, 152, 0.04);
+  border-bottom: 2px solid rgba(33, 64, 152, 0.15);
 }
 
 .card-modal .modal-accordion .accordion-header.tab-starred {
-  background: rgba(242, 190, 88, 0.12);
-  box-shadow: inset 0 -1px 0 rgba(242, 190, 88, 0.28);
+  background: rgba(242, 190, 88, 0.08);
+  border-bottom: 2px solid rgba(242, 190, 88, 0.4);
 }
 
 /* Post-star toolbar: unlock “Mostra tutto” (open all tabs) */
@@ -7977,17 +8105,38 @@ body.page-product .badge {
   transition: transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Body: topic-tinted paper + content reveal */
+/* Body: clean and minimal with proper padding and alignment */
 .card-modal .modal-accordion .accordion-body {
-  transition: max-height 320ms cubic-bezier(0.2, 0.9, 0.2, 1);
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: inset 0 1px 0 rgba(var(--tab-accent-rgb), 0.08);
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  /* When collapsed, do NOT keep padding (it creates a visible white block). */
+  background: transparent;
+  padding: 0 16px;
+  overflow: hidden;
+  max-height: 0;
+}
+
+.card-modal .modal-accordion .accordion-item.is-open .accordion-body {
+  background: #ffffff;
+  padding: 16px 16px 18px 16px;
+  border-top: 1px solid rgba(33, 64, 152, 0.06);
+}
+
+@media (max-width: 600px) {
+  .card-modal .modal-accordion .accordion-header {
+    padding: 12px 14px;
+  }
+  .card-modal .modal-accordion .accordion-body {
+    padding-inline: 14px;
+  }
+  .card-modal .modal-accordion .accordion-item.is-open .accordion-body {
+    padding: 14px 14px 16px 14px;
+  }
 }
 
 .card-modal .modal-accordion .accordion-body > * {
   opacity: 0;
-  transform: translateY(-4px);
-  transition: opacity 200ms ease, transform 260ms ease;
+  transform: translateY(-3px);
+  transition: opacity 200ms ease 80ms, transform 260ms ease 80ms;
 }
 
 .card-modal .modal-accordion .accordion-item.is-open .accordion-body > * {
@@ -8001,90 +8150,116 @@ body.page-product .badge {
     inset 0 1px 0 rgba(255, 255, 255, 0.72);
 }
 
-/* Make inner blocks pick up topic accent (no copy changes) */
+/* Panels inside accordion tabs should inherit the category accent (data-topic). */
+.card-modal .modal-accordion .accordion-item {
+  --tab-accent: rgb(var(--tab-accent-rgb, 33, 64, 152));
+  --tab-accent-soft: rgba(var(--tab-accent-rgb, 33, 64, 152), 0.04);
+  --tab-accent-ring: rgba(var(--tab-accent-rgb, 33, 64, 152), 0.55);
+}
+
+/* Uniform styling for specs inside accordion tabs - category-colored border */
 .card-modal .modal-accordion .accordion-item .modal-specs {
-  border-color: rgba(var(--tab-accent-rgb), 0.18);
-  background: rgba(255, 255, 255, 0.88);
+  border: 2px solid var(--tab-accent);
+  border-radius: 12px;
+  background: var(--tab-accent-soft);
+  padding: 18px;
+  box-shadow: none;
 }
 
 .card-modal .modal-accordion .accordion-item .modal-specs__title {
-  color: rgb(var(--tab-accent-rgb));
+  color: var(--brand-blue);
 }
 
 .card-modal .modal-accordion .accordion-item .modal-specs__key {
-  color: rgb(var(--tab-accent2-rgb));
+  color: var(--brand-rose);
 }
 
-/* Replace the “odd gray” labels inside tabs with the current topic accent */
-.card-modal .modal-accordion .accordion-item .modal-specs__subtitle,
+/* Uniform gray labels inside tabs */
+.card-modal .modal-accordion .accordion-item .modal-specs__subtitle {
+  color: var(--brand-gray-soft);
+}
+
+/* Section titles inside accordion tabs: match the pink uppercase heading style */
 .card-modal .modal-accordion .accordion-item .card-modal-section__title {
-  color: rgba(var(--tab-accent-rgb), 0.78);
+  font-family: "SuperGrotesk-Medium", Arial, sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 13px;
+  color: var(--brand-rose);
 }
 
-/* Specs grid items inside tabs: make them feel like branded “data tiles” */
+/* Specs grid items inside tabs: flattened design without individual borders */
 .card-modal .modal-accordion .accordion-item .modal-specs__grid {
-  gap: 12px;
+  gap: 16px;
 }
 
 .card-modal .modal-accordion .accordion-item .modal-specs__item {
   position: relative;
-  overflow: hidden;
-  border-radius: 16px;
-  padding: 12px 12px;
-  border: 1px solid rgba(var(--tab-accent-rgb), 0.14);
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow:
-    0 10px 20px rgba(15, 33, 84, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.75);
-  transition:
-    transform 220ms cubic-bezier(0.2, 0.9, 0.2, 1),
-    border-color 220ms ease,
-    box-shadow 260ms ease;
+  overflow: visible;
+  border-radius: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  transition: none;
 }
 
-/* Mini accent corner glow (subtle, topic-tinted) */
 .card-modal .modal-accordion .accordion-item .modal-specs__item::after {
   content: none;
 }
 
 .card-modal .modal-accordion .accordion-item .modal-specs__item:hover {
-  transform: translateY(-1px);
-  border-color: rgba(var(--tab-accent-rgb), 0.24);
-  box-shadow:
-    0 14px 28px rgba(15, 33, 84, 0.10),
-    inset 0 1px 0 rgba(255, 255, 255, 0.78);
+  transform: none;
+  border-color: transparent;
+  box-shadow: none;
 }
 
 .card-modal .modal-accordion .accordion-item .modal-specs__key {
-  font-family: var(--font-medium);
-  font-size: 11px;
-  letter-spacing: 0.22em;
+  font-family: "SuperGrotesk-Medium", Arial, sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgb(var(--tab-accent-rgb));
+  font-weight: 600;
+  color: var(--brand-rose);
 }
 
 .card-modal .modal-accordion .accordion-item .modal-specs__value {
-  font-family: var(--font-medium);
+  font-family: var(--font-regular);
   font-size: 16px;
-  line-height: 1.35;
+  line-height: 1.7;
   color: var(--ink);
 }
+
+/* Make Checklist / Focus mini blocks look like proper cards with category color */
+.card-modal .modal-accordion .accordion-item .card-modal-mini-specs,
+.card-modal .modal-accordion .accordion-item .card-modal-focus,
+.card-modal .modal-accordion .accordion-item .card-modal-intro {
+  border: 2px solid var(--tab-accent);
+  background: var(--tab-accent-soft);
+  border-radius: 12px;
+  padding: 18px;
+}
+
+/* Note: Steps/Tips already have strong brand borders (rose/gold).
+   Avoid adding an extra category ring here, otherwise some topics (e.g. Procedura)
+   will show a “double border” effect when the accent matches the box border. */
 
 @media (max-width: 600px) {
   .card-modal .modal-accordion .accordion-item .modal-specs__grid {
-    gap: 10px;
+    gap: 14px;
   }
   .card-modal .modal-accordion .accordion-item .modal-specs__item {
-    padding: 10px 10px;
-    border-radius: 14px;
+    padding: 0;
+    border-radius: 0;
   }
   .card-modal .modal-accordion .accordion-item .modal-specs__key {
-    font-size: 10px;
-    letter-spacing: 0.20em;
+    font-size: 13px;
+    letter-spacing: 0.18em;
   }
   .card-modal .modal-accordion .accordion-item .modal-specs__value {
-    font-size: 14px;
-    line-height: 1.35;
+    font-size: 15px;
+    line-height: 1.7;
   }
 }
 
@@ -8094,140 +8269,101 @@ body.page-product .badge {
   }
 }
 
-.card-modal .modal-accordion .accordion-item .steps,
-.card-modal .modal-accordion .accordion-item .tips {
-  border-color: rgba(var(--tab-accent-rgb), 0.16) !important;
-}
+/* ===== STYLED TAB CONTENT - RICH VISUAL APPROACH ===== */
+/* All tabs inherit the original styled design with gradients, colored accents, and structured divisions */
+/* This matches the "Note" tab aesthetic that the user prefers */
 
-.card-modal .modal-accordion .accordion-item .steps span {
-  border-left-color: rgba(var(--tab-accent-rgb), 0.55) !important;
-}
-
-.card-modal .modal-accordion .accordion-item .tips {
-  border-left-color: rgba(var(--tab-accent2-rgb), 0.55) !important;
-}
-
-/* Lightweight tabs (Panoramica / Checklist / Focus): make them feel like premium panels */
-.card-modal .modal-accordion .accordion-item .card-modal-overview,
-.card-modal .modal-accordion .accordion-item .card-modal-mini-specs,
-.card-modal .modal-accordion .accordion-item .card-modal-focus {
-  border: 1px solid rgba(var(--tab-accent-rgb), 0.16);
-  border-radius: 16px;
-  padding: 16px;
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 10px 22px rgba(15, 33, 84, 0.06);
-}
-
-.card-modal .modal-accordion .accordion-item .card-modal-mini-specs .modal-specs__bullets,
-.card-modal .modal-accordion .accordion-item .card-modal-focus .modal-specs__bullets {
-  padding-left: 0;
-  list-style: none;
-  margin: 0;
-  display: grid;
-  gap: 10px;
-}
-
-.card-modal .modal-accordion .accordion-item .card-modal-mini-specs .modal-specs__bullets li,
-.card-modal .modal-accordion .accordion-item .card-modal-focus .modal-specs__bullets li {
-  margin: 0;
-  padding: 12px 12px 12px 14px;
-  border-radius: 14px;
-  border: 1px solid rgba(var(--tab-accent-rgb), 0.12);
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 10px 18px rgba(15, 33, 84, 0.05);
-}
-
-.card-modal .modal-accordion .accordion-item .card-modal-mini-specs .modal-specs__bullets li strong,
-.card-modal .modal-accordion .accordion-item .card-modal-focus .modal-specs__bullets li strong {
-  color: rgb(var(--tab-accent-rgb));
-  font-family: var(--font-medium);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-size: 12px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .card-modal .modal-accordion .accordion-header,
-  .card-modal .modal-accordion .accordion-body,
-  .card-modal .modal-accordion .accordion-body > *,
-  .card-modal .modal-accordion .accordion-chevron {
-    transition: none !important;
-  }
-}
-
-/* Modal tabs: unify content styling so each tab feels consistent.
-   The tab title already tells the user what they're reading, so we suppress
-   the internal pseudo-headings and normalize the blocks. */
-.card-modal .accordion-body .steps,
-.card-modal .accordion-body .tips {
-  border-radius: 16px;
-  padding: 16px 16px;
+/* Keep base accordion typography clean */
+.card-modal .modal-accordion .accordion-body p {
+  margin: 0 0 14px 0;
+  font-family: var(--font-regular);
   font-size: 16px;
-  line-height: 1.65;
+  line-height: 1.7;
   color: var(--ink);
-  background: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(33, 64, 152, 0.14);
-  box-shadow: 0 10px 26px rgba(15, 33, 84, 0.08);
+}
+
+.card-modal .modal-accordion .accordion-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* Strong text (titles/headings) use medium font */
+.card-modal .modal-accordion .accordion-body strong {
+  font-family: "SuperGrotesk-Medium", Arial, sans-serif;
+  font-weight: 600;
+  color: var(--brand-rose);
+}
+
+/* Checklist + mini-specs: labels like “Obiettivo:” / “Focus:” should match the uppercase pink heading style */
+.card-modal .modal-accordion .accordion-body .modal-specs__bullets strong {
+  font-family: "SuperGrotesk-Medium", Arial, sans-serif;
+  font-weight: 600;
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: var(--brand-rose);
+}
+
+/* Essentials bullets inside accordion: keep labels consistent too */
+.card-modal .modal-accordion .accordion-body .card-modal-essentials__bullets strong {
+  font-family: "SuperGrotesk-Medium", Arial, sans-serif;
+  font-weight: 600;
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: var(--brand-rose);
+}
+
+/* Tips strong: uppercase, on separate line */
+.card-modal .modal-accordion .accordion-body .tips strong {
+  font-family: "SuperGrotesk-Medium", Arial, sans-serif;
+  display: block;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  font-size: 13px;
+  letter-spacing: 0.15em;
+}
+
+/* Steps strong: uppercase, on separate line (for inline headers in procedure/checklist tabs) */
+.card-modal .modal-accordion .accordion-body .steps strong {
+  font-family: "SuperGrotesk-Medium", Arial, sans-serif;
+  display: block;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  font-size: 13px;
+  letter-spacing: 0.15em;
+}
+
+/* Overview tab: product name in uppercase on its own line */
+.card-modal .modal-accordion .accordion-item[data-topic="panoramica"] .card-modal-overview p strong,
+.card-modal .modal-accordion .accordion-item[data-topic="altro"] .card-modal-overview p strong,
+.card-modal .modal-accordion .accordion-item[data-topic="dettagli"] .card-modal-overview p strong,
+.card-modal .modal-accordion .accordion-item[data-topic="approfondimenti"] .card-modal-overview p strong {
+  display: block;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  font-family: "SuperGrotesk-Medium", Arial, sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  color: var(--brand-rose);
+}
+
+/* Horizontal rules */
+.card-modal .modal-accordion .accordion-body hr {
+  border: none;
+  border-top: 1px dashed rgba(33, 64, 152, 0.2);
+  margin: 12px 0;
 }
 
 @media (max-width: 600px) {
-  .card-modal .accordion-body .steps,
-  .card-modal .accordion-body .tips {
-    border-radius: 14px;
-    padding: 14px;
-    font-size: 14px;
-    line-height: 1.6;
+  .card-modal .modal-accordion .accordion-body p,
+  .card-modal .modal-accordion .accordion-body li {
+    font-size: 15px;
+    line-height: 1.65;
   }
-}
-
-.card-modal .accordion-body .steps::before,
-.card-modal .accordion-body .tips::before {
-  content: none !important;
-  display: none !important;
-}
-
-.card-modal .accordion-body .steps span {
-  font-size: inherit;
-  padding-left: 14px;
-  border-left: 3px solid rgba(33, 64, 152, 0.35);
-}
-
-.card-modal .accordion-body .steps span:hover {
-  transform: none;
-  border-left-color: rgba(33, 64, 152, 0.55);
-}
-
-.card-modal .accordion-body .tips strong {
-  font-size: inherit;
-  letter-spacing: 0.02em;
-  text-transform: none;
-}
-
-/* In modal accordion, the header already labels the section */
-.card-modal .accordion-body .steps::before,
-.card-modal .accordion-body .tips::before {
-  content: none !important;
-  display: none !important;
-}
-
-/* Hide the gold "💰 Upselling" headings everywhere (label only, keep content) */
-.details .steps > strong[style*="brand-gold"],
-.details .tips > strong[style*="brand-gold"],
-.card-modal .steps > strong[style*="brand-gold"],
-.card-modal .tips > strong[style*="brand-gold"] {
-  display: none !important;
-}
-
-/* Hide the "🛠 Pro tip" strong label when styled in rose */
-.details .tips > strong[style*="brand-rose"],
-.card-modal .tips > strong[style*="brand-rose"] {
-  display: none !important;
-}
-
-.card-modal-body hr {
-  border: none;
-  border-top: 1px dashed rgba(33, 64, 152, 0.2);
-  margin: 6px 0;
 }
 
 .video-chip {

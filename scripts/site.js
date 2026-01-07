@@ -11522,8 +11522,33 @@ toggles.forEach((button) => {
       </svg>
     `;
 
+    // Compact “study mode” toggle (open all tabs) — placed on the LEFT of the header.
+    // Locked until the card is converted to a star.
+    const studyToggleWrap = document.createElement('span');
+    studyToggleWrap.className = 'card-modal-study-toggle-wrap';
+    studyToggleWrap.hidden = true;
+
+    const studyToggleBtn = document.createElement('button');
+    studyToggleBtn.type = 'button';
+    studyToggleBtn.className = 'card-modal-study-toggle';
+    studyToggleBtn.setAttribute('aria-pressed', 'false');
+    studyToggleBtn.setAttribute('data-i18n-attr', 'aria-label:modal.studyMode.showAllAria');
+    studyToggleBtn.setAttribute('aria-label', tr('modal.studyMode.showAllAria', null, 'Mostra tutto'));
+    studyToggleBtn.innerHTML = '<span class="sr-only" data-i18n="modal.studyMode.showAll">Mostra tutto</span>';
+    studyToggleBtn.addEventListener('click', (e) => {
+      try { e.preventDefault(); e.stopPropagation(); } catch (err) {}
+      toggleAllTabsMode();
+    });
+    studyToggleWrap.appendChild(studyToggleBtn);
+
+    // Left controls container: eye + crystals chip.
+    const leftControls = document.createElement('div');
+    leftControls.className = 'card-modal-left-controls';
+    leftControls.appendChild(studyToggleWrap);
+    leftControls.appendChild(crystalChip);
+
+    modalHeader.appendChild(leftControls);
     modalHeader.appendChild(headerTitle);
-    modalHeader.appendChild(crystalChip);
     modalHeader.appendChild(closeBtn);
 
     // Post-star UX: allow trainees to reveal ALL tab contents at once.
@@ -11538,6 +11563,12 @@ toggles.forEach((button) => {
       apis: [],
       starred: false
     };
+
+    // Wire the header study toggle into the existing state machine.
+    try {
+      allTabsControl.wrapper = studyToggleWrap;
+      allTabsControl.button = studyToggleBtn;
+    } catch (e) {}
 
     const syncAllTabsControlUI = () => {
       const btn = allTabsControl.button;
@@ -11819,8 +11850,10 @@ toggles.forEach((button) => {
         inner.className = 'card-modal-intro';
 
         const parts = [];
-        if (titleTextForOverview || descTextForOverview) {
-          parts.push(`<p><strong>${titleTextForOverview}</strong>${descTextForOverview ? ` ${descTextForOverview}` : ''}</p>`);
+        // User request: avoid repeating the card title inside the modal tabs.
+        // The modal header already shows the card title (e.g., "WAFFLES").
+        if (descTextForOverview) {
+          parts.push(`<p>${descTextForOverview}</p>`);
         }
         if (extendedFromStats) {
           parts.push(`<p>${extendedFromStats}</p>`);
@@ -12635,12 +12668,203 @@ toggles.forEach((button) => {
         return '';
       };
 
+      // --- Modal content hygiene ---
+      // 1) Avoid repeated chunks across tabs (even when the content is short).
+      // 2) After a dot (.) go to a new line (user request), without breaking decimals like 2.5.
+      // 3) Remove duplicated list items within a tab.
+      const normalizeModalText = (value) => {
+        try {
+          return tidy(String(value || '')).replace(/\s+/g, ' ').trim();
+        } catch (e) {
+          return '';
+        }
+      };
+
+      const normalizeHeadingText = (value) => {
+        try {
+          return normalizeModalText(value)
+            .toLowerCase()
+            .replace(/[\s\u00A0]+/g, ' ')
+            .replace(/[\.:;!?,\-–—]+/g, '')
+            .trim();
+        } catch (e) {
+          return '';
+        }
+      };
+
+      const stripRedundantHeadings = (root, tabTitle, cardTitleText) => {
+        try {
+          if (!root || !(root instanceof HTMLElement)) return;
+          const tabNorm = normalizeHeadingText(tabTitle);
+          const cardNorm = normalizeHeadingText(cardTitleText);
+          if (!tabNorm && !cardNorm) return;
+
+          const matchesRedundant = (text) => {
+            const n = normalizeHeadingText(text);
+            if (!n) return false;
+            if (tabNorm && n === tabNorm) return true;
+            if (cardNorm && n === cardNorm) return true;
+            return false;
+          };
+
+          // Case A: blocks like .steps/.tips usually have a top strong heading.
+          root.querySelectorAll('.steps, .tips').forEach((block) => {
+            try {
+              const strong = block.querySelector(':scope > strong');
+              if (!strong) return;
+              if (matchesRedundant(strong.textContent)) strong.remove();
+            } catch (e) {}
+          });
+
+          // Case B: some panels render a visible heading element inside the tab body.
+          // Remove only if it is a *top-level* heading-like element (avoid labels inside lists).
+          const candidates = root.querySelectorAll(
+            ':scope > .card-modal-section__title, :scope > h1, :scope > h2, :scope > h3, :scope > h4, :scope > h5, :scope > h6'
+          );
+          candidates.forEach((el) => {
+            try {
+              if (matchesRedundant(el.textContent)) el.remove();
+            } catch (e) {}
+          });
+
+          // Case C: overview intro often starts with <p><strong>Title</strong> ...</p>
+          // Strip the leading <strong> when it matches card/tab title.
+          root.querySelectorAll('p').forEach((p) => {
+            try {
+              const strong = p.querySelector(':scope > strong');
+              if (!strong) return;
+              // Only if strong is the first significant child.
+              const firstEl = p.firstElementChild;
+              if (firstEl !== strong) return;
+              if (!matchesRedundant(strong.textContent)) return;
+
+              strong.remove();
+
+              // Trim leading whitespace in the now-first text node.
+              const firstNode = p.firstChild;
+              if (firstNode && firstNode.nodeType === Node.TEXT_NODE) {
+                firstNode.nodeValue = String(firstNode.nodeValue || '').replace(/^\s+/, '');
+              }
+            } catch (e) {}
+          });
+        } catch (e) {}
+      };
+
+      const enforceNewLineAfterDot = (root) => {
+        try {
+          if (!root || !(root instanceof HTMLElement)) return;
+
+          const shouldSkipTextNode = (node) => {
+            try {
+              if (!node || !node.parentElement) return true;
+              const parent = node.parentElement;
+              const tag = String(parent.tagName || '').toUpperCase();
+              if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'TEXTAREA') return true;
+              return false;
+            } catch (e) {
+              return true;
+            }
+          };
+
+          const textNodes = [];
+          const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+          let node = null;
+          while ((node = walker.nextNode())) {
+            try {
+              if (shouldSkipTextNode(node)) continue;
+              const v = String(node.nodeValue || '');
+              if (!v || v.indexOf('.') === -1) continue;
+              textNodes.push(node);
+            } catch (e) {}
+          }
+
+          textNodes.forEach((textNode) => {
+            try {
+              const text = String(textNode.nodeValue || '');
+              if (!text) return;
+
+              const parts = [];
+              let i = 0;
+              for (let idx = 0; idx < text.length; idx += 1) {
+                if (text[idx] !== '.') continue;
+                if (idx > 0 && /\d/.test(text[idx - 1])) continue; // keep decimals like 2.5
+
+                // Consume whitespace after the dot
+                let j = idx + 1;
+                while (j < text.length && /\s/.test(text[j])) j += 1;
+
+                // Only insert a line break if there is more text after the dot.
+                if (j >= text.length) continue;
+
+                parts.push(text.slice(i, idx + 1));
+                parts.push({ br: true });
+                i = j;
+                idx = j - 1;
+              }
+              if (!parts.length) return;
+              parts.push(text.slice(i));
+
+              // If we didn't actually insert any breaks, keep as-is.
+              if (!parts.some((p) => p && p.br)) return;
+
+              const frag = document.createDocumentFragment();
+              parts.forEach((p) => {
+                if (!p) return;
+                if (p.br) {
+                  frag.appendChild(document.createElement('br'));
+                } else {
+                  const chunk = String(p);
+                  if (chunk) frag.appendChild(document.createTextNode(chunk));
+                }
+              });
+
+              textNode.replaceWith(frag);
+            } catch (e) {}
+          });
+        } catch (e) {}
+      };
+
+      const dedupeListItemsIn = (root) => {
+        try {
+          if (!root || !root.querySelectorAll) return;
+          root.querySelectorAll('ul, ol').forEach((list) => {
+            try {
+              const seen = new Set();
+              Array.from(list.children || []).forEach((child) => {
+                if (!(child instanceof HTMLElement)) return;
+                if (child.tagName !== 'LI') return;
+                const snap = normalizeModalText(child.textContent).toLowerCase();
+                if (!snap || snap.length < 12) return;
+                if (seen.has(snap)) {
+                  child.remove();
+                } else {
+                  seen.add(snap);
+                }
+              });
+            } catch (e) {}
+          });
+        } catch (e) {}
+      };
+
+      const prepareModalTabContent = (contentEl, tabTitle) => {
+        try {
+          if (!contentEl || !(contentEl instanceof HTMLElement)) return;
+          stripRedundantHeadings(contentEl, tabTitle, cardTitle);
+          enforceNewLineAfterDot(contentEl);
+          dedupeListItemsIn(contentEl);
+        } catch (e) {}
+      };
+
       const pushOverflowGroup = (title, contentEl) => {
+        // Normalize content (line breaks after dots + remove repeated list items).
+        try { prepareModalTabContent(contentEl, title); } catch (e) {}
+
         // Skip duplicated content (common when the same text was pasted into multiple blocks).
         try {
           const snap = tidy(contentEl?.textContent).toLowerCase().replace(/\s+/g, ' ').trim();
           const key = snap ? snap.slice(0, 1400) : '';
-          if (key && key.length > 120) {
+          // Also dedupe short-but-meaningful content (e.g. short tabs that got duplicated).
+          if (key && key.length > 40) {
             if (seenTabContent.has(key)) return;
             seenTabContent.add(key);
           }
@@ -12662,6 +12886,9 @@ toggles.forEach((button) => {
 
       const createAccordionItem = (title, contentEl, expandByDefault = false) => {
         if (!contentEl) return;
+
+        // Normalize content before assessing and deduping.
+        try { prepareModalTabContent(contentEl, title); } catch (e) {}
 
         const hasMeaningfulTabContent = (el) => {
           try {
@@ -12692,7 +12919,8 @@ toggles.forEach((button) => {
         try {
           const snap = tidy(contentEl?.textContent).toLowerCase().replace(/\s+/g, ' ').trim();
           const key = snap ? snap.slice(0, 1400) : '';
-          if (key && key.length > 120) {
+          // Also dedupe short-but-meaningful content (e.g. Checklist/Focus duplication).
+          if (key && key.length > 40) {
             if (seenTabContent.has(key)) return;
             seenTabContent.add(key);
           }
@@ -13231,40 +13459,8 @@ toggles.forEach((button) => {
         } catch (e) {}
       }
 
-      // Post-star: toolbar to toggle �open all tabs� mode
-      try {
-        const toolbar = document.createElement('div');
-        toolbar.className = 'modal-tabs-toolbar';
-        toolbar.hidden = true;
-
-        const hint = document.createElement('p');
-        hint.className = 'modal-tabs-toolbar__hint';
-        hint.setAttribute('data-i18n', 'modal.studyMode.hint');
-        hint.textContent = tr('modal.studyMode.hint', null, 'Modalit� studio: apri tutti i tab insieme.');
-
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'btn-ghost modal-tabs-toolbar__btn';
-        btn.setAttribute('aria-pressed', 'false');
-        btn.setAttribute('data-i18n-attr', 'aria-label:modal.studyMode.showAllAria');
-        btn.setAttribute('aria-label', tr('modal.studyMode.showAllAria', null, 'Mostra tutto'));
-        btn.innerHTML = '<span class="sr-only" data-i18n="modal.studyMode.showAll">Mostra tutto</span>';
-        btn.hidden = true;
-        btn.addEventListener('click', (e) => {
-          try { e.preventDefault(); e.stopPropagation(); } catch (err) {}
-          toggleAllTabsMode();
-        });
-
-        toolbar.appendChild(hint);
-        toolbar.appendChild(btn);
-
-        allTabsControl.wrapper = toolbar;
-        allTabsControl.button = btn;
-        allTabsControl.hint = hint;
-        syncAllTabsControlUI();
-
-        sectionWrap.appendChild(toolbar);
-      } catch (e) {}
+      // Post-star control is now in the modal header (eye button on the left).
+      try { syncAllTabsControlUI(); } catch (e) {}
 
       sectionWrap.appendChild(accordion);
       if (overflowSection && overflowSection.childElementCount) {
@@ -13297,6 +13493,7 @@ toggles.forEach((button) => {
         accordion.className = 'modal-accordion';
         try { allTabsControl.accordion = accordion; } catch (e) {}
         const createdTabTitles = new Set();
+        const seenTabContent = new Set();
         const MAX_MODAL_TABS = 5;
         const MIN_MODAL_TABS = 4;
         const maxTabs = MAX_MODAL_TABS;
@@ -13360,7 +13557,183 @@ toggles.forEach((button) => {
           return '';
         };
 
+        // --- Modal content hygiene (fallback path) ---
+        const normalizeModalText = (value) => {
+          try {
+            return tidy(String(value || '')).replace(/\s+/g, ' ').trim();
+          } catch (e) {
+            return '';
+          }
+        };
+
+        const normalizeHeadingText = (value) => {
+          try {
+            return normalizeModalText(value)
+              .toLowerCase()
+              .replace(/[\s\u00A0]+/g, ' ')
+              .replace(/[\.:;!?,\-–—]+/g, '')
+              .trim();
+          } catch (e) {
+            return '';
+          }
+        };
+
+        const stripRedundantHeadings = (root, tabTitle, cardTitleText) => {
+          try {
+            if (!root || !(root instanceof HTMLElement)) return;
+            const tabNorm = normalizeHeadingText(tabTitle);
+            const cardNorm = normalizeHeadingText(cardTitleText);
+            if (!tabNorm && !cardNorm) return;
+
+            const matchesRedundant = (text) => {
+              const n = normalizeHeadingText(text);
+              if (!n) return false;
+              if (tabNorm && n === tabNorm) return true;
+              if (cardNorm && n === cardNorm) return true;
+              return false;
+            };
+
+            root.querySelectorAll('.steps, .tips').forEach((block) => {
+              try {
+                const strong = block.querySelector(':scope > strong');
+                if (!strong) return;
+                if (matchesRedundant(strong.textContent)) strong.remove();
+              } catch (e) {}
+            });
+
+            const candidates = root.querySelectorAll(
+              ':scope > .card-modal-section__title, :scope > h1, :scope > h2, :scope > h3, :scope > h4, :scope > h5, :scope > h6'
+            );
+            candidates.forEach((el) => {
+              try {
+                if (matchesRedundant(el.textContent)) el.remove();
+              } catch (e) {}
+            });
+
+            root.querySelectorAll('p').forEach((p) => {
+              try {
+                const strong = p.querySelector(':scope > strong');
+                if (!strong) return;
+                const firstEl = p.firstElementChild;
+                if (firstEl !== strong) return;
+                if (!matchesRedundant(strong.textContent)) return;
+
+                strong.remove();
+                const firstNode = p.firstChild;
+                if (firstNode && firstNode.nodeType === Node.TEXT_NODE) {
+                  firstNode.nodeValue = String(firstNode.nodeValue || '').replace(/^\s+/, '');
+                }
+              } catch (e) {}
+            });
+          } catch (e) {}
+        };
+
+        const enforceNewLineAfterDot = (root) => {
+          try {
+            if (!root || !(root instanceof HTMLElement)) return;
+            const shouldSkipTextNode = (node) => {
+              try {
+                if (!node || !node.parentElement) return true;
+                const parent = node.parentElement;
+                const tag = String(parent.tagName || '').toUpperCase();
+                if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'TEXTAREA') return true;
+                return false;
+              } catch (e) {
+                return true;
+              }
+            };
+
+            const textNodes = [];
+            const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+            let node = null;
+            while ((node = walker.nextNode())) {
+              try {
+                if (shouldSkipTextNode(node)) continue;
+                const v = String(node.nodeValue || '');
+                if (!v || v.indexOf('.') === -1) continue;
+                textNodes.push(node);
+              } catch (e) {}
+            }
+
+            textNodes.forEach((textNode) => {
+              try {
+                const text = String(textNode.nodeValue || '');
+                if (!text) return;
+
+                const parts = [];
+                let i = 0;
+                for (let idx = 0; idx < text.length; idx += 1) {
+                  if (text[idx] !== '.') continue;
+                  if (idx > 0 && /\d/.test(text[idx - 1])) continue;
+                  let j = idx + 1;
+                  while (j < text.length && /\s/.test(text[j])) j += 1;
+                  if (j >= text.length) continue;
+                  parts.push(text.slice(i, idx + 1));
+                  parts.push({ br: true });
+                  i = j;
+                  idx = j - 1;
+                }
+                if (!parts.length) return;
+                parts.push(text.slice(i));
+                if (!parts.some((p) => p && p.br)) return;
+
+                const frag = document.createDocumentFragment();
+                parts.forEach((p) => {
+                  if (!p) return;
+                  if (p.br) frag.appendChild(document.createElement('br'));
+                  else {
+                    const chunk = String(p);
+                    if (chunk) frag.appendChild(document.createTextNode(chunk));
+                  }
+                });
+                textNode.replaceWith(frag);
+              } catch (e) {}
+            });
+          } catch (e) {}
+        };
+
+        const dedupeListItemsIn = (root) => {
+          try {
+            if (!root || !root.querySelectorAll) return;
+            root.querySelectorAll('ul, ol').forEach((list) => {
+              try {
+                const seen = new Set();
+                Array.from(list.children || []).forEach((child) => {
+                  if (!(child instanceof HTMLElement)) return;
+                  if (child.tagName !== 'LI') return;
+                  const snap = normalizeModalText(child.textContent).toLowerCase();
+                  if (!snap || snap.length < 12) return;
+                  if (seen.has(snap)) child.remove();
+                  else seen.add(snap);
+                });
+              } catch (e) {}
+            });
+          } catch (e) {}
+        };
+
+        const prepareModalTabContent = (contentEl, tabTitle) => {
+          try {
+            if (!contentEl || !(contentEl instanceof HTMLElement)) return;
+            stripRedundantHeadings(contentEl, tabTitle, cardTitle);
+            enforceNewLineAfterDot(contentEl);
+            dedupeListItemsIn(contentEl);
+          } catch (e) {}
+        };
+
         const pushOverflowGroup = (title, contentEl) => {
+          // Normalize content (line breaks after dots + remove repeated list items).
+          try { prepareModalTabContent(contentEl, title); } catch (e) {}
+
+          // Avoid repeating the same text in overflow too.
+          try {
+            const snap = tidy(contentEl?.textContent).toLowerCase().replace(/\s+/g, ' ').trim();
+            const key = snap ? snap.slice(0, 1400) : '';
+            if (key && key.length > 40) {
+              if (seenTabContent.has(key)) return;
+              seenTabContent.add(key);
+            }
+          } catch (e) {}
+
           // Keep extra content reachable without adding more tabs.
           const wrap = ensureOverflowSection();
           try {
@@ -13438,6 +13811,19 @@ toggles.forEach((button) => {
         };
 
         const addFallbackAccordionItem = (titleText, contentEl, openByDefault) => {
+          // Normalize content early (line breaks + list-item dedupe) before counting/deduping.
+          try { prepareModalTabContent(contentEl, titleText); } catch (e) {}
+
+          // Avoid creating tabs that repeat the same information.
+          try {
+            const snap = tidy(contentEl?.textContent).toLowerCase().replace(/\s+/g, ' ').trim();
+            const key = snap ? snap.slice(0, 1400) : '';
+            if (key && key.length > 40) {
+              if (seenTabContent.has(key)) return;
+              seenTabContent.add(key);
+            }
+          } catch (e) {}
+
           if (totalTabsCount >= maxTabs) {
             pushOverflowGroup(titleText, contentEl);
             return;
@@ -13651,40 +14037,8 @@ toggles.forEach((button) => {
           } catch (e) {}
         }
 
-        // Post-star: toolbar to toggle �open all tabs� mode
-        try {
-          const toolbar = document.createElement('div');
-          toolbar.className = 'modal-tabs-toolbar';
-          toolbar.hidden = true;
-
-          const hint = document.createElement('p');
-          hint.className = 'modal-tabs-toolbar__hint';
-          hint.setAttribute('data-i18n', 'modal.studyMode.hint');
-          hint.textContent = tr('modal.studyMode.hint', null, 'Modalit� studio: apri tutti i tab insieme.');
-
-          const btn = document.createElement('button');
-          btn.type = 'button';
-          btn.className = 'btn-ghost modal-tabs-toolbar__btn';
-          btn.setAttribute('aria-pressed', 'false');
-          btn.setAttribute('data-i18n-attr', 'aria-label:modal.studyMode.showAllAria');
-          btn.setAttribute('aria-label', tr('modal.studyMode.showAllAria', null, 'Mostra tutto'));
-          btn.innerHTML = '<span class="sr-only" data-i18n="modal.studyMode.showAll">Mostra tutto</span>';
-          btn.hidden = true;
-          btn.addEventListener('click', (e) => {
-            try { e.preventDefault(); e.stopPropagation(); } catch (err) {}
-            toggleAllTabsMode();
-          });
-
-          toolbar.appendChild(hint);
-          toolbar.appendChild(btn);
-
-          allTabsControl.wrapper = toolbar;
-          allTabsControl.button = btn;
-          allTabsControl.hint = hint;
-          syncAllTabsControlUI();
-
-          sectionWrap.appendChild(toolbar);
-        } catch (e) {}
+        // Post-star control is now in the modal header (eye button on the left).
+        try { syncAllTabsControlUI(); } catch (e) {}
 
         sectionWrap.appendChild(accordion);
         if (overflowSection && overflowSection.childElementCount) {
