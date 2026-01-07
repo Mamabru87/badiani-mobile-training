@@ -806,15 +806,22 @@
     bumpUnread() {}
 
     playSynthSound(type) {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      if (!AudioContext) return;
+      // Reuse the shared audio engine (single AudioContext) to avoid lag/volume issues on mobile.
+      if (!window.__badianiUserGesture) return;
+      const api = window.BadianiAudio;
+      const ctx = api?.getContext?.({ requireGesture: true }) || null;
+      if (!ctx) return;
+      try { api?.ensureGraph?.(ctx); } catch {}
+      if (ctx.state === 'suspended') {
+        ctx.resume().catch(() => {});
+      }
+      const out = api?.getOutput?.(ctx) || ctx.destination;
 
-      const ctx = new AudioContext();
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
 
       osc.connect(gain);
-      gain.connect(ctx.destination);
+      gain.connect(out);
 
       const now = ctx.currentTime;
 
@@ -851,7 +858,7 @@
         const osc2 = ctx.createOscillator();
         const gain2 = ctx.createGain();
         osc2.connect(gain2);
-        gain2.connect(ctx.destination);
+        gain2.connect(out);
         osc2.frequency.setValueAtTime(1760, now);
         gain2.gain.setValueAtTime(0.05, now);
         gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.4);

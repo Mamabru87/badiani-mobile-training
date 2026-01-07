@@ -2,26 +2,6 @@
     // Gelato Effects: Fluid Animation & Sound
     // Adds a "creamy" feel to the cockpit carousel
 
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    let audioCtx;
-
-    // Initialize Audio Context only after a trusted user gesture
-    function initAudio() {
-        try {
-            if (!window.__badianiUserGesture) return false;
-            if (!AudioContext) return false;
-            if (!audioCtx) {
-                audioCtx = new AudioContext();
-            }
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume().catch(() => {});
-            }
-            return true;
-        } catch (_) {
-            return false;
-        }
-    }
-
     // Sound: Soft "Pop" (Bubble)
     function playGelatoPop() {
         // Silenziato per evitare suoni involontari
@@ -48,8 +28,6 @@
         let lastScrollX = track.scrollLeft;
 
         track.addEventListener('scroll', () => {
-            if (!initAudio()) return;
-
             // Nessun suono su scroll (slide/pop disabilitati)
             const currentScrollX = track.scrollLeft;
             lastScrollX = currentScrollX;

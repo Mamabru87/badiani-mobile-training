@@ -3714,6 +3714,7 @@ const gamification = (() => {
       ctx: null,
       masterGain: null,
       masterComp: null,
+      _listenersAttached: false,
       getContext: function(options = {}) {
         const { requireGesture = true } = options || {};
         const AudioCtor = window.AudioContext || window.webkitAudioContext;
@@ -3772,6 +3773,25 @@ const gamification = (() => {
         return this.masterGain || c.destination;
       }
     };
+
+    // Keep the AudioContext alive when the user returns to the page.
+    try {
+      if (!api._listenersAttached) {
+        api._listenersAttached = true;
+        document.addEventListener('visibilitychange', () => {
+          try {
+            if (document.visibilityState === 'visible' && window.__badianiUserGesture) {
+              api.ensureRunning();
+            }
+          } catch {}
+        });
+        window.addEventListener('pageshow', () => {
+          try {
+            if (window.__badianiUserGesture) api.ensureRunning();
+          } catch {}
+        });
+      }
+    } catch {}
 
     try { window.BadianiAudio = api; } catch {}
     return api;
