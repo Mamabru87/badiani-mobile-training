@@ -8696,6 +8696,24 @@ const gamification = (() => {
     let chatMessages = [];
     let chatContainer = null;
     
+    // Funzione per aggiungere un messaggio alla chat (definita PRIMA dell'uso)
+    const addBernyMessage = (text) => {
+      if (!chatContainer) return;
+      
+      const messageEl = document.createElement('div');
+      messageEl.className = 'berny-chat-message';
+      messageEl.style.cssText = 'background: white; padding: 10px 14px; border-radius: 16px; margin-bottom: 8px; border-left: 3px solid #E30613; font-size: 14px; line-height: 1.5; animation: bernyMessageSlide 0.3s ease;';
+      messageEl.textContent = text;
+      
+      chatContainer.appendChild(messageEl);
+      chatMessages.push(text);
+      
+      // Scroll automatico in basso
+      setTimeout(() => {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }, 100);
+    };
+    
     if (isBernyQuiz) {
       // Header con avatar Berny
       const bernyHeader = document.createElement('div');
@@ -8731,24 +8749,6 @@ const gamification = (() => {
       intro.textContent = introText || 'Rispondi correttamente a tutte le domande per vincere.';
       wrapper.appendChild(intro);
     }
-    
-    // Funzione per aggiungere un messaggio alla chat
-    const addBernyMessage = (text) => {
-      if (!chatContainer) return;
-      
-      const messageEl = document.createElement('div');
-      messageEl.className = 'berny-chat-message';
-      messageEl.style.cssText = 'background: white; padding: 10px 14px; border-radius: 16px; margin-bottom: 8px; border-left: 3px solid #E30613; font-size: 14px; line-height: 1.5; animation: bernyMessageSlide 0.3s ease;';
-      messageEl.textContent = text;
-      
-      chatContainer.appendChild(messageEl);
-      chatMessages.push(text);
-      
-      // Scroll automatico in basso
-      setTimeout(() => {
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-      }, 100);
-    };
     
     const progress = document.createElement('div');
     progress.className = 'quiz-progress';
@@ -9127,8 +9127,8 @@ const gamification = (() => {
           if (isCorrect) {
             playQuizCorrectSound();
             
-            // Aggiungi commento casuale di Berny dopo risposta corretta
-            if (isBernyQuiz) {
+            // Aggiungi commento casuale di Berny solo nel Test Me (3 domande)
+            if (isBernyQuiz && questions.length >= 3) {
               const bernyComments = [
                 'Ottimo! 👏',
                 'Esatto! Continua così! 💪',
@@ -9160,24 +9160,26 @@ const gamification = (() => {
               currentIndex += 1;
               markProgress(currentIndex, false);
               
-              // Prima di mostrare la domanda successiva, Berny "pensa"
-              if (isBernyQuiz && currentIndex === 2) {
-                // Prima della domanda difficile
-                setTimeout(() => {
-                  addBernyMessage('Ora una domanda più difficile... 🤔');
-                }, 200);
-              } else if (isBernyQuiz) {
-                // Tra le domande normali
-                const thinkingMessages = [
-                  'Vediamo la prossima...',
-                  'Andiamo avanti...',
-                  'Ecco un\'altra...',
-                  'Prossima domanda...',
-                ];
-                const thinkMsg = thinkingMessages[Math.floor(Math.random() * thinkingMessages.length)];
-                setTimeout(() => {
-                  addBernyMessage(thinkMsg);
-                }, 200);
+              // Prima di mostrare la domanda successiva, Berny "pensa" (solo Test Me con 3 domande)
+              if (isBernyQuiz && questions.length >= 3) {
+                if (currentIndex === 2) {
+                  // Prima della domanda difficile
+                  setTimeout(() => {
+                    addBernyMessage('Ora una domanda più difficile... 🤔');
+                  }, 200);
+                } else {
+                  // Tra le domande normali
+                  const thinkingMessages = [
+                    'Vediamo la prossima...',
+                    'Andiamo avanti...',
+                    'Ecco un\'altra...',
+                    'Prossima domanda...',
+                  ];
+                  const thinkMsg = thinkingMessages[Math.floor(Math.random() * thinkingMessages.length)];
+                  setTimeout(() => {
+                    addBernyMessage(thinkMsg);
+                  }, 200);
+                }
               }
               
               renderStep();
@@ -9204,11 +9206,7 @@ const gamification = (() => {
       stepLabel.className = 'quiz-step';
       stepLabel.textContent = `${tr('quiz.question')} ${currentIndex + 1}/${questions.length}`;
 
-      // FASE 1: Chat bubble con typing animation
-      const typingContainer = document.createElement('div');
-      typingContainer.style.minHeight = '60px';
-
-      // Frasi casuali di Berny
+      // Frasi casuali di Berny per il typing
       const bernyQueries = [
         'Vediamo che domanda potrei farti...',
         'Vediamo cosa hai studiato...',
@@ -9217,43 +9215,52 @@ const gamification = (() => {
       ];
       const randomQuery = bernyQueries[Math.floor(Math.random() * bernyQueries.length)];
 
-      const typingText = document.createElement('p');
-      typingText.className = 'berny-typing-text typing';
-      typingText.textContent = randomQuery;
-      typingContainer.appendChild(typingText);
-
-      // FASE 2: Puntini di sospensione (dopo ~1.8s)
-      const dotsContainer = document.createElement('div');
-      dotsContainer.style.opacity = '0';
-      dotsContainer.style.transition = 'opacity 0.3s ease';
-      const dots = document.createElement('div');
-      dots.className = 'berny-dots';
-      ['.', '.', '.'].forEach((dot, i) => {
-        const span = document.createElement('span');
-        span.className = 'berny-dot';
-        span.textContent = '.';
-        dots.appendChild(span);
-      });
-      dotsContainer.appendChild(dots);
-      typingContainer.appendChild(dotsContainer);
+      // FASE 1: Aggiungi messaggio con typing nella chat
+      if (chatContainer) {
+        const typingMessage = document.createElement('div');
+        typingMessage.className = 'berny-chat-message berny-typing';
+        typingMessage.style.cssText = 'background: white; padding: 10px 14px; border-radius: 16px; margin-bottom: 8px; border-left: 3px solid #E30613; font-size: 14px; line-height: 1.5; animation: bernyMessageSlide 0.3s ease; overflow: hidden; white-space: nowrap;';
+        typingMessage.textContent = randomQuery;
+        
+        chatContainer.appendChild(typingMessage);
+        chatMessages.push(randomQuery);
+        
+        // Scroll automatico
+        setTimeout(() => {
+          chatContainer.scrollTop = chatContainer.scrollHeight;
+        }, 100);
+      }
 
       card.appendChild(stepLabel);
-      card.appendChild(typingContainer);
       stage.appendChild(card);
 
-      // FASE 3: Mostra domanda per 1 secondo
+      // FASE 2: Dopo il typing, mostra i puntini pensanti (nella chat)
       timerId = setTimeout(() => {
         if (!sessionActive) return;
-        dotsContainer.style.opacity = '1';
+        
+        if (chatContainer) {
+          const thinkingDots = document.createElement('div');
+          thinkingDots.className = 'berny-chat-message berny-thinking';
+          thinkingDots.style.cssText = 'background: white; padding: 10px 14px; border-radius: 16px; margin-bottom: 8px; border-left: 3px solid #E30613; font-size: 14px; line-height: 1.5; animation: bernyMessageSlide 0.3s ease;';
+          thinkingDots.innerHTML = '<span class="berny-dots"><span class="berny-dot">.</span><span class="berny-dot">.</span><span class="berny-dot">.</span></span>';
+          
+          chatContainer.appendChild(thinkingDots);
+          chatContainer.scrollTop = chatContainer.scrollHeight;
+          
+          // Rimuovi i puntini dopo un po'
+          timerId = setTimeout(() => {
+            if (thinkingDots && thinkingDots.parentNode) {
+              thinkingDots.remove();
+            }
+          }, 1000);
+        }
       }, 1800);
 
-      // FASE 4: Mostri le opzioni con fade-in (dopo ~1 secondo)
+      // FASE 3: Mostra le opzioni con fade-in
       timerId = setTimeout(() => {
         if (!sessionActive) return;
-        // Rimuovi il typing container
-        typingContainer.style.display = 'none';
 
-        // Crea le opzioni con animazione
+        // Crea la domanda e le opzioni
         const prompt = document.createElement('p');
         prompt.className = 'quiz-prompt';
         prompt.textContent = question.question;
