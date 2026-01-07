@@ -8387,11 +8387,53 @@ Rispondi SOLO con il JSON, niente altro.`;
   }) {
     const wrapper = document.createElement('div');
     wrapper.className = `quiz-screen quiz-screen--${theme}`;
-    const heading = document.createElement('h3');
-    heading.textContent = title || 'Quiz';
-    const intro = document.createElement('p');
-    intro.className = 'reward-modal__text';
-    intro.textContent = introText || 'Rispondi correttamente a tutte le domande per vincere.';
+    
+    // Se è un quiz Berny, mostra l'avatar e uno stile chat
+    const isBernyQuiz = theme === 'berny' || (questions[0] && questions[0].generatedByBerny);
+    
+    if (isBernyQuiz) {
+      // Header con avatar Berny
+      const bernyHeader = document.createElement('div');
+      bernyHeader.className = 'berny-quiz-header';
+      bernyHeader.innerHTML = `
+        <div class="berny-quiz-avatar">
+          <svg width="48" height="48" viewBox="0 0 60 60" fill="none">
+            <circle cx="30" cy="30" r="28" fill="#E30613" opacity="0.15"/>
+            <circle cx="30" cy="30" r="24" fill="#E30613"/>
+            <path d="M20 28 Q 25 23, 30 28 T 40 28" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <circle cx="22" cy="24" r="2.5" fill="white"/>
+            <circle cx="38" cy="24" r="2.5" fill="white"/>
+          </svg>
+        </div>
+        <div class="berny-quiz-info">
+          <h3 class="berny-quiz-name">Berny</h3>
+          <p class="berny-quiz-status">Il tuo assistente formazione</p>
+        </div>
+      `;
+      wrapper.appendChild(bernyHeader);
+      
+      // Messaggio di Berny in stile chat bubble
+      const bernyMessage = document.createElement('div');
+      bernyMessage.className = 'berny-chat-bubble';
+      bernyMessage.innerHTML = `
+        <div class="berny-chat-text">
+          <p><strong>${title || '🧠 Quiz Personalizzato'}</strong></p>
+          <p>${introText || 'Ho preparato una domanda basata su quello che hai studiato!'}</p>
+        </div>
+      `;
+      wrapper.appendChild(bernyMessage);
+    } else {
+      // Header normale per quiz standard
+      const heading = document.createElement('h3');
+      heading.textContent = title || 'Quiz';
+      wrapper.appendChild(heading);
+      
+      const intro = document.createElement('p');
+      intro.className = 'reward-modal__text';
+      intro.textContent = introText || 'Rispondi correttamente a tutte le domande per vincere.';
+      wrapper.appendChild(intro);
+    }
+    
     const progress = document.createElement('div');
     progress.className = 'quiz-progress';
     questions.forEach((_, index) => {
@@ -8409,10 +8451,10 @@ Rispondi SOLO con il JSON, niente altro.`;
     const later = document.createElement('button');
     later.type = 'button';
     later.className = 'reward-action secondary';
-    later.textContent = 'Not now';
+    later.textContent = isBernyQuiz ? '🙏 Più tardi Berny' : 'Più tardi';
     actions.appendChild(later);
 
-    wrapper.append(heading, intro, progress, stage, actions);
+    wrapper.append(progress, stage, actions);
     openOverlay(wrapper);
 
     let currentIndex = 0;
@@ -8934,11 +8976,15 @@ Rispondi SOLO con il JSON, niente altro.`;
             <path d="M20 28 Q 25 23, 30 28 T 40 28" stroke="white" stroke-width="2" fill="none"/>
             <circle cx="22" cy="24" r="2" fill="white"/>
             <circle cx="38" cy="24" r="2" fill="white"/>
+            <circle cx="30" cy="30" r="1" fill="white" opacity="0.6">
+              <animate attributeName="r" values="1;3;1" dur="1s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="0.6;1;0.6" dur="1s" repeatCount="indefinite"/>
+            </circle>
           </svg>
         </div>
       </div>
-      <h3 class="reward-modal__title" style="margin-top: 1rem;">Berny sta pensando...</h3>
-      <p class="reward-modal__text">Sto analizzando cosa hai studiato per creare una domanda personalizzata 🧠</p>
+      <h3 class="reward-modal__title" style="margin-top: 1rem; color: #E30613;">🧠 Berny sta pensando...</h3>
+      <p class="reward-modal__text">Sto analizzando cosa hai studiato per creare una domanda personalizzata per te!</p>
       <div class="berny-loading-dots">
         <span>.</span><span>.</span><span>.</span>
       </div>

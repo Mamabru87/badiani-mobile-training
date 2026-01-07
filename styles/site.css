@@ -2734,6 +2734,138 @@ h4 {
   letter-spacing: 0.18em;
 }
 
+/* ============================================================
+   BERNY QUIZ HEADER & CHAT BUBBLE
+   ============================================================ */
+
+.berny-quiz-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(227, 6, 19, 0.08) 0%, rgba(236, 65, 140, 0.08) 100%);
+  border-radius: var(--radius-lg);
+  border: 2px solid rgba(227, 6, 19, 0.2);
+  margin-bottom: 4px;
+}
+
+.berny-quiz-avatar {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  animation: bernyWiggle 2s ease-in-out infinite;
+}
+
+@keyframes bernyWiggle {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-5deg);
+  }
+  75% {
+    transform: rotate(5deg);
+  }
+}
+
+.berny-quiz-info {
+  flex: 1;
+}
+
+.berny-quiz-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #E30613;
+  margin: 0 0 2px 0;
+  letter-spacing: 0.02em;
+}
+
+.berny-quiz-status {
+  font-size: 12px;
+  color: var(--brand-gray);
+  margin: 0;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.berny-chat-bubble {
+  background: white;
+  border: 2px solid rgba(227, 6, 19, 0.15);
+  border-radius: 20px;
+  border-top-left-radius: 4px;
+  padding: 18px 20px;
+  margin-bottom: 8px;
+  box-shadow: 0 4px 12px rgba(227, 6, 19, 0.1);
+  position: relative;
+  animation: bernyBubbleSlide 0.4s ease-out;
+}
+
+@keyframes bernyBubbleSlide {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.berny-chat-bubble::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -10px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 12px 12px 0;
+  border-color: transparent rgba(227, 6, 19, 0.15) transparent transparent;
+}
+
+.berny-chat-bubble::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -8px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 10px 10px 0;
+  border-color: transparent white transparent transparent;
+}
+
+.berny-chat-text p {
+  margin: 0;
+  line-height: 1.5;
+  color: var(--ink);
+  font-size: 14px;
+}
+
+.berny-chat-text p strong {
+  display: block;
+  font-size: 16px;
+  color: #E30613;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+/* Stile speciale per quiz screen Berny */
+.quiz-screen--berny .quiz-card {
+  border-color: rgba(227, 6, 19, 0.25);
+  box-shadow: 0 24px 60px rgba(227, 6, 19, 0.15);
+}
+
+.quiz-screen--berny .quiz-option {
+  border-color: rgba(227, 6, 19, 0.2);
+}
+
+.quiz-screen--berny .quiz-option:hover,
+.quiz-screen--berny .quiz-option:focus-visible {
+  border-color: #E30613;
+  box-shadow: 0 12px 24px rgba(227, 6, 19, 0.25);
+}
+
 .quiz-progress {
   display: flex;
   gap: 10px;
