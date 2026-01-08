@@ -931,6 +931,16 @@ window.addEventListener('avatar-updated', (e) => {
       avatar.src = data;
       avatar.style.display = 'block';
     }
+    // Also update hub profile card if visible
+    const hubAvatar = document.getElementById('hub-profile-img');
+    if (hubAvatar) {
+      hubAvatar.src = data;
+      hubAvatar.style.display = 'block';
+      const placeholder = hubAvatar.nextElementSibling;
+      if (placeholder && placeholder.classList.contains('avatar-placeholder')) {
+        placeholder.style.display = 'none';
+      }
+    }
   } catch {}
 });
 
@@ -6257,8 +6267,29 @@ const gamification = (() => {
       if (user) {
         const nickNode = root.querySelector('[data-profile-nick]');
         const gelatoNode = root.querySelector('[data-profile-gelato]');
+        const avatarImg = document.getElementById('hub-profile-img');
+        const savedAvatar = (() => {
+          try { return localStorage.getItem('badiani_user_avatar') || ''; } catch { return ''; }
+        })();
+
         if (nickNode) nickNode.textContent = user?.nickname || '';
         if (gelatoNode) gelatoNode.textContent = user?.gelato || '';
+        
+        if (avatarImg) {
+          const placeholder = avatarImg.nextElementSibling;
+          if (savedAvatar) {
+            avatarImg.src = savedAvatar;
+            avatarImg.style.display = 'block';
+            if (placeholder && placeholder.classList.contains('avatar-placeholder')) {
+              placeholder.style.display = 'none';
+            }
+          } else {
+            avatarImg.style.display = 'none';
+            if (placeholder && placeholder.classList.contains('avatar-placeholder')) {
+              placeholder.style.display = ''; // Reset to default (block/inline)
+            }
+          }
+        }
       }
     } catch {}
     const stars = state.stars || 0;
@@ -16173,20 +16204,28 @@ window.toggleMenu = function() {
   const drawer = document.querySelector('.menu-drawer');
   if (!drawer) return;
   
-  const isOpen = drawer.getAttribute('aria-hidden') === 'false';
-  const nextState = !isOpen;
+  const isVisible = drawer.getAttribute('aria-hidden') === 'false';
+  const shouldHide = isVisible; // Toggle: if visible, hide (true). If hidden, show (false).
   
-  drawer.setAttribute('aria-hidden', String(nextState));
+  // FIX: Se stiamo chiudendo, rimuovi focus interno prima di nascondere per evitare errori ARIA
+  if (shouldHide && document.activeElement && drawer.contains(document.activeElement)) {
+     document.activeElement.blur();
+  }
+  
+  drawer.setAttribute('aria-hidden', String(shouldHide));
   
   // Use the global bodyScrollLock helper if available, otherwise fallback
   if (typeof bodyScrollLock !== 'undefined') {
-    if (nextState) { // closing (aria-hidden=true) -> unlock
+    if (shouldHide) { // closing (aria-hidden=true) -> unlock
       bodyScrollLock.unlock();
     } else { // opening (aria-hidden=false) -> lock
       bodyScrollLock.lock();
     }
   } else {
-    document.body.style.overflow = nextState ? '' : 'hidden';
+    document.body.style.overflow = shouldHide ? '' : 'hidden'; // shouldHide=true -> hidden (no, wait. overflow='' restores scroll. overflow='hidden' locks scroll).
+    // If shouldHide (closing), we want scrolling back. So '' (empty).
+    // If !shouldHide (opening), we want no scroll. So 'hidden'.
+    // Logic: shouldHide ? '' : 'hidden'. Correct.
   }
 };
 
@@ -16220,6 +16259,12 @@ window.openProfileSettings = function() {
   try {
     const drawer = document.querySelector('[data-menu-drawer]') || document.querySelector('.menu-drawer');
     if (drawer && drawer.getAttribute('aria-hidden') === 'false') {
+      // FIX ACCESSIBILITA': Rimuovi il focus dal pulsante nel drawer prima di nascondere il drawer.
+      // E' cruciale perché nascondere un antenato dell'elemento coi focus viola le regole ARIA e blocca l'UI.
+      if (document.activeElement && drawer.contains(document.activeElement)) {
+        document.activeElement.blur();
+      }
+
       drawer.setAttribute('aria-hidden', 'true');
       try { if (typeof bodyScrollLock !== 'undefined') bodyScrollLock.unlock(); } catch {}
     }
@@ -16505,7 +16550,13 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     menuButtons.forEach(btn => btn.addEventListener('click', triggerBlup));
-    closeButtons.forEach(btn => btn.addEventListener('click', triggerBlup));
+    closeButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        triggerBlup();
+        e.preventDefault();
+        if (typeof window.toggleMenu === 'function') window.toggleMenu();
+      });
+    });
 });
 
 // ============================================================

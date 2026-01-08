@@ -11515,13 +11515,20 @@ body.page-home {
 
 
 /* Menu Action Buttons (Profile/Lang) */
+.menu-footer-actions {
+  display: flex !important;
+  flex-direction: column;
+  gap: 8px !important;
+  margin-top: 10px;
+}
+
 .menu-action-btn {
-  flex: 1;
+  width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
   border: 1px solid rgba(33, 64, 152, 0.15);
   border-radius: 12px;
   background: #ffffff;
@@ -11530,6 +11537,7 @@ body.page-home {
   font-size: 14px;
   cursor: pointer;
   transition: all 0.2s ease;
+  font-family: inherit;
 }
 
 .menu-action-btn:hover {
@@ -11539,7 +11547,21 @@ body.page-home {
 }
 
 .menu-action-btn .icon {
-  font-size: 16px;
+  font-size: 18px;
+}
+
+/* Align lang summary with profile button */
+.menu-lang__summary {
+  padding: 10px 12px !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(33, 64, 152, 0.15) !important;
+  background: #ffffff !important;
+  box-shadow: none !important;
+}
+.menu-lang__summary:hover {
+  border-color: var(--brand-blue, #214098) !important;
+  background: rgba(33, 64, 152, 0.04) !important;
+  transform: translateY(-1px) !important;
 }
 
 /* ========================================================================
