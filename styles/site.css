@@ -10684,7 +10684,10 @@ body.page-home {
   gap: 4px;
   /* Cockpit cards manage their own sizing via aspect-ratio/min-height.
      Don't stretch them to the tallest card. */
-  align-items: flex-start;
+  align-items: stretch;
+  /* Fix vertical dragging on mobile: force 1D scroll container */
+  overflow-y: hidden;
+  padding-bottom: 4px; /* Space for shadows */
 }
 
 .page-home .carousel--cockpit .carousel-track [data-carousel-item] {
@@ -10692,6 +10695,7 @@ body.page-home {
   /* Prefer relative units: stable under resize, no fixed px widths. */
   width: clamp(8rem, 22vw, 10rem);
   min-width: 0;
+  height: auto; /* Allow stretch */
 }
 
 /* Hub cockpit: cards should be slim + tall (not square). */
@@ -10701,8 +10705,8 @@ body.page-home {
   padding: 12px;
   gap: 10px;
   width: clamp(8.5rem, 46vw, 10.5rem);
-  max-height: 240px;
-  overflow: visible;
+  /* Removed max-height so they can grow to fit content if needed */
+  overflow: hidden; /* Ensure content stays inside rounded corners */
 }
 
 .page-home .carousel--cockpit .summary-card {
@@ -10744,6 +10748,9 @@ body.page-home {
 
 .page-home .carousel--cockpit .hub-card--profile .hub-card__center {
   gap: 6px;
+  /* Prevent profile avatar distortion if height constrained */
+  min-height: 0;
+  justify-content: center;
 }
 
 /* Limit mistakes card height and show only the latest item in preview */
@@ -10820,15 +10827,18 @@ body.page-home {
   .page-home .carousel--cockpit .carousel-track {
     gap: 6px;
     padding: 4px 6px;
+    align-items: stretch; /* Ensure all cards have same height */
   }
 
   .page-home .carousel--cockpit .carousel-track [data-carousel-item] {
     width: clamp(7.5rem, 44vw, 9.5rem);
     min-width: 0;
+    height: auto;
   }
 
   .page-home .carousel--cockpit .hub-card[data-carousel-item] {
     min-height: 160px;
+    height: 100%; /* Fill the stretched height */
   }
 
   .page-home .carousel--cockpit .summary-card {
