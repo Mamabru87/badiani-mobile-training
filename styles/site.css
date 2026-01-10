@@ -10685,6 +10685,8 @@ body.page-home {
   /* Cockpit cards manage their own sizing via aspect-ratio/min-height.
      Don't stretch them to the tallest card. */
   align-items: flex-start;
+  /* Fix vertical dragging on mobile: force 1D scroll container */
+  overflow-y: hidden;
 }
 
 .page-home .carousel--cockpit .carousel-track [data-carousel-item] {
