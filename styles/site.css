@@ -10685,8 +10685,6 @@ body.page-home {
   /* Cockpit cards manage their own sizing via aspect-ratio/min-height.
      Don't stretch them to the tallest card. */
   align-items: flex-start;
-  /* Fix vertical dragging on mobile: force 1D scroll container */
-  overflow-y: hidden;
 }
 
 .page-home .carousel--cockpit .carousel-track [data-carousel-item] {
@@ -10705,13 +10703,6 @@ body.page-home {
   width: clamp(8.5rem, 46vw, 10.5rem);
   max-height: 240px;
   overflow: visible;
-  /* Prevent zoom/scale on focus or hover */
-  transform: none !important;
-}
-
-.page-home .carousel--cockpit .hub-card[data-carousel-item].is-focused {
-  transform: none !important;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Keep standard shadow */
 }
 
 .page-home .carousel--cockpit .summary-card {
@@ -11135,7 +11126,7 @@ body.page-home {
 /* Effetto Pulse per Card Evidenziata */
 @keyframes cardPulse {
     0% { transform: scale(1); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-    50% { transform: scale(1); box-shadow: 0 0 15px rgba(227, 6, 19, 0.6); border-color: #E30613; }
+    50% { transform: scale(1.05); box-shadow: 0 0 15px rgba(227, 6, 19, 0.6); border-color: #E30613; }
     100% { transform: scale(1); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
 }
 
