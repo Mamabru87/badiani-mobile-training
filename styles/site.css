@@ -10828,10 +10828,8 @@ body.page-home {
     gap: 6px;
     padding: 4px 6px;
     align-items: stretch; /* Ensure all cards have same height */
-  }
-
-  .page-home .carousel--cockpit .carousel-track [data-carousel-item] {
-    width: clamp(7.5rem, 44vw, 9.5rem);
+  /* Prevent layout thrashing during scroll */
+  will-change: scroll-position;
     min-width: 0;
     height: auto;
   }

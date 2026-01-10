@@ -15557,10 +15557,11 @@ const initCarousels = () => {
     const observerOptions = isCockpit
       ? {
           root: carouselTrack,
-          // Shrink the observation area to a center band, so focus only updates when
-          // the card is actually near the center (more stable + "magnetic" feel).
-          rootMargin: '0px -35% 0px -35%',
-          threshold: [0.15]
+          // Shrink the observation area to a VERY NARROW center band.
+          // This forces the "focused" state to only change when a card is trully centered,
+          // preventing flickering between adjacent cards when they share the viewport.
+          rootMargin: '0px -48.5% 0px -48.5%',
+          threshold: [0.01] 
         }
       : {
           root: carouselTrack,
@@ -15602,17 +15603,27 @@ const initCarousels = () => {
       let scrollRaf = 0;
       const onScroll = () => {
         if (focusLock) return;
+        if (carouselTrack.dataset.silentTick) return; // Skip logic if programmatically scrolling (goToIndex)
+        
+        // Throttling: only run heavy geometric calculations every ~5 frames to improve fluidity.
+        // The IntersectionObserver handles the main state changes; this is just a backup.
+        const now = performance.now();
+        if (now - (carouselTrack._lastScrollTime || 0) < 60) return;
+        carouselTrack._lastScrollTime = now;
+
         if (scrollRaf) return;
         scrollRaf = requestAnimationFrame(() => {
           scrollRaf = 0;
           // If siamo attaccati all'inizio, forza la prima card come focus.
-          if (carouselTrack.scrollLeft <= 2) {
+          if (carouselTrack.scrollLeft <= 4) { // Increased tolerance
             applyState(0);
             return;
           }
 
           const nextIndex = getNearestIndexByCenter();
-          applyState(nextIndex);
+          if (nextIndex !== currentIndex) {
+            applyState(nextIndex);
+          }
         });
       };
 
