@@ -409,7 +409,7 @@
 /* Effetto Evidenziatore Badiani */
 @keyframes badianiPulse {
   0% { box-shadow: 0 0 0 0 rgba(227, 6, 19, 0.7); transform: scale(1); }
-  50% { box-shadow: 0 0 0 20px rgba(227, 6, 19, 0); transform: scale(1.02); }
+  50% { box-shadow: 0 0 0 20px rgba(227, 6, 19, 0); transform: scale(1); }
   100% { box-shadow: 0 0 0 0 rgba(227, 6, 19, 0); transform: scale(1); }
 }
 
