@@ -3831,7 +3831,7 @@ h4 {
   .hero-stack {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 0;
   }
 
   .hero-stack > .carousel {
@@ -3842,8 +3842,8 @@ h4 {
 
   .hero--split {
     flex-direction: column;
-    gap: 4px;
-    padding: 6px 0 0;
+    gap: 0;
+    padding: 0;
   }
 
   .hero--split .hero-card.visual {
@@ -5830,9 +5830,7 @@ section.carousel:last-of-type {
 }
 
 .footer-stats {
-  display: flex;
-  gap: 40px;
-  margin-top: 24px;
+  display: none;
 }
 
 .footer-stat {
@@ -11579,21 +11577,41 @@ body.page-home {
 
 body.page-product {
   /* Reduce gap between carousel sections significantly */
-  --carousel-section-gap: 6px;
+  --carousel-section-gap: 0;
 
   /* Reduce excess space after each carousel track (product pages feel tighter) */
-  --carousel-track-pad-bottom: 7px;
+  --carousel-track-pad-bottom: 0;
 
   /* Pull the carousel stack upward on product pages (less empty space before cards). */
-  --carousel-sticky-offset-desktop: 8px;
-  --carousel-sticky-offset-mobile: 7px;
+  --carousel-sticky-offset-desktop: 0;
+  --carousel-sticky-offset-mobile: 0;
+
+  /* Compact carousel header padding */
+  --carousel-header-padding-block: 6px;
+  --carousel-header-margin-inline: 8px;
 }
 
 /* Product pages: tighten space between hero and first carousel */
-body.page-product section.carousel:not(.carousel--cockpit):not(.story-carousel) {
-  margin-top: 2px;
+body.page-product .carousel:not(.carousel--cockpit):not(.story-carousel) {
+  margin-top: 0 !important;
   /* Bring consecutive carousels closer together on product pages */
-  margin-bottom: 10px;
+  margin-bottom: 0 !important;
+}
+
+/* Assicura spazio tra carousel header e track nelle pagine product */
+body.page-product .carousel-header {
+  margin-bottom: 0;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  min-height: 36px;
+  /* Sposta l'header sticky più in alto */
+  top: 0 !important;
+}
+
+/* Padding-top del track deve compensare l'altezza dell'header sticky */
+body.page-product .carousel-track {
+  padding-top: 9px !important;
+  scroll-padding-top: 9px !important;
 }
 
 /* Compact Hero on product pages */
@@ -11601,9 +11619,9 @@ body.page-product .hero {
   /* Keep image + text side-by-side even on mobile */
   /* Make the image column bigger; shrink the left text card if needed. */
   grid-template-columns: minmax(0, 0.9fr) minmax(160px, 1.1fr);
-  padding-top: 6px;
+  padding-top: 0;
   padding-bottom: 0;
-  gap: 12px; /* Reduce grid gap */
+  gap: 8px; /* Reduce grid gap */
 }
 
 /* Prevent long titles/lede from forcing grid overflow */
@@ -11612,7 +11630,7 @@ body.page-product .hero > * {
 }
 
 body.page-product .hero-card {
-  padding: 20px; /* Reduce from 32px */
+  padding: 14px; /* Reduce from 32px */
 }
 
 /* Product pages (non-hub, non-story): visual hero square */
@@ -11621,8 +11639,8 @@ body.page-product .hero-card.visual {
 }
 
 body.page-product .hero h1 {
-  margin-bottom: 8px; /* Reduce from 14px */
-  font-size: clamp(28px, 5vw, 42px); /* Slightly smaller title */
+  margin-bottom: 4px; /* Reduce from 14px */
+  font-size: clamp(24px, 4.5vw, 38px); /* Slightly smaller title */
 }
 
 /* Reduce space between hero and first carousel */
@@ -11632,19 +11650,19 @@ body.page-product .hero + .carousel {
 
 /* Keep a tiny breathing space so hero and carousel header don't visually touch. */
 body.page-product .hero + .carousel .carousel-header {
-  margin-top: 6px;
+  margin-top: 0;
 }
 
 @media (max-width: 480px) {
   body.page-product .hero {
     /* On very small phones: prioritize the visual even more. */
     grid-template-columns: minmax(0, 0.78fr) minmax(160px, 1.22fr);
-    gap: 10px;
-    padding-top: 6px;
+    gap: 6px;
+    padding-top: 0;
   }
 
   body.page-product .hero-card {
-    padding: 18px;
+    padding: 12px;
   }
 
   body.page-product .hero-card.visual {
