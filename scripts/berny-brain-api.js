@@ -81,7 +81,22 @@ class BernyBrainAPI {
         { text: "Slitti: in che anno è stata fondata l'azienda come torrefazione di caffè?\nA) 1932\nB) 1969\nC) 1990\nD) 1993", answer: "B" },
         { text: "Pralina Slitti Irish Coffee: qual è la percentuale di alcol contenuta?\nA) 0.5%\nB) 0.9%\nC) 1.5%\nD) 2.1%", answer: "B" },
         { text: "Spalmabile Gianera: qual è la percentuale di nocciole dichiarata?\nA) 37%\nB) 51%\nC) 57%\nD) 65%", answer: "C" },
-        { text: "Mulled wine (Vin Brulé): quanto tempo deve riscaldare al livello 10 prima del servizio?\nA) 10-15 min\nB) 15-20 min\nC) 25-30 min\nD) 45-60 min", answer: "C" }
+        { text: "Mulled wine (Vin Brulé): quanto tempo deve riscaldare al livello 10 prima del servizio?\nA) 10-15 min\nB) 15-20 min\nC) 25-30 min\nD) 45-60 min", answer: "C" },
+        // === GELATO TEMPERATURE ===
+        { text: "Qual è la temperatura ideale per conservare il gelato in vetrina?\nA) -5°C / -8°C\nB) -8°C / -14°C\nC) -14°C / -18°C\nD) -18°C / -20°C", answer: "B" },
+        { text: "Qual è la temperatura ideale per servire il gelato al cliente?\nA) -18°C\nB) -14°C\nC) -10°C / -12°C\nD) -5°C", answer: "C" },
+        // === CAFFÈ ===
+        { text: "Qual è la temperatura ideale dell'acqua per estrarre un espresso perfetto?\nA) 70-75°C\nB) 88-92°C\nC) 95-100°C\nD) 60-65°C", answer: "B" },
+        { text: "Quanti bar di pressione sono necessari per estrarre un espresso?\nA) 5 bar\nB) 9 bar\nC) 15 bar\nD) 20 bar", answer: "B" },
+        { text: "Quanto deve durare l'estrazione di un espresso?\nA) 10-15 sec\nB) 25-30 sec\nC) 45-50 sec\nD) 60 sec", answer: "B" },
+        { text: "A quale temperatura va montato il latte per un cappuccino cremoso?\nA) 55°C\nB) 65°C\nC) 75°C\nD) 85°C", answer: "B" },
+        // === FESTIVE ===
+        { text: "Panettone: entro quanti giorni va consumato dopo l'apertura?\nA) 1 giorno\nB) 2-3 giorni\nC) 7 giorni\nD) 14 giorni", answer: "B" },
+        // === SLITTI ===
+        { text: "A quale temperatura va conservato il cioccolato Slitti?\nA) 4-8°C\nB) 16-18°C\nC) 22-25°C\nD) 28-30°C", answer: "B" },
+        // === BRAND ===
+        { text: "In che anno è stata fondata Badiani a Firenze?\nA) 1912\nB) 1932\nC) 1952\nD) 1972", answer: "B" },
+        { text: "Come si chiama il famoso gelato al gusto crema Badiani?\nA) Fiorellino\nB) Buontalenti\nC) Medici\nD) Rinascimento", answer: "B" }
       ],
       en: [
         { text: "You are preparing the \"BIG BATCH\" crepe mix: which ingredient is 1500 ml?\nA) Water\nB) Whole milk\nC) Egg white\nD) Maple syrup", answer: "B" },
@@ -98,7 +113,23 @@ class BernyBrainAPI {
         { text: "Savoury crepe \"Prosciutto\" (plain base): how many slices of ham?\nA) 1\nB) 2\nC) 3\nD) 4", answer: "B" },
         { text: "Base beetroot: how much beetroot powder do you add to 250 g of mix?\nA) 1 g\nB) 3 g\nC) 6 g\nD) 10 g", answer: "B" },
         { text: "Waffle: which \"power\" setting is correct?\nA) 1\nB) 2\nC) 3\nD) 5", answer: "C" },
-        { text: "Waffle: how much batter corresponds to \"one entire scoopful\"?\nA) 120 ml\nB) 150 ml\nC) 177 ml\nD) 250 ml", answer: "C" }
+        { text: "Waffle: how much batter corresponds to \"one entire scoopful\"?\nA) 120 ml\nB) 150 ml\nC) 177 ml\nD) 250 ml", answer: "C" },
+        // === GELATO TEMPERATURE ===
+        { text: "What is the ideal temperature for storing gelato in the display case?\nA) -5°C / -8°C\nB) -8°C / -14°C\nC) -14°C / -18°C\nD) -18°C / -20°C", answer: "B" },
+        { text: "What is the ideal temperature for serving gelato to customers?\nA) -18°C\nB) -14°C\nC) -10°C / -12°C\nD) -5°C", answer: "C" },
+        // === COFFEE ===
+        { text: "What is the ideal water temperature for extracting a perfect espresso?\nA) 70-75°C\nB) 88-92°C\nC) 95-100°C\nD) 60-65°C", answer: "B" },
+        { text: "How many bars of pressure are needed to extract an espresso?\nA) 5 bar\nB) 9 bar\nC) 15 bar\nD) 20 bar", answer: "B" },
+        { text: "How long should espresso extraction take?\nA) 10-15 sec\nB) 25-30 sec\nC) 45-50 sec\nD) 60 sec", answer: "B" },
+        { text: "At what temperature should milk be steamed for a creamy cappuccino?\nA) 55°C\nB) 65°C\nC) 75°C\nD) 85°C", answer: "B" },
+        // === FESTIVE ===
+        { text: "Panettone: within how many days should it be consumed after opening?\nA) 1 day\nB) 2-3 days\nC) 7 days\nD) 14 days", answer: "B" },
+        { text: "Churros: what is the exact fryer temperature?\nA) 170°C\nB) 180°C\nC) 190°C\nD) 200°C", answer: "C" },
+        // === SLITTI ===
+        { text: "At what temperature should Slitti chocolate be stored?\nA) 4-8°C\nB) 16-18°C\nC) 22-25°C\nD) 28-30°C", answer: "B" },
+        // === BRAND ===
+        { text: "In what year was Badiani founded in Florence?\nA) 1912\nB) 1932\nC) 1952\nD) 1972", answer: "B" },
+        { text: "What is the name of Badiani's famous cream-flavored gelato?\nA) Fiorellino\nB) Buontalenti\nC) Medici\nD) Rinascimento", answer: "B" }
       ],
       es: [
         { text: "Estás preparando el mix de crepes \"BIG BATCH\": ¿qué ingrediente es de 1500 ml?\nA) Agua\nB) Leche entera\nC) Clara de huevo\nD) Sirope de arce", answer: "B" },
@@ -115,7 +146,23 @@ class BernyBrainAPI {
         { text: "Crepe salada \"Prosciutto\" (plain base): ¿cuántas lonchas de jamón (ham)?\nA) 1\nB) 2\nC) 3\nD) 4", answer: "B" },
         { text: "Base beetroot: ¿cuánta beetroot powder añades a 250 g de mix?\nA) 1 g\nB) 3 g\nC) 6 g\nD) 10 g", answer: "B" },
         { text: "Waffle: ¿qué ajuste de \"power\" es correcto?\nA) 1\nB) 2\nC) 3\nD) 5", answer: "C" },
-        { text: "Waffle: ¿cuánta masa corresponde a \"one entire scoopful\"?\nA) 120 ml\nB) 150 ml\nC) 177 ml\nD) 250 ml", answer: "C" }
+        { text: "Waffle: ¿cuánta masa corresponde a \"one entire scoopful\"?\nA) 120 ml\nB) 150 ml\nC) 177 ml\nD) 250 ml", answer: "C" },
+        // === GELATO TEMPERATURA ===
+        { text: "¿Cuál es la temperatura ideal para conservar el helado en vitrina?\nA) -5°C / -8°C\nB) -8°C / -14°C\nC) -14°C / -18°C\nD) -18°C / -20°C", answer: "B" },
+        { text: "¿Cuál es la temperatura ideal para servir el helado?\nA) -18°C\nB) -14°C\nC) -10°C / -12°C\nD) -5°C", answer: "C" },
+        // === CAFÉ ===
+        { text: "¿Cuál es la temperatura ideal del agua para extraer un espresso perfecto?\nA) 70-75°C\nB) 88-92°C\nC) 95-100°C\nD) 60-65°C", answer: "B" },
+        { text: "¿Cuántos bares de presión se necesitan para extraer un espresso?\nA) 5 bar\nB) 9 bar\nC) 15 bar\nD) 20 bar", answer: "B" },
+        { text: "¿Cuánto debe durar la extracción de un espresso?\nA) 10-15 seg\nB) 25-30 seg\nC) 45-50 seg\nD) 60 seg", answer: "B" },
+        { text: "¿A qué temperatura se debe calentar la leche para un cappuccino cremoso?\nA) 55°C\nB) 65°C\nC) 75°C\nD) 85°C", answer: "B" },
+        // === FESTIVO ===
+        { text: "Panettone: ¿en cuántos días debe consumirse después de abrir?\nA) 1 día\nB) 2-3 días\nC) 7 días\nD) 14 días", answer: "B" },
+        { text: "Churros: ¿cuál es la temperatura exacta de la freidora?\nA) 170°C\nB) 180°C\nC) 190°C\nD) 200°C", answer: "C" },
+        // === SLITTI ===
+        { text: "¿A qué temperatura debe conservarse el chocolate Slitti?\nA) 4-8°C\nB) 16-18°C\nC) 22-25°C\nD) 28-30°C", answer: "B" },
+        // === MARCA ===
+        { text: "¿En qué año fue fundada Badiani en Florencia?\nA) 1912\nB) 1932\nC) 1952\nD) 1972", answer: "B" },
+        { text: "¿Cómo se llama el famoso helado de crema Badiani?\nA) Fiorellino\nB) Buontalenti\nC) Medici\nD) Rinascimento", answer: "B" }
       ],
       fr: [
         { text: "Tu prépares le mix crêpes \"BIG BATCH\" : quel ingrédient correspond à 1500 ml ?\nA) Eau\nB) Lait entier\nC) Blanc d’œuf\nD) Sirop d’érable", answer: "B" },
@@ -132,7 +179,23 @@ class BernyBrainAPI {
         { text: "Crêpe salée \"Prosciutto\" (plain base) : combien de tranches de ham ?\nA) 1\nB) 2\nC) 3\nD) 4", answer: "B" },
         { text: "Base beetroot : combien de beetroot powder ajoutes-tu à 250 g de mix ?\nA) 1 g\nB) 3 g\nC) 6 g\nD) 10 g", answer: "B" },
         { text: "Waffle : quel réglage de \"power\" est correct ?\nA) 1\nB) 2\nC) 3\nD) 5", answer: "C" },
-        { text: "Waffle : quel volume de pâte correspond à \"one entire scoopful\" ?\nA) 120 ml\nB) 150 ml\nC) 177 ml\nD) 250 ml", answer: "C" }
+        { text: "Waffle : quel volume de pâte correspond à \"one entire scoopful\" ?\nA) 120 ml\nB) 150 ml\nC) 177 ml\nD) 250 ml", answer: "C" },
+        // === TEMPÉRATURE GLACE ===
+        { text: "Quelle température pour conserver la glace en vitrine ?\nA) -5°C / -8°C\nB) -8°C / -14°C\nC) -14°C / -18°C\nD) -18°C / -20°C", answer: "B" },
+        { text: "Quelle température pour servir la glace ?\nA) -18°C\nB) -14°C\nC) -10°C / -12°C\nD) -5°C", answer: "C" },
+        // === CAFÉ ===
+        { text: "Quelle est la température idéale de l'eau pour un espresso parfait ?\nA) 70-75°C\nB) 88-92°C\nC) 95-100°C\nD) 60-65°C", answer: "B" },
+        { text: "Combien de bars de pression pour extraire un espresso ?\nA) 5 bars\nB) 9 bars\nC) 15 bars\nD) 20 bars", answer: "B" },
+        { text: "Combien de temps dure l'extraction d'un espresso ?\nA) 10-15 sec\nB) 25-30 sec\nC) 45-50 sec\nD) 60 sec", answer: "B" },
+        { text: "À quelle température faire mousser le lait pour un cappuccino crémeux ?\nA) 55°C\nB) 65°C\nC) 75°C\nD) 85°C", answer: "B" },
+        // === FESTIF ===
+        { text: "Panettone : sous combien de jours le consommer après ouverture ?\nA) 1 jour\nB) 2-3 jours\nC) 7 jours\nD) 14 jours", answer: "B" },
+        { text: "Churros : quelle température de la friteuse ?\nA) 170°C\nB) 180°C\nC) 190°C\nD) 200°C", answer: "C" },
+        // === SLITTI ===
+        { text: "À quelle température conserver le chocolat Slitti ?\nA) 4-8°C\nB) 16-18°C\nC) 22-25°C\nD) 28-30°C", answer: "B" },
+        // === MARQUE ===
+        { text: "En quelle année Badiani a été fondée à Florence ?\nA) 1912\nB) 1932\nC) 1952\nD) 1972", answer: "B" },
+        { text: "Comment s'appelle la fameuse glace à la crème Badiani ?\nA) Fiorellino\nB) Buontalenti\nC) Medici\nD) Rinascimento", answer: "B" }
       ]
     };
 
@@ -1873,7 +1936,15 @@ class BernyBrainAPI {
     }
 
     // SDK fallback
-    if (!this.apiKey || this.apiKey.length < 10) return "⚠️ Scrivi '/apikey LA_TUA_CHIAVE' per attivarmi (oppure usa il proxy)!";
+    if (!this.apiKey || this.apiKey.length < 10) {
+      // 🔄 FALLBACK: Prova Legacy KB anche senza API key
+      const fallbackResponse = this.tryLegacyKBFallback(userMessage, (window.BadianiI18n?.getLang?.() || 'it'));
+      if (fallbackResponse) {
+        console.log('📚 Berny: No API key, uso fallback KB');
+        return this.addressUser(fallbackResponse);
+      }
+      return "⚠️ Scrivi '/apikey LA_TUA_CHIAVE' per attivarmi (oppure usa il proxy)!";
+    }
     if (!this.model) this.init();
 
     // Notifica UI
