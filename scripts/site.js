@@ -1,6 +1,45 @@
 document.documentElement.classList.add('has-js');
 
 // ============================================================
+// PRODUCTION LOGGER: Silences console.log/warn in production
+// Set window.__BADIANI_DEBUG__ = true in devtools to enable logging
+// ============================================================
+(() => {
+  if (window.__badianiLoggerInit) return;
+  window.__badianiLoggerInit = true;
+
+  // Check if we're in development mode (localhost or debug flag)
+  const isDev = () => {
+    try {
+      const host = window.location?.hostname || '';
+      return host === 'localhost' || host === '127.0.0.1' || host === '' || window.__BADIANI_DEBUG__ === true;
+    } catch {
+      return false;
+    }
+  };
+
+  // Store original console methods
+  const originalLog = console.log;
+  const originalWarn = console.warn;
+
+  // Create wrapped versions that check isDev
+  const wrappedLog = (...args) => { if (isDev()) originalLog.apply(console, args); };
+  const wrappedWarn = (...args) => { if (isDev()) originalWarn.apply(console, args); };
+
+  // Replace console methods (keep error always visible for debugging production issues)
+  console.log = wrappedLog;
+  console.warn = wrappedWarn;
+
+  // Allow re-enabling via debug flag
+  window.__enableBadianiLogs = () => {
+    window.__BADIANI_DEBUG__ = true;
+    console.log = originalLog;
+    console.warn = originalWarn;
+    originalLog('[Badiani] Logging enabled');
+  };
+})();
+
+// ============================================================
 // GLOBAL: DISABLE PAGE ZOOM (mobile double-tap / pinch + desktop ctrl+wheel)
 // Requested behavior: the site must stay fixed; no zoom.
 // ============================================================

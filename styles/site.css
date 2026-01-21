@@ -2202,6 +2202,7 @@ h4 {
   position: relative;
   box-shadow: 0 40px 120px rgba(5, 10, 44, 0.45);
   overflow: hidden;
+  text-align: center;
 }
 
 .reward-overlay__panel[data-lock-close="true"] .reward-overlay__close {
@@ -2248,6 +2249,16 @@ h4 {
   cursor: pointer;
 }
 
+/* Modal content container: ensure centered text and layout */
+.reward-modal {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+}
+
 .reward-modal__burst {
   font-size: clamp(32px, 6vw, 56px);
   color: var(--brand-rose);
@@ -2272,6 +2283,8 @@ h4 {
   gap: 12px;
   flex-wrap: wrap;
   margin-top: 30px;
+  justify-content: center;
+  width: 100%;
 }
 
 /* ============================================================
