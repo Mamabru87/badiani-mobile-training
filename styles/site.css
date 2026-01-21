@@ -1898,7 +1898,8 @@ h4 {
   position: absolute;
   top: calc(100% + 14px);
   right: 0;
-  width: min(280px, 72vw);
+  left: auto;
+  width: min(280px, calc(100vw - 32px));
   /* Prevent clipping when the viewport is short or the nav is crowded.
      Keeps the popover usable instead of stretching off-screen. */
   max-height: min(520px, calc(100dvh - 120px));
@@ -1919,6 +1920,30 @@ h4 {
 .nav-token--stars .reward-popover {
   left: 0;
   right: auto;
+  /* Ensure it doesn't go off the right edge */
+  max-width: calc(100vw - 32px);
+}
+
+/* Mobile: center the popover under the token to prevent clipping */
+@media (max-width: 480px) {
+  .reward-popover {
+    position: fixed;
+    top: auto;
+    bottom: 16px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: calc(100vw - 32px);
+    max-width: 320px;
+    max-height: calc(100dvh - 100px);
+    border-radius: 20px;
+  }
+  
+  .nav-token--stars .reward-popover {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+  }
 }
 
 .reward-popover.is-open {
@@ -7602,6 +7627,7 @@ section.carousel:last-of-type {
   width: fit-content;
   max-width: 100%;
   white-space: nowrap;
+  margin-bottom: 15px;
 }
 
 /* Product pages: slightly smaller badge text (keeps one-line layout). */
