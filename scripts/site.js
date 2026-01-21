@@ -8424,8 +8424,8 @@ const gamification = (() => {
 
   /**
    * Chiede a Berny di generare una domanda basata sul contenuto studiato.
-   * VERSIONE MOCK LOCALE - NON dipende da API esterne!
-   * Perfetta per testing. Switchare a API reale quando pronto.
+   * Prima tenta con l'API di Gemini per domande dinamiche e tradotte.
+   * Fallback a domande mock locali se l'API non è disponibile.
    */
   async function generateBernyQuizQuestion() {
     try {
@@ -8454,95 +8454,652 @@ const gamification = (() => {
         .map(c => slugToCardName[c.pageSlug] || c.cardTitle || c.tabTitle)
         .filter(Boolean);
       
-      console.log(`✅ Berny MOCK: generando domanda su [${cardNames[0]}]`);
+      // Ottieni la lingua corrente dell'utente
+      const currentLang = getUiLang();
+      const langNames = { it: 'italiano', en: 'English', es: 'español', fr: 'français' };
+      const langName = langNames[currentLang] || 'italiano';
 
-      // BANCA DOMANDE MOCK - associate ai topic comuni
-      const mockQuestions = {
-        'caffe': [
-          {
-            question: 'Qual è la temperatura ideale per l\'estrazione di un espresso?',
-            options: ['70°C', '88-92°C', '110°C', '60°C'],
-            correct: 1,
-            explanation: 'La temperatura ottimale è tra 88-92°C.'
-          },
-          {
-            question: 'Quanto tempo deve durare l\'estrazione?',
-            options: ['10-15 sec', '25-30 sec', '5 sec', '60 sec'],
-            correct: 1,
-            explanation: 'Un buon espresso richiede 25-30 secondi di estrazione.'
-          },
-          {
-            question: 'A quale temperatura si monta il latte per il cappuccino?',
-            options: ['55°C', '65°C', '75°C', '85°C'],
-            correct: 1,
-            explanation: 'La temperatura ideale è circa 65°C per avere microfoam perfetta.'
+      // ====== TENTA API GEMINI PER DOMANDA DINAMICA ======
+      const bernyBrain = window.bernyBrain;
+      if (bernyBrain && typeof bernyBrain.processMessage === 'function') {
+        try {
+          console.log('🧠 Berny API: tentativo generazione domanda dinamica...');
+          
+          // Costruisci contesto dalle schede studiate
+          const cardContext = recentCards.map(c => {
+            const title = c.cardTitle || c.tabTitle || 'Scheda';
+            const content = (c.content || '').substring(0, 500); // Limita per non sovraccaricare
+            return `${title}: ${content}`;
+          }).join('\n');
+
+          // Esempi di domande per dare a Berny lo stile corretto
+          const exampleQuestions = {
+            it: `ESEMPI DI DOMANDE TIPO (stile da seguire):
+- "Per il mix crepes BIG BATCH, quante uova sono necessarie?" → Opzioni: 6, 8, 9, 12 → Corretta: 9
+- "Qual è la shelf life operativa del mix crepes una volta preparato?" → Opzioni: 1g, 2g, 3g, 7g → Corretta: 3 giorni
+- "Signature Buontalenti Crepe: quanto pesa la pallina di gelato?" → Opzioni: 40g, 70g, 100g, 140g → Corretta: 70g
+- "Coppetta Piccola: qual è il range di peso corretto?" → Opzioni: 80-100g, 100-120g, 120-140g, 140-160g → Corretta: 100-120g`,
+            en: `EXAMPLE QUESTIONS (style to follow):
+- "For the BIG BATCH crepe mix, how many eggs are needed?" → Options: 6, 8, 9, 12 → Correct: 9
+- "What is the operational shelf life of the crepe mix once prepared?" → Options: 1d, 2d, 3d, 7d → Correct: 3 days
+- "Signature Buontalenti Crepe: how much does the gelato scoop weigh?" → Options: 40g, 70g, 100g, 140g → Correct: 70g
+- "Small cup: what is the correct weight range?" → Options: 80-100g, 100-120g, 120-140g, 140-160g → Correct: 100-120g`,
+            es: `PREGUNTAS DE EJEMPLO (estilo a seguir):
+- "Para el mix de crepes BIG BATCH, ¿cuántos huevos se necesitan?" → Opciones: 6, 8, 9, 12 → Correcta: 9
+- "¿Cuál es la vida útil operativa del mix de crepes una vez preparado?" → Opciones: 1d, 2d, 3d, 7d → Correcta: 3 días
+- "Crepe Signature Buontalenti: ¿cuánto pesa la bola de helado?" → Opciones: 40g, 70g, 100g, 140g → Correcta: 70g`,
+            fr: `EXEMPLES DE QUESTIONS (style à suivre):
+- "Pour le mix crêpes BIG BATCH, combien d'œufs sont nécessaires?" → Options: 6, 8, 9, 12 → Correcte: 9
+- "Quelle est la durée de conservation opérationnelle du mix crêpes?" → Options: 1j, 2j, 3j, 7j → Correcte: 3 jours
+- "Crêpe Signature Buontalenti: combien pèse la boule de glace?" → Options: 40g, 70g, 100g, 140g → Correcte: 70g`
+          };
+          const examples = exampleQuestions[currentLang] || exampleQuestions['it'];
+
+          // Prompt specifico per generare una domanda quiz
+          const quizPrompt = `GENERA UNA DOMANDA QUIZ per testare la conoscenza dell'utente su procedure Badiani.
+
+LINGUA: Rispondi SOLO in ${langName}.
+
+${examples}
+
+CONTESTO STUDIATO DALL'UTENTE (basa la domanda su questi contenuti):
+${cardContext}
+
+ISTRUZIONI RIGOROSE:
+1. Crea UNA domanda a risposta multipla (4 opzioni: A, B, C, D)
+2. La domanda deve essere CHIARA, SPECIFICA e AUTOSUFFICIENTE
+3. FOCALIZZATI su dati operativi concreti: dosi, temperature, tempi, quantità, procedure
+4. Esempio SBAGLIATO: "Qual è la temperatura?" (troppo vago)
+5. Esempio CORRETTO: "Qual è la temperatura ideale dell'acqua per estrarre un espresso perfetto?"
+6. Le opzioni devono essere NUMERI o DATI SPECIFICI quando possibile
+7. Solo UNA risposta corretta, le altre devono essere plausibili ma sbagliate
+8. Aggiungi una breve spiegazione della risposta corretta
+
+FORMATO RISPOSTA (JSON puro, senza markdown):
+{
+  "question": "La domanda completa e chiara in ${langName}",
+  "options": ["Opzione A", "Opzione B", "Opzione C", "Opzione D"],
+  "correct": 0,
+  "explanation": "Spiegazione breve della risposta corretta in ${langName}"
+}
+
+Rispondi SOLO con il JSON, nient'altro.`;
+
+          const response = await bernyBrain.processMessage(quizPrompt);
+          
+          if (response) {
+            // Estrai JSON dalla risposta
+            const jsonMatch = response.match(/\{[\s\S]*\}/);
+            if (jsonMatch) {
+              const parsed = JSON.parse(jsonMatch[0]);
+              if (parsed.question && parsed.options && typeof parsed.correct === 'number') {
+                console.log('✅ Berny API: domanda generata con successo');
+                return {
+                  id: `berny-api-${Date.now()}`,
+                  topic: 'Berny AI',
+                  question: parsed.question,
+                  options: parsed.options,
+                  correct: parsed.correct,
+                  explanation: parsed.explanation || '',
+                  generatedByBerny: true,
+                  generatedByAPI: true,
+                  basedOnCards: cardNames
+                };
+              }
+            }
           }
-        ],
-        'gelato-lab': [
-          {
-            question: 'A quale temperatura si conserva il gelato?',
-            options: ['-5°C', '-8°C', '-14°C', '-20°C'],
-            correct: 2,
-            explanation: 'La temperatura è -8°C a -14°C.'
-          },
-          {
-            question: 'Quanto dura il gelato dopo l\'apertura della vaschetta?',
-            options: ['1 giorno', '3 giorni', '7 giorni', '14 giorni'],
-            correct: 1,
-            explanation: 'Dopo apertura, il gelato va consumato entro 24-48 ore per qualità.'
-          }
-        ],
-        'pastries': [
-          {
-            question: 'Quale è la temperatura per la lievitazione?',
-            options: ['15°C', '25-27°C', '35°C', '45°C'],
-            correct: 1,
-            explanation: 'La temperatura ottimale è 25-27°C.'
-          },
-          {
-            question: 'Quanto tempo di riposo serve per i croissant?',
-            options: ['30 min', '1 ora', '2 ore', '4 ore'],
-            correct: 2,
-            explanation: 'I croissant necessitano di almeno 2 ore di riposo in frigo.'
-          }
-        ],
-        'sweet-treats': [
-          {
-            question: 'Quale zucchero dona brillantezza?',
-            options: ['Grezzo', 'Canna', 'Semolato', 'A velo'],
-            correct: 2,
-            explanation: 'Lo zucchero semolato crea una finitura brillante.'
-          },
-          {
-            question: 'A quale temperatura si servono i waffle?',
-            options: ['Freddi', 'Tiepidi', 'Caldi', 'Bollenti'],
-            correct: 2,
-            explanation: 'I waffle vanno serviti caldi per mantenere la croccantezza.'
-          }
-        ],
-        'festive': [
-          {
-            question: 'A quale temperatura si frigge il churro?',
-            options: ['150°C', '170°C', '190°C', '210°C'],
-            correct: 1,
-            explanation: 'La temperatura ideale per friggere i churros è 170-180°C.'
-          },
-          {
-            question: 'Quanto tempo si conserva il panettone dopo apertura?',
-            options: ['1 giorno', '3 giorni', '5 giorni', '7 giorni'],
-            correct: 1,
-            explanation: 'Il panettone va consumato entro 2-3 giorni dall\'apertura.'
-          }
-        ],
-        'slitti-yoyo': [
-          {
-            question: 'Qual è la caratteristica principale del cioccolato Slitti?',
-            options: ['Economico', 'Artigianale', 'Industriale', 'Sintetico'],
-            correct: 1,
-            explanation: 'Slitti produce cioccolato artigianale di alta qualità.'
-          }
-        ]
+          console.warn('⚠️ Berny API: risposta non valida, uso fallback mock');
+        } catch (apiError) {
+          console.warn('⚠️ Berny API non disponibile, uso fallback mock:', apiError.message);
+        }
+      }
+
+      // ====== FALLBACK: DOMANDE MOCK LOCALI ======
+      console.log(`📚 Berny MOCK: generando domanda su [${cardNames[0]}]`);
+
+      // BANCA DOMANDE MOCK MULTILINGUE - associate ai topic comuni
+      // IMPORTANTE: Ogni domanda deve essere chiara e autosufficiente, senza dare per scontato il soggetto
+      const mockQuestionsI18n = {
+        it: {
+          'caffe': [
+            {
+              question: 'Qual è la temperatura ideale dell\'acqua per estrarre un espresso perfetto?',
+              options: ['70°C', '88-92°C', '110°C', '60°C'],
+              correct: 1,
+              explanation: 'La temperatura ottimale dell\'acqua per l\'espresso è tra 88-92°C.'
+            },
+            {
+              question: 'Quanto tempo deve durare l\'estrazione di un espresso dalla macchina?',
+              options: ['10-15 secondi', '25-30 secondi', '5 secondi', '60 secondi'],
+              correct: 1,
+              explanation: 'Un buon espresso richiede 25-30 secondi di estrazione.'
+            },
+            {
+              question: 'A quale temperatura bisogna montare il latte per preparare un cappuccino cremoso?',
+              options: ['55°C', '65°C', '75°C', '85°C'],
+              correct: 1,
+              explanation: 'La temperatura ideale per montare il latte è circa 65°C per ottenere una microfoam perfetta.'
+            },
+            {
+              question: 'Quanti grammi di caffè macinato servono per preparare un espresso singolo?',
+              options: ['5-6 grammi', '7-9 grammi', '12-14 grammi', '18-20 grammi'],
+              correct: 1,
+              explanation: 'Per un espresso singolo si usano 7-9 grammi di caffè macinato.'
+            },
+            {
+              question: 'Quale pressione in bar è necessaria per estrarre correttamente un espresso?',
+              options: ['5 bar', '9 bar', '15 bar', '20 bar'],
+              correct: 1,
+              explanation: 'La pressione ideale per l\'estrazione dell\'espresso è di 9 bar.'
+            }
+          ],
+          'gelato-lab': [
+            {
+              question: 'A quale temperatura si deve conservare il gelato artigianale nelle vetrine?',
+              options: ['-5°C', '-8°C a -14°C', '-18°C a -20°C', '0°C'],
+              correct: 1,
+              explanation: 'Il gelato in vetrina si conserva tra -8°C e -14°C per mantenere la giusta consistenza.'
+            },
+            {
+              question: 'Entro quanto tempo va consumato il gelato dopo l\'apertura della vaschetta?',
+              options: ['1 giorno', '2-3 giorni', '7 giorni', '14 giorni'],
+              correct: 1,
+              explanation: 'Dopo apertura, il gelato va consumato entro 24-48 ore per mantenere qualità e freschezza.'
+            },
+            {
+              question: 'Qual è la temperatura ideale per servire il gelato artigianale al cliente?',
+              options: ['-18°C', '-14°C', '-10°C a -12°C', '-5°C'],
+              correct: 2,
+              explanation: 'Il gelato si serve a circa -10°C/-12°C per avere la giusta cremosità.'
+            },
+            {
+              question: 'Quante ore prima dell\'apertura bisogna spostare il gelato dal freezer alla vetrina?',
+              options: ['30 minuti', '1-2 ore', '4-6 ore', '12 ore'],
+              correct: 1,
+              explanation: 'Il gelato va spostato in vetrina 1-2 ore prima per raggiungere la temperatura di servizio.'
+            }
+          ],
+          'pastries': [
+            {
+              question: 'A quale temperatura ambiente si fa lievitare la pasta per croissant e brioche?',
+              options: ['15°C', '25-27°C', '35°C', '45°C'],
+              correct: 1,
+              explanation: 'La temperatura ottimale di lievitazione è 25-27°C.'
+            },
+            {
+              question: 'Quanto tempo di riposo in frigorifero necessitano i croissant prima della cottura?',
+              options: ['30 minuti', '1 ora', '2-3 ore', '30 minuti'],
+              correct: 2,
+              explanation: 'I croissant necessitano di almeno 2-3 ore di riposo in frigorifero.'
+            },
+            {
+              question: 'A quale temperatura del forno si cuociono le paste sfogliate come i croissant?',
+              options: ['140°C', '160°C', '180-190°C', '220°C'],
+              correct: 2,
+              explanation: 'Le paste sfogliate si cuociono a 180-190°C per ottenere la giusta doratura.'
+            }
+          ],
+          'sweet-treats': [
+            {
+              question: 'Quale tipo di zucchero dona una finitura brillante ai dolci?',
+              options: ['Zucchero grezzo', 'Zucchero di canna', 'Zucchero semolato', 'Zucchero a velo'],
+              correct: 2,
+              explanation: 'Lo zucchero semolato crea una finitura brillante sui dolci.'
+            },
+            {
+              question: 'A quale temperatura vanno serviti i waffle per mantenere la croccantezza?',
+              options: ['Freddi', 'A temperatura ambiente', 'Caldi (appena fatti)', 'Tiepidi'],
+              correct: 2,
+              explanation: 'I waffle vanno serviti caldi appena fatti per mantenere la croccantezza esterna.'
+            },
+            {
+              question: 'Quanto tempo si possono conservare i biscotti artigianali in contenitore chiuso?',
+              options: ['1-2 giorni', '5-7 giorni', '2 settimane', '1 mese'],
+              correct: 1,
+              explanation: 'I biscotti artigianali si mantengono freschi per 5-7 giorni in contenitore ermetico.'
+            }
+          ],
+          'festive': [
+            {
+              question: 'A quale temperatura dell\'olio si devono friggere i churros per ottenere la giusta doratura?',
+              options: ['150°C', '170-180°C', '200°C', '220°C'],
+              correct: 1,
+              explanation: 'La temperatura ideale per friggere i churros è 170-180°C.'
+            },
+            {
+              question: 'Entro quanti giorni va consumato il panettone dopo l\'apertura della confezione?',
+              options: ['1 giorno', '2-3 giorni', '7 giorni', '14 giorni'],
+              correct: 1,
+              explanation: 'Il panettone va consumato entro 2-3 giorni dall\'apertura per mantenere la fragranza.'
+            },
+            {
+              question: 'Come si conserva correttamente il pandoro una volta aperto?',
+              options: ['In frigorifero', 'A temperatura ambiente in sacchetto chiuso', 'Nel freezer', 'Senza copertura'],
+              correct: 1,
+              explanation: 'Il pandoro si conserva a temperatura ambiente in sacchetto o contenitore chiuso.'
+            }
+          ],
+          'slitti-yoyo': [
+            {
+              question: 'Qual è la caratteristica principale che distingue il cioccolato Slitti dagli altri?',
+              options: ['È il più economico', 'È artigianale e di alta qualità', 'È prodotto industrialmente', 'Contiene conservanti'],
+              correct: 1,
+              explanation: 'Slitti produce cioccolato artigianale di alta qualità con metodi tradizionali.'
+            },
+            {
+              question: 'A quale temperatura va conservato il cioccolato Slitti per mantenerne le proprietà?',
+              options: ['In frigorifero a 4°C', '16-18°C in luogo asciutto', 'A temperatura ambiente 22-25°C', 'Nel freezer'],
+              correct: 1,
+              explanation: 'Il cioccolato si conserva meglio a 16-18°C in luogo fresco e asciutto.'
+            }
+          ]
+        },
+        en: {
+          'caffe': [
+            {
+              question: 'What is the ideal water temperature for extracting a perfect espresso?',
+              options: ['70°C', '88-92°C', '110°C', '60°C'],
+              correct: 1,
+              explanation: 'The optimal water temperature for espresso is between 88-92°C.'
+            },
+            {
+              question: 'How long should the extraction of an espresso from the machine last?',
+              options: ['10-15 seconds', '25-30 seconds', '5 seconds', '60 seconds'],
+              correct: 1,
+              explanation: 'A good espresso requires 25-30 seconds of extraction.'
+            },
+            {
+              question: 'At what temperature should you steam milk to prepare a creamy cappuccino?',
+              options: ['55°C', '65°C', '75°C', '85°C'],
+              correct: 1,
+              explanation: 'The ideal temperature for steaming milk is about 65°C to get perfect microfoam.'
+            },
+            {
+              question: 'How many grams of ground coffee are needed to prepare a single espresso?',
+              options: ['5-6 grams', '7-9 grams', '12-14 grams', '18-20 grams'],
+              correct: 1,
+              explanation: 'A single espresso uses 7-9 grams of ground coffee.'
+            },
+            {
+              question: 'What pressure in bar is required to correctly extract an espresso?',
+              options: ['5 bar', '9 bar', '15 bar', '20 bar'],
+              correct: 1,
+              explanation: 'The ideal pressure for espresso extraction is 9 bar.'
+            }
+          ],
+          'gelato-lab': [
+            {
+              question: 'At what temperature should artisan gelato be stored in display cases?',
+              options: ['-5°C', '-8°C to -14°C', '-18°C to -20°C', '0°C'],
+              correct: 1,
+              explanation: 'Gelato in display cases is stored between -8°C and -14°C to maintain the right consistency.'
+            },
+            {
+              question: 'Within how long should gelato be consumed after opening the container?',
+              options: ['1 day', '2-3 days', '7 days', '14 days'],
+              correct: 1,
+              explanation: 'After opening, gelato should be consumed within 24-48 hours to maintain quality and freshness.'
+            },
+            {
+              question: 'What is the ideal temperature for serving artisan gelato to customers?',
+              options: ['-18°C', '-14°C', '-10°C to -12°C', '-5°C'],
+              correct: 2,
+              explanation: 'Gelato is served at about -10°C/-12°C for the right creaminess.'
+            },
+            {
+              question: 'How many hours before opening should gelato be moved from freezer to display case?',
+              options: ['30 minutes', '1-2 hours', '4-6 hours', '12 hours'],
+              correct: 1,
+              explanation: 'Gelato should be moved to the display case 1-2 hours before to reach serving temperature.'
+            }
+          ],
+          'pastries': [
+            {
+              question: 'At what room temperature should croissant and brioche dough be left to rise?',
+              options: ['15°C', '25-27°C', '35°C', '45°C'],
+              correct: 1,
+              explanation: 'The optimal proofing temperature is 25-27°C.'
+            },
+            {
+              question: 'How long do croissants need to rest in the refrigerator before baking?',
+              options: ['30 minutes', '1 hour', '2-3 hours', '30 minutes'],
+              correct: 2,
+              explanation: 'Croissants need at least 2-3 hours of rest in the refrigerator.'
+            },
+            {
+              question: 'At what oven temperature should puff pastries like croissants be baked?',
+              options: ['140°C', '160°C', '180-190°C', '220°C'],
+              correct: 2,
+              explanation: 'Puff pastries are baked at 180-190°C to achieve the right golden color.'
+            }
+          ],
+          'sweet-treats': [
+            {
+              question: 'What type of sugar gives a shiny finish to desserts?',
+              options: ['Raw sugar', 'Brown sugar', 'Granulated sugar', 'Powdered sugar'],
+              correct: 2,
+              explanation: 'Granulated sugar creates a shiny finish on desserts.'
+            },
+            {
+              question: 'At what temperature should waffles be served to maintain crispiness?',
+              options: ['Cold', 'At room temperature', 'Hot (freshly made)', 'Lukewarm'],
+              correct: 2,
+              explanation: 'Waffles should be served hot and freshly made to maintain their external crispiness.'
+            },
+            {
+              question: 'How long can artisan cookies be stored in a closed container?',
+              options: ['1-2 days', '5-7 days', '2 weeks', '1 month'],
+              correct: 1,
+              explanation: 'Artisan cookies stay fresh for 5-7 days in an airtight container.'
+            }
+          ],
+          'festive': [
+            {
+              question: 'At what oil temperature should churros be fried to achieve the right golden color?',
+              options: ['150°C', '170-180°C', '200°C', '220°C'],
+              correct: 1,
+              explanation: 'The ideal temperature for frying churros is 170-180°C.'
+            },
+            {
+              question: 'Within how many days should panettone be consumed after opening the package?',
+              options: ['1 day', '2-3 days', '7 days', '14 days'],
+              correct: 1,
+              explanation: 'Panettone should be consumed within 2-3 days of opening to maintain freshness.'
+            },
+            {
+              question: 'How should pandoro be stored correctly once opened?',
+              options: ['In the refrigerator', 'At room temperature in a sealed bag', 'In the freezer', 'Without cover'],
+              correct: 1,
+              explanation: 'Pandoro is stored at room temperature in a sealed bag or container.'
+            }
+          ],
+          'slitti-yoyo': [
+            {
+              question: 'What is the main characteristic that distinguishes Slitti chocolate from others?',
+              options: ['It is the cheapest', 'It is artisanal and high quality', 'It is industrially produced', 'It contains preservatives'],
+              correct: 1,
+              explanation: 'Slitti produces artisanal high-quality chocolate with traditional methods.'
+            },
+            {
+              question: 'At what temperature should Slitti chocolate be stored to maintain its properties?',
+              options: ['In the refrigerator at 4°C', '16-18°C in a dry place', 'At room temperature 22-25°C', 'In the freezer'],
+              correct: 1,
+              explanation: 'Chocolate is best stored at 16-18°C in a cool, dry place.'
+            }
+          ]
+        },
+        es: {
+          'caffe': [
+            {
+              question: '¿Cuál es la temperatura ideal del agua para extraer un espresso perfecto?',
+              options: ['70°C', '88-92°C', '110°C', '60°C'],
+              correct: 1,
+              explanation: 'La temperatura óptima del agua para el espresso está entre 88-92°C.'
+            },
+            {
+              question: '¿Cuánto tiempo debe durar la extracción de un espresso en la máquina?',
+              options: ['10-15 segundos', '25-30 segundos', '5 segundos', '60 segundos'],
+              correct: 1,
+              explanation: 'Un buen espresso requiere 25-30 segundos de extracción.'
+            },
+            {
+              question: '¿A qué temperatura se debe calentar la leche para preparar un capuchino cremoso?',
+              options: ['55°C', '65°C', '75°C', '85°C'],
+              correct: 1,
+              explanation: 'La temperatura ideal para calentar la leche es de unos 65°C para obtener una microespuma perfecta.'
+            },
+            {
+              question: '¿Cuántos gramos de café molido se necesitan para preparar un espresso simple?',
+              options: ['5-6 gramos', '7-9 gramos', '12-14 gramos', '18-20 gramos'],
+              correct: 1,
+              explanation: 'Para un espresso simple se utilizan 7-9 gramos de café molido.'
+            },
+            {
+              question: '¿Qué presión en bares es necesaria para extraer correctamente un espresso?',
+              options: ['5 bar', '9 bar', '15 bar', '20 bar'],
+              correct: 1,
+              explanation: 'La presión ideal para la extracción del espresso es de 9 bares.'
+            }
+          ],
+          'gelato-lab': [
+            {
+              question: '¿A qué temperatura se debe conservar el helado artesanal en las vitrinas?',
+              options: ['-5°C', '-8°C a -14°C', '-18°C a -20°C', '0°C'],
+              correct: 1,
+              explanation: 'El helado en vitrina se conserva entre -8°C y -14°C para mantener la consistencia adecuada.'
+            },
+            {
+              question: '¿En cuánto tiempo debe consumirse el helado después de abrir el envase?',
+              options: ['1 día', '2-3 días', '7 días', '14 días'],
+              correct: 1,
+              explanation: 'Después de abrirlo, el helado debe consumirse en 24-48 horas para mantener la calidad y frescura.'
+            },
+            {
+              question: '¿Cuál es la temperatura ideal para servir el helado artesanal al cliente?',
+              options: ['-18°C', '-14°C', '-10°C a -12°C', '-5°C'],
+              correct: 2,
+              explanation: 'El helado se sirve a unos -10°C/-12°C para tener la cremosidad adecuada.'
+            },
+            {
+              question: '¿Cuántas horas antes de la apertura hay que mover el helado del congelador a la vitrina?',
+              options: ['30 minutos', '1-2 horas', '4-6 horas', '12 horas'],
+              correct: 1,
+              explanation: 'El helado debe moverse a la vitrina 1-2 horas antes para alcanzar la temperatura de servicio.'
+            }
+          ],
+          'pastries': [
+            {
+              question: '¿A qué temperatura ambiente se deja leudar la masa para croissants y brioches?',
+              options: ['15°C', '25-27°C', '35°C', '45°C'],
+              correct: 1,
+              explanation: 'La temperatura óptima de fermentación es 25-27°C.'
+            },
+            {
+              question: '¿Cuánto tiempo de reposo en el refrigerador necesitan los croissants antes de hornear?',
+              options: ['30 minutos', '1 hora', '2-3 horas', '30 minutos'],
+              correct: 2,
+              explanation: 'Los croissants necesitan al menos 2-3 horas de reposo en el refrigerador.'
+            },
+            {
+              question: '¿A qué temperatura del horno se hornean las pastas hojaldradas como los croissants?',
+              options: ['140°C', '160°C', '180-190°C', '220°C'],
+              correct: 2,
+              explanation: 'Las pastas hojaldradas se hornean a 180-190°C para obtener el dorado adecuado.'
+            }
+          ],
+          'sweet-treats': [
+            {
+              question: '¿Qué tipo de azúcar da un acabado brillante a los postres?',
+              options: ['Azúcar moreno', 'Azúcar de caña', 'Azúcar granulado', 'Azúcar glas'],
+              correct: 2,
+              explanation: 'El azúcar granulado crea un acabado brillante en los postres.'
+            },
+            {
+              question: '¿A qué temperatura deben servirse los waffles para mantener su crocancia?',
+              options: ['Fríos', 'A temperatura ambiente', 'Calientes (recién hechos)', 'Tibios'],
+              correct: 2,
+              explanation: 'Los waffles deben servirse calientes recién hechos para mantener la crocancia exterior.'
+            },
+            {
+              question: '¿Cuánto tiempo se pueden conservar las galletas artesanales en un recipiente cerrado?',
+              options: ['1-2 días', '5-7 días', '2 semanas', '1 mes'],
+              correct: 1,
+              explanation: 'Las galletas artesanales se mantienen frescas durante 5-7 días en un recipiente hermético.'
+            }
+          ],
+          'festive': [
+            {
+              question: '¿A qué temperatura del aceite se deben freír los churros para obtener el dorado adecuado?',
+              options: ['150°C', '170-180°C', '200°C', '220°C'],
+              correct: 1,
+              explanation: 'La temperatura ideal para freír churros es 170-180°C.'
+            },
+            {
+              question: '¿En cuántos días debe consumirse el panettone después de abrir el paquete?',
+              options: ['1 día', '2-3 días', '7 días', '14 días'],
+              correct: 1,
+              explanation: 'El panettone debe consumirse en 2-3 días después de abrirlo para mantener la frescura.'
+            },
+            {
+              question: '¿Cómo se conserva correctamente el pandoro una vez abierto?',
+              options: ['En el refrigerador', 'A temperatura ambiente en bolsa cerrada', 'En el congelador', 'Sin tapar'],
+              correct: 1,
+              explanation: 'El pandoro se conserva a temperatura ambiente en bolsa o recipiente cerrado.'
+            }
+          ],
+          'slitti-yoyo': [
+            {
+              question: '¿Cuál es la característica principal que distingue al chocolate Slitti de los demás?',
+              options: ['Es el más barato', 'Es artesanal y de alta calidad', 'Es producido industrialmente', 'Contiene conservantes'],
+              correct: 1,
+              explanation: 'Slitti produce chocolate artesanal de alta calidad con métodos tradicionales.'
+            },
+            {
+              question: '¿A qué temperatura debe conservarse el chocolate Slitti para mantener sus propiedades?',
+              options: ['En el refrigerador a 4°C', '16-18°C en lugar seco', 'A temperatura ambiente 22-25°C', 'En el congelador'],
+              correct: 1,
+              explanation: 'El chocolate se conserva mejor a 16-18°C en un lugar fresco y seco.'
+            }
+          ]
+        },
+        fr: {
+          'caffe': [
+            {
+              question: 'Quelle est la température idéale de l\'eau pour extraire un espresso parfait ?',
+              options: ['70°C', '88-92°C', '110°C', '60°C'],
+              correct: 1,
+              explanation: 'La température optimale de l\'eau pour l\'espresso est entre 88-92°C.'
+            },
+            {
+              question: 'Combien de temps doit durer l\'extraction d\'un espresso depuis la machine ?',
+              options: ['10-15 secondes', '25-30 secondes', '5 secondes', '60 secondes'],
+              correct: 1,
+              explanation: 'Un bon espresso nécessite 25-30 secondes d\'extraction.'
+            },
+            {
+              question: 'À quelle température faut-il faire mousser le lait pour préparer un cappuccino crémeux ?',
+              options: ['55°C', '65°C', '75°C', '85°C'],
+              correct: 1,
+              explanation: 'La température idéale pour faire mousser le lait est d\'environ 65°C pour obtenir une microfoam parfaite.'
+            },
+            {
+              question: 'Combien de grammes de café moulu faut-il pour préparer un espresso simple ?',
+              options: ['5-6 grammes', '7-9 grammes', '12-14 grammes', '18-20 grammes'],
+              correct: 1,
+              explanation: 'Pour un espresso simple, on utilise 7-9 grammes de café moulu.'
+            },
+            {
+              question: 'Quelle pression en bars est nécessaire pour extraire correctement un espresso ?',
+              options: ['5 bars', '9 bars', '15 bars', '20 bars'],
+              correct: 1,
+              explanation: 'La pression idéale pour l\'extraction de l\'espresso est de 9 bars.'
+            }
+          ],
+          'gelato-lab': [
+            {
+              question: 'À quelle température doit-on conserver la glace artisanale dans les vitrines ?',
+              options: ['-5°C', '-8°C à -14°C', '-18°C à -20°C', '0°C'],
+              correct: 1,
+              explanation: 'La glace en vitrine se conserve entre -8°C et -14°C pour maintenir la bonne consistance.'
+            },
+            {
+              question: 'Dans quel délai la glace doit-elle être consommée après ouverture du récipient ?',
+              options: ['1 jour', '2-3 jours', '7 jours', '14 jours'],
+              correct: 1,
+              explanation: 'Après ouverture, la glace doit être consommée dans les 24-48 heures pour maintenir qualité et fraîcheur.'
+            },
+            {
+              question: 'Quelle est la température idéale pour servir la glace artisanale au client ?',
+              options: ['-18°C', '-14°C', '-10°C à -12°C', '-5°C'],
+              correct: 2,
+              explanation: 'La glace se sert à environ -10°C/-12°C pour avoir la bonne onctuosité.'
+            },
+            {
+              question: 'Combien d\'heures avant l\'ouverture faut-il déplacer la glace du congélateur à la vitrine ?',
+              options: ['30 minutes', '1-2 heures', '4-6 heures', '12 heures'],
+              correct: 1,
+              explanation: 'La glace doit être déplacée en vitrine 1-2 heures avant pour atteindre la température de service.'
+            }
+          ],
+          'pastries': [
+            {
+              question: 'À quelle température ambiante fait-on lever la pâte pour croissants et brioches ?',
+              options: ['15°C', '25-27°C', '35°C', '45°C'],
+              correct: 1,
+              explanation: 'La température optimale de levée est de 25-27°C.'
+            },
+            {
+              question: 'Combien de temps de repos au réfrigérateur les croissants nécessitent-ils avant la cuisson ?',
+              options: ['30 minutes', '1 heure', '2-3 heures', '30 minutes'],
+              correct: 2,
+              explanation: 'Les croissants nécessitent au moins 2-3 heures de repos au réfrigérateur.'
+            },
+            {
+              question: 'À quelle température du four cuit-on les pâtes feuilletées comme les croissants ?',
+              options: ['140°C', '160°C', '180-190°C', '220°C'],
+              correct: 2,
+              explanation: 'Les pâtes feuilletées se cuisent à 180-190°C pour obtenir la bonne dorure.'
+            }
+          ],
+          'sweet-treats': [
+            {
+              question: 'Quel type de sucre donne une finition brillante aux desserts ?',
+              options: ['Sucre roux', 'Sucre de canne', 'Sucre semoule', 'Sucre glace'],
+              correct: 2,
+              explanation: 'Le sucre semoule crée une finition brillante sur les desserts.'
+            },
+            {
+              question: 'À quelle température les gaufres doivent-elles être servies pour garder leur croustillant ?',
+              options: ['Froides', 'À température ambiante', 'Chaudes (juste faites)', 'Tièdes'],
+              correct: 2,
+              explanation: 'Les gaufres doivent être servies chaudes et fraîchement faites pour garder leur croustillant extérieur.'
+            },
+            {
+              question: 'Combien de temps peut-on conserver les biscuits artisanaux dans un récipient fermé ?',
+              options: ['1-2 jours', '5-7 jours', '2 semaines', '1 mois'],
+              correct: 1,
+              explanation: 'Les biscuits artisanaux restent frais pendant 5-7 jours dans un récipient hermétique.'
+            }
+          ],
+          'festive': [
+            {
+              question: 'À quelle température d\'huile doit-on frire les churros pour obtenir la bonne dorure ?',
+              options: ['150°C', '170-180°C', '200°C', '220°C'],
+              correct: 1,
+              explanation: 'La température idéale pour frire les churros est de 170-180°C.'
+            },
+            {
+              question: 'Dans combien de jours le panettone doit-il être consommé après ouverture de l\'emballage ?',
+              options: ['1 jour', '2-3 jours', '7 jours', '14 jours'],
+              correct: 1,
+              explanation: 'Le panettone doit être consommé dans les 2-3 jours suivant l\'ouverture pour garder sa fraîcheur.'
+            },
+            {
+              question: 'Comment conserver correctement le pandoro une fois ouvert ?',
+              options: ['Au réfrigérateur', 'À température ambiante dans un sac fermé', 'Au congélateur', 'Sans couvercle'],
+              correct: 1,
+              explanation: 'Le pandoro se conserve à température ambiante dans un sac ou récipient fermé.'
+            }
+          ],
+          'slitti-yoyo': [
+            {
+              question: 'Quelle est la caractéristique principale qui distingue le chocolat Slitti des autres ?',
+              options: ['C\'est le moins cher', 'C\'est artisanal et de haute qualité', 'C\'est produit industriellement', 'Il contient des conservateurs'],
+              correct: 1,
+              explanation: 'Slitti produit du chocolat artisanal de haute qualité avec des méthodes traditionnelles.'
+            },
+            {
+              question: 'À quelle température le chocolat Slitti doit-il être conservé pour maintenir ses propriétés ?',
+              options: ['Au réfrigérateur à 4°C', '16-18°C dans un endroit sec', 'À température ambiante 22-25°C', 'Au congélateur'],
+              correct: 1,
+              explanation: 'Le chocolat se conserve mieux à 16-18°C dans un endroit frais et sec.'
+            }
+          ]
+        }
       };
+
+      // Seleziona le domande nella lingua corrente (fallback a italiano)
+      const mockQuestions = mockQuestionsI18n[currentLang] || mockQuestionsI18n['it'];
 
       // Raccogli domande dai topic visitati
       const possibleQuestions = [];
@@ -9769,6 +10326,178 @@ const gamification = (() => {
     ensureDailyState();
     if (state.quizTokens < STARS_FOR_QUIZ) return;
 
+    // Chiave per persistere la domanda corrente (evita che l'utente chiuda e riapra per cambiare domanda)
+    const PENDING_QUESTION_KEY = 'badianiMiniQuiz.pendingQuestion';
+
+    // Controlla se c'è una domanda in sospeso salvata
+    const savedQuestion = (() => {
+      try {
+        const raw = sessionStorage.getItem(PENDING_QUESTION_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          // Verifica che non sia scaduta (max 1 ora)
+          if (parsed && parsed.ts && Date.now() - parsed.ts < 3600000) {
+            return parsed;
+          }
+        }
+      } catch (e) {}
+      return null;
+    })();
+
+    // Funzione helper per cancellare la domanda salvata
+    const clearPendingQuestion = () => {
+      try { sessionStorage.removeItem(PENDING_QUESTION_KEY); } catch (e) {}
+    };
+
+    // Se c'è una domanda salvata, usala direttamente senza loading
+    if (savedQuestion && savedQuestion.questions && savedQuestion.questions.length > 0) {
+      const { questions, bernyGenerated, bernyIntro } = savedQuestion;
+      
+      playQuizStartSound();
+      
+      const handleMiniSuccess = () => {
+        clearPendingQuestion(); // Pulisci la domanda salvata
+        playQuizCorrectSound();
+        state.testMeCredits = Math.max(0, (state.testMeCredits || 0) + 1);
+        saveState();
+        updateUI();
+
+        const container = document.createElement('div');
+        container.className = 'reward-modal';
+        
+        if (bernyGenerated) {
+          container.innerHTML = `
+            <div class="berny-avatar-section">
+              <div class="berny-avatar-circle berny-success">
+                <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                  <circle cx="30" cy="30" r="28" fill="#4CAF50" opacity="0.1"/>
+                  <circle cx="30" cy="30" r="24" fill="#4CAF50"/>
+                  <path d="M20 28 Q 25 33, 30 28 T 40 28" stroke="white" stroke-width="2" fill="none"/>
+                  <circle cx="22" cy="22" r="2" fill="white"/>
+                  <circle cx="38" cy="22" r="2" fill="white"/>
+                </svg>
+              </div>
+            </div>
+          `;
+        }
+        
+        const title = document.createElement('h3');
+        title.className = 'reward-modal__title';
+        title.textContent = bernyGenerated 
+          ? 'Ottimo lavoro! 🎉' 
+          : tr('quiz.mini.success.title', null, 'Mini quiz superato!');
+        
+        const text = document.createElement('p');
+        text.className = 'reward-modal__text';
+        
+        if (bernyGenerated) {
+          text.textContent = isCooldownActive()
+            ? `Hai studiato bene! Ho sbloccato "Test me" ma c'è già un gelato in cooldown. Torna tra ${formatDuration(getCooldownRemaining())}.`
+            : 'Hai studiato bene! Ho sbloccato "Test me": è il quiz più difficile che assegna il gelato.';
+        } else {
+          text.textContent = isCooldownActive()
+            ? tr('quiz.mini.success.text.cooldown', { time: formatDuration(getCooldownRemaining()) }, `Hai sbloccato "Test me", ma hai già un gelato in cooldown. Torna tra ${formatDuration(getCooldownRemaining())} per provarci.`)
+            : tr('quiz.mini.success.text.ready', null, 'Hai sbloccato "Test me": è il quiz più difficile che assegna il gelato.');
+        }
+        
+        const actions = document.createElement('div');
+        actions.className = 'reward-modal__actions';
+
+        const later = document.createElement('button');
+        later.type = 'button';
+        later.className = 'reward-action secondary';
+        later.textContent = tr('quiz.mini.success.cta.later', null, 'Più tardi');
+        later.addEventListener('click', closeOverlay);
+        actions.appendChild(later);
+
+        if (!isCooldownActive()) {
+          const go = document.createElement('button');
+          go.type = 'button';
+          go.className = 'reward-action primary';
+          go.textContent = tr('quiz.mini.success.cta.start', null, 'Inizia Test me');
+          go.dataset.overlayFocus = 'true';
+          go.addEventListener('click', () => {
+            closeOverlay({ force: true });
+            showTestMeQuiz();
+          });
+          actions.appendChild(go);
+        } else {
+          const ok = document.createElement('button');
+          ok.type = 'button';
+          ok.className = 'reward-action primary';
+          ok.textContent = tr('quiz.mini.success.cta.ok', null, 'Ok');
+          ok.dataset.overlayFocus = 'true';
+          ok.addEventListener('click', closeOverlay);
+          actions.appendChild(ok);
+        }
+
+        container.append(title, text, actions);
+        openOverlay(container);
+      };
+
+      const handleMiniFail = (question) => {
+        clearPendingQuestion(); // Pulisci la domanda salvata
+        playQuizWrongSound();
+        applyMiniQuizPenalty();
+
+        try {
+          if (!state.history) state.history = { quiz: [] };
+          if (!Array.isArray(state.history.quiz)) state.history.quiz = [];
+          const review = buildQuizReview(question);
+          const lastItem = {
+            ts: Date.now(),
+            correct: false,
+            prompt: review.prompt,
+            qid: question?.id || null,
+            qtype: bernyGenerated ? 'mini-berny' : 'mini',
+            correctText: review.correctText,
+            explanation: review.explanation,
+            suggestion: review.suggestion,
+            specHref: review.specHref,
+            specLabel: review.specLabel,
+          };
+          state.history.quiz.push(lastItem);
+          if (state.history.quiz.length > 300) state.history.quiz = state.history.quiz.slice(-300);
+          saveState();
+          updateUI();
+
+          openWrongReviewModal(lastItem);
+          return;
+        } catch (e) {}
+
+        const container = document.createElement('div');
+        container.className = 'reward-modal';
+        const title = document.createElement('h3');
+        title.className = 'reward-modal__title';
+        title.textContent = tr('quiz.mini.fail.title', null, 'Mini quiz perso: -3 stelline');
+        const text = document.createElement('p');
+        text.className = 'reward-modal__text';
+        text.textContent = tr('quiz.mini.fail.text', null, 'Niente panico: riparti e ritenta. Al prossimo set di 3 stelline rifai il mini quiz.');
+        const actions = document.createElement('div');
+        actions.className = 'reward-modal__actions';
+        const ok = document.createElement('button');
+        ok.type = 'button';
+        ok.className = 'reward-action primary';
+        ok.textContent = tr('quiz.mini.fail.cta', null, 'Ok');
+        ok.dataset.overlayFocus = 'true';
+        ok.addEventListener('click', closeOverlay);
+        actions.appendChild(ok);
+        container.append(title, text, actions);
+        openOverlay(container);
+      };
+
+      startQuizSession({
+        modeKey: 'mini',
+        title: '🧠 Berny Quiz',
+        introText: bernyIntro,
+        questions,
+        theme: 'berny',
+        onSuccess: handleMiniSuccess,
+        onFail: handleMiniFail,
+      });
+      return;
+    }
+
     // Mostra un loading mentre Berny genera la domanda
     const loadingContainer = document.createElement('div');
     loadingContainer.className = 'reward-modal berny-quiz-loading';
@@ -9821,6 +10550,16 @@ const gamification = (() => {
         return;
       }
 
+      // Salva la domanda in sessionStorage così se l'utente chiude e riapre, ritrova la stessa domanda
+      try {
+        sessionStorage.setItem(PENDING_QUESTION_KEY, JSON.stringify({
+          ts: Date.now(),
+          questions,
+          bernyGenerated,
+          bernyIntro
+        }));
+      } catch (e) {}
+
       // Chiudi il loading
       closeOverlay();
 
@@ -9829,6 +10568,7 @@ const gamification = (() => {
         playQuizStartSound(); // Suono "bin bin bin" crescente
 
         const handleMiniSuccess = () => {
+          clearPendingQuestion(); // Pulisci la domanda salvata
           playQuizCorrectSound(); // Suono di successo
           state.testMeCredits = Math.max(0, (state.testMeCredits || 0) + 1);
           saveState();
@@ -9909,6 +10649,7 @@ const gamification = (() => {
         };
 
         const handleMiniFail = (question) => {
+          clearPendingQuestion(); // Pulisci la domanda salvata
           playQuizWrongSound(); // Suono di errore
           // Apply the penalty
           applyMiniQuizPenalty();
@@ -9981,7 +10722,7 @@ const gamification = (() => {
     showMiniQuiz();
   }
 
-  function showTestMeQuiz() {
+  async function showTestMeQuiz() {
     closeActivePopover();
     ensureDailyState();
     if (state.quizTokens < STARS_FOR_QUIZ) return;
@@ -10007,13 +10748,32 @@ const gamification = (() => {
     };
 
     // Get pools filtered by visited tabs (adaptive hard quiz)
-    // 2 domande facili + 1 difficile
+    // 2 domande super-easy statiche + 1 easy generata da Berny (fallback statica)
     const superEasyPool = getSuperEasyQuestionsForVisitedTabs();
     const easyPool = getQuestionsForVisitedTabs();
 
     const superEasyPicked = pickQuestionsFromBag('test-me-sm', superEasyPool, 2).map(localizeQuizQuestion);
-    const easyPicked = pickQuestionsFromBag('test-me', easyPool, 1).map(localizeQuizQuestion);
-    const picked = [...superEasyPicked, ...easyPicked];
+    
+    // 🧠 BERNY: Tenta di generare la 3a domanda dinamicamente
+    let thirdQuestion = null;
+    try {
+      console.log('🧠 Test Me: richiesta domanda a Berny...');
+      thirdQuestion = await generateBernyQuizQuestion();
+      if (thirdQuestion) {
+        console.log('✅ Test Me: Berny ha generato la domanda:', thirdQuestion.question.substring(0, 50) + '...');
+      }
+    } catch (err) {
+      console.warn('⚠️ Test Me: errore Berny, uso fallback statico:', err.message);
+    }
+    
+    // Fallback: se Berny non genera, usa pool statico
+    if (!thirdQuestion) {
+      console.log('📝 Test Me: uso domanda statica come fallback');
+      const easyPicked = pickQuestionsFromBag('test-me', easyPool, 1).map(localizeQuizQuestion);
+      thirdQuestion = easyPicked[0];
+    }
+    
+    const picked = [...superEasyPicked, thirdQuestion].filter(Boolean);
     
     startQuizSession({
       modeKey: 'test-me',

@@ -464,7 +464,7 @@ class BernyBrainAPI {
     // Se non sembra troncato, restituisci subito
     if (!this.looksTruncatedAnswer(base)) return base;
 
-    const systemPrompt = (typeof this.buildSystemPrompt === 'function') ? this.buildSystemPrompt() : '';
+    const systemPrompt = (typeof this.buildSystemPrompt === 'function') ? this.buildSystemPrompt(userMessage) : '';
     const lang = (typeof this.getUiLang === 'function') ? this.getUiLang() : 'it';
 
     // PROXY mode continuation (riutilizza lo stesso endpoint del proxy)
@@ -1660,6 +1660,12 @@ class BernyBrainAPI {
   }
 
   async processMessage(userMessage) {
+    // 0. CHECK CACHE per risposte frequenti
+    const cachedResponse = this.getCachedResponse(userMessage);
+    if (cachedResponse) {
+      return this.addressUser(cachedResponse);
+    }
+
     // 1. QUIZ INTERCEPTION
     if (this.quizState.active) {
       return this.addressUser(await this.handleQuizAnswer(userMessage));
@@ -1714,6 +1720,8 @@ class BernyBrainAPI {
 
       finalResp = this.addressUser(finalResp);
       this.recordConversationTurn(userMessage, finalResp);
+      // Cache la risposta per usi futuri
+      this.setCachedResponse(userMessage, finalResp);
       return finalResp;
     }
 
@@ -1726,7 +1734,7 @@ class BernyBrainAPI {
       window.dispatchEvent(new CustomEvent('berny-typing-start'));
 
       try {
-        const systemPrompt = this.buildSystemPrompt();
+        const systemPrompt = this.buildSystemPrompt(userMessage);
         const historyMsgs = this.getRecentHistoryMessages(3); // ultime 3 coppie
         const messages = [
           { role: 'system', content: systemPrompt },
@@ -1872,7 +1880,7 @@ class BernyBrainAPI {
     window.dispatchEvent(new CustomEvent('berny-typing-start'));
 
     try {
-      const systemPrompt = this.buildSystemPrompt();
+      const systemPrompt = this.buildSystemPrompt(userMessage);
       const historyText = this.renderRecentHistoryForPrompt(3);
       const contextBlock = historyText ? `\n${historyText}\n` : '';
       const fullPrompt = `${systemPrompt}${contextBlock}\nUtente: ${userMessage}`;
@@ -1938,7 +1946,7 @@ class BernyBrainAPI {
           // TENTATIVO 2: Modello Backup (Gemini 1.5 Flash - Più stabile)
           const backupModel = this.genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
           
-          const systemPrompt = this.buildSystemPrompt();
+          const systemPrompt = this.buildSystemPrompt(userMessage);
           const historyText = this.renderRecentHistoryForPrompt(3);
           const contextBlock = historyText ? `\n${historyText}\n` : '';
           const result = await backupModel.generateContent(`${systemPrompt}${contextBlock}\nUtente: ${userMessage}`);
@@ -1996,9 +2004,119 @@ class BernyBrainAPI {
     }
   }
 
-  buildSystemPrompt() {
+  // ============================================================
+  // CACHING SYSTEM - Risposte frequenti con TTL
+  // ============================================================
+  static CACHE_KEY = 'badianiBerny.responseCache.v1';
+  static CACHE_TTL = 1000 * 60 * 60 * 24; // 24 ore
+
+  getCachedResponse(query) {
+    try {
+      const cache = JSON.parse(localStorage.getItem(BernyBrainAPI.CACHE_KEY) || '{}');
+      const queryKey = this.normalizeText(query).substring(0, 100);
+      const entry = cache[queryKey];
+      if (entry && (Date.now() - entry.ts) < BernyBrainAPI.CACHE_TTL) {
+        console.log('📦 Berny Cache HIT:', queryKey.substring(0, 30));
+        return entry.response;
+      }
+    } catch (e) {
+      console.warn('⚠️ Cache read error:', e);
+    }
+    return null;
+  }
+
+  setCachedResponse(query, response) {
+    try {
+      const cache = JSON.parse(localStorage.getItem(BernyBrainAPI.CACHE_KEY) || '{}');
+      const queryKey = this.normalizeText(query).substring(0, 100);
+      
+      // Limita cache a 50 entry
+      const keys = Object.keys(cache);
+      if (keys.length >= 50) {
+        // Rimuovi le più vecchie
+        const sorted = keys.sort((a, b) => (cache[a].ts || 0) - (cache[b].ts || 0));
+        sorted.slice(0, 10).forEach(k => delete cache[k]);
+      }
+      
+      cache[queryKey] = { response, ts: Date.now() };
+      localStorage.setItem(BernyBrainAPI.CACHE_KEY, JSON.stringify(cache));
+      console.log('💾 Berny Cache SET:', queryKey.substring(0, 30));
+    } catch (e) {
+      console.warn('⚠️ Cache write error:', e);
+    }
+  }
+
+  // ============================================================
+  // FALLBACK con Legacy KB
+  // ============================================================
+  tryLegacyKBFallback(query, lang = 'it') {
+    // Prima prova la nuova KB strutturata
+    if (typeof window.BERNY_KNOWLEDGE_SEARCH === 'function') {
+      const match = window.BERNY_KNOWLEDGE_SEARCH(query, lang);
+      if (match && match.entry) {
+        const response = window.BERNY_GET_RESPONSE(match.entry, lang);
+        if (response) {
+          console.log('📚 Berny Fallback: KB strutturata match per', match.key);
+          return response;
+        }
+      }
+    }
+
+    // Fallback alla legacy KB
     const kb = window.BERNY_KNOWLEDGE || {};
-    const superKb = window.BERNY_SUPER_KNOWLEDGE || {};
+    const queryNorm = this.normalizeText(query);
+    
+    // Cerca nei prodotti
+    if (kb.products) {
+      for (const [key, val] of Object.entries(kb.products)) {
+        if (!val.keywords) continue;
+        for (const kw of val.keywords) {
+          if (queryNorm.includes(this.normalizeText(kw))) {
+            console.log('📚 Berny Fallback: Legacy KB match per', key);
+            return val.response;
+          }
+        }
+      }
+    }
+
+    // Cerca nelle procedure
+    if (kb.procedures) {
+      for (const [key, val] of Object.entries(kb.procedures)) {
+        if (!val.keywords) continue;
+        for (const kw of val.keywords) {
+          if (queryNorm.includes(this.normalizeText(kw))) {
+            console.log('📚 Berny Fallback: Procedure match per', key);
+            let response = val.response;
+            if (val.steps && response.includes('{steps}')) {
+              response = response.replace('{steps}', val.steps.map((s, i) => `${i + 1}. ${s}`).join('\n'));
+            }
+            return response;
+          }
+        }
+      }
+    }
+
+    // Cerca nelle FAQ
+    if (kb.faq) {
+      for (const [key, val] of Object.entries(kb.faq)) {
+        if (!val.keywords) continue;
+        for (const kw of val.keywords) {
+          if (queryNorm.includes(this.normalizeText(kw))) {
+            console.log('📚 Berny Fallback: FAQ match per', key);
+            if (val.responses && Array.isArray(val.responses)) {
+              return val.responses[Math.floor(Math.random() * val.responses.length)];
+            }
+            return val.response;
+          }
+        }
+      }
+    }
+
+    return null;
+  }
+
+  buildSystemPrompt(userQuery = '') {
+    const kb = window.BERNY_KNOWLEDGE || {};
     const appContext = window.FULL_APP_CONTEXT || "";
     
     // Rileva lingua utente (default IT)
@@ -2016,25 +2134,36 @@ class BernyBrainAPI {
     
     let info = "";
     
-    // 1. Inietta info dai prodotti (Legacy KB)
+    // ============================================================
+    // CONTEXT-AWARE PROMPTING: Inietta solo KB rilevante
+    // ============================================================
+    if (userQuery && typeof window.BERNY_GET_RELEVANT_KB === 'function') {
+      const relevantKB = window.BERNY_GET_RELEVANT_KB(userQuery, userLangCode, 5);
+      if (relevantKB) {
+        info += relevantKB + "\n";
+      }
+    }
+
+    // Legacy KB compatta (solo chiavi principali)
     if (kb.products) {
-      info += "INFO PRODOTTI (Legacy):\n";
+      info += "\n📦 PRODOTTI (sintesi):\n";
       Object.entries(kb.products).forEach(([key, val]) => {
-        info += `- ${key.toUpperCase()}: ${val.response}\n`;
+        // Solo una riga per prodotto
+        const shortResponse = String(val.response || '').split('\n')[0].substring(0, 150);
+        info += `• ${key}: ${shortResponse}\n`;
       });
     }
 
-    // 2. Inietta Full App Context (Testo Gigante)
-    if (appContext) {
-      info += "\n--- FULL APP CONTEXT ---\n";
-      info += appContext;
+    // App Context solo se query specifica (non sempre)
+    // Riduciamo il contesto a max 8000 caratteri per risparmiare token
+    if (appContext && appContext.length > 0) {
+      const trimmedContext = appContext.substring(0, 8000);
+      info += "\n--- APP CONTEXT (ridotto) ---\n";
+      info += trimmedContext;
+      if (appContext.length > 8000) {
+        info += "\n... [contesto troncato per efficienza] ...\n";
+      }
       info += "\n--- END APP CONTEXT ---\n";
-    }
-
-    // 3. Inietta Super Knowledge Base (Multilingua - se presente)
-    if (superKb.manuals || superKb.pages) {
-      info += "\nSUPER KNOWLEDGE BASE (Contesto Esteso):\n";
-      // ... (resto della logica esistente)
     }
 
     return `
