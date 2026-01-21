@@ -1140,11 +1140,11 @@ window.addEventListener('avatar-updated', (e) => {
     overlay.setAttribute('aria-modal', 'true');
     overlay.setAttribute('role', 'dialog');
     overlay.setAttribute('aria-labelledby', 'signup-title');
-    overlay.style.cssText = `position: fixed; inset: 0; z-index: 99999; background: radial-gradient(1200px 600px at 20% -10%, rgba(33,64,152,0.12), transparent 60%), radial-gradient(900px 600px at 120% 50%, rgba(246,147,170,0.12), transparent 60%), rgba(248, 250, 255, 0.95); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center;`;
+    overlay.style.cssText = `position: fixed; inset: 0; z-index: 99999; background: radial-gradient(1200px 600px at 20% -10%, rgba(33,64,152,0.12), transparent 60%), radial-gradient(900px 600px at 120% 50%, rgba(246,147,170,0.12), transparent 60%), rgba(248, 250, 255, 0.95); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; padding: 16px; overflow-y: auto; -webkit-overflow-scrolling: touch;`;
 
     const card = document.createElement('div');
     card.className = 'signup-card';
-    card.style.cssText = `width: min(92vw, 480px); background: #fff; border-radius: 16px; box-shadow: 0 16px 44px rgba(15,33,84,0.18); padding: 24px; color: var(--ink, #0f2154);`;
+    card.style.cssText = `width: min(92vw, 480px); max-height: min(90vh, 700px); background: #fff; border-radius: 16px; box-shadow: 0 16px 44px rgba(15,33,84,0.18); padding: 24px; color: var(--ink, #0f2154); overflow-y: auto; -webkit-overflow-scrolling: touch; margin: auto;`;
 
     const verifiedNow = isVerifiedOrBeta();
 
