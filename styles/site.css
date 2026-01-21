@@ -1,4 +1,4 @@
-@font-face {
+﻿@font-face {
   font-family: "SuperGrotesk-Regular";
   src: url("../fonts/SuperGroteskA-Rg.otf") format("opentype");
   font-weight: 400;
@@ -2429,13 +2429,12 @@ h4 {
 }
 
 .berny-guide-panel {
-  /* Un pelo più piccolo su desktop e sempre centrato */
-  width: min(920px, 94vw);
-  /* Mantieni un layout da video, centrato e senza "effetto gigantone" su desktop */
-  aspect-ratio: 16 / 9;
-  height: auto;
-  /* Evita fullscreen “gigante” su schermi grandi */
-  max-height: 75vh;
+  /* Video verticale (9:16) sempre, su tutti i dispositivi */
+  aspect-ratio: 9 / 16;
+  /* Occupa la massima altezza disponibile */
+  height: min(92vh, 850px);
+  width: auto;
+  max-width: 94vw;
   background: #fff;
   border: 1px solid rgba(33, 64, 152, 0.14);
   border-radius: var(--radius-xl);
@@ -2533,20 +2532,36 @@ h4 {
 
 @media (max-width: 560px) {
   .berny-guide-panel {
-    /* Video verticale su mobile: pannello portrait, centrato */
-    aspect-ratio: 9 / 16;
-    height: 80vh;
-    max-height: calc(100vh - 28px);
-    width: auto;
-    max-width: 92vw;
-    border-radius: var(--radius-lg);
-  }
+  /* Video verticale (9:16) sempre, su tutti i dispositivi */
+  aspect-ratio: 9 / 16;
+  /* Occupa la massima altezza disponibile */
+  height: min(92vh, 850px);
+  width: auto;
+  max-width: 94vw;
+  background: #fff;
+  border: 1px solid rgba(33, 64, 152, 0.14);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 40px 120px rgba(5, 10, 44, 0.55);
+  overflow: hidden;
+  position: relative;
+}
 }
 
 @media (max-width: 420px) {
   .berny-guide-panel {
-    border-radius: 14px;
-  }
+  /* Video verticale (9:16) sempre, su tutti i dispositivi */
+  aspect-ratio: 9 / 16;
+  /* Occupa la massima altezza disponibile */
+  height: min(92vh, 850px);
+  width: auto;
+  max-width: 94vw;
+  background: #fff;
+  border: 1px solid rgba(33, 64, 152, 0.14);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 40px 120px rgba(5, 10, 44, 0.55);
+  overflow: hidden;
+  position: relative;
+}
   .berny-guide-close {
     top: 10px;
     right: 10px;

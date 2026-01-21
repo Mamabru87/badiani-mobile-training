@@ -16712,7 +16712,8 @@ document.addEventListener("DOMContentLoaded", () => {
           <video
             class="berny-guide-video"
             playsinline
-            preload="metadata"
+            webkit-playsinline
+            preload="auto"
             muted
             autoplay
             data-berny-guide-video
@@ -16864,6 +16865,34 @@ document.addEventListener("DOMContentLoaded", () => {
         try { panel?.addEventListener?.('pointerdown', audioUnlockHandler, { passive: true }); } catch {}
         try { panel?.addEventListener?.('click', audioUnlockHandler, { passive: true }); } catch {}
       }
+
+      // Previene interruzioni audio/video: gestisci stalled, waiting, pause indesiderate
+      const resumeIfPaused = () => {
+        if (!video || !overlay?.classList?.contains('is-visible')) return;
+        if (video.paused && video.currentTime < video.duration - 0.5) {
+          const p = video.play();
+          if (p && typeof p.catch === 'function') p.catch(() => {});
+        }
+      };
+
+      // Riprendi se il browser mette in pausa per stallo o buffering
+      try {
+        video.addEventListener('stalled', resumeIfPaused, { passive: true });
+        video.addEventListener('waiting', () => {
+          // Attendi un attimo prima di riprovare
+          setTimeout(resumeIfPaused, 300);
+        }, { passive: true });
+      } catch {}
+
+      // Riprendi quando la pagina torna visibile
+      const handleVisibility = () => {
+        if (document.visibilityState === 'visible') {
+          setTimeout(resumeIfPaused, 100);
+        }
+      };
+      try {
+        document.addEventListener('visibilitychange', handleVisibility, { passive: true });
+      } catch {}
     }
   };
 
