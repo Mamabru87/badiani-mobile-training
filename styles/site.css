@@ -6782,11 +6782,9 @@ section.carousel:last-of-type {
   display: block;
 }
 
-/* Open state: rose pill + white icon when all tabs open */
+/* Open state: no background change, icon stays rose */
 .card-modal .card-modal-study-toggle[aria-pressed="true"] {
-  background: var(--brand-rose) !important;
-  border-radius: 999px;
-  box-shadow: 0 2px 8px rgba(236, 65, 140, 0.25) !important;
+  background: transparent !important;
 }
 
 @media (max-width: 600px) {

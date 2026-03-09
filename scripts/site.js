@@ -12440,8 +12440,7 @@ toggles.forEach((button) => {
       btn.setAttribute('aria-label', label);
       try { btn.title = label; } catch (e) {}
       try {
-        const strokeCol = allowMultiOpenTabs ? '#fff' : '#ec418c';
-        const svgIcon = eyeSvg(allowMultiOpenTabs, strokeCol);
+        const svgIcon = eyeSvg(allowMultiOpenTabs, '#ec418c');
         const sr = btn.querySelector('.sr-only');
         if (sr) {
           sr.textContent = label;
