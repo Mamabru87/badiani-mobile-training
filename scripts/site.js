@@ -6834,7 +6834,7 @@ const gamification = (() => {
         ta.remove();
         showToast(tr('toast.copied', null, 'Copiato negli appunti.'));
       } catch (e) {
-        showToast('Impossibile copiare (browser).');
+        showToast(tr('toast.copyFailed', null, 'Impossibile copiare (browser).'));
       }
     };
 
@@ -6906,7 +6906,7 @@ const gamification = (() => {
       saveUserGelato(gelato);
       updateUI();
       closeOverlay();
-      showToast('Gusto aggiornato!');
+      showToast(tr('toast.flavorUpdated', null, 'Gusto aggiornato!'));
     });
     const cancelBtn = container.querySelector('[data-cancel-gelato]');
     if (cancelBtn) cancelBtn.addEventListener('click', closeOverlay);
@@ -6923,30 +6923,30 @@ const gamification = (() => {
     container.style.maxWidth = '400px';
     
     // Check if AvatarLab is available
-    let avatarHtml = '<p>Avatar Creator non disponibile.</p>';
+    let avatarHtml = '<p>' + tr('profile.avatarUnavailable', null, 'Avatar Creator non disponibile.') + '</p>';
     try {
       if (typeof AvatarLab !== 'undefined' && AvatarLab && typeof AvatarLab.getHTML === 'function') {
         avatarHtml = AvatarLab.getHTML();
       }
     } catch (e) {
       console.warn('AvatarLab.getHTML failed', e);
-      avatarHtml = '<p>Avatar Creator non disponibile.</p>';
+      avatarHtml = '<p>' + tr('profile.avatarUnavailable', null, 'Avatar Creator non disponibile.') + '</p>';
     }
     
     container.innerHTML = `
       <div style="text-align:center; margin-bottom:12px;">
         <p style="font-size:28px; margin:0; line-height:1;">👤</p>
       </div>
-      <h3 style="margin:0 0 8px 0; font-size:20px;">Il tuo Avatar</h3>
-      <p style="margin:0 0 16px 0; color:var(--brand-gray-soft, #6b7280); font-size:14px;">Personalizza il tuo look per l'Hub.</p>
+      <h3 style="margin:0 0 8px 0; font-size:20px;">${tr('profile.avatarTitle', null, 'Il tuo Avatar')}</h3>
+      <p style="margin:0 0 16px 0; color:var(--brand-gray-soft, #6b7280); font-size:14px;">${tr('profile.avatarDesc', null, "Personalizza il tuo look per l'Hub.")}</p>
       
       ${avatarHtml}
       
       <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
       
       <div style="display:flex; gap:8px; justify-content: center;">
-        <button type="button" data-confirm-switch style="padding:10px 20px; border-radius:10px; background:#fff; color:#e11d48; border:1px solid #e11d48; font-weight:600; font-size:13px;">Esci / Cambia Profilo</button>
-        <button type="button" data-cancel-switch style="padding:10px 20px; border-radius:10px; background:#e5e7eb; color:#0f2154; border:none; font-weight:600; font-size:13px;">Chiudi</button>
+        <button type="button" data-confirm-switch style="padding:10px 20px; border-radius:10px; background:#fff; color:#e11d48; border:1px solid #e11d48; font-weight:600; font-size:13px;">${tr('profile.switchBtn', null, 'Esci / Cambia Profilo')}</button>
+        <button type="button" data-cancel-switch style="padding:10px 20px; border-radius:10px; background:#e5e7eb; color:#0f2154; border:none; font-weight:600; font-size:13px;">${tr('common.close', null, 'Chiudi')}</button>
       </div>
     `;
     
@@ -6962,7 +6962,7 @@ const gamification = (() => {
           event.stopImmediatePropagation();
         } catch {}
 
-        try { if (typeof showToast === 'function') showToast('Uscita dal profilo…'); } catch {}
+        try { if (typeof showToast === 'function') showToast(tr('toast.loggedOut', null, 'Uscita dal profilo…')); } catch {}
 
         try {
           if (window.BadianiProfile?.logout) window.BadianiProfile.logout();
@@ -6989,7 +6989,7 @@ const gamification = (() => {
           if (typeof AvatarLab.render === 'function') AvatarLab.render();
         } catch (e) {
           console.warn('AvatarLab.init failed', e);
-          try { if (window.showToast) window.showToast('Avatar Creator non disponibile (errore).'); } catch {}
+          try { if (window.showToast) window.showToast(tr('toast.avatarError', null, 'Avatar Creator non disponibile (errore).')); } catch {}
         }
       }, 0);
     }
@@ -10447,7 +10447,7 @@ Rispondi SOLO con il JSON, nient'altro.`;
 
       if (!questions.length) {
         closeOverlay();
-        showToast('Impossibile caricare domande per il quiz', { type: 'error' });
+        showToast(tr('toast.quizLoadError', null, 'Impossibile caricare domande per il quiz'), { type: 'error' });
         return;
       }
 
@@ -12488,9 +12488,9 @@ toggles.forEach((button) => {
       try {
         // Use the standard (non-anchored) toast for maximum reliability inside modals.
         if (allowMultiOpenTabs) {
-          showToast('Modalit\u00E0 studio attiva: scorri per leggere tutta la scheda (tutti i tab sono aperti).');
+          showToast(tr('toast.studyMode', null, 'Modalit\u00E0 studio attiva: scorri per leggere tutta la scheda (tutti i tab sono aperti).'));
         } else {
-          showToast('Vista singola: apri una sezione alla volta toccando il titolo del tab.');
+          showToast(tr('toast.singleView', null, 'Vista singola: apri una sezione alla volta toccando il titolo del tab.'));
         }
       } catch (e) {}
     };

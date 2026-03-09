@@ -185,7 +185,7 @@ Browser ←→ HTML/CSS/JS statici ←→ localStorage (stato)
 | 2 | `card-panettone-dark-chocolate` | Prodotto |
 | 3 | `card-pandoro-classico` | Prodotto |
 | 4 | `card-servizio-caldo-pandoro` | Prodotto |
-| 5 | `card-hot-chocolate` | Prodotto |
+| 5 | `card-hot-chocolate-seasonal` | Prodotto |
 | 6 | `card-colomba` | Prodotto |
 | 7 | `card-packaging-mini-panettone-delivery` | Procedura |
 

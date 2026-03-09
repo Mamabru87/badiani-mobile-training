@@ -1494,7 +1494,7 @@ class BernyBrainAPI {
         if (e.detail.message.startsWith('/apikey')) {
           const key = e.detail.message.replace('/apikey', '').trim();
           localStorage.setItem('berny_api_key', key);
-          alert("Chiave salvata! Ricarico...");
+          alert(typeof tr === 'function' ? tr('toast.keySaved', null, 'Chiave salvata! Ricarico...') : 'Chiave salvata! Ricarico...');
           window.location.reload();
         }
       });
@@ -1508,7 +1508,7 @@ class BernyBrainAPI {
         if (msg.startsWith('/access')) {
           const code = msg.replace('/access', '').trim();
           try { localStorage.setItem('badianiBerny.accessCode.v1', code); } catch {}
-          alert('Accesso salvato! Ricarico...');
+          alert(typeof tr === 'function' ? tr('toast.accessSaved', null, 'Accesso salvato! Ricarico...') : 'Accesso salvato! Ricarico...');
           window.location.reload();
         }
       });

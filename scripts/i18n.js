@@ -25,6 +25,19 @@
 
       'common.close': 'Chiudi',
       'toast.copied': 'Copiato negli appunti ✅',
+      'toast.copyFailed': 'Impossibile copiare (browser).',
+      'toast.flavorUpdated': 'Gusto aggiornato!',
+      'toast.loggedOut': 'Uscita dal profilo…',
+      'toast.avatarError': 'Avatar Creator non disponibile (errore).',
+      'toast.keySaved': 'Chiave salvata! Ricarico...',
+      'toast.accessSaved': 'Accesso salvato! Ricarico...',
+      'profile.avatarUnavailable': 'Avatar Creator non disponibile.',
+      'profile.avatarTitle': 'Il tuo Avatar',
+      'profile.avatarDesc': "Personalizza il tuo look per l'Hub.",
+      'profile.switchBtn': 'Esci / Cambia Profilo',
+      'toast.quizLoadError': 'Impossibile caricare domande per il quiz',
+      'toast.studyMode': 'Modalità studio attiva: scorri per leggere tutta la scheda (tutti i tab sono aperti).',
+      'toast.singleView': 'Vista singola: apri una sezione alla volta toccando il titolo del tab.',
 
       'quiz.generic': 'Quiz',
       'carousel.headerAria': 'Scorri il carosello: swipe sinistra/destra oppure clic (sinistra=precedente, destra=successivo)',
@@ -46,7 +59,7 @@
       'card.keyMessage': 'Key message',
 
       'operations.hero.badge': 'Playbook operativo',
-      'operations.hero.stars': '⭐ Stelle: 0/13',
+      'operations.hero.stars': '⭐ Stelle: 11/11',
         'operations.hero.title': 'Operations & Setup',
       'operations.hero.desc': 'Una sezione dedicata a tutte le schede che non sono “prodotti”: apertura, set-up vetrine, packaging, procedure di servizio e chiusura. Qui trovi gli standard che tengono il banco pulito, veloce e coerente.',
       'operations.hero.coverAlt': 'Playbook operativo Badiani',
@@ -449,7 +462,7 @@
       'gelatoLab.footer.heritageLabel': 'Heritage',
 
       'caffe.hero.badge': 'Bar & Drinks · 2025',
-      'caffe.hero.stars': '⭐ Stelle: 18/18',
+      'caffe.hero.stars': '⭐ Stelle: 29/29',
       'caffe.hero.title': 'Bar & Drinks',
       'caffe.hero.desc': 'La guida completa al beverage Badiani: dai classici della caffetteria italiana al nuovo Matcha Bar, fino agli Smoothies e le bevande fredde. Include procedure per servizio al tavolo e Take Away (TW).',
       'caffe.hero.coverAlt': 'Setup linea bar Badiani',
@@ -649,7 +662,7 @@
       'sweetTreats.footer.stat2.label': 'Gusti',
 
       'pastries.hero.badge': 'Pasticceria da banco',
-      'pastries.hero.stars': '⭐ Stelle: 6/6',
+      'pastries.hero.stars': '⭐ Stelle: 10/10',
       'pastries.hero.title': 'Pastry Lab',
       'pastries.hero.desc': 'Tutte le referenze servite al banco: cakes, brownies, loaf, croissant farciti e scones con scoop di Buontalenti. Ogni scheda include shelf life, porzioni e script di upselling.',
       'pastries.hero.coverAlt': 'Cakes e brownie Badiani',
@@ -1107,6 +1120,19 @@
 
       'common.close': 'Close',
       'toast.copied': 'Copied to clipboard ✅',
+      'toast.copyFailed': 'Unable to copy (browser).',
+      'toast.flavorUpdated': 'Flavour updated!',
+      'toast.loggedOut': 'Logged out…',
+      'toast.avatarError': 'Avatar Creator unavailable (error).',
+      'toast.keySaved': 'Key saved! Reloading…',
+      'toast.accessSaved': 'Access saved! Reloading…',
+      'profile.avatarUnavailable': 'Avatar Creator unavailable.',
+      'profile.avatarTitle': 'Your Avatar',
+      'profile.avatarDesc': 'Customise your look for the Hub.',
+      'profile.switchBtn': 'Log out / Switch Profile',
+      'toast.quizLoadError': 'Unable to load quiz questions',
+      'toast.studyMode': 'Study mode on: scroll to read the full card (all tabs are open).',
+      'toast.singleView': 'Single view: open one section at a time by tapping the tab title.',
 
       'quiz.generic': 'Quiz',
       'carousel.headerAria': 'Scroll the carousel: swipe left/right or click (left=previous, right=next)',
@@ -1127,7 +1153,7 @@
       'card.keyMessage': 'Key message',
 
       'operations.hero.badge': 'Operations playbook',
-      'operations.hero.stars': '⭐ Stars: 0/13',
+      'operations.hero.stars': '⭐ Stars: 11/11',
         'operations.hero.title': 'Operations & Setup',
       'operations.hero.desc': 'A section dedicated to all cards that are not “products”: opening, display set-up, packaging, service procedures and closing. Here you\'ll find the standards that keep the counter clean, fast and consistent.',
       'operations.hero.coverAlt': 'Badiani operations playbook',
@@ -1504,7 +1530,7 @@
       'gelatoLab.footer.heritageLabel': 'Heritage',
 
       'caffe.hero.badge': 'Bar & Drinks · 2025',
-      'caffe.hero.stars': '⭐ Stars: 18/18',
+      'caffe.hero.stars': '⭐ Stars: 29/29',
       'caffe.hero.title': 'Bar & Drinks',
       'caffe.hero.desc': 'The complete Badiani beverage guide: from classic Italian coffee drinks to the new Matcha Bar, plus Smoothies and cold drinks. Includes table service and Take Away (TW) procedures.',
       'caffe.hero.coverAlt': 'Badiani bar line setup',
@@ -1703,7 +1729,7 @@
       'sweetTreats.footer.stat2.label': 'Flavours',
 
       'pastries.hero.badge': 'Counter pastry',
-      'pastries.hero.stars': '⭐ Stars: 6/6',
+      'pastries.hero.stars': '⭐ Stars: 10/10',
       'pastries.hero.title': 'Pastry Lab',
       'pastries.hero.desc': 'All counter-served references: cakes, brownies, loaf, filled croissants and scones with a scoop of Buontalenti. Each card includes shelf life, portions and upselling scripts.',
       'pastries.hero.coverAlt': 'Badiani cakes and brownies',
@@ -4165,6 +4191,19 @@
 
       'common.close': 'Cerrar',
       'toast.copied': 'Copiado al portapapeles ✅',
+      'toast.copyFailed': 'No se pudo copiar (navegador).',
+      'toast.flavorUpdated': '¡Sabor actualizado!',
+      'toast.loggedOut': 'Sesión cerrada…',
+      'toast.avatarError': 'Avatar Creator no disponible (error).',
+      'toast.keySaved': '¡Clave guardada! Recargando…',
+      'toast.accessSaved': '¡Acceso guardado! Recargando…',
+      'profile.avatarUnavailable': 'Avatar Creator no disponible.',
+      'profile.avatarTitle': 'Tu Avatar',
+      'profile.avatarDesc': 'Personaliza tu look para el Hub.',
+      'profile.switchBtn': 'Salir / Cambiar Perfil',
+      'toast.quizLoadError': 'No se pudieron cargar las preguntas del quiz',
+      'toast.studyMode': 'Modo estudio activo: desplázate para leer toda la ficha (todas las pestañas están abiertas).',
+      'toast.singleView': 'Vista individual: abre una sección a la vez tocando el título de la pestaña.',
 
       'quiz.generic': 'Quiz',
       'carousel.headerAria': 'Desplaza el carrusel: desliza izquierda/derecha o haz clic (izquierda=anterior, derecha=siguiente)',
@@ -4185,7 +4224,7 @@
       'card.keyMessage': 'Key message',
 
       'operations.hero.badge': 'Playbook operativo',
-      'operations.hero.stars': '⭐ Estrellas: 0/13',
+      'operations.hero.stars': '⭐ Estrellas: 11/11',
         'operations.hero.title': 'Operations & Setup',
       'operations.hero.desc': 'Una sección dedicada a todas las fichas que no son “productos”: apertura, set-up de vitrinas, packaging, procedimientos de servicio y cierre. Aquí están los estándares que mantienen el mostrador limpio, rápido y coherente.',
       'operations.hero.coverAlt': 'Playbook operativo Badiani',
@@ -4625,7 +4664,7 @@
       'gelatoLab.footer.heritageLabel': 'Herencia',
 
       'caffe.hero.badge': 'Bar & Drinks · 2025',
-      'caffe.hero.stars': '⭐ Estrellas: 18/18',
+      'caffe.hero.stars': '⭐ Estrellas: 29/29',
       'caffe.hero.desc': 'La guía completa de bebidas Badiani: desde los clásicos de la cafetería italiana hasta el nuevo Matcha Bar, además de Smoothies y bebidas frías. Incluye procedimientos de servicio en mesa y Take Away (TW).',
 
       'caffe.hero.title': 'Bar & Drinks',
@@ -4825,7 +4864,7 @@
       'sweetTreats.footer.stat2.label': 'Sabores',
 
       'pastries.hero.badge': 'Pastelería de mostrador',
-      'pastries.hero.stars': '⭐ Estrellas: 6/6',
+      'pastries.hero.stars': '⭐ Estrellas: 10/10',
       'pastries.hero.title': 'Pastry Lab',
       'pastries.hero.desc': 'Todas las referencias servidas en mostrador: cakes, brownies, loaf, croissants rellenos y scones con un scoop de Buontalenti. Cada ficha incluye shelf life, porciones y guion de upselling.',
       'pastries.hero.coverAlt': 'Cakes y brownie Badiani',
@@ -5905,6 +5944,19 @@
 
       'common.close': 'Fermer',
       'toast.copied': 'Copié dans le presse-papiers ✅',
+      'toast.copyFailed': 'Impossible de copier (navigateur).',
+      'toast.flavorUpdated': 'Parfum mis à jour !',
+      'toast.loggedOut': 'Déconnexion…',
+      'toast.avatarError': 'Avatar Creator indisponible (erreur).',
+      'toast.keySaved': 'Clé enregistrée ! Rechargement…',
+      'toast.accessSaved': 'Accès enregistré ! Rechargement…',
+      'profile.avatarUnavailable': 'Avatar Creator indisponible.',
+      'profile.avatarTitle': 'Ton Avatar',
+      'profile.avatarDesc': 'Personnalise ton look pour le Hub.',
+      'profile.switchBtn': 'Quitter / Changer de Profil',
+      'toast.quizLoadError': 'Impossible de charger les questions du quiz',
+      'toast.studyMode': 'Mode étude actif : fais défiler pour lire toute la fiche (tous les onglets sont ouverts).',
+      'toast.singleView': 'Vue individuelle : ouvre une section à la fois en touchant le titre de l\u2019onglet.',
 
       'quiz.generic': 'Quiz',
       'carousel.headerAria': 'Faites défiler le carrousel : glissez à gauche/droite ou cliquez (gauche=précédent, droite=suivant)',
@@ -5925,7 +5977,7 @@
       'card.keyMessage': 'Key message',
 
       'operations.hero.badge': 'Playbook opérationnel',
-      'operations.hero.stars': '⭐ Étoiles : 0/13',
+      'operations.hero.stars': '⭐ Étoiles : 11/11',
         'operations.hero.title': 'Operations & Setup',
       'operations.hero.desc': 'Une section dédiée à toutes les fiches qui ne sont pas des “produits” : ouverture, set-up vitrines, packaging, procédures de service et fermeture. Ici, les standards pour garder le comptoir propre, rapide et cohérent.',
       'operations.hero.coverAlt': 'Playbook opérationnel Badiani',
@@ -7043,7 +7095,7 @@
       'gelatoLab.footer.heritageLabel': 'Héritage',
 
       'caffe.hero.badge': 'Bar & Drinks · 2025',
-      'caffe.hero.stars': '⭐ Étoiles : 18/18',
+      'caffe.hero.stars': '⭐ Étoiles : 29/29',
       'caffe.hero.desc': 'Le guide complet des boissons Badiani : des classiques du café italien au nouveau Matcha Bar, en passant par les Smoothies et les boissons froides. Inclut les procédures de service à table et Take Away (TW).',
 
       'caffe.hero.title': 'Bar & Drinks',
@@ -7243,7 +7295,7 @@
       'sweetTreats.footer.stat2.label': 'Saveurs',
 
       'pastries.hero.badge': 'Pâtisserie comptoir',
-      'pastries.hero.stars': '⭐ Étoiles : 6/6',
+      'pastries.hero.stars': '⭐ Étoiles : 10/10',
       'pastries.hero.title': 'Pastry Lab',
       'pastries.hero.desc': 'Toutes les références servies au comptoir : cakes, brownies, loaf, croissants garnis et scones avec un scoop de Buontalenti. Chaque fiche inclut shelf life, portions et scripts d\'upselling.',
       'pastries.hero.coverAlt': 'Cakes et brownies Badiani',
