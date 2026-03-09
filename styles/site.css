@@ -6748,11 +6748,14 @@ section.carousel:last-of-type {
   position: relative;
   width: 38px;
   height: 38px;
-  padding: 0;
+  padding: 0 !important;
   border-radius: 999px;
-  border: none;
-  background: transparent;
-  box-shadow: none;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -6781,9 +6784,9 @@ section.carousel:last-of-type {
 
 /* Open state: rose pill + white icon when all tabs open */
 .card-modal .card-modal-study-toggle[aria-pressed="true"] {
-  background: var(--brand-rose);
+  background: var(--brand-rose) !important;
   border-radius: 999px;
-  box-shadow: 0 2px 8px rgba(236, 65, 140, 0.25);
+  box-shadow: 0 2px 8px rgba(236, 65, 140, 0.25) !important;
 }
 
 @media (max-width: 600px) {
