@@ -6741,11 +6741,6 @@ const gamification = (() => {
     search.placeholder = tr('wrongLog.searchPlaceholder', null, 'Cerca negli errori (es. coni, box, latte, churros...)');
     search.setAttribute('aria-label', tr('wrongLog.searchAria', null, 'Cerca negli errori'));
 
-    const copyBtn = document.createElement('button');
-    copyBtn.type = 'button';
-    copyBtn.className = 'btn btn-ghost btn--sm';
-    copyBtn.textContent = tr('wrongLog.copyJson', null, 'Copia JSON');
-
     const listWrap = document.createElement('div');
     listWrap.className = 'wrong-log__list';
     const list = document.createElement('ul');
@@ -6818,36 +6813,9 @@ const gamification = (() => {
       });
     };
 
-    const copyJson = async () => {
-      try {
-        const payload = JSON.stringify(localizedAll, null, 2);
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          await navigator.clipboard.writeText(payload);
-          showToast(tr('toast.copied', null, 'Copiato negli appunti.'));
-          return;
-        }
-      } catch (e) {}
-      // Fallback
-      try {
-        const ta = document.createElement('textarea');
-        ta.value = JSON.stringify(allWrong, null, 2);
-        ta.setAttribute('readonly', 'true');
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        ta.remove();
-        showToast(tr('toast.copied', null, 'Copiato negli appunti.'));
-      } catch (e) {
-        showToast(tr('toast.copyFailed', null, 'Impossibile copiare (browser).'));
-      }
-    };
-
     search.addEventListener('input', () => renderList(search.value));
-    copyBtn.addEventListener('click', copyJson);
 
-    toolbar.append(search, copyBtn);
+    toolbar.append(search);
     container.append(eyebrow, title, meta, toolbar, listWrap, hint, actions);
 
     openOverlay(container, { fullScreen: true });
@@ -12386,7 +12354,7 @@ toggles.forEach((button) => {
     studyToggleBtn.setAttribute('aria-pressed', 'false');
     studyToggleBtn.setAttribute('data-i18n-attr', 'aria-label:modal.studyMode.showAllAria');
     studyToggleBtn.setAttribute('aria-label', tr('modal.studyMode.showAllAria', null, 'Mostra tutto'));
-    studyToggleBtn.style.cssText = 'background:transparent;border:none;padding:0;box-shadow:none;-webkit-appearance:none;appearance:none;outline:none;margin-right:8px;display:inline-flex;align-items:center;line-height:0;vertical-align:middle;';
+    studyToggleBtn.style.cssText = 'background:transparent;border:none;padding:0;box-shadow:none;-webkit-appearance:none;appearance:none;outline:none;margin-right:8px;display:inline-flex;align-items:center;line-height:0;vertical-align:middle;position:relative;top:-4px;';
     const eyeSvg = (on, color) => on
       ? '<svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="' + color + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
       : '<svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="' + color + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
