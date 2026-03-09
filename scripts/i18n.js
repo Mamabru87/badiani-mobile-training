@@ -1,4 +1,4 @@
-﻿/* Badiani Training Orbit – runtime i18n (no bundler, vanilla JS, IIFE)
+/* Badiani Training Orbit – runtime i18n (no bundler, vanilla JS, IIFE)
    - Marks translatable nodes via data-i18n / data-i18n-html / data-i18n-attr.
    - Persists language in localStorage.
    - Does NOT translate product names/brand terms unless explicitly keyed.
@@ -149,7 +149,7 @@
       'operations.cards.takeAwayThermal.title': 'Take-away: autonomia termica',
       'operations.cards.takeAwayThermal.desc': 'Box termica: autonomia ~40 min. Comunica al cliente di mettere in freezer appena possibile.',
       'operations.cards.takeAwayThermal.stats': `<li>Comunicalo sempre al cliente (qualità e sicurezza)</li><li>Consiglia freezer appena possibile</li><li>Evita soste “lunghe” fuori controllo (rider/attese)</li>`,
-      'operations.cards.takeAwayThermal.details': `<div class="steps"><strong data-i18n="modal.tab.preparation"></strong><span>1 · “Questa box tiene circa 40 minuti: poi freezer.”</span><span>2 · Offri bag termica se prevista dallo store.</span><span>3 · Per delivery: conserva in freezer fino al ritiro.</span></div>`,
+      'operations.cards.takeAwayThermal.details': `<div class="steps"><strong data-i18n="modal.tab.preparation"></strong><span>1 · Questa box tiene circa 40 minuti: poi freezer.</span><span>2 · Per delivery: conserva in freezer fino al ritiro.</span></div>`,
 
       'operations.cards.closingProcedures.tag1': 'Chiusura',
       'operations.cards.closingProcedures.tag2': 'EOD',
@@ -1227,7 +1227,7 @@
       'operations.cards.takeAwayThermal.title': 'Take-away: thermal hold',
       'operations.cards.takeAwayThermal.desc': 'The thermal box holds about 40 minutes—tell the guest to freeze it as soon as possible.',
       'operations.cards.takeAwayThermal.stats': `<li>Always tell the guest (quality and safety)</li><li>Recommend freezer as soon as possible</li><li>Avoid long waits outside control (riders/queues)</li>`,
-      'operations.cards.takeAwayThermal.details': `<div class="steps"><strong data-i18n="modal.tab.preparation"></strong><span>1 · “This box holds for about 40 minutes: then freezer.”</span><span>2 · Offer an insulated bag if your store has it.</span><span>3 · For delivery: keep in the freezer until pick-up.</span></div>`,
+      'operations.cards.takeAwayThermal.details': `<div class="steps"><strong data-i18n="modal.tab.preparation"></strong><span>1 · This box holds for about 40 minutes: then freezer.</span><span>2 · For delivery: keep in the freezer until pick-up.</span></div>`,
 
             'operations.cards.closingProcedures.tag1': 'Closing',
       'operations.cards.closingProcedures.tag2': 'EOD',
@@ -4306,7 +4306,7 @@
       'operations.cards.takeAwayThermal.title': 'Take-away: autonomía térmica',
       'operations.cards.takeAwayThermal.desc': 'La thermal storage box tiene autonomía máxima de 40 minutos: luego el producto debe volver al freezer.',
       'operations.cards.takeAwayThermal.stats': `<li>Comunícalo siempre (calidad y seguridad)</li><li>Recomienda freezer cuanto antes</li><li>Evita esperas largas fuera de control (rider/colas)</li>`,
-      'operations.cards.takeAwayThermal.details': `<div class="steps"><strong data-i18n="modal.tab.preparation"></strong><span>1 · “Esta box aguanta aprox. 40 minutos: luego freezer.”</span><span>2 · Ofrece bolsa térmica si el store la tiene.</span><span>3 · Delivery: en freezer hasta el pick-up.</span></div>`,
+      'operations.cards.takeAwayThermal.details': `<div class="steps"><strong data-i18n="modal.tab.preparation"></strong><span>1 · Esta box aguanta aprox. 40 minutos: luego freezer.</span><span>2 · Delivery: en freezer hasta el pick-up.</span></div>`,
 
                   'operations.cards.closingProcedures.tag1': 'Cierre',
       'operations.cards.closingProcedures.tag2': 'EOD',
@@ -6059,7 +6059,7 @@
       'operations.cards.takeAwayThermal.title': 'Take-away : autonomie thermique',
       'operations.cards.takeAwayThermal.desc': 'La thermal storage box tient max 40 minutes : après, le produit doit retourner au freezer.',
       'operations.cards.takeAwayThermal.stats': `<li>À communiquer toujours (qualité/sécurité)</li><li>Conseiller freezer dès que possible</li><li>Éviter les longues attentes hors contrôle</li>`,
-      'operations.cards.takeAwayThermal.details': `<div class="steps"><strong data-i18n="modal.tab.preparation"></strong><span>1 · “Cette box tient environ 40 min : ensuite freezer.”</span><span>2 · Propose un sac isotherme si disponible.</span><span>3 · Delivery : au freezer jusqu\'au pick-up.</span></div>`,
+      'operations.cards.takeAwayThermal.details': `<div class="steps"><strong data-i18n="modal.tab.preparation"></strong><span>1 · Cette box tient environ 40 min : ensuite freezer.</span><span>2 · Delivery : au freezer jusqu\'au pick-up.</span></div>`,
 
             'operations.cards.closingProcedures.tag1': 'Fermeture',
       'operations.cards.closingProcedures.tag2': 'Fin de journée',
