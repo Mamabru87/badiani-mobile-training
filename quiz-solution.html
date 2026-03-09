@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Soluzione quiz · Badiani</title>
-  <meta name="description" content="Pagina di soluzione quiz — revisione delle risposte e approfondimento argomenti Badiani Training Orbit." />
+  <title>Soluzione quiz � Badiani</title>
+  <meta name="description" content="Pagina di soluzione quiz � revisione delle risposte e approfondimento argomenti Badiani Training Orbit." />
   <link rel="preload" href="fonts/SuperGroteskC-MedLF.otf" as="font" type="font/opentype" crossorigin />
   <link rel="preload" href="fonts/SuperGroteskB-CdMed.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="styles/site.css?v=20260309_1" />
+  <link rel="stylesheet" href="styles/site.css?v=20260309_6" />
   <script defer src="scripts/i18n.js?v=20260309_1"></script>
   <script defer src="scripts/i18n-manager.js?v=20260309_1"></script>
   <style>
@@ -119,20 +119,20 @@
 </head>
 <body>
   <main class="solution-shell">
-    <p class="solution-eyebrow" data-i18n="quizSolution.eyebrow">Quiz · Soluzione</p>
+    <p class="solution-eyebrow" data-i18n="quizSolution.eyebrow">Quiz � Soluzione</p>
     <h1 class="solution-title" data-i18n="quizSolution.title">Rivedi la risposta corretta</h1>
     <p class="solution-question" data-solution-question data-i18n="quizSolution.loadingQuestion">Caricamento domanda...</p>
     <div class="solution-answer" data-solution-answer data-i18n="quizSolution.loadingAnswer">Caricamento risposta corretta...</div>
     <div class="solution-note" data-solution-explain hidden><strong data-i18n="quizSolution.explainLabel">Spiegazione:</strong> <span data-solution-explain-text></span></div>
     <div class="solution-note" data-solution-tip hidden><strong data-i18n="quizSolution.tipLabel">Suggerimento:</strong> <span data-solution-tip-text></span></div>
     <div class="solution-revisions" data-solution-revisions hidden>
-      <div class="solution-revisions-title">📚 Berny consiglia di rivedere:</div>
+      <div class="solution-revisions-title">?? Berny consiglia di rivedere:</div>
       <div class="solution-revisions-list" data-solution-revisions-list></div>
     </div>
     <div class="solution-actions">
-      <a href="index.html" data-i18n="quizSolution.backHub">⬅ Torna all'hub</a>
-      <a href="#" data-solution-spec hidden data-i18n="quizSolution.openSpecs">📖 Apri specifiche</a>
-      <a href="javascript:history.back()" data-i18n="quizSolution.back">↩ Torna indietro</a>
+      <a href="index.html" data-i18n="quizSolution.backHub">? Torna all'hub</a>
+      <a href="#" data-solution-spec hidden data-i18n="quizSolution.openSpecs">?? Apri specifiche</a>
+      <a href="javascript:history.back()" data-i18n="quizSolution.back">? Torna indietro</a>
     </div>
   </main>
 
@@ -169,7 +169,9 @@
       
       if (q && a) {
         questionEl.textContent = decodeURIComponent(q);
+        questionEl.removeAttribute('data-i18n');
         answerEl.textContent = t('quizSolution.correctAnswerPrefix', null, 'Risposta corretta:') + ' ' + decodeURIComponent(a);
+        answerEl.removeAttribute('data-i18n');
 
         if (explain && explainWrap && explainText) {
           explainText.textContent = decodeURIComponent(explain);
@@ -185,9 +187,9 @@
             specLink.href = href;
             if (specLabel) {
               try {
-                specLink.textContent = `📖 ${decodeURIComponent(specLabel)}`;
+                specLink.textContent = `?? ${decodeURIComponent(specLabel)}`;
               } catch (e) {
-                specLink.textContent = t('quizSolution.openSuggestedCard', null, '📖 Apri scheda consigliata');
+                specLink.textContent = t('quizSolution.openSuggestedCard', null, '?? Apri scheda consigliata');
               }
             }
             specLink.hidden = false;
@@ -197,18 +199,18 @@
         // Mostra le schede di revisione consigliate da Berny
         if (revisions && revisionsWrap && revisionsList) {
           try {
-            console.log('📚 Parsing revisions:', revisions);
+            console.log('?? Parsing revisions:', revisions);
             const cardNames = JSON.parse(decodeURIComponent(revisions));
-            console.log('📚 Parsed cardNames:', cardNames);
+            console.log('?? Parsed cardNames:', cardNames);
             
             if (Array.isArray(cardNames) && cardNames.length > 0) {
               // Mappa il nome della scheda ai file corretti (DEVE CORRISPONDERE a site.js slugToCardName)
               const cardLinks = {
-                'Caffè': { href: 'caffe.html', label: '☕ Torna a Caffè' },
-                'Gelato Lab': { href: 'gelato-lab.html', label: '🍦 Torna a Gelato Lab' },
-                'Dolciumi': { href: 'sweet-treats.html', label: '🍰 Torna a Dolciumi' },
-                'Paste': { href: 'pastries.html', label: '🥐 Torna a Paste' },
-                'Seasonal': { href: 'festive.html', label: '🎄 Torna a Seasonal' },
+                'Caff�': { href: 'caffe.html', label: '? Torna a Caff�' },
+                'Gelato Lab': { href: 'gelato-lab.html', label: '?? Torna a Gelato Lab' },
+                'Dolciumi': { href: 'sweet-treats.html', label: '?? Torna a Dolciumi' },
+                'Paste': { href: 'pastries.html', label: '?? Torna a Paste' },
+                'Seasonal': { href: 'festive.html', label: '?? Torna a Seasonal' },
               };
               
               revisionsList.innerHTML = '';
@@ -225,27 +227,27 @@
                   link.textContent = linkInfo.label;
                   revisionsList.appendChild(link);
                   linksCreated++;
-                  console.log(`✅ Link creato per: ${trimmedName} -> ${linkInfo.href}`);
+                  console.log(`? Link creato per: ${trimmedName} -> ${linkInfo.href}`);
                 } else {
-                  console.warn(`⚠️ Nome scheda non mappato: "${trimmedName}"`);
+                  console.warn(`?? Nome scheda non mappato: "${trimmedName}"`);
                 }
               });
               
               if (linksCreated > 0) {
                 revisionsWrap.hidden = false;
-                console.log(`✅ Berny: ${linksCreated} schede di revisione consigliate`);
+                console.log(`? Berny: ${linksCreated} schede di revisione consigliate`);
               } else {
-                console.warn('⚠️ Nessun link creato - nomi non mappati');
+                console.warn('?? Nessun link creato - nomi non mappati');
                 revisionsWrap.hidden = true;
               }
             } else {
-              console.warn('⚠️ cardNames non è un array o è vuoto:', cardNames);
+              console.warn('?? cardNames non � un array o � vuoto:', cardNames);
             }
           } catch (e) {
-            console.error('❌ Errore parsing schede revisione:', e.message, 'revisions:', revisions);
+            console.error('? Errore parsing schede revisione:', e.message, 'revisions:', revisions);
           }
         } else {
-          console.log('ℹ️ Nessun parametro revisions trovato');
+          console.log('?? Nessun parametro revisions trovato');
         }
       } else {
         questionEl.textContent = t('quizSolution.noQuestion', null, 'Nessuna domanda ricevuta.');

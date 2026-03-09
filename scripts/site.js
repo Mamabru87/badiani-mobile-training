@@ -1,4 +1,4 @@
-document.documentElement.classList.add('has-js');
+﻿document.documentElement.classList.add('has-js');
 
 // ============================================================
 // PRODUCTION LOGGER: Silences console.log/warn in production
@@ -5786,17 +5786,17 @@ const gamification = (() => {
     container.className = 'zero-splash';
     const eyebrow = document.createElement('p');
     eyebrow.className = 'zero-splash__eyebrow';
-    eyebrow.textContent = 'Zero stelline';
+    eyebrow.textContent = tr('zero.eyebrow', null, 'Zero stelline');
     const title = document.createElement('h3');
     title.className = 'zero-splash__title';
-    title.textContent = 'Ops! Sembra tu abbia bisogno di piu zucchero.';
+    title.textContent = tr('zero.title', null, 'Ops! Sembra tu abbia bisogno di piu zucchero.');
     const text = document.createElement('p');
     text.className = 'zero-splash__text';
-    text.textContent = 'Prendi un respiro, riapri il playbook e riprova subito: ogni scheda raccontata vale di nuovo una stellina.';
+    text.textContent = tr('zero.text', null, 'Prendi un respiro, riapri il playbook e riprova subito: ogni scheda raccontata vale di nuovo una stellina.');
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'zero-splash__cta';
-    btn.textContent = 'Riprovo subito';
+    btn.textContent = tr('zero.cta', null, 'Riprovo subito');
     btn.dataset.overlayFocus = 'true';
     btn.addEventListener('click', () => {
       unlockOverlayClose();
@@ -6408,9 +6408,15 @@ const gamification = (() => {
       ? question.steps.map((step, idx) => (prefix ? tr(`${prefix}.step.${idx}`, null, step) : step))
       : question.steps;
     const explainBase = question.explain ?? question.explanation;
-    const localizedExplain = prefix ? tr(`${prefix}.explain`, null, explainBase) : explainBase;
+    const localizedExplain = prefix ? (() => {
+      const result = tr(`${prefix}.explain`, null, explainBase || '');
+      return result === `${prefix}.explain` ? (explainBase || '') : result;
+    })() : explainBase;
     const tipBase = question.tip ?? question.suggestion;
-    const localizedTip = prefix ? tr(`${prefix}.tip`, null, tipBase) : tipBase;
+    const localizedTip = prefix ? (() => {
+      const result = tr(`${prefix}.tip`, null, tipBase || '');
+      return result === `${prefix}.tip` ? '' : result;
+    })() : tipBase;
 
     return {
       ...question,
@@ -7514,7 +7520,7 @@ const gamification = (() => {
     const label = tabTitle ? ` ◆ ${tabTitle}` : '';
     // Force toast to top-center as requested to avoid distraction
     const anchor = { x: window.innerWidth / 2, y: 60 };
-    showToast(`💎 +${amount} cristall${amount > 1 ? 'i' : 'o'}${label} (${crystalsAfter}/${CRYSTALS_PER_STAR})`, { anchor });
+    showToast(`💎 +${amount} ${amount > 1 ? tr('toast.crystal.unitPlural', null, 'cristalli') : tr('toast.crystal.unit', null, 'cristallo')}${label} (${crystalsAfter}/${CRYSTALS_PER_STAR})`, { anchor });
     playCrystalPing(source, evt);
     playCrystalSound();
   }
@@ -7534,7 +7540,7 @@ const gamification = (() => {
     const label = readableTitle ? `: ${readableTitle}` : '';
     // Force toast to top-center for star award too
     const anchor = { x: window.innerWidth / 2, y: 60 };
-    showToast(`⭐ Cristalli -> +1 stella${label}`, { anchor });
+    showToast(`⭐ ${tr('toast.star.awarded', null, 'Cristalli -> +1 stella')}${label}`, { anchor });
     const celebrateSet = state.quizTokens % STARS_FOR_QUIZ === 0;
     const noteLevel = celebrateSet ? 4 : ((state.quizTokens - 1) % STARS_FOR_QUIZ) + 1;
     if (animateFromCrystal) {
@@ -7930,7 +7936,7 @@ const gamification = (() => {
     title.textContent = tr('game.bonus.title', null, '65 stelline completate!');
     const text = document.createElement('p');
     text.className = 'reward-modal__text';
-    text.textContent = `Hai sbloccato il loop completo: stelline azzerate e +${BONUS_POINTS_PER_FULL_SET} punti bonus da spendere in premi cash o prodotti.`;
+    text.textContent = tr('game.bonus.text', { points: BONUS_POINTS_PER_FULL_SET }, `Hai sbloccato il loop completo: stelline azzerate e +${BONUS_POINTS_PER_FULL_SET} punti bonus da spendere in premi cash o prodotti.`);
     const actions = document.createElement('div');
     actions.className = 'reward-modal__actions';
     const ok = document.createElement('button');
@@ -9388,7 +9394,7 @@ Rispondi SOLO con il JSON, nient'altro.`;
         </div>
         <div class="berny-quiz-info">
           <h3 class="berny-quiz-name">Berny</h3>
-          <p class="berny-quiz-status">Il tuo assistente formazione</p>
+          <p class="berny-quiz-status">${tr('berny.header.subtitle', null, 'Il tuo assistente formazione')}</p>
         </div>
       `;
       wrapper.appendChild(bernyHeader);
@@ -9398,7 +9404,7 @@ Rispondi SOLO con il JSON, nient'altro.`;
       chatContainer.className = 'berny-chat-container';
       
       // Messaggio iniziale
-      addBernyMessage('Ci sono. Facciamo subito una domanda. 🎯');
+      addBernyMessage(tr('berny.chat.intro', null, 'Ci sono. Facciamo subito una domanda. 🎯'));
       
       wrapper.appendChild(chatContainer);
     } else {
@@ -9409,7 +9415,7 @@ Rispondi SOLO con il JSON, nient'altro.`;
       
       const intro = document.createElement('p');
       intro.className = 'reward-modal__text';
-      intro.textContent = introText || 'Rispondi correttamente a tutte le domande per vincere.';
+      intro.textContent = introText || tr('quiz.intro.fallback', null, 'Rispondi correttamente a tutte le domande per vincere.');
       wrapper.appendChild(intro);
     }
     
@@ -9430,7 +9436,7 @@ Rispondi SOLO con il JSON, nient'altro.`;
     const later = document.createElement('button');
     later.type = 'button';
     later.className = 'reward-action secondary';
-    later.textContent = isBernyQuiz ? '🙏 Più tardi Berny' : 'Più tardi';
+    later.textContent = isBernyQuiz ? tr('quiz.later.berny', null, '🙏 Più tardi Berny') : tr('quiz.later', null, 'Più tardi');
     actions.appendChild(later);
 
     wrapper.append(progress, stage, actions);
@@ -9529,7 +9535,7 @@ Rispondi SOLO con il JSON, nient'altro.`;
       colA.className = 'quiz-order__col';
       const colATitle = document.createElement('p');
       colATitle.className = 'quiz-order__title';
-      colATitle.textContent = 'Passaggi disponibili';
+      colATitle.textContent = tr('quiz.order.available', null, 'Passaggi disponibili');
       const availableList = document.createElement('div');
       availableList.className = 'quiz-order__list';
       colA.append(colATitle, availableList);
@@ -9538,7 +9544,7 @@ Rispondi SOLO con il JSON, nient'altro.`;
       colB.className = 'quiz-order__col';
       const colBTitle = document.createElement('p');
       colBTitle.className = 'quiz-order__title';
-      colBTitle.textContent = 'Il tuo ordine';
+      colBTitle.textContent = tr('quiz.order.yours', null, 'Il tuo ordine');
       const selectedList = document.createElement('div');
       selectedList.className = 'quiz-order__list quiz-order__list--selected';
       colB.append(colBTitle, selectedList);
@@ -9555,7 +9561,7 @@ Rispondi SOLO con il JSON, nient'altro.`;
         if (!selected.length) {
           const empty = document.createElement('p');
           empty.className = 'quiz-order__empty';
-          empty.textContent = 'Seleziona i passaggi dalla lista a sinistra.';
+          empty.textContent = tr('quiz.order.empty', null, 'Seleziona i passaggi dalla lista a sinistra.');
           selectedList.appendChild(empty);
           return;
         }
@@ -9579,21 +9585,21 @@ Rispondi SOLO con il JSON, nient'altro.`;
           up.type = 'button';
           up.className = 'quiz-order__btn';
           up.textContent = '\u2191';
-          up.setAttribute('aria-label', 'Sposta su');
+          up.setAttribute('aria-label', tr('quiz.order.moveUp', null, 'Sposta su'));
           up.disabled = idx === 0;
 
           const down = document.createElement('button');
           down.type = 'button';
           down.className = 'quiz-order__btn';
           down.textContent = '\u2193';
-          down.setAttribute('aria-label', 'Sposta gi\u00F9');
+          down.setAttribute('aria-label', tr('quiz.order.moveDown', null, 'Sposta gi\u00F9'));
           down.disabled = idx === selected.length - 1;
 
           const remove = document.createElement('button');
           remove.type = 'button';
           remove.className = 'quiz-order__btn quiz-order__btn--remove';
           remove.textContent = '\u00D7';
-          remove.setAttribute('aria-label', 'Rimuovi');
+          remove.setAttribute('aria-label', tr('quiz.order.remove', null, 'Rimuovi'));
 
           up.addEventListener('click', () => {
             if (!sessionActive) return;
@@ -9637,13 +9643,13 @@ Rispondi SOLO con il JSON, nient'altro.`;
       const confirm = document.createElement('button');
       confirm.type = 'button';
       confirm.className = 'reward-action primary';
-      confirm.textContent = 'Conferma ordine';
+      confirm.textContent = tr('quiz.order.confirm', null, 'Conferma ordine');
       confirm.disabled = true;
 
       const reset = document.createElement('button');
       reset.type = 'button';
       reset.className = 'reward-action secondary';
-      reset.textContent = 'Reset';
+      reset.textContent = tr('quiz.order.reset', null, 'Reset');
 
       const syncConfirm = () => {
         confirm.disabled = selected.length !== steps.length;
@@ -9794,14 +9800,14 @@ Rispondi SOLO con il JSON, nient'altro.`;
             // Aggiungi commento casuale di Berny solo nel Test Me (3 domande)
             if (isBernyQuiz && questions.length >= 3) {
               const bernyComments = [
-                'Ottimo! 👏',
-                'Esatto! Continua così! 💪',
-                'Perfetto! Lo sapevo! ✨',
-                'Grande! Stai andando benissimo! 🎯',
-                'Bravo! Hai studiato bene! 📚',
-                'Corretto! Sei sulla strada giusta! 🚀',
-                'Fantastico! Un\'altra giusta! 🌟',
-                'Ben fatto! Avanti così! 💫',
+                tr('berny.comments.0', null, 'Ottimo! 👏'),
+                tr('berny.comments.1', null, 'Esatto! Continua così! 💪'),
+                tr('berny.comments.2', null, 'Perfetto! Lo sapevo! ✨'),
+                tr('berny.comments.3', null, 'Grande! Stai andando benissimo! 🎯'),
+                tr('berny.comments.4', null, 'Bravo! Hai studiato bene! 📚'),
+                tr('berny.comments.5', null, 'Corretto! Sei sulla strada giusta! 🚀'),
+                tr('berny.comments.6', null, 'Fantastico! Un\'altra giusta! 🌟'),
+                tr('berny.comments.7', null, 'Ben fatto! Avanti così! 💫'),
               ];
               const randomComment = bernyComments[Math.floor(Math.random() * bernyComments.length)];
               setTimeout(() => {
@@ -9856,16 +9862,16 @@ Rispondi SOLO con il JSON, nient'altro.`;
 
       // Frasi (brevi) di Berny prima della domanda
       const bernyIntro = [
-        'Vediamo cosa hai studiato…',
-        'Ok, fammi vedere…',
-        'Ci siamo…',
-        'Ecco una domanda…',
+        tr('berny.intro.0', null, 'Vediamo cosa hai studiato…'),
+        tr('berny.intro.1', null, 'Ok, fammi vedere…'),
+        tr('berny.intro.2', null, 'Ci siamo…'),
+        tr('berny.intro.3', null, 'Ecco una domanda…'),
       ];
       const bernyNext = [
-        'Andiamo avanti…',
-        'Prossima…',
-        'Un\'altra al volo…',
-        'Vediamo questa…',
+        tr('berny.next.0', null, 'Andiamo avanti…'),
+        tr('berny.next.1', null, 'Prossima…'),
+        tr('berny.next.2', null, 'Un\'altra al volo…'),
+        tr('berny.next.3', null, 'Vediamo questa…'),
       ];
       const pool = currentIndex === 0 ? bernyIntro : bernyNext;
       const randomQuery = pool[Math.floor(Math.random() * pool.length)];
@@ -9983,10 +9989,10 @@ Rispondi SOLO con il JSON, nient'altro.`;
 
       // Suspense in chat (compatta e persistente)
       const suspenseMessages = [
-        'Ok… ora una più difficile. 🔥',
-        'Sfida finale… 🔥',
-        'Questa è tosta… 🔥',
-        'Vediamo se ci arrivi… 🔥',
+        tr('berny.suspense.0', null, 'Ok… ora una più difficile. 🔥'),
+        tr('berny.suspense.1', null, 'Sfida finale… 🔥'),
+        tr('berny.suspense.2', null, 'Questa è tosta… 🔥'),
+        tr('berny.suspense.3', null, 'Vediamo se ci arrivi… 🔥'),
       ];
       const randomMessage = suspenseMessages[Math.floor(Math.random() * suspenseMessages.length)];
       addBernyMessage(randomMessage, { kind: 'typing' });
@@ -10040,10 +10046,10 @@ Rispondi SOLO con il JSON, nient'altro.`;
               // Commento casuale (solo Test Me)
               if (isBernyQuiz && questions.length >= 3) {
                 const bernyComments = [
-                  'Yes! 🔥',
-                  'Spaccata! 👏',
-                  'Bravissimo! ✨',
-                  'Perfetta! 🎯',
+                  tr('berny.comments.hard.0', null, 'Yes! 🔥'),
+                  tr('berny.comments.hard.1', null, 'Spaccata! 👏'),
+                  tr('berny.comments.hard.2', null, 'Bravissimo! ✨'),
+                  tr('berny.comments.hard.3', null, 'Perfetta! 🎯'),
                 ];
                 const randomComment = bernyComments[Math.floor(Math.random() * bernyComments.length)];
                 setTimeout(() => {
@@ -10093,7 +10099,7 @@ Rispondi SOLO con il JSON, nient'altro.`;
 
       const hint = document.createElement('p');
       hint.className = 'quiz-hint';
-      hint.textContent = 'Seleziona 2 opzioni ERRATE (hai 5 secondi).';
+      hint.textContent = tr('quiz.flash.hint', null, 'Seleziona 2 opzioni ERRATE (hai 5 secondi).');
 
       const timer = document.createElement('div');
       timer.className = 'quiz-timer';
@@ -10285,7 +10291,7 @@ Rispondi SOLO con il JSON, nient'altro.`;
         const title = document.createElement('h3');
         title.className = 'reward-modal__title';
         title.textContent = bernyGenerated 
-          ? 'Ottimo lavoro! 🎉' 
+          ? tr('berny.success.title', null, 'Ottimo lavoro! 🎉') 
           : tr('quiz.mini.success.title', null, 'Mini quiz superato!');
         
         const text = document.createElement('p');
@@ -10293,8 +10299,8 @@ Rispondi SOLO con il JSON, nient'altro.`;
         
         if (bernyGenerated) {
           text.textContent = isCooldownActive()
-            ? `Hai studiato bene! Ho sbloccato "Test me" ma c'è già un gelato in cooldown. Torna tra ${formatDuration(getCooldownRemaining())}.`
-            : 'Hai studiato bene! Ho sbloccato "Test me": è il quiz più difficile che assegna il gelato.';
+            ? tr('berny.success.text.cooldown', { time: formatDuration(getCooldownRemaining()) }, `Hai studiato bene! Ho sbloccato "Test me" ma c'è già un gelato in cooldown. Torna tra ${formatDuration(getCooldownRemaining())}.`)
+            : tr('berny.success.text.ready', null, 'Hai studiato bene! Ho sbloccato "Test me": è il quiz più difficile che assegna il gelato.');
         } else {
           text.textContent = isCooldownActive()
             ? tr('quiz.mini.success.text.cooldown', { time: formatDuration(getCooldownRemaining()) }, `Hai sbloccato "Test me", ma hai già un gelato in cooldown. Torna tra ${formatDuration(getCooldownRemaining())} per provarci.`)
@@ -10406,7 +10412,7 @@ Rispondi SOLO con il JSON, nient'altro.`;
       <div class="berny-avatar-section">
         <img src="assets/avatars/berni%20avatar.png" alt="Berny" class="berny-avatar-loading" />
       </div>
-      <h3 class="reward-modal__title" style="margin-top: 0.5rem; color: #E30613; font-size: 18px;">Berny sta pensando...</h3>
+      <h3 class="reward-modal__title" style="margin-top: 0.5rem; color: #E30613; font-size: 18px;">${tr('berny.loading', null, 'Berny sta pensando...')}</h3>
       <div class="berny-loading-dots" style="margin-top: 0.5rem;">
         <span>.</span><span>.</span><span>.</span>
       </div>
@@ -10418,7 +10424,7 @@ Rispondi SOLO con il JSON, nient'altro.`;
     (async () => {
       let questions = [];
       let bernyGenerated = false;
-      let bernyIntro = 'Fammi vedere cosa hai studiato!';
+      let bernyIntro = tr('berny.intro.default', null, 'Fammi vedere cosa hai studiato!');
 
       try {
         // Sempre try to generate con Berny
@@ -10428,7 +10434,7 @@ Rispondi SOLO con il JSON, nient'altro.`;
         if (bernyQuestion) {
           questions = [bernyQuestion];
           bernyGenerated = true;
-          bernyIntro = 'Andiamo! Ho preparato una domanda per te.';
+          bernyIntro = tr('berny.intro.ready', null, 'Andiamo! Ho preparato una domanda per te.');
           console.log('✅ Domanda generata da Berny');
         } else {
           console.warn('⚠️ Berny non ha generato domanda, uso fallback');
@@ -10442,7 +10448,7 @@ Rispondi SOLO con il JSON, nient'altro.`;
         console.log('📚 Fallback a domande standard del pool');
         const topicQuestions = getSuperEasyQuestionsForVisitedTabs();
         questions = pickQuestionsFromBag('mini-sm', topicQuestions, 1).map(localizeQuizQuestion);
-        bernyIntro = 'Andiamo! Ho preparato una domanda per te.';
+        bernyIntro = tr('berny.intro.ready', null, 'Andiamo! Ho preparato una domanda per te.');
       }
 
       if (!questions.length) {
@@ -10498,7 +10504,7 @@ Rispondi SOLO con il JSON, nient'altro.`;
           const title = document.createElement('h3');
           title.className = 'reward-modal__title';
           title.textContent = bernyGenerated 
-            ? 'Ottimo lavoro! 🎉' 
+            ? tr('berny.success.title', null, 'Ottimo lavoro! 🎉') 
             : tr('quiz.mini.success.title', null, 'Mini quiz superato!');
           
           const text = document.createElement('p');
@@ -10506,8 +10512,8 @@ Rispondi SOLO con il JSON, nient'altro.`;
           
           if (bernyGenerated) {
             text.textContent = isCooldownActive()
-              ? `Hai studiato bene! Ho sbloccato "Test me" ma c'è già un gelato in cooldown. Torna tra ${formatDuration(getCooldownRemaining())}.`
-              : 'Hai studiato bene! Ho sbloccato "Test me": è il quiz più difficile che assegna il gelato.';
+              ? tr('berny.success.text.cooldown', { time: formatDuration(getCooldownRemaining()) }, `Hai studiato bene! Ho sbloccato "Test me" ma c'è già un gelato in cooldown. Torna tra ${formatDuration(getCooldownRemaining())}.`)
+              : tr('berny.success.text.ready', null, 'Hai studiato bene! Ho sbloccato "Test me": è il quiz più difficile che assegna il gelato.');
           } else {
             text.textContent = isCooldownActive()
               ? tr('quiz.mini.success.text.cooldown', { time: formatDuration(getCooldownRemaining()) }, `Hai sbloccato "Test me", ma hai già un gelato in cooldown. Torna tra ${formatDuration(getCooldownRemaining())} per provarci.`)
@@ -10741,20 +10747,9 @@ Rispondi SOLO con il JSON, nient'altro.`;
     saveState();
     updateUI();
 
-    // Se errore Berny, aggiungi il link alla scheda originale per la revisione
-    let revisionsLinks = '';
-    if (bernyMetadata.generatedByBerny && bernyMetadata.basedOnCards?.length > 0) {
-      revisionsLinks = '&revisions=' + encodeURIComponent(JSON.stringify(bernyMetadata.basedOnCards));
-    }
-
-    const prompt = encodeURIComponent(review.prompt || '');
-    const answer = encodeURIComponent(review.correctText || '');
-    const explain = encodeURIComponent(review.explanation || '');
-    const tip = encodeURIComponent(review.suggestion || '');
-    const spec = encodeURIComponent(review.specHref || '');
-    const specLabel = encodeURIComponent(review.specLabel || '');
-    const target = `quiz-solution.html?prompt=${prompt}&answer=${answer}&explain=${explain}&tip=${tip}&spec=${spec}&specLabel=${specLabel}${revisionsLinks}`;
-    window.location.href = target;
+    // Use the same in-app review modal as mini-quiz (consistent UX, no redirect)
+    const lastItem = state.history.quiz[state.history.quiz.length - 1];
+    openWrongReviewModal(lastItem);
   }
 
   function showQuizFailure() {
@@ -11158,18 +11153,18 @@ Rispondi SOLO con il JSON, nient'altro.`;
     container.className = 'reward-modal';
     const title = document.createElement('h3');
     title.className = 'reward-modal__title';
-    title.textContent = afterQuiz ? 'Gelato gi� riscattato' : 'Frena la gola!';
+    title.textContent = afterQuiz ? tr('cooldown.title.after', null, 'Gelato gi\u00e0 riscattato') : tr('cooldown.title', null, 'Frena la gola!');
     const text = document.createElement('p');
     text.className = 'reward-modal__text';
-    text.textContent = `Hai gi� ottenuto un gelato virtuale: non essere ingordo! Aspetta ancora ${formatDuration(
+    text.textContent = tr('cooldown.text', { time: formatDuration(getCooldownRemaining()) }, `Hai gi\u00e0 ottenuto un gelato virtuale: non essere ingordo! Aspetta ancora ${formatDuration(
       getCooldownRemaining()
-    )} prima di tentare di nuovo.`;
+    )} prima di tentare di nuovo.`);
     const actions = document.createElement('div');
     actions.className = 'reward-modal__actions';
     const ok = document.createElement('button');
     ok.type = 'button';
     ok.className = 'reward-action primary';
-    ok.textContent = 'Capito';
+    ok.textContent = tr('cooldown.cta', null, 'Capito');
     ok.dataset.overlayFocus = 'true';
     ok.addEventListener('click', closeOverlay);
     actions.appendChild(ok);
@@ -11192,7 +11187,7 @@ Rispondi SOLO con il JSON, nient'altro.`;
   function formatDuration(ms) {
     const hours = Math.floor(ms / (1000 * 60 * 60));
     const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
-    if (hours <= 0 && minutes <= 0) return 'pochi minuti';
+    if (hours <= 0 && minutes <= 0) return tr('time.fewMinutes', null, 'pochi minuti');
     if (hours <= 0) return `${minutes} min`;
     return minutes > 0 ? `${hours}h ${minutes}m` : `${hours}h`;
   }
@@ -11843,8 +11838,8 @@ sectionMenus.forEach((menu) => {
     const alreadyCelebrated = !!completion.celebrated?.[pageKey];
     if (!prev && next && !alreadyCelebrated) {
       completion.celebrated[pageKey] = true;
-      const categoryName = document.querySelector('h1')?.textContent?.trim() || 'la categoria';
-      showToastLite(`🎉 Complimenti! Hai completato “${categoryName}”.`);
+      const categoryName = document.querySelector('h1')?.textContent?.trim() || tr('category.fallback', null, 'la categoria');
+      showToastLite(tr('category.toast.completed', { name: categoryName }, `🎉 Complimenti! Hai completato “${categoryName}”.`));
     }
 
     saveCompletion(completion);
@@ -12348,7 +12343,7 @@ toggles.forEach((button) => {
     crystalChip.className = 'card-modal-crystals';
     crystalChip.setAttribute('role', 'status');
     crystalChip.setAttribute('aria-live', 'polite');
-    crystalChip.setAttribute('aria-label', 'Cristalli disponibili');
+    crystalChip.setAttribute('aria-label', tr('modal.crystals.aria', null, 'Cristalli disponibili'));
 
     const CRYSTAL_ICON_SVG = `
       <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -12365,7 +12360,7 @@ toggles.forEach((button) => {
         ${CRYSTAL_ICON_SVG}
       </span>
       <span class="card-modal-crystals__value" data-card-modal-crystals>0</span>
-      <span class="card-modal-crystals__suffix" aria-hidden="true">cristalli</span>
+      <span class="card-modal-crystals__suffix" aria-hidden="true">${tr('modal.crystals.suffix', null, 'cristalli')}</span>
     `;
 
     const closeBtn = document.createElement('button');
@@ -12391,7 +12386,10 @@ toggles.forEach((button) => {
     studyToggleBtn.setAttribute('aria-pressed', 'false');
     studyToggleBtn.setAttribute('data-i18n-attr', 'aria-label:modal.studyMode.showAllAria');
     studyToggleBtn.setAttribute('aria-label', tr('modal.studyMode.showAllAria', null, 'Mostra tutto'));
-    studyToggleBtn.innerHTML = '<span class="sr-only" data-i18n="modal.studyMode.showAll">Mostra tutto</span>';
+    const eyeSvg = (on, color) => on
+      ? '<svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="' + color + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
+      : '<svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="' + color + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+    studyToggleBtn.innerHTML = eyeSvg(false, '#ec418c') + '<span class="sr-only" data-i18n="modal.studyMode.showAll">Mostra tutto</span>';
     studyToggleBtn.addEventListener('click', (e) => {
       try { e.preventDefault(); e.stopPropagation(); } catch (err) {}
       toggleAllTabsMode();
@@ -12442,9 +12440,17 @@ toggles.forEach((button) => {
       btn.setAttribute('aria-label', label);
       try { btn.title = label; } catch (e) {}
       try {
+        const strokeCol = allowMultiOpenTabs ? '#fff' : '#ec418c';
+        const svgIcon = eyeSvg(allowMultiOpenTabs, strokeCol);
         const sr = btn.querySelector('.sr-only');
-        if (sr) sr.textContent = label;
-        else btn.textContent = label;
+        if (sr) {
+          sr.textContent = label;
+          const oldSvg = btn.querySelector('.eye-icon');
+          if (oldSvg) oldSvg.remove();
+          sr.insertAdjacentHTML('beforebegin', svgIcon);
+        } else {
+          btn.innerHTML = svgIcon + '<span class="sr-only">' + label + '</span>';
+        }
       } catch (e) {
         btn.textContent = label;
       }
@@ -12527,17 +12533,17 @@ toggles.forEach((button) => {
           suffix.textContent = '';
           suffix.hidden = true;
         }
-        crystalChip.setAttribute('aria-label', 'Stella ottenuta');
+        crystalChip.setAttribute('aria-label', tr('modal.crystals.starred', null, 'Stella ottenuta'));
       } else {
         crystalChip.classList.remove('is-starred');
         if (icon) icon.innerHTML = CRYSTAL_ICON_SVG;
         modalCrystalValue.textContent = String(next);
         modalCrystalValue.hidden = false;
         if (suffix) {
-          suffix.textContent = 'cristalli';
+          suffix.textContent = tr('modal.crystals.suffix', null, 'cristalli');
           suffix.hidden = false;
         }
-        crystalChip.setAttribute('aria-label', 'Cristalli disponibili');
+        crystalChip.setAttribute('aria-label', tr('modal.crystals.aria', null, 'Cristalli disponibili'));
       }
     };
     document.addEventListener('badiani:crystals-updated', handleCrystalUpdate);
