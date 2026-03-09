@@ -1,4 +1,4 @@
-// Super-easy (sm-) quiz translations - English
+﻿// Super-easy (sm-) quiz translations - English
       'quiz.q.sm-001.question': "A colleague prepares the crepe mix and lets it rest for 1 hour: what is the correct fix?",
       'quiz.q.sm-001.option.0': "It’s fine as it is",
       'quiz.q.sm-001.option.1': "Add more flour",
@@ -461,33 +461,9 @@
       'quiz.q.sm-066.option.3': "In the switched-off oven",
       'quiz.q.sm-066.explain': "The standard requires the box to stay in the freezer until the driver arrives.",
 
-      'quiz.q.sm-067.question': "Mulled wine: which setup avoids mechanical errors?",
-      'quiz.q.sm-067.option.0': "Floating inner container",
-      'quiz.q.sm-067.option.1': "Inner container inserted without water",
-      'quiz.q.sm-067.option.2': "Inner container inserted correctly and must not float",
-      'quiz.q.sm-067.option.3': "No inner container",
-      'quiz.q.sm-067.explain': "The standard specifies that the inner container must not “float”.",
 
-      'quiz.q.sm-068.question': "Mulled wine: which warm-up is correct?",
-      'quiz.q.sm-068.option.0': "Level 10 for 5 minutes",
-      'quiz.q.sm-068.option.1': "Level 10 for 25–30 minutes",
-      'quiz.q.sm-068.option.2': "Level 5 for 60 minutes",
-      'quiz.q.sm-068.option.3': "Dial 6/7 immediately without warm-up",
-      'quiz.q.sm-068.explain': "The standard heats at level 10 for 25–30 min, then sets to dial 6/7.",
 
-      'quiz.q.sm-069.question': "Mulled wine: which garnish is standard for service?",
-      'quiz.q.sm-069.option.0': "Cinnamon stick",
-      'quiz.q.sm-069.option.1': "Orange slice",
-      'quiz.q.sm-069.option.2': "Mint",
-      'quiz.q.sm-069.option.3': "Lime",
-      'quiz.q.sm-069.explain': "The standard includes an orange slice in the cup.",
 
-      'quiz.q.sm-070.question': "Mulled wine: which shelf life is correct?",
-      'quiz.q.sm-070.option.0': "Warmed: 30 days; In-box: 3 days",
-      'quiz.q.sm-070.option.1': "Warmed: 3 days; In-box: 30 days",
-      'quiz.q.sm-070.option.2': "Warmed: 7 days; In-box: 7 days",
-      'quiz.q.sm-070.option.3': "Warmed: 1 day; In-box: 14 days",
-      'quiz.q.sm-070.explain': "Standard = 3 days from first warm-up (machine) and 30 days from first opening (box).",
 
       'quiz.q.sm-071.question': "Slitti: in which year was it founded as a coffee roasting company?",
       'quiz.q.sm-071.option.0': "1932",
@@ -650,19 +626,7 @@
       'quiz.q.sm-093.option.3': "10",
       'quiz.q.sm-093.explain': "The standard indicates ice to the ridge line, about 6 large cubes.",
 
-      'quiz.q.sm-094.question': "Mulled wine: where is the mix stored at night after cooling?",
-      'quiz.q.sm-094.option.0': "At room temperature",
-      'quiz.q.sm-094.option.1': "In the freezer",
-      'quiz.q.sm-094.option.2': "In the fridge",
-      'quiz.q.sm-094.option.3': "In the switched-on machine",
-      'quiz.q.sm-094.explain': "The standard calls for cooling, covering with cling film, and storing in the fridge.",
 
-      'quiz.q.sm-095.question': "Mulled wine: what cleaning is correct at the end of service?",
-      'quiz.q.sm-095.option.0': "Only machine exterior",
-      'quiz.q.sm-095.option.1': "Wash inner container and lid with soap and hot water + dry",
-      'quiz.q.sm-095.option.2': "Spray perfume",
-      'quiz.q.sm-095.option.3': "Do not clean",
-      'quiz.q.sm-095.explain': "The standard includes washing internal components and cleaning the exterior with a damp cloth.",
 
       'quiz.q.sm-096.question': "Panettone/Pandoro: what action increases “counter” appeal?",
       'quiz.q.sm-096.option.0': "Always serve cold with no options",

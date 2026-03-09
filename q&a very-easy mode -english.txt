@@ -1,4 +1,4 @@
-A colleague prepares the crepe mix and lets it rest for 1 hour: what is the correct fix?
+﻿A colleague prepares the crepe mix and lets it rest for 1 hour: what is the correct fix?
 A) It’s fine as it is
 B) Add more flour
 C) Increase the minimum rest to 2 hours
@@ -526,70 +526,6 @@ D) In the switched-off oven
 Solution: C
 Motivation: The standard requires the box to stay in the freezer until the driver arrives.
 
-Mulled wine: which setup avoids mechanical errors?
-A) Floating inner container
-B) Inner container inserted without water
-C) Inner container inserted correctly and must not float
-D) No inner container
-Solution: C
-Motivation: The standard specifies that the inner container must not “float”.
-
-Mulled wine: which warm-up is correct?
-A) Level 10 for 5 minutes
-B) Level 10 for 25–30 minutes
-C) Level 5 for 60 minutes
-D) Dial 6/7 immediately without warm-up
-Solution: B
-Motivation: The standard heats at level 10 for 25–30 min, then sets to dial 6/7.
-
-Mulled wine: which garnish is standard for service?
-A) Cinnamon stick
-B) Orange slice
-C) Mint
-D) Lime
-Solution: B
-Motivation: The standard includes an orange slice in the cup.
-
-Mulled wine: which shelf life is correct?
-A) Warmed: 30 days; In-box: 3 days
-B) Warmed: 3 days; In-box: 30 days
-C) Warmed: 7 days; In-box: 7 days
-D) Warmed: 1 day; In-box: 14 days
-Solution: B
-Motivation: Standard = 3 days from first warm-up (machine) and 30 days from first opening (box).
-
-Slitti: in which year was it founded as a coffee roasting company?
-A) 1932
-B) 1969
-C) 1988
-D) 1990
-Solution: B
-Motivation: Founding as a coffee roasting company was in 1969.
-
-Slitti: when did Andrea expand production to chocolate?
-A) 1988
-B) 1990
-C) 1994
-D) 2008
-Solution: B
-Motivation: Historical standard indicates the move to chocolate in 1990.
-
-Slitti: which award is associated with 1994?
-A) Eurochocolate Award
-B) Grand Prix International de la Chocolaterie
-C) Best chocolatier in Italy
-D) None
-Solution: B
-Motivation: 1994 is associated with the Grand Prix International de la Chocolaterie.
-
-Slitti: which praline contains alcohol and how much?
-A) Passion fruit 1.5%
-B) Irish Coffee 0.9%
-C) Origin 0%
-D) All 0.9%
-Solution: B
-Motivation: The Irish Coffee praline contains 0.9% alcohol.
-
 Slitti Coffee Spoons: in which year were they created?
 A) 1969
 B) 1988
@@ -742,22 +678,6 @@ D) 10
 Solution: C
 Motivation: The standard indicates ice to the ridge line, about 6 large cubes.
 
-Mulled wine: where is the mix stored at night after cooling?
-A) At room temperature
-B) In the freezer
-C) In the fridge
-D) In the switched-on machine
-Solution: C
-Motivation: The standard calls for cooling, covering with cling film, and storing in the fridge.
-
-Mulled wine: what cleaning is correct at the end of service?
-A) Only machine exterior
-B) Wash inner container and lid with soap and hot water + dry
-C) Spray perfume
-D) Do not clean
-Solution: B
-Motivation: The standard includes washing internal components and cleaning the exterior with a damp cloth.
-
 Panettone/Pandoro: what action increases “counter” appeal?
 A) Always serve cold with no options
 B) Ask if they want it warm and toast for 10 sec per side
@@ -790,10 +710,3 @@ D) Created in 2008
 Solution: B
 Motivation: They are described as original, secret recipe, and the first “True Spoons”.
 
-Slitti: which “spreadable → type” combination is correct?
-A) Riccosa = dark chocolate cream
-B) Gianera = milk chocolate cream
-C) Slittosa = cocoa spread
-D) Slittosa = milk only
-Solution: C
-Motivation: Slittosa is described as a cocoa spread, while Riccosa is milk chocolate cream and Gianera is dark chocolate cream.

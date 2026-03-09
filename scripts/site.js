@@ -1779,7 +1779,6 @@ scrollButtons.forEach((btn) => {
     { id: 'sweet', file: 'sweet-treats.txt', defaultHref: 'sweet-treats.html?center=1' },
     { id: 'festive', file: 'churros-christmas.txt', defaultHref: 'festive.html?center=1' },
     { id: 'pastries', file: 'pastries.txt', defaultHref: 'pastries.html?center=1' },
-    { id: 'slitti', file: 'slitti-yoyo.txt', defaultHref: 'slitti-yoyo.html?center=1' },
     { id: 'freshdrinks', file: 'drinks.txt', defaultHref: 'caffe.html?center=1' },
     { id: 'caffe', file: 'caffe.txt', defaultHref: 'caffe.html?center=1' },
   ];
@@ -1842,7 +1841,10 @@ scrollButtons.forEach((btn) => {
     if (/(waffl|crepe|cr[eè]p|pancak|porridge|gelato\s*burger|croissant)/i.test(q)) {
       return 'sweet-treats.html?center=1';
     }
-    if (/(churros|vin\s*brul|mulled|panettone|festive)/i.test(q)) {
+    if (/(churros)/i.test(q)) {
+      return 'sweet-treats.html?center=1';
+    }
+    if (/(panettone|pandoro|seasonal|colomba|cioccolata\s*calda)/i.test(q)) {
       return 'festive.html?center=1';
     }
     if (/(cappucc|flat\s*white|americano|latte|schium|espresso|mocha|chai|tea|cioccolat|iced)/i.test(q)) {
@@ -1891,49 +1893,6 @@ scrollButtons.forEach((btn) => {
     return (lastStop > 80 ? cut.slice(0, lastStop + 1) : cut).trim() + '…';
   };
 
-  // Slitti: compute "tavolette/barre" variants by reading the Slitti page.
-  // This avoids hardcoding counts and stays aligned to the actual training file.
-  let slittiTavoletteInfoPromise = null;
-  const getSlittiTavoletteInfo = async () => {
-    if (slittiTavoletteInfoPromise) return slittiTavoletteInfoPromise;
-    slittiTavoletteInfoPromise = (async () => {
-      try {
-        const res = await fetch('slitti-yoyo.html', { cache: 'no-store' });
-        if (!res || !res.ok) return null;
-        const html = await res.text();
-        if (!html) return null;
-        const doc = new DOMParser().parseFromString(html, 'text/html');
-        const cards = Array.from(doc.querySelectorAll('.guide-card'));
-        const pick = (card) => {
-          const tagText = (card.querySelector('.tag-row')?.textContent || '').toLowerCase();
-          const title = (card.querySelector('h3')?.textContent || '').toLowerCase();
-          return tagText.includes('tavolette') || title.includes('tavolette');
-        };
-        const card = cards.find(pick);
-        if (!card) return null;
-
-        const text = (card.textContent || '').toLowerCase();
-        const percSet = new Set();
-        for (const m of text.matchAll(/(\d{2,3})\s*%/g)) {
-          const n = Number(m[1]);
-          if (Number.isFinite(n) && n > 0 && n <= 100) percSet.add(n);
-        }
-        const perc = Array.from(percSet).sort((a, b) => a - b);
-        const labels = perc.map((p) => `${p}%`);
-        const hasCaffeLatte = /caff[eè]\s*latte/.test(text);
-        if (hasCaffeLatte) labels.push('Caffè Latte');
-
-        return {
-          count: labels.length,
-          labels,
-          cardKey: 'tavolette-lattenero-gran-cacao',
-        };
-      } catch {
-        return null;
-      }
-    })();
-    return slittiTavoletteInfoPromise;
-  };
 
   const pickMoodKey = () => {
     if (!moodKeys.length) return '';
@@ -2100,11 +2059,10 @@ scrollButtons.forEach((btn) => {
       // NOTE: story-orbit uses pseudo-cards (steps) and has no carousel items.
       'operations': 11,
       'caffe': 29,
-      'sweet-treats': 14,
+      'sweet-treats': 16,
       'pastries': 10,
-      'slitti-yoyo': 11,
-      'gelato-lab': 10,
-      'festive': 12,
+      'gelato-lab': 16,
+      'festive': 7,
       'story-orbit': 5,
     };
     const fileBySlug = {
@@ -2112,7 +2070,6 @@ scrollButtons.forEach((btn) => {
       'caffe': 'caffe.html',
       'sweet-treats': 'sweet-treats.html',
       'pastries': 'pastries.html',
-      'slitti-yoyo': 'slitti-yoyo.html',
       'gelato-lab': 'gelato-lab.html',
       'festive': 'festive.html',
       'story-orbit': 'story-orbit.html',
@@ -2251,8 +2208,7 @@ scrollButtons.forEach((btn) => {
     { name: 'set-up giornaliero setup daily', label: 'Set-up giornaliero', category: 'Operations & Setup', categoryHref: 'operations.html', card: 'set-up-giornaliero', description: 'Setup giorno' },
     { name: 'servizio caldo pandoro piastra 10 secondi', label: 'Servizio Caldo (Pandoro)', category: 'Operations & Setup', categoryHref: 'operations.html', card: 'servizio-caldo-pandoro', description: 'Warm slice' },
     { name: 'packaging take away treat box delivery', label: 'Packaging take away', category: 'Operations & Setup', categoryHref: 'operations.html', card: 'packaging-take-away', description: 'Delivery' },
-    { name: 'allestimento macchina Vin Brulé setup 600 ml acqua', label: 'Allestimento macchina', category: 'Operations & Setup', categoryHref: 'operations.html', card: 'allestimento-macchina', description: 'Vin Brulé setup' },
-    { name: 'service chiusura Vin Brulé pulizia shelf life', label: 'Service & chiusura', category: 'Operations & Setup', categoryHref: 'operations.html', card: 'service-chiusura', description: 'Fine turno' },
+
     // Caffè Rituals - all drinks
     { name: 'americano', label: 'Americano', category: 'Caffè Rituals', categoryHref: 'caffe.html', tab: 'espresso-core', description: 'Diluito' },
     { name: 'cappuccino', label: 'Cappuccino', category: 'Caffè Rituals', categoryHref: 'caffe.html', tab: 'milk', description: 'Foam classico' },
@@ -2294,25 +2250,21 @@ scrollButtons.forEach((btn) => {
     { name: 'banana loaf dolce pane', label: 'Banana / altri loaf', category: 'Pastry Lab', categoryHref: 'pastries.html', tab: 'cakes', description: 'Banana bread' },
     { name: 'croissant farciti dolce', label: 'Croissant farciti', category: 'Pastry Lab', categoryHref: 'pastries.html', tab: 'croissants', description: 'Croissant riempiti' },
     { name: 'scone buontalenti dolce', label: 'Scone con Buontalenti', category: 'Pastry Lab', categoryHref: 'pastries.html', tab: 'croissants', description: 'Scone' },
-    // Slitti & Yo-Yo (cards)
-    { name: 'timeline essenziale slitti storia premi', label: 'Timeline essenziale', category: 'Slitti & Yo-Yo', categoryHref: 'slitti-yoyo.html', card: 'timeline-essenziale', description: 'Storia e premi' },
-    { name: 'tavolette lattenero gran cacao cioccolato', label: 'Tavolette LatteNero & Gran Cacao', category: 'Slitti & Yo-Yo', categoryHref: 'slitti-yoyo.html', card: 'tavolette-lattenero-gran-cacao', description: 'Cioccolato Slitti' },
-    { name: 'minicake dolce slitti', label: 'Minicake', category: 'Slitti & Yo-Yo', categoryHref: 'slitti-yoyo.html', card: 'minicake', description: 'Mini torta' },
-    { name: 'praline dragee cioccolato', label: 'Praline & Dragéee', category: 'Slitti & Yo-Yo', categoryHref: 'slitti-yoyo.html', card: 'praline-drag-e', description: 'Praline' },
-    { name: 'creme slittosa riccosa gianera dolce', label: 'Creme Slittosa / Riccosa / Gianera', category: 'Slitti & Yo-Yo', categoryHref: 'slitti-yoyo.html', card: 'creme-slittosa-riccosa-gianera', description: 'Creme Slitti' },
-    { name: 'setup stock display fifo yoyo', label: 'Setup & stock', category: 'Slitti & Yo-Yo', categoryHref: 'slitti-yoyo.html', card: 'setup-stock', description: 'Display + FIFO' },
-    { name: 'procedura servizio yoyo wafer tool', label: 'Procedura servizio', category: 'Slitti & Yo-Yo', categoryHref: 'slitti-yoyo.html', card: 'procedura-servizio', description: 'Step operativi' },
-    // Festive
-    { name: 'cottura perfetta churros frittura', label: 'Cottura perfetta', category: 'Festive & Churros', categoryHref: 'festive.html', tab: 'churros', description: 'Frittura' },
-    { name: 'impiattamento upsell dolce', label: 'Impiattamento & upsell', category: 'Festive & Churros', categoryHref: 'festive.html', tab: 'churros', description: 'Presentazione' },
-    { name: 'taglio presentazione panettone', label: 'Taglio & presentazione', category: 'Festive & Churros', categoryHref: 'festive.html', tab: 'mulled', description: 'Panettone' },
-    { name: 'slice calda dolce', label: 'Slice calda', category: 'Festive & Churros', categoryHref: 'festive.html', tab: 'mulled', description: 'Fetta calda' },
-    { name: 'piatto classico festivo', label: 'Piatto classico', category: 'Festive & Churros', categoryHref: 'festive.html', tab: 'mulled', description: 'Piatto' },
-    { name: 'opzione calda festiva', label: 'Opzione calda', category: 'Festive & Churros', categoryHref: 'festive.html', tab: 'mulled', description: 'Opzione calda' },
-    { name: 'mini panettone buontalenti dolce', label: 'Mini panettone con Buontalenti', category: 'Festive & Churros', categoryHref: 'festive.html', tab: 'mulled', description: 'Mini panettone' },
-    { name: 'packaging take away panettone', label: 'Packaging take away', category: 'Festive & Churros', categoryHref: 'festive.html', tab: 'mulled', description: 'Confezione' },
-    { name: 'mulled wine Vin Brulé natale caldo', label: 'Mulled Wine', category: 'Festive & Churros', categoryHref: 'festive.html', tab: 'mulled', description: 'Vin Brulé' },
-    { name: 'churros frittura dolce', label: 'Churros', category: 'Festive & Churros', categoryHref: 'festive.html', tab: 'churros', description: 'Frittura' },
+    // Yo-Yo (now in Gelato Lab)
+    { name: 'setup stock display fifo yoyo', label: 'Setup & stock', category: 'Gelato Lab', categoryHref: 'gelato-lab.html', card: 'setup-stock', description: 'Display + FIFO' },
+    { name: 'procedura servizio yoyo wafer tool', label: 'Procedura servizio', category: 'Gelato Lab', categoryHref: 'gelato-lab.html', card: 'procedura-servizio', description: 'Step operativi' },
+    // Churros (now in Sweet Treats)
+    { name: 'cottura perfetta churros frittura', label: 'Cottura perfetta', category: 'Sweet Treat Atelier', categoryHref: 'sweet-treats.html', card: 'churros', description: 'Frittura' },
+    { name: 'churros frittura dolce', label: 'Churros', category: 'Sweet Treat Atelier', categoryHref: 'sweet-treats.html', card: 'churros', description: 'Frittura' },
+    // Seasonal
+    { name: 'taglio presentazione panettone', label: 'Taglio & presentazione', category: 'Seasonal', categoryHref: 'festive.html', card: 'panettone-classico', description: 'Panettone' },
+    { name: 'slice calda dolce', label: 'Slice calda', category: 'Seasonal', categoryHref: 'festive.html', card: 'servizio-caldo-pandoro', description: 'Fetta calda' },
+    { name: 'piatto classico festivo', label: 'Piatto classico', category: 'Seasonal', categoryHref: 'festive.html', card: 'pandoro-classico', description: 'Piatto' },
+    { name: 'opzione calda festiva', label: 'Opzione calda', category: 'Seasonal', categoryHref: 'festive.html', card: 'hot-chocolate', description: 'Opzione calda' },
+    { name: 'mini panettone buontalenti dolce', label: 'Mini panettone con Buontalenti', category: 'Seasonal', categoryHref: 'festive.html', card: 'packaging-mini-panettone-delivery', description: 'Mini panettone' },
+    { name: 'packaging take away panettone', label: 'Packaging take away', category: 'Seasonal', categoryHref: 'festive.html', card: 'packaging-mini-panettone-delivery', description: 'Confezione' },
+    { name: 'cioccolata calda hot chocolate bevanda', label: 'Cioccolata Calda', category: 'Seasonal', categoryHref: 'festive.html', card: 'hot-chocolate', description: 'Hot Chocolate' },
+    { name: 'colomba pasquale easter dolce', label: 'Colomba', category: 'Seasonal', categoryHref: 'festive.html', card: 'colomba', description: 'Colomba pasquale' },
   ];
 
   // Merge (prefer catalog-derived cards, which stay in sync with new/updated pages).
@@ -2800,7 +2752,7 @@ scrollButtons.forEach((btn) => {
       return {
         message: tr('assistant.churros.message', null, 'Churros: olio a 190�C, porzione 8 pezzi, frittura 8�9 minuti. Zucchero+cannella: 600g + 20g. Ti apro la scheda per gli step.'),
         actions: [
-          { label: tr('assistant.churros.cta', null, 'Apri Churros'), href: 'festive.html?tab=churros&center=1' },
+          { label: tr('assistant.churros.cta', null, 'Apri Churros'), href: 'sweet-treats.html?q=churros&center=1' },
         ],
       };
     }
@@ -2825,14 +2777,6 @@ scrollButtons.forEach((btn) => {
         message: tr('assistant.crepeStd.message', null, 'Cr�pe (standard con salsa): mix riposo =2h in frigo (shelf life 3 giorni). Piastra ben calda (non fumante). Cuoci ~20s per lato, spalma la salsa su met�, chiudi a mezzaluna poi a ventaglio; zucchero a velo + drizzle. Ti apro la scheda con gli step.'),
         actions: [
           { label: tr('assistant.crepeStd.cta', null, 'Apri Crepe con Salsa'), href: 'sweet-treats.html?card=crepe-con-salsa&center=1' },
-        ],
-      };
-    }
-    if (/(vin\s*brul|mulled|\bbrul\b)/i.test(q)) {
-      return {
-        message: tr('assistant.mulled.message', null, 'Vin Brulé: setup macchina con ~600ml acqua, poi warm-up 25–30 min (livello 10) e servizio a 6/7. Conservazione: raffredda e frigo; warmed ~3 giorni, box 30 giorni dall’apertura. Apriamo “Mulled”.'),
-        actions: [
-          { label: tr('assistant.mulled.cta', null, 'Apri Mulled Wine'), href: 'festive.html?tab=mulled&center=1' },
         ],
       };
     }
@@ -2889,37 +2833,7 @@ scrollButtons.forEach((btn) => {
       };
     }
 
-    // Slitti bars (tavolette): compute from the actual Slitti page.
-    if (/(slitti)/i.test(norm) && /(barre|barra|tavolett|cioccolat)/i.test(norm) && /(quanti|numero|tipi|varian|offri|offerta|shop|negozi)/i.test(norm)) {
-      const info = await getSlittiTavoletteInfo();
-      const href = info?.cardKey
-        ? `slitti-yoyo.html?card=${encodeURIComponent(String(info.cardKey))}&center=1`
-        : 'slitti-yoyo.html?center=1';
 
-      if (info && Number.isFinite(info.count) && info.count > 0) {
-        const perc = (info.labels || []).filter((l) => /%$/.test(l));
-        const hasCaffe = (info.labels || []).some((l) => /caff/i.test(l));
-        const parts = [];
-        if (perc.length) parts.push(`LatteNero ${perc.join(' / ')}`);
-        if (hasCaffe) parts.push('Caffè Latte');
-        const detail = parts.length ? ` (in scheda: ${parts.join(' + ')})` : '';
-        return {
-          message: `Barre Slitti (tavolette): ${info.count} tipologie${detail}. Per sicurezza, apri la scheda e verifica l'assortimento esposto.`,
-          actions: [
-            { label: 'Apri Tavolette Slitti', href },
-          ],
-          examples: ['Quali sono le varianti LatteNero?', 'Come si conserva il cioccolato?', 'Che cos�� Yo-Yo?'],
-        };
-      }
-
-      return {
-        message: 'Per contare le tavolette Slitti devo leggere la scheda (qui sul momento non riesco a recuperare l�elenco). Ti porto direttamente alla sezione giusta.',
-        actions: [
-          { label: 'Apri Slitti & Yo-Yo', href },
-        ],
-        examples: ['Quali percentuali LatteNero abbiamo?', 'Conservazione cioccolato: quanti �C?'],
-      };
-    }
 
     // 1) Rules (high confidence)
     const ruled = assistantRuleAnswer(raw);
@@ -4392,20 +4306,14 @@ const gamification = (() => {
                    'tm-033', 'tm-034', 'tm-035', 'tm-036', 'tm-037', 'tm-038', 'tm-039', 'tm-040',
                    'tm-041'],
     
-    // Drinks (Smoothie, Matcha, Cocktails, Mulled Wine)
+    // Drinks (Smoothie, Matcha, Cocktails)
     'caffe': ['tm-042', 'tm-043', 'tm-044', 'tm-045', 'tm-046', 'tm-047', 'tm-048', 'tm-049', 
               'tm-050', 'tm-051', 'tm-052', 'tm-053', 'tm-054', 'tm-055', 'tm-056', 'tm-057',
               'tm-058', 'tm-059'],
     
-    // Sweet Treats & Festive (Churros, Panettone, Pandoro, Mulled Wine)
-    'pastries': ['tm-060', 'tm-061', 'tm-062', 'tm-063', 'tm-064', 'tm-065', 'tm-066', 'tm-067',
-                 'tm-068', 'tm-069', 'tm-070'],
+    // Sweet Treats & Seasonal (Panettone, Pandoro, Cioccolata Calda, Colomba)
+    'pastries': ['tm-060', 'tm-061', 'tm-062', 'tm-063', 'tm-064', 'tm-065', 'tm-066'],
     
-    // Slitti History, Products, Yo-Yo & Advanced Gelato Service
-    'slitti-yoyo': ['tm-071', 'tm-072', 'tm-073', 'tm-074', 'tm-075', 'tm-076', 'tm-077', 'tm-078',
-                    'tm-079', 'tm-080', 'tm-081', 'tm-082', 'tm-083', 'tm-084', 'tm-085', 'tm-086',
-                    'tm-087', 'tm-088', 'tm-089', 'tm-090', 'tm-091', 'tm-092', 'tm-093', 'tm-094',
-                    'tm-095', 'tm-096', 'tm-097', 'tm-098', 'tm-099', 'tm-100'],
   };
 
   // Super-easy mode (sm-) questions: distributed across 5 topics (sm-001 to sm-100)
@@ -4422,17 +4330,10 @@ const gamification = (() => {
     'caffe': ['sm-032', 'sm-033', 'sm-034', 'sm-035', 'sm-036', 'sm-037', 'sm-038', 'sm-039',
               'sm-040', 'sm-041', 'sm-042', 'sm-043'],
     
-    // Treats & Festive
+    // Treats & Seasonal
     'pastries': ['sm-044', 'sm-045', 'sm-046', 'sm-047', 'sm-048', 'sm-049', 'sm-050', 'sm-051',
                  'sm-052', 'sm-053'],
     
-    // Slitti Yo-Yo & Advanced
-    'slitti-yoyo': ['sm-054', 'sm-055', 'sm-056', 'sm-057', 'sm-058', 'sm-059', 'sm-060', 'sm-061',
-                    'sm-062', 'sm-063', 'sm-064', 'sm-065', 'sm-066', 'sm-067', 'sm-068', 'sm-069',
-                    'sm-070', 'sm-071', 'sm-072', 'sm-073', 'sm-074', 'sm-075', 'sm-076', 'sm-077',
-                    'sm-078', 'sm-079', 'sm-080', 'sm-081', 'sm-082', 'sm-083', 'sm-084', 'sm-085',
-                    'sm-086', 'sm-087', 'sm-088', 'sm-089', 'sm-090', 'sm-091', 'sm-092', 'sm-093',
-                    'sm-094', 'sm-095', 'sm-096', 'sm-097', 'sm-098', 'sm-099', 'sm-100'],
   };
 
   // Legacy structure: keep QUIZ_QUESTIONS flat
@@ -4900,104 +4801,6 @@ const gamification = (() => {
       explain: 'Lo standard prevede che la box vada in freezer finch� arriva il driver.',
     },
     {
-      id: 'tm-067',
-      question: 'Mulled wine: quale setup evita errori meccanici?',
-      options: ['Inner container che galleggia', 'Inner container inserito senza acqua', 'Inner container inserito correttamente e non deve galleggiare', 'Nessun inner container'],
-      correct: 2,
-      explain: 'Lo standard specifica che l�inner container non deve �float�.',
-    },
-    {
-      id: 'tm-068',
-      question: 'Mulled wine: quale warm-up � corretto?',
-      options: ['Level 10 per 5 minuti', 'Level 10 per 25�30 minuti', 'Level 5 per 60 minuti', 'Dial 6/7 subito senza warm-up'],
-      correct: 1,
-      explain: 'Lo standard scalda a livello 10 per 25�30 min, poi imposta dial 6/7.',
-    },
-    {
-      id: 'tm-069',
-      question: 'Mulled wine: quale garnish � standard in servizio?',
-      options: ['Cannella in stecca', 'Fetta d�arancia', 'Menta', 'Lime'],
-      correct: 1,
-      explain: 'Lo standard prevede una fetta d�arancia nella cup.',
-    },
-    {
-      id: 'tm-070',
-      question: 'Mulled wine: quale shelf life � corretta?',
-      options: ['Scaldato: 30 giorni; In-box: 3 giorni', 'Scaldato: 3 giorni; In-box: 30 giorni', 'Scaldato: 7 giorni; In-box: 7 giorni', 'Scaldato: 1 giorno; In-box: 14 giorni'],
-      correct: 1,
-      explain: 'Standard = 3 giorni dal primo warm-up (macchina) e 30 giorni dalla prima apertura (box).',
-    },
-    {
-      id: 'tm-071',
-      question: 'Slitti: in che anno nasce come torrefazione?',
-      options: ['1932', '1969', '1988', '1990'],
-      correct: 1,
-      explain: 'La fondazione come coffee roasting company � nel 1969.',
-    },
-    {
-      id: 'tm-072',
-      question: 'Slitti: quando Andrea espande la produzione al cioccolato?',
-      options: ['1988', '1990', '1994', '2008'],
-      correct: 1,
-      explain: 'Lo standard storico indica il passaggio al cioccolato nel 1990.',
-    },
-    {
-      id: 'tm-073',
-      question: 'Slitti: quale premio � associato al 1994?',
-      options: ['Eurochocolate Award', 'Grand Prix International de la Chocolaterie', 'Best chocolatier in Italy', 'Nessuno'],
-      correct: 1,
-      explain: 'Nel 1994 � associato il Grand Prix International de la Chocolaterie.',
-    },
-    {
-      id: 'tm-074',
-      question: 'Slitti: quale pralina contiene alcol e quanto?',
-      options: ['Passion fruit 1.5%', 'Irish Coffee 0.9%', 'Origin 0%', 'Tutte 0.9%'],
-      correct: 1,
-      explain: 'La pralina Irish Coffee contiene 0.9% di alcol.',
-    },
-    {
-      id: 'tm-075',
-      question: 'Slitti Coffee Spoons: in che anno vengono create?',
-      options: ['1969', '1988', '1993', '2008'],
-      correct: 2,
-      explain: 'Le �Coffee Spoons� sono create nel 1993.',
-    },
-    {
-      id: 'tm-076',
-      question: 'Dragee Pistacchi di Bronte: come sono descritti?',
-      options: ['Solo cioccolato fondente', 'Pistacchi tostati coperti da strato di cioccolato bianco e latte, finiti con zucchero a velo', 'Pistacchi salati senza copertura', 'Pistacchi al caramello salato'],
-      correct: 1,
-      explain: 'Lo standard descrive Bronte pistachios tostati con copertura white + milk chocolate e finitura zucchero a velo.',
-    },
-    {
-      id: 'tm-077',
-      question: 'Dragee �Grani di Arabica�: quale copertura � citata?',
-      options: ['64% dark chocolate', '45% milk chocolate', '82% dark chocolate', 'White chocolate'],
-      correct: 0,
-      explain: 'I grani di Arabica sono coperti con un sottile strato di 64% dark chocolate.',
-    },
-    {
-      id: 'tm-078',
-      question: 'Spread Slittosa: percentuale nocciole Langhe?',
-      options: ['37%', '51%', '57%', '64%'],
-      correct: 0,
-      explain: 'Slittosa � descritta con 37% di nocciole delle Langhe.',
-    },
-    {
-      id: 'tm-079',
-      question: 'Spread Riccosa: percentuale nocciole Langhe?',
-      options: ['37%', '51%', '57%', '73%'],
-      correct: 1,
-      explain: 'Riccosa � descritta con 51% di nocciole delle Langhe.',
-    },
-    {
-      id: 'tm-080',
-      question: 'Spread Gianera: percentuale nocciole Langhe?',
-      options: ['37%', '51%', '57%', '82%'],
-      correct: 2,
-      explain: 'Gianera � descritta con 57% di nocciole delle Langhe.',
-    },
-    {
       id: 'tm-081',
       question: 'Yo-Yo: qual è la porzione gelato standard?',
       options: ['50�60g', '70g', '80�90g', '120g'],
@@ -5089,20 +4892,6 @@ const gamification = (() => {
       explain: 'Lo standard indica ghiaccio fino al ridge line, circa 6 cubi grandi.',
     },
     {
-      id: 'tm-094',
-      question: 'Mulled wine: dove si conserva la miscela la notte dopo raffreddamento?',
-      options: ['A temperatura ambiente', 'In freezer', 'In frigo', 'In macchina accesa'],
-      correct: 2,
-      explain: 'Lo standard prevede raffreddare, coprire con cling film e conservare in frigo.',
-    },
-    {
-      id: 'tm-095',
-      question: 'Mulled wine: quale pulizia � corretta a fine servizio?',
-      options: ['Solo esterno macchina', 'Lavare inner container e lid con sapone e acqua calda + asciugare', 'Spruzzare profumo', 'Non pulire'],
-      correct: 1,
-      explain: 'Lo standard prevede lavaggio dei componenti interni e pulizia esterna con panno umido.',
-    },
-    {
       id: 'tm-096',
       question: 'Panettone/Pandoro: quale azione aumenta l�appeal �al banco�?',
       options: ['Servire sempre freddo senza opzioni', 'Chiedere se lo vogliono warm e tostare 10 sec per lato', 'Friggerlo', 'Mettere olio sulla piastra'],
@@ -5122,20 +4911,6 @@ const gamification = (() => {
       options: ['Non proporre nulla', 'Proporre whipped cream o passare al cono chocolate', 'Proporre solo acqua', 'Proporre spezie salate'],
       correct: 1,
       explain: 'Lo standard suggerisce upsell con whipped cream o cono chocolate.',
-    },
-    {
-      id: 'tm-099',
-      question: 'Slitti: quale affermazione � corretta sulle coffee spoons?',
-      options: ['Ricetta pubblica e replicabile', 'Ricetta segreta e �first True Spoons�', 'Solo gusto fragola', 'Create nel 2008'],
-      correct: 1,
-      explain: 'Sono descritte come originali, ricetta segreta e prime �True Spoons�.',
-    },
-    {
-      id: 'tm-100',
-      question: 'Slitti: quale combinazione �spalmabile ? tipo� � corretta?',
-      options: ['Riccosa = dark chocolate cream', 'Gianera = milk chocolate cream', 'Slittosa = cocoa spread', 'Slittosa = solo latte'],
-      correct: 2,
-      explain: 'Slittosa � descritta come cocoa spread, mentre Riccosa � milk chocolate cream e Gianera dark chocolate cream.',
     },
   ];
 
@@ -6511,14 +6286,13 @@ const gamification = (() => {
       return { href: 'gelato-lab.html?card=coni-classici&tab=parametri&center=1', label: 'Apri Coni classici' };
     }
 
-    if (has('churro', 'churros', 'panettone', 'pandoro', 'vin brulé', 'vin brule', 'vin chaud', 'mulled', 'vino caliente')) {
-      if (has('mulled', 'vin brulé', 'vin brule', 'vin chaud', 'vino caliente')) {
-        return { href: 'festive.html?q=mulled-wine-vin-brul', label: 'Apri Mulled Wine' };
-      }
+    if (has('churro', 'churros', 'panettone', 'pandoro', 'colomba', 'cioccolata calda')) {
       if (has('pandoro')) return { href: 'festive.html?q=pandoro-classico', label: 'Apri Pandoro' };
       if (has('panettone')) return { href: 'festive.html?q=panettone-classico', label: 'Apri Panettone' };
-      if (has('churro', 'churros')) return { href: 'festive.html?q=churros', label: 'Apri Churros' };
-      return { href: 'festive.html', label: 'Apri Festive' };
+      if (has('colomba')) return { href: 'festive.html?q=colomba', label: 'Apri Colomba' };
+      if (has('cioccolata calda')) return { href: 'festive.html?q=hot-chocolate', label: 'Apri Cioccolata Calda' };
+      if (has('churro', 'churros')) return { href: 'sweet-treats.html?q=churros', label: 'Apri Churros' };
+      return { href: 'festive.html', label: 'Apri Seasonal' };
     }
 
     if (has('espresso', 'cappuccino', 'americano', 'flat white', 'macchiato', 'shot', 'estrazione', 'grinder', 'steam', 'wand', 'portafiltro', 'tamper', 'latte')) {
@@ -6548,8 +6322,8 @@ const gamification = (() => {
       return { href: 'sweet-treats.html', label: 'Apri Sweet Treats' };
     }
 
-    if (has('slitti', 'yo-yo', 'yoyo')) {
-      return { href: 'slitti-yoyo.html?q=slitti-timeline', label: 'Apri Slitti & Yo-Yo' };
+    if (has('yo-yo', 'yoyo')) {
+      return { href: 'gelato-lab.html?q=yoyo', label: 'Apri Yo-Yo' };
     }
     // Affogati/affogato (es. Dirty Matcha Affogato) vivono in Bar & Drinks, non in Gelato Lab
     if (has('affogato', 'affogati', 'dirty matcha')) {
@@ -6744,20 +6518,13 @@ const gamification = (() => {
           'brownie': { href: 'pastries.html?q=brownie', label: '🥐 Apri Brownie' },
         }
       },
-      'Slitti Yoyo': {
-        default: { href: 'slitti-yoyo.html', label: '🍫 Torna a Slitti Yoyo' },
-        keywords: {
-          'slitti': { href: 'slitti-yoyo.html?q=slitti-timeline', label: '🍫 Apri Timeline' },
-          'yoyo': { href: 'slitti-yoyo.html?q=slitti-timeline', label: '🍫 Apri Timeline' },
-        }
-      },
-      'Festivo': {
-        default: { href: 'festive.html', label: '🎄 Torna a Festivo' },
+
+      'Seasonal': {
+        default: { href: 'festive.html', label: '🎄 Torna a Seasonal' },
         keywords: {
           'panettone': { href: 'festive.html?q=panettone-classico', label: '🎄 Apri Panettone' },
           'pandoro': { href: 'festive.html?q=pandoro-classico', label: '🎄 Apri Pandoro' },
-          'churro': { href: 'festive.html?q=churros', label: '🎄 Apri Churros' },
-          'vin brulé': { href: 'festive.html?q=mulled-wine-vin-brul', label: '🎄 Apri Mulled Wine' },
+          'churro': { href: 'sweet-treats.html?q=churros', label: '🍩 Apri Churros' },
         }
       },
       'Story Orbit': {
@@ -7701,7 +7468,7 @@ const gamification = (() => {
         tryAwardChapter(id, storyMedia, evt);
         if (!prereq?.[id]?.tab) {
           const anchor = getOriginPoint(storyMedia, evt);
-          showToast('Foto ok. Ora seleziona il capitolo per completare il cristallo.', { anchor });
+          showToast(tr('storyOrbit.toastPhotoOk'), { anchor });
         }
       };
       storyMedia.addEventListener('click', onPhoto);
@@ -7721,7 +7488,7 @@ const gamification = (() => {
         tryAwardChapter(id, node, evt);
         if (!prereq?.[id]?.photo) {
           const anchor = getOriginPoint(node, evt);
-          showToast('Capitolo selezionato. Ora clicca la foto a sinistra per completare il cristallo.', { anchor });
+          showToast(tr('storyOrbit.toastChapterSelected'), { anchor });
         }
       });
     });
@@ -8179,7 +7946,6 @@ const gamification = (() => {
 
   const KNOWN_PAGE_SLUGS = [
     'sweet-treats',
-    'slitti-yoyo',
     'gelato-lab',
     'story-orbit',
     'pastries',
@@ -8230,9 +7996,9 @@ const gamification = (() => {
     if (/(espresso|cappuccino|latte\b|americano|flat white|macchiato|steam|wand|grinder|portafiltro|shot|crema\b)/i.test(blob)) slugs.add('caffe');
     if (/(waffle|pancake|crepe|cr[eè]pes|porridge|afternoon tea|gelato burger|gelato croissant)/i.test(blob)) slugs.add('sweet-treats');
     if (/(croissant|brownie|cake\b|scone|loaf)/i.test(blob)) slugs.add('pastries');
-    if (/(slitti|praline|drag[ée]e|crema slitti|yo-yo|yoyo)/i.test(blob)) slugs.add('slitti-yoyo');
+    if (/(praline|drag[ée]e|yo-yo|yoyo)/i.test(blob)) slugs.add('gelato-lab');
     if (/(gelato|buontalenti|vetrina|spatolatura|vaschetta|coni\b|coppette|affogato premium|stracciatella|nocciola|pistachio)/i.test(blob)) slugs.add('gelato-lab');
-    if (/(churros|mulled|Vin Brulée�]|panettone|pandoro|natale|festiv)/i.test(blob)) slugs.add('festive');
+    if (/(churros|colomba|cioccolata\s*calda|panettone|pandoro|natale|festiv)/i.test(blob)) slugs.add('festive');
     if (/(story orbit)/i.test(blob)) slugs.add('story-orbit');
 
     // Theme heuristics.
@@ -8259,7 +8025,6 @@ const gamification = (() => {
     { id: 'pastry-croissant', label: 'Croissant', image: 'assets/products/pastry-croissant.webp', slug: 'pastries' },
     { id: 'pastry-brownie', label: 'Brownie', image: 'assets/products/pastry-brownie.webp', slug: 'pastries' },
     { id: 'pastry-cake', label: 'Cake', image: 'assets/products/pastry-cake.webp', slug: 'pastries' },
-    { id: 'slitti-praline', label: 'Praline', image: 'assets/products/slitti-praline.webp', slug: 'slitti-yoyo' },
     { id: 'gelato-box', label: 'Gelato Box', image: 'assets/products/gelato-box.webp', slug: 'gelato-lab' },
     { id: 'gelato-cones', label: 'Coni gelato', image: 'assets/products/gelato-cones.webp', slug: 'gelato-lab' },
     { id: 'festive-churros', label: 'Churros', image: 'assets/products/festive-churros.webp', slug: 'festive' },
@@ -8312,9 +8077,8 @@ const gamification = (() => {
       'caffe': 'caffe',
       'sweet-treats': 'sweet-treats',
       'pastries': 'pastries',
-      'slitti-yoyo': 'slitti-yoyo',
       'gelato-lab': 'gelato-lab',
-      'festive': 'pastries',  // Festive maps to pastries (panettone/mulled wine)
+      'festive': 'pastries',  // Festive maps to pastries (panettone/pandoro/colomba)
     };
     
     // Collect topics from visited pages
@@ -8356,7 +8120,6 @@ const gamification = (() => {
       'caffe': 'caffe',
       'sweet-treats': 'sweet-treats',
       'pastries': 'pastries',
-      'slitti-yoyo': 'slitti-yoyo',
       'gelato-lab': 'gelato-lab',
       'festive': 'pastries',
     };
@@ -8445,8 +8208,7 @@ const gamification = (() => {
         'gelato-lab': 'Gelato Lab',
         'sweet-treats': 'Dolciumi',
         'pastries': 'Paste',
-        'slitti-yoyo': 'Slitti Yoyo',
-        'festive': 'Festivo'
+        'festive': 'Seasonal'
       };
       
       // Normalizza i titoli usando i slug
@@ -8591,6 +8353,36 @@ Rispondi SOLO con il JSON, nient'altro.`;
               options: ['5 bar', '9 bar', '15 bar', '20 bar'],
               correct: 1,
               explanation: 'La pressione ideale per l\'estrazione dell\'espresso è di 9 bar.'
+            },
+            {
+              question: 'Americano single: quale formato di acqua calda è corretto?',
+              options: ['4 oz', '8 oz', '12 oz', '16 oz'],
+              correct: 1,
+              explanation: 'Americano single = 1 shot + 8 oz di acqua calda.'
+            },
+            {
+              question: 'Cappuccino: quale frazione del volume totale deve essere foam (schiuma)?',
+              options: ['1/5', '1/4', '1/3', '1/2'],
+              correct: 2,
+              explanation: 'Il cappuccino standard ha circa 1/3 di foam sul volume totale.'
+            },
+            {
+              question: 'Flat White: quanti secondi di stretch servono per il latte?',
+              options: ['1 secondo', '3 secondi', '8 secondi', '15 secondi'],
+              correct: 1,
+              explanation: 'Flat White: stretch 3 secondi, poi whirlpool per microfoam vellutata.'
+            },
+            {
+              question: 'A quale temperatura si prepara l\'acqua per il matcha per evitare di bruciarlo?',
+              options: ['60°C', '70°C', '80°C', '100°C'],
+              correct: 2,
+              explanation: 'Il matcha si prepara con acqua a 80°C per non bruciare la polvere.'
+            },
+            {
+              question: 'Americano double: quale formato di acqua calda è corretto?',
+              options: ['4 oz', '8 oz', '12 oz', '16 oz'],
+              correct: 2,
+              explanation: 'Americano double = 2 shot + 12 oz di acqua calda.'
             }
           ],
           'gelato-lab': [
@@ -8657,6 +8449,24 @@ Rispondi SOLO con il JSON, nient'altro.`;
               options: ['1-2 giorni', '5-7 giorni', '2 settimane', '1 mese'],
               correct: 1,
               explanation: 'I biscotti artigianali si mantengono freschi per 5-7 giorni in contenitore ermetico.'
+            },
+            {
+              question: 'Quante volte va girata la crepe prima di aggiungere la salsa?',
+              options: ['1 volta', '2 volte', '3 volte', 'Non va girata'],
+              correct: 1,
+              explanation: 'La crepe va girata due volte prima di aggiungere la farcitura.'
+            },
+            {
+              question: 'Qual \u00e8 la shelf life del mix crepe in frigo?',
+              options: ['1 giorno', '3 giorni', '7 giorni', '14 giorni'],
+              correct: 1,
+              explanation: 'Il mix crepe ha una shelf life di 3 giorni in frigo.'
+            },
+            {
+              question: 'Quali sono le tre salse signature per le crepe Badiani?',
+              options: ['Fragola, Mango, Caramello', 'Pistacchio, Nocciola, Cioccolato', 'Vaniglia, Limone, Lampone', 'Cocco, Menta, Caffè'],
+              correct: 1,
+              explanation: 'Le tre salse signature sono Pistacchio, Nocciola e Cioccolato.'
             }
           ],
           'festive': [
@@ -8679,20 +8489,7 @@ Rispondi SOLO con il JSON, nient'altro.`;
               explanation: 'Il pandoro si conserva a temperatura ambiente in sacchetto o contenitore chiuso.'
             }
           ],
-          'slitti-yoyo': [
-            {
-              question: 'Qual è la caratteristica principale che distingue il cioccolato Slitti dagli altri?',
-              options: ['È il più economico', 'È artigianale e di alta qualità', 'È prodotto industrialmente', 'Contiene conservanti'],
-              correct: 1,
-              explanation: 'Slitti produce cioccolato artigianale di alta qualità con metodi tradizionali.'
-            },
-            {
-              question: 'A quale temperatura va conservato il cioccolato Slitti per mantenerne le proprietà?',
-              options: ['In frigorifero a 4°C', '16-18°C in luogo asciutto', 'A temperatura ambiente 22-25°C', 'Nel freezer'],
-              correct: 1,
-              explanation: 'Il cioccolato si conserva meglio a 16-18°C in luogo fresco e asciutto.'
-            }
-          ]
+
         },
         en: {
           'caffe': [
@@ -8725,6 +8522,36 @@ Rispondi SOLO con il JSON, nient'altro.`;
               options: ['5 bar', '9 bar', '15 bar', '20 bar'],
               correct: 1,
               explanation: 'The ideal pressure for espresso extraction is 9 bar.'
+            },
+            {
+              question: 'Single Americano: what is the correct amount of hot water?',
+              options: ['4 oz', '8 oz', '12 oz', '16 oz'],
+              correct: 1,
+              explanation: 'Single Americano = 1 shot + 8 oz of hot water.'
+            },
+            {
+              question: 'Cappuccino: what fraction of the total volume should be foam?',
+              options: ['1/5', '1/4', '1/3', '1/2'],
+              correct: 2,
+              explanation: 'A standard cappuccino has about 1/3 foam by total volume.'
+            },
+            {
+              question: 'Flat White: how many seconds of stretch for the milk?',
+              options: ['1 second', '3 seconds', '8 seconds', '15 seconds'],
+              correct: 1,
+              explanation: 'Flat White: stretch 3 seconds, then whirlpool to create velvety microfoam.'
+            },
+            {
+              question: 'At what temperature should water be prepared for matcha to avoid burning it?',
+              options: ['60°C', '70°C', '80°C', '100°C'],
+              correct: 2,
+              explanation: 'Matcha is prepared with 80°C water to avoid burning the powder.'
+            },
+            {
+              question: 'Double Americano: what is the correct amount of hot water?',
+              options: ['4 oz', '8 oz', '12 oz', '16 oz'],
+              correct: 2,
+              explanation: 'Double Americano = 2 shots + 12 oz of hot water.'
             }
           ],
           'gelato-lab': [
@@ -8791,6 +8618,24 @@ Rispondi SOLO con il JSON, nient'altro.`;
               options: ['1-2 days', '5-7 days', '2 weeks', '1 month'],
               correct: 1,
               explanation: 'Artisan cookies stay fresh for 5-7 days in an airtight container.'
+            },
+            {
+              question: 'How many times should you flip the crepe before adding the sauce?',
+              options: ['1 time', '2 times', '3 times', 'Do not flip'],
+              correct: 1,
+              explanation: 'The crepe should be flipped twice before adding the filling.'
+            },
+            {
+              question: 'What is the shelf life of crepe mix in the fridge?',
+              options: ['1 day', '3 days', '7 days', '14 days'],
+              correct: 1,
+              explanation: 'Crepe mix has a shelf life of 3 days in the fridge.'
+            },
+            {
+              question: 'What are the three signature sauces for Badiani crepes?',
+              options: ['Strawberry, Mango, Caramel', 'Pistachio, Hazelnut, Chocolate', 'Vanilla, Lemon, Raspberry', 'Coconut, Mint, Coffee'],
+              correct: 1,
+              explanation: 'The three signature sauces are Pistachio, Hazelnut and Chocolate.'
             }
           ],
           'festive': [
@@ -8813,20 +8658,7 @@ Rispondi SOLO con il JSON, nient'altro.`;
               explanation: 'Pandoro is stored at room temperature in a sealed bag or container.'
             }
           ],
-          'slitti-yoyo': [
-            {
-              question: 'What is the main characteristic that distinguishes Slitti chocolate from others?',
-              options: ['It is the cheapest', 'It is artisanal and high quality', 'It is industrially produced', 'It contains preservatives'],
-              correct: 1,
-              explanation: 'Slitti produces artisanal high-quality chocolate with traditional methods.'
-            },
-            {
-              question: 'At what temperature should Slitti chocolate be stored to maintain its properties?',
-              options: ['In the refrigerator at 4°C', '16-18°C in a dry place', 'At room temperature 22-25°C', 'In the freezer'],
-              correct: 1,
-              explanation: 'Chocolate is best stored at 16-18°C in a cool, dry place.'
-            }
-          ]
+
         },
         es: {
           'caffe': [
@@ -8859,6 +8691,36 @@ Rispondi SOLO con il JSON, nient'altro.`;
               options: ['5 bar', '9 bar', '15 bar', '20 bar'],
               correct: 1,
               explanation: 'La presión ideal para la extracción del espresso es de 9 bares.'
+            },
+            {
+              question: 'Americano single: ¿cuál es la cantidad correcta de agua caliente?',
+              options: ['4 oz', '8 oz', '12 oz', '16 oz'],
+              correct: 1,
+              explanation: 'Americano single = 1 shot + 8 oz de agua caliente.'
+            },
+            {
+              question: 'Capuchino: ¿qué fracción del volumen total debe ser espuma?',
+              options: ['1/5', '1/4', '1/3', '1/2'],
+              correct: 2,
+              explanation: 'Un capuchino estándar tiene aproximadamente 1/3 de espuma respecto al volumen total.'
+            },
+            {
+              question: 'Flat White: ¿cuántos segundos de stretch para la leche?',
+              options: ['1 segundo', '3 segundos', '8 segundos', '15 segundos'],
+              correct: 1,
+              explanation: 'Flat White: stretch 3 segundos, luego whirlpool para crear microespuma aterciopelada.'
+            },
+            {
+              question: '¿A qué temperatura se debe preparar el agua para el matcha para no quemarlo?',
+              options: ['60°C', '70°C', '80°C', '100°C'],
+              correct: 2,
+              explanation: 'El matcha se prepara con agua a 80°C para no quemar el polvo.'
+            },
+            {
+              question: 'Americano double: ¿cuál es la cantidad correcta de agua caliente?',
+              options: ['4 oz', '8 oz', '12 oz', '16 oz'],
+              correct: 2,
+              explanation: 'Americano double = 2 shots + 12 oz de agua caliente.'
             }
           ],
           'gelato-lab': [
@@ -8925,6 +8787,24 @@ Rispondi SOLO con il JSON, nient'altro.`;
               options: ['1-2 días', '5-7 días', '2 semanas', '1 mes'],
               correct: 1,
               explanation: 'Las galletas artesanales se mantienen frescas durante 5-7 días en un recipiente hermético.'
+            },
+            {
+              question: '¿Cuántas veces hay que girar la crepe antes de añadir la salsa?',
+              options: ['1 vez', '2 veces', '3 veces', 'No se gira'],
+              correct: 1,
+              explanation: 'La crepe se gira dos veces antes de añadir el relleno.'
+            },
+            {
+              question: '¿Cuál es la shelf life del mix de crepe en el frigo?',
+              options: ['1 día', '3 días', '7 días', '14 días'],
+              correct: 1,
+              explanation: 'El mix de crepe tiene una shelf life de 3 días en el frigo.'
+            },
+            {
+              question: '¿Cuáles son las tres salsas signature para las crepes Badiani?',
+              options: ['Fresa, Mango, Caramelo', 'Pistacho, Avellana, Chocolate', 'Vainilla, Limón, Frambuesa', 'Coco, Menta, Café'],
+              correct: 1,
+              explanation: 'Las tres salsas signature son Pistacho, Avellana y Chocolate.'
             }
           ],
           'festive': [
@@ -8947,20 +8827,7 @@ Rispondi SOLO con il JSON, nient'altro.`;
               explanation: 'El pandoro se conserva a temperatura ambiente en bolsa o recipiente cerrado.'
             }
           ],
-          'slitti-yoyo': [
-            {
-              question: '¿Cuál es la característica principal que distingue al chocolate Slitti de los demás?',
-              options: ['Es el más barato', 'Es artesanal y de alta calidad', 'Es producido industrialmente', 'Contiene conservantes'],
-              correct: 1,
-              explanation: 'Slitti produce chocolate artesanal de alta calidad con métodos tradicionales.'
-            },
-            {
-              question: '¿A qué temperatura debe conservarse el chocolate Slitti para mantener sus propiedades?',
-              options: ['En el refrigerador a 4°C', '16-18°C en lugar seco', 'A temperatura ambiente 22-25°C', 'En el congelador'],
-              correct: 1,
-              explanation: 'El chocolate se conserva mejor a 16-18°C en un lugar fresco y seco.'
-            }
-          ]
+
         },
         fr: {
           'caffe': [
@@ -8993,6 +8860,36 @@ Rispondi SOLO con il JSON, nient'altro.`;
               options: ['5 bars', '9 bars', '15 bars', '20 bars'],
               correct: 1,
               explanation: 'La pression idéale pour l\'extraction de l\'espresso est de 9 bars.'
+            },
+            {
+              question: 'Americano simple : quelle est la bonne quantité d\'eau chaude ?',
+              options: ['4 oz', '8 oz', '12 oz', '16 oz'],
+              correct: 1,
+              explanation: 'Americano simple = 1 shot + 8 oz d\'eau chaude.'
+            },
+            {
+              question: 'Cappuccino : quelle fraction du volume total doit être de la mousse ?',
+              options: ['1/5', '1/4', '1/3', '1/2'],
+              correct: 2,
+              explanation: 'Un cappuccino standard a environ 1/3 de mousse par rapport au volume total.'
+            },
+            {
+              question: 'Flat White : combien de secondes de stretch pour le lait ?',
+              options: ['1 seconde', '3 secondes', '8 secondes', '15 secondes'],
+              correct: 1,
+              explanation: 'Flat White : stretch 3 secondes, puis whirlpool pour créer une microfoam veloutée.'
+            },
+            {
+              question: 'À quelle température doit-on préparer l\'eau pour le matcha afin de ne pas le brûler ?',
+              options: ['60°C', '70°C', '80°C', '100°C'],
+              correct: 2,
+              explanation: 'Le matcha se prépare avec de l\'eau à 80°C pour ne pas brûler la poudre.'
+            },
+            {
+              question: 'Americano double : quelle est la bonne quantité d\'eau chaude ?',
+              options: ['4 oz', '8 oz', '12 oz', '16 oz'],
+              correct: 2,
+              explanation: 'Americano double = 2 shots + 12 oz d\'eau chaude.'
             }
           ],
           'gelato-lab': [
@@ -9059,6 +8956,24 @@ Rispondi SOLO con il JSON, nient'altro.`;
               options: ['1-2 jours', '5-7 jours', '2 semaines', '1 mois'],
               correct: 1,
               explanation: 'Les biscuits artisanaux restent frais pendant 5-7 jours dans un récipient hermétique.'
+            },
+            {
+              question: 'Combien de fois faut-il retourner la crêpe avant d\'ajouter la sauce ?',
+              options: ['1 fois', '2 fois', '3 fois', 'On ne la retourne pas'],
+              correct: 1,
+              explanation: 'La crêpe doit être retournée deux fois avant d\'ajouter la garniture.'
+            },
+            {
+              question: 'Quelle est la shelf life du mix crêpe au frigo ?',
+              options: ['1 jour', '3 jours', '7 jours', '14 jours'],
+              correct: 1,
+              explanation: 'Le mix crêpe a une shelf life de 3 jours au frigo.'
+            },
+            {
+              question: 'Quelles sont les trois sauces signature pour les crêpes Badiani ?',
+              options: ['Fraise, Mangue, Caramel', 'Pistache, Noisette, Chocolat', 'Vanille, Citron, Framboise', 'Coco, Menthe, Café'],
+              correct: 1,
+              explanation: 'Les trois sauces signature sont Pistache, Noisette et Chocolat.'
             }
           ],
           'festive': [
@@ -9081,20 +8996,7 @@ Rispondi SOLO con il JSON, nient'altro.`;
               explanation: 'Le pandoro se conserve à température ambiante dans un sac ou récipient fermé.'
             }
           ],
-          'slitti-yoyo': [
-            {
-              question: 'Quelle est la caractéristique principale qui distingue le chocolat Slitti des autres ?',
-              options: ['C\'est le moins cher', 'C\'est artisanal et de haute qualité', 'C\'est produit industriellement', 'Il contient des conservateurs'],
-              correct: 1,
-              explanation: 'Slitti produit du chocolat artisanal de haute qualité avec des méthodes traditionnelles.'
-            },
-            {
-              question: 'À quelle température le chocolat Slitti doit-il être conservé pour maintenir ses propriétés ?',
-              options: ['Au réfrigérateur à 4°C', '16-18°C dans un endroit sec', 'À température ambiante 22-25°C', 'Au congélateur'],
-              correct: 1,
-              explanation: 'Le chocolat se conserve mieux à 16-18°C dans un endroit frais et sec.'
-            }
-          ]
+
         }
       };
 
@@ -9304,7 +9206,6 @@ Rispondi SOLO con il JSON, nient'altro.`;
         'caffe': 'Caffè',
         'sweet-treats': 'Sweet treats',
         'pastries': 'Pastries',
-        'slitti-yoyo': 'Slitti & Yo-Yo',
         'gelato-lab': 'Gelato Lab',
         'festive': 'Festive',
         'story-orbit': 'Story Orbit',
@@ -13016,10 +12917,9 @@ toggles.forEach((button) => {
         const cleaned = d.replace(/^life\b\s*/i, '').trim();
         // If the parser captured only the placeholder token "life", drop it.
         if (!cleaned || cleaned.toLowerCase() === 'life') return '';
-        // Add a short, learner-friendly explanation without changing the factual value.
         const base = cleaned.replace(/[.\s]+$/g, '').trim();
         if (!base) return '';
-        return `${base}. Indica fino a quando puoi usarlo mantenendo qualit� e sicurezza, se conservato correttamente.`;
+        return /[.!?]$/.test(base) ? base : `${base}.`;
       }
       if (l === 'espresso') {
         const cleaned = d.replace(/[.\s]+$/g, '').trim();
@@ -15528,7 +15428,7 @@ const dailyQuestions = (() => {
     "Come si verifica la freschezza di un caffè in grani?",
     "Un gelato presenta cristalli di ghiaccio sulla superficie. Cosa significa?",
     "Il panettone tagliato ieri � ancora vendibile oggi?",
-    "Come conservi i prodotti Slitti (praline e tavolette)?",
+    "Come conservi le praline e i dragée in vetrina?",
     "La macchina espresso mostra 95�C invece di 90�C. � un problema?",
     "Il cliente dice: 'Questo latte sa di cipolla'. Possibile causa?",
     "Quanti shot puoi estrarre con 1kg di caffè?",
@@ -15538,7 +15438,7 @@ const dailyQuestions = (() => {
     "I churros avanzati dalla sera prima - riutilizzabili?",
     "Come si conserva la panna montata avanzata?",
     "Il gelato Buontalenti ha una texture granulosa. Causa?",
-    "Crema spalmabile Slitti: shelf life post-apertura?",
+    "Yo-Yo: qual è la porzione gelato standard?",
     "Un cliente chiede se il caffè � biologico. Come verifichi?",
     "Noti condensa dentro la vetrina gelato. Azione?",
     "Come conservi i muffin/loaf dopo l'apertura della confezione?",
@@ -15550,7 +15450,6 @@ const dailyQuestions = (() => {
     "Affogato: il gelato si scioglie troppo velocemente. Cosa cambi?",
     "Come testi la freschezza dei chicchi di caffè al tatto?",
     "Il cliente dice: 'Il cappuccino � tiepido'. Range temperatura corretto?",
-    "Mulled wine: come conservi il mix preparato?",
     "Quanto dura una crepe preparata ma non servita?",
     "Come riconosci un espresso sotto-estratto vs sovra-estratto?",
     "Il grinder fa rumore strano. Primo check?",
@@ -15694,7 +15593,7 @@ const dailyQuestions = (() => {
     "Differenza tra Buontalenti gelato e gelato normale?",
     "Cosa rende unico il blend Badiani 80/20?",
     "Cliente chiede origine del caffè. Cosa sai?",
-    "Slitti: anno di fondazione e caratteristica principale?",
+    "Yo-Yo: quale combo è corretta per il servizio?",
     "Quali prodotti contengono alcool?",
     "Temperatura di cottura ideale churros?",
     "Ingredienti signature Buontalenti crepe?",
@@ -15711,7 +15610,7 @@ const dailyQuestions = (() => {
     "Origine della ricetta churros spagnola?",
     "Cosa rende 'signature' un drink signature?",
     "Quali prodotti sono adatti a bambini <3 anni?",
-    "Shelf life di una tavoletta Slitti non aperta?",
+    "Shelf life di un dragée dopo apertura della confezione?",
   ];
 
   const questionsByLang = {
@@ -15733,7 +15632,7 @@ const dailyQuestions = (() => {
       "How do you check coffee bean freshness?",
       "Gelato shows ice crystals on top. Meaning?",
       "Panettone cut yesterday - sellable today?",
-      "How do you store Slitti pralines/tablets?",
+      "How do you store pralines and dragées in the display?",
       "Espresso machine reads 95\u00B0C instead of 90\u00B0C. Problem?",
       "Customer says milk tastes like onion. Possible cause?",
       "How many shots from 1kg of coffee?",

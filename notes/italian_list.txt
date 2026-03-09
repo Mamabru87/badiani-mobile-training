@@ -1,4 +1,4 @@
-Block 0: Un collega prepara il mix crepes e lo lascia riposare 1 ora: qual è la correzione giusta?
+﻿Block 0: Un collega prepara il mix crepes e lo lascia riposare 1 ora: qual è la correzione giusta?
 Block 1: Stai facendo una Buontalenti crepe e il cliente vuole “più salsa sopra”: qual è la quantità standard di salsa top prima di eventuali extra?
 Block 2: Vuoi preparare una crepe “Italiana plain base”: quale combinazione è coerente con lo standard?
 Block 3: La crepe salata è pronta ma “molle” al centro: quale step finale è stato probabilmente saltato?
@@ -64,10 +64,6 @@ Block 62: Pandoro: quale finitura si usa sulla fetta?
 Block 63: Mini panettone in negozio: quale coppia azione/salsa è corretta?
 Block 64: Delivery mini panettone: qual è la disposizione nella scatola?
 Block 65: Delivery mini panettone: dove si conserva la scatola in attesa del driver?
-Block 66: Mulled wine (Vin Brulé): quale setup evita errori?
-Block 67: Mulled wine: quale riscaldamento è corretto?
-Block 68: Mulled wine: quale decorazione è standard?
-Block 69: Mulled wine: quale shelf life è corretta?
 Block 70: Slitti: in che anno nasce come torrefazione?
 Block 71: Slitti: quando Andrea espande la produzione al cioccolato?
 Block 72: Slitti: quale premio è associato al 1994?
@@ -91,8 +87,6 @@ Block 89: Smoothie: tempo minimo di frullata?
 Block 90: Matcha iced latte: perché versi lentamente il matcha sul latte e ghiaccio?
 Block 91: Buontalenti/Strawberry iced (matcha): dove deve stare il topping di gelato?
 Block 92: Cocktail pouches: quanti cubetti di ghiaccio grandi si usano come riferimento?
-Block 93: Mulled wine: dove si conserva la miscela la notte?
-Block 94: Mulled wine: pulizia a fine servizio?
 Block 95: Panettone/Pandoro: come aumentare l'appetibilità al banco?
 Block 96: Coppette gelato: quale tecnica di servizio è corretta?
 Block 97: Coni gelato: quale upsell è coerente con lo standard?

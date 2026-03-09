@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 """Generate an image inventory + AI prompt pack for all guide cards.
 
 This repo is a static site: images are referenced directly from HTML.
@@ -29,7 +29,6 @@ HTML_PAGES = [
     "caffe.html",
     "sweet-treats.html",
     "pastries.html",
-    "slitti-yoyo.html",
     "gelato-lab.html",
     "festive.html",
     "story-orbit.html",
@@ -60,7 +59,6 @@ def _sanitize_for_midjourney(text: str) -> str:
     t = _clean_text(text)
     # Avoid explicit brand names in the Midjourney variant.
     t = re.sub(r"\bBadiani\b", "boutique gelateria", t, flags=re.IGNORECASE)
-    t = re.sub(r"\bSlitti\b", "artisan chocolate", t, flags=re.IGNORECASE)
     t = re.sub(r"\bBuontalenti\b", "signature gelato", t, flags=re.IGNORECASE)
     return t
 
@@ -227,9 +225,8 @@ def _make_prompt(
         "caffe.html": "contesto bar caffetteria Badiani",
         "sweet-treats.html": "contesto dessert e sweet counter Badiani",
         "pastries.html": "contesto pastry e vetrina dolci",
-        "slitti-yoyo.html": "contesto prodotti Slitti + device Yo-Yo",
-        "gelato-lab.html": "contesto gelato artigianale e vetrina",
-        "festive.html": "contesto stagionale/festivo (churros, panettone, vin brulè)",
+        "gelato-lab.html": "contesto gelato artigianale, Yo-Yo e vetrina",
+        "festive.html": "contesto stagionale/festivo (panettone, cioccolata calda, colomba)",
         "story-orbit.html": "contesto storytelling brand, moodbook",
         "index.html": "contesto dashboard/cockpit (grafica astratta, non numeri)",
     }.get(page, "contesto Badiani")

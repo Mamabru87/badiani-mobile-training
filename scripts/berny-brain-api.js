@@ -1,4 +1,4 @@
-// FILE: scripts/berny-brain-api.js
+﻿// FILE: scripts/berny-brain-api.js
 // Integrazione Google Gemini via SDK Ufficiale + Quiz System (Embedded Data)
 
 class BernyBrainAPI {
@@ -78,10 +78,6 @@ class BernyBrainAPI {
         { text: "Coppetta \"Media\": qual è il range di peso corretto?\nA) 100-120g\nB) 120-140g\nC) 140-160g\nD) 160-180g", answer: "C" },
         { text: "Vaschetta d'asporto \"Grande\": qual è la sua capacità volumetrica?\nA) 500 ml\nB) 750 ml\nC) 1000 ml\nD) 1500 ml", answer: "C" },
         { text: "Churros: qual è la temperatura esatta della friggitrice?\nA) 170 °C\nB) 180 °C\nC) 190 °C\nD) 200 °C", answer: "C" },
-        { text: "Slitti: in che anno è stata fondata l'azienda come torrefazione di caffè?\nA) 1932\nB) 1969\nC) 1990\nD) 1993", answer: "B" },
-        { text: "Pralina Slitti Irish Coffee: qual è la percentuale di alcol contenuta?\nA) 0.5%\nB) 0.9%\nC) 1.5%\nD) 2.1%", answer: "B" },
-        { text: "Spalmabile Gianera: qual è la percentuale di nocciole dichiarata?\nA) 37%\nB) 51%\nC) 57%\nD) 65%", answer: "C" },
-        { text: "Mulled wine (Vin Brulé): quanto tempo deve riscaldare al livello 10 prima del servizio?\nA) 10-15 min\nB) 15-20 min\nC) 25-30 min\nD) 45-60 min", answer: "C" },
         // === GELATO TEMPERATURE ===
         { text: "Qual è la temperatura ideale per conservare il gelato in vetrina?\nA) -5°C / -8°C\nB) -8°C / -14°C\nC) -14°C / -18°C\nD) -18°C / -20°C", answer: "B" },
         { text: "Qual è la temperatura ideale per servire il gelato al cliente?\nA) -18°C\nB) -14°C\nC) -10°C / -12°C\nD) -5°C", answer: "C" },
@@ -92,8 +88,6 @@ class BernyBrainAPI {
         { text: "A quale temperatura va montato il latte per un cappuccino cremoso?\nA) 55°C\nB) 65°C\nC) 75°C\nD) 85°C", answer: "B" },
         // === FESTIVE ===
         { text: "Panettone: entro quanti giorni va consumato dopo l'apertura?\nA) 1 giorno\nB) 2-3 giorni\nC) 7 giorni\nD) 14 giorni", answer: "B" },
-        // === SLITTI ===
-        { text: "A quale temperatura va conservato il cioccolato Slitti?\nA) 4-8°C\nB) 16-18°C\nC) 22-25°C\nD) 28-30°C", answer: "B" },
         // === BRAND ===
         { text: "In che anno è stata fondata Badiani a Firenze?\nA) 1912\nB) 1932\nC) 1952\nD) 1972", answer: "B" },
         { text: "Come si chiama il famoso gelato al gusto crema Badiani?\nA) Fiorellino\nB) Buontalenti\nC) Medici\nD) Rinascimento", answer: "B" }
@@ -125,8 +119,6 @@ class BernyBrainAPI {
         // === FESTIVE ===
         { text: "Panettone: within how many days should it be consumed after opening?\nA) 1 day\nB) 2-3 days\nC) 7 days\nD) 14 days", answer: "B" },
         { text: "Churros: what is the exact fryer temperature?\nA) 170°C\nB) 180°C\nC) 190°C\nD) 200°C", answer: "C" },
-        // === SLITTI ===
-        { text: "At what temperature should Slitti chocolate be stored?\nA) 4-8°C\nB) 16-18°C\nC) 22-25°C\nD) 28-30°C", answer: "B" },
         // === BRAND ===
         { text: "In what year was Badiani founded in Florence?\nA) 1912\nB) 1932\nC) 1952\nD) 1972", answer: "B" },
         { text: "What is the name of Badiani's famous cream-flavored gelato?\nA) Fiorellino\nB) Buontalenti\nC) Medici\nD) Rinascimento", answer: "B" }
@@ -158,8 +150,6 @@ class BernyBrainAPI {
         // === FESTIVO ===
         { text: "Panettone: ¿en cuántos días debe consumirse después de abrir?\nA) 1 día\nB) 2-3 días\nC) 7 días\nD) 14 días", answer: "B" },
         { text: "Churros: ¿cuál es la temperatura exacta de la freidora?\nA) 170°C\nB) 180°C\nC) 190°C\nD) 200°C", answer: "C" },
-        // === SLITTI ===
-        { text: "¿A qué temperatura debe conservarse el chocolate Slitti?\nA) 4-8°C\nB) 16-18°C\nC) 22-25°C\nD) 28-30°C", answer: "B" },
         // === MARCA ===
         { text: "¿En qué año fue fundada Badiani en Florencia?\nA) 1912\nB) 1932\nC) 1952\nD) 1972", answer: "B" },
         { text: "¿Cómo se llama el famoso helado de crema Badiani?\nA) Fiorellino\nB) Buontalenti\nC) Medici\nD) Rinascimento", answer: "B" }
@@ -191,8 +181,6 @@ class BernyBrainAPI {
         // === FESTIF ===
         { text: "Panettone : sous combien de jours le consommer après ouverture ?\nA) 1 jour\nB) 2-3 jours\nC) 7 jours\nD) 14 jours", answer: "B" },
         { text: "Churros : quelle température de la friteuse ?\nA) 170°C\nB) 180°C\nC) 190°C\nD) 200°C", answer: "C" },
-        // === SLITTI ===
-        { text: "À quelle température conserver le chocolat Slitti ?\nA) 4-8°C\nB) 16-18°C\nC) 22-25°C\nD) 28-30°C", answer: "B" },
         // === MARQUE ===
         { text: "En quelle année Badiani a été fondée à Florence ?\nA) 1912\nB) 1932\nC) 1952\nD) 1972", answer: "B" },
         { text: "Comment s'appelle la fameuse glace à la crème Badiani ?\nA) Fiorellino\nB) Buontalenti\nC) Medici\nD) Rinascimento", answer: "B" }
@@ -835,7 +823,7 @@ class BernyBrainAPI {
   hasExplicitTopicSignal(msgNorm) {
     const m = String(msgNorm || '');
     if (!m) return false;
-    return /\b(story\s*orbit|storia|firenze|origine|gelato|buontalenti|cono|coni|coppett|coppa|gusti|vetrina|caffe|caff[eè]|espresso|americano|cappuccino|chai|affogato|matcha|waffle|crepe|cr[eè]p|pancake|cakes|cake|torta|torte|fetta|slice|croissant|brownie|slitti|yo\s*-\s*yo|yoyo|churro|churros|panettone|pandoro|mulled|vin\s*brul|festive)\b/i.test(m);
+    return /\b(story\s*orbit|storia|firenze|origine|gelato|buontalenti|cono|coni|coppett|coppa|gusti|vetrina|caffe|caff[eè]|espresso|americano|cappuccino|chai|affogato|matcha|waffle|crepe|cr[eè]p|pancake|cakes|cake|torta|torte|fetta|slice|croissant|brownie|yo\s*-\s*yo|yoyo|churro|churros|panettone|pandoro)\b/i.test(m);
   }
 
   buildClarificationForMetaGuidance(userMessage) {
@@ -845,19 +833,19 @@ class BernyBrainAPI {
     // Keep it short and actionable; no link until clarified.
     const it =
       `Posso aiutarti volentieri, ma mi serve un dettaglio: su quale linea/prodotto vuoi fare "${base}"?\n` +
-      `Esempi rapidi (scrivine uno): Gelato Lab (coni/coppette), Cakes (Pastry Lab), Crepe/Waffle (Sweet Treats), Bar & Drinks (caffè/matcha), Festive (churros/panettone), Slitti & Yo-Yo, oppure Operations (apertura/chiusura). [[NOLINK]]`;
+      `Esempi rapidi (scrivine uno): Gelato Lab (coni/coppette/Yo-Yo), Cakes (Pastry Lab), Crepe/Waffle/Churros (Sweet Treats), Bar & Drinks (caffè/matcha), Seasonal (panettone/colomba), oppure Operations (apertura/chiusura). [[NOLINK]]`;
 
     const en =
       `Happy to help—quick clarification: which product/category is your "${base}" about?\n` +
-      `Examples: Gelato Lab (cones/cups), Cakes (Pastry Lab), Crepe/Waffle (Sweet Treats), Bar & Drinks, Festive, Slitti & Yo-Yo, or Operations (opening/closing). [[NOLINK]]`;
+      `Examples: Gelato Lab (cones/cups/Yo-Yo), Cakes (Pastry Lab), Crepe/Waffle/Churros (Sweet Treats), Bar & Drinks, Seasonal, or Operations (opening/closing). [[NOLINK]]`;
 
     const es =
       `¡Claro! Solo una aclaración: ¿sobre qué producto/categoría es tu "${base}"?\n` +
-      `Ejemplos: Gelato Lab, Cakes (Pastry Lab), Crepe/Waffle (Sweet Treats), Bar & Drinks, Festive, Slitti & Yo-Yo, u Operations (apertura/cierre). [[NOLINK]]`;
+      `Ejemplos: Gelato Lab (Yo-Yo), Cakes (Pastry Lab), Crepe/Waffle/Churros (Sweet Treats), Bar & Drinks, Seasonal, u Operations (apertura/cierre). [[NOLINK]]`;
 
     const fr =
       `Avec plaisir—petite précision: ton "${base}" concerne quel produit/catégorie ?\n` +
-      `Exemples : Gelato Lab, Cakes (Pastry Lab), Crêpe/Waffle (Sweet Treats), Bar & Drinks, Festive, Slitti & Yo-Yo, ou Operations (ouverture/fermeture). [[NOLINK]]`;
+      `Exemples : Gelato Lab (Yo-Yo), Cakes (Pastry Lab), Crêpe/Waffle/Churros (Sweet Treats), Bar & Drinks, Seasonal, ou Operations (ouverture/fermeture). [[NOLINK]]`;
 
     return ({ it, en, es, fr }[lang] || it);
   }
@@ -901,10 +889,11 @@ class BernyBrainAPI {
       { href: 'sweet-treats.html?q=waffles', keys: ['waffle'] },
       { href: 'sweet-treats.html?q=pancake', keys: ['pancake'] },
 
-      { href: 'festive.html?q=churros', keys: ['churro', 'churros'] },
+      { href: 'sweet-treats.html?q=churros', keys: ['churro', 'churros'] },
       { href: 'festive.html?q=panettone-classico', keys: ['panettone'] },
       { href: 'festive.html?q=pandoro-classico', keys: ['pandoro'] },
-      { href: 'festive.html?q=mulled-wine-vin-brul', keys: ['vin brule', 'vinbrule', 'mulled'] },
+      { href: 'festive.html?q=hot-chocolate', keys: ['cioccolata calda', 'hot chocolate', 'chocolate caliente', 'chocolat chaud'] },
+      { href: 'festive.html?q=colomba', keys: ['colomba'] },
 
       { href: 'operations.html?q=ops-opening', keys: ['apertura', 'opening', 'open store'] },
       // NOTE: do NOT map generic "upsell/upselling" here; it must be anchored to a product.
@@ -912,7 +901,7 @@ class BernyBrainAPI {
       { href: 'operations.html?q=service-chiusura', keys: ['chiusura', 'closing', 'close store'] },
       { href: 'operations.html?q=schedule-pulizie-giorno-settimana', keys: ['pulizia', 'cleaning', 'sanificazione', 'sanitize'] },
 
-      { href: 'slitti-yoyo.html?q=slitti-timeline', keys: ['slitti', 'yoyo', 'yo-yo', 'yo yo'] },
+      { href: 'gelato-lab.html?q=yoyo-product', keys: ['yoyo', 'yo-yo', 'yo yo'] },
       { href: 'pastries.html?q=croissants', keys: ['croissant'] },
       { href: 'pastries.html?q=brownie', keys: ['brownie'] },
       { href: 'story-orbit.html?q=story', keys: ['story orbit', 'firenze', 'origine', 'storia'] },
@@ -930,10 +919,10 @@ class BernyBrainAPI {
       const options = [
         { href: 'operations.html?q=ops-opening', label: { it: 'Apertura', en: 'Opening', es: 'Apertura', fr: 'Ouverture' } },
         { href: 'sweet-treats.html?q=waffles', label: { it: 'Waffle', en: 'Waffle', es: 'Waffle', fr: 'Waffle' } },
-        { href: 'festive.html?q=churros', label: { it: 'Churros', en: 'Churros', es: 'Churros', fr: 'Churros' } },
+        { href: 'sweet-treats.html?q=churros', label: { it: 'Churros', en: 'Churros', es: 'Churros', fr: 'Churros' } },
         { href: 'caffe.html?q=espresso-single', label: { it: 'Espresso', en: 'Espresso', es: 'Espresso', fr: 'Espresso' } },
         { href: 'gelato-lab.html?q=cups', label: { it: 'Gelato Lab', en: 'Gelato Lab', es: 'Gelato Lab', fr: 'Gelato Lab' } },
-        { href: 'slitti-yoyo.html?q=slitti-timeline', label: { it: 'Slitti & Yo-Yo', en: 'Slitti & Yo-Yo', es: 'Slitti & Yo-Yo', fr: 'Slitti & Yo-Yo' } },
+        { href: 'gelato-lab.html?q=yoyo-product', label: { it: 'Yo-Yo', en: 'Yo-Yo', es: 'Yo-Yo', fr: 'Yo-Yo' } },
       ];
       const pick = this.pickDifferent(options, last?.href);
       const label = pick?.label?.[uiLang] || pick?.label?.it || 'Training';
@@ -997,23 +986,19 @@ class BernyBrainAPI {
       { href: 'sweet-treats.html?q=shelf-life-storage-rapidi', keywords: ['shelf life sweet', 'conservazione dolci', 'storage rapidi'] },
       { href: 'sweet-treats.html?q=porzionatura-dosi-quick-ref', keywords: ['porzionatura dolci', 'dosi dolci', 'quick ref dolci'] },
       { href: 'sweet-treats.html?q=chiusura-pulizia-rapida', keywords: ['chiusura dolci', 'pulizia dolci'] },
-      // Festive
-      { href: 'festive.html?q=churros', keywords: ['churro', 'churros', 'churro caliente'] },
+      // Seasonal
+      { href: 'sweet-treats.html?q=churros', keywords: ['churro', 'churros', 'churro caliente'] },
       { href: 'festive.html?q=panettone-classico', keywords: ['panettone', 'panetón', 'panettone classic', 'panettone classique'] },
       { href: 'festive.html?q=pandoro-classico', keywords: ['pandoro'] },
-      { href: 'festive.html?q=mulled-wine-vin-brul', keywords: ['vin brule', 'mulled', 'vin chaud', 'vino caliente'] },
       { href: 'festive.html?q=panettone-classico', keywords: ['panettone classico', 'classic panettone'] },
       { href: 'festive.html?q=panettone-dark-chocolate', keywords: ['panettone dark', 'panettone cioccolato'] },
       { href: 'festive.html?q=pandoro-classico', keywords: ['pandoro', 'pandoro classico'] },
       { href: 'festive.html?q=servizio-caldo-pandoro', keywords: ['servizio caldo pandoro', 'warm pandoro'] },
-      { href: 'festive.html?q=setup-macchina-vin-brul', keywords: ['setup vin brul', 'macchina vin brule'] },
-      { href: 'festive.html?q=warm-up-mantenimento-vin-brul', keywords: ['warm up vin brul', 'mantenimento vin brule'] },
-      { href: 'festive.html?q=come-conservarlo-di-notte', keywords: ['conservare vin brul', 'overnight vin brule'] },
-      { href: 'festive.html?q=shelf-life-vin-brul-quick', keywords: ['shelf life vin brul', 'scadenza vin brule'] },
-      { href: 'festive.html?q=pulizia-macchina-fine-giornata', keywords: ['pulizia macchina vin brul', 'cleaning vin brule'] },
+      { href: 'festive.html?q=hot-chocolate', keywords: ['cioccolata calda', 'hot chocolate', 'chocolate caliente', 'chocolat chaud'] },
+      { href: 'festive.html?q=colomba', keywords: ['colomba', 'colomba pasquale', 'easter colomba'] },
       { href: 'festive.html?q=packaging-mini-panettone-delivery', keywords: ['packaging mini panettone', 'delivery panettone'] },
       // Other
-      { href: 'slitti-yoyo.html?q=slitti-timeline', keywords: ['slitti', 'yoyo', 'yo-yo'] },
+      { href: 'gelato-lab.html?q=yoyo-product', keywords: ['yoyo', 'yo-yo'] },
       // Gelato Lab products & procedures
       { href: 'gelato-lab.html?q=cups', keywords: ['cups', 'coppette', 'cup'] },
       { href: 'gelato-lab.html?q=cones', keywords: ['cones', 'coni', 'cono'] },
@@ -1145,16 +1130,18 @@ class BernyBrainAPI {
       // Pastries
       { name: 'cakes', aliases: ['cake', 'torta', 'torte', 'fetta'], href: 'pastries.html?q=cakes', label: '🎂 Apri Cakes' },
       
-      // Festive
-      { name: 'churro', aliases: ['churro', 'churros'], href: 'festive.html?q=churros', label: '🎄 Apri Churros' },
+      // Festive / Seasonal
+      { name: 'churro', aliases: ['churro', 'churros'], href: 'sweet-treats.html?q=churros', label: '🧇 Apri Churros' },
       { name: 'panettone', aliases: ['panettone'], href: 'festive.html?q=panettone-classico', label: '🎄 Apri Panettone' },
       { name: 'pandoro', aliases: ['pandoro'], href: 'festive.html?q=pandoro-classico', label: '🎄 Apri Pandoro' },
+      { name: 'cioccolata-calda', aliases: ['cioccolata calda', 'hot chocolate', 'chocolate caliente', 'chocolat chaud'], href: 'festive.html?q=hot-chocolate', label: '🎄 Apri Cioccolata Calda' },
+      { name: 'colomba', aliases: ['colomba'], href: 'festive.html?q=colomba', label: '🎄 Apri Colomba' },
       
       // Story Orbit
       { name: 'story', aliases: ['story', 'storia', 'badiani', 'firenze', 'origine'], href: 'story-orbit.html?q=story', label: '🌟 Apri Story Orbit' },
       
-      // Slitti & Yo-Yo
-      { name: 'slitti', aliases: ['slitti', 'cioccolato', 'yoyo', 'yo-yo'], href: 'slitti-yoyo.html?q=slitti-timeline', label: '🍫 Apri Slitti & Yo-Yo' }
+      // Yo-Yo
+      { name: 'yoyo', aliases: ['yoyo', 'yo-yo'], href: 'gelato-lab.html?q=yoyo-product', label: '🍦 Apri Yo-Yo' }
     ];
   }
 
@@ -1197,9 +1184,10 @@ class BernyBrainAPI {
       },
       { href: 'caffe.html', keys: ['caffe', 'caffè', 'espresso', 'cappuccino', 'bar', 'bevanda'], label: '☕ Apri scheda Bar & Drinks' },
       { href: 'sweet-treats.html?q=waffles', keys: ['waffle', 'waffel', 'crepe', 'crêpe', 'pancake'], label: '🧇 Apri scheda Sweet Treats' },
-      { href: 'festive.html?q=churros', keys: ['churro', 'churros', 'panettone', 'pandoro', 'natale', 'capodanno'], label: '🎄 Apri scheda Festive' },
+      { href: 'festive.html?q=panettone-classico', keys: ['panettone', 'pandoro', 'natale', 'capodanno', 'cioccolata calda', 'colomba'], label: '🎄 Apri scheda Seasonal' },
+      { href: 'sweet-treats.html?q=churros', keys: ['churro', 'churros'], label: '🧇 Apri Churros' },
       { href: 'story-orbit.html?q=story', keys: ['story', 'storia', 'badiani', 'firenze', 'origine', 'tradizione'], label: '🌟 Apri Story Orbit' },
-      { href: 'slitti-yoyo.html', keys: ['slitti', 'yoyo', 'yo-yo', 'cioccolato'], label: '🍫 Apri scheda Slitti & Yo-Yo' },
+      { href: 'gelato-lab.html?q=yoyo-product', keys: ['yoyo', 'yo-yo', 'cioccolato'], label: '🍦 Apri scheda Yo-Yo' },
       { href: 'gelato-lab.html', keys: ['gelato', 'gusto', 'flavour', 'flavor', 'ricetta'], label: '🍦 Apri scheda Gelato Lab' },
     ];
 
@@ -1323,19 +1311,15 @@ class BernyBrainAPI {
       { href: 'sweet-treats.html?q=porzionatura-dosi-quick-ref', keys: ['porzionatura dolci', 'dosi dolci', 'quick ref dolci'] },
       { href: 'sweet-treats.html?q=chiusura-pulizia-rapida', keys: ['chiusura dolci', 'pulizia dolci'] },
 
-      { href: 'festive.html?q=churros', keys: ['churro', 'churros'] },
+      { href: 'sweet-treats.html?q=churros', keys: ['churro', 'churros'] },
       { href: 'festive.html?q=panettone-classico', keys: ['panettone'] },
       { href: 'festive.html?q=pandoro-classico', keys: ['pandoro'] },
-      { href: 'festive.html?q=mulled-wine-vin-brul', keys: ['vin brule', 'vinbrule', 'mulled', 'vin chaud', 'vino caliente'] },
       { href: 'festive.html?q=panettone-classico', keys: ['panettone classico', 'classic panettone'] },
       { href: 'festive.html?q=panettone-dark-chocolate', keys: ['panettone dark', 'panettone cioccolato'] },
       { href: 'festive.html?q=pandoro-classico', keys: ['pandoro', 'pandoro classico'] },
       { href: 'festive.html?q=servizio-caldo-pandoro', keys: ['servizio caldo pandoro', 'warm pandoro'] },
-      { href: 'festive.html?q=setup-macchina-vin-brul', keys: ['setup vin brul', 'macchina vin brule'] },
-      { href: 'festive.html?q=warm-up-mantenimento-vin-brul', keys: ['warm up vin brul', 'mantenimento vin brule'] },
-      { href: 'festive.html?q=come-conservarlo-di-notte', keys: ['conservare vin brul', 'overnight vin brule'] },
-      { href: 'festive.html?q=shelf-life-vin-brul-quick', keys: ['shelf life vin brul', 'scadenza vin brule'] },
-      { href: 'festive.html?q=pulizia-macchina-fine-giornata', keys: ['pulizia macchina vin brul', 'cleaning vin brule'] },
+      { href: 'festive.html?q=hot-chocolate', keys: ['cioccolata calda', 'hot chocolate', 'chocolate caliente', 'chocolat chaud'] },
+      { href: 'festive.html?q=colomba', keys: ['colomba', 'colomba pasquale', 'easter colomba'] },
       { href: 'festive.html?q=packaging-mini-panettone-delivery', keys: ['packaging mini panettone', 'delivery panettone'] },
 
       { href: 'operations.html?q=ops-opening', keys: ['apertura', 'opening', 'open store'] },
@@ -1356,7 +1340,7 @@ class BernyBrainAPI {
       { href: 'operations.html?q=take-away-autonomia-termica', keys: ['autonomia termica', 'take away termico'] },
       { href: 'operations.html?q=schedule-pulizie-giorno-settimana', keys: ['schedule pulizie', 'pulizie settimana'] },
 
-      { href: 'slitti-yoyo.html?q=slitti-timeline', keys: ['slitti', 'yoyo', 'yo-yo', 'yo yo'] },
+      { href: 'gelato-lab.html?q=yoyo-product', keys: ['yoyo', 'yo-yo', 'yo yo'] },
       { href: 'pastries.html?q=croissants', keys: ['croissant'] },
       { href: 'pastries.html?q=brownie', keys: ['brownie'] },
       { href: 'pastries.html?q=loaf', keys: ['loaf', 'banana loaf'] },

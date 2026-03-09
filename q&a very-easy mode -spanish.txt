@@ -1,4 +1,4 @@
-Un compañero prepara el mix de crepes y lo deja reposar 1 hora: ¿cuál es la corrección adecuada?
+﻿Un compañero prepara el mix de crepes y lo deja reposar 1 hora: ¿cuál es la corrección adecuada?
 A) Está bien así
 B) Añadir más harina
 C) Aumentar el reposo mínimo a 2 horas
@@ -526,70 +526,6 @@ D) Horno
 Solución: C
 Motivación: Estándar exige que la caja esté en el congelador hasta que llegue el driver.
 
-Mulled wine: ¿qué setup evita errores?
-A) Recipiente interno flotando
-B) Recipiente interno sin agua
-C) Recipiente interno bien puesto y no debe flotar
-D) Sin recipiente interno
-Solución: C
-Motivación: Estándar especifica que el recipiente interno no debe “flotar”.
-
-Mulled wine: ¿calentamiento correcto?
-A) Nivel 10 por 5 min
-B) Nivel 10 por 25–30 min
-C) Nivel 5 por 60 min
-D) Dial 6/7 directo
-Solución: B
-Motivación: Estándar calienta a nivel 10 por 25–30 min, luego ajusta dial a 6/7.
-
-Mulled wine: ¿decoración estándar?
-A) Canela en rama
-B) Rodaja de naranja
-C) Menta
-D) Lima
-Solución: B
-Motivación: El estándar prevé una rodaja de naranja en la copa.
-
-Mulled wine: ¿vida útil correcta?
-A) Calentado: 30 días; En caja: 3 días
-B) Calentado: 3 días; En caja: 30 días
-C) Calentado: 7 días; En caja: 7 días
-D) Calentado: 1 día; En caja: 14 días
-Solución: B
-Motivación: Estándar = 3 días calentado (máquina) y 30 días abierta (caja).
-
-Slitti: ¿año de nacimiento como torrefacción?
-A) 1932
-B) 1969
-C) 1988
-D) 1990
-Solución: B
-Motivación: La fundación como empresa tostadora de café fue en 1969.
-
-Slitti: ¿cuándo expandió Andrea la producción al chocolate?
-A) 1988
-B) 1990
-C) 1994
-D) 2008
-Solución: B
-Motivación: Estándar histórico indica el paso al chocolate en 1990.
-
-Slitti: ¿premio asociado a 1994?
-A) Eurochocolate
-B) Grand Prix International de la Chocolaterie
-C) Mejor chocolatero de Italia
-D) Ninguno
-Solución: B
-Motivación: 1994 se asocia con el Grand Prix International de la Chocolaterie.
-
-Slitti: ¿qué pralina tiene alcohol y cuánto?
-A) Maracuyá 1.5%
-B) Irish Coffee 0.9%
-C) Origin 0%
-D) Todas 0.9%
-Solución: B
-Motivación: La pralina Irish Coffee contiene 0.9% de alcohol.
-
 Slitti Coffee Spoons: ¿año de creación?
 A) 1969
 B) 1988
@@ -742,22 +678,6 @@ D) 10
 Solución: C
 Motivación: Estándar indica hielo hasta la línea, unos 6 cubos grandes.
 
-Mulled wine: ¿dónde se guarda la mezcla por la noche?
-A) Ambiente
-B) Congelador
-C) Nevera
-D) En la máquina encendida
-Solución: C
-Motivación: Estándar exige enfriar, tapar con film y guardar en nevera.
-
-Mulled wine: ¿limpieza correcta al cierre?
-A) Solo exterior
-B) Lavar recipiente interno y tapa con jabón y agua caliente + secar
-C) Echar perfume
-D) No limpiar
-Solución: B
-Motivación: Estándar prevé lavado de piezas internas y paño húmedo fuera.
-
 Panettone/Pandoro: ¿qué aumenta el atractivo al mostrador?
 A) Servir siempre frío
 B) Preguntar si lo quieren warm y tostar 10 seg por lado
@@ -790,10 +710,3 @@ D) De 2008
 Solución: B
 Motivación: Se describen como originales, receta secreta y primeras “True Spoons”.
 
-Slitti: ¿combinación spalmabile/tipo correcta?
-A) Riccosa = chocolate negro
-B) Gianera = chocolate con leche
-C) Slittosa = crema de cacao
-D) Slittosa = solo leche
-Solución: C
-Motivación: Slittosa es crema de cacao, Riccosa es chocolate con leche y Gianera chocolate negro.

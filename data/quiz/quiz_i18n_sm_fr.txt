@@ -1,4 +1,4 @@
-// Super-easy (sm-) quiz translations - French
+﻿// Super-easy (sm-) quiz translations - French
       'quiz.q.sm-001.question': "Un collègue prépare le mix crêpes et le laisse reposer 1 heure : quelle est la correction appropriée ?",
       'quiz.q.sm-001.option.0': "C'est bien comme ça",
       'quiz.q.sm-001.option.1': "Ajouter plus de farine",
@@ -461,33 +461,9 @@
       'quiz.q.sm-066.option.3': "Dans le four éteint",
       'quiz.q.sm-066.explain': "Le standard exige que la boîte soit au congélateur jusqu'à l'arrivée du driver.",
 
-      'quiz.q.sm-067.question': "Mulled wine : quel setup évite les erreurs ?",
-      'quiz.q.sm-067.option.0': "Récipient interne qui flotte",
-      'quiz.q.sm-067.option.1': "Récipient interne inséré sans eau",
-      'quiz.q.sm-067.option.2': "Récipient interne bien mis et ne doit pas flotter",
-      'quiz.q.sm-067.option.3': "Pas de récipient interne",
-      'quiz.q.sm-067.explain': "Le standard spécifie que l'inner container ne doit pas \"float\".",
 
-      'quiz.q.sm-068.question': "Mulled wine : quel warm-up est correct ?",
-      'quiz.q.sm-068.option.0': "Niveau 10 pendant 5 min",
-      'quiz.q.sm-068.option.1': "Niveau 10 pendant 25–30 min",
-      'quiz.q.sm-068.option.2': "Niveau 5 pendant 60 min",
-      'quiz.q.sm-068.option.3': "Dial 6/7 direct",
-      'quiz.q.sm-068.explain': "Le standard chauffe au niveau 10 pendant 25–30 min, puis règle le dial sur 6/7.",
 
-      'quiz.q.sm-069.question': "Mulled wine : quelle décoration est standard au service ?",
-      'quiz.q.sm-069.option.0': "Bâton de cannelle",
-      'quiz.q.sm-069.option.1': "Tranche d'orange",
-      'quiz.q.sm-069.option.2': "Menthe",
-      'quiz.q.sm-069.option.3': "Citron vert",
-      'quiz.q.sm-069.explain': "Le standard prévoit une tranche d'orange dans la cup.",
 
-      'quiz.q.sm-070.question': "Mulled wine : quelle shelf life est correcte ?",
-      'quiz.q.sm-070.option.0': "Réchauffé : 30 jours ; En boîte : 3 jours",
-      'quiz.q.sm-070.option.1': "Réchauffé : 3 jours ; En boîte : 30 jours",
-      'quiz.q.sm-070.option.2': "Réchauffé : 7 jours ; En boîte : 7 jours",
-      'quiz.q.sm-070.option.3': "Réchauffé : 1 jour ; En boîte : 14 jours",
-      'quiz.q.sm-070.explain': "Standard = 3 jours réchauffé (machine) et 30 jours ouverte (boîte).",
 
       'quiz.q.sm-071.question': "Slitti : en quelle année a-t-il été fondé comme torréfacteur ?",
       'quiz.q.sm-071.option.0': "1932",
@@ -650,19 +626,7 @@
       'quiz.q.sm-093.option.3': "10",
       'quiz.q.sm-093.explain': "Le standard indique de la glace jusqu'à la ligne, environ 6 gros glaçons.",
 
-      'quiz.q.sm-094.question': "Mulled wine : où est conservé le mélange la nuit ?",
-      'quiz.q.sm-094.option.0': "À température ambiante",
-      'quiz.q.sm-094.option.1': "Au congélateur",
-      'quiz.q.sm-094.option.2': "Au frigo",
-      'quiz.q.sm-094.option.3': "Dans la machine allumée",
-      'quiz.q.sm-094.explain': "Le standard exige de refroidir, couvrir de film et garder au frigo.",
 
-      'quiz.q.sm-095.question': "Mulled wine : nettoyage correct à la fermeture ?",
-      'quiz.q.sm-095.option.0': "Extérieur seulement",
-      'quiz.q.sm-095.option.1': "Laver récipient interne et couvercle avec savon et eau chaude + sécher",
-      'quiz.q.sm-095.option.2': "Pulvériser du parfum",
-      'quiz.q.sm-095.option.3': "Ne pas nettoyer",
-      'quiz.q.sm-095.explain': "Le standard prévoit le lavage des pièces internes et un chiffon humide dehors.",
 
       'quiz.q.sm-096.question': "Panettone/Pandoro : qu'est-ce qui augmente l'attrait au comptoir ?",
       'quiz.q.sm-096.option.0': "Servir toujours froid",

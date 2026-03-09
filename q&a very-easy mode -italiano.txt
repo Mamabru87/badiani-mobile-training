@@ -1,4 +1,4 @@
-Un collega prepara il mix crepes e lo lascia riposare 1 ora: qual è la correzione giusta?
+﻿Un collega prepara il mix crepes e lo lascia riposare 1 ora: qual è la correzione giusta?
 A) Va bene così
 B) Aggiungere più farina
 C) Portare il riposo minimo a 2 ore
@@ -526,70 +526,6 @@ D) Nel forno spento
 Soluzione: C
 Motivazione: La scatola deve restare in freezer fino all'arrivo del driver.
 
-Mulled wine (Vin Brulé): quale setup evita errori?
-A) Contenitore interno che galleggia
-B) Contenitore interno inserito senza acqua
-C) Contenitore interno inserito correttamente (non deve galleggiare)
-D) Senza contenitore interno
-Soluzione: C
-Motivazione: Il contenitore interno non deve galleggiare per garantire il riscaldamento corretto.
-
-Mulled wine: quale riscaldamento è corretto?
-A) Livello 10 per 5 min
-B) Livello 10 per 25–30 min
-C) Livello 5 per 60 min
-D) Dial 6/7 subito
-Soluzione: B
-Motivazione: Si scalda a livello 10 per 25-30 minuti, poi si imposta il dial su 6/7.
-
-Mulled wine: quale decorazione è standard?
-A) Stecca di cannella
-B) Fetta d’arancia
-C) Menta
-D) Lime
-Soluzione: B
-Motivazione: Lo standard prevede una fetta d'arancia nella tazza.
-
-Mulled wine: quale shelf life è corretta?
-A) Riscaldato: 30 giorni; In scatola: 3 giorni
-B) Riscaldato: 3 giorni; In scatola: 30 giorni
-C) Riscaldato: 7 giorni; In scatola: 7 giorni
-D) Riscaldato: 1 giorno; In scatola: 14 giorni
-Soluzione: B
-Motivazione: 3 giorni una volta riscaldato in macchina, 30 giorni dalla prima apertura della scatola.
-
-Slitti: in che anno nasce come torrefazione?
-A) 1932
-B) 1969
-C) 1988
-D) 1990
-Soluzione: B
-Motivazione: La fondazione come azienda di torrefazione risale al 1969.
-
-Slitti: quando Andrea espande la produzione al cioccolato?
-A) 1988
-B) 1990
-C) 1994
-D) 2008
-Soluzione: B
-Motivazione: Il passaggio al cioccolato è avvenuto nel 1990.
-
-Slitti: quale premio è associato al 1994?
-A) Eurochocolate Award
-B) Grand Prix International de la Chocolaterie
-C) Miglior cioccolatiere d'Italia
-D) Nessuno
-Soluzione: B
-Motivazione: Nel 1994 ha vinto il Grand Prix International de la Chocolaterie.
-
-Slitti: quale pralina contiene alcol e in che percentuale?
-A) Frutto della passione 1.5%
-B) Irish Coffee 0.9%
-C) Origin 0%
-D) Tutte 0.9%
-Soluzione: B
-Motivazione: La pralina Irish Coffee contiene lo 0.9% di alcol.
-
 Slitti Coffee Spoons: in che anno sono state create?
 A) 1969
 B) 1988
@@ -742,22 +678,6 @@ D) 10
 Soluzione: C
 Motivazione: Lo standard indica circa 6 cubetti grandi, arrivando alla linea di riferimento.
 
-Mulled wine: dove si conserva la miscela la notte?
-A) Ambiente
-B) In freezer
-C) In frigo
-D) In macchina accesa
-Soluzione: C
-Motivazione: Va raffreddato, coperto con pellicola e conservato in frigorifero.
-
-Mulled wine: pulizia a fine servizio?
-A) Solo esterno macchina
-B) Lavare contenitore interno e coperchio con sapone e acqua calda + asciugare
-C) Spruzzare profumo
-D) Non pulire
-Soluzione: B
-Motivazione: I componenti interni vanno lavati accuratamente ogni giorno.
-
 Panettone/Pandoro: come aumentare l'appetibilità al banco?
 A) Servirlo sempre freddo
 B) Chiedere se lo vogliono caldo e tostare 10 sec per lato
@@ -790,10 +710,3 @@ D) Sono nate nel 2008
 Soluzione: B
 Motivazione: Sono un brevetto originale Slitti con ricetta segreta.
 
-Slitti: quale abbinamento spalmabile-tipo è corretto?
-A) Riccosa = cioccolato fondente
-B) Gianera = cioccolato al latte
-C) Slittosa = crema al cacao
-D) Slittosa = solo latte
-Soluzione: C
-Motivazione: Slittosa è crema al cacao, Riccosa è cioccolato al latte, Gianera è fondente.

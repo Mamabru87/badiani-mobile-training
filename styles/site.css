@@ -9014,6 +9014,38 @@ body.page-product .badge {
   color: #ffffff;
 }
 
+/* ── Story modal translation panel ── */
+.story-modal__translation {
+  margin-top: 14px;
+  padding: 16px 18px;
+  background: linear-gradient(135deg, rgba(33, 64, 152, 0.04), rgba(242, 190, 88, 0.06));
+  border: 1px solid rgba(33, 64, 152, 0.12);
+  border-radius: calc(var(--radius-xl) - 14px);
+  max-height: 220px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.story-modal__translation:empty {
+  display: none;
+}
+
+.story-modal__translation strong {
+  display: block;
+  font-family: var(--font-medium);
+  font-size: 14px;
+  color: var(--brand-blue, #214098);
+  margin-bottom: 6px;
+  letter-spacing: 0.02em;
+}
+
+.story-modal__translation p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
 /* ========================================================================
    Homepage: overrides migrated from index.html inline styles
    ======================================================================== */

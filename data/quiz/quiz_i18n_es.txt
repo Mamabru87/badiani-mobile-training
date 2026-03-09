@@ -1,4 +1,4 @@
-// Spanish quiz translations - add to i18n.js 'es' section
+﻿// Spanish quiz translations - add to i18n.js 'es' section
       'quiz.q.tm-001.question': "Est\u00e1s preparando el mix de crepes \"BIG BATCH\": \u00bfqu\u00e9 ingrediente es de 1500 ml?",
       'quiz.q.tm-001.option.0': "Agua",
       'quiz.q.tm-001.option.1': "Leche entera",
@@ -415,9 +415,9 @@
       'quiz.q.tm-060.question': "Autonom\u00eda t\u00e9rmica m\u00e1xima del box (antes de volver al congelador):",
       'quiz.q.tm-060.option.0': "15 min",
       'quiz.q.tm-060.option.1': "30 min",
-      'quiz.q.tm-060.option.2': "1 hora",
+      'quiz.q.tm-060.option.2': "40 min",
       'quiz.q.tm-060.option.3': "3 horas",
-      'quiz.q.tm-060.explain': "El est\u00e1ndar operativo permite hasta 1 hora.",
+      'quiz.q.tm-060.explain': "El estándar operativo permite hasta 40 minutos.",
 
       'quiz.q.tm-061.question': "Relleno del box: \u00bfcu\u00e1l es el objetivo clave durante la prensado del gelato?",
       'quiz.q.tm-061.option.0': "Dejar espacio",
@@ -608,33 +608,9 @@
       'quiz.q.tm-087.option.3': "4",
       'quiz.q.tm-087.explain': "La cantidad est\u00e1ndar en una pot est\u00e1 pensada para dos mini panettoni.",
 
-      'quiz.q.tm-088.question': "Mulled wine machine: \u00bfcu\u00e1nta agua va en el outer tank (aprox.)?",
-      'quiz.q.tm-088.option.0': "200 ml",
-      'quiz.q.tm-088.option.1': "400 ml",
-      'quiz.q.tm-088.option.2': "600 ml",
-      'quiz.q.tm-088.option.3': "1000 ml",
-      'quiz.q.tm-088.explain': "El setup est\u00e1ndar prev\u00e9 unos 600 ml de agua en el outer tank sin superar el m\u00e1ximo.",
 
-      'quiz.q.tm-089.question': "Mulled wine: tiempo de warm-up a nivel 10 (aprox.)?",
-      'quiz.q.tm-089.option.0': "5\u201310 min",
-      'quiz.q.tm-089.option.1': "15\u201320 min",
-      'quiz.q.tm-089.option.2': "25\u201330 min",
-      'quiz.q.tm-089.option.3': "45\u201360 min",
-      'quiz.q.tm-089.explain': "El warm-up est\u00e1ndar es de 25\u201330 minutos para llevar la mezcla a caliente.",
 
-      'quiz.q.tm-090.question': "Servicio de mulled wine: \u00bfqu\u00e9 garnish es obligatorio en el vaso?",
-      'quiz.q.tm-090.option.0': "Lima",
-      'quiz.q.tm-090.option.1': "Menta",
-      'quiz.q.tm-090.option.2': "Rodaja de naranja",
-      'quiz.q.tm-090.option.3': "Nata",
-      'quiz.q.tm-090.explain': "La presentaci\u00f3n est\u00e1ndar prev\u00e9 una rodaja de naranja en la cup.",
 
-      'quiz.q.tm-091.question': "Mulled wine: shelf life del vino calentado en m\u00e1quina (desde el primer warm-up)?",
-      'quiz.q.tm-091.option.0': "1 d\u00eda",
-      'quiz.q.tm-091.option.1': "3 d\u00edas",
-      'quiz.q.tm-091.option.2': "7 d\u00edas",
-      'quiz.q.tm-091.option.3': "30 d\u00edas",
-      'quiz.q.tm-091.explain': "La conservaci\u00f3n operativa del producto \"warmed up\" es de 3 d\u00edas desde el primer calentamiento.",
 
       'quiz.q.tm-092.question': "Smoothie Rosso Berry: \u00bfqu\u00e9 pareja \"sticker + sabor\" es correcta?",
       'quiz.q.tm-092.option.0': "Pink + Rosso Berry",

@@ -1,4 +1,4 @@
-
+﻿
 import os
 
 file_path = 'scripts/site.js'
@@ -9,9 +9,6 @@ with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
 
 # Define replacements for the remaining issues found via grep
 replacements = [
-    ('Vin Brul鿽', 'Vin Brulé'),
-    ('Vin Brulée]', 'Vin Brulé'),
-    ('Vin Brul\ufffd', 'Vin Brulé'), # Just in case
 ]
 
 # Apply replacements

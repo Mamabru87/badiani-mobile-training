@@ -1,4 +1,4 @@
-Stai preparando il mix crepes "BIG BATCH": quale ingrediente deve essere esattamente 1500 ml?
+﻿Stai preparando il mix crepes "BIG BATCH": quale ingrediente deve essere esattamente 1500 ml?
 A) Acqua
 B) Latte intero
 C) Albume d'uovo
@@ -110,10 +110,3 @@ D) 65%
 Soluzione: C
 Motivazione: La Gianera è caratterizzata dal 57% di nocciole delle Langhe.
 
-Mulled wine (Vin Brulé): quanto tempo deve riscaldare al livello 10 prima del servizio?
-A) 10-15 min
-B) 15-20 min
-C) 25-30 min
-D) 45-60 min
-Soluzione: C
-Motivazione: Sono necessari 25-30 minuti per portare la miscela a temperatura ideale.

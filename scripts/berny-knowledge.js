@@ -122,7 +122,7 @@
 
   // ============================================================
   // STRUCTURED KNOWLEDGE BASE (v2.0) - Context-Aware
-  // Categorie: brand, gelato, crepes, waffle, caffe, slitti, festive, procedures, faq
+  // Categorie: brand, gelato, crepes, waffle, caffe, seasonal, procedures, faq
   // Ogni entry ha: keywords[], category, params{}, response{}
   // ============================================================
   window.BERNY_KNOWLEDGE_STRUCTURED = {
@@ -292,47 +292,11 @@
         }
       }
     },
-    // === SLITTI ===
-    slitti: {
-      brand: {
-        keywords: ['slitti', 'cioccolato slitti', 'fondazione slitti', '1969'],
-        category: 'slitti',
-        params: { fondazione: 1969, origine: 'Torrefazione' },
-        response: {
-          it: '🍫 **Slitti**: fondata nel 1969 come torrefazione, oggi cioccolato artigianale.',
-          en: '🍫 **Slitti**: founded in 1969 as a roaster, now artisan chocolate.',
-          es: '🍫 **Slitti**: fundada en 1969, hoy chocolate artesanal.',
-          fr: '🍫 **Slitti**: fondée en 1969, aujourd\'hui chocolat artisanal.'
-        }
-      },
-      conservazione: {
-        keywords: ['temperatura cioccolato', 'conservazione cioccolato', '16', '18'],
-        category: 'slitti',
-        params: { temperatura: { min: 16, max: 18 } },
-        response: {
-          it: '🍫 Conserva cioccolato Slitti a 16-18°C in luogo fresco e asciutto.',
-          en: '🍫 Store Slitti chocolate at 16-18°C in a cool, dry place.',
-          es: '🍫 Conserva chocolate Slitti a 16-18°C en lugar fresco y seco.',
-          fr: '🍫 Conservez chocolat Slitti à 16-18°C dans un endroit frais et sec.'
-        }
-      },
-      gianera: {
-        keywords: ['gianera', 'spalmabile', 'nocciole', '57'],
-        category: 'slitti',
-        params: { nocciole: 57 },
-        response: {
-          it: '🍫 **Gianera**: spalmabile con 57% di nocciole.',
-          en: '🍫 **Gianera**: spread with 57% hazelnuts.',
-          es: '🍫 **Gianera**: crema con 57% de avellanas.',
-          fr: '🍫 **Gianera**: pâte à tartiner avec 57% de noisettes.'
-        }
-      }
-    },
-    // === FESTIVE ===
-    festive: {
+    // === SEASONAL ===
+    seasonal: {
       churros: {
         keywords: ['churros', 'temperatura olio', 'frittura', '190'],
-        category: 'festive',
+        category: 'seasonal',
         params: { temperaturaOlio: 190 },
         response: {
           it: '🥖 **Churros**: friggere a 190°C.',
@@ -341,26 +305,37 @@
           fr: '🥖 **Churros**: frire à 190°C.'
         }
       },
-      mulled_wine: {
-        keywords: ['mulled wine', 'vin brulé', 'vino caldo', '25', '30 min'],
-        category: 'festive',
-        params: { riscaldamento: '25-30 min', livello: 10 },
-        response: {
-          it: '🍷 **Mulled Wine**: riscaldare 25-30 min a livello 10.',
-          en: '🍷 **Mulled Wine**: heat 25-30 min at level 10.',
-          es: '🍷 **Vino caliente**: calentar 25-30 min a nivel 10.',
-          fr: '🍷 **Vin chaud**: chauffer 25-30 min au niveau 10.'
-        }
-      },
       panettone: {
         keywords: ['panettone', 'conservazione panettone', '2-3 giorni'],
-        category: 'festive',
+        category: 'seasonal',
         params: { shelfLifeAperto: '2-3 giorni' },
         response: {
           it: '🎄 **Panettone**: dopo apertura, consumare entro 2-3 giorni.',
           en: '🎄 **Panettone**: after opening, consume within 2-3 days.',
           es: '🎄 **Panettone**: después de abrir, consumir en 2-3 días.',
           fr: '🎄 **Panettone**: après ouverture, consommer sous 2-3 jours.'
+        }
+      },
+      hot_chocolate: {
+        keywords: ['cioccolata calda', 'hot chocolate', 'chocolate caliente', 'chocolat chaud'],
+        category: 'seasonal',
+        params: { temperatura: 'calda, non bollente', servizio: 'tazza grande' },
+        response: {
+          it: '☕ **Cioccolata Calda**: densa e cremosa, servita in tazza grande con panna montata e topping a scelta.',
+          en: '☕ **Hot Chocolate**: rich and creamy, served in a large cup with whipped cream and topping of choice.',
+          es: '☕ **Chocolate Caliente**: denso y cremoso, servido en taza grande con nata montada y topping a elección.',
+          fr: '☕ **Chocolat Chaud**: dense et crémeux, servi dans une grande tasse avec crème fouettée et topping au choix.'
+        }
+      },
+      colomba: {
+        keywords: ['colomba', 'colomba pasquale', 'easter colomba', 'pasqua'],
+        category: 'seasonal',
+        params: { porzioni: 8, lievitazione: '36 ore' },
+        response: {
+          it: '🐣 **Colomba**: tradizionale con glassa di mandorle. 8 porzioni. Servire a temperatura ambiente.',
+          en: '🐣 **Colomba**: traditional with almond glaze. 8 portions. Serve at room temperature.',
+          es: '🐣 **Colomba**: tradicional con glaseado de almendras. 8 porciones. Servir a temperatura ambiente.',
+          fr: '🐣 **Colomba**: traditionnelle avec glaçage aux amandes. 8 portions. Servir à température ambiante.'
         }
       }
     },

@@ -1,4 +1,4 @@
-You are preparing the "BIG BATCH" crepe mix: which ingredient is 1500 ml?
+﻿You are preparing the "BIG BATCH" crepe mix: which ingredient is 1500 ml?
 A) Water
 B) Whole milk
 C) Egg white
@@ -693,38 +693,6 @@ C) 3
 D) 4
 Solution: B
 Explanation: The standard quantity in one pot is designed for two mini panettoni.
-
-Mulled wine machine: roughly how much water goes into the outer tank?
-A) 200 ml
-B) 400 ml
-C) 600 ml
-D) 1000 ml
-Solution: C
-Explanation: The standard setup uses about 600 ml of water in the outer tank without exceeding the max.
-
-Mulled wine: warm-up time at level 10 (approximately)?
-A) 5–10 min
-B) 15–20 min
-C) 25–30 min
-D) 45–60 min
-Solution: C
-Explanation: The standard warm-up is 25–30 minutes to bring the mix to serving temperature.
-
-Mulled wine service: which garnish is mandatory in the glass?
-A) Lime
-B) Mint
-C) Orange slice
-D) Cream
-Solution: C
-Explanation: The standard presentation includes one orange slice in the cup.
-
-Mulled wine: shelf life of wine kept warm in the machine (from the first warm-up)?
-A) 1 day
-B) 3 days
-C) 7 days
-D) 30 days
-Solution: B
-Explanation: The operational shelf life of the "warmed up" product is 3 days from the first heating.
 
 Smoothie Rosso Berry: which "sticker + flavour" pair is correct?
 A) Pink + Rosso Berry

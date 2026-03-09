@@ -1,4 +1,4 @@
-# Image pack (Midjourney)
+﻿# Image pack (Midjourney)
 
 Generato: **2025-12-16 09:53**
 
@@ -194,13 +194,13 @@ Note:
 
 ## festive.html
 
-### 1. HERO — Churros, Panettoni & Vin Brule'
+### 1. HERO — Seasonal
 
 - Asset attuale: assets/churro-cover.jpg assets/churro-cover.webp
 
 
 
-/imagine prompt: premium editorial food photography, Florence boutique cafe aesthetic, soft natural light, clean warm color grading, marble and brushed steel surfaces, minimal background, shallow depth of field, high detail, tidy composition, hero shot of Churros, Panettoni & Vin Brule' (accessibility hint: Churros con salsa), no recognizable people --ar 3:2 --v 6.1 --stylize 75 --quality 1 --no testo, watermark, firma, logo, deformed hands, extra fingers, people, brand concorrenti, sfondo disordinato, bassa qualità, blur eccessivo, artefatti, oversaturated, pixelated, cartoon, illustrazione piatta, text, signature, brand logos
+/imagine prompt: premium editorial food photography, Florence boutique cafe aesthetic, soft natural light, clean warm color grading, marble and brushed steel surfaces, minimal background, shallow depth of field, high detail, tidy composition, hero shot of Seasonal (accessibility hint: Churros con salsa), no recognizable people --ar 3:2 --v 6.1 --stylize 75 --quality 1 --no testo, watermark, firma, logo, deformed hands, extra fingers, people, brand concorrenti, sfondo disordinato, bassa qualità, blur eccessivo, artefatti, oversaturated, pixelated, cartoon, illustrazione piatta, text, signature, brand logos
 
 
 
@@ -286,21 +286,17 @@ Note:
 
 ### 10. CARD — Allestimento macchina
 
-- Asset attuale: assets/festive-mulled-setup.jpg assets/festive-mulled-setup.webp
 
 
 
-/imagine prompt: premium editorial food photography, Florence boutique cafe aesthetic, soft natural light, clean warm color grading, marble and brushed steel surfaces, minimal background, shallow depth of field, high detail, tidy composition, product shot of Allestimento macchina, subtle details hinting at: Setup, 600 ml acqua (accessibility hint: Setup macchina per vin brule'), no recognizable people --ar 3:2 --v 6.1 --stylize 75 --quality 1 --no testo, watermark, firma, logo, deformed hands, extra fingers, people, brand concorrenti, sfondo disordinato, bassa qualità, blur eccessivo, artefatti, oversaturated, pixelated, cartoon, illustrazione piatta, text, signature, brand logos
 
 
 
 ### 11. CARD — Service & chiusura
 
-- Asset attuale: assets/festive-mulled-service.jpg assets/festive-mulled-service.webp
 
 
 
-/imagine prompt: premium editorial food photography, Florence boutique cafe aesthetic, soft natural light, clean warm color grading, marble and brushed steel surfaces, minimal background, shallow depth of field, high detail, tidy composition, product shot of Service & chiusura, subtle details hinting at: Servizio, 3 giorni shelf life (accessibility hint: Servizio vin brule'), no recognizable people --ar 3:2 --v 6.1 --stylize 75 --quality 1 --no testo, watermark, firma, logo, deformed hands, extra fingers, people, brand concorrenti, sfondo disordinato, bassa qualità, blur eccessivo, artefatti, oversaturated, pixelated, cartoon, illustrazione piatta, text, signature, brand logos
 
 
 

@@ -1,4 +1,4 @@
-Estás preparando el mix de crepes "BIG BATCH": ¿qué ingrediente es de 1500 ml?
+﻿Estás preparando el mix de crepes "BIG BATCH": ¿qué ingrediente es de 1500 ml?
 A) Agua
 B) Leche entera
 C) Clara de huevo
@@ -693,38 +693,6 @@ C) 3
 D) 4
 Solución: B
 Explicación: La cantidad estándar en una pot está pensada para dos mini panettoni.
-
-Mulled wine machine: ¿cuánta agua va en el outer tank (aprox.)?
-A) 200 ml
-B) 400 ml
-C) 600 ml
-D) 1000 ml
-Solución: C
-Explicación: El setup estándar prevé unos 600 ml de agua en el outer tank sin superar el máximo.
-
-Mulled wine: tiempo de warm-up a nivel 10 (aprox.)?
-A) 5–10 min
-B) 15–20 min
-C) 25–30 min
-D) 45–60 min
-Solución: C
-Explicación: El warm-up estándar es de 25–30 minutos para llevar la mezcla a caliente.
-
-Servicio de mulled wine: ¿qué garnish es obligatorio en el vaso?
-A) Lima
-B) Menta
-C) Rodaja de naranja
-D) Nata
-Solución: C
-Explicación: La presentación estándar prevé una rodaja de naranja en la cup.
-
-Mulled wine: shelf life del vino calentado en máquina (desde el primer warm-up)?
-A) 1 día
-B) 3 días
-C) 7 días
-D) 30 días
-Solución: B
-Explicación: La conservación operativa del producto "warmed up" es de 3 días desde el primer calentamiento.
 
 Smoothie Rosso Berry: ¿qué pareja "sticker + sabor" es correcta?
 A) Pink + Rosso Berry

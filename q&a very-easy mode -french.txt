@@ -1,4 +1,4 @@
-Un collègue prépare le mix crêpes et le laisse reposer 1 heure : quelle est la correction appropriée ?
+﻿Un collègue prépare le mix crêpes et le laisse reposer 1 heure : quelle est la correction appropriée ?
 A) C'est bien comme ça
 B) Ajouter plus de farine
 C) Porter le repos minimum à 2 heures
@@ -526,70 +526,6 @@ D) Dans le four éteint
 Réponse : C
 Motivation : Le standard exige que la boîte soit au congélateur jusqu'à l'arrivée du driver.
 
-Mulled wine : quel setup évite les erreurs ?
-A) Récipient interne qui flotte
-B) Récipient interne inséré sans eau
-C) Récipient interne bien mis et ne doit pas flotter
-D) Pas de récipient interne
-Réponse : C
-Motivation : Le standard spécifie que l'inner container ne doit pas "float".
-
-Mulled wine : quel warm-up est correct ?
-A) Niveau 10 pendant 5 min
-B) Niveau 10 pendant 25–30 min
-C) Niveau 5 pendant 60 min
-D) Dial 6/7 direct
-Réponse : B
-Motivation : Le standard chauffe au niveau 10 pendant 25–30 min, puis règle le dial sur 6/7.
-
-Mulled wine : quelle décoration est standard au service ?
-A) Bâton de cannelle
-B) Tranche d'orange
-C) Menthe
-D) Citron vert
-Réponse : B
-Motivation : Le standard prévoit une tranche d'orange dans la cup.
-
-Mulled wine : quelle shelf life est correcte ?
-A) Réchauffé : 30 jours ; En boîte : 3 jours
-B) Réchauffé : 3 jours ; En boîte : 30 jours
-C) Réchauffé : 7 jours ; En boîte : 7 jours
-D) Réchauffé : 1 jour ; En boîte : 14 jours
-Réponse : B
-Motivation : Standard = 3 jours réchauffé (machine) et 30 jours ouverte (boîte).
-
-Slitti : en quelle année a-t-il été fondé comme torréfacteur ?
-A) 1932
-B) 1969
-C) 1988
-D) 1990
-Réponse : B
-Motivation : La fondation comme entreprise de torréfaction de café date de 1969.
-
-Slitti : quand Andrea a-t-il étendu la production au chocolat ?
-A) 1988
-B) 1990
-C) 1994
-D) 2008
-Réponse : B
-Motivation : Le standard historique indique le passage au chocolat en 1990.
-
-Slitti : quel prix est associé à l'année 1994 ?
-A) Eurochocolate Award
-B) Grand Prix International de la Chocolaterie
-C) Meilleur chocolatier d'Italie
-D) Aucun
-Réponse : B
-Motivation : 1994 est associé au Grand Prix International de la Chocolaterie.
-
-Slitti : quel praliné contient de l'alcool et combien ?
-A) Passion fruit 1.5%
-B) Irish Coffee 0.9%
-C) Origin 0%
-D) Tous 0.9%
-Réponse : B
-Motivation : Le praliné Irish Coffee contient 0.9% d'alcool.
-
 Slitti Coffee Spoons : en quelle année ont-elles été créées ?
 A) 1969
 B) 1988
@@ -742,22 +678,6 @@ D) 10
 Réponse : C
 Motivation : Le standard indique de la glace jusqu'à la ligne, environ 6 gros glaçons.
 
-Mulled wine : où est conservé le mélange la nuit ?
-A) À température ambiante
-B) Au congélateur
-C) Au frigo
-D) Dans la machine allumée
-Réponse : C
-Motivation : Le standard exige de refroidir, couvrir de film et garder au frigo.
-
-Mulled wine : nettoyage correct à la fermeture ?
-A) Extérieur seulement
-B) Laver récipient interne et couvercle avec savon et eau chaude + sécher
-C) Pulvériser du parfum
-D) Ne pas nettoyer
-Réponse : B
-Motivation : Le standard prévoit le lavage des pièces internes et un chiffon humide dehors.
-
 Panettone/Pandoro : qu'est-ce qui augmente l'attrait au comptoir ?
 A) Servir toujours froid
 B) Demander s'ils le veulent warm et griller 10 sec par face
@@ -790,10 +710,3 @@ D) Créées en 2008
 Réponse : B
 Motivation : Elles sont décrites comme originales, recette secrète, et premières “True Spoons”.
 
-Slitti : combinaison tartinable/type correcte ?
-A) Riccosa = chocolat noir
-B) Gianera = chocolat au lait
-C) Slittosa = pâte de cacao
-D) Slittosa = lait seulement
-Réponse : C
-Motivation : Slittosa est une pâte de cacao, Riccosa est au chocolat au lait et Gianera au chocolat noir.

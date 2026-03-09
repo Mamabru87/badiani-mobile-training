@@ -293,9 +293,8 @@
           'menu.link.caffe': 'Bar & Drinks',
           'menu.link.sweetTreats': 'Sweet Treat Atelier',
           'menu.link.pastries': 'Pastry Lab',
-          'menu.link.slittiYoyo': 'Slitti & Yo-Yo',
           'menu.link.gelatoLab': 'Gelato Lab',
-          'menu.link.festive': 'Festive & Churros',
+          'menu.link.festive': 'Seasonal',
 
           // Drawer
           'drawer.categories': 'Categorie',
@@ -437,9 +436,8 @@
           'menu.link.caffe': 'Bar & Drinks',
           'menu.link.sweetTreats': 'Sweet Treat Atelier',
           'menu.link.pastries': 'Pastry Lab',
-          'menu.link.slittiYoyo': 'Slitti & Yo-Yo',
           'menu.link.gelatoLab': 'Gelato Lab',
-          'menu.link.festive': 'Festive & Churros',
+          'menu.link.festive': 'Seasonal',
 
           // Drawer
           'drawer.categories': 'Categories',
@@ -581,9 +579,8 @@
           'menu.link.caffe': 'Bar y bebidas',
           'menu.link.sweetTreats': 'Atelier de dulces',
           'menu.link.pastries': 'Laboratorio de pastelería',
-          'menu.link.slittiYoyo': 'Slitti & Yo-Yo',
           'menu.link.gelatoLab': 'Laboratorio Gelato',
-          'menu.link.festive': 'Festivos y churros',
+          'menu.link.festive': 'Seasonal',
 
           // Drawer
           'drawer.categories': 'Categorías',
@@ -725,9 +722,8 @@
           'menu.link.caffe': 'Bar & boissons',
           'menu.link.sweetTreats': 'Atelier Sweet Treat',
           'menu.link.pastries': 'Pastry Lab',
-          'menu.link.slittiYoyo': 'Slitti & Yo-Yo',
           'menu.link.gelatoLab': 'Gelato Lab',
-          'menu.link.festive': 'Festif & churros',
+          'menu.link.festive': 'Seasonal',
 
           // Drawer
           'drawer.categories': 'Catégories',

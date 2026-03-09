@@ -684,7 +684,7 @@
         const lower = (cleanText || '').toLowerCase();
         if (lower.includes('story orbit') || lower.includes('story-orbit') || (lower.includes('firenze') && lower.includes('origine'))) {
           link = 'story-orbit.html?q=story';
-        } else if (lower.includes('churro')) link = 'festive.html?q=churros';
+        } else if (lower.includes('churro')) link = 'sweet-treats.html?q=churros';
         else if (lower.includes('waffle')) link = 'sweet-treats.html?q=waffles';
         else if (lower.includes('pancake')) link = 'sweet-treats.html?q=pancake';
         else if (lower.includes('gelato')) link = 'gelato-lab.html?q=cups';

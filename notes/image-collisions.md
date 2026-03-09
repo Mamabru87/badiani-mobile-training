@@ -1,4 +1,4 @@
-# Image collisions (asset riusati)
+﻿# Image collisions (asset riusati)
 
 Alcune schede condividono **lo stesso file immagine** in `assets/`.
 Se vuoi davvero **un'immagine diversa per ogni scheda**, questi file vanno **sdoppiati** (nuovo filename) e poi va aggiornato l’HTML della card che deve usare la nuova immagine.
@@ -10,7 +10,7 @@ Per ora ho lasciato i filename invariati nel pack, quindi **per questi casi devi
 ## Duplicati individuati
 
 ### `assets/churro-cover.jpg` (+ `assets/churro-cover.webp`)
-- `festive.html` — HERO: **Churros, Panettoni & Vin Brule'**
+- `festive.html` — HERO: **Seasonal**
 - `festive.html` — CARD: **Impiattamento & upsell**
 
 Suggerimento (Opzione B):

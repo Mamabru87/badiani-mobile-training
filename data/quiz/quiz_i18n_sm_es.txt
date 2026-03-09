@@ -1,4 +1,4 @@
-// Super-easy (sm-) quiz translations - Spanish
+﻿// Super-easy (sm-) quiz translations - Spanish
       'quiz.q.sm-001.question': "Un compañero prepara el mix de crepes y lo deja reposar 1 hora: ¿cuál es la corrección adecuada?",
       'quiz.q.sm-001.option.0': "Está bien así",
       'quiz.q.sm-001.option.1': "Añadir más harina",
@@ -461,33 +461,9 @@
       'quiz.q.sm-066.option.3': "Horno",
       'quiz.q.sm-066.explain': "Estándar exige que la caja esté en el congelador hasta que llegue el driver.",
 
-      'quiz.q.sm-067.question': "Mulled wine: ¿qué setup evita errores?",
-      'quiz.q.sm-067.option.0': "Recipiente interno flotando",
-      'quiz.q.sm-067.option.1': "Recipiente interno sin agua",
-      'quiz.q.sm-067.option.2': "Recipiente interno bien puesto y no debe flotar",
-      'quiz.q.sm-067.option.3': "Sin recipiente interno",
-      'quiz.q.sm-067.explain': "Estándar especifica que el recipiente interno no debe “flotar”.",
 
-      'quiz.q.sm-068.question': "Mulled wine: ¿calentamiento correcto?",
-      'quiz.q.sm-068.option.0': "Nivel 10 por 5 min",
-      'quiz.q.sm-068.option.1': "Nivel 10 por 25–30 min",
-      'quiz.q.sm-068.option.2': "Nivel 5 por 60 min",
-      'quiz.q.sm-068.option.3': "Dial 6/7 directo",
-      'quiz.q.sm-068.explain': "Estándar calienta a nivel 10 por 25–30 min, luego ajusta dial a 6/7.",
 
-      'quiz.q.sm-069.question': "Mulled wine: ¿decoración estándar?",
-      'quiz.q.sm-069.option.0': "Canela en rama",
-      'quiz.q.sm-069.option.1': "Rodaja de naranja",
-      'quiz.q.sm-069.option.2': "Menta",
-      'quiz.q.sm-069.option.3': "Lima",
-      'quiz.q.sm-069.explain': "El estándar prevé una rodaja de naranja en la copa.",
 
-      'quiz.q.sm-070.question': "Mulled wine: ¿vida útil correcta?",
-      'quiz.q.sm-070.option.0': "Calentado: 30 días; En caja: 3 días",
-      'quiz.q.sm-070.option.1': "Calentado: 3 días; En caja: 30 días",
-      'quiz.q.sm-070.option.2': "Calentado: 7 días; En caja: 7 días",
-      'quiz.q.sm-070.option.3': "Calentado: 1 día; En caja: 14 días",
-      'quiz.q.sm-070.explain': "Estándar = 3 días calentado (máquina) y 30 días abierta (caja).",
 
       'quiz.q.sm-071.question': "Slitti: ¿año de nacimiento como torrefacción?",
       'quiz.q.sm-071.option.0': "1932",
@@ -650,19 +626,7 @@
       'quiz.q.sm-093.option.3': "10",
       'quiz.q.sm-093.explain': "Estándar indica hielo hasta la línea, unos 6 cubos grandes.",
 
-      'quiz.q.sm-094.question': "Mulled wine: ¿dónde se guarda la mezcla por la noche?",
-      'quiz.q.sm-094.option.0': "Ambiente",
-      'quiz.q.sm-094.option.1': "Congelador",
-      'quiz.q.sm-094.option.2': "Nevera",
-      'quiz.q.sm-094.option.3': "En la máquina encendida",
-      'quiz.q.sm-094.explain': "Estándar exige enfriar, tapar con film y guardar en nevera.",
 
-      'quiz.q.sm-095.question': "Mulled wine: ¿limpieza correcta al cierre?",
-      'quiz.q.sm-095.option.0': "Solo exterior",
-      'quiz.q.sm-095.option.1': "Lavar recipiente interno y tapa con jabón y agua caliente + secar",
-      'quiz.q.sm-095.option.2': "Echar perfume",
-      'quiz.q.sm-095.option.3': "No limpiar",
-      'quiz.q.sm-095.explain': "Estándar prevé lavado de piezas internas y paño húmedo fuera.",
 
       'quiz.q.sm-096.question': "Panettone/Pandoro: ¿qué aumenta el atractivo al mostrador?",
       'quiz.q.sm-096.option.0': "Servir siempre frío",

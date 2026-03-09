@@ -1,4 +1,4 @@
-sm-001: Un collègue prépare l'appareil à crêpes et le laisse reposer 1h : quel correctif appliquer ?
+﻿sm-001: Un collègue prépare l'appareil à crêpes et le laisse reposer 1h : quel correctif appliquer ?
 sm-002: Tu fais une Buontalenti crêpe et le client veut “plus de sauce dessus” : quelle quantité standard de sauce top avant l'extra ?
 sm-003: Tu veux préparer une crêpe “Italiana plain base” : quelle combinaison respecte le standard ?
 sm-004: La crêpe salée est prête mais “molle” au centre : quelle étape finale a probablement été oubliée ?
@@ -70,10 +70,6 @@ sm-069: Mini panettone farci : d'où le prends-tu en boutique ?
 sm-070: Mini panettone farci : à quel niveau remplir la espresso cup de sauce ?
 sm-071: Mini panettone – delivery : jusqu'à quel niveau remplis-tu la sauce pot ?
 sm-072: Mini panettone – delivery : une sauce pot couvre combien de mini unités ?
-sm-073: Mulled wine machine : quel volume d'eau va dans l'outer tank (approx) ?
-sm-074: Mulled wine : temps de warm-up au niveau 10 (approx) ?
-sm-075: Service du mulled wine : quel garnish est obligatoire dans le verre ?
-sm-076: Mulled wine : shelf life du vin réchauffé dans la machine (depuis le premier warm-up) ?
 sm-077: Smoothie Rosso Berry : quel couple “sticker + goût” est correct ?
 sm-078: Smoothie Verde Boost : quel sticker est correct ?
 sm-079: Smoothie Giallo Passion : quel sticker est correct ?

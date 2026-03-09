@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="it">
   <head>
     <meta charset="UTF-8">
@@ -57,9 +57,8 @@
             <li><a href="caffe.html" data-i18n="menu.link.caffe">Bar &amp; Drinks</a></li>
             <li><a href="sweet-treats.html" data-i18n="menu.link.sweetTreats">Sweet Treat Atelier</a></li>
             <li><a href="pastries.html" data-i18n="menu.link.pastries">Pastry Lab</a></li>
-            <li><a href="slitti-yoyo.html" data-i18n="menu.link.slittiYoyo">Slitti &amp; Yo-Yo</a></li>
             <li><a href="gelato-lab.html" data-i18n="menu.link.gelatoLab">Gelato Lab</a></li>
-            <li><a href="festive.html" data-i18n="menu.link.festive">Festive &amp; Churros</a></li>
+            <li><a href="festive.html" data-i18n="menu.link.festive">Seasonal</a></li>
           </ul>
         </nav>
 
@@ -96,7 +95,7 @@
         <div class="hero-card">
           <div class="badge">
             <span data-i18n="operations.hero.badge">Playbook operativo</span>
-            <span class="page-stars" data-page-stars data-i18n="operations.hero.stars">⭐ Stelle: 0/6</span>
+            <span class="page-stars" data-page-stars data-i18n="operations.hero.stars">⭐ Stelle: 0/13</span>
           </div>
           <h1 data-i18n="operations.hero.title">Operations &amp; Setup</h1>
           <p data-i18n="operations.hero.desc">
@@ -185,7 +184,19 @@
               <div class="tips">Fotografa il set-up ideale e condividilo nel gruppo store per mantenere coerenza.</div>
             </div>
           </article>
+        </div>
+      </section>
 
+      <section class="carousel" data-carousel="operations-tech">
+        <header class="carousel-header" data-carousel-header>
+          <div class="carousel-header__title-block">
+            <h2 class="carousel-title" data-carousel-title data-i18n="operations.carousel.tech.title">Dati tecnici &amp; Conservazione</h2>
+            <span class="carousel-category" data-carousel-category data-i18n="operations.carousel.tech.category">Quick reference · Temperature · Shelf life · FIFO</span>
+          </div>
+          <div class="carousel-indicators" data-carousel-indicators></div>
+        </header>
+
+        <div class="carousel-track" data-carousel-track>
           <!-- Festive / Servizio e procedure -->
           <article class="guide-card guide-card--procedure" id="card-ops-warm-service" data-carousel-item>
             <div class="tag-row">
@@ -254,74 +265,37 @@
             </div>
           </article>
 
-          <article class="guide-card guide-card--procedure" data-carousel-item id="card-allestimento-macchina">
+                    <!-- Daily Checklists -->
+          <article class="guide-card guide-card--procedure" data-carousel-item id="card-daily-checklists">
             <div class="tag-row">
-              <span class="tag" data-i18n="operations.cards.vinMachineSetup.tag1">Setup</span>
-              <span class="tag">Vin Brulé</span>
-              <span class="tag" data-i18n="operations.cards.vinMachineSetup.tag3">Tank</span>
+              <span class="tag" data-i18n="operations.cards.dailyChecklists.tag1">Daily</span>
+              <span class="tag" data-i18n="operations.cards.dailyChecklists.tag2">Checklist</span>
+              <span class="tag" data-i18n="operations.cards.dailyChecklists.tag3">Routine</span>
             </div>
-            <h3 data-i18n="operations.cards.vinMachineSetup.title">Allestimento macchina</h3>
-            <p data-i18n="operations.cards.vinMachineSetup.desc">Macchina Vin Brulé: riempire tank esterno con 600 ml d'acqua senza superare il max, inserire contenitore interno.</p>
-            <button class="btn-ghost" data-toggle-card data-i18n="card.procedure">Procedura</button>
-            <div class="details" data-i18n-html="operations.cards.vinMachineSetup.details">
+            <h3 data-i18n="operations.cards.dailyChecklists.title">Checklist giornaliere</h3>
+            <p data-i18n="operations.cards.dailyChecklists.desc">Lista delle checklist operative da completare ogni giorno in negozio.</p>
+            <ul class="stat-list" data-i18n-html="operations.cards.dailyChecklists.stats">
+              <li>✅ Opening Checklist – Apertura e preparazione</li>
+              <li>✅ Delivery Checklist – Ricezione merce e controlli</li>
+              <li>✅ Temperature Checklist – Registra temperature su log HACCP</li>
+              <li>✅ Afternoon Checklist – Refill, ordine, pulizia</li>
+              <li>✅ Closing Checklist – Chiusura, temperature, pulizia</li>
+              <li>✅ Cleaning Checklist – Pulizie giornaliere e settimanali</li>
+            </ul>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.checklist">Checklist</button>
+            <div class="details" data-i18n-html="operations.cards.dailyChecklists.details">
               <div class="steps">
-                <span>1 - Versa 500/1000 ml di mix nel tank argento.</span>
-                <span>2 - Porta temperatura a livello 10 per 25-30 min; poi mantieni a 6-7.</span>
-                <span>3 - Usa il coperchio durante il mantenimento per evitare evaporazione.</span>
+                <span>1 · Opening: temperature, vetrine pronte, utensili puliti.</span>
+                <span>2 · Delivery: verifica quantità, temperatura merce, FIFO.</span>
+                <span>3 · Temperature: registra su HACCP tutte le temperature.</span>
+                <span>4 · Afternoon: refill, ordine banco, pulizia superfici.</span>
+                <span>5 · Closing: spegni vetrina, temperature finali, pulizie.</span>
+                <span>6 · Cleaning: vetri, filtri, defrost come da schedule.</span>
               </div>
-              <div class="tips">Meglio scaldare piccoli lotti per garantire freschezza e aromi.</div>
-              <hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);">
-              <div class="steps">
-                <strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong>
-                <span><strong>Visual appeal:</strong> "Setup macchina in area visibile per attirare ordini"</span>
-                <span><strong>Sampling:</strong> "Offri mini assaggi nelle ore punta per conversione"</span>
-                <span><strong>Bundle:</strong> "Mulled wine + mini panettone = combo festiva perfetta"</span>
-              </div>
-              <hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);">
-              <div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Tank esterno: 600ml acqua max. Livello 10 per 25-30 min riscaldamento, poi 6-7 mantenimento. Piccoli batch = freschezza. Coperchio evita evaporazione aromi.</div>
             </div>
           </article>
 
-          <article class="guide-card guide-card--maintenance" data-carousel-item id="card-service-chiusura">
-            <div class="tag-row">
-              <span class="tag" data-i18n="operations.cards.vinServiceClosing.tag1">Servizio</span>
-              <span class="tag">Vin Brulé</span>
-              <span class="tag" data-i18n="operations.cards.vinServiceClosing.tag3">Chiusura</span>
-            </div>
-            <h3 data-i18n="operations.cards.vinServiceClosing.title">Service & chiusura</h3>
-            <p data-i18n="operations.cards.vinServiceClosing.desc">Vin Brulé: servi con mestolo, fetta d'arancia e controllo shelf life.</p>
-            <button class="btn-ghost" data-toggle-card data-i18n="card.procedure">Procedura</button>
-            <div class="details" data-i18n-html="operations.cards.vinServiceClosing.details">
-              <div class="steps">
-                <span>1 - Riempire cup con mestolo, aggiungere fetta d'arancia.</span>
-                <span>2 - A fine giornata travasa nel bricco, lascia raffreddare e copri con pellicola.</span>
-                <span>3 - Frigo + label (3 giorni dal primo warm-up; 30 giorni per mix non aperto).</span>
-              </div>
-              <div class="tips">Pulire tank, contenitore e esterno macchina ogni sera con acqua calda e detergente.</div>
-              <hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);">
-              <div class="steps">
-                <strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">💰 Upselling</strong>
-                <span><strong>Opzione 1:</strong> "Vuoi aggiungere shot di rum per versione adulta?"</span>
-                <span><strong>Opzione 2:</strong> "Fetta d'arancia fresca + cannella stick = presentazione Instagram"</span>
-                <span><strong>Opzione 3:</strong> "Racconta spezie natalizie e tradizione per valore percepito"</span>
-              </div>
-              <hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);">
-              <div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Servi con mestolo dedicato. Fetta arancia fresca sempre. Shelf life: 3 giorni da primo riscaldamento, 30 giorni mix chiuso. Pulizia tank ogni sera con acqua calda.</div>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section class="carousel" data-carousel="operations-tech">
-        <header class="carousel-header" data-carousel-header>
-          <div class="carousel-header__title-block">
-            <h2 class="carousel-title" data-carousel-title data-i18n="operations.carousel.tech.title">Dati tecnici &amp; Conservazione</h2>
-            <span class="carousel-category" data-carousel-category data-i18n="operations.carousel.tech.category">Quick reference · Temperature · Shelf life · FIFO</span>
-          </div>
-          <div class="carousel-indicators" data-carousel-indicators></div>
-        </header>
-
-        <div class="carousel-track" data-carousel-track>
+          <!-- Key Temperatures -->
           <article class="guide-card guide-card--procedure" data-carousel-item id="card-temperature-chiave-quick-map">
             <div class="tag-row">
               <span class="tag" data-i18n="operations.cards.tempKeyMap.tag1">Setting</span>
@@ -329,18 +303,17 @@
               <span class="tag" data-i18n="operations.cards.tempKeyMap.tag3">Quick ref</span>
             </div>
             <h3 data-i18n="operations.cards.tempKeyMap.title">Temperature chiave (quick map)</h3>
-            <p data-i18n="operations.cards.tempKeyMap.desc">Temperature chiave da tenere a mente per evitare prodotti fuori standard.</p>
+            <p data-i18n="operations.cards.tempKeyMap.desc">Temperature chiave da rispettare per evitare prodotti fuori standard.</p>
             <ul class="stat-list" data-i18n-html="operations.cards.tempKeyMap.stats">
-              <li>Gelato vetrina: -14/-15 °C (target)</li>
-              <li>Display freezer treats: almeno -14 e senza ghiaccio (defrost weekly)</li>
-              <li>Thermal storage box (gelato take-away): autonomia max 1 ora prima di tornare in freezer</li>
+              <li>Vetrina gelato: -14/-15 °C (target)</li>
+              <li>Frigoriferi: fino a +7 °C max</li>
+              <li>Vertical display: -16 °C</li>
+              <li>Display freezer treats: almeno -14 °C e senza ghiaccio</li>
             </ul>
             <button class="btn-ghost" data-toggle-card data-i18n="card.use">Uso</button>
             <div class="details" data-i18n-html="operations.cards.tempKeyMap.details">
               <div class="steps">
-                <span>1 · Se la temperatura è fuori range: avvisa subito e non “compensare” con service tricks.</span>
-                <span>2 · Sliding doors in posizione quando non busy per preservare -14/-15.</span>
-                <span>3 · Defrost e pulizia programmata = stabilità temperature.</span>
+                <span>Se la temperatura è fuori range, segnalalo immediatamente!</span>
               </div>
             </div>
           </article>
@@ -380,7 +353,6 @@
               <li>Crepe mix: 3 giorni (frigo) + riposo minimo 2 ore</li>
               <li>Waffle mix (pre-packed): 2 giorni</li>
               <li>Premade matcha: 1 giorno (incluso giorno di preparazione) → frigo</li>
-              <li>Mulled wine: 3 giorni dal primo warm-up (mix in macchina)</li>
             </ul>
             <button class="btn-ghost" data-toggle-card data-i18n="card.rules">Regole</button>
             <div class="details" data-i18n-html="operations.cards.shelfLifeQuick.details">
@@ -396,10 +368,10 @@
             <div class="tag-row">
               <span class="tag" data-i18n="operations.cards.takeAwayThermal.tag1">Packaging</span>
               <span class="tag" data-i18n="operations.cards.takeAwayThermal.tag2">Take away</span>
-              <span class="tag">1h</span>
+              <span class="tag">40 min</span>
             </div>
             <h3 data-i18n="operations.cards.takeAwayThermal.title">Take-away: autonomia termica</h3>
-            <p data-i18n="operations.cards.takeAwayThermal.desc">La thermal storage box ha autonomia massima di 1 ora: poi il prodotto deve tornare in freezer.</p>
+            <p data-i18n="operations.cards.takeAwayThermal.desc">La thermal storage box ha autonomia massima di 40 minuti: poi il prodotto deve tornare in freezer.</p>
             <ul class="stat-list" data-i18n-html="operations.cards.takeAwayThermal.stats">
               <li>Comunicalo sempre al cliente (qualità e sicurezza)</li>
               <li>Consiglia freezer appena possibile</li>
@@ -408,33 +380,80 @@
             <button class="btn-ghost" data-toggle-card data-i18n="card.script">Script</button>
             <div class="details" data-i18n-html="operations.cards.takeAwayThermal.details">
               <div class="steps">
-                <span>1 · “Questa box tiene circa 1 ora: poi freezer.”</span>
+                <span>1 · "Questa box tiene circa 40 minuti: poi freezer."</span>
                 <span>2 · Offri bag termica se prevista dallo store.</span>
                 <span>3 · Per delivery: conserva in freezer fino al ritiro.</span>
               </div>
             </div>
           </article>
 
-          <article class="guide-card guide-card--procedure" data-carousel-item id="card-schedule-pulizie-giorno-settimana">
+          <!-- Closing Procedures -->
+          <article class="guide-card guide-card--procedure" data-carousel-item id="card-closing-procedures">
             <div class="tag-row">
-              <span class="tag" data-i18n="operations.cards.cleaningSchedule.tag1">Chiusura</span>
-              <span class="tag" data-i18n="operations.cards.cleaningSchedule.tag2">Weekly</span>
-              <span class="tag" data-i18n="operations.cards.cleaningSchedule.tag3">Routine</span>
+              <span class="tag" data-i18n="operations.cards.closingProcedures.tag1">Chiusura</span>
+              <span class="tag" data-i18n="operations.cards.closingProcedures.tag2">EOD</span>
+              <span class="tag" data-i18n="operations.cards.closingProcedures.tag3">Standard</span>
             </div>
-            <h3 data-i18n="operations.cards.cleaningSchedule.title">Schedule pulizie (giorno / settimana)</h3>
-            <p data-i18n="operations.cards.cleaningSchedule.desc">Chiusura e manutenzione programmata = performance costanti e meno imprevisti in servizio.</p>
+            <h3 data-i18n="operations.cards.closingProcedures.title">Procedura di chiusura</h3>
+            <p data-i18n="operations.cards.closingProcedures.desc">Tutte le fasi di chiusura per lasciare il negozio pronto per il giorno dopo.</p>
+            <ul class="stat-list" data-i18n-html="operations.cards.closingProcedures.stats">
+              <li>Pulisci tutte le superfici e attrezzi di lavoro</li>
+              <li>Spegni vetrina gelato (OFF ogni notte)</li>
+              <li>Registra temperature finali su log HACCP</li>
+              <li>Etichetta e copri tutti i prodotti in frigo</li>
+              <li>Controlla scadenze e FIFO per il giorno successivo</li>
+            </ul>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.procedure">Procedura</button>
+            <div class="details" data-i18n-html="operations.cards.closingProcedures.details">
+              <div class="steps">
+                <span>1 · Pulisci superfici, macchina cappuccino, attrezzi.</span>
+                <span>2 · Spegni vetrina gelato e chiudi sliding doors.</span>
+                <span>3 · Registra temperature finali (HACCP).</span>
+                <span>4 · Copri e etichetta tutti i prodotti in frigo/freezer.</span>
+                <span>5 · Controlla FIFO e elimina prodotti scaduti.</span>
+                <span>6 · Svuota cestini, pulisci pavimenti.</span>
+                <span>7 · Chiudi cassa e compila report giornaliero.</span>
+              </div>
+              <div class="tips"><strong style="color: var(--brand-rose);">🛠️ Pro tip:</strong> Una chiusura fatta bene = un'apertura veloce domani.</div>
+            </div>
+          </article>
+
+          <!-- Cleaning & Defrost -->
+          <article class="guide-card guide-card--maintenance" data-carousel-item id="card-schedule-pulizie-giorno-settimana">
+            <div class="tag-row">
+              <span class="tag" data-i18n="operations.cards.cleaningSchedule.tag1">Pulizia</span>
+              <span class="tag" data-i18n="operations.cards.cleaningSchedule.tag2">Defrost</span>
+              <span class="tag" data-i18n="operations.cards.cleaningSchedule.tag3">Weekly</span>
+            </div>
+            <h3 data-i18n="operations.cards.cleaningSchedule.title">Pulizia &amp; Defrost</h3>
+            <p data-i18n="operations.cards.cleaningSchedule.desc">Pulizia vetrina, deep clean filtri e sbrinamento freezer programmati per performance costanti.</p>
             <ul class="stat-list" data-i18n-html="operations.cards.cleaningSchedule.stats">
-              <li>Gelato vetrina: OFF ogni notte</li>
-              <li>Gelato vetrina: deep clean weekly</li>
-              <li>Filtri: cleaning weekly</li>
-              <li>Display freezer treats: defrost weekly (free of ice)</li>
+              <li>Vetrina gelato: pulisci vetri ogni giorno, deep clean settimanale</li>
+              <li>Filtri: deep cleaning settimanale (rimuovi, lava, asciuga, rimonta)</li>
+              <li>Treat freezer: defrost settimanale (sempre senza ghiaccio)</li>
+              <li>Vertical display: defrost settimanale (verifica -16 °C)</li>
             </ul>
             <button class="btn-ghost" data-toggle-card data-i18n="card.checklist">Checklist</button>
             <div class="details" data-i18n-html="operations.cards.cleaningSchedule.details">
               <div class="steps">
-                <span>1 · Segna la giornata di deep clean (non improvvisare).</span>
-                <span>2 · Pulisci prima che si accumuli: è più veloce.</span>
-                <span>3 · Dopo la pulizia: rimonta, sanitizza e lucida.</span>
+                <strong>🧊 Pulizia vetrina gelato</strong>
+                <span>1 · Spegni vetrina a fine turno (OFF ogni notte).</span>
+                <span>2 · Pulisci vetri interni ed esterni con prodotto specifico.</span>
+                <span>3 · Deep clean settimanale: smonta, pulisci, sanitizza, lucida e rimonta.</span>
+              </div>
+              <hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);">
+              <div class="steps">
+                <strong>🔧 Deep cleaning filtri</strong>
+                <span>1 · Rimuovi filtri dalla vetrina/freezer.</span>
+                <span>2 · Lava con acqua calda e detergente specifico.</span>
+                <span>3 · Asciuga completamente prima di rimontare.</span>
+              </div>
+              <hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);">
+              <div class="steps">
+                <strong>❄️ Defrosting freezer</strong>
+                <span>1 · Treat freezer: defrost settimanale (deve risultare senza ghiaccio).</span>
+                <span>2 · Vertical display: defrost settimanale (verifica -16 °C dopo riavvio).</span>
+                <span>3 · Dopo ogni defrost: pulisci, asciuga e riaccendi.</span>
               </div>
             </div>
           </article>
@@ -449,7 +468,7 @@
         <p class="footer-tagline" data-i18n="operations.footer.tagline">Standard che rendono il servizio semplice</p>
         <div class="footer-stats">
           <div class="footer-stat">
-            <span class="stat-value">6</span>
+            <span class="stat-value">13</span>
             <span class="stat-label" data-i18n="operations.footer.stats.cards">Schede</span>
           </div>
           <div class="footer-stat">

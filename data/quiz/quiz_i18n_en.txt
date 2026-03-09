@@ -1,4 +1,4 @@
-// English quiz translations - add to i18n.js 'en' section
+﻿// English quiz translations - add to i18n.js 'en' section
       'quiz.q.tm-001.question': "You are preparing the \"BIG BATCH\" crepe mix: which ingredient is 1500 ml?",
       'quiz.q.tm-001.option.0': "Water",
       'quiz.q.tm-001.option.1': "Whole milk",
@@ -415,9 +415,9 @@
       'quiz.q.tm-060.question': "Maximum thermal autonomy of the box (before going back into the freezer):",
       'quiz.q.tm-060.option.0': "15 min",
       'quiz.q.tm-060.option.1': "30 min",
-      'quiz.q.tm-060.option.2': "1 hour",
+      'quiz.q.tm-060.option.2': "40 min",
       'quiz.q.tm-060.option.3': "3 hours",
-      'quiz.q.tm-060.explain': "The operational standard allows up to 1 hour.",
+      'quiz.q.tm-060.explain': "The operational standard allows up to 40 minutes.",
 
       'quiz.q.tm-061.question': "Filling the box: what is the key objective while pressing the gelato?",
       'quiz.q.tm-061.option.0': "Leave space",
@@ -608,33 +608,9 @@
       'quiz.q.tm-087.option.3': "4",
       'quiz.q.tm-087.explain': "The standard quantity in one pot is designed for two mini panettoni.",
 
-      'quiz.q.tm-088.question': "Mulled wine machine: roughly how much water goes into the outer tank?",
-      'quiz.q.tm-088.option.0': "200 ml",
-      'quiz.q.tm-088.option.1': "400 ml",
-      'quiz.q.tm-088.option.2': "600 ml",
-      'quiz.q.tm-088.option.3': "1000 ml",
-      'quiz.q.tm-088.explain': "The standard setup uses about 600 ml of water in the outer tank without exceeding the max.",
 
-      'quiz.q.tm-089.question': "Mulled wine: warm-up time at level 10 (approximately)?",
-      'quiz.q.tm-089.option.0': "5\u201310 min",
-      'quiz.q.tm-089.option.1': "15\u201320 min",
-      'quiz.q.tm-089.option.2': "25\u201330 min",
-      'quiz.q.tm-089.option.3': "45\u201360 min",
-      'quiz.q.tm-089.explain': "The standard warm-up is 25\u201330 minutes to bring the mix to serving temperature.",
 
-      'quiz.q.tm-090.question': "Mulled wine service: which garnish is mandatory in the glass?",
-      'quiz.q.tm-090.option.0': "Lime",
-      'quiz.q.tm-090.option.1': "Mint",
-      'quiz.q.tm-090.option.2': "Orange slice",
-      'quiz.q.tm-090.option.3': "Cream",
-      'quiz.q.tm-090.explain': "The standard presentation includes one orange slice in the cup.",
 
-      'quiz.q.tm-091.question': "Mulled wine: shelf life of wine kept warm in the machine (from the first warm-up)?",
-      'quiz.q.tm-091.option.0': "1 day",
-      'quiz.q.tm-091.option.1': "3 days",
-      'quiz.q.tm-091.option.2': "7 days",
-      'quiz.q.tm-091.option.3': "30 days",
-      'quiz.q.tm-091.explain': "The operational shelf life of the \"warmed up\" product is 3 days from the first heating.",
 
       'quiz.q.tm-092.question': "Smoothie Rosso Berry: which \"sticker + flavour\" pair is correct?",
       'quiz.q.tm-092.option.0': "Pink + Rosso Berry",

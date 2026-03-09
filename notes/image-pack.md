@@ -1,4 +1,4 @@
-# Image pack (prompts)
+﻿# Image pack (prompts)
 
 Generato: **2025-12-16 09:53**
 
@@ -431,7 +431,7 @@ testo, watermark, firma, logo visibile, mani deformi, dita extra, volti riconosc
 
 ## festive.html
 
-### 1. HERO — Churros, Panettoni & Vin Brule'
+### 1. HERO — Seasonal
 
 - Asset: assets/churro-cover.jpg assets/churro-cover.webp
 
@@ -444,7 +444,7 @@ testo, watermark, firma, logo visibile, mani deformi, dita extra, volti riconosc
 
 **Prompt**
 
-Foto editoriale premium, stile boutique fiorentina, luce morbida naturale, color grading caldo ma pulito, materiali reali (marmo chiaro, acciaio, ceramica), sfondo minimale, profondità di campo leggera, alta nitidezza, composizione ordinata. Soggetto principale: Cover: Churros, Panettoni & Vin Brule'. contesto stagionale/festivo (churros, panettone, vin brulè). Scatto inquadratura 3/4 o top-down a seconda del prodotto, nessuna persona riconoscibile, focus sul prodotto/strumento, ambientazione pulita e professionale. Nota: descrizione accessibilità: 'Churros con salsa'.
+Foto editoriale premium, stile boutique fiorentina, luce morbida naturale, color grading caldo ma pulito, materiali reali (marmo chiaro, acciaio, ceramica), sfondo minimale, profondità di campo leggera, alta nitidezza, composizione ordinata. Soggetto principale: Cover: Seasonal. contesto stagionale/festivo (churros, panettone). Scatto inquadratura 3/4 o top-down a seconda del prodotto, nessuna persona riconoscibile, focus sul prodotto/strumento, ambientazione pulita e professionale. Nota: descrizione accessibilità: 'Churros con salsa'.
 
 
 **Negative prompt**
@@ -467,7 +467,7 @@ testo, watermark, firma, logo visibile, mani deformi, dita extra, volti riconosc
 
 **Prompt**
 
-Foto editoriale premium, stile boutique fiorentina, luce morbida naturale, color grading caldo ma pulito, materiali reali (marmo chiaro, acciaio, ceramica), sfondo minimale, profondità di campo leggera, alta nitidezza, composizione ordinata. Soggetto principale: Cottura perfetta. contesto stagionale/festivo (churros, panettone, vin brulè). Scatto inquadratura 3/4 o top-down a seconda del prodotto, nessuna persona riconoscibile, focus sul prodotto/strumento, ambientazione pulita e professionale. Includi micro-dettagli coerenti con: Fryer 190 °C, 8 pezzi/porzione. Nota: descrizione accessibilità: 'Churros appena fritti'.
+Foto editoriale premium, stile boutique fiorentina, luce morbida naturale, color grading caldo ma pulito, materiali reali (marmo chiaro, acciaio, ceramica), sfondo minimale, profondità di campo leggera, alta nitidezza, composizione ordinata. Soggetto principale: Cottura perfetta. contesto stagionale/festivo (churros, panettone). Scatto inquadratura 3/4 o top-down a seconda del prodotto, nessuna persona riconoscibile, focus sul prodotto/strumento, ambientazione pulita e professionale. Includi micro-dettagli coerenti con: Fryer 190 °C, 8 pezzi/porzione. Nota: descrizione accessibilità: 'Churros appena fritti'.
 
 
 **Negative prompt**
@@ -490,7 +490,7 @@ testo, watermark, firma, logo visibile, mani deformi, dita extra, volti riconosc
 
 **Prompt**
 
-Foto editoriale premium, stile boutique fiorentina, luce morbida naturale, color grading caldo ma pulito, materiali reali (marmo chiaro, acciaio, ceramica), sfondo minimale, profondità di campo leggera, alta nitidezza, composizione ordinata. Soggetto principale: Impiattamento & upsell. contesto stagionale/festivo (churros, panettone, vin brulè). Scatto inquadratura 3/4 o top-down a seconda del prodotto, nessuna persona riconoscibile, focus sul prodotto/strumento, ambientazione pulita e professionale. Includi micro-dettagli coerenti con: Plating, Sauce 1oz. Nota: descrizione accessibilità: 'Churros impiattati con salsa'.
+Foto editoriale premium, stile boutique fiorentina, luce morbida naturale, color grading caldo ma pulito, materiali reali (marmo chiaro, acciaio, ceramica), sfondo minimale, profondità di campo leggera, alta nitidezza, composizione ordinata. Soggetto principale: Impiattamento & upsell. contesto stagionale/festivo (churros, panettone). Scatto inquadratura 3/4 o top-down a seconda del prodotto, nessuna persona riconoscibile, focus sul prodotto/strumento, ambientazione pulita e professionale. Includi micro-dettagli coerenti con: Plating, Sauce 1oz. Nota: descrizione accessibilità: 'Churros impiattati con salsa'.
 
 
 **Negative prompt**
@@ -513,7 +513,7 @@ testo, watermark, firma, logo visibile, mani deformi, dita extra, volti riconosc
 
 **Prompt**
 
-Foto editoriale premium, stile boutique fiorentina, luce morbida naturale, color grading caldo ma pulito, materiali reali (marmo chiaro, acciaio, ceramica), sfondo minimale, profondità di campo leggera, alta nitidezza, composizione ordinata. Soggetto principale: Taglio & presentazione. contesto stagionale/festivo (churros, panettone, vin brulè). Scatto inquadratura 3/4 o top-down a seconda del prodotto, nessuna persona riconoscibile, focus sul prodotto/strumento, ambientazione pulita e professionale. Includi micro-dettagli coerenti con: Slice service, 8 porzioni. Nota: descrizione accessibilità: 'Panettone al taglio'.
+Foto editoriale premium, stile boutique fiorentina, luce morbida naturale, color grading caldo ma pulito, materiali reali (marmo chiaro, acciaio, ceramica), sfondo minimale, profondità di campo leggera, alta nitidezza, composizione ordinata. Soggetto principale: Taglio & presentazione. contesto stagionale/festivo (churros, panettone). Scatto inquadratura 3/4 o top-down a seconda del prodotto, nessuna persona riconoscibile, focus sul prodotto/strumento, ambientazione pulita e professionale. Includi micro-dettagli coerenti con: Slice service, 8 porzioni. Nota: descrizione accessibilità: 'Panettone al taglio'.
 
 
 **Negative prompt**
@@ -536,7 +536,7 @@ testo, watermark, firma, logo visibile, mani deformi, dita extra, volti riconosc
 
 **Prompt**
 
-Foto editoriale premium, stile boutique fiorentina, luce morbida naturale, color grading caldo ma pulito, materiali reali (marmo chiaro, acciaio, ceramica), sfondo minimale, profondità di campo leggera, alta nitidezza, composizione ordinata. Soggetto principale: Slice calda. contesto stagionale/festivo (churros, panettone, vin brulè). Scatto inquadratura 3/4 o top-down a seconda del prodotto, nessuna persona riconoscibile, focus sul prodotto/strumento, ambientazione pulita e professionale. Includi micro-dettagli coerenti con: Warm option, Crepe plate. Nota: descrizione accessibilità: 'Fetta di panettone'.
+Foto editoriale premium, stile boutique fiorentina, luce morbida naturale, color grading caldo ma pulito, materiali reali (marmo chiaro, acciaio, ceramica), sfondo minimale, profondità di campo leggera, alta nitidezza, composizione ordinata. Soggetto principale: Slice calda. contesto stagionale/festivo (churros, panettone). Scatto inquadratura 3/4 o top-down a seconda del prodotto, nessuna persona riconoscibile, focus sul prodotto/strumento, ambientazione pulita e professionale. Includi micro-dettagli coerenti con: Warm option, Crepe plate. Nota: descrizione accessibilità: 'Fetta di panettone'.
 
 
 **Negative prompt**
@@ -559,7 +559,7 @@ testo, watermark, firma, logo visibile, mani deformi, dita extra, volti riconosc
 
 **Prompt**
 
-Foto editoriale premium, stile boutique fiorentina, luce morbida naturale, color grading caldo ma pulito, materiali reali (marmo chiaro, acciaio, ceramica), sfondo minimale, profondità di campo leggera, alta nitidezza, composizione ordinata. Soggetto principale: Piatto classico. contesto stagionale/festivo (churros, panettone, vin brulè). Scatto inquadratura 3/4 o top-down a seconda del prodotto, nessuna persona riconoscibile, focus sul prodotto/strumento, ambientazione pulita e professionale. Includi micro-dettagli coerenti con: Powder sugar. Nota: descrizione accessibilità: 'Fetta di pandoro con zucchero a velo'.
+Foto editoriale premium, stile boutique fiorentina, luce morbida naturale, color grading caldo ma pulito, materiali reali (marmo chiaro, acciaio, ceramica), sfondo minimale, profondità di campo leggera, alta nitidezza, composizione ordinata. Soggetto principale: Piatto classico. contesto stagionale/festivo (churros, panettone). Scatto inquadratura 3/4 o top-down a seconda del prodotto, nessuna persona riconoscibile, focus sul prodotto/strumento, ambientazione pulita e professionale. Includi micro-dettagli coerenti con: Powder sugar. Nota: descrizione accessibilità: 'Fetta di pandoro con zucchero a velo'.
 
 
 **Negative prompt**
@@ -582,7 +582,7 @@ testo, watermark, firma, logo visibile, mani deformi, dita extra, volti riconosc
 
 **Prompt**
 
-Foto editoriale premium, stile boutique fiorentina, luce morbida naturale, color grading caldo ma pulito, materiali reali (marmo chiaro, acciaio, ceramica), sfondo minimale, profondità di campo leggera, alta nitidezza, composizione ordinata. Soggetto principale: Opzione calda. contesto stagionale/festivo (churros, panettone, vin brulè). Scatto inquadratura 3/4 o top-down a seconda del prodotto, nessuna persona riconoscibile, focus sul prodotto/strumento, ambientazione pulita e professionale. Includi micro-dettagli coerenti con: Warm slice, 10'' x lato. Nota: descrizione accessibilità: 'Pandoro tostato'.
+Foto editoriale premium, stile boutique fiorentina, luce morbida naturale, color grading caldo ma pulito, materiali reali (marmo chiaro, acciaio, ceramica), sfondo minimale, profondità di campo leggera, alta nitidezza, composizione ordinata. Soggetto principale: Opzione calda. contesto stagionale/festivo (churros, panettone). Scatto inquadratura 3/4 o top-down a seconda del prodotto, nessuna persona riconoscibile, focus sul prodotto/strumento, ambientazione pulita e professionale. Includi micro-dettagli coerenti con: Warm slice, 10'' x lato. Nota: descrizione accessibilità: 'Pandoro tostato'.
 
 
 **Negative prompt**
@@ -605,7 +605,7 @@ testo, watermark, firma, logo visibile, mani deformi, dita extra, volti riconosc
 
 **Prompt**
 
-Foto editoriale premium, stile boutique fiorentina, luce morbida naturale, color grading caldo ma pulito, materiali reali (marmo chiaro, acciaio, ceramica), sfondo minimale, profondità di campo leggera, alta nitidezza, composizione ordinata. Soggetto principale: Mini panettone con Buontalenti. contesto stagionale/festivo (churros, panettone, vin brulè). Scatto inquadratura 3/4 o top-down a seconda del prodotto, nessuna persona riconoscibile, focus sul prodotto/strumento, ambientazione pulita e professionale. Includi micro-dettagli coerenti con: In-store, Gloves. Nota: descrizione accessibilità: 'Mini panettoni Badiani'.
+Foto editoriale premium, stile boutique fiorentina, luce morbida naturale, color grading caldo ma pulito, materiali reali (marmo chiaro, acciaio, ceramica), sfondo minimale, profondità di campo leggera, alta nitidezza, composizione ordinata. Soggetto principale: Mini panettone con Buontalenti. contesto stagionale/festivo (churros, panettone). Scatto inquadratura 3/4 o top-down a seconda del prodotto, nessuna persona riconoscibile, focus sul prodotto/strumento, ambientazione pulita e professionale. Includi micro-dettagli coerenti con: In-store, Gloves. Nota: descrizione accessibilità: 'Mini panettoni Badiani'.
 
 
 **Negative prompt**
@@ -628,7 +628,7 @@ testo, watermark, firma, logo visibile, mani deformi, dita extra, volti riconosc
 
 **Prompt**
 
-Foto editoriale premium, stile boutique fiorentina, luce morbida naturale, color grading caldo ma pulito, materiali reali (marmo chiaro, acciaio, ceramica), sfondo minimale, profondità di campo leggera, alta nitidezza, composizione ordinata. Soggetto principale: Packaging take away. contesto stagionale/festivo (churros, panettone, vin brulè). Scatto inquadratura 3/4 o top-down a seconda del prodotto, nessuna persona riconoscibile, focus sul prodotto/strumento, ambientazione pulita e professionale. Includi micro-dettagli coerenti con: Delivery, Treat box. Nota: descrizione accessibilità: 'Packaging delivery panettoni'.
+Foto editoriale premium, stile boutique fiorentina, luce morbida naturale, color grading caldo ma pulito, materiali reali (marmo chiaro, acciaio, ceramica), sfondo minimale, profondità di campo leggera, alta nitidezza, composizione ordinata. Soggetto principale: Packaging take away. contesto stagionale/festivo (churros, panettone). Scatto inquadratura 3/4 o top-down a seconda del prodotto, nessuna persona riconoscibile, focus sul prodotto/strumento, ambientazione pulita e professionale. Includi micro-dettagli coerenti con: Delivery, Treat box. Nota: descrizione accessibilità: 'Packaging delivery panettoni'.
 
 
 **Negative prompt**
@@ -640,9 +640,9 @@ testo, watermark, firma, logo visibile, mani deformi, dita extra, volti riconosc
 
 - Tag: Setup, 600 ml acqua
 
-- Asset: assets/festive-mulled-setup.jpg assets/festive-mulled-setup.webp
+- Asset: assets/removed-product.jpg assets/removed-product.webp
 
-- Alt attuale: Setup macchina per vin brule'
+- Alt attuale: Setup macchina per'
 
 - Size consigliata: **1152x768**
 
@@ -651,7 +651,7 @@ testo, watermark, firma, logo visibile, mani deformi, dita extra, volti riconosc
 
 **Prompt**
 
-Foto editoriale premium, stile boutique fiorentina, luce morbida naturale, color grading caldo ma pulito, materiali reali (marmo chiaro, acciaio, ceramica), sfondo minimale, profondità di campo leggera, alta nitidezza, composizione ordinata. Soggetto principale: Allestimento macchina. contesto stagionale/festivo (churros, panettone, vin brulè). Scatto inquadratura 3/4 o top-down a seconda del prodotto, nessuna persona riconoscibile, focus sul prodotto/strumento, ambientazione pulita e professionale. Includi micro-dettagli coerenti con: Setup, 600 ml acqua. Nota: descrizione accessibilità: 'Setup macchina per vin brule''.
+Foto editoriale premium, stile boutique fiorentina, luce morbida naturale, color grading caldo ma pulito, materiali reali (marmo chiaro, acciaio, ceramica), sfondo minimale, profondità di campo leggera, alta nitidezza, composizione ordinata. Soggetto principale: Allestimento macchina. contesto stagionale/festivo (churros, panettone). Scatto inquadratura 3/4 o top-down a seconda del prodotto, nessuna persona riconoscibile, focus sul prodotto/strumento, ambientazione pulita e professionale. Includi micro-dettagli coerenti con: Setup, 600 ml acqua. Nota: descrizione accessibilità: 'Setup macchina per''.
 
 
 **Negative prompt**
@@ -663,9 +663,9 @@ testo, watermark, firma, logo visibile, mani deformi, dita extra, volti riconosc
 
 - Tag: Servizio, 3 giorni shelf life
 
-- Asset: assets/festive-mulled-service.jpg assets/festive-mulled-service.webp
+- Asset: assets/removed-product.jpg assets/removed-product.webp
 
-- Alt attuale: Servizio vin brule'
+- Alt attuale: Servizio'
 
 - Size consigliata: **1152x768**
 
@@ -674,7 +674,7 @@ testo, watermark, firma, logo visibile, mani deformi, dita extra, volti riconosc
 
 **Prompt**
 
-Foto editoriale premium, stile boutique fiorentina, luce morbida naturale, color grading caldo ma pulito, materiali reali (marmo chiaro, acciaio, ceramica), sfondo minimale, profondità di campo leggera, alta nitidezza, composizione ordinata. Soggetto principale: Service & chiusura. contesto stagionale/festivo (churros, panettone, vin brulè). Scatto inquadratura 3/4 o top-down a seconda del prodotto, nessuna persona riconoscibile, focus sul prodotto/strumento, ambientazione pulita e professionale. Includi micro-dettagli coerenti con: Servizio, 3 giorni shelf life. Nota: descrizione accessibilità: 'Servizio vin brule''.
+Foto editoriale premium, stile boutique fiorentina, luce morbida naturale, color grading caldo ma pulito, materiali reali (marmo chiaro, acciaio, ceramica), sfondo minimale, profondità di campo leggera, alta nitidezza, composizione ordinata. Soggetto principale: Service & chiusura. contesto stagionale/festivo (churros, panettone). Scatto inquadratura 3/4 o top-down a seconda del prodotto, nessuna persona riconoscibile, focus sul prodotto/strumento, ambientazione pulita e professionale. Includi micro-dettagli coerenti con: Servizio, 3 giorni shelf life. Nota: descrizione accessibilità: 'Servizio''.
 
 
 **Negative prompt**

@@ -11,3 +11,7 @@ __pycache__/
 # Environment secrets
 .env
 .env.*
+.tmp_cf_vars.txt
+
+# Review folder
+da-revisionare/
