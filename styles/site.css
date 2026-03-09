@@ -6752,10 +6752,10 @@ section.carousel:last-of-type {
 
 .card-modal .card-modal-study-toggle {
   position: relative;
-  width: 38px;
-  height: 38px;
+  width: auto;
+  height: auto;
   padding: 0 !important;
-  border-radius: 999px;
+  border-radius: 0;
   border: none !important;
   background: transparent !important;
   box-shadow: none !important;
@@ -6767,6 +6767,7 @@ section.carousel:last-of-type {
   justify-content: center;
   cursor: pointer;
   transition: transform var(--anim-fast) ease;
+  line-height: 0;
 }
 
 .card-modal .card-modal-study-toggle:hover {
@@ -6794,9 +6795,9 @@ section.carousel:last-of-type {
 }
 
 @media (max-width: 600px) {
-  .card-modal .card-modal-study-toggle {
-    width: 36px;
-    height: 36px;
+  .card-modal .card-modal-study-toggle .eye-icon {
+    width: 18px;
+    height: 18px;
   }
 }
 
