@@ -6740,6 +6740,12 @@ section.carousel:last-of-type {
 }
 
 /* Header study toggle (open all tabs) */
+.card-modal-left-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+}
+
 .card-modal .card-modal-study-toggle-wrap[hidden] {
   display: none !important;
 }
