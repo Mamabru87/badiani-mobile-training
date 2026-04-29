@@ -2,7 +2,15 @@
 <html lang="it">
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#214098" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Badiani Training" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="apple-touch-icon" href="assets/brand/logo-b-blue.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
     <title>Bar & Drinks � Badiani</title>
     <meta name="description" content="Guida formativa Bar & Drinks � preparazione caff�, bevande calde e fredde, tecniche di servizio Badiani." />
     <link rel="preload" href="fonts/SuperGroteskC-MedLF.otf" as="font" type="font/opentype" crossorigin />
@@ -17,13 +25,13 @@
   <body class="page-product" data-product="caffe">
     <nav class="nav-shell">
         <a class="brand" href="index.html" aria-label="Torna alla home Badiani" data-i18n-attr="aria-label:nav.homeAria">
-          <img src="assets/brand/logo-badiani.jpg" data-default-src="assets/brand/logo-badiani.jpg" data-alt-src="assets/brand/logo-b-blue.png" alt="Badiani logo" class="brand-avatar" />
+          <img loading="lazy"  decoding="async" data-default-src="assets/brand/logo-badiani.jpg"  alt="Badiani logo" class="brand-avatar" src="assets/brand/logo-badiani.jpg" data-alt-src="assets/brand/logo-b-blue.png">
           <div class="brand-text">
             <small>Training</small>
           </div>
         </a>
         <div class="user-nickname-bar" id="user-nickname-bar" style="margin-left:auto; font-weight:600; color:#214098; font-size:1.1em; display:none; align-items:center; gap:0.5em;">
-          <img id="nav-avatar" class="user-nav-avatar" alt="" aria-hidden="true" />
+          <img loading="lazy" decoding="async" id="nav-avatar" class="user-nav-avatar" alt="" aria-hidden="true" />
           <span id="nickname-display"></span>
         </div>
         <button class="menu-trigger" type="button" data-menu-toggle aria-expanded="false" aria-controls="nav-panel">
@@ -95,7 +103,7 @@
         <div class="hero-card">
           <div class="badge">
             <span data-i18n="caffe.hero.badge">Bar & Drinks � 2025</span>
-            <span class="page-stars" data-page-stars data-i18n="caffe.hero.stars">⭐ Stelle: 29/29</span>
+            <span class="page-stars" data-page-stars data-i18n="caffe.hero.stars">⭐ Stelle: 35/35</span>
           </div>
           <h1 data-i18n="caffe.hero.title">Bar & Drinks</h1>
           <p data-i18n="caffe.hero.desc">
@@ -105,15 +113,15 @@
           
         </div>
         <div class="hero-card visual">
-          <img src="assets/covers/bar%20%26%20drinks.png" alt="Setup linea bar Badiani" loading="lazy" data-i18n-attr="alt:caffe.hero.coverAlt" />
+          <picture><source srcset="assets/covers/bar%20%26%20drinks.webp" type="image/webp" /><img fetchpriority="high" decoding="async"   alt="Setup linea bar Badiani" data-i18n-attr="alt:caffe.hero.coverAlt" src="assets/covers/bar%20%26%20drinks.png" /></picture>
         </div>
       </section>
 
-      <section class="carousel" data-carousel="caffe">
+      <section class="carousel" data-carousel="caffe-hot">
         <header class="carousel-header" data-carousel-header>
           <div class="carousel-header__title-block">
-            <h2 class="carousel-title" data-carousel-title data-i18n="caffe.carousel.classics.title">Classics</h2>
-            <span class="carousel-category" data-carousel-category data-i18n="caffe.carousel.classics.category">Caffetteria Italiana</span>
+            <h2 class="carousel-title" data-carousel-title data-i18n="caffe.carousel.hotCoffee.title">Hot Coffee &amp; British Hot Chocolate</h2>
+            <span class="carousel-category" data-carousel-category data-i18n="caffe.carousel.hotCoffee.category">Caffetteria italiana &amp; cioccolata</span>
           </div>
           <div class="carousel-indicators" data-carousel-indicators></div>
         </header>
@@ -129,7 +137,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/espresso.png" type="image/png" />
-                <img src="assets/products/espresso.png" alt="Espresso Single" loading="lazy" />
+                <img decoding="async" src="assets/products/espresso.png" alt="Espresso Single" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="caffe.cards.espressoSingle.desc">L'essenza del caff�. Estrazione perfetta per un gusto intenso, corpo rotondo e crema persistente.</p>
@@ -140,7 +148,7 @@
               <li><strong>Estrazione:</strong> 25-30 secondi</li>
               <li><strong>Crema:</strong> Color nocciola, tigrata, elastica</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTw">Step & TW</button>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
             <div class="details" data-i18n-html="caffe.cards.espressoSingle.details">
               <div class="steps">
                 <span>1 � Pulisci e asciuga il portafiltro. Macina la dose al momento.</span>
@@ -150,7 +158,7 @@
               <hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);">
               <div class="steps">
                 <strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">?? Take Away (TW)</strong>
-                <img src="assets/products/espresso%20TW.png" alt="Espresso TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;">
+                <img loading="lazy" decoding="async" src="assets/products/espresso%20TW.png" alt="Espresso TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;" />
                 <p style="font-size: 0.9em;">Usa cup 4oz. Chiudi sempre con coperchio.</p>
               </div>
               <hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);">
@@ -168,7 +176,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/espresso%20double.png" type="image/png" />
-                <img src="assets/products/espresso%20double.png" alt="Espresso Double" loading="lazy" />
+                <img decoding="async" src="assets/products/espresso%20double.png" alt="Espresso Double" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="caffe.cards.espressoDouble.desc">Doppia dose di energia. Due shot estratti nello stesso tempo per un gusto pi� ricco.</p>
@@ -179,7 +187,7 @@
               <li><strong>Estrazione:</strong> 25-30 secondi (flusso costante)</li>
               <li><strong>Crema:</strong> Spessa e persistente</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTw">Step & TW</button>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
             <div class="details" data-i18n-html="caffe.cards.espressoDouble.details">
               <div class="steps">
                 <span>1 � Usa il filtro doppio. Macina dose doppia.</span>
@@ -189,7 +197,7 @@
               <hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);">
               <div class="steps">
                 <strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">?? Take Away (TW)</strong>
-                <img src="assets/products/espresso%20double%20TW.png" alt="Espresso Double TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;">
+                <img loading="lazy" decoding="async" src="assets/products/espresso%20double%20TW.png" alt="Espresso Double TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;" />
                 <p style="font-size: 0.9em;">Usa cup 4oz o 8oz a richiesta. Coperchio obbligatorio.</p>
               </div>
             </div>
@@ -205,7 +213,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/espresso%20macchiato%20single.png" type="image/png" />
-                <img src="assets/products/espresso%20macchiato%20single.png" alt="Espresso Macchiato" loading="lazy" />
+                <img decoding="async" src="assets/products/espresso%20macchiato%20single.png" alt="Espresso Macchiato" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="caffe.cards.espressoMacchiato.desc">Espresso "macchiato" con una piccola quantit� di schiuma di latte calda.</p>
@@ -214,7 +222,7 @@
               <li><strong>Top:</strong> 1-2 cucchiaini di schiuma di latte</li>
               <li><strong>Servizio:</strong> Tazzina espresso</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTw">Step & TW</button>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
             <div class="details" data-i18n-html="caffe.cards.espressoMacchiato.details">
               <div class="steps">
                 <span>1 � Prepara un espresso singolo.</span>
@@ -224,7 +232,7 @@
               <hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);">
               <div class="steps">
                 <strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">?? Take Away (TW)</strong>
-                <img src="assets/products/espresso%20macchiato%20single%20TW.png" alt="Macchiato Single TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;">
+                <img loading="lazy" decoding="async" src="assets/products/espresso%20macchiato%20single%20TW.png" alt="Macchiato Single TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;" />
                 <p style="font-size: 0.9em;">Cup 4oz. La schiuma deve rimanere compatta anche nel trasporto.</p>
               </div>
             </div>
@@ -240,7 +248,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/espresso%20macchiato%20double.png" type="image/png" />
-                <img src="assets/products/espresso%20macchiato%20double.png" alt="Double Macchiato" loading="lazy" />
+                <img decoding="async" src="assets/products/espresso%20macchiato%20double.png" alt="Double Macchiato" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="caffe.cards.doubleMacchiato.desc">Doppio espresso con una macchia di latte schiumato. Pi� intenso, stesso tocco di latte.</p>
@@ -249,7 +257,7 @@
               <li><strong>Top:</strong> Schiuma di latte (microfoam)</li>
               <li><strong>Servizio:</strong> Tazza grande o bicchierino</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTw">Step & TW</button>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
             <div class="details" data-i18n-html="caffe.cards.doubleMacchiato.details">
               <div class="steps">
                 <span>1 � Prepara un doppio espresso.</span>
@@ -259,7 +267,7 @@
               <hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);">
               <div class="steps">
                 <strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">?? Take Away (TW)</strong>
-                <img src="assets/products/espresso%20macchiato%20double%20TW.png" alt="Macchiato Double TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;">
+                <img loading="lazy" decoding="async" src="assets/products/espresso%20macchiato%20double%20TW.png" alt="Macchiato Double TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;" />
                 <p style="font-size: 0.9em;">Cup 4oz o 8oz. Mantieni la proporzione caff�/schiuma.</p>
               </div>
             </div>
@@ -275,7 +283,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/americano.png" type="image/png" />
-                <img src="assets/products/americano.png" alt="Americano" loading="lazy" />
+                <img decoding="async" src="assets/products/americano.png" alt="Americano" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="caffe.cards.americano.desc">Acqua calda + espresso estratto direttamente in tazza. Disponibile in versione Take Away.</p>
@@ -284,7 +292,7 @@
               <li>Ricetta double: 12 oz acqua calda</li>
               <li>Spazio di sicurezza: lascia 2 cm dalla sommit�</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTw">Step & TW</button>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
             <div class="details" data-i18n-html="caffe.cards.americano.details">
               <div class="steps">
                 <span>1 � Riempi la tazza con acqua calda lasciando 2 cm.</span>
@@ -311,7 +319,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/cappuccino.png" type="image/png" />
-                <img src="assets/products/cappuccino.png" alt="Cappuccino" loading="lazy" />
+                <img decoding="async" src="assets/products/cappuccino.png" alt="Cappuccino" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="caffe.cards.cappuccino.desc">Espresso, latte caldo e schiuma fine. Texture vellutata senza bolle grandi.</p>
@@ -320,7 +328,7 @@
               <li>Foam: circa 1/3 del volume</li>
               <li>Temperatura: 65�C (sweet spot)</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTw">Step & TW</button>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
             <div class="details" data-i18n-html="caffe.cards.cappuccino.details">
               <div class="steps">
                 <span>1 � Espresso in tazza.</span>
@@ -330,7 +338,7 @@
               <hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);">
               <div class="steps">
                 <strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">?? Take Away (TW)</strong>
-                <img src="assets/products/cappuccino%20TW.png" alt="Cappuccino TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;">
+                <img loading="lazy" decoding="async" src="assets/products/cappuccino%20TW.png" alt="Cappuccino TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;" />
                 <p style="font-size: 0.9em;">Per il TW, mantieni la stessa qualit� della schiuma. Assicura il coperchio saldamente.</p>
               </div>
               <hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);">
@@ -348,7 +356,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/flat%20white%20.png" type="image/png" />
-                <img src="assets/products/flat%20white%20.png" alt="Flat white" loading="lazy" />
+                <img decoding="async" src="assets/products/flat%20white%20.png" alt="Flat white" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="caffe.cards.flatWhite.desc">Doppio espresso + latte con microfoam sottilissima. Texture setosa.</p>
@@ -357,7 +365,7 @@
               <li>Temperatura: 65�C.</li>
               <li>Versata: inizia alta, poi abbassa per latte art.</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTw">Step & TW</button>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
             <div class="details" data-i18n-html="caffe.cards.flatWhite.details">
               <div class="steps">
                 <span>1 � Doppio espresso in 8 oz.</span>
@@ -367,7 +375,7 @@
               <hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);">
               <div class="steps">
                 <strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">?? Take Away (TW)</strong>
-                <img src="assets/products/flat%20white%20TW.png" alt="Flat White TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;">
+                <img loading="lazy" decoding="async" src="assets/products/flat%20white%20TW.png" alt="Flat White TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;" />
                 <p style="font-size: 0.9em;">Il Flat White TW richiede la stessa cura nella microfoam. Usa cup 8oz.</p>
               </div>
             </div>
@@ -383,7 +391,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/mocha.png" type="image/png" />
-                <img src="assets/products/mocha.png" alt="Mocha" loading="lazy" />
+                <img decoding="async" src="assets/products/mocha.png" alt="Mocha" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="caffe.cards.mocha.desc">Espresso + cacao + latte. Sciogli prima il cacao nell�espresso.</p>
@@ -392,7 +400,7 @@
               <li>Milk: stretch leggero</li>
               <li>Vaso 8 oz</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTw">Step & TW</button>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
             <div class="details" data-i18n-html="caffe.cards.mocha.details">
               <div class="steps">
                 <span>1 � Miscelare espresso e cacao nella tazza.</span>
@@ -402,7 +410,7 @@
               <hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);">
               <div class="steps">
                 <strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">?? Take Away (TW)</strong>
-                <img src="assets/products/mocha%20TW.png" alt="Mocha TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;">
+                <img loading="lazy" decoding="async" src="assets/products/mocha%20TW.png" alt="Mocha TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;" />
                 <p style="font-size: 0.9em;">Mescola bene il cacao anche nel cup di carta prima di aggiungere il latte.</p>
               </div>
             </div>
@@ -418,7 +426,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/hot%20chocolate.png" type="image/png" />
-                <img src="assets/products/hot%20chocolate.png" alt="Hot chocolate" loading="lazy" />
+                <img decoding="async" src="assets/products/hot%20chocolate.png" alt="Hot chocolate" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="caffe.cards.hotChocolate.desc">Cioccolata calda cremosa: consistenza liscia, servizio caldo.</p>
@@ -427,7 +435,7 @@
               <li>Texture: setosa (zero grumi)</li>
               <li>Servizio: cucchiaino + piattino</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTw">Step & TW</button>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
             <div class="details" data-i18n-html="caffe.cards.hotChocolate.details">
               <div class="steps">
                 <span>1 � Scalda la base fino a temperatura di servizio.</span>
@@ -437,7 +445,7 @@
               <hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);">
               <div class="steps">
                 <strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">?? Take Away (TW)</strong>
-                <img src="assets/products/chocolate%20TW.png" alt="Hot Chocolate TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;">
+                <img loading="lazy" decoding="async" src="assets/products/chocolate%20TW.png" alt="Hot Chocolate TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;" />
                 <p style="font-size: 0.9em;">Attenzione alla temperatura per il TW. Assicura bene il coperchio.</p>
               </div>
             </div>
@@ -453,7 +461,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/chai%20latte.png" type="image/png" />
-                <img src="assets/products/chai%20latte.png" alt="Chai latte" loading="lazy" />
+                <img decoding="async" src="assets/products/chai%20latte.png" alt="Chai latte" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="caffe.cards.chaiLatte.desc">2 pump di sciroppo chai, latte montato lucido e cannella.</p>
@@ -462,7 +470,7 @@
               <li>Temperatura latte: 65�C</li>
               <li>Finish: cannella (dust leggero)</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
             <div class="details" data-i18n-html="caffe.cards.chaiLatte.details">
               <div class="steps">
                 <span>1 � Eroga lo sciroppo chai in tazza.</span>
@@ -483,7 +491,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/tea.png" type="image/png" />
-                <img src="assets/products/tea.png" alt="Tea Selection" loading="lazy" />
+                <img decoding="async" src="assets/products/tea.png" alt="Tea Selection" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="caffe.cards.teaSelection.desc">Selezione di t� premium. Servito con teiera e clessidra per infusione perfetta.</p>
@@ -492,7 +500,7 @@
               <li>Infusione: 3-5 minuti</li>
               <li>Servizio: Teiera + tazza + latte/limone a parte</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTw">Step & TW</button>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
             <div class="details" data-i18n-html="caffe.cards.teaSelection.details">
               <div class="steps">
                 <span>1 � Scalda la teiera, inserisci la bustina/filtro.</span>
@@ -502,7 +510,7 @@
               <hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);">
               <div class="steps">
                 <strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">?? Take Away (TW)</strong>
-                <img src="assets/products/tea%20TW.png" alt="Tea TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;">
+                <img loading="lazy" decoding="async" src="assets/products/tea%20TW.png" alt="Tea TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;" />
                 <p style="font-size: 0.9em;">Non riempire fino all'orlo. Chiudi bene e metti sleeve se bollente.</p>
               </div>
             </div>
@@ -518,7 +526,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/afternoon%20tea%20set.png" type="image/png" />
-                <img src="assets/products/afternoon%20tea%20set.png" alt="Afternoon Tea Set" loading="lazy" />
+                <img decoding="async" src="assets/products/afternoon%20tea%20set.png" alt="Afternoon Tea Set" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="caffe.cards.afternoonTeaSet.desc">Selezione di mini dolci, scones e sandwich per l'esperienza del t� pomeridiano.</p>
@@ -527,7 +535,7 @@
               <li><strong>Bevanda:</strong> T� o Prosecco</li>
               <li><strong>Servizio:</strong> Alzatina a 3 piani</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
             <div class="details" data-i18n-html="caffe.cards.afternoonTeaSet.details">
               <div class="steps">
                 <span>1 � Prepara l'alzatina: salato sotto, scones in mezzo, dolci sopra.</span>
@@ -547,7 +555,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/affogato.png" type="image/png" />
-                <img src="assets/products/affogato.png" alt="Affogato" loading="lazy" />
+                <img decoding="async" src="assets/products/affogato.png" alt="Affogato" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="caffe.cards.affogato.desc">Gelato �annegato� con espresso: servi 1 scoop di Buontalenti e versa un doppio espresso davanti al cliente.</p>
@@ -556,7 +564,7 @@
               <li>Espresso doppio</li>
               <li>Servire subito</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTw">Step & TW</button>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
             <div class="details" data-i18n-html="caffe.cards.affogato.details">
               <div class="steps">
                 <span>1 � Pre-raffredda la tazza.</span>
@@ -566,7 +574,7 @@
               <hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);">
               <div class="steps">
                 <strong style="color: var(--brand-gold); display: block; margin-bottom: 8px;">?? Take Away (TW)</strong>
-                <img src="assets/products/affogato%20TW.png" alt="Affogato TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;">
+                <img loading="lazy" decoding="async" src="assets/products/affogato%20TW.png" alt="Affogato TW" style="width: 80px; float: right; margin-left: 10px; border-radius: 8px;" />
                 <p style="font-size: 0.9em;">Per il TW, usa la coppetta gelato grande o cup caff� basso. Versa l'espresso sopra prima di chiudere.</p>
               </div>
             </div>
@@ -582,7 +590,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/wipped%20coffee.png" type="image/png" />
-                <img src="assets/products/wipped%20coffee.png" alt="Whipped coffee" loading="lazy" />
+                <img decoding="async" src="assets/products/wipped%20coffee.png" alt="Whipped coffee" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="caffe.cards.whippedCoffee.desc">Espresso singolo sormontato da panna montata fresca.</p>
@@ -591,7 +599,7 @@
               <li>Panna montata al momento</li>
               <li>Servire con cucchiaino</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
             <div class="details" data-i18n-html="caffe.cards.whippedCoffee.details">
               <div class="steps">
                 <span>1 � Prepara espresso singolo.</span>
@@ -601,7 +609,59 @@
             </div>
           </article>
 
-          <!-- MATCHA BAR SECTION -->
+
+          <!-- BRITISH HOT CHOCOLATE -->
+          <article class="guide-card guide-card--product" data-carousel-item id="card-british-hot-chocolate">
+            <div class="tag-row">
+              <span class="tag">Powder</span>
+              <span class="tag">Summer version</span>
+              <span class="tag">8oz</span>
+            </div>
+            <h3 data-i18n="caffe.cards.britishHotChocolate.title">British Hot Chocolate</h3>
+            <figure class="guide-media">
+              <picture>
+                <source srcset="assets/products/hot-chocolate.png" type="image/png" />
+                <img decoding="async" src="assets/products/hot-chocolate.png" alt="British Hot Chocolate" loading="lazy" data-i18n-attr="alt:caffe.cards.britishHotChocolate.alt" />
+              </picture>
+            </figure>
+            <p data-i18n="caffe.cards.britishHotChocolate.desc">Versione estiva (powder) della cioccolata calda. Upsell con whipping cream.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.britishHotChocolate.stats">
+              <li><strong>Tazza:</strong> 8oz</li>
+              <li><strong>Acqua:</strong> 2oz a fondo tazza</li>
+              <li><strong>Cioccolato in polvere:</strong> 2 cucchiai</li>
+              <li><strong>Latte:</strong> riempi jug fino al beccuccio</li>
+              <li><strong>Temperatura latte:</strong> 65 °C (140 °F)</li>
+            </ul>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
+            <div class="details" data-i18n-html="caffe.cards.britishHotChocolate.details">
+              <div class="steps">
+                <strong>Procedure</strong>
+                <span>1 · Aggiungi 2oz di acqua nella tazza 8oz.</span>
+                <span>2 · Aggiungi 2 cucchiai di polvere di cioccolato e mescola.</span>
+                <span>3 · Riempi la milk jug fino al beccuccio.</span>
+                <span>4 · Stretching: lancia appena sotto la superficie, vapore al massimo, ~3 secondi per montare.</span>
+                <span>5 · Texturing: porta la lancia a metà jug e crea un vortice. Stop a 65 °C.</span>
+                <span>6 · Polish: batti la jug per eliminare le bolle, ruota fino a latte lucido.</span>
+                <span>7 · Pouring: parti lento da 2 pollici e abbassa la jug a metà tazza.</span>
+              </div>
+              <div class="tips"><strong>Tips &amp; Tricks:</strong> se servito con whipping cream riempi la tazza solo per 3/4: la cioccolata risale subito dopo l'aggiunta della panna.</div>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <section class="carousel" data-carousel="caffe-matcha">
+        <header class="carousel-header" data-carousel-header>
+          <div class="carousel-header__title-block">
+            <h2 class="carousel-title" data-carousel-title data-i18n="caffe.carousel.matcha.title">Matcha Bar</h2>
+            <span class="carousel-category" data-carousel-category data-i18n="caffe.carousel.matcha.category">Premium ceremonial matcha</span>
+          </div>
+          <div class="carousel-indicators" data-carousel-indicators></div>
+        </header>
+
+        <div class="carousel-track" data-carousel-track>
+          <!-- MATCHA BAR -->
           <article class="guide-card guide-card--product" data-carousel-item id="card-matcha-latte">
             <div class="tag-row">
               <span class="tag">Matcha Premium</span>
@@ -611,7 +671,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/matcha%20buontalenti%20latte.png" type="image/png" />
-                <img src="assets/products/matcha%20buontalenti%20latte.png" alt="Matcha Latte" loading="lazy" />
+                <img decoding="async" src="assets/products/matcha%20buontalenti%20latte.png" alt="Matcha Latte" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="caffe.cards.matchaLatte.desc">T� verde Matcha cerimoniale con latte montato. Colore verde brillante e gusto umami.</p>
@@ -620,7 +680,7 @@
               <li>Acqua: 30ml calda (80�C) per sciogliere</li>
               <li>Latte: montato come cappuccino</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
             <div class="details" data-i18n-html="caffe.cards.matchaLatte.details">
               <div class="steps">
                 <span>1 � Sciogli il matcha in poca acqua calda con il frustino (chasen) o mixer.</span>
@@ -640,7 +700,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/matcha%20iced%20latte.png" type="image/png" />
-                <img src="assets/products/matcha%20iced%20latte.png" alt="Iced Matcha Latte" loading="lazy" />
+                <img decoding="async" src="assets/products/matcha%20iced%20latte.png" alt="Iced Matcha Latte" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="caffe.cards.icedMatchaLatte.desc">Versione fredda rinfrescante. Matcha versato su latte e ghiaccio per effetto bicolor.</p>
@@ -649,7 +709,7 @@
               <li>Latte freddo: 3/4 bicchiere</li>
               <li>Top: base matcha concentrata</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
             <div class="details" data-i18n-html="caffe.cards.icedMatchaLatte.details">
               <div class="steps">
                 <span>1 � Riempi il bicchiere di ghiaccio e latte freddo.</span>
@@ -668,7 +728,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/matcha%20matcha%20affogato.png" type="image/png" />
-                <img src="assets/products/matcha%20matcha%20affogato.png" alt="Matcha Affogato" loading="lazy" />
+                <img decoding="async" src="assets/products/matcha%20matcha%20affogato.png" alt="Matcha Affogato" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="caffe.cards.matchaAffogato.desc">Scoop di gelato Buontalenti affogato con una dose di Matcha cerimoniale caldo.</p>
@@ -677,7 +737,7 @@
               <li>Matcha: dose standard concentrata</li>
               <li>Servizio: versare al tavolo</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
             <div class="details" data-i18n-html="caffe.cards.matchaAffogato.details">
               <div class="steps">
                 <span>1 � Prepara la coppetta con lo scoop di gelato.</span>
@@ -696,7 +756,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/dirty%20macha%20affogato.png" type="image/png" />
-                <img src="assets/products/dirty%20macha%20affogato.png" alt="Dirty Matcha" loading="lazy" />
+                <img decoding="async" src="assets/products/dirty%20macha%20affogato.png" alt="Dirty Matcha" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="caffe.cards.dirtyMatcha.desc">L'incontro tra Oriente e Occidente: Matcha Latte con l'aggiunta di uno shot di espresso.</p>
@@ -705,7 +765,7 @@
               <li>Aggiunta: 1 shot espresso</li>
               <li>Profilo: Energizzante e complesso</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
             <div class="details" data-i18n-html="caffe.cards.dirtyMatcha.details">
               <div class="steps">
                 <span>1 � Prepara un Matcha Latte standard.</span>
@@ -715,7 +775,20 @@
             </div>
           </article>
 
-          <!-- ICED & SMOOTHIES SECTION -->
+        </div>
+      </section>
+
+      <section class="carousel" data-carousel="caffe-cold">
+        <header class="carousel-header" data-carousel-header>
+          <div class="carousel-header__title-block">
+            <h2 class="carousel-title" data-carousel-title data-i18n="caffe.carousel.coldCoffee.title">Cold Coffee</h2>
+            <span class="carousel-category" data-carousel-category data-i18n="caffe.carousel.coldCoffee.category">Iced coffee &amp; signature cold lattes</span>
+          </div>
+          <div class="carousel-indicators" data-carousel-indicators></div>
+        </header>
+
+        <div class="carousel-track" data-carousel-track>
+          <!-- COLD COFFEE -->
           <article class="guide-card guide-card--product" data-carousel-item id="card-iced-americano">
             <div class="tag-row">
               <span class="tag">Iced Americano</span>
@@ -725,7 +798,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/iced%20americano.png" type="image/png" />
-                <img src="assets/products/iced%20americano.png" alt="Iced Americano" loading="lazy" />
+                <img decoding="async" src="assets/products/iced%20americano.png" alt="Iced Americano" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="caffe.cards.icedAmericano.desc">3 cubi grandi di ghiaccio, acqua fredda e doppio espresso versato lentamente.</p>
@@ -734,7 +807,7 @@
               <li>Lascia 1/4 spazio</li>
               <li>Mix zucchero nello shot</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
             <div class="details" data-i18n-html="caffe.cards.icedAmericano.details">
               <div class="steps">
                 <span>1 � Aggiungi ghiaccio e acqua lasciando spazio.</span>
@@ -753,7 +826,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/iced%20latte.png" type="image/png" />
-                <img src="assets/products/iced%20latte.png" alt="Iced Latte" loading="lazy" />
+                <img decoding="async" src="assets/products/iced%20latte.png" alt="Iced Latte" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="caffe.cards.icedLatte.desc">Ghiaccio + latte freddo, doppio espresso versato direttamente sopra creando layering.</p>
@@ -762,7 +835,7 @@
               <li>Latte fino a 3/4</li>
               <li>Sciroppi: mixare con espresso</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
             <div class="details" data-i18n-html="caffe.cards.icedLatte.details">
               <div class="steps">
                 <span>1 � Aggiungi ghiaccio e latte lasciando spazio.</span>
@@ -781,7 +854,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/pistacho%20iced%20latte.png" type="image/png" />
-                <img src="assets/products/pistacho%20iced%20latte.png" alt="Pistachio iced latte" loading="lazy" />
+                <img decoding="async" src="assets/products/pistacho%20iced%20latte.png" alt="Pistachio iced latte" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="caffe.cards.pistachioIcedLatte.desc">Iced latte al pistacchio: salsa/sciroppo + latte freddo + espresso per effetto cascade.</p>
@@ -790,7 +863,7 @@
               <li>Ghiaccio: 3 cubi grandi</li>
               <li>Syrup/salsa: prima del latte</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
             <div class="details" data-i18n-html="caffe.cards.pistachioIcedLatte.details">
               <div class="steps">
                 <span>1 � Metti sauce/sciroppo nel bicchiere (swirl interno).</span>
@@ -800,6 +873,59 @@
             </div>
           </article>
 
+
+          <!-- LA DOLCEVITA ICED LATTE -->
+          <article class="guide-card guide-card--product" data-carousel-item id="card-dolcevita-iced-latte">
+            <div class="tag-row">
+              <span class="tag">Cold</span>
+              <span class="tag">La Dolcevita</span>
+              <span class="tag">Hazelnut</span>
+            </div>
+            <h3 data-i18n="caffe.cards.dolcevitaIcedLatte.title">La Dolcevita Iced Latte</h3>
+            <figure class="guide-media">
+              <picture>
+                <source srcset="assets/products/iced-latte.png" type="image/png" />
+                <img decoding="async" src="assets/products/iced-latte.png" alt="La Dolcevita Iced Latte" loading="lazy" data-i18n-attr="alt:caffe.cards.dolcevitaIcedLatte.alt" />
+              </picture>
+            </figure>
+            <p data-i18n="caffe.cards.dolcevitaIcedLatte.desc">Iced latte signature con la salsa La Dolcevita di Paolo Pomposi e sciroppo di nocciola.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.dolcevitaIcedLatte.stats">
+              <li><strong>Salsa La Dolcevita:</strong> 30 g (+ 2 swirl in tazza)</li>
+              <li><strong>Espresso:</strong> doppio (2 shot caldi)</li>
+              <li><strong>Latte:</strong> 150 g</li>
+              <li><strong>Sciroppo nocciola:</strong> 2 pump</li>
+              <li><strong>Ghiaccio:</strong> 3 cubi grandi o 9 piccoli</li>
+              <li><strong>Mix milkshake maker:</strong> 45 secondi</li>
+            </ul>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
+            <div class="details" data-i18n-html="caffe.cards.dolcevitaIcedLatte.details">
+              <div class="steps">
+                <strong>Procedure</strong>
+                <span>1 · Aggiungi 2 swirl di salsa La Dolcevita in tazza e riempi con il ghiaccio.</span>
+                <span>2 · Nel milkshake maker: salsa La Dolcevita 30g + 2 shot espresso caldo + 150g latte + 2 pump nocciola, 45 secondi.</span>
+                <span>3 · Versa sopra il ghiaccio e metti il lid.</span>
+                <span>4 · Topping con whipped cream.</span>
+                <span>5 · Cannuccia e servi.</span>
+              </div>
+              <div class="tips"><strong>Tips &amp; Tricks:</strong> puoi usare più salsa su richiesta, ma ricorda di addebitarla al cliente.</div>
+            </div>
+          </article>
+
+
+
+        </div>
+      </section>
+
+      <section class="carousel" data-carousel="caffe-smoothies-juices">
+        <header class="carousel-header" data-carousel-header>
+          <div class="carousel-header__title-block">
+            <h2 class="carousel-title" data-carousel-title data-i18n="caffe.carousel.smoothiesJuices.title">Smoothies &amp; Juices</h2>
+            <span class="carousel-category" data-carousel-category data-i18n="caffe.carousel.smoothiesJuices.category">Frutta, verdura &amp; energia</span>
+          </div>
+          <div class="carousel-indicators" data-carousel-indicators></div>
+        </header>
+
+        <div class="carousel-track" data-carousel-track>
           <!-- SMOOTHIES -->
           <article class="guide-card guide-card--product" data-carousel-item id="card-smoothie-giallo-passion">
             <div class="tag-row">
@@ -810,7 +936,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/smoothie%20giallo%20passion.png" type="image/png" />
-                <img src="assets/products/smoothie%20giallo%20passion.png" alt="Smoothie Giallo" loading="lazy" />
+                <img decoding="async" src="assets/products/smoothie%20giallo%20passion.png" alt="Smoothie Giallo" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="caffe.cards.smoothieGialloPassion.desc">Mix tropicale con mango, ananas e frutto della passione. Colore giallo vibrante.</p>
@@ -819,7 +945,7 @@
               <li>Mix frutta: Giallo pack</li>
               <li>Blend: 30 secondi</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
             <div class="details" data-i18n-html="caffe.cards.smoothieGialloPassion.details">
               <div class="steps">
                 <span>1 � Versa la base liquida nel blender.</span>
@@ -838,7 +964,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/smoothie%20rosso%20berry.png" type="image/png" />
-                <img src="assets/products/smoothie%20rosso%20berry.png" alt="Smoothie Rosso" loading="lazy" />
+                <img decoding="async" src="assets/products/smoothie%20rosso%20berry.png" alt="Smoothie Rosso" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="caffe.cards.smoothieRossoBerry.desc">Esplosione di frutti di bosco: fragole, lamponi, mirtilli. Dolce e acidulo.</p>
@@ -847,7 +973,7 @@
               <li>Mix frutta: Rosso pack</li>
               <li>Blend: 30 secondi</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
             <div class="details" data-i18n-html="caffe.cards.smoothieRossoBerry.details">
               <div class="steps">
                 <span>1 � Versa la base liquida nel blender.</span>
@@ -866,7 +992,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/smoothie%20verde%20boost.png" type="image/png" />
-                <img src="assets/products/smoothie%20verde%20boost.png" alt="Smoothie Verde" loading="lazy" />
+                <img decoding="async" src="assets/products/smoothie%20verde%20boost.png" alt="Smoothie Verde" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="caffe.cards.smoothieVerdeBoost.desc">Mix salutare con spinaci, mela verde, cetriolo e zenzero. Fresco e dissetante.</p>
@@ -875,7 +1001,7 @@
               <li>Mix frutta/verdura: Verde pack</li>
               <li>Blend: 30 secondi</li>
             </ul>
-            <button class="btn-ghost" data-toggle-card data-i18n="card.stepsTips">Step & tips</button>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
             <div class="details" data-i18n-html="caffe.cards.smoothieVerdeBoost.details">
               <div class="steps">
                 <span>1 � Versa la base liquida nel blender.</span>
@@ -885,6 +1011,151 @@
             </div>
           </article>
 
+          <!-- ENERGY BOOSTER -->
+          <article class="guide-card guide-card--product" data-carousel-item id="card-energy-booster">
+            <div class="tag-row">
+              <span class="tag">Fresh juice</span>
+              <span class="tag">Energy</span>
+              <span class="tag">Citrus &amp; ginger</span>
+            </div>
+            <h3 data-i18n="caffe.cards.energyBooster.title">Energy Booster</h3>
+            <figure class="guide-media">
+              <picture>
+                <source srcset="assets/products/smoothie-rosso-berry.png" type="image/png" />
+                <img decoding="async" src="assets/products/smoothie-rosso-berry.png" alt="Energy Booster juice" loading="lazy" data-i18n-attr="alt:caffe.cards.energyBooster.alt" />
+              </picture>
+            </figure>
+            <p data-i18n="caffe.cards.energyBooster.desc">Succo fresco a base di carote, arance, limone e zenzero. Boost energetico naturale.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.energyBooster.stats">
+              <li><strong>Arance:</strong> 3 (sbucciate)</li>
+              <li><strong>Carote:</strong> 2 medie (1 e mezza se grandi)</li>
+              <li><strong>Limone:</strong> 1/2 (sbucciato)</li>
+              <li><strong>Zenzero:</strong> 1 cubo (mezzo pollice)</li>
+              <li><strong>Servizio:</strong> dome lid + cannuccia</li>
+            </ul>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
+            <div class="details" data-i18n-html="caffe.cards.energyBooster.details">
+              <div class="steps">
+                <strong>Procedure</strong>
+                <span>1 · Lava bene tutti gli ingredienti.</span>
+                <span>2 · Sbuccia le 3 arance.</span>
+                <span>3 · Taglia le carote a metà.</span>
+                <span>4 · Sbuccia il mezzo limone.</span>
+                <span>5 · Prepara il cubo di zenzero.</span>
+                <span>6 · Inserisci tutto in sequenza nella juice machine.</span>
+                <span>7 · Servi con dome lid e cannuccia.</span>
+              </div>
+              <div class="tips"><strong>Tips &amp; Tricks:</strong> prepara al momento per qualità e freschezza. Lo zenzero dà il kick: dosalo in base alla tolleranza del cliente.</div>
+            </div>
+          </article>
+
+          <!-- SWEET BEET -->
+          <article class="guide-card guide-card--product" data-carousel-item id="card-sweet-beet">
+            <div class="tag-row">
+              <span class="tag">Fresh juice</span>
+              <span class="tag">Beetroot</span>
+              <span class="tag">Berry</span>
+            </div>
+            <h3 data-i18n="caffe.cards.sweetBeet.title">Sweet Beet</h3>
+            <figure class="guide-media">
+              <picture>
+                <source srcset="assets/products/smoothie-rosso-berry.png" type="image/png" />
+                <img decoding="async" src="assets/products/smoothie-rosso-berry.png" alt="Sweet Beet juice" loading="lazy" data-i18n-attr="alt:caffe.cards.sweetBeet.alt" />
+              </picture>
+            </figure>
+            <p data-i18n="caffe.cards.sweetBeet.desc">Succo fresco a base di barbabietola, mele, fragole e zenzero. Antiossidante e vibrante.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.sweetBeet.stats">
+              <li><strong>Barbabietola:</strong> 1 (tagliata a metà)</li>
+              <li><strong>Mele:</strong> 2 (in 4 parti, no adesivi/semi)</li>
+              <li><strong>Fragole:</strong> 4 (senza foglie)</li>
+              <li><strong>Zenzero:</strong> 1 cubo (mezzo pollice)</li>
+              <li><strong>Servizio:</strong> dome lid + cannuccia</li>
+            </ul>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
+            <div class="details" data-i18n-html="caffe.cards.sweetBeet.details">
+              <div class="steps">
+                <strong>Procedure</strong>
+                <span>1 · Lava bene tutti gli ingredienti.</span>
+                <span>2 · Taglia la barbabietola a metà.</span>
+                <span>3 · Taglia le 2 mele in 4, rimuovi adesivi e semi.</span>
+                <span>4 · Pulisci 4 fragole rimuovendo le foglie.</span>
+                <span>5 · Prepara il cubo di zenzero.</span>
+                <span>6 · Inserisci tutto in sequenza nella juice machine.</span>
+                <span>7 · Servi con dome lid e cannuccia.</span>
+              </div>
+              <div class="tips"><strong>Tips &amp; Tricks:</strong> la barbabietola colora la juice machine: pulisci subito dopo l'uso. Le mele bilanciano il gusto terroso della barbabietola.</div>
+            </div>
+          </article>
+
+          <!-- GET CLEAN -->
+          <article class="guide-card guide-card--product" data-carousel-item id="card-get-clean">
+            <div class="tag-row">
+              <span class="tag">Fresh juice</span>
+              <span class="tag">Detox</span>
+              <span class="tag">Veggie</span>
+            </div>
+            <h3 data-i18n="caffe.cards.getClean.title">Get Clean</h3>
+            <figure class="guide-media">
+              <picture>
+                <source srcset="assets/products/smoothie-verde-boost.png" type="image/png" />
+                <img decoding="async" src="assets/products/smoothie-verde-boost.png" alt="Get Clean juice" loading="lazy" data-i18n-attr="alt:caffe.cards.getClean.alt" />
+              </picture>
+            </figure>
+            <p data-i18n="caffe.cards.getClean.desc">Succo fresco detox a base di sedano, mele e cetriolo. Idratante e digestivo.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.getClean.stats">
+              <li><strong>Sedano:</strong> 2 coste (tagliate a metà)</li>
+              <li><strong>Mele:</strong> 2 (in 4 parti, no adesivi/semi)</li>
+              <li><strong>Cetriolo:</strong> 1 (tagliato a metà)</li>
+              <li><strong>Servizio:</strong> dome lid + cannuccia</li>
+            </ul>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
+            <div class="details" data-i18n-html="caffe.cards.getClean.details">
+              <div class="steps">
+                <strong>Procedure</strong>
+                <span>1 · Lava bene tutti gli ingredienti.</span>
+                <span>2 · Taglia 2 coste di sedano a metà.</span>
+                <span>3 · Taglia 2 mele in 4 parti, rimuovi adesivi e semi.</span>
+                <span>4 · Taglia 1 cetriolo a metà.</span>
+                <span>5 · Inserisci tutto in sequenza nella juice machine.</span>
+                <span>6 · Servi con dome lid e cannuccia.</span>
+              </div>
+              <div class="tips"><strong>Tips &amp; Tricks:</strong> prep dei vegetali a inizio turno per velocizzare il servizio. Il sedano è il più fibroso: spingi con calma nel tubo.</div>
+            </div>
+          </article>
+
+          <!-- ORANGE JUICE -->
+          <article class="guide-card guide-card--product" data-carousel-item id="card-orange-juice">
+            <div class="tag-row">
+              <span class="tag">Fresh juice</span>
+              <span class="tag">100% Orange</span>
+              <span class="tag">Classic</span>
+            </div>
+            <h3 data-i18n="caffe.cards.orangeJuice.title">Orange Juice</h3>
+            <figure class="guide-media">
+              <picture>
+                <source srcset="assets/products/smoothie-giallo-passion.png" type="image/png" />
+                <img decoding="async" src="assets/products/smoothie-giallo-passion.png" alt="Orange Juice" loading="lazy" data-i18n-attr="alt:caffe.cards.orangeJuice.alt" />
+              </picture>
+            </figure>
+            <p data-i18n="caffe.cards.orangeJuice.desc">Spremuta d'arancia 100% fresca. Classico intramontabile, ricco di vitamina C.</p>
+            <ul class="stat-list" data-i18n-html="caffe.cards.orangeJuice.stats">
+              <li><strong>Arance:</strong> 4-5 medie per cup standard</li>
+              <li><strong>Macchina:</strong> juicer dedicato (no juice machine)</li>
+              <li><strong>Servizio:</strong> dome lid + cannuccia</li>
+              <li><strong>Shelf life:</strong> consumare entro 30 min dalla spremitura</li>
+            </ul>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.tipsTricks">Tips &amp; Tricks</button>
+            <div class="details" data-i18n-html="caffe.cards.orangeJuice.details">
+              <div class="steps">
+                <strong>Procedure</strong>
+                <span>1 · Lava le arance e tagliale a metà.</span>
+                <span>2 · Spremi nel juicer dedicato fino al volume target.</span>
+                <span>3 · Versa nella tazza, dome lid + cannuccia.</span>
+                <span>4 · Servi immediatamente.</span>
+              </div>
+              <div class="tips"><strong>Tips &amp; Tricks:</strong> arance fredde da frigo per un succo più piacevole. Pulisci il juicer ad ogni servizio per evitare ossidazione e sapori amari.</div>
+            </div>
+          </article>
         </div>
       </section>
 

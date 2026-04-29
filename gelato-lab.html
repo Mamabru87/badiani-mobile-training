@@ -2,7 +2,15 @@
 <html lang="it">
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#214098" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Badiani Training" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="apple-touch-icon" href="assets/brand/logo-b-blue.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
     <title>Gelato Lab - Badiani</title>
     <meta name="description" content="Guida formativa Gelato Lab � ricettario, tecniche di servizio e conservazione del gelato artigianale Badiani." />
     <link rel="preload" href="fonts/SuperGroteskC-MedLF.otf" as="font" type="font/opentype" crossorigin />
@@ -17,13 +25,13 @@
   <body class="page-product" data-product="gelato-lab">
     <nav class="nav-shell">
         <a class="brand" href="index.html" aria-label="Torna alla home Badiani" data-i18n-attr="aria-label:nav.homeAria">
-          <img src="assets/brand/logo-badiani.jpg" data-default-src="assets/brand/logo-badiani.jpg" data-alt-src="assets/brand/logo-b-blue.png" alt="Badiani logo" class="brand-avatar" />
+          <img loading="lazy"  decoding="async" data-default-src="assets/brand/logo-badiani.jpg"  alt="Badiani logo" class="brand-avatar" src="assets/brand/logo-badiani.jpg" data-alt-src="assets/brand/logo-b-blue.png">
           <div class="brand-text">
             <small>Training</small>
           </div>
         </a>
         <div class="user-nickname-bar" id="user-nickname-bar" style="margin-left:auto; font-weight:600; color:#214098; font-size:1.1em; display:none; align-items:center; gap:0.5em;">
-          <img id="nav-avatar" class="user-nav-avatar" alt="" aria-hidden="true" />
+          <img loading="lazy" decoding="async" id="nav-avatar" class="user-nav-avatar" alt="" aria-hidden="true" />
           <span id="nickname-display"></span>
         </div>
         <button class="menu-trigger" type="button" data-menu-toggle aria-expanded="false" aria-controls="nav-panel">
@@ -105,7 +113,7 @@
           
         </div>
         <div class="hero-card visual">
-          <img src="assets/covers/gelato%20lab.png" alt="Cup gelato Badiani" loading="lazy" />
+          <picture><source srcset="assets/covers/gelato%20lab.webp" type="image/webp" /><img fetchpriority="high" decoding="async"   alt="Cup gelato Badiani" src="assets/covers/gelato%20lab.png" /></picture>
         </div>
       </section>
 
@@ -128,7 +136,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/gelato%20cup%20medio.png" type="image/png" />
-                <img src="assets/products/gelato%20cup%20medio.png" alt="Coppette gelato Badiani" loading="lazy" />
+                <img decoding="async" src="assets/products/gelato%20cup%20medio.png" alt="Coppette gelato Badiani" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="gelatoLab.cards.cups.desc">
@@ -170,7 +178,7 @@
             <figure class="guide-media tall">
               <picture>
                 <source srcset="assets/products/gelato%20cone%20medio.png" type="image/png" />
-                <img src="assets/products/gelato%20cone%20medio.png" alt="Coni gelato Badiani" loading="lazy" />
+                <img decoding="async" src="assets/products/gelato%20cone%20medio.png" alt="Coni gelato Badiani" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="gelatoLab.cards.cones.desc">
@@ -214,7 +222,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/gelato%20box%20medio.png" type="image/png" />
-                <img src="assets/products/gelato%20box%20medio.png" alt="Gelato take me home box" loading="lazy" />
+                <img decoding="async" src="assets/products/gelato%20box%20medio.png" alt="Gelato take me home box" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="gelatoLab.cards.boxes.desc">
@@ -259,7 +267,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/coppa%20gelato.png" type="image/png" />
-                <img src="assets/products/coppa%20gelato.png" alt="Coppa gelato scenografica" loading="lazy" />
+                <img decoding="async" src="assets/products/coppa%20gelato.png" alt="Coppa gelato scenografica" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="gelatoLab.cards.coppa.desc">
@@ -302,7 +310,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/yo-yo.png" type="image/png" />
-                <img src="assets/products/yo-yo.png" alt="Yo-Yo" loading="lazy" />
+                <img decoding="async" src="assets/products/yo-yo.png" alt="Yo-Yo" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="gelatoLab.cards.yoyo.desc">Due biscotti morbidi che racchiudono uno strato di gelato. Disponibile in vari gusti.</p>
@@ -462,6 +470,28 @@
                 <span>3 � Non superare 5�7 cm di scampolo complessivo.</span>
               </div>
               <div class="tips">Scampolo = controllo sprechi, ma sempre rispettando lo standard visivo.</div>
+            </div>
+          </article>
+
+          <article class="guide-card guide-card--procedure" data-carousel-item id="card-take-away-autonomia-termica">
+            <div class="tag-row">
+              <span class="tag" data-i18n="operations.cards.takeAwayThermal.tag1">Packaging</span>
+              <span class="tag" data-i18n="operations.cards.takeAwayThermal.tag2">Take away</span>
+              <span class="tag">40 min</span>
+            </div>
+            <h3 data-i18n="operations.cards.takeAwayThermal.title">Take-away: autonomia termica</h3>
+            <p data-i18n="operations.cards.takeAwayThermal.desc">La thermal storage box ha autonomia massima di 40 minuti: poi il prodotto deve tornare in freezer.</p>
+            <ul class="stat-list" data-i18n-html="operations.cards.takeAwayThermal.stats">
+              <li>Comunicalo sempre al cliente (qualità e sicurezza)</li>
+              <li>Consiglia freezer appena possibile</li>
+              <li>Evita soste &laquo;lunghe&raquo; fuori controllo (rider/attese)</li>
+            </ul>
+            <button class="btn-ghost" data-toggle-card data-i18n="card.script">Script</button>
+            <div class="details" data-i18n-html="operations.cards.takeAwayThermal.details">
+              <div class="steps">
+                <span>1 · Questa box tiene circa 40 minuti: poi freezer.</span>
+                <span>2 · Per delivery: conserva in freezer fino al ritiro.</span>
+              </div>
             </div>
           </article>
 

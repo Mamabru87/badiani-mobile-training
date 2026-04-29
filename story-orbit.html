@@ -2,7 +2,15 @@
 <html lang="it">
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#214098" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Badiani Training" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="apple-touch-icon" href="assets/brand/logo-b-blue.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
     <title>Story Orbit � Badiani</title>
     <meta name="description" content="Story Orbit � la storia del brand Badiani, dalla fondazione a oggi, in formato interattivo." />
     <link rel="preload" href="fonts/SuperGroteskC-MedLF.otf" as="font" type="font/opentype" crossorigin />
@@ -371,13 +379,13 @@
     <main>
       <nav class="nav-shell">
         <a class="brand" href="index.html" aria-label="Torna alla home Badiani" data-i18n-attr="aria-label:nav.homeAria">
-          <img src="assets/brand/logo-badiani.jpg" data-default-src="assets/brand/logo-badiani.jpg" data-alt-src="assets/brand/logo-b-blue.png" alt="Badiani logo" class="brand-avatar" />
+          <img loading="lazy"  decoding="async" data-default-src="assets/brand/logo-badiani.jpg"  alt="Badiani logo" class="brand-avatar" src="assets/brand/logo-badiani.jpg" data-alt-src="assets/brand/logo-b-blue.png">
           <div class="brand-text">
             <small>Training</small>
           </div>
         </a>
         <div class="user-nickname-bar" id="user-nickname-bar" style="margin-left:auto; font-weight:600; color:#214098; font-size:1.1em; display:none; align-items:center; gap:0.5em;">
-          <img id="nav-avatar" class="user-nav-avatar" alt="" aria-hidden="true" />
+          <img loading="lazy" decoding="async" id="nav-avatar" class="user-nav-avatar" alt="" aria-hidden="true" />
           <span id="nickname-display"></span>
         </div>
         <button class="menu-trigger" type="button" data-menu-toggle aria-expanded="false" aria-controls="nav-panel">
@@ -497,23 +505,23 @@
           
         </div>
         <div class="hero-card visual">
-          <img src="assets/covers/Story%20orbit.png" alt="Story Orbit Badiani 1932" loading="lazy" />
+          <picture><source srcset="assets/covers/Story%20orbit.webp" type="image/webp" /><img fetchpriority="high" decoding="async"   alt="Story Orbit Badiani 1932" src="assets/covers/Story%20orbit.png" /></picture>
         </div>
       </section>
 
       <section class="story-experience story-experience--accordion">
         <div class="story-media" data-story-fullscreen tabindex="0" aria-label="Apri pagina story a schermo intero" data-i18n-attr="aria-label:storyOrbit.fullscreenAria">
           <div class="story-image" data-story-image="tradizione">
-            <img src="assets/story/story-tradizione.webp" alt="Pagina tradizione Badiani" loading="lazy" />
+            <img decoding="async" src="assets/story/story-tradizione.webp" alt="Pagina tradizione Badiani" loading="lazy" />
           </div>
           <div class="story-image" data-story-image="idea">
-            <img src="assets/story/story-idea.webp" alt="Pagina idea Badiani" loading="lazy" />
+            <img decoding="async" src="assets/story/story-idea.webp" alt="Pagina idea Badiani" loading="lazy" />
           </div>
           <div class="story-image" data-story-image="gelato">
-            <img src="assets/story/story-gelato.webp" alt="Pagina cultura del gelato Buontalenti" loading="lazy" />
+            <img decoding="async" src="assets/story/story-gelato.webp" alt="Pagina cultura del gelato Buontalenti" loading="lazy" />
           </div>
           <div class="story-image" data-story-image="buontalenti">
-            <img src="assets/story/story-buontalenti.webp" alt="Pagina Buontalenti signature" loading="lazy" />
+            <img decoding="async" src="assets/story/story-buontalenti.webp" alt="Pagina Buontalenti signature" loading="lazy" />
           </div>
           <div class="story-halo"></div>
           <div class="story-zoom-hint" data-i18n="storyOrbit.zoomHint">Click per ingrandire</div>
@@ -707,7 +715,7 @@
       <div class="story-modal__content" role="dialog" aria-modal="true" aria-label="Story orbit fullscreen" data-i18n-attr="aria-label:storyOrbit.modalAria">
         <button class="story-modal__close" type="button" aria-label="Chiudi visualizzazione" data-i18n-attr="aria-label:storyOrbit.modalClose" data-story-modal-close>&times;</button>
         <figure>
-          <img src="" alt="" data-story-modal-image />
+          <img loading="lazy" decoding="async" src="" alt="" data-story-modal-image />
           <figcaption data-story-modal-caption></figcaption>
         </figure>
         <div class="story-modal__translation" data-story-modal-translation></div>

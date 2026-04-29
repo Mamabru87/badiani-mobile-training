@@ -1,0 +1,27 @@
+{
+  "name": "Badiani Training Orbit",
+  "short_name": "Badiani",
+  "description": "Training mobile per il team Badiani: gelato, caffè, pastry, operations.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#214098",
+  "theme_color": "#214098",
+  "lang": "it",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "assets/brand/logo-b-blue.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/brand/logo-b-blue.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

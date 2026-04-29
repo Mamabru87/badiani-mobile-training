@@ -79,9 +79,9 @@ Browser ←→ HTML/CSS/JS statici ←→ localStorage (stato)
 - **Contenuto:** 6 hub-card (daily training, performance, totali, errori, storico, profilo)
 
 ### caffe.html — Bar & Drinks
-- **Stars dichiarate:** 18/18
-- **Card totali:** 29
-- **Carousel:** `caffe` (prodotti) + `caffe-ops` (procedure)
+- **Stars dichiarate:** 35/35
+- **Card totali:** 35 (30 prodotto + 5 procedura)
+- **Carousel:** `caffe-hot`, `caffe-matcha`, `caffe-cold`, `caffe-smoothies-juices` (prodotti) + `caffe-ops` (procedure)
 
 | # | Card ID | Tipo |
 |---|---------|------|
@@ -99,21 +99,27 @@ Browser ←→ HTML/CSS/JS statici ←→ localStorage (stato)
 | 12 | `card-afternoon-tea` | Prodotto |
 | 13 | `card-affogato` | Prodotto |
 | 14 | `card-whipped-coffee` | Prodotto |
-| 15 | `card-matcha-latte` | Prodotto |
-| 16 | `card-iced-matcha` | Prodotto |
-| 17 | `card-matcha-affogato` | Prodotto |
-| 18 | `card-dirty-matcha` | Prodotto |
-| 19 | `card-iced-americano` | Prodotto |
-| 20 | `card-iced-latte` | Prodotto |
-| 21 | `card-pistachio-iced-latte` | Prodotto |
-| 22 | `card-smoothie-giallo-passion` | Prodotto |
-| 23 | `card-smoothie-rosso-berry` | Prodotto |
-| 24 | `card-smoothie-verde-boost` | Prodotto |
-| 25 | `card-prep-matcha-premade-una-volta-al-giorno` | Procedura |
-| 26 | `card-setting-iced-matcha-latte-standard` | Procedura |
-| 27 | `card-smoothie-parametri-di-produzione` | Procedura |
-| 28 | `card-storage-matcha-premade-haccp` | Procedura |
-| 29 | `card-chiusura-stazione-matcha-blender` | Procedura |
+| 15 | `card-british-hot-chocolate` | Prodotto |
+| 16 | `card-matcha-latte` | Prodotto |
+| 17 | `card-iced-matcha` | Prodotto |
+| 18 | `card-matcha-affogato` | Prodotto |
+| 19 | `card-dirty-matcha` | Prodotto |
+| 20 | `card-iced-americano` | Prodotto |
+| 21 | `card-iced-latte` | Prodotto |
+| 22 | `card-pistachio-iced-latte` | Prodotto |
+| 23 | `card-dolcevita-iced-latte` | Prodotto |
+| 24 | `card-smoothie-giallo-passion` | Prodotto |
+| 25 | `card-smoothie-rosso-berry` | Prodotto |
+| 26 | `card-smoothie-verde-boost` | Prodotto |
+| 27 | `card-energy-booster` | Prodotto |
+| 28 | `card-sweet-beet` | Prodotto |
+| 29 | `card-get-clean` | Prodotto |
+| 30 | `card-orange-juice` | Prodotto |
+| 31 | `card-prep-matcha-premade-una-volta-al-giorno` | Procedura |
+| 32 | `card-setting-iced-matcha-latte-standard` | Procedura |
+| 33 | `card-smoothies-parametri-di-produzione` | Procedura |
+| 34 | `card-storage-matcha-premade-haccp` | Procedura |
+| 35 | `card-chiusura-stazione-matcha-blender` | Procedura |
 
 ### gelato-lab.html — Gelato Lab
 - **Stars dichiarate:** 8/8
@@ -190,23 +196,26 @@ Browser ←→ HTML/CSS/JS statici ←→ localStorage (stato)
 | 7 | `card-packaging-mini-panettone-delivery` | Procedura |
 
 ### operations.html — Operations & Setup
-- **Stars dichiarate:** 0/6 (no scoring)
-- **Card totali:** 11
-- **Carousel:** `operations` (standard) + `operations-tech` (dati tecnici)
+- **Stars dichiarate:** 14/14
+- **Card totali:** 14
+- **Carousel:** `operations-routines` (apertura/afternoon/chiusura) + `operations-bts` (Behind The Scenes) + `operations-tech` (dati tecnici)
 
 | # | Card ID | Tipo |
 |---|---------|------|
-| 1 | `card-ops-opening` | Procedura |
-| 2 | `card-ops-daily-setup` | Procedura |
-| 3 | `card-ops-warm-service` | Procedura |
-| 4 | `card-packaging-take-away` | Procedura |
-| 5 | `card-allestimento-macchina` | Procedura |
-| 6 | `card-service-chiusura` | Procedura |
-| 7 | `card-temperature-chiave-quick-map` | Tecnico |
-| 8 | `card-fifo-etichette-regola-d-oro` | Tecnico |
-| 9 | `card-shelf-life-rapidi-mix-premade` | Tecnico |
-| 10 | `card-take-away-autonomia-termica` | Tecnico |
-| 11 | `card-schedule-pulizie-giorno-settimana` | Tecnico |
+| 1 | `card-ops-opening` | Routine |
+| 2 | `card-ops-afternoon` | Routine |
+| 3 | `card-ops-closing` | Routine |
+| 4 | `card-bts-weekly` | BTS |
+| 5 | `card-bts-google-forms` | BTS |
+| 6 | `card-bts-monthly` | BTS |
+| 7 | `card-bts-quarterly-audit` | BTS |
+| 8 | `card-temperature-chiave-quick-map` | Tecnico |
+| 9 | `card-fifo` | Tecnico |
+| 10 | `card-batch-mix` | Tecnico |
+| 11 | `card-shelf-life-rapidi-mix-premade` | Tecnico |
+| 12 | `card-filters-defrost` | Tecnico |
+| 13 | `card-discounts-promos` | Tecnico |
+| 14 | `card-troubleshooting` | Tecnico |
 
 ### story-orbit.html — Story Orbit Badiani 1932
 - **Stars dichiarate:** 0/5 (no scoring)
@@ -224,8 +233,11 @@ Browser ←→ HTML/CSS/JS statici ←→ localStorage (stato)
 | Pagina | Carousel ID | Contenuto |
 |--------|------------|-----------|
 | index.html | `cockpit` | Hub cards (daily, stats, profilo) |
-| caffe.html | `caffe` | Prodotti caffè (classici + matcha + smoothie + cold) |
-| caffe.html | `caffe-ops` | Procedure matcha/blender/storage |
+| caffe.html | `caffe-hot` | Hot Coffee & British Hot Chocolate (15 cards) |
+| caffe.html | `caffe-matcha` | Matcha Bar (4 cards) |
+| caffe.html | `caffe-cold` | Cold Coffee (4 cards) |
+| caffe.html | `caffe-smoothies-juices` | Smoothies & Juices (7 cards) |
+| caffe.html | `caffe-ops` | Procedure matcha/blender/storage (5 cards) |
 | gelato-lab.html | `gelato-lab` | Coppette, coni, boxes, coppa |
 | gelato-lab.html | `gelato-lab-ops` | Setup vetrina, temperature, shelf life |
 | pastries.html | `pastries` | Cakes, brownie, loaf, croissant, scones |
@@ -234,10 +246,11 @@ Browser ←→ HTML/CSS/JS statici ←→ localStorage (stato)
 | sweet-treats.html | `sweet-treats-ops` | Checklist, settaggi, shelf life, chiusura |
 | festive.html | `festive-products` | Panettone, pandoro, cioccolata calda, colomba |
 | festive.html | `festive-ops` | Setup macchina, conservazione, pulizia, packaging |
-| operations.html | `operations` | Standard operativi (apertura, setup, chiusura) |
-| operations.html | `operations-tech` | Temperature, FIFO, shelf life, pulizie |
+| operations.html | `operations-routines` | Routine apertura, afternoon, chiusura |
+| operations.html | `operations-bts` | Behind The Scenes (weekly, Google Forms, monthly, audit) |
+| operations.html | `operations-tech` | Temperature, FIFO, batch & mix, shelf life, filters, promo, troubleshooting |
 
-**Totale: 13 carousel** su 7 pagine prodotto + 1 cockpit.
+**Totale: 17 carousel** su 7 pagine prodotto + 1 cockpit.
 
 ---
 

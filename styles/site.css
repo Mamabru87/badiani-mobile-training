@@ -231,7 +231,7 @@ html {
 }
 
 body {
-  min-height: 100vh;
+  min-height: 100dvh;
   background-color: #ffffff;
   color: var(--ink-soft);
   font-size: 16px;
@@ -2608,7 +2608,7 @@ h4 {
 @media (max-width: 560px) {
   .berny-guide-panel {
     /* Mobile: altezza leggermente ridotta */
-    --panel-height: min(88vh, calc(100vh - 28px));
+    --panel-height: min(88vh, calc(100dvh - 28px));
     height: var(--panel-height);
     width: calc(var(--panel-height) * 0.5625);
     max-width: 92vw;
@@ -4704,7 +4704,7 @@ h4 {
 
 .wrong-log__list {
   margin-top: 12px;
-  max-height: calc(100vh - 400px);
+  max-height: calc(100dvh - 400px);
   overflow: auto;
   padding-right: 4px;
   flex: 1 1 auto;
@@ -6296,7 +6296,7 @@ section.carousel:last-of-type {
   box-shadow: 0 20px 60px rgba(15, 33, 84, 0.2);
   width: min(1000px, 96vw);
   /* Keep the modal fully inside the viewport (accounting for overlay padding). */
-  max-height: min(calc(100vh - 48px), 1200px);
+  max-height: min(calc(100dvh - 48px), 1200px);
   max-height: min(calc(100dvh - 48px), 1200px);
   display: grid;
   grid-template-columns: 420px 1fr;
@@ -6381,7 +6381,7 @@ section.carousel:last-of-type {
   background: var(--paper);
   width: min(1000px, 96vw);
   /* Keep the modal fully inside the viewport (accounting for overlay padding). */
-  max-height: min(calc(100vh - 48px), 1200px);
+  max-height: min(calc(100dvh - 48px), 1200px);
   max-height: min(calc(100dvh - 48px), 1200px);
   display: grid;
   grid-template-columns: 420px 1fr;
@@ -9283,7 +9283,7 @@ body.page-home {
   top: 0;
   right: 0;
   left: auto;
-  height: 100vh;
+  height: 100dvh;
   width: 380px;
   background: #ffffff;
   box-shadow: 4px 0 20px rgba(33, 64, 152, 0.2);
@@ -11971,3 +11971,136 @@ body.page-product .hero + .carousel .carousel-header {
   gap: 10px;
 }
 
+
+/* === Operations: photo grids + placeholders + video (BSG 2025 update) === */
+.guide-photo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 10px 0 6px;
+}
+.guide-photo-grid figure { margin: 0; }
+.guide-photo-grid img,
+.guide-photo-grid .guide-photo-placeholder {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  border-radius: 12px;
+  display: block;
+}
+.guide-photo-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(33,64,152,0.06),
+    rgba(33,64,152,0.06) 10px,
+    rgba(33,64,152,0.12) 10px,
+    rgba(33,64,152,0.12) 20px
+  );
+  border: 2px dashed rgba(33,64,152,0.35);
+  color: var(--brand-blue);
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  padding: 12px;
+}
+.guide-photo-placeholder::before {
+  content: "📸";
+  font-size: 28px;
+  filter: grayscale(0.2);
+}
+.guide-photo-placeholder[data-state="bad"] {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(236,65,140,0.08),
+    rgba(236,65,140,0.08) 10px,
+    rgba(236,65,140,0.16) 10px,
+    rgba(236,65,140,0.16) 20px
+  );
+  border-color: rgba(236,65,140,0.45);
+  color: var(--brand-rose);
+}
+.guide-photo-placeholder[data-state="good"],
+.guide-photo-placeholder[data-state="after"] {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(46,160,67,0.08),
+    rgba(46,160,67,0.08) 10px,
+    rgba(46,160,67,0.16) 10px,
+    rgba(46,160,67,0.16) 20px
+  );
+  border-color: rgba(46,160,67,0.45);
+  color: #1f7a32;
+}
+.guide-photo-grid figcaption {
+  font-size: 12px;
+  color: var(--brand-gray);
+  text-align: center;
+  margin-top: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.guide-video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 70vh;
+  object-fit: contain;
+  border-radius: 14px;
+  background: #000;
+  margin: 10px 0;
+}
+.guide-video[hidden] { display: none; }
+@media (max-width: 480px) {
+  .guide-photo-grid { gap: 6px; }
+  .guide-photo-placeholder { font-size: 11px; padding: 8px; }
+}
+
+/* Caption shown above details photo grid (was figcaption next to cover image) */
+.details .details-caption {
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--brand-blue);
+  text-align: center;
+}
+.details .guide-photo-grid { margin-top: 0; margin-bottom: 10px; }
+.details .guide-video { margin-top: 0; margin-bottom: 12px; }
+
+/* === Mobile a11y: minimum tap targets (WCAG 2.5.5 AAA / 2.5.8 AA = 24px) ===
+ * iOS HIG / Material recommend 44px. Apply broadly to interactive elements.
+ */
+@media (pointer: coarse), (max-width: 768px) {
+  button,
+  .btn,
+  .btn-ghost,
+  .btn-primary,
+  .btn-secondary,
+  a[role="button"],
+  [data-toggle-card],
+  [data-menu-toggle],
+  [data-menu-close],
+  [data-popover-toggle],
+  .nav-token,
+  .tag[role="button"],
+  input[type="button"],
+  input[type="submit"],
+  input[type="checkbox"],
+  input[type="radio"],
+  select {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+  }
+  /* Compact tags inside .tag-row stay small visually but get larger hit area via padding */
+  .tag-row .tag {
+    padding-block: 8px;
+  }
+  /* Ensure links inside text don't get oversize boxes that break flow */
+  p a, li a { min-height: auto; min-width: auto; }
+}

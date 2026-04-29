@@ -15,3 +15,16 @@ __pycache__/
 
 # Review folder
 da-revisionare/
+
+# Photoshop sources (large, not for production)
+*.psb
+*.psd
+
+
+# Large source assets (use external storage / Drive)
+notes/*.docx
+notes/*.pdf
+berny video/
+# Mojibake repair backups (temporary)
+_mojibake_backup_*/
+

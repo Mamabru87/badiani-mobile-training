@@ -1,6 +1,20 @@
 ﻿document.documentElement.classList.add('has-js');
 
 // ============================================================
+// SERVICE WORKER REGISTRATION
+// Cache-first PWA for offline-friendly mobile training app.
+// Disabled on file:// (local preview) and when explicitly opted out.
+// ============================================================
+if ('serviceWorker' in navigator && location.protocol.startsWith('http') && !window.__BADIANI_NO_SW__) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch((err) => {
+      // eslint-disable-next-line no-console
+      console.warn('[Badiani] SW registration failed:', err);
+    });
+  });
+}
+
+// ============================================================
 // PRODUCTION LOGGER: Silences console.log/warn in production
 // Set window.__BADIANI_DEBUG__ = true in devtools to enable logging
 // ============================================================
@@ -3078,9 +3092,28 @@ scrollButtons.forEach((btn) => {
     releaseDrawerFocusTrap = trapFocus(drawer);
   };
 
+  // Embargo video: swap source by current UI language.
+  const updateEmbargoVideos = () => {
+    try {
+      const lang = (window.BadianiI18n?.getLang?.() || document.documentElement.lang || 'it').slice(0, 2).toLowerCase();
+      document.querySelectorAll('video[data-embargo-video]').forEach((v) => {
+        const map = { it: v.dataset.srcIt, en: v.dataset.srcEn, es: v.dataset.srcEs, fr: v.dataset.srcFr };
+        const next = map[lang] || map.it || map.en;
+        if (next && v.getAttribute('src') !== next) {
+          const wasPlaying = !v.paused;
+          v.src = next;
+          v.load();
+          if (wasPlaying) { try { v.play(); } catch {} }
+        }
+      });
+    } catch {}
+  };
+  updateEmbargoVideos();
+
   // Keep mood line aligned when UI language changes.
   document.addEventListener('badiani:lang-changed', () => {
     applyMoodLine();
+    updateEmbargoVideos();
     
     // Re-apply translations to assistant UI (title, labels, etc.)
     if (typeof window.BadianiI18n?.applyTranslations === 'function') {

@@ -2,7 +2,15 @@
 <html lang="it">
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#214098" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Badiani Training" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="apple-touch-icon" href="assets/brand/logo-b-blue.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
     <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
@@ -59,7 +67,7 @@
     <script defer src="scripts/i18n.js?v=20260309_1"></script>
     <script defer src="scripts/berny-ui.js?v=20260309_1"></script>
     <script defer src="scripts/avatar-lab.js"></script>
-    <script defer src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <script defer src="scripts/vendor/lottie-player.js?v=20260429_1"></script>
     <script defer src="scripts/site.js?v=20260309_14"></script>
     <script defer src="scripts/gelato-effects.js?v=20260309_1"></script>
   <!-- COCKPIT_COMPACT block removed: styling now lives in styles/site.css -->
@@ -115,7 +123,7 @@
 
       <nav class="nav-shell">
         <a class="brand" href="index.html" aria-label="Torna alla home Badiani" data-i18n-attr="aria-label:nav.homeAria">
-          <img src="assets/brand/logo-badiani.jpg" data-default-src="assets/brand/logo-badiani.jpg" data-alt-src="assets/brand/logo-b-blue.png" alt="Badiani logo" class="brand-avatar" />
+          <img loading="lazy"  decoding="async" data-default-src="assets/brand/logo-badiani.jpg"  alt="Badiani logo" class="brand-avatar" src="assets/brand/logo-badiani.jpg" data-alt-src="assets/brand/logo-b-blue.png">
           <div class="brand-text">
             <small>Training</small>
           </div>
@@ -302,7 +310,7 @@
               </div>
               <div class="hub-card__center" data-profile>
                  <div class="summary-profile__avatar summary-profile__avatar--placeholder" aria-hidden="true" style="transform: scale(1.5); margin-bottom: 10px;">
-                    <img id="hub-profile-img" src="" alt="Avatar" style="width:100%; height:100%; object-fit:cover; display:none; border-radius:50%;">
+                    <img loading="lazy" decoding="async" id="hub-profile-img" src="" alt="Avatar" style="width:100%; height:100%; object-fit:cover; display:none; border-radius:50%;" />
                     <span class="avatar-placeholder" role="img" aria-label="Profilo">👤</span>
                  </div>
                  <h3 class="hub-card__title" data-profile-nick>�</h3>

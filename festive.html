@@ -2,7 +2,15 @@
 <html lang="it">
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#214098" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Badiani Training" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="apple-touch-icon" href="assets/brand/logo-b-blue.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
     <title>Seasonal - Badiani</title>
     <meta name="description" content="Guida formativa Seasonal � prodotti stagionali, panettone, pandoro, colomba e cioccolata calda Badiani." />
     <link rel="preload" href="fonts/SuperGroteskC-MedLF.otf" as="font" type="font/opentype" crossorigin />
@@ -17,13 +25,13 @@
   <body class="page-product" data-product="festive">
     <nav class="nav-shell">
         <a class="brand" href="index.html" aria-label="Torna alla home Badiani" data-i18n-attr="aria-label:nav.homeAria">
-          <img src="assets/brand/logo-badiani.jpg" data-default-src="assets/brand/logo-badiani.jpg" data-alt-src="assets/brand/logo-b-blue.png" alt="Badiani logo" class="brand-avatar" />
+          <img loading="lazy"  decoding="async" data-default-src="assets/brand/logo-badiani.jpg"  alt="Badiani logo" class="brand-avatar" src="assets/brand/logo-badiani.jpg" data-alt-src="assets/brand/logo-b-blue.png">
           <div class="brand-text">
             <small>Training</small>
           </div>
         </a>
         <div class="user-nickname-bar" id="user-nickname-bar" style="margin-left:auto; font-weight:600; color:#214098; font-size:1.1em; display:none; align-items:center; gap:0.5em;">
-          <img id="nav-avatar" class="user-nav-avatar" alt="" aria-hidden="true" />
+          <img loading="lazy" decoding="async" id="nav-avatar" class="user-nav-avatar" alt="" aria-hidden="true" />
           <span id="nickname-display"></span>
         </div>
         <button class="menu-trigger" type="button" data-menu-toggle aria-expanded="false" aria-controls="nav-panel">
@@ -104,7 +112,7 @@
           
         </div>
         <div class="hero-card visual">
-          <img src="assets/covers/Festive.png" alt="Prodotti stagionali Badiani" loading="lazy" data-i18n-attr="alt:festive.hero.coverAlt" />
+          <picture><source srcset="assets/covers/Festive.webp" type="image/webp" /><img fetchpriority="high" decoding="async"   alt="Prodotti stagionali Badiani" data-i18n-attr="alt:festive.hero.coverAlt" src="assets/covers/Festive.png" /></picture>
         </div>
       </section>
 
@@ -128,7 +136,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/panettone%20classico.png" type="image/png" />
-                <img src="assets/products/panettone%20classico.png" alt="Panettone Classico" loading="lazy" />
+                <img decoding="async" src="assets/products/panettone%20classico.png" alt="Panettone Classico" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="festive.cards.panettoneClassic.desc">
@@ -171,7 +179,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/panettone%20dark%20chocolate.png" type="image/png" />
-                <img src="assets/products/panettone%20dark%20chocolate.png" alt="Panettone Dark Chocolate" loading="lazy" />
+                <img decoding="async" src="assets/products/panettone%20dark%20chocolate.png" alt="Panettone Dark Chocolate" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="festive.cards.panettoneDark.desc">
@@ -212,7 +220,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/pandoro.png" type="image/png" />
-                <img src="assets/products/pandoro.png" alt="Pandoro Classico" loading="lazy" />
+                <img decoding="async" src="assets/products/pandoro.png" alt="Pandoro Classico" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="festive.cards.pandoroClassic.desc">
@@ -279,7 +287,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/cioccolata%20calda.webp" type="image/webp" />
-                <img src="assets/products/cioccolata%20calda.jpg" alt="Cioccolata Calda" loading="lazy" />
+                <img decoding="async" src="assets/products/cioccolata%20calda.jpg" alt="Cioccolata Calda" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="festive.cards.hotChocolate.desc">Cioccolata calda densa e cremosa, perfetta per la stagione fredda. Servita in tazza grande con panna montata e topping a scelta.</p>
@@ -319,7 +327,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/colomba.webp" type="image/webp" />
-                <img src="assets/products/colomba.jpg" alt="Colomba" loading="lazy" />
+                <img decoding="async" src="assets/products/colomba.jpg" alt="Colomba" loading="lazy" />
               </picture>
             </figure>
             <p data-i18n="festive.cards.colomba.desc">Colomba pasquale tradizionale con glassa di mandorle e canditi. Lievitazione naturale lunga. Servita a fetta su piatto dessert con posate.</p>

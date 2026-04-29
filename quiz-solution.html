@@ -1,10 +1,18 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Soluzione quiz · Badiani</title>
-  <meta name="description" content="Pagina di soluzione quiz — revisione delle risposte e approfondimento argomenti Badiani Training Orbit." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#214098" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Badiani Training" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="apple-touch-icon" href="assets/brand/logo-b-blue.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
+  <title>Soluzione quiz Â· Badiani</title>
+  <meta name="description" content="Pagina di soluzione quiz â€” revisione delle risposte e approfondimento argomenti Badiani Training Orbit." />
   <link rel="preload" href="fonts/SuperGroteskC-MedLF.otf" as="font" type="font/opentype" crossorigin />
   <link rel="preload" href="fonts/SuperGroteskB-CdMed.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="styles/site.css?v=20260309_12" />
@@ -119,7 +127,7 @@
 </head>
 <body>
   <main class="solution-shell">
-    <p class="solution-eyebrow" data-i18n="quizSolution.eyebrow">Quiz · Soluzione</p>
+    <p class="solution-eyebrow" data-i18n="quizSolution.eyebrow">Quiz Â· Soluzione</p>
     <h1 class="solution-title" data-i18n="quizSolution.title">Rivedi la risposta corretta</h1>
     <p class="solution-question" data-solution-question data-i18n="quizSolution.loadingQuestion">Caricamento domanda...</p>
     <div class="solution-answer" data-solution-answer data-i18n="quizSolution.loadingAnswer">Caricamento risposta corretta...</div>
@@ -206,7 +214,7 @@
             if (Array.isArray(cardNames) && cardNames.length > 0) {
               // Mappa il nome della scheda ai file corretti (DEVE CORRISPONDERE a site.js slugToCardName)
               const cardLinks = {
-                'Caffè': { href: 'caffe.html', label: '? Torna a Caffè' },
+                'CaffÃ¨': { href: 'caffe.html', label: '? Torna a CaffÃ¨' },
                 'Gelato Lab': { href: 'gelato-lab.html', label: '?? Torna a Gelato Lab' },
                 'Dolciumi': { href: 'sweet-treats.html', label: '?? Torna a Dolciumi' },
                 'Paste': { href: 'pastries.html', label: '?? Torna a Paste' },
@@ -241,7 +249,7 @@
                 revisionsWrap.hidden = true;
               }
             } else {
-              console.warn('?? cardNames non è un array o è vuoto:', cardNames);
+              console.warn('?? cardNames non Ã¨ un array o Ã¨ vuoto:', cardNames);
             }
           } catch (e) {
             console.error('? Errore parsing schede revisione:', e.message, 'revisions:', revisions);

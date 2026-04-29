@@ -2,7 +2,15 @@
 <html lang="it">
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#214098" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Badiani Training" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="apple-touch-icon" href="assets/brand/logo-b-blue.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
     <title>Pastry Lab � Badiani</title>
     <meta name="description" content="Guida formativa Pastry Lab � pasticceria da banco, mignon, torte e servizio vetrina Badiani." />
     <link rel="preload" href="fonts/SuperGroteskC-MedLF.otf" as="font" type="font/opentype" crossorigin />
@@ -17,13 +25,13 @@
   <body class="page-product" data-product="pastries">
     <nav class="nav-shell">
         <a class="brand" href="index.html" aria-label="Torna alla home Badiani" data-i18n-attr="aria-label:nav.homeAria">
-          <img src="assets/brand/logo-badiani.jpg" data-default-src="assets/brand/logo-badiani.jpg" data-alt-src="assets/brand/logo-b-blue.png" alt="Badiani logo" class="brand-avatar" />
+          <img loading="lazy"  decoding="async" data-default-src="assets/brand/logo-badiani.jpg"  alt="Badiani logo" class="brand-avatar" src="assets/brand/logo-badiani.jpg" data-alt-src="assets/brand/logo-b-blue.png">
           <div class="brand-text">
             <small>Training</small>
           </div>
         </a>
         <div class="user-nickname-bar" id="user-nickname-bar" style="margin-left:auto; font-weight:600; color:#214098; font-size:1.1em; display:none; align-items:center; gap:0.5em;">
-          <img id="nav-avatar" class="user-nav-avatar" alt="" aria-hidden="true" />
+          <img loading="lazy" decoding="async" id="nav-avatar" class="user-nav-avatar" alt="" aria-hidden="true" />
           <span id="nickname-display"></span>
         </div>
         <button class="menu-trigger" type="button" data-menu-toggle aria-expanded="false" aria-controls="nav-panel">
@@ -105,7 +113,7 @@
           
         </div>
         <div class="hero-card visual">
-          <img src="assets/covers/Pastry%20Lab.png" alt="Cakes e brownie Badiani" loading="lazy" data-i18n-attr="alt:pastries.hero.coverAlt" />
+          <picture><source srcset="assets/covers/Pastry%20Lab.webp" type="image/webp" /><img fetchpriority="high" decoding="async"   alt="Cakes e brownie Badiani" data-i18n-attr="alt:pastries.hero.coverAlt" src="assets/covers/Pastry%20Lab.png" /></picture>
         </div>
       </section>
 
@@ -128,7 +136,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/cake.png" type="image/png" />
-                <img src="assets/products/cake.png" alt="Fetta di torta Badiani" loading="lazy" data-i18n-attr="alt:pastries.cards.cakes.alt" />
+                <img decoding="async" src="assets/products/cake.png" alt="Fetta di torta Badiani" loading="lazy" data-i18n-attr="alt:pastries.cards.cakes.alt" />
               </picture>
             </figure>
             <p data-i18n="pastries.cards.cakes.desc">Chocolate (3g), Carrot (2g), Walnut (3g) rispettando 14 fette per torta.</p>
@@ -166,7 +174,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/brownie.png" type="image/png" />
-                <img src="assets/products/brownie.png" alt="Brownie Badiani" loading="lazy" data-i18n-attr="alt:pastries.cards.brownie.alt" />
+                <img decoding="async" src="assets/products/brownie.png" alt="Brownie Badiani" loading="lazy" data-i18n-attr="alt:pastries.cards.brownie.alt" />
               </picture>
             </figure>
             <p data-i18n="pastries.cards.brownie.desc">Taglio 4x3 (12 pezzi) e servizio su piatto con cutlery.</p>
@@ -195,7 +203,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/loaf.png" type="image/png" />
-                <img src="assets/products/loaf.png" alt="Loaf al banane" loading="lazy" data-i18n-attr="alt:pastries.cards.loaf.alt" />
+                <img decoding="async" src="assets/products/loaf.png" alt="Loaf al banane" loading="lazy" data-i18n-attr="alt:pastries.cards.loaf.alt" />
               </picture>
             </figure>
             <p data-i18n="pastries.cards.loaf.desc">Ogni loaf deve fornire 10 fette. Servizio e upsell identici alle cakes.</p>
@@ -224,7 +232,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/croissants%20pistacchio.png" type="image/png" />
-                <img src="assets/products/croissants%20pistacchio.png" alt="Croissant farcito" loading="lazy" data-i18n-attr="alt:pastries.cards.croissants.alt" />
+                <img decoding="async" src="assets/products/croissants%20pistacchio.png" alt="Croissant farcito" loading="lazy" data-i18n-attr="alt:pastries.cards.croissants.alt" />
               </picture>
             </figure>
             <p data-i18n="pastries.cards.croissants.desc">
@@ -258,7 +266,7 @@
             <figure class="guide-media">
               <picture>
                 <source srcset="assets/products/scones.png" type="image/png" />
-                <img src="assets/products/scones.png" alt="Scone ripieno di gelato" loading="lazy" data-i18n-attr="alt:pastries.cards.scone.alt" />
+                <img decoding="async" src="assets/products/scones.png" alt="Scone ripieno di gelato" loading="lazy" data-i18n-attr="alt:pastries.cards.scone.alt" />
               </picture>
             </figure>
             <p data-i18n="pastries.cards.scone.desc">Scalda 15 s nel gelato burger machine, farcisci con scoop Buontalenti e sauce.</p>
@@ -301,7 +309,7 @@
             <figure class="guide-media tall">
               <picture>
                 <source srcset="assets/products/pastry%20vetrine.png" type="image/png" />
-                <img src="assets/products/pastry%20vetrine.png" alt="Vetrina pastry Badiani" loading="lazy" data-i18n-attr="alt:pastries.ops.display.alt" />
+                <img decoding="async" src="assets/products/pastry%20vetrine.png" alt="Vetrina pastry Badiani" loading="lazy" data-i18n-attr="alt:pastries.ops.display.alt" />
               </picture>
             </figure>
             <p data-i18n="pastries.ops.display.desc">Obiettivo apertura: vetrina piena, ordinata e leggibile. Label sempre accanto al tray corretto; le cakes sui cake stand con una fetta rimossa per mostrare l'interno.</p>
