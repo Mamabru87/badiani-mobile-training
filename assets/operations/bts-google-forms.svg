@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="Google Forms tracking">
+  <defs>
+    <linearGradient id="bgGF" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff5f9"/>
+      <stop offset="1" stop-color="#ffe6f1"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bgGF)"/>
+  <!-- phone frame -->
+  <rect x="200" y="50" width="200" height="320" rx="28" fill="#214098"/>
+  <rect x="212" y="62" width="176" height="296" rx="18" fill="#fff"/>
+  <!-- form header -->
+  <rect x="225" y="78" width="150" height="34" rx="6" fill="#214098"/>
+  <text x="300" y="100" text-anchor="middle" fill="#fff" font-family="Arial,sans-serif" font-weight="700" font-size="14">📋 Form</text>
+  <!-- input rows -->
+  <g>
+    <rect x="225" y="125" width="150" height="22" rx="4" fill="#f4f7ff" stroke="#cfd6e8"/>
+    <rect x="229" y="130" width="80" height="12" fill="#cfd6e8" rx="2"/>
+    <rect x="225" y="155" width="150" height="22" rx="4" fill="#f4f7ff" stroke="#cfd6e8"/>
+    <rect x="229" y="160" width="100" height="12" fill="#cfd6e8" rx="2"/>
+    <rect x="225" y="185" width="150" height="22" rx="4" fill="#f4f7ff" stroke="#cfd6e8"/>
+    <rect x="229" y="190" width="60" height="12" fill="#cfd6e8" rx="2"/>
+  </g>
+  <!-- radio -->
+  <g>
+    <circle cx="237" cy="232" r="7" fill="#fff" stroke="#214098" stroke-width="2"/>
+    <circle cx="237" cy="232" r="4" fill="#ec418c"/>
+    <rect x="252" y="226" width="100" height="12" rx="2" fill="#cfd6e8"/>
+    <circle cx="237" cy="258" r="7" fill="#fff" stroke="#cfd6e8" stroke-width="2"/>
+    <rect x="252" y="252" width="80" height="12" rx="2" fill="#cfd6e8"/>
+    <circle cx="237" cy="284" r="7" fill="#fff" stroke="#cfd6e8" stroke-width="2"/>
+    <rect x="252" y="278" width="90" height="12" rx="2" fill="#cfd6e8"/>
+  </g>
+  <!-- submit btn -->
+  <rect x="240" y="315" width="120" height="30" rx="15" fill="#ec418c"/>
+  <text x="300" y="335" text-anchor="middle" fill="#fff" font-family="Arial,sans-serif" font-weight="700" font-size="13">SUBMIT ✓</text>
+  <!-- floating icons -->
+  <g>
+    <circle cx="120" cy="120" r="32" fill="#f2be58"/>
+    <text x="120" y="128" text-anchor="middle" font-size="32">📸</text>
+    <circle cx="480" cy="160" r="28" fill="#214098"/>
+    <text x="480" y="170" text-anchor="middle" font-size="28">🌡️</text>
+    <circle cx="100" cy="280" r="26" fill="#ec418c"/>
+    <text x="100" y="289" text-anchor="middle" font-size="24">✓</text>
+    <circle cx="490" cy="290" r="30" fill="#f2be58"/>
+    <text x="490" y="300" text-anchor="middle" font-size="28">🧹</text>
+  </g>
+</svg>

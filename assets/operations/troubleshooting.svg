@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="Troubleshooting">
+  <defs>
+    <linearGradient id="bgTr" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff5f9"/>
+      <stop offset="1" stop-color="#fff8ec"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bgTr)"/>
+  <!-- big wrench -->
+  <g transform="translate(300 200) rotate(-30)">
+    <path d="M -110 -22 Q -130 -22 -130 0 Q -130 22 -110 22 L -10 22 L -10 110 Q -10 130 12 130 Q 34 130 34 110 L 34 22 L 110 22 Q 130 22 130 0 Q 130 -22 110 -22 Z"
+          fill="#214098" stroke="#214098" stroke-width="2"/>
+    <circle cx="-110" cy="0" r="14" fill="#fff5f9"/>
+    <circle cx="110" cy="0" r="14" fill="#fff5f9"/>
+  </g>
+  <!-- gear -->
+  <g transform="translate(140 130)" fill="#f2be58" stroke="#214098" stroke-width="2">
+    <circle r="36"/>
+    <circle r="14" fill="#fff5f9"/>
+    <g>
+      <rect x="-6" y="-48" width="12" height="14" rx="2"/>
+      <rect x="-6" y="34" width="12" height="14" rx="2"/>
+      <rect x="-48" y="-6" width="14" height="12" rx="2"/>
+      <rect x="34" y="-6" width="14" height="12" rx="2"/>
+      <rect x="-38" y="-38" width="14" height="12" rx="2" transform="rotate(-45)"/>
+      <rect x="24" y="-38" width="14" height="12" rx="2" transform="rotate(45)"/>
+    </g>
+  </g>
+  <!-- gear small -->
+  <g transform="translate(470 290)" fill="#ec418c" stroke="#214098" stroke-width="2">
+    <circle r="28"/>
+    <circle r="11" fill="#fff5f9"/>
+    <g>
+      <rect x="-5" y="-38" width="10" height="11" rx="2"/>
+      <rect x="-5" y="27" width="10" height="11" rx="2"/>
+      <rect x="-38" y="-5" width="11" height="10" rx="2"/>
+      <rect x="27" y="-5" width="11" height="10" rx="2"/>
+    </g>
+  </g>
+  <!-- alert badge -->
+  <g transform="translate(110 290)">
+    <circle r="38" fill="#ec418c" stroke="#214098" stroke-width="3"/>
+    <text y="14" text-anchor="middle" fill="#fff" font-family="Arial,sans-serif" font-weight="900" font-size="48">!</text>
+  </g>
+  <!-- small check badge -->
+  <g transform="translate(490 110)">
+    <circle r="32" fill="#214098"/>
+    <path d="M -12 0 L -3 10 L 14 -10" stroke="#f2be58" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

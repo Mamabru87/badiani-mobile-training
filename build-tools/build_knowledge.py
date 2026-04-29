@@ -38,7 +38,7 @@ def build_context():
     # Walk through the project
     for root, dirs, files in os.walk(PROJECT_ROOT):
         # Filter ignored directories
-        dirs[:] = [d for d in dirs if d not in IGNORE_DIRS and not any(d.startswith(p) for p in ["backup_", "."])]
+        dirs[:] = [d for d in dirs if d not in IGNORE_DIRS and not any(d.startswith(p) for p in ["backup_", ".", "_mojibake_backup", "_backup"])]
         
         rel_root = os.path.relpath(root, PROJECT_ROOT)
         
