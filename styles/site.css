@@ -106,7 +106,7 @@
   --guide-card-text-size: 15px;
 
   /* Guide cards: keep descriptions uniform across the carousel */
-  --guide-card-title-lines: 2;
+  --guide-card-title-lines: 1;
   --guide-card-desc-lines: 3;
 
   --guide-media-padding: 8px;
@@ -7411,11 +7411,11 @@ section.carousel:last-of-type {
 
 .guide-card h3 {
   margin: 0;
-  font-size: 24px;
+  font-size: clamp(16px, 4.4vw, 21px);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   font-family: var(--font-medium);
-  line-height: 1.2;
+  line-height: 1.18;
   color: var(--ink);
 }
 
