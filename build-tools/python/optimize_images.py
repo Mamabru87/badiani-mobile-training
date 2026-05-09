@@ -1,12 +1,12 @@
 ﻿from PIL import Image
 import os
 files = [
-    "assets/afternoon_routine_coffee.png",
-    "assets/afternoon_routine_gelato.png",
-    "assets/afternoon_routine_pastries.png",
-    "assets/closing_routine_coffee.png",
-    "assets/closing_routine_gelato.png",
-    "assets/closing_routine_pastries.png",
+    "assets/afternoon-routine-coffee.png",
+    "assets/afternoon-routine-gelato.png",
+    "assets/afternoon-routine-pastries.png",
+    "assets/closing-routine-coffee.png",
+    "assets/closing-routine-gelato.png",
+    "assets/closing-routine-pastries.png",
     "assets/products/energy-booster.png",
     "assets/products/get-clean.png",
     "assets/products/sweet-beet.png",
