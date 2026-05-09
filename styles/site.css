@@ -5180,16 +5180,31 @@ button,
 
 /* Make tags on guide cards more compact/premium */
 .guide-card .tag-row {
-  gap: 8px;
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  gap: 6px;
+  font-size: 10px;
+  letter-spacing: 0.08em;
 }
 
 .guide-card .tag {
-  padding: 6px 10px;
+  padding: 4px 8px;
   border: 1px solid rgba(33, 64, 152, 0.16);
   background: rgba(255, 255, 255, 0.75);
-  box-shadow: 0 10px 22px rgba(15, 33, 84, 0.08);
+  box-shadow: 0 6px 14px rgba(15, 33, 84, 0.06);
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 600px) {
+  .guide-card .tag-row {
+    gap: 5px;
+    font-size: 9.5px;
+    letter-spacing: 0.06em;
+  }
+  .guide-card .tag {
+    padding: 3px 7px;
+  }
 }
 
 /* Tag variants should keep their identity even inside card color variants.
