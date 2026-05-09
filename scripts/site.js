@@ -17720,8 +17720,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (img.dataset.noZoom === 'true') return false;
     if (img.closest('[data-no-zoom]')) return false;
     if (img.closest('button, a')) return false;
-    // Only inside content areas (cards/modals/story/details)
-    return !!(img.closest('.card-modal-body') || img.closest('.guide-card') || img.closest('.details') || img.closest('.story-modal'));
+    // Zoom only inside the card modal and story modal — never on the carousel cards directly
+    return !!(img.closest('.card-modal-body') || img.closest('.story-modal'));
   }
 
   function ensureOverlay(){
