@@ -106,7 +106,7 @@
   --guide-card-text-size: 15px;
 
   /* Guide cards: keep descriptions uniform across the carousel */
-  --guide-card-title-lines: 1;
+  --guide-card-title-lines: 2;
   --guide-card-desc-lines: 3;
 
   --guide-media-padding: 8px;
@@ -7419,12 +7419,15 @@ section.carousel:last-of-type {
   color: var(--ink);
 }
 
-/* Clamp carousel card titles so the vertical rhythm stays consistent */
+/* Reserve space for 2 lines: short titles sit centered on 1 line,
+   longer titles wrap to 2 lines and stay fully readable (no ellipsis). */
 .guide-card[data-carousel-item] > h3 {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: var(--guide-card-title-lines);
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: calc(1.18em * var(--guide-card-title-lines));
+  hyphens: auto;
+  overflow-wrap: anywhere;
 }
 
 .guide-card p {
