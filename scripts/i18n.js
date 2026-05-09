@@ -78,7 +78,7 @@
       'operations.cards.openingRoutine.tag1': 'Prep mattino',
       'operations.cards.openingRoutine.title': 'Routine apertura',
       'operations.cards.openingRoutine.desc': 'Controlli apertura: temperature, vetri, ordine vaschette (FIFO) ed etichette. Obiettivo: vetrina pulita e leggibile.',
-      'operations.cards.openingRoutine.stats': `<li>Temperature: -14/-15°C (registra su log HACCP)</li><li>Pulizia: vetri interni/esterni con prodotto specifico</li><li>Vaschette: riordina per colore/gusto, pulisci bordi vaschetta</li><li>Etichette: tutte presenti, dritte e pulite</li><li>Utensili: spatole pulite e in acqua corrente (se sistema a flusso continuo) o cambi frequenti</li>`,
+      'operations.cards.openingRoutine.stats': `<li>Morning checklist completa: temperature, vetrine, attrezzi, scorte</li><li>Compila l'<strong>Opening Checklist Google Form</strong> a fine routine</li><li>Foto reference per coffee · gelato · pastry</li><li>Standard "good": pulito, allineato, etichettato, pieno</li><li>Anti-pattern "bad": vaschette vuote, etichette mancanti, vetri sporchi</li>`,
       'operations.cards.openingRoutine.details': `<div class="steps"><strong data-i18n="modal.tab.preparation"></strong><span>1 · Registra temperature su log HACCP.</span><span>2 · Pulisci vetri e bordi vaschette.</span><span>3 · Verifica etichette e utensili pronti.</span></div><div class="tips"><strong data-i18n="modal.tab.tips"></strong>Se una vaschetta è quasi vuota, sostituiscila subito (non raschiare il fondo davanti al cliente).</div>`,
 
       'operations.cards.dailySetup.tag1': 'Display',
@@ -401,7 +401,7 @@
       'modal.studyMode.showAllAria': 'Mostra tutto',
 
       'gelatoLab.hero.badge': 'Linea gelato',
-      'gelatoLab.hero.stars': '⭐ Stelle: 16/16',
+      'gelatoLab.hero.stars': '⭐ Stelle: 15/15',
       'gelatoLab.hero.title': 'Gelato Lab',
       'gelatoLab.hero.desc': 'Manuale per il banco gelato: porzioni, servizio take me home, coppe scenografiche e manutenzione della vetrina a -14/-15 °C.',
       'gelatoLab.carousel.products.category': 'Linea gelato',
@@ -462,9 +462,9 @@
       'gelatoLab.footer.tempLabel': 'Temp. Ideale',
       'gelatoLab.footer.heritageLabel': 'Heritage',
 
-      'caffe.hero.badge': 'Bar & Drinks · 2025',
-      'caffe.hero.stars': '⭐ Stelle: 35/35',
-      'caffe.hero.title': 'Bar & Drinks',
+      'caffe.hero.badge': 'Coffee & Drinks · 2025',
+      'caffe.hero.stars': '⭐ Stelle: 36/36',
+      'caffe.hero.title': 'Coffee & Drinks',
       'caffe.hero.desc': 'La guida completa al beverage Badiani: dai classici della caffetteria italiana al nuovo Matcha Bar, fino agli Smoothies e le bevande fredde. Include procedure per servizio al tavolo e Take Away (TW).',
       'caffe.hero.coverAlt': 'Setup linea bar Badiani',
 
@@ -473,7 +473,7 @@
       'caffe.carousel.ops.title': 'Setup & Conservazione',
       'caffe.carousel.ops.category': 'Apertura · Setting · Dati tecnici · Storage · Chiusura',
 
-      'caffe.footer.title': 'Bar & Drinks',
+      'caffe.footer.title': 'Coffee & Drinks',
       'caffe.footer.tagline': 'Caffetteria, Matcha & Smoothies',
       'caffe.footer.stats.value.products': '18 Prodotti',
       'caffe.footer.stats.label.products': 'Prodotti',
@@ -663,7 +663,7 @@
       'sweetTreats.footer.stat2.label': 'Gusti',
 
       'pastries.hero.badge': 'Pasticceria da banco',
-      'pastries.hero.stars': '⭐ Stelle: 10/10',
+      'pastries.hero.stars': '⭐ Stelle: 9/9',
       'pastries.hero.title': 'Pastry Lab',
       'pastries.hero.desc': 'Tutte le referenze servite al banco: cakes, brownies, loaf, croissant farciti e scones con scoop di Buontalenti. Ogni scheda include shelf life, porzioni e script di upselling.',
       'pastries.hero.coverAlt': 'Cakes e brownie Badiani',
@@ -840,7 +840,7 @@
       'menu.link.hub': 'Hub',
       'menu.link.storyOrbit': 'Story Orbit',
       'menu.link.operations': 'Operations & Setup',
-      'menu.link.caffe': 'Bar & Drinks',
+      'menu.link.caffe': 'Coffee & Drinks',
       'menu.link.sweetTreats': 'Sweet Treat Atelier',
       'menu.link.pastries': 'Pastry Lab',
       'menu.link.gelatoLab': 'Gelato Lab',
@@ -1284,7 +1284,7 @@
       'operations.cards.filtersDefrost.captionPhoto': 'Filtri puliti e display senza ghiaccio (after)',
       'operations.cards.filtersDefrost.desc': 'Deep clean filtri e sbrinamento freezer programmati per performance costanti. Foto before/after obbligatorie.',
       'operations.cards.filtersDefrost.stats': `<li>Filtri vetrina/freezer: deep clean settimanale</li><li>Treat freezer: defrost settimanale (sempre senza ghiaccio)</li><li>Vertical display: defrost settimanale (verifica -16 °C)</li><li>Foto before/after caricate su Google Form maintenance</li>`,
-      'operations.cards.filtersDefrost.details': `<div class="steps"><strong>🔧 Deep cleaning filtri</strong><span>1 · Foto BEFORE: filtri sporchi nella loro sede.</span><span>2 · Rimuovi filtri dalla vetrina/freezer.</span><span>3 · Lava con acqua calda e detergente specifico.</span><span>4 · Asciuga completamente prima di rimontare.</span><span>5 · Foto AFTER: filtri puliti rimontati.</span></div><hr style="margin:12px 0;border:none;border-top:1px dashed rgba(33,64,152,0.2);"><div class="steps"><strong>❄️ Defrosting freezer</strong><span>1 · Foto BEFORE: ghiaccio accumulato nel freezer.</span><span>2 · Treat freezer: defrost settimanale completo.</span><span>3 · Vertical display: defrost settimanale (verifica -16 °C).</span><span>4 · Foto AFTER: superfici pulite, asciutte, senza ghiaccio.</span><span>5 · Riaccendi e attendi temperatura target prima di ricaricare.</span></div><div class="tips"><strong>📸 Le foto sono obbligatorie:</strong> caricale sul Google Form maintenance prima di chiudere il task.</div>`,
+      'operations.cards.filtersDefrost.details': `<div class="steps"><strong>🔧 Pulizia filtri</strong><span>1 · Svita e rimuovi la griglia di copertura dei filtri.</span><span>2 · Foto BEFORE: stato del filtro sporco.</span><span>3 · Usa una spazzola per rimuovere tutta la polvere.</span><span>4 · Spruzza acqua pulita per assicurarti che tutta la polvere si sia sciolta.</span><span>5 · Foto AFTER: filtro pulito.</span><span>6 · Riavvita la griglia metallica.</span></div><hr style="margin:12px 0;border:none;border-top:1px dashed rgba(33,64,152,0.2);"><div class="steps"><strong>❄️ Sbrinamento freezer</strong><span>1 · Foto BEFORE: ghiaccio accumulato nel freezer.</span><span>2 · Sposta tutte le vaschette gelato o altri prodotti in un altro freezer.</span><span>3 · Avvia il freezer da sbrinare e lascialo con la porta aperta finché il ghiaccio non si è completamente sciolto.</span><span>4 · Assicurati che il tubo di scarico sia aperto con un contenitore sotto.</span><span>5 · Scarica tutta l'acqua e asciuga con cura il freezer con un panno o blue paper e spray sanitizzante.</span><span>6 · Foto AFTER: freezer pulito e asciutto.</span><span>7 · Riaccendi il freezer.</span><span>8 · Quando la temperatura scende sotto -14 °C, riposiziona i prodotti all'interno.</span></div><div class="tips"><strong>📸 Le foto sono obbligatorie:</strong> caricale sul Google Form maintenance prima di chiudere il task.</div>`,
 
       'operations.cards.discountsPromos.tag1': 'Discounts',
       'operations.cards.discountsPromos.tag2': 'Promo',
@@ -1418,7 +1418,7 @@
       'operations.cards.openingRoutine.tag1': 'Morning prep',
       'operations.cards.openingRoutine.title': 'Opening routine',
       'operations.cards.openingRoutine.desc': 'Opening checks: temperatures, clean glass, tidy pans (FIFO) and labels. Keep the display spotless.',
-      'operations.cards.openingRoutine.stats': `<li>Temperature: -14/-15°C (record on HACCP log)</li><li>Cleaning: inside/outside glass with the appropriate product</li><li>Pans: reorder by colour/flavour; clean pan rims</li><li>Labels: all present, straight and clean</li><li>Tools: clean spatulas in running water (if continuous-flow system) or frequent swaps</li>`,
+      'operations.cards.openingRoutine.stats': `<li>Full morning checklist: temperatures, displays, tools, stock</li><li>Submit the <strong>Opening Checklist Google Form</strong> at the end of the routine</li><li>Photo reference for coffee · gelato · pastry</li><li>"Good" standard: clean, aligned, labelled, full</li><li>"Bad" anti-pattern: empty pans, missing labels, smudged glass</li>`,
       'operations.cards.openingRoutine.details': `<div class="steps"><strong data-i18n="modal.tab.preparation"></strong><span>1 · Record temperatures on the HACCP log.</span><span>2 · Clean glass and pan rims.</span><span>3 · Check labels and make sure tools are ready.</span></div><div class="tips"><strong data-i18n="modal.tab.tips"></strong>If a pan is almost empty, replace it immediately (don\'t scrape the bottom in front of the guest).</div>`,
 
       'operations.cards.dailySetup.tag1': 'Display',
@@ -1715,7 +1715,7 @@
       'modal.studyMode.showAllAria': 'Show all',
 
       'gelatoLab.hero.badge': 'Gelato line',
-      'gelatoLab.hero.stars': '⭐ Stars: 16/16',
+      'gelatoLab.hero.stars': '⭐ Stars: 15/15',
       'gelatoLab.hero.title': 'Gelato Lab',
       'gelatoLab.hero.desc': 'Manual for the gelato display: portions, take-me-home service, showpiece cups, and cabinet maintenance at -14/-15 °C.',
       'gelatoLab.carousel.products.category': 'Gelato line',
@@ -1776,9 +1776,9 @@
       'gelatoLab.footer.tempLabel': 'Ideal temp.',
       'gelatoLab.footer.heritageLabel': 'Heritage',
 
-      'caffe.hero.badge': 'Bar & Drinks · 2025',
-      'caffe.hero.stars': '⭐ Stars: 35/35',
-      'caffe.hero.title': 'Bar & Drinks',
+      'caffe.hero.badge': 'Coffee & Drinks · 2025',
+      'caffe.hero.stars': '⭐ Stars: 36/36',
+      'caffe.hero.title': 'Coffee & Drinks',
       'caffe.hero.desc': 'The complete Badiani beverage guide: from classic Italian coffee drinks to the new Matcha Bar, plus Smoothies and cold drinks. Includes table service and Take Away (TW) procedures.',
       'caffe.hero.coverAlt': 'Badiani bar line setup',
 
@@ -1787,7 +1787,7 @@
       'caffe.carousel.ops.title': 'Setup & Storage',
       'caffe.carousel.ops.category': 'Opening · Setup · Tech data · Storage · Closing',
 
-      'caffe.footer.title': 'Bar & Drinks',
+      'caffe.footer.title': 'Coffee & Drinks',
       'caffe.footer.tagline': 'Coffee bar, Matcha & Smoothies',
       'caffe.footer.stats.value.products': '18 Products',
       'caffe.footer.stats.label.products': 'Products',
@@ -1976,7 +1976,7 @@
       'sweetTreats.footer.stat2.label': 'Flavours',
 
       'pastries.hero.badge': 'Counter pastry',
-      'pastries.hero.stars': '⭐ Stars: 10/10',
+      'pastries.hero.stars': '⭐ Stars: 9/9',
       'pastries.hero.title': 'Pastry Lab',
       'pastries.hero.desc': 'All counter-served references: cakes, brownies, loaf, filled croissants and scones with a scoop of Buontalenti. Each card includes shelf life, portions and upselling scripts.',
       'pastries.hero.coverAlt': 'Badiani cakes and brownies',
@@ -2158,7 +2158,7 @@
       'menu.link.hub': 'Hub',
       'menu.link.storyOrbit': 'Story Orbit',
       'menu.link.operations': 'Operations & Setup',
-      'menu.link.caffe': 'Bar & Drinks',
+      'menu.link.caffe': 'Coffee & Drinks',
       'menu.link.sweetTreats': 'Sweet Treat Atelier',
       'menu.link.pastries': 'Pastry Lab',
       'menu.link.gelatoLab': 'Gelato Lab',
@@ -4601,7 +4601,7 @@
       'operations.cards.filtersDefrost.captionPhoto': 'Clean filters and ice-free display (after)',
       'operations.cards.filtersDefrost.desc': 'Scheduled filter deep clean and freezer defrost for consistent performance. Before/after photos mandatory.',
       'operations.cards.filtersDefrost.stats': `<li>Display/freezer filters: weekly deep clean</li><li>Treat freezer: weekly defrost (always ice-free)</li><li>Vertical display: weekly defrost (verify -16 °C)</li><li>Before/after photos uploaded to maintenance Google Form</li>`,
-      'operations.cards.filtersDefrost.details': `<div class="steps"><strong>🔧 Filter deep cleaning</strong><span>1 · BEFORE photo: dirty filters in their housing.</span><span>2 · Remove filters from display/freezer.</span><span>3 · Wash with hot water and specific detergent.</span><span>4 · Dry completely before reassembling.</span><span>5 · AFTER photo: clean filters reinstalled.</span></div><hr style="margin:12px 0;border:none;border-top:1px dashed rgba(33,64,152,0.2);"><div class="steps"><strong>❄️ Defrosting freezer</strong><span>1 · BEFORE photo: ice build-up in the freezer.</span><span>2 · Treat freezer: full weekly defrost.</span><span>3 · Vertical display: weekly defrost (verify -16 °C).</span><span>4 · AFTER photo: clean, dry, ice-free surfaces.</span><span>5 · Switch back on and wait for target temperature before reloading.</span></div><div class="tips"><strong>📸 Photos are mandatory:</strong> upload them on the maintenance Google Form before closing the task.</div>`,
+      'operations.cards.filtersDefrost.details': `<div class="steps"><strong>🔧 Filter cleaning</strong><span>1 · Unscrew and remove the covering grid of the filters.</span><span>2 · BEFORE photo of the filter (dirty state).</span><span>3 · Use a brush to remove all the dust.</span><span>4 · Spray clean water to make sure all the dust has dissolved.</span><span>5 · AFTER photo of the cleaned filter.</span><span>6 · Screw the metal grid back on.</span></div><hr style="margin:12px 0;border:none;border-top:1px dashed rgba(33,64,152,0.2);"><div class="steps"><strong>❄️ Freezer defrost</strong><span>1 · BEFORE photo: ice build-up in the freezer.</span><span>2 · Move all gelato pans or any other products to another freezer.</span><span>3 · Switch on the freezer you need to defrost and leave it with the door open until the ice has completely melted.</span><span>4 · Make sure the drain pipe is open with a container underneath.</span><span>5 · Drain all the water and carefully dry the freezer with a cloth or blue paper and sanitiser spray.</span><span>6 · AFTER photo: clean, dry freezer.</span><span>7 · Switch the freezer back on.</span><span>8 · When the temperature drops below -14 °C, move the products back inside.</span></div><div class="tips"><strong>📸 Photos are mandatory:</strong> upload them on the maintenance Google Form before closing the task.</div>`,
 
       'operations.cards.discountsPromos.tag1': 'Discounts',
       'operations.cards.discountsPromos.tag2': 'Promo',
@@ -4735,7 +4735,7 @@
       'operations.cards.openingRoutine.tag1': 'Prep mañana',
       'operations.cards.openingRoutine.title': 'Rutina de apertura',
       'operations.cards.openingRoutine.desc': 'Rutina de apertura: temperaturas, cristales, FIFO y etiquetas. La vitrina debe estar limpia y ordenada.',
-      'operations.cards.openingRoutine.stats': `<li>Temperatura: -14/-15°C (registrar en log HACCP)</li><li>Limpieza: cristales interior/exterior con producto específico</li><li>Cubetas: reordenar por color/sabor; limpiar bordes</li><li>Etiquetas: todas presentes, rectas y limpias</li><li>Utensilios: espátulas limpias en agua corriente (si sistema) o cambios frecuentes</li>`,
+      'operations.cards.openingRoutine.stats': `<li>Checklist matinal completo: temperaturas, vitrinas, utensilios, stock</li><li>Envía el <strong>Opening Checklist Google Form</strong> al terminar</li><li>Foto referencia para coffee · gelato · pastry</li><li>Estándar "good": limpio, alineado, etiquetado, lleno</li><li>Anti-patrón "bad": cubetas vacías, etiquetas faltantes, cristales sucios</li>`,
       'operations.cards.openingRoutine.details': `<div class="steps"><strong data-i18n="modal.tab.preparation"></strong><span>1 · Registra las temperaturas en el log HACCP.</span><span>2 · Limpia cristales y bordes de cubetas.</span><span>3 · Verifica etiquetas y utensilios listos.</span></div><div class="tips"><strong data-i18n="modal.tab.tips"></strong>Si una cubeta está casi vacía, cámbiala enseguida (no rascar el fondo delante del cliente).</div>`,
 
       'operations.cards.dailySetup.tag1': 'Display',
@@ -4817,7 +4817,7 @@
       'operations.cards.cleaningSchedule.details': `<div class="steps"><strong>🧊 Limpieza vitrina gelato</strong><span>1 · Apaga vitrina al final del turno (OFF cada noche).</span><span>2 · Limpia cristales internos y externos con producto específico.</span><span>3 · Deep clean semanal: desmonta, limpia, sanitiza, abrillanta y monta.</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong>🔧 Deep cleaning filtros</strong><span>1 · Retira filtros de la vitrina/freezer.</span><span>2 · Lava con agua caliente y detergente específico.</span><span>3 · Seca completamente antes de montar.</span></div><hr style="margin: 12px 0; border: none; border-top: 1px dashed rgba(33, 64, 152, 0.2);"><div class="steps"><strong>❄️ Defrosting freezer</strong><span>1 · Treat freezer: defrost semanal (debe quedar sin hielo).</span><span>2 · Vertical display: defrost semanal (verifica -16 °C tras reinicio).</span><span>3 · Después de cada defrost: limpia, seca y reinicia.</span></div>`,
 
       'gelatoLab.hero.badge': 'Línea Gelato',
-      'gelatoLab.hero.stars': '⭐ Estrellas: 16/16',
+      'gelatoLab.hero.stars': '⭐ Estrellas: 15/15',
       'gelatoLab.hero.title': 'Gelato Lab',
       'gelatoLab.hero.desc': 'Manual para el mostrador de gelato: porciones, servicio take me home, copas escenográficas y mantenimiento de la vitrina a -14/-15 °C.',
       'gelatoLab.carousel.products.title': 'Línea Gelato',
@@ -5097,7 +5097,7 @@
       'modal.studyMode.showAllAria': 'Mostrar todo',
 
       'gelatoLab.hero.badge': 'Línea de GELATO',
-      'gelatoLab.hero.stars': '⭐ Estrellas: 16/16',
+      'gelatoLab.hero.stars': '⭐ Estrellas: 15/15',
       'gelatoLab.hero.desc': 'Manual del banco de GELATO: porciones, servicio para llevar, copas “wow” y mantenimiento de la vitrina a -14/-15 °C.',
       'gelatoLab.carousel.products.category': 'Línea de GELATO',
       'gelatoLab.ops.title': 'Setup y conservación',
@@ -5155,11 +5155,11 @@
       'gelatoLab.footer.tempLabel': 'Temp. ideal',
       'gelatoLab.footer.heritageLabel': 'Herencia',
 
-      'caffe.hero.badge': 'Bar & Drinks · 2025',
-      'caffe.hero.stars': '⭐ Estrellas: 35/35',
+      'caffe.hero.badge': 'Café y bebidas · 2025',
+      'caffe.hero.stars': '⭐ Estrellas: 36/36',
       'caffe.hero.desc': 'La guía completa de bebidas Badiani: desde los clásicos de la cafetería italiana hasta el nuevo Matcha Bar, además de Smoothies y bebidas frías. Incluye procedimientos de servicio en mesa y Take Away (TW).',
 
-      'caffe.hero.title': 'Bar & Drinks',
+      'caffe.hero.title': 'Café y bebidas',
       'caffe.hero.coverAlt': 'Setup de la línea bar Badiani',
 
       'caffe.carousel.classics.title': 'Clásicos',
@@ -5167,7 +5167,7 @@
       'caffe.carousel.ops.title': 'Setup y conservación',
       'caffe.carousel.ops.category': 'Apertura · Setting · Datos técnicos · Almacenaje · Cierre',
 
-      'caffe.footer.title': 'Bar & Drinks',
+      'caffe.footer.title': 'Café y bebidas',
       'caffe.footer.tagline': 'Cafetería, Matcha y Smoothies',
       'caffe.footer.stats.value.products': '18 Productos',
       'caffe.footer.stats.label.products': 'Productos',
@@ -5356,7 +5356,7 @@
       'sweetTreats.footer.stat2.label': 'Sabores',
 
       'pastries.hero.badge': 'Pastelería de mostrador',
-      'pastries.hero.stars': '⭐ Estrellas: 10/10',
+      'pastries.hero.stars': '⭐ Estrellas: 9/9',
       'pastries.hero.title': 'Pastry Lab',
       'pastries.hero.desc': 'Todas las referencias servidas en mostrador: cakes, brownies, loaf, croissants rellenos y scones con un scoop de Buontalenti. Cada ficha incluye shelf life, porciones y guion de upselling.',
       'pastries.hero.coverAlt': 'Cakes y brownie Badiani',
@@ -5538,7 +5538,7 @@
       'menu.link.hub': 'Hub',
       'menu.link.storyOrbit': 'Story Orbit',
       'menu.link.operations': 'Operaciones y setup',
-      'menu.link.caffe': 'Bar y bebidas',
+      'menu.link.caffe': 'Café y bebidas',
       'menu.link.sweetTreats': 'Sweet Treat Atelier',
       'menu.link.pastries': 'Pastry Lab',
       'menu.link.gelatoLab': 'Gelato Lab',
@@ -6599,7 +6599,7 @@
       'operations.cards.filtersDefrost.captionPhoto': 'Filtros limpios y display sin hielo (after)',
       'operations.cards.filtersDefrost.desc': 'Deep clean filtros y defrost freezer programados para rendimiento constante. Fotos before/after obligatorias.',
       'operations.cards.filtersDefrost.stats': `<li>Filtros vitrina/freezer: deep clean semanal</li><li>Treat freezer: defrost semanal (siempre sin hielo)</li><li>Vertical display: defrost semanal (verifica -16 °C)</li><li>Fotos before/after subidas a Google Form maintenance</li>`,
-      'operations.cards.filtersDefrost.details': `<div class="steps"><strong>🔧 Deep cleaning filtros</strong><span>1 · Foto BEFORE: filtros sucios en su lugar.</span><span>2 · Retira filtros de la vitrina/freezer.</span><span>3 · Lava con agua caliente y detergente específico.</span><span>4 · Seca completamente antes de remontar.</span><span>5 · Foto AFTER: filtros limpios montados.</span></div><hr style="margin:12px 0;border:none;border-top:1px dashed rgba(33,64,152,0.2);"><div class="steps"><strong>❄️ Defrosting freezer</strong><span>1 · Foto BEFORE: hielo acumulado en el freezer.</span><span>2 · Treat freezer: defrost semanal completo.</span><span>3 · Vertical display: defrost semanal (verifica -16 °C).</span><span>4 · Foto AFTER: superficies limpias, secas, sin hielo.</span><span>5 · Reenciende y espera temperatura target antes de recargar.</span></div><div class="tips"><strong>📸 Las fotos son obligatorias:</strong> súbelas en Google Form maintenance antes de cerrar el task.</div>`,
+      'operations.cards.filtersDefrost.details': `<div class="steps"><strong>🔧 Limpieza filtros</strong><span>1 · Desatornilla y retira la rejilla de cobertura de los filtros.</span><span>2 · Foto BEFORE: estado del filtro sucio.</span><span>3 · Usa un cepillo para quitar todo el polvo.</span><span>4 · Pulveriza agua limpia para asegurarte de que todo el polvo se haya disuelto.</span><span>5 · Foto AFTER: filtro limpio.</span><span>6 · Vuelve a atornillar la rejilla metálica.</span></div><hr style="margin:12px 0;border:none;border-top:1px dashed rgba(33,64,152,0.2);"><div class="steps"><strong>❄️ Descongelación freezer</strong><span>1 · Foto BEFORE: hielo acumulado en el freezer.</span><span>2 · Mueve todas las cubetas de gelato o cualquier otro producto a otro freezer.</span><span>3 · Pon en marcha el freezer a descongelar y déjalo con la puerta abierta hasta que el hielo se haya derretido completamente.</span><span>4 · Asegúrate de que el tubo de drenaje esté abierto con un contenedor debajo.</span><span>5 · Drena toda el agua y seca con cuidado el freezer con un paño o blue paper y spray sanitizante.</span><span>6 · Foto AFTER: freezer limpio y seco.</span><span>7 · Reenciende el freezer.</span><span>8 · Cuando la temperatura baje por debajo de -14 °C, vuelve a colocar los productos en el interior.</span></div><div class="tips"><strong>📸 Las fotos son obligatorias:</strong> súbelas en Google Form maintenance antes de cerrar el task.</div>`,
 
       'operations.cards.discountsPromos.tag1': 'Discounts',
       'operations.cards.discountsPromos.tag2': 'Promo',
@@ -6733,7 +6733,7 @@
       'operations.cards.openingRoutine.tag1': 'Prep matin',
       'operations.cards.openingRoutine.title': 'Routine d\'ouverture',
       'operations.cards.openingRoutine.desc': 'Routine d\'ouverture : températures, vitres, FIFO et étiquettes. La vitrine doit être impeccable.',
-      'operations.cards.openingRoutine.stats': `<li>Température : -14/-15°C (à noter sur le log HACCP)</li><li>Nettoyage : vitres intérieures/extérieures avec le produit adapté</li><li>Bacs : réorganiser par couleur/goût ; nettoyer les bords</li><li>Étiquettes : toutes présentes, droites et propres</li><li>Outils : spatules propres en eau courante (si système) ou changements fréquents</li>`,
+      'operations.cards.openingRoutine.stats': `<li>Checklist du matin complète : températures, vitrines, outils, stock</li><li>Soumets le <strong>Opening Checklist Google Form</strong> à la fin</li><li>Photo référence pour coffee · gelato · pastry</li><li>Standard « good » : propre, aligné, étiqueté, plein</li><li>Anti-pattern « bad » : bacs vides, étiquettes manquantes, vitres sales</li>`,
       'operations.cards.openingRoutine.details': `<div class="steps"><strong data-i18n="modal.tab.preparation"></strong><span>1 · Note les températures sur le log HACCP.</span><span>2 · Nettoie vitres et bords de bacs.</span><span>3 · Vérifie étiquettes et outils prêts.</span></div><div class="tips"><strong data-i18n="modal.tab.tips"></strong>Si un bac est presque vide, remplace-le tout de suite (ne gratte pas le fond devant le client).</div>`,
 
       'operations.cards.dailySetup.tag1': 'Display',
@@ -6817,7 +6817,7 @@
 
 
       'gelatoLab.hero.badge': 'Ligne Gelato',
-      'gelatoLab.hero.stars': '⭐ Étoiles : 16/16',
+      'gelatoLab.hero.stars': '⭐ Étoiles : 15/15',
       'gelatoLab.hero.title': 'Gelato Lab',
       'gelatoLab.hero.desc': 'Manuel pour le comptoir gelato : portions, service take me home, coupes scénographiques et maintenance de la vitrine à -14/-15 °C.',
       'gelatoLab.carousel.products.title': 'Ligne Gelato',
@@ -7773,7 +7773,7 @@
       'modal.studyMode.showAllAria': 'Tout afficher',
 
       'gelatoLab.hero.badge': 'Ligne de GELATO',
-      'gelatoLab.hero.stars': '⭐ Étoiles : 16/16',
+      'gelatoLab.hero.stars': '⭐ Étoiles : 15/15',
       'gelatoLab.hero.desc': 'Manuel du comptoir GELATO : portions, service à emporter, coupes “wow” et maintenance de la vitrine à -14/-15 °C.',
       'gelatoLab.carousel.products.category': 'Ligne de GELATO',
       'gelatoLab.ops.title': 'Mise en place & conservation',
@@ -7831,11 +7831,11 @@
       'gelatoLab.footer.tempLabel': 'Temp. idéale',
       'gelatoLab.footer.heritageLabel': 'Héritage',
 
-      'caffe.hero.badge': 'Bar & Drinks · 2025',
-      'caffe.hero.stars': '⭐ Étoiles : 35/35',
+      'caffe.hero.badge': 'Café & boissons · 2025',
+      'caffe.hero.stars': '⭐ Étoiles : 36/36',
       'caffe.hero.desc': 'Le guide complet des boissons Badiani : des classiques du café italien au nouveau Matcha Bar, en passant par les Smoothies et les boissons froides. Inclut les procédures de service à table et Take Away (TW).',
 
-      'caffe.hero.title': 'Bar & Drinks',
+      'caffe.hero.title': 'Café & boissons',
       'caffe.hero.coverAlt': 'Mise en place ligne bar Badiani',
 
       'caffe.carousel.classics.title': 'Classiques',
@@ -7843,7 +7843,7 @@
       'caffe.carousel.ops.title': 'Mise en place & conservation',
       'caffe.carousel.ops.category': 'Ouverture · Setup · Données techniques · Stockage · Fermeture',
 
-      'caffe.footer.title': 'Bar & Drinks',
+      'caffe.footer.title': 'Café & boissons',
       'caffe.footer.tagline': 'Café, Matcha & Smoothies',
       'caffe.footer.stats.value.products': '18 Produits',
       'caffe.footer.stats.label.products': 'Produits',
@@ -8032,7 +8032,7 @@
       'sweetTreats.footer.stat2.label': 'Saveurs',
 
       'pastries.hero.badge': 'Pâtisserie comptoir',
-      'pastries.hero.stars': '⭐ Étoiles : 10/10',
+      'pastries.hero.stars': '⭐ Étoiles : 9/9',
       'pastries.hero.title': 'Pastry Lab',
       'pastries.hero.desc': 'Toutes les références servies au comptoir : cakes, brownies, loaf, croissants garnis et scones avec un scoop de Buontalenti. Chaque fiche inclut shelf life, portions et scripts d\'upselling.',
       'pastries.hero.coverAlt': 'Cakes et brownies Badiani',
@@ -8214,7 +8214,7 @@
       'menu.link.hub': 'Hub',
       'menu.link.storyOrbit': 'Story Orbit',
       'menu.link.operations': 'Opérations & setup',
-      'menu.link.caffe': 'Bar & boissons',
+      'menu.link.caffe': 'Café & boissons',
       'menu.link.sweetTreats': 'Sweet Treat Atelier',
       'menu.link.pastries': 'Pastry Lab',
       'menu.link.gelatoLab': 'Gelato Lab',
@@ -9275,7 +9275,7 @@
       'operations.cards.filtersDefrost.captionPhoto': 'Filtres propres et display sans glace (after)',
       'operations.cards.filtersDefrost.desc': "Deep clean filtres et dégivrage freezer programmés pour une performance constante. Photos before/after obligatoires.",
       'operations.cards.filtersDefrost.stats': `<li>Filtres vitrine/freezer : deep clean hebdo</li><li>Treat freezer : dégivrage hebdo (toujours sans glace)</li><li>Vertical display : dégivrage hebdo (vérifier -16 °C)</li><li>Photos before/after chargées sur Google Form maintenance</li>`,
-      'operations.cards.filtersDefrost.details': `<div class="steps"><strong>🔧 Deep cleaning filtres</strong><span>1 · Photo BEFORE : filtres sales dans leur logement.</span><span>2 · Retire les filtres de la vitrine/freezer.</span><span>3 · Lave à l'eau chaude et détergent spécifique.</span><span>4 · Sèche complètement avant de remonter.</span><span>5 · Photo AFTER : filtres propres remontés.</span></div><hr style="margin:12px 0;border:none;border-top:1px dashed rgba(33,64,152,0.2);"><div class="steps"><strong>❄️ Dégivrage freezer</strong><span>1 · Photo BEFORE : givre accumulé dans le freezer.</span><span>2 · Treat freezer : dégivrage hebdo complet.</span><span>3 · Vertical display : dégivrage hebdo (vérifier -16 °C).</span><span>4 · Photo AFTER : surfaces propres, sèches, sans glace.</span><span>5 · Rallume et attends la température cible avant de recharger.</span></div><div class="tips"><strong>📸 Les photos sont obligatoires :</strong> charge-les sur le Google Form maintenance avant de fermer la tâche.</div>`,
+      'operations.cards.filtersDefrost.details': `<div class="steps"><strong>🔧 Nettoyage filtres</strong><span>1 · Dévisse et retire la grille de couverture des filtres.</span><span>2 · Photo BEFORE : état du filtre sale.</span><span>3 · Utilise une brosse pour enlever toute la poussière.</span><span>4 · Vaporise de l'eau propre pour t'assurer que toute la poussière s'est dissoute.</span><span>5 · Photo AFTER : filtre propre.</span><span>6 · Revisse la grille métallique.</span></div><hr style="margin:12px 0;border:none;border-top:1px dashed rgba(33,64,152,0.2);"><div class="steps"><strong>❄️ Dégivrage freezer</strong><span>1 · Photo BEFORE : givre accumulé dans le freezer.</span><span>2 · Déplace tous les bacs gelato ou autres produits dans un autre freezer.</span><span>3 · Mets en marche le freezer à dégivrer et laisse-le avec la porte ouverte jusqu'à ce que la glace soit complètement fondue.</span><span>4 · Assure-toi que le tuyau d'évacuation est ouvert avec un récipient en dessous.</span><span>5 · Évacue toute l'eau et sèche soigneusement le freezer avec un chiffon ou du blue paper et spray désinfectant.</span><span>6 · Photo AFTER : freezer propre et sec.</span><span>7 · Rallume le freezer.</span><span>8 · Quand la température descend sous -14 °C, remets les produits à l'intérieur.</span></div><div class="tips"><strong>📸 Les photos sont obligatoires :</strong> charge-les sur le Google Form maintenance avant de fermer la tâche.</div>`,
 
       'operations.cards.discountsPromos.tag1': 'Discounts',
       'operations.cards.discountsPromos.tag2': 'Promo',

@@ -7,6 +7,7 @@ import pathlib, shutil, datetime
 FILES = [
     'caffe.html', 'festive.html', 'gelato-lab.html', 'index.html',
     'operations.html', 'pastries.html', 'story-orbit.html', 'sweet-treats.html',
+    'quiz-solution.html',
 ]
 
 # Build a forgiving cp1252 -> byte map. cp1252 covers most "smart" chars

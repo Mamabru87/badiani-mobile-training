@@ -6021,7 +6021,7 @@ section.carousel:last-of-type {
 .guide-card .details {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 28px;
   overflow: hidden;
   max-height: 0;
   opacity: 0;
@@ -6029,6 +6029,41 @@ section.carousel:last-of-type {
   margin-top: 0;
   padding-top: 0;
   transition: max-height var(--anim-slow) ease, opacity var(--anim-fast) ease, transform var(--anim-fast) ease;
+}
+
+/* Extra breathing room between consecutive sub-section blocks inside .details */
+.guide-card .details .steps + .steps,
+.guide-card .details .steps + .tips,
+.guide-card .details .tips + .steps,
+.guide-card .details .tips + .tips,
+.guide-card .details .steps + h4,
+.guide-card .details .tips + h4,
+.guide-card .details ul + .steps,
+.guide-card .details ul + .tips,
+.guide-card .details ol + .steps,
+.guide-card .details ol + .tips,
+.guide-card .details p + .steps,
+.guide-card .details p + .tips {
+  margin-top: 12px;
+}
+
+.guide-card .details h4 {
+  margin: 18px 0 4px;
+  font-family: "SuperGrotesk-Medium", Arial, sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brand-blue);
+}
+
+.guide-card .details > h4:first-child {
+  margin-top: 4px;
+}
+
+@media (max-width: 600px) {
+  .guide-card .details {
+    gap: 22px;
+  }
 }
 
 /* Color variants for guide cards */
@@ -6216,6 +6251,9 @@ section.carousel:last-of-type {
 .toast.toast--anchored {
   right: auto;
   bottom: auto;
+  max-width: min(86vw, 320px);
+  white-space: normal;
+  text-align: center;
   transform: translate(-50%, calc(-100% + 10px));
 }
 
@@ -7870,13 +7908,28 @@ body.page-product .badge {
 .details.details--modal {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 32px;
   overflow: visible;
   max-height: none;
   opacity: 1;
   transform: none;
   margin-top: 0;
   padding-top: 0;
+}
+
+.details.details--modal .steps + .steps,
+.details.details--modal .steps + .tips,
+.details.details--modal .tips + .steps,
+.details.details--modal .tips + .tips,
+.details.details--modal hr + .steps,
+.details.details--modal hr + .tips {
+  margin-top: 8px;
+}
+
+@media (max-width: 600px) {
+  .details.details--modal {
+    gap: 24px;
+  }
 }
 
 .card-modal-sections {
@@ -8029,7 +8082,7 @@ body.page-product .badge {
 }
 
 .accordion-item.is-open .accordion-body {
-  padding: 0 20px 20px 20px;
+  padding: 16px 20px 24px 20px;
   border-top: 1px solid rgba(33, 64, 152, 0.06);
 }
 
@@ -8256,8 +8309,22 @@ body.page-product .badge {
 
 .card-modal .modal-accordion .accordion-item.is-open .accordion-body {
   background: #ffffff;
-  padding: 16px 16px 18px 16px;
+  padding: 18px 16px 32px 16px;
   border-top: 1px solid rgba(33, 64, 152, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Last styled box inside an open body shouldn't add its own bottom margin (padding handles it) */
+.card-modal .modal-accordion .accordion-item.is-open .accordion-body > .tips:last-child,
+.card-modal .modal-accordion .accordion-item.is-open .accordion-body > .steps:last-child {
+  margin-bottom: 0;
+}
+
+/* Subtle separator under an open tab so the next (collapsed) header doesn't stick to the styled box */
+.card-modal .modal-accordion .accordion-item.is-open + .accordion-item .accordion-header {
+  border-top: 1px solid rgba(33, 64, 152, 0.08);
 }
 
 @media (max-width: 600px) {
@@ -8268,7 +8335,7 @@ body.page-product .badge {
     padding-inline: 14px;
   }
   .card-modal .modal-accordion .accordion-item.is-open .accordion-body {
-    padding: 14px 14px 16px 14px;
+    padding: 16px 14px 22px 14px;
   }
 }
 
@@ -12104,3 +12171,50 @@ body.page-product .hero + .carousel .carousel-header {
   /* Ensure links inside text don't get oversize boxes that break flow */
   p a, li a { min-height: auto; min-width: auto; }
 }
+
+/* ===== Image Lightbox ===== */
+img.is-zoomable { cursor: zoom-in; }
+.image-lightbox {
+  position: fixed; inset: 0;
+  background: rgba(8, 12, 28, 0.92);
+  display: none;
+  align-items: center; justify-content: center;
+  padding: 24px;
+  z-index: 99999;
+  opacity: 0;
+  transition: opacity 180ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.image-lightbox.is-open { display: flex; opacity: 1; }
+.image-lightbox__img {
+  max-width: 96vw;
+  max-height: 92vh;
+  width: auto; height: auto;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+  cursor: zoom-out;
+  user-select: none;
+  -webkit-user-drag: none;
+  transition: transform 180ms ease;
+  touch-action: none;
+}
+.image-lightbox__close {
+  position: absolute;
+  top: 16px; right: 16px;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.18);
+  color: #fff;
+  font-size: 28px; line-height: 1;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(6px);
+}
+.image-lightbox__close:hover { background: rgba(255,255,255,0.28); }
+html.image-lightbox-locked, html.image-lightbox-locked body { overflow: hidden; }
+@media (prefers-reduced-motion: reduce) {
+  .image-lightbox, .image-lightbox__img { transition: none; }
+}
+

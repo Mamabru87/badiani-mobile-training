@@ -833,19 +833,19 @@ class BernyBrainAPI {
     // Keep it short and actionable; no link until clarified.
     const it =
       `Posso aiutarti volentieri, ma mi serve un dettaglio: su quale linea/prodotto vuoi fare "${base}"?\n` +
-      `Esempi rapidi (scrivine uno): Gelato Lab (coni/coppette/Yo-Yo), Cakes (Pastry Lab), Crepe/Waffle/Churros (Sweet Treats), Bar & Drinks (caffè/matcha), Seasonal (panettone/colomba), oppure Operations (apertura/chiusura). [[NOLINK]]`;
+      `Esempi rapidi (scrivine uno): Gelato Lab (coni/coppette/Yo-Yo), Cakes (Pastry Lab), Crepe/Waffle/Churros (Sweet Treats), Coffee & Drinks (caffè/matcha), Seasonal (panettone/colomba), oppure Operations (apertura/chiusura). [[NOLINK]]`;
 
     const en =
       `Happy to help—quick clarification: which product/category is your "${base}" about?\n` +
-      `Examples: Gelato Lab (cones/cups/Yo-Yo), Cakes (Pastry Lab), Crepe/Waffle/Churros (Sweet Treats), Bar & Drinks, Seasonal, or Operations (opening/closing). [[NOLINK]]`;
+      `Examples: Gelato Lab (cones/cups/Yo-Yo), Cakes (Pastry Lab), Crepe/Waffle/Churros (Sweet Treats), Coffee & Drinks, Seasonal, or Operations (opening/closing). [[NOLINK]]`;
 
     const es =
       `¡Claro! Solo una aclaración: ¿sobre qué producto/categoría es tu "${base}"?\n` +
-      `Ejemplos: Gelato Lab (Yo-Yo), Cakes (Pastry Lab), Crepe/Waffle/Churros (Sweet Treats), Bar & Drinks, Seasonal, u Operations (apertura/cierre). [[NOLINK]]`;
+      `Ejemplos: Gelato Lab (Yo-Yo), Cakes (Pastry Lab), Crepe/Waffle/Churros (Sweet Treats), Coffee & Drinks, Seasonal, u Operations (apertura/cierre). [[NOLINK]]`;
 
     const fr =
       `Avec plaisir—petite précision: ton "${base}" concerne quel produit/catégorie ?\n` +
-      `Exemples : Gelato Lab (Yo-Yo), Cakes (Pastry Lab), Crêpe/Waffle/Churros (Sweet Treats), Bar & Drinks, Seasonal, ou Operations (ouverture/fermeture). [[NOLINK]]`;
+      `Exemples : Gelato Lab (Yo-Yo), Cakes (Pastry Lab), Crêpe/Waffle/Churros (Sweet Treats), Coffee & Drinks, Seasonal, ou Operations (ouverture/fermeture). [[NOLINK]]`;
 
     return ({ it, en, es, fr }[lang] || it);
   }
@@ -1182,7 +1182,7 @@ class BernyBrainAPI {
         label: '🍹 Apri parametri Smoothies',
         relatedLink: smoothiesOptions[Math.floor(Math.random() * smoothiesOptions.length)] // Scegli uno random
       },
-      { href: 'caffe.html', keys: ['caffe', 'caffè', 'espresso', 'cappuccino', 'bar', 'bevanda'], label: '☕ Apri scheda Bar & Drinks' },
+      { href: 'caffe.html', keys: ['caffe', 'caffè', 'espresso', 'cappuccino', 'bar', 'bevanda'], label: '☕ Apri scheda Coffee & Drinks' },
       { href: 'sweet-treats.html?q=waffles', keys: ['waffle', 'waffel', 'crepe', 'crêpe', 'pancake'], label: '🧇 Apri scheda Sweet Treats' },
       { href: 'festive.html?q=panettone-classico', keys: ['panettone', 'pandoro', 'natale', 'capodanno', 'cioccolata calda', 'colomba'], label: '🎄 Apri scheda Seasonal' },
       { href: 'sweet-treats.html?q=churros', keys: ['churro', 'churros'], label: '🧇 Apri Churros' },

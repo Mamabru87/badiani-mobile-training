@@ -2798,7 +2798,7 @@ scrollButtons.forEach((btn) => {
       return {
         message: tr('assistant.milk.message', null, 'Latte & schiuma: andiamo nella sezione Milk. L� trovi tecnica e standard (senza improvvisazioni artistiche� a meno che non siano volute).'),
         actions: [
-          { label: tr('assistant.milk.cta', null, 'Apri Milk (Bar & Drinks)'), href: 'caffe.html?tab=milk&center=1' },
+          { label: tr('assistant.milk.cta', null, 'Apri Milk (Coffee & Drinks)'), href: 'caffe.html?tab=milk&center=1' },
         ],
       };
     }
@@ -7519,8 +7519,20 @@ const gamification = (() => {
     dispatchCardCrystalsUpdated(cardId, { crystals: crystalsAfter, converted: false, awarded: 0 });
 
     const label = tabTitle ? ` ◆ ${tabTitle}` : '';
-    // Force toast to top-center as requested to avoid distraction
-    const anchor = { x: window.innerWidth / 2, y: 60 };
+    // Anchor toast near the user's click so it appears in context.
+    // Fallback: just below the source element. Last resort: top-center.
+    let anchor;
+    const xFromEvt = evt?.clientX;
+    const yFromEvt = evt?.clientY;
+    if (Number.isFinite(xFromEvt) && Number.isFinite(yFromEvt)) {
+      // Position slightly above the click so it doesn't sit under the finger.
+      anchor = { x: xFromEvt, y: Math.max(80, yFromEvt - 12) };
+    } else if (source && source.getBoundingClientRect) {
+      const r = source.getBoundingClientRect();
+      anchor = { x: r.left + r.width / 2, y: Math.max(80, r.top - 8) };
+    } else {
+      anchor = { x: window.innerWidth / 2, y: 80 };
+    }
     showToast(`💎 +${amount} ${amount > 1 ? tr('toast.crystal.unitPlural', null, 'cristalli') : tr('toast.crystal.unit', null, 'cristallo')}${label} (${crystalsAfter}/${CRYSTALS_PER_STAR})`, { anchor });
     playCrystalPing(source, evt);
     playCrystalSound();
@@ -7539,8 +7551,18 @@ const gamification = (() => {
     updateUI();
     const readableTitle = (source?.closest('.guide-card') || source)?.querySelector?.('h3')?.textContent?.trim();
     const label = readableTitle ? `: ${readableTitle}` : '';
-    // Force toast to top-center for star award too
-    const anchor = { x: window.innerWidth / 2, y: 60 };
+    // Anchor near the user's click (fallback to source element, then top-center).
+    let anchor;
+    const xFromEvt = evt?.clientX;
+    const yFromEvt = evt?.clientY;
+    if (Number.isFinite(xFromEvt) && Number.isFinite(yFromEvt)) {
+      anchor = { x: xFromEvt, y: Math.max(80, yFromEvt - 12) };
+    } else if (source && source.getBoundingClientRect) {
+      const r = source.getBoundingClientRect();
+      anchor = { x: r.left + r.width / 2, y: Math.max(80, r.top - 8) };
+    } else {
+      anchor = { x: window.innerWidth / 2, y: 80 };
+    }
     showToast(`⭐ ${tr('toast.star.awarded', null, 'Cristalli -> +1 stella')}${label}`, { anchor });
     const celebrateSet = state.quizTokens % STARS_FOR_QUIZ === 0;
     const noteLevel = celebrateSet ? 4 : ((state.quizTokens - 1) % STARS_FOR_QUIZ) + 1;
@@ -12705,7 +12727,7 @@ toggles.forEach((button) => {
       }
     }
 
-    if (!overviewTabContent && (descTextForOverview || titleTextForOverview || extendedFromStats)) {
+    if (!overviewTabContent && (descTextForOverview || titleTextForOverview)) {
       try {
         const wrap = document.createElement('div');
         wrap.className = 'card-modal-overview';
@@ -12716,11 +12738,10 @@ toggles.forEach((button) => {
         const parts = [];
         // User request: avoid repeating the card title inside the modal tabs.
         // The modal header already shows the card title (e.g., "WAFFLES").
+        // Only the description goes into Overview; the stat list is shown in
+        // the dedicated Notes/Procedura tab to avoid truncated/duplicated copy.
         if (descTextForOverview) {
           parts.push(`<p>${descTextForOverview}</p>`);
-        }
-        if (extendedFromStats) {
-          parts.push(`<p>${extendedFromStats}</p>`);
         }
 
         inner.innerHTML = parts.filter(Boolean).join('');
@@ -12811,7 +12832,10 @@ toggles.forEach((button) => {
         .sort((a, b) => b.length - a.length)
         .join('|');
 
-      const re = new RegExp(`\\b(${keyAlternation})\\b`, 'gi');
+      // Case-sensitive on purpose: a stat-list label is always capitalized
+      // ("Latte freddo ..."). Keeping it case-insensitive caused mid-sentence
+      // words like "in temperatura" to be wrongly split off and dropped.
+      const re = new RegExp(`\\b(${keyAlternation})\\b`, 'g');
       const matches = [];
       let m;
       let lastEnd = -1;
@@ -12821,6 +12845,19 @@ toggles.forEach((button) => {
         const end = start + len;
         // Skip matches that sit inside a longer match (e.g. "Mix" inside "Shelf life mix").
         if (lastEnd >= 0 && start < lastEnd) continue;
+        // Only treat the keyword as a new segment boundary when it's at the
+        // start of the string or preceded by whitespace/punctuation that
+        // typically separates list items (avoids splitting "in Temperatura").
+        if (start > 0) {
+          const prev = text.slice(Math.max(0, start - 2), start);
+          if (!/[\s\u00b7\u2022\u25c6\u25cf\-\u2013\u2014.,;:|/\\(){}\[\]]\s*$/.test(prev)) {
+            // Mid-phrase capitalized match (e.g. proper noun): not a boundary.
+            // Still allow if it's clearly a label followed by descriptive text
+            // (i.e. preceded by start of string, which we already handled).
+            // Otherwise skip.
+            continue;
+          }
+        }
         matches.push({ index: start });
         lastEnd = end;
       }
@@ -17671,3 +17708,111 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   } catch {}
 })();
+
+/* ===== Image Lightbox: click to enlarge, click/swipe to close ===== */
+(function(){
+  if (typeof document === 'undefined') return;
+  var overlay = null, imgEl = null, currentTrigger = null;
+  var touchStartX = 0, touchStartY = 0, touchActive = false;
+
+  function isZoomable(img){
+    if (!img || img.tagName !== 'IMG') return false;
+    if (img.dataset.noZoom === 'true') return false;
+    if (img.closest('[data-no-zoom]')) return false;
+    if (img.closest('button, a')) return false;
+    // Only inside content areas (cards/modals/story/details)
+    return !!(img.closest('.card-modal-body') || img.closest('.guide-card') || img.closest('.details') || img.closest('.story-modal'));
+  }
+
+  function ensureOverlay(){
+    if (overlay) return overlay;
+    overlay = document.createElement('div');
+    overlay.className = 'image-lightbox';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-label', 'Immagine ingrandita');
+    overlay.innerHTML = '<button type="button" class="image-lightbox__close" aria-label="Chiudi">&times;</button><img class="image-lightbox__img" alt="" />';
+    document.body.appendChild(overlay);
+    imgEl = overlay.querySelector('.image-lightbox__img');
+    overlay.addEventListener('click', function(e){
+      // click anywhere closes
+      close();
+    });
+    overlay.addEventListener('touchstart', function(e){
+      if (!e.touches || !e.touches[0]) return;
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      touchActive = true;
+    }, { passive: true });
+    overlay.addEventListener('touchmove', function(e){
+      if (!touchActive || !e.touches || !e.touches[0]) return;
+      var dx = e.touches[0].clientX - touchStartX;
+      var dy = e.touches[0].clientY - touchStartY;
+      if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
+        if (imgEl) imgEl.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
+      }
+    }, { passive: true });
+    overlay.addEventListener('touchend', function(e){
+      if (!touchActive) return;
+      touchActive = false;
+      var t = (e.changedTouches && e.changedTouches[0]) || null;
+      if (!t) { close(); return; }
+      var dx = t.clientX - touchStartX;
+      var dy = t.clientY - touchStartY;
+      if (Math.abs(dx) > 40 || Math.abs(dy) > 40) { close(); return; }
+      if (imgEl) imgEl.style.transform = '';
+      // tap = close
+      close();
+    });
+    return overlay;
+  }
+
+  function open(img){
+    ensureOverlay();
+    if (!imgEl) return;
+    var src = img.currentSrc || img.src;
+    imgEl.src = src;
+    imgEl.alt = img.alt || '';
+    imgEl.style.transform = '';
+    overlay.classList.add('is-open');
+    document.documentElement.classList.add('image-lightbox-locked');
+    currentTrigger = img;
+    document.addEventListener('keydown', onKey);
+  }
+
+  function close(){
+    if (!overlay) return;
+    overlay.classList.remove('is-open');
+    document.documentElement.classList.remove('image-lightbox-locked');
+    if (imgEl) { imgEl.style.transform = ''; setTimeout(function(){ if (imgEl) imgEl.src = ''; }, 200); }
+    document.removeEventListener('keydown', onKey);
+    if (currentTrigger && typeof currentTrigger.focus === 'function') { try { currentTrigger.focus(); } catch(e){} }
+    currentTrigger = null;
+  }
+
+  function onKey(e){
+    if (e.key === 'Escape' || e.key === 'Esc') { e.preventDefault(); close(); }
+  }
+
+  document.addEventListener('click', function(e){
+    var t = e.target;
+    if (!t) return;
+    var img = (t.tagName === 'IMG') ? t : (t.closest && t.closest('img'));
+    if (!img) return;
+    if (!isZoomable(img)) return;
+    // if image is inside a link, let the link handle it
+    if (img.closest('a[href]')) return;
+    e.preventDefault();
+    e.stopPropagation();
+    open(img);
+  }, true);
+
+  // Mark zoomable images with a cursor hint via mutation observer? Simpler: rely on CSS attribute selector.
+  // Add a class on hover via delegated mouseover for cursor.
+  document.addEventListener('mouseover', function(e){
+    var t = e.target;
+    if (!t || t.tagName !== 'IMG') return;
+    if (isZoomable(t) && !t.classList.contains('is-zoomable')) t.classList.add('is-zoomable');
+  }, true);
+})();
+

@@ -78,7 +78,7 @@ Browser ←→ HTML/CSS/JS statici ←→ localStorage (stato)
 - **Stars:** Nessuna (hub page)
 - **Contenuto:** 6 hub-card (daily training, performance, totali, errori, storico, profilo)
 
-### caffe.html — Bar & Drinks
+### caffe.html — Coffee & Drinks
 - **Stars dichiarate:** 35/35
 - **Card totali:** 35 (30 prodotto + 5 procedura)
 - **Carousel:** `caffe-hot`, `caffe-matcha`, `caffe-cold`, `caffe-smoothies-juices` (prodotti) + `caffe-ops` (procedure)
@@ -437,7 +437,7 @@ TEST ME (7 domande) ── richiede 1 credito "Test me"
 
 **Sezioni pagina:**
 - `operations.*` — Operations & Setup
-- `caffe.*` — Bar & Drinks (caffè, matcha, smoothie)
+- `caffe.*` — Coffee & Drinks (caffè, matcha, smoothie)
 - `sweetTreats.*` — Sweet Treat Atelier
 - `pastries.*` — Pastry Lab
 - `gelatoLab.*` — Gelato Lab (include Yo-Yo)

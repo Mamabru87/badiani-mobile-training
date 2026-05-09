@@ -15,11 +15,11 @@
     <meta name="description" content="Guida operativa Operations & Setup � procedure di apertura, chiusura, igiene e manutenzione punti vendita Badiani." />
     <link rel="preload" href="fonts/SuperGroteskC-MedLF.otf" as="font" type="font/opentype" crossorigin />
     <link rel="preload" href="fonts/SuperGroteskB-CdMed.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="styles/site.css?v=20260429_1" />
+    <link rel="stylesheet" href="styles/site.css?v=20260509_13" />
     <script src="scripts/config.js?v=20260309_1"></script>
-    <script defer src="scripts/i18n.js?v=20260429_1"></script>
+    <script defer src="scripts/i18n.js?v=20260509_13"></script>
     <script defer src="scripts/i18n-manager.js?v=20260309_1"></script>
-    <script defer src="scripts/site.js?v=20260429_1"></script>
+    <script defer src="scripts/site.js?v=20260509_13"></script>
     <script defer src="scripts/deep-link.js?v=20260309_1"></script>
   </head>
   <body class="page-product" data-product="operations">
@@ -63,7 +63,7 @@
             <li><a href="index.html" data-i18n="menu.link.hub">Hub</a></li>
             <li><a href="operations.html" aria-current="page" data-i18n="menu.link.operations">Operations &amp; Setup</a></li>
             <li><a href="story-orbit.html" data-i18n="menu.link.storyOrbit">Story Orbit</a></li>
-            <li><a href="caffe.html" data-i18n="menu.link.caffe">Bar &amp; Drinks</a></li>
+            <li><a href="caffe.html" data-i18n="menu.link.caffe">Coffee &amp; Drinks</a></li>
             <li><a href="sweet-treats.html" data-i18n="menu.link.sweetTreats">Sweet Treat Atelier</a></li>
             <li><a href="pastries.html" data-i18n="menu.link.pastries">Pastry Lab</a></li>
             <li><a href="gelato-lab.html" data-i18n="menu.link.gelatoLab">Gelato Lab</a></li>
@@ -145,6 +145,7 @@
             </p>
             <ul class="stat-list" data-i18n-html="operations.cards.openingRoutine.stats">
               <li>Morning checklist completa: temperature, vetrine, attrezzi, scorte</li>
+              <li>Compila l'<strong>Opening Checklist Google Form</strong> a fine routine</li>
               <li>Foto reference per coffee · gelato · pastry</li>
               <li>Standard "good": pulito, allineato, etichettato, pieno</li>
               <li>Anti-pattern "bad": vaschette vuote, etichette mancanti, vetri sporchi</li>
@@ -212,17 +213,21 @@
             </ul>
             <button class="btn-ghost" data-toggle-card data-i18n="card.checklist">Checklist</button>
             <div class="details">
-              <div class="guide-photo-grid" aria-label="Good vs Bad reference">
+              <div class="guide-photo-grid" aria-label="Afternoon good reference">
                 <figure>
-                  <div class="guide-photo-placeholder" data-state="good" role="img">Foto GOOD<br>da inserire</div>
-                  <figcaption>Good</figcaption>
+                  <picture><source srcset="assets/afternoon_routine_coffee.webp" type="image/webp" /><img decoding="async" src="assets/afternoon_routine_coffee.png" alt="Coffee station — afternoon good" loading="lazy" /></picture>
+                  <figcaption>Coffee</figcaption>
                 </figure>
                 <figure>
-                  <div class="guide-photo-placeholder" data-state="bad" role="img">Foto BAD<br>da inserire</div>
-                  <figcaption>Bad</figcaption>
+                  <picture><source srcset="assets/afternoon_routine_gelato.webp" type="image/webp" /><img decoding="async" src="assets/afternoon_routine_gelato.png" alt="Gelato display — afternoon good" loading="lazy" /></picture>
+                  <figcaption>Gelato</figcaption>
+                </figure>
+                <figure>
+                  <picture><source srcset="assets/afternoon_routine_pastries.webp" type="image/webp" /><img decoding="async" src="assets/afternoon_routine_pastries.png" alt="Pastry vetrina — afternoon good" loading="lazy" /></picture>
+                  <figcaption>Pastry</figcaption>
                 </figure>
               </div>
-              <p class="details-caption" data-i18n="operations.cards.afternoonRoutine.captionGelato">Gelato display — refill pomeridiano</p>
+              <p class="details-caption" data-i18n="operations.cards.afternoonRoutine.captionGelato">Stazioni — refill pomeridiano (good reference)</p>
               <div data-i18n-html="operations.cards.afternoonRoutine.details">
               <div class="steps">
                 <strong>📋 Afternoon checklist</strong>
@@ -269,15 +274,19 @@
             <div class="details">
               <div class="guide-photo-grid" aria-label="Closing reference">
                 <figure>
-                  <div class="guide-photo-placeholder" data-state="good" role="img">Foto POST-CLOSING<br>da inserire</div>
-                  <figcaption>Coffee &amp; Gelato</figcaption>
+                  <picture><source srcset="assets/closing_routine_coffee.webp" type="image/webp" /><img decoding="async" src="assets/closing_routine_coffee.png" alt="Coffee station — post-closing" loading="lazy" /></picture>
+                  <figcaption>Coffee</figcaption>
                 </figure>
                 <figure>
-                  <div class="guide-photo-placeholder" data-state="good" role="img">Foto POST-CLOSING<br>da inserire</div>
-                  <figcaption>Pastry &amp; Floor</figcaption>
+                  <picture><source srcset="assets/closing_routine_gelato.webp" type="image/webp" /><img decoding="async" src="assets/closing_routine_gelato.png" alt="Gelato display — post-closing" loading="lazy" /></picture>
+                  <figcaption>Gelato</figcaption>
+                </figure>
+                <figure>
+                  <picture><source srcset="assets/closing_routine_pastries.webp" type="image/webp" /><img decoding="async" src="assets/closing_routine_pastries.png" alt="Pastry vetrina — post-closing" loading="lazy" /></picture>
+                  <figcaption>Pastry</figcaption>
                 </figure>
               </div>
-              <p class="details-caption" data-i18n="operations.cards.closingRoutine.captionPastry">Pastry vetrina — stato post-chiusura</p>
+              <p class="details-caption" data-i18n="operations.cards.closingRoutine.captionPastry">Stazioni — stato post-chiusura (good reference)</p>
               <div data-i18n-html="operations.cards.closingRoutine.details">
               <div class="steps">
                 <strong>🔒 Closing checklist</strong>
@@ -319,8 +328,9 @@
                 <img decoding="async" src="assets/operations/bts-weekly.svg" alt="Weekly cleaning calendar illustration" loading="lazy" />
               </picture>
             </figure>
-            <p data-i18n="operations.cards.btsWeekly.desc">Pulizie programmate ogni settimana per mantenere standard di igiene e performance attrezzature.</p>
+            <p data-i18n="operations.cards.btsWeekly.desc">Pulizie programmate ogni settimana per mantenere standard di igiene e performance attrezzature. <strong>La checklist segue il Google Form dedicato di ciascuno store</strong> (varia in base alla location).</p>
             <ul class="stat-list" data-i18n-html="operations.cards.btsWeekly.stats">
+              <li><strong>Google Form per store:</strong> chiedi al manager il link della tua location</li>
               <li>Lunedì: deep clean macchina caffè (gruppi, lance vapore, filtri)</li>
               <li>Mercoledì: deep clean vetrina gelato + filtri</li>
               <li>Venerdì: defrost treat freezer + vertical display</li>
@@ -378,13 +388,13 @@
               <span class="tag" data-i18n="operations.cards.btsMonthly.tag2">Maintenance</span>
               <span class="tag" data-i18n="operations.cards.btsMonthly.tag3">Stock</span>
             </div>
-            <h3 data-i18n="operations.cards.btsMonthly.title">Monthly checklist</h3>
+            <h3 data-i18n="operations.cards.btsMonthly.title">Monthly checklist <span class="tag" style="background:var(--brand-rose);color:#fff;font-size:0.65em;vertical-align:middle;">Coming soon</span></h3>
             <figure class="guide-media">
               <picture>
                 <img decoding="async" src="assets/operations/bts-monthly.svg" alt="Monthly checklist illustration" loading="lazy" />
               </picture>
             </figure>
-            <p data-i18n="operations.cards.btsMonthly.desc">Controlli e manutenzioni mensili: inventario, calibrazione macchine, revisione scadenze e branding store.</p>
+            <p data-i18n="operations.cards.btsMonthly.desc"><strong>In development:</strong> the monthly checklist is not yet available (UK and most regions). Below is a draft of the planned scope — it will be released on a per-store Google Form, like the weekly one.</p>
             <ul class="stat-list" data-i18n-html="operations.cards.btsMonthly.stats">
               <li>Inventario completo: gelato, pastry, packaging, beverage</li>
               <li>Calibrazione macinino caffè + check pressione macchina</li>
@@ -583,6 +593,83 @@
             </div>
           </article>
 
+          <!-- Recipes — Mixes & Premade -->
+          <article class="guide-card guide-card--procedure" data-carousel-item id="card-recipes-mixes-premade">
+            <div class="tag-row">
+              <span class="tag">Recipes</span>
+              <span class="tag">Mixes</span>
+              <span class="tag">Premade</span>
+            </div>
+            <h3 data-i18n="operations.cards.recipesMixes.title">Recipes — Mixes &amp; Premade</h3>
+            <figure class="guide-media">
+              <picture>
+                <img decoding="async" src="assets/operations/batch-mix.svg" alt="Recipes for mixes and premade illustration" loading="lazy" />
+              </picture>
+            </figure>
+            <p data-i18n="operations.cards.recipesMixes.desc">Le ricette ufficiali dei mix preparati in store. Tocca ogni mix per vedere small &amp; big batch. Sempre etichettare (data/ora) e rispettare la shelf life.</p>
+            <ul class="stat-list">
+              <li><strong>Crepes mix</strong> — small + big batch</li>
+              <li><strong>Pancake mix</strong> — small + large batch (con riposo 2h)</li>
+              <li><strong>Waffle mix</strong> — single / double / triple (8/9 · 16/17 · 24/25 portions)</li>
+              <li><strong>Hot Chocolate mix</strong> — Paolo Pomposi powder, ratio 1:4 (powder:milk)</li>
+            </ul>
+
+            <button class="btn-ghost" data-toggle-card data-i18n="card.recipes">Ricette complete</button>
+            <div class="details">
+
+              <div class="steps">
+                <strong>🥞 Crepes mix</strong>
+                <span><em>Big batch:</em> 1.5 kg flour · 2 L milk · 250 g sugar · 15 g salt · 125 g butter · 9 eggs.</span>
+                <span><em>Small batch:</em> 1 kg flour · 1.3 L milk · 165 g sugar · 10 g salt · 100 g butter · 6 eggs.</span>
+                <span>Procedura: secchi insieme → liquidi a parte → unisci con frusta/blender. Riposo minimo 2h in frigo. Shelf life 3 giorni.</span>
+              </div>
+
+              <hr style="margin:12px 0;border:none;border-top:1px dashed rgba(33,64,152,0.2);">
+
+              <div class="steps">
+                <strong>🥞 Pancake mix — Large batch</strong>
+                <span><em>Dry:</em> 250 g sugar · 1200 g plain flour · 15 g salt · 21 g baking powder.</span>
+                <span><em>Wet:</em> 1500 ml whole milk · 300 ml water · 9 eggs · 150 g melted unsalted butter.</span>
+                <span>1 · Mescola tutti i secchi in una bowl/jug.</span>
+                <span>2 · In una jug separata mescola tutti i wet.</span>
+                <span>3 · Con blender elettrico: parti dai wet, aggiungi i dry un cucchiaio alla volta.</span>
+                <span>4 · Refrigerare <strong>2 ore</strong> prima dell'uso.</span>
+              </div>
+
+              <div class="steps">
+                <strong>🥞 Pancake mix — Small batch</strong>
+                <span><em>Dry:</em> 165 g sugar · 800 g plain flour · 10 g salt · 10 g baking powder.</span>
+                <span><em>Wet:</em> 1000 ml whole milk · 200 ml water · 6 eggs · 100 g melted unsalted butter.</span>
+                <span>Stessa procedura del large batch (riposo 2h obbligatorio).</span>
+              </div>
+
+              <hr style="margin:12px 0;border:none;border-top:1px dashed rgba(33,64,152,0.2);">
+
+              <div class="steps">
+                <strong>🧇 Waffle mix (per dose)</strong>
+                <span><em>Single (8/9 portions):</em> Flour 375 · Baking powder 27 · Salt 8 · Sugar 150 · Milk @42°C 549 · Butter (molten) 171 · Egg 3 whole — Tot 1460 g.</span>
+                <span><em>Double (16/17 portions):</em> Flour 750 · Baking powder 54 · Salt 16 · Sugar 300 · Milk @42°C 1098 · Butter 342 · Egg 6 whole — Tot 2920 g.</span>
+                <span><em>Triple (24/25 portions):</em> Flour 1125 · Baking powder 81 · Salt 24 · Sugar 450 · Milk @42°C 1647 · Butter 513 · Egg 9 whole — Tot 4380 g.</span>
+                <span>Gruppo A = secchi (flour, baking powder, salt, sugar). Gruppo B = liquidi (milk a 42°C, butter molten, egg). Unisci A nei B.</span>
+              </div>
+
+              <hr style="margin:12px 0;border:none;border-top:1px dashed rgba(33,64,152,0.2);">
+
+              <div class="steps">
+                <strong>🍫 Hot Chocolate mix — Standard (Large) Machine</strong>
+                <span><em>Base ricetta:</em> 800 ml whole milk + 200 g Paolo Pomposi hot chocolate mix powder.</span>
+                <span><em>Aspect ratios (scale up):</em></span>
+                <span>· 1600 ml milk + 400 g powder</span>
+                <span>· 2000 ml milk + 600 g powder</span>
+                <span>· 3200 ml milk + 800 g powder</span>
+                <span>· 4000 ml milk + 1000 g powder</span>
+                <span>Shelf life: 1 giorno (prepare on demand). Frigo + label data/ora.</span>
+              </div>
+
+              <div class="tips"><strong>📌 Sempre:</strong> etichetta (data/ora), rispetta riposo (crepe/pancake = 2h), FIFO. Oltre shelf life: elimina e rifai.</div>
+            </div>
+          </article>
+
           <!-- Filters & Defrost (renamed, with before/after photos) -->
           <article class="guide-card guide-card--maintenance" data-carousel-item id="card-filters-defrost">
             <div class="tag-row">
@@ -622,21 +709,25 @@
               </div>
               <div data-i18n-html="operations.cards.filtersDefrost.details">
               <div class="steps">
-                <strong>🔧 Deep cleaning filtri</strong>
-                <span>1 · Foto BEFORE: filtri sporchi nella loro sede.</span>
-                <span>2 · Rimuovi filtri dalla vetrina/freezer.</span>
-                <span>3 · Lava con acqua calda e detergente specifico.</span>
-                <span>4 · Asciuga completamente prima di rimontare.</span>
-                <span>5 · Foto AFTER: filtri puliti rimontati.</span>
+                <strong>🔧 Pulizia filtri</strong>
+                <span>1 · Svita e rimuovi la griglia di copertura dei filtri.</span>
+                <span>2 · Foto BEFORE: stato del filtro sporco.</span>
+                <span>3 · Usa una spazzola per rimuovere tutta la polvere.</span>
+                <span>4 · Spruzza acqua pulita per assicurarti che tutta la polvere si sia sciolta.</span>
+                <span>5 · Foto AFTER: filtro pulito.</span>
+                <span>6 · Riavvita la griglia metallica.</span>
               </div>
               <hr style="margin:12px 0;border:none;border-top:1px dashed rgba(33,64,152,0.2);">
               <div class="steps">
-                <strong>❄️ Defrosting freezer</strong>
+                <strong>❄️ Sbrinamento freezer</strong>
                 <span>1 · Foto BEFORE: ghiaccio accumulato nel freezer.</span>
-                <span>2 · Treat freezer: defrost settimanale completo.</span>
-                <span>3 · Vertical display: defrost settimanale (verifica -16 °C).</span>
-                <span>4 · Foto AFTER: superfici pulite, asciutte, senza ghiaccio.</span>
-                <span>5 · Riaccendi e attendi temperatura target prima di ricaricare.</span>
+                <span>2 · Sposta tutte le vaschette gelato o altri prodotti in un altro freezer.</span>
+                <span>3 · Avvia il freezer da sbrinare e lascialo con la porta aperta finché il ghiaccio non si è completamente sciolto.</span>
+                <span>4 · Assicurati che il tubo di scarico sia aperto con un contenitore sotto.</span>
+                <span>5 · Scarica tutta l'acqua e asciuga con cura il freezer con un panno o blue paper e spray sanitizzante.</span>
+                <span>6 · Foto AFTER: freezer pulito e asciutto.</span>
+                <span>7 · Riaccendi il freezer.</span>
+                <span>8 · Quando la temperatura scende sotto -14 °C, riposiziona i prodotti all'interno.</span>
               </div>
               <div class="tips"><strong>📸 Le foto sono obbligatorie:</strong> caricale sul Google Form maintenance prima di chiudere il task.</div>
               </div>
