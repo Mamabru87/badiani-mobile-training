@@ -834,10 +834,7 @@ normalize(s) = s.toLowerCase().normalize('NFD')
 
   <!-- Media (picture con webp+jpg fallback) -->
   <figure class="guide-media">
-    <picture>
-      <source srcset="assets/products/nome.webp" type="image/webp" />
-      <img src="assets/products/nome.jpg" alt="Descrizione" loading="lazy" />
-    </picture>
+    <img src="assets/products/<slug>.webp" alt="Descrizione" loading="lazy" decoding="async" />
   </figure>
 
   <!-- Descrizione breve -->
@@ -1017,7 +1014,7 @@ window.__enableBadianiLogs();
 - **Card ID:** `card-nome-descrittivo` (kebab-case, prefisso `card-`)
 - **Carousel ID:** `nome-sezione` per prodotti, `nome-sezione-ops` per procedure
 - **i18n key:** `sezione.cards.cardKey.campo` (dot-notation)
-- **Asset:** `assets/products/nome.webp` + `.jpg`
+- **Asset:** `assets/products/<slug>.webp` (WebP-only; originali archiviati fuori dal repo quando non servono)
 
 ### Tono del contenuto
 - Stile training italiano: passi numerati concisi

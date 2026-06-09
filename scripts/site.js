@@ -8027,21 +8027,21 @@ const gamification = (() => {
   }
 
   const QUIZ_PRODUCT_GUESS_ITEMS = [
-    { id: 'caffe-espresso', label: 'Espresso', image: 'assets/products/espresso.png', slug: 'caffe' },
-    { id: 'caffe-cappuccino', label: 'Cappuccino', image: 'assets/products/cappuccino.png', slug: 'caffe' },
-    { id: 'caffe-americano', label: 'Americano', image: 'assets/products/americano.png', slug: 'caffe' },
-    { id: 'caffe-affogato', label: 'Affogato', image: 'assets/products/affogato.png', slug: 'caffe' },
-    { id: 'sweet-waffle', label: 'Waffle', image: 'assets/products/waffles.png', slug: 'sweet-treats' },
-    { id: 'sweet-pancake', label: 'Pancake', image: 'assets/products/pancake.png', slug: 'sweet-treats' },
-    { id: 'sweet-mini-stack', label: 'Mini Stack', image: 'assets/products/yo-yo-storage.png', slug: 'sweet-treats' },
-    { id: 'pastry-croissant', label: 'Croissant', image: 'assets/products/croissant-chocolate.png', slug: 'pastries' },
-    { id: 'pastry-brownie', label: 'Brownie', image: 'assets/products/brownie.png', slug: 'pastries' },
-    { id: 'pastry-cake', label: 'Cake', image: 'assets/products/cake.png', slug: 'pastries' },
-    { id: 'gelato-box', label: 'Gelato Box', image: 'assets/products/gelato-box-medio.png', slug: 'gelato-lab' },
-    { id: 'gelato-cones', label: 'Coni gelato', image: 'assets/products/gelato-cone-medio.png', slug: 'gelato-lab' },
-    { id: 'festive-churros', label: 'Churros', image: 'assets/products/churros.png', slug: 'festive' },
-    { id: 'panettone', label: 'Panettone', image: 'assets/products/panettone-classico.png', slug: 'festive' },
-    { id: 'pandoro', label: 'Pandoro', image: 'assets/products/pandoro.png', slug: 'festive' },
+    { id: 'caffe-espresso', label: 'Espresso', image: 'assets/products/espresso.webp', slug: 'caffe' },
+    { id: 'caffe-cappuccino', label: 'Cappuccino', image: 'assets/products/cappuccino.webp', slug: 'caffe' },
+    { id: 'caffe-americano', label: 'Americano', image: 'assets/products/americano.webp', slug: 'caffe' },
+    { id: 'caffe-affogato', label: 'Affogato', image: 'assets/products/affogato.webp', slug: 'caffe' },
+    { id: 'sweet-waffle', label: 'Waffle', image: 'assets/products/waffles.webp', slug: 'sweet-treats' },
+    { id: 'sweet-pancake', label: 'Pancake', image: 'assets/products/pancake.webp', slug: 'sweet-treats' },
+    { id: 'sweet-mini-stack', label: 'Mini Stack', image: 'assets/products/yo-yo-storage.webp', slug: 'sweet-treats' },
+    { id: 'pastry-croissant', label: 'Croissant', image: 'assets/products/croissant-chocolate.webp', slug: 'pastries' },
+    { id: 'pastry-brownie', label: 'Brownie', image: 'assets/products/brownie.webp', slug: 'pastries' },
+    { id: 'pastry-cake', label: 'Cake', image: 'assets/products/cake.webp', slug: 'pastries' },
+    { id: 'gelato-box', label: 'Gelato Box', image: 'assets/products/gelato-box-medio.webp', slug: 'gelato-lab' },
+    { id: 'gelato-cones', label: 'Coni gelato', image: 'assets/products/gelato-cone-medio.webp', slug: 'gelato-lab' },
+    { id: 'festive-churros', label: 'Churros', image: 'assets/products/churros.webp', slug: 'festive' },
+    { id: 'panettone', label: 'Panettone', image: 'assets/products/panettone-classico.webp', slug: 'festive' },
+    { id: 'pandoro', label: 'Pandoro', image: 'assets/products/pandoro.webp', slug: 'festive' },
   ];
 
   const QUIZ_FLASH_QUESTIONS = [

@@ -28,37 +28,9 @@ BAR_LABELS = {
     'data-i18n="menu.link.caffe">Bar & Drinks': 'data-i18n="menu.link.caffe">Coffee & Drinks',
 }
 
-# Smoothie / juice photo path updates for caffe.html only
-CAFFE_PHOTO_FIXES = [
-    # Add webp source above png for smoothies
-    (
-        '<picture>\n                <source srcset="assets/products/smoothie%20giallo%20passion.png" type="image/png" />',
-        '<picture>\n                <source srcset="assets/products/smoothie%20giallo%20passion.webp" type="image/webp" />\n                <source srcset="assets/products/smoothie%20giallo%20passion.png" type="image/png" />',
-    ),
-    (
-        '<picture>\n                <source srcset="assets/products/smoothie%20rosso%20berry.png" type="image/png" />',
-        '<picture>\n                <source srcset="assets/products/smoothie%20rosso%20berry.webp" type="image/webp" />\n                <source srcset="assets/products/smoothie%20rosso%20berry.png" type="image/png" />',
-    ),
-    (
-        '<picture>\n                <source srcset="assets/products/smoothie%20verde%20boost.png" type="image/png" />',
-        '<picture>\n                <source srcset="assets/products/smoothie%20verde%20boost.webp" type="image/webp" />\n                <source srcset="assets/products/smoothie%20verde%20boost.png" type="image/png" />',
-    ),
-    # Energy Booster: replace placeholder smoothie-rosso-berry with real energy-booster
-    (
-        '<source srcset="assets/products/smoothie-rosso-berry.png" type="image/png" />\n                <img decoding="async" src="assets/products/smoothie-rosso-berry.png" alt="Energy Booster juice"',
-        '<source srcset="assets/products/energy-booster.webp" type="image/webp" />\n                <source srcset="assets/products/energy-booster.png" type="image/png" />\n                <img decoding="async" src="assets/products/energy-booster.png" alt="Energy Booster juice"',
-    ),
-    # Sweet Beet: replace placeholder
-    (
-        '<source srcset="assets/products/smoothie-rosso-berry.png" type="image/png" />\n                <img decoding="async" src="assets/products/smoothie-rosso-berry.png" alt="Sweet Beet juice"',
-        '<source srcset="assets/products/sweet-beet.webp" type="image/webp" />\n                <source srcset="assets/products/sweet-beet.png" type="image/png" />\n                <img decoding="async" src="assets/products/sweet-beet.png" alt="Sweet Beet juice"',
-    ),
-    # Get Clean: replace placeholder smoothie-verde-boost
-    (
-        '<source srcset="assets/products/smoothie-verde-boost.png" type="image/png" />\n                <img decoding="async" src="assets/products/smoothie-verde-boost.png" alt="Get Clean juice"',
-        '<source srcset="assets/products/get-clean.webp" type="image/webp" />\n                <source srcset="assets/products/get-clean.png" type="image/png" />\n                <img decoding="async" src="assets/products/get-clean.png" alt="Get Clean juice"',
-    ),
-]
+# Deprecated one-off image replacements from the old PNG fallback phase.
+# Current app assets are WebP-only (except tiny PWA icons), so keep this no-op to avoid reintroducing stale PNG references.
+CAFFE_PHOTO_FIXES = []
 
 
 def process(path: pathlib.Path) -> bool:

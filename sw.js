@@ -3,7 +3,7 @@
  * - Network-first for HTML (so updates land fast)
  * - Skip cache for video_embargo (large) and external URLs
  */
-const VERSION = 'badiani-v2-20260609-04';
+const VERSION = 'badiani-v2-20260609-05';
 const STATIC_CACHE = `${VERSION}-static`;
 const RUNTIME_CACHE = `${VERSION}-runtime`;
 
@@ -32,6 +32,8 @@ const PRECACHE = [
   './assets/brand/logo-badiani.webp',
   './assets/brand/logo-b-blue.webp',
   './assets/brand/logo-b-blue-180.png',
+  './assets/brand/logo-b-blue-192.png',
+  './assets/brand/logo-b-blue-512.png',
   './assets/brand/favicon-64.png',
   './assets/avatars/berni-avatar.webp',
   './fonts/stylesheet.css',

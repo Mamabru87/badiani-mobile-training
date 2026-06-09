@@ -3823,7 +3823,7 @@ h4 {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url("../assets/patterns/pattern-dots.png");
+  background-image: url("../assets/patterns/pattern-dots.webp");
   background-size: 220% auto;
   background-repeat: no-repeat;
   background-position: center;
@@ -4185,20 +4185,20 @@ h4 {
 }
 
 .pattern-dots::before {
-  background-image: url("../assets/patterns/pattern-dots.png");
+  background-image: url("../assets/patterns/pattern-dots.webp");
   opacity: 0.22;
   background-size: 230% auto;
 }
 
 .pattern-geometric::before {
-  background-image: url("../assets/patterns/pattern-dots.png");
+  background-image: url("../assets/patterns/pattern-dots.webp");
   opacity: 0.18;
   background-size: 210% auto;
   background-position: 60% 40%;
 }
 
 .pattern-waves::before {
-  background-image: url("../assets/patterns/pattern-dots.png");
+  background-image: url("../assets/patterns/pattern-dots.webp");
   opacity: 0.26;
   background-size: 205% auto;
   background-position: 40% 60%;

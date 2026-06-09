@@ -1,15 +1,15 @@
-# Avatar sprite (BERNY / gelatiere)
+# Avatar BERNY / Avatar Lab
 
-Metti qui lo sprite sheet dell’avatar.
+Asset attuali in formato WebP leggero.
 
-## File atteso (default)
+## File attuale BERNY
 
-- `assets/avatars/berny-sprite.png`
+- `assets/avatars/berni-avatar.webp`
 
-## Specifiche usate dal codice (index.html)
+## Avatar Lab
 
-- cols × rows: 6 × 4 (24 frame)
-- fps: 12
-- ordine frame: sinistra→destra, riga per riga (top→bottom)
+- Parti componibili in `assets/avatars/parts/`
+- Manifest: `scripts/avatar-manifest.js`
+- Estensione asset: `.webp`
 
-Se il nome file cambia, aggiorna l’attributo `data-avatar-src` in `index.html`.
+Se il nome file cambia, aggiorna il riferimento nel markup o nel manifest.
