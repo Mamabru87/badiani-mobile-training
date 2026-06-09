@@ -39,6 +39,54 @@
 
   const sanitize = (value) => String(value ?? '').trim();
 
+  const BERNY_SUITE_VERSION = '20260609_02';
+  const BERNY_SUITE_SCRIPTS = [
+    'scripts/berny-knowledge.js',
+    'scripts/berny-super-knowledge.js',
+    'scripts/search-catalog-seed.js',
+    'scripts/berny-brain-api.js'
+  ];
+  let bernySuitePromise = null;
+
+  const loadScriptOnce = (src) => new Promise((resolve, reject) => {
+    const normalizedSrc = `${src}?v=${BERNY_SUITE_VERSION}`;
+    const existing = Array.from(document.scripts).find((script) => {
+      try { return String(script.getAttribute('src') || '').split('?')[0] === src; } catch { return false; }
+    });
+    if (existing?.dataset?.loaded === 'true') {
+      resolve();
+      return;
+    }
+    if (existing) {
+      existing.addEventListener('load', () => resolve(), { once: true });
+      existing.addEventListener('error', () => reject(new Error(`Impossibile caricare ${src}`)), { once: true });
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = normalizedSrc;
+    script.async = false;
+    script.dataset.bernyLazy = 'true';
+    script.addEventListener('load', () => {
+      script.dataset.loaded = 'true';
+      resolve();
+    }, { once: true });
+    script.addEventListener('error', () => reject(new Error(`Impossibile caricare ${src}`)), { once: true });
+    document.head.appendChild(script);
+  });
+
+  const ensureBernySuite = async () => {
+    if (window.bernyBrain && typeof window.bernyBrain.sendMessage === 'function') return window.bernyBrain;
+    if (!bernySuitePromise) {
+      bernySuitePromise = BERNY_SUITE_SCRIPTS.reduce(
+        (chain, src) => chain.then(() => loadScriptOnce(src)),
+        Promise.resolve()
+      ).then(() => window.bernyBrain || null);
+    }
+    const brain = await bernySuitePromise;
+    return (brain && typeof brain.sendMessage === 'function') ? brain : null;
+  };
+
   class BernyUI {
     constructor() {
       this.widget = document.querySelector('[data-berny-widget]');
@@ -78,6 +126,9 @@
           btn.addEventListener('click', (e) => {
             e.preventDefault();
             this.toggleWindow();
+            if (this.isOpen()) {
+              ensureBernySuite().catch((err) => console.warn('BERNY lazy-load failed:', err));
+            }
           });
         } catch {}
       });
@@ -145,7 +196,7 @@
       this.chatInput.addEventListener('input', () => this.autoResizeInput());
     }
 
-    handleSend() {
+    async handleSend() {
       const message = sanitize(this.chatInput.value);
       if (!message) return;
 
@@ -162,27 +213,29 @@
 
       if (this.isTyping) return;
 
-      const brain = window.bernyBrain;
-      if (!brain || typeof brain.sendMessage !== 'function') {
-        this.addMessage(message, 'user');
-        this.chatInput.value = '';
-        this.autoResizeInput();
-        this.addMessage(
-          tr('assistant.offlineFallback', null, 'Posso aiutarti su coni, Buontalenti, procedure e quiz. Prova a chiedermi una di queste!'),
-          'berny'
-        );
-        return;
-      }
-
       this.addMessage(message, 'user');
       this.chatInput.value = '';
       this.autoResizeInput();
       this.playSynthSound('sent');
 
-      // Show the classic 3-dots immediately (as on first question).
+      // Show the classic 3-dots while the lazy BERNY brain loads and answers.
       // handleStreamChunk() will replace this indicator with the streaming bubble on first chunk.
       this.showTypingIndicator();
       this.animateAvatar('thinking');
+
+      const brain = await ensureBernySuite().catch((err) => {
+        console.warn('BERNY lazy-load failed:', err);
+        return null;
+      });
+      if (!brain || typeof brain.sendMessage !== 'function') {
+        this.hideTypingIndicator();
+        this.addMessage(
+          tr('assistant.offlineFallback', null, 'Posso aiutarti su coni, Buontalenti, procedure e quiz. Prova a chiedermi una di queste!'),
+          'berny'
+        );
+        this.animateAvatar('idle');
+        return;
+      }
 
       try {
         brain.sendMessage(

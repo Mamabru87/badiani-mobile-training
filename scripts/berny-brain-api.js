@@ -2243,9 +2243,17 @@ class BernyBrainAPI {
 }
 
 // Inizializza
-document.addEventListener('DOMContentLoaded', () => {
-  window.bernyBrain = new BernyBrainAPI();
-});
+const initBernyBrain = () => {
+  if (!window.bernyBrain) {
+    window.bernyBrain = new BernyBrainAPI();
+  }
+  return window.bernyBrain;
+};
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initBernyBrain, { once: true });
+} else {
+  initBernyBrain();
+}
 
 // ------------------------------------------------------------
 // Compatibilità con la chat esistente del sito
