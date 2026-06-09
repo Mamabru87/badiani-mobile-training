@@ -1,6 +1,6 @@
 ﻿@font-face {
   font-family: "SuperGrotesk-Regular";
-  src: url("../fonts/SuperGroteskA-Rg.otf") format("opentype");
+  src: url("../fonts/SuperGroteskA-Rg.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -8,8 +8,7 @@
 
 @font-face {
   font-family: "SuperGrotesk-Medium";
-  src: url("../fonts/SuperGroteskB-CdMed.woff2") format("woff2"),
-    url("../fonts/SuperGroteskB-CdMed.woff") format("woff");
+  src: url("../fonts/SuperGroteskB-CdMed.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -17,7 +16,7 @@
 
 @font-face {
   font-family: "supergroteskc-medlf";
-  src: url("../fonts/SuperGroteskC-MedLF.otf") format("opentype");
+  src: url("../fonts/SuperGroteskC-MedLF.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;

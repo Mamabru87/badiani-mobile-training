@@ -3,7 +3,7 @@
  * - Network-first for HTML (so updates land fast)
  * - Skip cache for video_embargo (large) and external URLs
  */
-const VERSION = 'badiani-v2-20260609-03';
+const VERSION = 'badiani-v2-20260609-04';
 const STATIC_CACHE = `${VERSION}-static`;
 const RUNTIME_CACHE = `${VERSION}-runtime`;
 
@@ -35,7 +35,9 @@ const PRECACHE = [
   './assets/brand/favicon-64.png',
   './assets/avatars/berni-avatar.webp',
   './fonts/stylesheet.css',
+  './fonts/SuperGroteskA-Rg.woff2',
   './fonts/SuperGroteskB-CdMed.woff2',
+  './fonts/SuperGroteskC-MedLF.woff2',
 ];
 
 self.addEventListener('install', (event) => {
