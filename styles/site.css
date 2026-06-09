@@ -442,6 +442,165 @@ body.page-home {
   padding: 10px 12px;
 }
 
+
+
+/* Daily mission dashboard — Sprint 3.1 training UX */
+.page-home .daily-mission {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.95fr);
+  gap: 14px;
+  margin: 14px 6px 0;
+  padding: clamp(16px, 2.2vw, 22px);
+  border: 1px solid rgba(33, 64, 152, 0.14);
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at top left, rgba(255, 217, 230, 0.45), transparent 34%),
+    linear-gradient(135deg, #ffffff 0%, #fff8f2 52%, #f8fbff 100%);
+  box-shadow: 0 18px 40px rgba(15, 33, 84, 0.08);
+}
+
+.page-home .daily-mission__hero,
+.page-home .daily-mission__reward {
+  min-width: 0;
+}
+
+.page-home .daily-mission__eyebrow {
+  margin: 0 0 6px;
+  color: var(--brand-blue);
+  font-family: var(--font-medium);
+  font-size: 11px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+}
+
+.page-home .daily-mission h2 {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-condensed);
+  font-size: clamp(28px, 4vw, 44px);
+  letter-spacing: 0.05em;
+  line-height: 0.98;
+  text-transform: uppercase;
+}
+
+.page-home .daily-mission__lede {
+  max-width: 58ch;
+  margin: 10px 0 0;
+  color: var(--brand-gray);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.page-home .daily-mission__progress {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 9px 12px;
+  border-radius: 999px;
+  background: rgba(33, 64, 152, 0.08);
+  color: var(--brand-blue);
+}
+
+.page-home .daily-mission__progress-label {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.page-home .daily-mission__steps {
+  display: grid;
+  gap: 10px;
+  align-content: center;
+}
+
+.page-home .daily-mission__step {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  padding: 11px;
+  border: 1px solid rgba(33, 64, 152, 0.12);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.74);
+}
+
+.page-home .daily-mission__step.is-complete {
+  border-color: rgba(34, 139, 78, 0.28);
+  background: rgba(230, 255, 240, 0.72);
+}
+
+.page-home .daily-mission__step-icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 8px 18px rgba(15, 33, 84, 0.08);
+}
+
+.page-home .daily-mission__step-copy {
+  display: grid;
+  gap: 3px;
+}
+
+.page-home .daily-mission__step-copy strong {
+  color: var(--ink);
+  font-family: var(--font-medium);
+  font-size: 14px;
+}
+
+.page-home .daily-mission__step-copy small {
+  color: var(--brand-gray);
+  font-size: 12px;
+}
+
+.page-home .daily-mission__reward {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(33, 64, 152, 0.18);
+}
+
+.page-home .daily-mission__reward p {
+  margin: 0;
+  color: var(--brand-gray);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.page-home .daily-mission__next {
+  color: var(--brand-blue) !important;
+  font-family: var(--font-medium);
+}
+
+.page-home .daily-mission__cta {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+  .page-home .daily-mission {
+    grid-template-columns: 1fr;
+    margin-inline: 0;
+    border-radius: 22px;
+  }
+
+  .page-home .daily-mission__reward {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .page-home .daily-mission__cta {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 /* Homepage cockpit carousel (uses existing carousel JS + indicators) */
 .page-home [data-carousel="cockpit"] {
   /* Allow vertical effects (focused lift), but never allow page-level horizontal scroll. */
