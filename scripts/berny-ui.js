@@ -155,7 +155,7 @@
       // Keep the latest user intent for coherent link inference.
       this.lastUserMessage = message;
 
-      // Broadcast raw user message so other components can react (e.g. /apikey secret command).
+      // Broadcast raw user message so other components can react (e.g. proxy access code command).
       try {
         window.dispatchEvent(new CustomEvent('berny-user-message', { detail: { message } }));
       } catch {}
@@ -526,7 +526,13 @@
 
     // --- FORMATTAZIONE MARKDOWN ---
     parseMarkdown(text) {
-      let html = text
+      const escaped = String(text || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+
+      const html = escaped
         // Grassetto **text** -> <b>text</b>
         .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
         // Liste * item -> <br>• item

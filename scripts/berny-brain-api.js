@@ -35,15 +35,10 @@ class BernyBrainAPI {
     const globalProxyEndpoint = readGlobalProxyEndpoint();
     this.proxyEndpoint = configuredProxyEndpoint || globalProxyEndpoint;
 
-    this.mode = ((String(this.config.provider || '')).toLowerCase() === 'proxy' && this.proxyEndpoint)
-      ? 'proxy'
-      : (this.proxyEndpoint ? 'proxy' : 'sdk');
+    this.mode = this.proxyEndpoint ? 'proxy' : 'disabled';
 
-    // SDK mode requires the user to provide their own key (via /apikey) and the SDK script to be present.
+    // API key Gemini nel browser disattivata: BERNY deve passare dal proxy Cloudflare.
     this.apiKey = '';
-    if (this.mode === 'sdk') {
-      try { this.apiKey = String(localStorage.getItem('berny_api_key') || '').trim(); } catch { this.apiKey = ''; }
-    }
 
     // Optional: proxy access gate code (checked server-side by the Worker)
     this.accessCode = '';
@@ -1477,27 +1472,9 @@ class BernyBrainAPI {
   }
 
   init() {
-    // SDK init (only if configured)
-    if (this.mode === 'sdk') {
-      if (window.GoogleGenerativeAI && this.apiKey && this.apiKey.length >= 10) {
-        this.genAI = new window.GoogleGenerativeAI(this.apiKey);
-        this.model = this.genAI.getGenerativeModel({ model: this.modelName });
-        console.log("🤖 Berny Brain (Google SDK) pronto!");
-      } else {
-        console.warn("⚠️ SDK Google o API Key mancante. (Consigliato: proxy) ");
-      }
-    }
-
-    // Listener per inserimento chiave via chat (solo in modalità SDK).
-    if (this.mode === 'sdk') {
-      window.addEventListener('berny-user-message', (e) => {
-        if (e.detail.message.startsWith('/apikey')) {
-          const key = e.detail.message.replace('/apikey', '').trim();
-          localStorage.setItem('berny_api_key', key);
-          alert(typeof tr === 'function' ? tr('toast.keySaved', null, 'Chiave salvata! Ricarico...') : 'Chiave salvata! Ricarico...');
-          window.location.reload();
-        }
-      });
+    // BERNY è proxy-only: niente SDK Google e niente chiavi API nel browser.
+    if (this.mode !== 'proxy') {
+      console.warn('⚠️ Config proxy BERNY mancante. SDK/API key browser disattivati.');
     }
 
     // Listener per inserimento access code via chat (solo in modalità proxy).
@@ -1919,16 +1896,15 @@ class BernyBrainAPI {
       }
     }
 
-    // SDK fallback
-    if (!this.apiKey || this.apiKey.length < 10) {
-      // 🔄 FALLBACK: Prova Legacy KB anche senza API key
-      const fallbackResponse = this.tryLegacyKBFallback(userMessage, (window.BadianiI18n?.getLang?.() || 'it'));
-      if (fallbackResponse) {
-        console.log('📚 Berny: No API key, uso fallback KB');
-        return this.addressUser(fallbackResponse);
-      }
-      return "⚠️ Scrivi '/apikey LA_TUA_CHIAVE' per attivarmi (oppure usa il proxy)!";
+    // Proxy-only fallback: niente API key Gemini nel browser.
+    const fallbackResponse = this.tryLegacyKBFallback(userMessage, (window.BadianiI18n?.getLang?.() || 'it'));
+    if (fallbackResponse) {
+      console.log('📚 Berny: proxy non configurato, uso fallback KB locale');
+      return this.addressUser(fallbackResponse);
     }
+    return "⚠️ BERNY richiede il proxy Cloudflare configurato. Modalità API key nel browser disattivata.";
+
+    // Legacy SDK path kept unreachable intentionally until fully removed in a deeper cleanup.
     if (!this.model) this.init();
 
     // Notifica UI

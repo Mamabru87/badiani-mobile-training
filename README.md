@@ -368,7 +368,6 @@ TEST ME (7 domande) ── richiede 1 credito "Test me"
 |-----|------|-----------|
 | `badianiBerny.config.v1` | JSON | `{provider, proxyEndpoint}` |
 | `badianiBerny.accessCode.v1` | string | Codice accesso opzionale per proxy |
-| `berny_api_key` | string | Chiave API Gemini (solo SDK mode) |
 | `badianiBerny.lastRecommendation.v1` | JSON | Ultima raccomandazione (anti-ripetizione) |
 
 ### Ricerca e cache
@@ -701,10 +700,9 @@ TEST ME (7 domande) ── richiede 1 credito "Test me"
 ### Modalità di funzionamento
 | Modalità | Descrizione |
 |----------|-------------|
-| **Proxy** (produzione) | Cloudflare Worker a `window.BERNY_PROXY_ENDPOINT` — chiave API server-side |
-| **SDK** (sviluppo) | Chiave Gemini in `berny_api_key` localStorage, modello `gemini-2.0-flash-exp` |
+| **Proxy** (produzione e sviluppo) | Cloudflare Worker a `window.BERNY_PROXY_ENDPOINT` — chiave API server-side |
 
-**Selezione:** Usa proxy se endpoint disponibile; fallback a SDK.
+**Selezione:** BERNY usa solo il proxy Cloudflare. La vecchia modalità SDK/API key Gemini nel browser è disattivata per sicurezza.
 
 ### Quiz DB
 - `QUESTIONS_DB`: ~26 domande per lingua (it/en/es/fr) embedded nel file

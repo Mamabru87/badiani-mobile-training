@@ -255,8 +255,9 @@ export default {
     const pathname = urlObj.pathname || '/';
     const origin = request.headers.get('Origin') || '';
 
-    // CORS allowlist
-    const allowedRaw = String(env.ALLOWED_ORIGIN || '*').trim();
+    // CORS allowlist. Secure default: deny browser origins unless ALLOWED_ORIGIN is configured.
+    // Production value for GitHub Pages should include: https://mamabru87.github.io
+    const allowedRaw = String(env.ALLOWED_ORIGIN || '').trim();
     const allowAll = allowedRaw === '*';
     const allowedSet = allowAll
       ? null
