@@ -444,6 +444,56 @@ body.page-home {
 
 
 
+
+
+/* Training brief blocks inside product cards — Sprint 3.2 */
+.training-brief {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0 14px;
+  padding: 10px;
+  border: 1px solid rgba(33, 64, 152, 0.13);
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(255, 248, 242, 0.92), rgba(248, 251, 255, 0.96));
+}
+
+.training-brief__item {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  gap: 8px;
+  align-items: start;
+}
+
+.training-brief__icon {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 6px 12px rgba(15, 33, 84, 0.07);
+  font-size: 16px;
+}
+
+.training-brief__copy {
+  display: grid;
+  gap: 2px;
+}
+
+.training-brief__copy strong {
+  color: var(--brand-blue);
+  font-family: var(--font-medium);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.training-brief__copy small {
+  color: var(--ink);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
 /* Daily mission dashboard — Sprint 3.1 training UX */
 .page-home .daily-mission {
   display: grid;

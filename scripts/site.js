@@ -5361,6 +5361,13 @@ const gamification = (() => {
     });
 
     formatStatListLabels();
+    enhanceTrainingBriefs();
+    document.addEventListener('badiani:lang-changed', () => {
+      window.setTimeout(() => {
+        formatStatListLabels();
+        enhanceTrainingBriefs();
+      }, 0);
+    });
     initProfileControls();
     ensureWrongLogHandler();
     checkStarMilestones();
@@ -5433,6 +5440,89 @@ const gamification = (() => {
       const rest = text.slice(idx + 1).trim();
       if (!label || !rest) return;
       item.innerHTML = `<strong>${label}:</strong> ${rest}`;
+    });
+  }
+
+  function enhanceTrainingBriefs() {
+    const cards = document.querySelectorAll('.guide-card--product');
+    if (!cards.length) return;
+
+    const clean = (value) => String(value || '')
+      .replace(/\s+/g, ' ')
+      .replace(/^(Troubleshooting|Pro tip|qualit(?:à|a)|Take Away \(TW\)):\s*/i, '')
+      .trim();
+
+    const firstText = (root, selector) => clean(root.querySelector(selector)?.textContent || '');
+
+    cards.forEach((card) => {
+      card.querySelector('[data-training-brief]')?.remove();
+
+      const title = firstText(card, 'h3');
+      const description = firstText(card, 'p');
+      const stats = [...card.querySelectorAll('.stat-list li')]
+        .map((item) => clean(item.textContent))
+        .filter(Boolean);
+      const steps = [...card.querySelectorAll('.details .steps span')]
+        .map((item) => clean(item.textContent.replace(/^\d+\s*·\s*/, '')))
+        .filter(Boolean);
+      const tip = firstText(card, '.details .tips') || steps[steps.length - 1] || stats[1] || '';
+      const remember = stats[0] || steps[0] || description;
+      const quizAnswer = stats[1] || remember;
+
+      if (!remember && !description && !tip) return;
+
+      const brief = document.createElement('div');
+      brief.className = 'training-brief';
+      brief.setAttribute('data-training-brief', '');
+
+      const items = [
+        {
+          icon: '🎯',
+          label: tr('trainingBrief.remember', null, 'Cosa ricordare'),
+          text: remember,
+        },
+        {
+          icon: '⚠️',
+          label: tr('trainingBrief.avoid', null, 'Errore da evitare'),
+          text: tip,
+        },
+        {
+          icon: '💬',
+          label: tr('trainingBrief.customer', null, 'Come dirlo al cliente'),
+          text: description,
+        },
+        {
+          icon: '❓',
+          label: tr('trainingBrief.quiz', null, 'Mini quiz'),
+          text: tr('trainingBrief.quizPrompt', { title }, `Punto chiave di ${title || 'questa scheda'}: ${quizAnswer}`),
+        },
+      ].filter((item) => item.text);
+
+      items.forEach((item) => {
+        const row = document.createElement('div');
+        row.className = 'training-brief__item';
+        const icon = document.createElement('span');
+        icon.className = 'training-brief__icon';
+        icon.setAttribute('aria-hidden', 'true');
+        icon.textContent = item.icon;
+        const copy = document.createElement('span');
+        copy.className = 'training-brief__copy';
+        const label = document.createElement('strong');
+        label.textContent = item.label;
+        const text = document.createElement('small');
+        text.textContent = item.text;
+        copy.append(label, text);
+        row.append(icon, copy);
+        brief.appendChild(row);
+      });
+
+      const statList = card.querySelector('.stat-list');
+      if (statList) {
+        statList.insertAdjacentElement('afterend', brief);
+      } else {
+        const desc = card.querySelector('p');
+        desc?.insertAdjacentElement('afterend', brief);
+      }
     });
   }
 
