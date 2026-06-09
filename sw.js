@@ -3,30 +3,39 @@
  * - Network-first for HTML (so updates land fast)
  * - Skip cache for video_embargo (large) and external URLs
  */
-const VERSION = 'badiani-v1-20260509';
+const VERSION = 'badiani-v2-20260609-03';
 const STATIC_CACHE = `${VERSION}-static`;
 const RUNTIME_CACHE = `${VERSION}-runtime`;
 
 const PRECACHE = [
   './',
   './index.html',
+  './caffe.html',
+  './gelato-lab.html',
+  './pastries.html',
+  './sweet-treats.html',
+  './festive.html',
+  './operations.html',
+  './story-orbit.html',
+  './quiz-solution.html',
   './styles/site.css',
   './scripts/config.js',
   './scripts/site.js',
   './scripts/i18n.js',
-  './scripts/berny-knowledge.js',
-  './scripts/berny-super-knowledge.js',
-  './scripts/berny-brain-api.js',
-  './scripts/berny-ui.js',
-  './scripts/berny-widget-controller.js',
-  './scripts/search-catalog-seed.js',
+  './scripts/i18n-manager.js',
+  './scripts/deep-link.js',
   './scripts/avatar-lab.js',
   './scripts/gelato-effects.js',
+  './scripts/berny-ui.js',
   './scripts/vendor/lottie-player.js',
   './manifest.webmanifest',
+  './assets/brand/logo-badiani.webp',
   './assets/brand/logo-b-blue.webp',
-  './assets/brand/logo-badiani.jpg',
+  './assets/brand/logo-b-blue-180.png',
+  './assets/brand/favicon-64.png',
+  './assets/avatars/berni-avatar.webp',
   './fonts/stylesheet.css',
+  './fonts/SuperGroteskB-CdMed.woff2',
 ];
 
 self.addEventListener('install', (event) => {

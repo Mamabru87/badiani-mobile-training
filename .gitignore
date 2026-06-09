@@ -21,9 +21,8 @@ da-revisionare/
 *.psd
 
 
-# Large source assets (use external storage / Drive)
-notes/*.docx
-notes/*.pdf
+# Internal notes / source assets (keep local or in Obsidian, not in production repo)
+notes/
 berny video/
 # Mojibake repair backups (temporary)
 _mojibake_backup_*/

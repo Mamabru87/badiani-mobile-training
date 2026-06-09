@@ -2336,7 +2336,7 @@ scrollButtons.forEach((btn) => {
       const spr = document.createElement('div');
       spr.className = 'avatar-sprite avatar-sprite--assistant';
       spr.setAttribute('data-avatar-sprite', '');
-      spr.setAttribute('data-avatar-src', 'assets/avatars/berni-avatar.png?v=20251228');
+      spr.setAttribute('data-avatar-src', 'assets/avatars/berni-avatar.webp?v=20260609');
       spr.setAttribute('data-avatar-cols', '6');
       spr.setAttribute('data-avatar-rows', '4');
       spr.setAttribute('data-avatar-fps', '6');
@@ -3266,7 +3266,7 @@ scrollButtons.forEach((btn) => {
     try {
       avatarContainer.innerHTML = '';
       const img = document.createElement('img');
-      img.src = 'assets/avatars/berni-avatar.png';
+      img.src = 'assets/avatars/berni-avatar.webp';
       img.alt = 'BERNY';
       img.width = 50;
       img.height = 50;
@@ -9396,7 +9396,7 @@ Rispondi SOLO con il JSON, nient\'altro.`;
       bernyHeader.className = 'berny-quiz-header';
       bernyHeader.innerHTML = `
         <div class="berny-quiz-avatar">
-          <img src="assets/avatars/berni-avatar.png" alt="Berny" loading="lazy" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" />
+          <img src="assets/avatars/berni-avatar.webp" alt="Berny" loading="lazy" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" />
         </div>
         <div class="berny-quiz-info">
           <h3 class="berny-quiz-name">Berny</h3>
@@ -10416,7 +10416,7 @@ Rispondi SOLO con il JSON, nient\'altro.`;
     loadingContainer.className = 'reward-modal berny-quiz-loading';
     loadingContainer.innerHTML = `
       <div class="berny-avatar-section">
-        <img src="assets/avatars/berni-avatar.png" alt="Berny" class="berny-avatar-loading" />
+        <img src="assets/avatars/berni-avatar.webp" alt="Berny" class="berny-avatar-loading" />
       </div>
       <h3 class="reward-modal__title" style="margin-top: 0.5rem; color: #E30613; font-size: 18px;">${tr('berny.loading', null, 'Berny sta pensando...')}</h3>
       <div class="berny-loading-dots" style="margin-top: 0.5rem;">
