@@ -1006,9 +1006,6 @@ window.addEventListener('avatar-updated', (e) => {
   // ============================================================
   const AUTH_TOKEN_KEY = 'badianiAuth.token.v1';
   const AUTH_VERIFIED_AT_KEY = 'badianiAuth.verifiedAt.v1';
-  // Beta-only: allow entering the UI without a phone (does NOT grant server-side access).
-  // This is intentionally separate from the real token so it won\'t compromise normal login.
-  const AUTH_BETA_SKIP_KEY = 'badianiAuth.betaSkip.v1';
 
   const getAuthToken = () => {
     try { return String(localStorage.getItem(AUTH_TOKEN_KEY) || '').trim(); } catch { return ''; }
@@ -1036,14 +1033,8 @@ window.addEventListener('avatar-updated', (e) => {
     return (exp * 1000) > Date.now();
   };
 
-  const isVerifiedOrBeta = () => {
-    if (isVerified()) return true;
-    try {
-      return String(localStorage.getItem(AUTH_BETA_SKIP_KEY) || '') === '1';
-    } catch {
-      return false;
-    }
-  };
+  // Phone verification is mandatory in production.
+  const isVerifiedOrBeta = () => isVerified();
 
   const getAuthBase = () => {
     // Prefer explicit endpoint.
@@ -1158,19 +1149,31 @@ window.addEventListener('avatar-updated', (e) => {
 
     const card = document.createElement('div');
     card.className = 'signup-card';
-    card.style.cssText = `width: min(92vw, 480px); max-height: min(90vh, 700px); background: #fff; border-radius: 16px; box-shadow: 0 16px 44px rgba(15,33,84,0.18); padding: 24px; color: var(--ink, #0f2154); overflow-y: auto; -webkit-overflow-scrolling: touch; margin: auto;`;
+    card.style.cssText = `width: min(92vw, 520px); max-height: min(92vh, 760px); background: linear-gradient(180deg, #fff 0%, #fff8f0 100%); border: 1px solid rgba(33,64,152,0.12); border-radius: 24px; box-shadow: 0 22px 70px rgba(15,33,84,0.22); padding: 24px; color: var(--ink, #0f2154); overflow-y: auto; -webkit-overflow-scrolling: touch; margin: auto;`;
 
     const verifiedNow = isVerifiedOrBeta();
 
     card.innerHTML = `
-      <h2 id="signup-title" style="margin:0 0 16px 0; font-size:24px; font-family: var(--font-medium);">Badiani Training</h2>
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+        <div aria-hidden="true" style="width:52px; height:52px; border-radius:18px; display:grid; place-items:center; background:#214098; color:#fff; box-shadow:0 12px 26px rgba(33,64,152,0.24); font-size:28px;">🍦</div>
+        <div>
+          <p style="margin:0 0 4px 0; color:#ec418c; font-size:12px; letter-spacing:.12em; text-transform:uppercase; font-weight:800;">Training Orbit</p>
+          <h2 id="signup-title" style="margin:0; font-size:26px; line-height:1.02; font-family: var(--font-medium);">${tr('auth.welcome.title', null, 'Benvenuto nel playbook Badiani')}</h2>
+        </div>
+      </div>
+      <p style="margin:0 0 14px 0; color: var(--brand-gray, #4f515e); font-size:15px; line-height:1.45;">${tr('auth.welcome.lede', null, 'Verifica il tuo numero per entrare nella training app, salvare i progressi e iniziare il percorso tra prodotti, procedure, quiz e reward.')}</p>
+      <div style="display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap:8px; margin:0 0 18px 0;">
+        <div style="border:1px solid rgba(33,64,152,.14); border-radius:14px; padding:9px 8px; background:#fff; text-align:center;"><strong style="display:block; color:#214098; font-size:18px;">⭐</strong><span style="font-size:11px; color:#4f515e; font-weight:700;">Stelline</span></div>
+        <div style="border:1px solid rgba(236,65,140,.18); border-radius:14px; padding:9px 8px; background:#fff; text-align:center;"><strong style="display:block; color:#ec418c; font-size:18px;">🍨</strong><span style="font-size:11px; color:#4f515e; font-weight:700;">Gelato</span></div>
+        <div style="border:1px solid rgba(242,190,88,.32); border-radius:14px; padding:9px 8px; background:#fff; text-align:center;"><strong style="display:block; color:#b7791f; font-size:18px;">🧠</strong><span style="font-size:11px; color:#4f515e; font-weight:700;">Quiz</span></div>
+      </div>
       <div style="display:flex; gap:12px; margin-bottom:16px;">
         <button type="button" data-tab="verify" class="tab-btn ${verifiedNow ? '' : 'is-active'}" style="flex:1; padding:10px; border-radius:10px; border:2px solid ${verifiedNow ? '#d1d5db' : '#214098'}; background:${verifiedNow ? 'transparent' : '#214098'}; color:${verifiedNow ? '#0f2154' : '#fff'}; font-weight:600; cursor:pointer;">${tr('auth.verify.tab', null, 'Verifica')}</button>
         <button type="button" data-tab="signup" class="tab-btn ${verifiedNow ? 'is-active' : ''}" ${verifiedNow ? '' : 'disabled'} style="flex:1; padding:10px; border-radius:10px; border:2px solid ${verifiedNow ? '#214098' : '#d1d5db'}; background:${verifiedNow ? '#214098' : '#f3f4f6'}; color:${verifiedNow ? '#fff' : '#9ca3af'}; font-weight:600; cursor:${verifiedNow ? 'pointer' : 'not-allowed'};">${tr('profile.gate.signup', null, 'Iscrizione')}</button>
         <button type="button" data-tab="login" class="tab-btn" ${verifiedNow ? '' : 'disabled'} style="flex:1; padding:10px; border-radius:10px; border:2px solid #d1d5db; background:${verifiedNow ? 'transparent' : '#f3f4f6'}; color:${verifiedNow ? '#0f2154' : '#9ca3af'}; font-weight:600; cursor:${verifiedNow ? 'pointer' : 'not-allowed'};">${tr('profile.gate.login', null, 'Accedi')}</button>
       </div>
       <div data-panel="verify" style="display:${verifiedNow ? 'none' : 'block'};">
-        <p style="margin:0 0 16px 0; color: var(--brand-gray-soft, #6b7280);">${tr('auth.verify.lede', null, 'Inserisci il tuo numero di cellulare. Se risulti nel registro Badiani, riceverai un codice SMS per sbloccare l\'accesso.')}</p>
+        <p style="margin:0 0 16px 0; color: var(--brand-gray-soft, #6b7280);">${tr('auth.verify.lede', null, 'Accesso riservato allo staff Badiani: inserisci il tuo numero, ricevi il codice SMS e sblocca il tuo percorso training personale.')}</p>
 
         <div style="display:grid; gap:10px;">
           <label style="display:block; font-weight:600; margin-bottom:6px;">${tr('auth.verify.phoneLabel', null, 'Numero di cellulare')}</label>
@@ -1186,10 +1189,6 @@ window.addEventListener('avatar-updated', (e) => {
 
           <button type="button" data-action="verify-otp" style="padding:10px 14px; border-radius:10px; background:#0f2154; color:#fff; border:none; font-weight:600; cursor:pointer;">${tr('auth.verify.confirmBtn', null, 'Conferma e continua')}</button>
 
-          <div style="border-top:1px solid #d1d5db; padding-top:10px; margin-top:10px;">
-            <p style="margin:0 0 10px 0; font-size:12px; color:#666; font-weight:600;">🧪 BETA - Accedi senza verifica:</p>
-            <button type="button" data-action="skip-verification" style="width:100%; padding:10px 14px; border-radius:10px; background:#f3f4f6; color:#0f2154; border:1px solid #d1d5db; font-weight:600; cursor:pointer;">${tr('auth.beta.skipBtn', null, 'Continua senza numero (test)')}</button>
-          </div>
         </div>
       </div>
 
@@ -1376,8 +1375,6 @@ window.addEventListener('avatar-updated', (e) => {
         }
         localStorage.setItem(AUTH_TOKEN_KEY, token);
         localStorage.setItem(AUTH_VERIFIED_AT_KEY, String(Date.now()));
-        // If user later completes real verification, remove beta bypass.
-        try { localStorage.removeItem(AUTH_BETA_SKIP_KEY); } catch {}
         setVerifyMessage('info', tr('auth.verify.ok', null, 'Verifica completata. Ora puoi accedere.'));
 
         updateTabsEnabled();
@@ -1391,20 +1388,6 @@ window.addEventListener('avatar-updated', (e) => {
 
     if (sendOtpBtn) sendOtpBtn.addEventListener('click', (e) => { e.preventDefault(); requestOtp(); });
     if (verifyOtpBtn) verifyOtpBtn.addEventListener('click', (e) => { e.preventDefault(); confirmOtp(); });
-
-    // Beta: Skip verification (bypass phone verification for testing)
-    const skipVerificationBtn = verifyPanel?.querySelector('[data-action="skip-verification"]');
-    if (skipVerificationBtn) {
-      skipVerificationBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        // Mark as verified in beta mode (UI-only; does not create a real auth token)
-        try { localStorage.setItem(AUTH_BETA_SKIP_KEY, '1'); } catch {}
-        try { localStorage.setItem(AUTH_VERIFIED_AT_KEY, String(Date.now())); } catch {}
-        setVerifyMessage('info', tr('auth.beta.enabled', null, '✓ Modalità beta attivata. Procedi con la creazione del profilo.'));
-        updateTabsEnabled();
-        switchTab('signup');
-      });
-    }
 
     if (signupForm) {
       const submitBtn = signupForm.querySelector('button[type="submit"]');
@@ -17359,11 +17342,6 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const isVerifiedOrBeta = () => {
-    try {
-      const beta = String(localStorage.getItem('badianiAuth.betaSkip.v1') || '') === '1';
-      if (beta) return true;
-    } catch {}
-
     try {
       const token = String(localStorage.getItem('badianiAuth.token.v1') || '').trim();
       if (!token) return false;
