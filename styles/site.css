@@ -7,7 +7,7 @@
 }
 
 @font-face {
-  font-family: "SuperGrotesk-Medium";
+  font-family: "SuperGrotesk-CondensedMedium";
   src: url("../fonts/SuperGroteskB-CdMed.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
@@ -15,7 +15,7 @@
 }
 
 @font-face {
-  font-family: "supergroteskc-medlf";
+  font-family: "SuperGrotesk-Medium";
   src: url("../fonts/SuperGroteskC-MedLF.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
@@ -48,8 +48,10 @@
   --anim-fast: 180ms;
   --anim-slow: 420ms;
   --slate: var(--brand-gray-soft);
-  --font-regular: "supergroteskc-medlf", Arial, sans-serif;
-  --font-medium: "supergroteskc-medlf", Arial, sans-serif;
+  --font-regular: "SuperGrotesk-Regular", Arial, sans-serif;
+  --font-heading: "SuperGrotesk-Regular", Arial, sans-serif;
+  --font-title: "SuperGrotesk-CondensedMedium", "SuperGrotesk-Medium", Arial, sans-serif;
+  --font-medium: "SuperGrotesk-Medium", "SuperGrotesk-Regular", Arial, sans-serif;
   /* Sticky stack metrics (updated at runtime by scripts/site.js).
      Used to prevent the sticky nav from overlapping carousel sticky headers. */
     --nav-height: 72px;
@@ -246,6 +248,31 @@ body {
   -webkit-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;
+}
+
+
+/* Brand typography rules — Badiani brandbook */
+body, button, input, textarea, select {
+  font-family: var(--font-regular);
+  font-weight: 400;
+}
+
+h1, .hero h1, .hero-card h1, .hero-title, .page-home .hero h1 {
+  font-family: var(--font-title);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.045em;
+}
+
+h2, h3, h4, .carousel-title, .guide-card h3, .daily-mission h2 {
+  font-family: var(--font-heading);
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+strong, b, .btn, .tag, .badge, .nav-token, .training-brief__copy strong {
+  font-family: var(--font-medium);
+  font-weight: 500;
 }
 
 /* Allow text selection inside form fields so typing/editing still works */
@@ -784,7 +811,7 @@ body.page-home {
   font-size: 9px;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--brand-blue-deep);
   opacity: 0.8;
   margin-bottom: 4px;
@@ -792,7 +819,7 @@ body.page-home {
 
 .hub-card__title {
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--brand-blue);
   margin: 0;
 }
@@ -808,7 +835,7 @@ body.page-home {
 
 .hub-card__big-text {
   font-size: 30px;
-  font-weight: 800;
+  font-weight: 500;
   line-height: 1;
   color: var(--brand-rose); /* Pink for numbers */
   font-family: var(--font-medium);
@@ -836,7 +863,7 @@ body.page-home {
   padding: 10px 20px;
   font-size: 13px;
   letter-spacing: 0.02em;
-  font-weight: 600;
+  font-weight: 500;
   transition: all 0.2s ease;
   width: 100%;
 }
@@ -888,7 +915,7 @@ body.page-home {
 
 .hub-card .stat-value {
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--brand-blue);
 }
 
@@ -1833,7 +1860,7 @@ h4 {
   border: 1px solid rgba(33, 64, 152, 0.3);
   background: rgba(33, 64, 152, 0.05);
   color: var(--ink);
-  font-weight: 600;
+  font-weight: 500;
   padding: 0;
   border-radius: 999px;
   display: inline-grid;
@@ -2804,7 +2831,7 @@ h4 {
   color: rgba(255, 255, 255, 0.96);
   border: 1px solid rgba(255, 255, 255, 0.18);
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 0.01em;
   user-select: none;
 }
@@ -3099,7 +3126,7 @@ h4 {
 
 .berny-quiz-name {
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 500;
   color: #E30613;
   margin: 0 0 2px 0;
   letter-spacing: 0.02em;
@@ -3183,7 +3210,7 @@ h4 {
   font-size: 16px;
   color: #E30613;
   margin-bottom: 6px;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 /* ============================================================
@@ -3320,7 +3347,7 @@ h4 {
   font-size: 16px;
   letter-spacing: 2px;
   color: var(--ink);
-  font-weight: 600;
+  font-weight: 500;
   height: 24px;
   display: flex;
   align-items: center;
@@ -3350,7 +3377,7 @@ h4 {
   opacity: 0;
   animation: fadeInShort 0.3s ease 0.2s forwards;
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--ink);
   line-height: 1.6;
 }
@@ -4346,7 +4373,7 @@ h4 {
   letter-spacing: 0.1em;
   color: var(--brand-rose);
   font-family: var(--font-medium);
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .daily-challenge__question {
@@ -4354,7 +4381,7 @@ h4 {
   line-height: 1.6;
   color: var(--ink);
   font-family: var(--font-medium);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .daily-challenge__hint {
@@ -4948,7 +4975,7 @@ h4 {
 button,
 .btn {
   border: none;
-  font-weight: 600;
+  font-weight: 500;
   border-radius: 999px;
   padding: 12px 20px;
   cursor: pointer;
@@ -5471,7 +5498,7 @@ button,
 }
 
 .card footer span {
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .card footer a {
@@ -5594,7 +5621,7 @@ button,
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .category-cta a {
@@ -5660,7 +5687,7 @@ button,
 .drawer-body footer {
   display: flex;
   justify-content: space-between;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .drawer.is-open .drawer-body {
@@ -5856,7 +5883,7 @@ section.carousel:last-of-type {
 
 .carousel-title {
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--brand-blue);
   transition: color 0.3s ease;
   margin: 0;
@@ -6131,7 +6158,7 @@ section.carousel:last-of-type {
 
 .footer-title {
   font-size: 28px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--brand-blue);
   margin: 0;
 }
@@ -6155,7 +6182,7 @@ section.carousel:last-of-type {
 
 .stat-value {
   font-size: 24px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--brand-blue);
 }
 
@@ -6218,7 +6245,7 @@ section.carousel:last-of-type {
   border-radius: 0;
   font-size: 16px;
   line-height: 1;
-  font-weight: 800;
+  font-weight: 500;
   background: transparent;
   color: var(--brand-rose);
   flex: 0 0 auto;
@@ -6373,7 +6400,7 @@ section.carousel:last-of-type {
 .shelf-life-table th {
   background: var(--brand-gold);
   color: #fff;
-  font-weight: 600;
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   padding: 8px 12px;
@@ -6395,7 +6422,7 @@ section.carousel:last-of-type {
 }
 
 .shelf-life-table td:nth-child(2) {
-  font-weight: 600;
+  font-weight: 500;
   color: var(--brand-gold);
 }
 
@@ -6445,7 +6472,7 @@ section.carousel:last-of-type {
   display: inline-flex;
   align-items: center;
   gap: 0.35em;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--brand-blue);
 }
 
@@ -7189,7 +7216,7 @@ section.carousel:last-of-type {
     color: var(--ink);
     text-align: center;
     line-height: 1.25;
-    font-weight: 600;
+    font-weight: 500;
   }
 
   .card-modal-crystals {
@@ -7234,7 +7261,7 @@ section.carousel:last-of-type {
 
 .card-modal-crystals__value {
   font-size: 1.05em;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--brand-rose);
 }
 
@@ -7536,7 +7563,7 @@ section.carousel:last-of-type {
   top: 50%;
   transform: translateY(-50%);
   color: var(--brand-rose);
-  font-weight: 800;
+  font-weight: 500;
   font-size: 15px;
   background: rgba(236, 65, 140, 0.12);
   width: 22px;
@@ -8614,7 +8641,7 @@ body.page-product .badge {
 /* Section titles inside accordion tabs: match the pink uppercase heading style */
 .card-modal .modal-accordion .accordion-item .card-modal-section__title {
   font-family: "SuperGrotesk-Medium", Arial, sans-serif;
-  font-weight: 600;
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.18em;
   font-size: 13px;
@@ -8652,7 +8679,7 @@ body.page-product .badge {
   font-size: 13px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--brand-rose);
 }
 
@@ -8721,14 +8748,14 @@ body.page-product .badge {
 /* Strong text (titles/headings) use medium font */
 .card-modal .modal-accordion .accordion-body strong {
   font-family: "SuperGrotesk-Medium", Arial, sans-serif;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--brand-rose);
 }
 
 /* Checklist + mini-specs: labels like “Obiettivo:” / “Focus:” should match the uppercase pink heading style */
 .card-modal .modal-accordion .accordion-body .modal-specs__bullets strong {
   font-family: "SuperGrotesk-Medium", Arial, sans-serif;
-  font-weight: 600;
+  font-weight: 500;
   display: block;
   text-transform: uppercase;
   letter-spacing: 0.18em;
@@ -8740,7 +8767,7 @@ body.page-product .badge {
 /* Essentials bullets inside accordion: keep labels consistent too */
 .card-modal .modal-accordion .accordion-body .card-modal-essentials__bullets strong {
   font-family: "SuperGrotesk-Medium", Arial, sans-serif;
-  font-weight: 600;
+  font-weight: 500;
   display: block;
   text-transform: uppercase;
   letter-spacing: 0.18em;
@@ -9344,7 +9371,7 @@ body.page-product .badge {
   background: #ffffff;
   color: var(--ink);
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
   line-height: 1;
 }
@@ -9619,7 +9646,7 @@ body.page-home {
 .menu-drawer__title {
   font-family: var(--font-display);
   font-size: 24px;
-  font-weight: 800;
+  font-weight: 500;
   color: var(--brand-blue-deep);
   margin: 0;
   letter-spacing: -0.01em;
@@ -9630,7 +9657,7 @@ body.page-home {
   font-size: 15px;
   color: var(--ink-soft);
   line-height: 1.35;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .menu-search {
@@ -9684,7 +9711,7 @@ body.page-home {
   margin: 0;
   font-family: var(--font-display);
   font-size: 15px;
-  font-weight: 900;
+  font-weight: 500;
   color: var(--brand-blue-deep);
   line-height: 1.2;
 }
@@ -10095,7 +10122,7 @@ body.page-home {
 
 .menu-search__suggestion strong {
   display: block;
-  font-weight: 700;
+  font-weight: 500;
   font-size: 14px;
 }
 
@@ -10103,7 +10130,7 @@ body.page-home {
   display: block;
   font-size: 12px;
   color: var(--brand-blue);
-  font-weight: 700;
+  font-weight: 500;
 
   margin-top: 2px;
 }
@@ -10712,7 +10739,7 @@ body.page-home {
 }
 
 .menu-lang__current {
-  font-weight: 800;
+  font-weight: 500;
   color: var(--brand-blue-deep);
 }
 
@@ -10731,7 +10758,7 @@ body.page-home {
   padding: 10px 12px;
   font-family: var(--font-medium);
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 500;
   letter-spacing: 0.01em;
   color: var(--brand-blue-deep);
   cursor: pointer;
@@ -10850,7 +10877,7 @@ body.page-home {
 .btn-learn-hero__text {
   font-family: var(--font-display);
   font-size: 32px;
-  font-weight: 900;
+  font-weight: 500;
   letter-spacing: 0.05em;
   color: #ffffff;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
@@ -10861,7 +10888,7 @@ body.page-home {
 .btn-learn-hero__hint {
   font-family: var(--font-medium);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.02em;
   color: rgba(255, 255, 255, 0.9);
   position: relative;
@@ -11587,7 +11614,7 @@ body.page-home {
     color: white !important;
     border: none;
     margin-right: 10px;
-    font-weight: bold;
+    font-weight: 500;
 }
 .study-link-btn:hover {
     background-color: #b30000 !important;
@@ -11688,7 +11715,7 @@ body.page-home {
 }
 
 .menu-logo {
-  font-weight: 800;
+  font-weight: 500;
   color: #002B5C;
   font-size: 1.2rem;
   display: flex;
@@ -11742,7 +11769,7 @@ body.page-home {
 
 .menu-grid .menu-label {
   font-size: 0.9rem;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 /* FOOTER */
@@ -11760,7 +11787,7 @@ body.page-home {
   border: 1px solid #eee;
   border-radius: 10px;
   background: white;
-  font-weight: 600;
+  font-weight: 500;
   color: #002B5C;
   cursor: pointer;
   display: flex;
@@ -11933,7 +11960,7 @@ body.page-home {
   border: 1px solid rgba(33, 64, 152, 0.08);
   border-radius: 20px;
   color: var(--brand-blue-deep, #0f2154);
-  font-weight: 600;
+  font-weight: 500;
   font-size: 15px;
   text-decoration: none;
   transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -11976,7 +12003,7 @@ body.page-home {
   border: 1px solid rgba(33, 64, 152, 0.15);
   border-radius: 12px;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--ink);
 }
 
@@ -12004,7 +12031,7 @@ body.page-home {
   border-radius: 12px;
   background: #ffffff;
   color: var(--brand-blue, #214098);
-  font-weight: 600;
+  font-weight: 500;
   font-size: 14px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -12297,7 +12324,7 @@ body.page-product .hero + .carousel .carousel-header {
   border: 2px dashed rgba(33,64,152,0.35);
   color: var(--brand-blue);
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
   text-align: center;
   padding: 12px;
 }
@@ -12334,7 +12361,7 @@ body.page-product .hero + .carousel .carousel-header {
   color: var(--brand-gray);
   text-align: center;
   margin-top: 4px;
-  font-weight: 600;
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -12358,7 +12385,7 @@ body.page-product .hero + .carousel .carousel-header {
 .details .details-caption {
   margin: 0 0 10px;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--brand-blue);
   text-align: center;
 }
@@ -12442,5 +12469,29 @@ img.is-zoomable { cursor: zoom-in; }
 html.image-lightbox-locked, html.image-lightbox-locked body { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .image-lightbox, .image-lightbox__img { transition: none; }
+}
+
+/* Final Badiani brandbook typography guard */
+body, button, input, textarea, select {
+  font-family: var(--font-regular);
+  font-weight: 400;
+}
+
+h1, .hero h1, .hero-card h1, .hero-title, .page-home .hero h1 {
+  font-family: var(--font-title);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+h2, h3, h4, .carousel-title, .guide-card h3, .daily-mission h2 {
+  font-family: var(--font-heading);
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+strong, b, .btn, .btn-primary, .btn-secondary, .btn-ghost, .tag, .badge, .nav-token,
+.menu-action-btn, .training-brief__copy strong {
+  font-family: var(--font-medium);
+  font-weight: 500;
 }
 
