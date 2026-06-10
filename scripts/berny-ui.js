@@ -39,7 +39,7 @@
 
   const sanitize = (value) => String(value ?? '').trim();
 
-  const BERNY_SUITE_VERSION = '20260610_17';
+  const BERNY_SUITE_VERSION = '20260610_19';
   const BERNY_SUITE_SCRIPTS = [
     'scripts/berny-knowledge.js',
     'scripts/berny-super-knowledge.js',
@@ -113,6 +113,7 @@
 
       // Track last user message so fallback link inference can use real intent.
       this.lastUserMessage = '';
+      this.pendingCoachQuiz = null;
 
       this.init();
     }
@@ -276,6 +277,63 @@
         .trim();
     }
 
+    buildCoachQuiz(title, answer = '', details = {}) {
+      const cleanAnswer = this.cleanCoachSnippet(answer || details?.remember || details?.description || 'apri la scheda e controlla il primo punto operativo.');
+      const normalizedAnswer = this.normalizeCoachText(cleanAnswer);
+      const rawDecoys = [
+        details?.avoid ? `Saltare il controllo: ${this.cleanCoachSnippet(details.avoid)}` : '',
+        'Servire senza verificare formato, temperatura o procedura della scheda.',
+        'Ricordare solo il nome del prodotto, senza controllare quantità e passaggi.',
+      ].filter(Boolean).filter((item) => {
+        const normalizedItem = this.normalizeCoachText(item);
+        return normalizedItem !== normalizedAnswer && !normalizedItem.includes(normalizedAnswer) && !normalizedAnswer.includes(normalizedItem);
+      });
+      const options = [cleanAnswer, ...rawDecoys].slice(0, 3);
+
+      while (options.length < 3) options.push('Aprire la scheda solo dopo aver servito il cliente.');
+
+      const offset = Math.abs(String(title || '').split('').reduce((sum, char) => sum + char.charCodeAt(0), 0)) % 3;
+      const ordered = [0, 1, 2].map((_, index) => options[(index + offset) % 3]);
+      const correctIndex = ordered.findIndex((item) => item === cleanAnswer);
+      const labels = ['A', 'B', 'C'];
+      const correctLabel = labels[Math.max(0, correctIndex)];
+
+      this.pendingCoachQuiz = {
+        title,
+        correctLabel,
+        correctAnswer: cleanAnswer,
+        createdAt: Date.now(),
+      };
+
+      return `Mini quiz — ${title}\nDomanda: qual è il punto operativo corretto da ricordare?\n\n${ordered.map((item, index) => `${labels[index]}) ${item}`).join('\n')}\n\nRispondi solo con A, B o C. Non ti do la soluzione finché non provi.`;
+    }
+
+    tryHandlePendingCoachQuiz(message = '') {
+      const pending = this.pendingCoachQuiz;
+      if (!pending) return null;
+      const normalized = this.normalizeCoachText(message);
+      const match = normalized.match(/^([abc])$/i) || normalized.match(/\b([abc])\b/i);
+      if (!match) {
+        return {
+          text: `Hai ancora un mini quiz aperto su ${pending.title}. Rispondi con A, B o C: niente soluzione prima del tentativo.`,
+          intent: 'quiz-pending',
+          title: pending.title,
+          links: [],
+        };
+      }
+      const answer = match[1].toUpperCase();
+      const ok = answer === pending.correctLabel;
+      this.pendingCoachQuiz = null;
+      return {
+        text: ok
+          ? `Corretto.\nLa risposta era ${pending.correctLabel}: ${pending.correctAnswer}\nBravo: hai fissato il punto chiave senza spoiler.`
+          : `Quasi, ma non è quella.\nLa risposta corretta era ${pending.correctLabel}: ${pending.correctAnswer}\nRiapri la scheda e ripassa quel punto prima del turno.`,
+        intent: ok ? 'quiz-correct' : 'quiz-wrong',
+        title: pending.title,
+        links: [],
+      };
+    }
+
     getCoachIntent(message = '') {
       const text = this.normalizeCoachText(message);
       if (!text) return null;
@@ -435,7 +493,7 @@
 
       if (intent === 'quiz') {
         const answer = details?.quizAnswer || details?.remember || 'apri la scheda e controlla il primo punto operativo.';
-        text = `Mini quiz — ${title}\nDomanda: qual è il punto chiave da ricordare in questa scheda?\nRisposta attesa: ${answer}`;
+        text = this.buildCoachQuiz(title, answer, details);
       } else if (intent === 'avoid') {
         const avoid = details?.avoid || 'controlla la procedura completa prima del servizio.';
         text = `Errore da evitare — ${title}\nPunto da non sbagliare: ${avoid}\nSe sei al banco, apri la scheda e verifica il passaggio prima di servire.`;
@@ -480,10 +538,20 @@
       this.showTypingIndicator();
       this.animateAvatar('thinking');
 
+      const pendingQuizReply = this.tryHandlePendingCoachQuiz(message);
+      if (pendingQuizReply) {
+        this.hideTypingIndicator();
+        this.addMessage(pendingQuizReply.text, 'berny');
+        this.animateAvatar('idle');
+        this.playSynthSound('received');
+        return;
+      }
+
       const brain = await ensureBernySuite().catch((err) => {
         console.warn('BERNY lazy-load failed:', err);
         return null;
       });
+
       const coachReply = await this.tryHandleCoachIntent(message).catch((err) => {
         console.warn('BERNY coach intent failed:', err);
         return null;
