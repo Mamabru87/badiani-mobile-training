@@ -5520,6 +5520,37 @@ const gamification = (() => {
         brief.appendChild(row);
       });
 
+      if (title) {
+        const actions = document.createElement('div');
+        actions.className = 'training-brief__actions';
+        const coachActions = [
+          { label: 'Ripassa', intent: 'review', prompt: `Ripassami la scheda ${title}` },
+          { label: 'Quiz', intent: 'quiz', prompt: `Fammi un mini quiz su ${title}` },
+          { label: 'Errori', intent: 'avoid', prompt: `Qual è l’errore da evitare su ${title}?` },
+        ];
+        coachActions.forEach((action) => {
+          const link = document.createElement('span');
+          link.setAttribute('role', 'link');
+          link.setAttribute('tabindex', '0');
+          link.className = `training-brief__coach-link training-brief__coach-link--${action.intent}`;
+          const targetUrl = `index.html?berny=${encodeURIComponent(action.intent)}&card=${encodeURIComponent(title)}`;
+          link.textContent = action.label;
+          link.setAttribute('aria-label', `Chiedi a BERNY: ${action.prompt}`);
+          const goToCoach = (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            if (typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
+            window.location.assign(targetUrl);
+          };
+          link.addEventListener('click', goToCoach);
+          link.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') goToCoach(event);
+          });
+          actions.appendChild(link);
+        });
+        brief.appendChild(actions);
+      }
+
       const statList = card.querySelector('.stat-list');
       if (statList) {
         statList.insertAdjacentElement('afterend', brief);

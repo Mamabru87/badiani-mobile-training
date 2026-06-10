@@ -581,6 +581,41 @@ body.page-home {
   transform: translateY(-1px);
 }
 
+
+.training-brief__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  padding-top: 2px;
+}
+
+.training-brief__coach-link {
+  appearance: none;
+  border: 1px solid rgba(33, 64, 152, 0.16);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--brand-blue);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: var(--font-medium);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  padding: 6px 9px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.training-brief__coach-link--avoid {
+  color: var(--brand-rose-ink);
+  border-color: rgba(236, 65, 140, 0.18);
+}
+
+.training-brief__coach-link--quiz {
+  color: var(--brand-gold-ink);
+  border-color: rgba(242, 190, 88, 0.30);
+}
+
 /* Daily mission dashboard — Sprint 3.1 training UX */
 .page-home .daily-mission {
   display: grid;

@@ -39,7 +39,7 @@
 
   const sanitize = (value) => String(value ?? '').trim();
 
-  const BERNY_SUITE_VERSION = '20260610_08';
+  const BERNY_SUITE_VERSION = '20260610_10';
   const BERNY_SUITE_SCRIPTS = [
     'scripts/berny-knowledge.js',
     'scripts/berny-super-knowledge.js',
@@ -166,6 +166,7 @@
       );
       if (greetingEl) greetingEl.setAttribute('data-greeting', 'true');
       this.renderCoachQuickActions();
+      this.runInitialCoachPromptFromUrl();
 
       // Listen for language changes
       window.addEventListener('i18nUpdated', () => {
@@ -227,6 +228,35 @@
       });
 
       this.messagesArea.appendChild(wrap);
+    }
+
+
+    runInitialCoachPromptFromUrl() {
+      try {
+        const params = new URLSearchParams(window.location.search || '');
+        const intent = (params.get('berny') || '').toLowerCase();
+        const card = String(params.get('card') || '').trim();
+        if (!intent || !card) return;
+        const allowed = new Set(['review', 'quiz', 'avoid']);
+        if (!allowed.has(intent)) return;
+        const runKey = `badiani.bernyCoachRun.${intent}.${card}`;
+        if (sessionStorage.getItem(runKey) === '1') return;
+        sessionStorage.setItem(runKey, '1');
+
+        const prompt = intent === 'quiz'
+          ? `Fammi un mini quiz su ${card}`
+          : intent === 'avoid'
+            ? `Qual è l’errore da evitare su ${card}?`
+            : `Ripassami la scheda ${card}`;
+
+        window.setTimeout(() => {
+          if (!this.chatInput) return;
+          this.chatInput.value = prompt;
+          this.autoResizeInput();
+          this.handleSend();
+          try { document.getElementById('berny')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch {}
+        }, 350);
+      } catch {}
     }
 
     normalizeCoachText(value = '') {
