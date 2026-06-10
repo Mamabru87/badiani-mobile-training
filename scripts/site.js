@@ -1155,39 +1155,39 @@ window.addEventListener('avatar-updated', (e) => {
 
     card.innerHTML = `
       <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
-        <div aria-hidden="true" style="width:52px; height:52px; border-radius:18px; display:grid; place-items:center; background:#214098; color:#fff; box-shadow:0 12px 26px rgba(33,64,152,0.24); font-size:28px;">🍦</div>
+        <div aria-hidden="true" style="width:52px; height:52px; border-radius:18px; display:grid; place-items:center; background:#214098; color:#fff; box-shadow:0 12px 26px rgba(33,64,152,0.24); font-family:var(--font-title); font-size:30px; font-weight:500; letter-spacing:.02em;">B</div>
         <div>
-          <p style="margin:0 0 4px 0; color:#ec418c; font-size:12px; letter-spacing:.12em; text-transform:uppercase; font-weight:800;">Training Orbit</p>
+          <p style="margin:0 0 4px 0; color:#9d1f5d; font-size:12px; letter-spacing:.12em; text-transform:uppercase; font-weight:500;">Training Orbit</p>
           <h2 id="signup-title" style="margin:0; font-size:26px; line-height:1.02; font-family: var(--font-medium);">${tr('auth.welcome.title', null, 'Benvenuto nel playbook Badiani')}</h2>
         </div>
       </div>
       <p style="margin:0 0 14px 0; color: var(--brand-gray, #4f515e); font-size:15px; line-height:1.45;">${tr('auth.welcome.lede', null, 'Verifica il tuo numero per entrare nella training app, salvare i progressi e iniziare il percorso tra prodotti, procedure, quiz e reward.')}</p>
       <div style="display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap:8px; margin:0 0 18px 0;">
-        <div style="border:1px solid rgba(33,64,152,.14); border-radius:14px; padding:9px 8px; background:#fff; text-align:center;"><strong style="display:block; color:#214098; font-size:18px;">⭐</strong><span style="font-size:11px; color:#4f515e; font-weight:700;">Stelline</span></div>
-        <div style="border:1px solid rgba(236,65,140,.18); border-radius:14px; padding:9px 8px; background:#fff; text-align:center;"><strong style="display:block; color:#ec418c; font-size:18px;">🍨</strong><span style="font-size:11px; color:#4f515e; font-weight:700;">Gelato</span></div>
-        <div style="border:1px solid rgba(242,190,88,.32); border-radius:14px; padding:9px 8px; background:#fff; text-align:center;"><strong style="display:block; color:#b7791f; font-size:18px;">🧠</strong><span style="font-size:11px; color:#4f515e; font-weight:700;">Quiz</span></div>
+        <div style="border:1px solid rgba(33,64,152,.14); border-radius:14px; padding:9px 8px; background:#fff; text-align:center;"><strong style="display:block; color:#214098; font-family:var(--font-medium); font-size:18px; font-weight:500;">★</strong><span style="font-size:11px; color:#4f515e; font-weight:500;">Stelline</span></div>
+        <div style="border:1px solid rgba(236,65,140,.18); border-radius:14px; padding:9px 8px; background:#fff; text-align:center;"><strong style="display:block; color:#9d1f5d; font-family:var(--font-medium); font-size:18px; font-weight:500;">B</strong><span style="font-size:11px; color:#4f515e; font-weight:500;">Gelato</span></div>
+        <div style="border:1px solid rgba(242,190,88,.32); border-radius:14px; padding:9px 8px; background:#fff; text-align:center;"><strong style="display:block; color:#8a5600; font-family:var(--font-medium); font-size:18px; font-weight:500;">Q</strong><span style="font-size:11px; color:#4f515e; font-weight:500;">Quiz</span></div>
       </div>
       <div style="display:flex; gap:12px; margin-bottom:16px;">
-        <button type="button" data-tab="verify" class="tab-btn ${verifiedNow ? '' : 'is-active'}" style="flex:1; padding:10px; border-radius:10px; border:2px solid ${verifiedNow ? '#d1d5db' : '#214098'}; background:${verifiedNow ? 'transparent' : '#214098'}; color:${verifiedNow ? '#0f2154' : '#fff'}; font-weight:600; cursor:pointer;">${tr('auth.verify.tab', null, 'Verifica')}</button>
-        <button type="button" data-tab="signup" class="tab-btn ${verifiedNow ? 'is-active' : ''}" ${verifiedNow ? '' : 'disabled'} style="flex:1; padding:10px; border-radius:10px; border:2px solid ${verifiedNow ? '#214098' : '#d1d5db'}; background:${verifiedNow ? '#214098' : '#f3f4f6'}; color:${verifiedNow ? '#fff' : '#9ca3af'}; font-weight:600; cursor:${verifiedNow ? 'pointer' : 'not-allowed'};">${tr('profile.gate.signup', null, 'Iscrizione')}</button>
-        <button type="button" data-tab="login" class="tab-btn" ${verifiedNow ? '' : 'disabled'} style="flex:1; padding:10px; border-radius:10px; border:2px solid #d1d5db; background:${verifiedNow ? 'transparent' : '#f3f4f6'}; color:${verifiedNow ? '#0f2154' : '#9ca3af'}; font-weight:600; cursor:${verifiedNow ? 'pointer' : 'not-allowed'};">${tr('profile.gate.login', null, 'Accedi')}</button>
+        <button type="button" data-tab="verify" class="tab-btn ${verifiedNow ? '' : 'is-active'}" style="flex:1; padding:10px; border-radius:10px; border:2px solid ${verifiedNow ? '#d1d5db' : '#214098'}; background:${verifiedNow ? 'transparent' : '#214098'}; color:${verifiedNow ? '#0f2154' : '#fff'}; font-weight:500; cursor:pointer;">${tr('auth.verify.tab', null, 'Verifica')}</button>
+        <button type="button" data-tab="signup" class="tab-btn ${verifiedNow ? 'is-active' : ''}" ${verifiedNow ? '' : 'disabled'} style="flex:1; padding:10px; border-radius:10px; border:2px solid ${verifiedNow ? '#214098' : '#d1d5db'}; background:${verifiedNow ? '#214098' : '#f3f4f6'}; color:${verifiedNow ? '#fff' : '#9ca3af'}; font-weight:500; cursor:${verifiedNow ? 'pointer' : 'not-allowed'};">${tr('profile.gate.signup', null, 'Iscrizione')}</button>
+        <button type="button" data-tab="login" class="tab-btn" ${verifiedNow ? '' : 'disabled'} style="flex:1; padding:10px; border-radius:10px; border:2px solid #d1d5db; background:${verifiedNow ? 'transparent' : '#f3f4f6'}; color:${verifiedNow ? '#0f2154' : '#9ca3af'}; font-weight:500; cursor:${verifiedNow ? 'pointer' : 'not-allowed'};">${tr('profile.gate.login', null, 'Accedi')}</button>
       </div>
       <div data-panel="verify" style="display:${verifiedNow ? 'none' : 'block'};">
         <p style="margin:0 0 16px 0; color: var(--brand-gray-soft, #6b7280);">${tr('auth.verify.lede', null, 'Accesso riservato allo staff Badiani: inserisci il tuo numero, ricevi il codice SMS e sblocca il tuo percorso training personale.')}</p>
 
         <div style="display:grid; gap:10px;">
-          <label style="display:block; font-weight:600; margin-bottom:6px;">${tr('auth.verify.phoneLabel', null, 'Numero di cellulare')}</label>
+          <label style="display:block; font-weight:500; margin-bottom:6px;">${tr('auth.verify.phoneLabel', null, 'Numero di cellulare')}</label>
           <input type="tel" data-input="phone" placeholder="${tr('auth.verify.phonePh', null, 'Es. +39 333 123 4567')}" style="width:100%; padding:12px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:16px;" />
 
-          <button type="button" data-action="send-otp" style="padding:10px 14px; border-radius:10px; background:#214098; color:#fff; border:none; font-weight:600; cursor:pointer;">${tr('auth.verify.sendBtn', null, 'Invia codice SMS')}</button>
+          <button type="button" data-action="send-otp" style="padding:10px 14px; border-radius:10px; background:#214098; color:#fff; border:none; font-weight:500; cursor:pointer;">${tr('auth.verify.sendBtn', null, 'Invia codice SMS')}</button>
 
-          <label style="display:block; font-weight:600; margin:8px 0 6px;">${tr('auth.verify.codeLabel', null, 'Codice (5 cifre)')}</label>
+          <label style="display:block; font-weight:500; margin:8px 0 6px;">${tr('auth.verify.codeLabel', null, 'Codice (5 cifre)')}</label>
           <input type="text" inputmode="numeric" maxlength="5" data-input="otp" placeholder="${tr('auth.verify.codePh', null, 'Es. 12345')}" style="width:100%; padding:12px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:16px;" />
 
           <p data-error-verify style="margin:0; color:#b91c1c; display:none; font-size:14px;"></p>
           <p data-info-verify style="margin:0; color:#1f2937; display:none; font-size:14px;"></p>
 
-          <button type="button" data-action="verify-otp" style="padding:10px 14px; border-radius:10px; background:#0f2154; color:#fff; border:none; font-weight:600; cursor:pointer;">${tr('auth.verify.confirmBtn', null, 'Conferma e continua')}</button>
+          <button type="button" data-action="verify-otp" style="padding:10px 14px; border-radius:10px; background:#0f2154; color:#fff; border:none; font-weight:500; cursor:pointer;">${tr('auth.verify.confirmBtn', null, 'Conferma e continua')}</button>
 
         </div>
       </div>
@@ -1195,23 +1195,23 @@ window.addEventListener('avatar-updated', (e) => {
       <div data-panel="signup" style="display:${verifiedNow ? 'block' : 'none'};">
         <p style="margin:0 0 16px 0; color: var(--brand-gray-soft, #6b7280);">${tr('profile.gate.signupLead', null, 'Crea un nuovo profilo con il tuo nickname e gusto di gelato preferito.')}</p>
         <form data-form="signup" novalidate>
-          <label style="display:block; font-weight:600; margin-bottom:6px;">${tr('profile.gate.nickname', null, 'Nickname')}</label>
+          <label style="display:block; font-weight:500; margin-bottom:6px;">${tr('profile.gate.nickname', null, 'Nickname')}</label>
           <input type="text" data-input="nickname" name="nickname" placeholder="${tr('profile.gate.nicknamePh', null, 'Es. StellaRosa')}" required style="width:100%; padding:12px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:16px; margin-bottom:14px;" />
-          <label style="display:block; font-weight:600; margin-bottom:6px;">${tr('profile.gate.gelatoLabel', null, 'Gusto gelato preferito')}</label>
+          <label style="display:block; font-weight:500; margin-bottom:6px;">${tr('profile.gate.gelatoLabel', null, 'Gusto gelato preferito')}</label>
           <input type="text" data-input="gelato" name="gelato" placeholder="${tr('profile.gate.gelatoPh', null, 'Es. Buontalenti')}" required style="width:100%; padding:12px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:16px; margin-bottom:18px;" />
           <p data-error style="margin:0 0 12px 0; color:#b91c1c; display:none; font-size:14px;"></p>
-          <button type="submit" style="padding:10px 14px; border-radius:10px; background:#214098; color:#fff; border:none; font-weight:600; cursor:pointer;">${tr('profile.gate.signupBtn', null, 'Iscriviti')}</button>
+          <button type="submit" style="padding:10px 14px; border-radius:10px; background:#214098; color:#fff; border:none; font-weight:500; cursor:pointer;">${tr('profile.gate.signupBtn', null, 'Iscriviti')}</button>
         </form>
       </div>
       <div data-panel="login" style="display:none;">
         <p style="margin:0 0 16px 0; color: var(--brand-gray-soft, #6b7280);">${tr('profile.gate.loginLead', null, 'Accedi con il tuo nickname e gusto di gelato.')}</p>
         <form data-form="login" novalidate>
-          <label style="display:block; font-weight:600; margin-bottom:6px;">${tr('profile.gate.nickname', null, 'Nickname')}</label>
+          <label style="display:block; font-weight:500; margin-bottom:6px;">${tr('profile.gate.nickname', null, 'Nickname')}</label>
           <input type="text" data-input="nickname" name="nickname" placeholder="${tr('profile.gate.nicknamePh', null, 'Es. StellaRosa')}" required style="width:100%; padding:12px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:16px; margin-bottom:14px;" />
-          <label style="display:block; font-weight:600; margin-bottom:6px;">${tr('profile.gate.gelatoLabel', null, 'Gusto gelato preferito')}</label>
+          <label style="display:block; font-weight:500; margin-bottom:6px;">${tr('profile.gate.gelatoLabel', null, 'Gusto gelato preferito')}</label>
           <input type="text" data-input="gelato" name="gelato" placeholder="${tr('profile.gate.gelatoPh', null, 'Es. Buontalenti')}" required style="width:100%; padding:12px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:16px; margin-bottom:18px;" />
           <p data-error style="margin:0 0 12px 0; color:#b91c1c; display:none; font-size:14px;"></p>
-          <button type="submit" style="padding:10px 14px; border-radius:10px; background:#214098; color:#fff; border:none; font-weight:600; cursor:pointer;">${tr('profile.gate.loginBtn', null, 'Accedi')}</button>
+          <button type="submit" style="padding:10px 14px; border-radius:10px; background:#214098; color:#fff; border:none; font-weight:500; cursor:pointer;">${tr('profile.gate.loginBtn', null, 'Accedi')}</button>
         </form>
       </div>
       <p style="margin-top:12px; font-size:12px; color:var(--brand-gray-soft, #6b7280);">${tr('profile.gate.deviceNote', null, 'I dati sono salvati solo su questo dispositivo.')}</p>
@@ -1262,7 +1262,7 @@ window.addEventListener('avatar-updated', (e) => {
       tabBtns.forEach(btn => {
         const isActive = btn.dataset.tab === targetTab;
         btn.classList.toggle('is-active', isActive);
-        btn.style.cssText = isActive ? 'flex:1; padding:10px; border-radius:10px; border:2px solid #214098; background:#214098; color:#fff; font-weight:600; cursor:pointer;' : 'flex:1; padding:10px; border-radius:10px; border:2px solid #d1d5db; background:transparent; color:#0f2154; font-weight:600; cursor:pointer;';
+        btn.style.cssText = isActive ? 'flex:1; padding:10px; border-radius:10px; border:2px solid #214098; background:#214098; color:#fff; font-weight:500; cursor:pointer;' : 'flex:1; padding:10px; border-radius:10px; border:2px solid #d1d5db; background:transparent; color:#0f2154; font-weight:500; cursor:pointer;';
       });
       panels.forEach(p => {
         p.style.display = (p.dataset.panel === targetTab) ? 'block' : 'none';
@@ -5383,7 +5383,7 @@ const gamification = (() => {
       banner.innerHTML = `
         <strong>Storage unavailable</strong><br>
         Progress will reset on navigation. Please open via http://localhost or a web server.
-        <button onclick="this.parentElement.remove()" style="margin-left:16px;padding:4px 12px;background:#fff;color:#b91c1c;border:none;border-radius:4px;cursor:pointer;font-weight:600;">Dismiss</button>
+        <button onclick="this.parentElement.remove()" style="margin-left:16px;padding:4px 12px;background:#fff;color:#b91c1c;border:none;border-radius:4px;cursor:pointer;font-weight:500;">Dismiss</button>
       `;
       document.body.appendChild(banner);
     } catch {}
@@ -5477,22 +5477,26 @@ const gamification = (() => {
 
       const items = [
         {
-          icon: '🎯',
+          icon: '01',
+          kind: 'remember',
           label: tr('trainingBrief.remember', null, 'Cosa ricordare'),
           text: remember,
         },
         {
-          icon: '⚠️',
+          icon: '!',
+          kind: 'avoid',
           label: tr('trainingBrief.avoid', null, 'Errore da evitare'),
           text: tip,
         },
         {
-          icon: '💬',
+          icon: 'B',
+          kind: 'customer',
           label: tr('trainingBrief.customer', null, 'Come dirlo al cliente'),
           text: description,
         },
         {
-          icon: '❓',
+          icon: '?',
+          kind: 'quiz',
           label: tr('trainingBrief.quiz', null, 'Mini quiz'),
           text: tr('trainingBrief.quizPrompt', { title }, `Punto chiave di ${title || 'questa scheda'}: ${quizAnswer}`),
         },
@@ -5500,9 +5504,9 @@ const gamification = (() => {
 
       items.forEach((item) => {
         const row = document.createElement('div');
-        row.className = 'training-brief__item';
+        row.className = `training-brief__item training-brief__item--${item.kind || 'note'}`;
         const icon = document.createElement('span');
-        icon.className = 'training-brief__icon';
+        icon.className = `training-brief__icon training-brief__icon--${item.kind || 'note'}`;
         icon.setAttribute('aria-hidden', 'true');
         icon.textContent = item.icon;
         const copy = document.createElement('span');
@@ -7021,8 +7025,8 @@ const gamification = (() => {
         <input type="text" data-new-gelato placeholder="Es. Buontalenti" style="width:100%; padding:12px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:16px; margin-bottom:10px;" />
         <p data-gelato-error style="margin:0 0 10px 0; color:#b91c1c; display:none; font-size:14px;">Inserisci un gusto valido.</p>
         <div style="display:flex; gap:8px;">
-          <button type="submit" style="flex:1; padding:10px; border-radius:10px; background:#214098; color:#fff; border:none; font-weight:600;">Salva</button>
-          <button type="button" data-cancel-gelato style="flex:1; padding:10px; border-radius:10px; background:#e5e7eb; color:#0f2154; border:none; font-weight:600;">Annulla</button>
+          <button type="submit" style="flex:1; padding:10px; border-radius:10px; background:#214098; color:#fff; border:none; font-weight:500;">Salva</button>
+          <button type="button" data-cancel-gelato style="flex:1; padding:10px; border-radius:10px; background:#e5e7eb; color:#0f2154; border:none; font-weight:500;">Annulla</button>
         </div>
       </form>
     `;
@@ -7081,8 +7085,8 @@ const gamification = (() => {
       <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
       
       <div style="display:flex; gap:8px; justify-content: center;">
-        <button type="button" data-confirm-switch style="padding:10px 20px; border-radius:10px; background:#fff; color:#e11d48; border:1px solid #e11d48; font-weight:600; font-size:13px;">${tr('profile.switchBtn', null, 'Esci / Cambia Profilo')}</button>
-        <button type="button" data-cancel-switch style="padding:10px 20px; border-radius:10px; background:#e5e7eb; color:#0f2154; border:none; font-weight:600; font-size:13px;">${tr('common.close', null, 'Chiudi')}</button>
+        <button type="button" data-confirm-switch style="padding:10px 20px; border-radius:10px; background:#fff; color:#e11d48; border:1px solid #e11d48; font-weight:500; font-size:13px;">${tr('profile.switchBtn', null, 'Esci / Cambia Profilo')}</button>
+        <button type="button" data-cancel-switch style="padding:10px 20px; border-radius:10px; background:#e5e7eb; color:#0f2154; border:none; font-weight:500; font-size:13px;">${tr('common.close', null, 'Chiudi')}</button>
       </div>
     `;
     

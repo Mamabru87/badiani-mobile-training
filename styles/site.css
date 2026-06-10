@@ -478,9 +478,9 @@ body.page-home {
 /* Training brief blocks inside product cards — Sprint 3.2 */
 .training-brief {
   display: grid;
-  gap: 8px;
+  gap: 7px;
   margin: 12px 0 14px;
-  padding: 10px;
+  padding: 12px;
   border: 1px solid rgba(33, 64, 152, 0.13);
   border-radius: 18px;
   background: linear-gradient(135deg, rgba(255, 248, 242, 0.92), rgba(248, 251, 255, 0.96));
@@ -488,7 +488,7 @@ body.page-home {
 
 .training-brief__item {
   display: grid;
-  grid-template-columns: 30px minmax(0, 1fr);
+  grid-template-columns: 28px minmax(0, 1fr);
   gap: 8px;
   align-items: start;
 }
@@ -496,12 +496,35 @@ body.page-home {
 .training-brief__icon {
   display: grid;
   place-items: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 12px;
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+  background: rgba(33, 64, 152, 0.09);
+  color: var(--brand-blue);
+  border: 1px solid rgba(33, 64, 152, 0.14);
+  box-shadow: 0 6px 12px rgba(15, 33, 84, 0.05);
+  font-family: var(--font-medium);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  line-height: 1;
+}
+
+.training-brief__icon--avoid {
+  background: rgba(236, 65, 140, 0.10);
+  color: var(--brand-rose-ink);
+  border-color: rgba(236, 65, 140, 0.18);
+}
+
+.training-brief__icon--customer {
+  background: rgba(242, 190, 88, 0.18);
+  color: var(--brand-gold-ink);
+  border-color: rgba(242, 190, 88, 0.28);
+}
+
+.training-brief__icon--quiz {
   background: #fff;
-  box-shadow: 0 6px 12px rgba(15, 33, 84, 0.07);
-  font-size: 16px;
+  color: var(--brand-blue);
 }
 
 .training-brief__copy {
@@ -521,6 +544,10 @@ body.page-home {
   color: var(--ink);
   font-size: 12px;
   line-height: 1.35;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
 }
 
 /* Daily mission dashboard — Sprint 3.1 training UX */
