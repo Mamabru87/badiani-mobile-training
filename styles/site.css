@@ -550,6 +550,37 @@ body.page-home {
   overflow: hidden;
 }
 
+.berny-coach-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 4px 0 10px 46px;
+}
+
+.berny-coach-chip {
+  appearance: none;
+  border: 1px solid rgba(33, 64, 152, 0.16);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--brand-blue);
+  cursor: pointer;
+  font-family: var(--font-medium);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  padding: 7px 10px;
+  text-transform: uppercase;
+  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.berny-coach-chip:hover,
+.berny-coach-chip:focus-visible {
+  border-color: rgba(33, 64, 152, 0.34);
+  box-shadow: 0 8px 18px rgba(15, 33, 84, 0.08);
+  outline: none;
+  transform: translateY(-1px);
+}
+
 /* Daily mission dashboard — Sprint 3.1 training UX */
 .page-home .daily-mission {
   display: grid;

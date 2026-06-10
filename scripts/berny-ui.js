@@ -39,7 +39,7 @@
 
   const sanitize = (value) => String(value ?? '').trim();
 
-  const BERNY_SUITE_VERSION = '20260610_07';
+  const BERNY_SUITE_VERSION = '20260610_08';
   const BERNY_SUITE_SCRIPTS = [
     'scripts/berny-knowledge.js',
     'scripts/berny-super-knowledge.js',
@@ -165,6 +165,7 @@
         false
       );
       if (greetingEl) greetingEl.setAttribute('data-greeting', 'true');
+      this.renderCoachQuickActions();
 
       // Listen for language changes
       window.addEventListener('i18nUpdated', () => {
@@ -194,6 +195,230 @@
       });
 
       this.chatInput.addEventListener('input', () => this.autoResizeInput());
+    }
+
+
+    renderCoachQuickActions() {
+      if (!this.messagesArea || this.messagesArea.querySelector('[data-berny-coach-actions]')) return;
+
+      const wrap = document.createElement('div');
+      wrap.className = 'berny-coach-actions';
+      wrap.setAttribute('data-berny-coach-actions', '');
+      wrap.setAttribute('aria-label', 'Azioni rapide BERNY');
+
+      const actions = [
+        { label: 'Ripassa Cappuccino', prompt: 'Ripassami la scheda Cappuccino' },
+        { label: 'Mini quiz Espresso', prompt: 'Fammi un mini quiz su Espresso Single' },
+        { label: 'Errore Coppette', prompt: 'Qual è l’errore da evitare sulle Coppette?' },
+      ];
+
+      actions.forEach((action) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'berny-coach-chip';
+        btn.textContent = action.label;
+        btn.addEventListener('click', () => {
+          if (!this.chatInput) return;
+          this.chatInput.value = action.prompt;
+          this.autoResizeInput();
+          this.handleSend();
+        });
+        wrap.appendChild(btn);
+      });
+
+      this.messagesArea.appendChild(wrap);
+    }
+
+    normalizeCoachText(value = '') {
+      return String(value || '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    cleanCoachSnippet(value = '') {
+      return String(value || '')
+        .replace(/\s+/g, ' ')
+        .replace(/^(Suggerimenti|Suggerimento|Tips|Checklist|Procedura|Procedure)\s*/i, '')
+        .trim();
+    }
+
+    getCoachIntent(message = '') {
+      const text = this.normalizeCoachText(message);
+      if (!text) return null;
+      if (/\b(quiz|domanda|test|mettimi alla prova|fammi)\b/.test(text)) return 'quiz';
+      if (/\b(errore|evitare|sbaglio|attenzione|non fare|da evitare)\b/.test(text)) return 'avoid';
+      if (/\b(ripassa|ripassami|riassumi|scheda|spiegami|procedura|come si fa|coach)\b/.test(text)) return 'review';
+      return null;
+    }
+
+    loadCoachCatalog() {
+      const mergePages = (target, source) => {
+        const pages = source?.pages || {};
+        Object.keys(pages).forEach((key) => {
+          const page = pages[key];
+          if (page && Array.isArray(page.cards)) target[key] = page;
+        });
+      };
+
+      const out = {};
+      try {
+        const raw = localStorage.getItem('badianiSearchCatalog.v2');
+        if (raw) mergePages(out, JSON.parse(raw));
+      } catch {}
+      try {
+        mergePages(out, window.__BADIANI_SEARCH_CATALOG_SEED__ || {});
+      } catch {}
+      return out;
+    }
+
+    findCoachCard(message = '') {
+      const currentCards = [];
+      try {
+        document.querySelectorAll('.guide-card').forEach((card) => {
+          const title = card.querySelector('h3')?.textContent?.trim() || '';
+          const rawId = String(card.getAttribute('id') || '').trim();
+          const cardKey = rawId.startsWith('card-') ? rawId.slice(5) : this.normalizeCoachText(title).replace(/\s+/g, '-');
+          if (title && cardKey) {
+            currentCards.push({
+              href: (location.pathname || '').split('/').pop() || 'index.html',
+              category: document.querySelector('h1')?.textContent?.trim() || '',
+              title,
+              cardKey,
+              domCard: card,
+            });
+          }
+        });
+      } catch {}
+
+      const catalogCards = [];
+      const pages = this.loadCoachCatalog();
+      Object.keys(pages).forEach((pageKey) => {
+        const page = pages[pageKey];
+        (page.cards || []).forEach((card) => {
+          if (!card?.title || !card?.cardKey) return;
+          catalogCards.push({
+            href: page.href || pageKey,
+            category: page.category || pageKey.replace(/\.html$/i, ''),
+            title: card.title,
+            cardKey: card.cardKey,
+          });
+        });
+      });
+
+      const all = [...currentCards, ...catalogCards];
+      const query = this.normalizeCoachText(message)
+        .replace(/\b(ripassa|ripassami|riassumi|scheda|spiegami|procedura|come|si|fa|quiz|domanda|test|errore|evitare|qual|e|l|da|su|sulle|sul|lo|la|il|gli|le|un|una|mini|fammi)\b/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+      const queryTokens = query.split(' ').filter((t) => t.length >= 3);
+      if (!queryTokens.length && currentCards.length) return currentCards[0];
+
+      let best = null;
+      let bestScore = 0;
+      all.forEach((card) => {
+        const hay = this.normalizeCoachText(`${card.title} ${card.cardKey} ${card.category}`);
+        let score = 0;
+        queryTokens.forEach((token) => {
+          if (hay.includes(token)) score += token.length;
+        });
+        if (this.normalizeCoachText(card.title) === query) score += 30;
+        if (score > bestScore) {
+          best = card;
+          bestScore = score;
+        }
+      });
+      return bestScore > 0 ? best : null;
+    }
+
+    async loadCoachCardDetails(card) {
+      if (!card) return null;
+      const extractFromNode = (node) => {
+        if (!node) return null;
+        const title = node.querySelector('h3')?.textContent?.trim() || card.title || '';
+        const rawId = String(node.getAttribute('id') || '').trim();
+        const resolvedCardKey = rawId.startsWith('card-') ? rawId.slice(5) : card.cardKey;
+        const description = this.cleanCoachSnippet(node.querySelector('p')?.textContent || '');
+        const stats = Array.from(node.querySelectorAll('.stat-list li'))
+          .map((li) => this.cleanCoachSnippet(li.textContent || ''))
+          .filter(Boolean);
+        const tips = Array.from(node.querySelectorAll('.details .tips, .tips, .details li, .details p'))
+          .map((n) => this.cleanCoachSnippet(n.textContent || ''))
+          .filter(Boolean);
+        const avoidCandidate = [...stats, ...tips, description]
+          .find((t) => /\b(non|mai|evita|evitare|controlla|contamin|difficile|temperatura|senza|subito)\b/i.test(t));
+        return {
+          title,
+          cardKey: resolvedCardKey,
+          description,
+          remember: stats[0] || description,
+          avoid: avoidCandidate || (stats[0] ? `Non dimenticare: ${stats[0]}` : description),
+          quizAnswer: stats[0] || tips[0] || description,
+        };
+      };
+
+      const local = extractFromNode(card.domCard);
+      if (local) return local;
+
+      try {
+        const response = await fetch(card.href, { cache: 'force-cache' });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const html = await response.text();
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        const safeId = `card-${CSS.escape(card.cardKey)}`;
+        const node = doc.querySelector(`#${safeId}`) || Array.from(doc.querySelectorAll('.guide-card')).find((el) => {
+          return this.normalizeCoachText(el.querySelector('h3')?.textContent || '') === this.normalizeCoachText(card.title || '');
+        });
+        return extractFromNode(node);
+      } catch (err) {
+        console.warn('BERNY coach card fetch failed:', err);
+        return {
+          title: card.title,
+          description: '',
+          remember: '',
+          avoid: '',
+          quizAnswer: '',
+        };
+      }
+    }
+
+    async tryHandleCoachIntent(message = '') {
+      const intent = this.getCoachIntent(message);
+      if (!intent) return null;
+
+      const card = this.findCoachCard(message);
+      if (!card) {
+        return {
+          text: 'Dimmi il nome della scheda e ti preparo subito ripasso, mini quiz o errore da evitare. Esempio: “Ripassami Cappuccino” oppure “Mini quiz Coppette”.',
+          links: [],
+        };
+      }
+
+      const details = await this.loadCoachCardDetails(card);
+      const title = details?.title || card.title;
+      const resolvedCardKey = details?.cardKey || card.cardKey;
+      const href = `${card.href}?q=${encodeURIComponent(resolvedCardKey)}#card-${encodeURIComponent(resolvedCardKey)}`;
+      let text = '';
+
+      if (intent === 'quiz') {
+        const answer = details?.quizAnswer || details?.remember || 'apri la scheda e controlla il primo punto operativo.';
+        text = `Mini quiz — ${title}\nDomanda: qual è il punto chiave da ricordare in questa scheda?\nRisposta attesa: ${answer}`;
+      } else if (intent === 'avoid') {
+        const avoid = details?.avoid || 'controlla la procedura completa prima del servizio.';
+        text = `Errore da evitare — ${title}\nPunto da non sbagliare: ${avoid}\nSe sei al banco, apri la scheda e verifica il passaggio prima di servire.`;
+      } else {
+        const remember = details?.remember || 'apri la scheda e riparti dai punti operativi.';
+        const description = details?.description || '';
+        text = `Ripasso rapido — ${title}\nDa ricordare: ${remember}${description ? `\nCome dirlo al cliente: ${description}` : ''}\nApri la scheda per vedere procedura e dettagli completi.`;
+      }
+
+      return {
+        text,
+        links: [{ url: href, label: `Apri ${title}` }],
+      };
     }
 
     async handleSend() {
@@ -227,6 +452,19 @@
         console.warn('BERNY lazy-load failed:', err);
         return null;
       });
+      const coachReply = await this.tryHandleCoachIntent(message).catch((err) => {
+        console.warn('BERNY coach intent failed:', err);
+        return null;
+      });
+      if (coachReply) {
+        this.hideTypingIndicator();
+        this.addMessage(coachReply.text, 'berny');
+        if (coachReply.links?.length) this.enqueueActionsMessage(coachReply.links, 250);
+        this.animateAvatar('idle');
+        this.playSynthSound('received');
+        return;
+      }
+
       if (!brain || typeof brain.sendMessage !== 'function') {
         this.hideTypingIndicator();
         this.addMessage(
@@ -564,13 +802,13 @@
       btn.style.marginTop = '10px';
       btn.style.marginRight = '8px';
       btn.style.padding = '8px 14px'; // Slightly larger
-      btn.style.backgroundColor = '#ec418c'; // Brand Rose (Brighter)
+      btn.style.backgroundColor = '#214098'; // Brand Blue
       btn.style.color = 'white';
       btn.style.borderRadius = '20px'; // More rounded
       btn.style.textDecoration = 'none';
       btn.style.fontSize = '0.9rem'; // Slightly larger
-      btn.style.fontWeight = '600'; // Bold via style instead of tag
-      btn.style.boxShadow = '0 4px 10px rgba(236, 65, 140, 0.3)'; // Soft shadow
+      btn.style.fontWeight = '500'; // Brand medium weight
+      btn.style.boxShadow = '0 4px 10px rgba(33, 64, 152, 0.22)'; // Soft shadow
       
       const isActions = !!(container && container.classList && container.classList.contains('message-actions'));
       if (!isActions) container.appendChild(document.createElement('br'));
