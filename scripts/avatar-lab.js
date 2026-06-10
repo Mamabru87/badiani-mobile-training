@@ -1,12 +1,16 @@
 /**
- * Badiani Avatar Lab v4.0 (Whiteboard Studio)
- * Features: Square Capture Frame, Floating "Dock" UI, collapsible asset drawer.
+ * Badiani Avatar Lab v5.0 (Playful Studio)
+ * - Never opens empty: instant random equip (body+skin+expression+hair, hat 50%).
+ * - "Sorprendimi!" full shuffle with bounce/pop preview animation.
+ * - Brand text chips (no emoji) + arrows / tap-to-cycle variants.
+ * - Fine adjustments (offset/scale/layer order) hidden behind "Regolazioni avanzate".
+ * - Save celebration via window.GelatoEffects (scripts/gelato-effects.js).
  */
 
 const AvatarLab = (() => {
   // Config
   const ASSET_PATH = 'assets/avatars/parts/';
-  
+
   const CATEGORIES = ['body', 'face_skin_tone', 'expressions', 'hair', 'hats'];
 
   const DEFAULT_LAYER_ORDER = [
@@ -17,8 +21,28 @@ const AvatarLab = (() => {
     'hats'             // Top
   ];
 
-  const CATEGORY_NAMES = { body: 'Outfit', face_skin_tone: 'Skin', expressions: 'Mood', hair: 'Hair', hats: 'Hats' };
-  const CATEGORY_ICONS = { body: '👕', face_skin_tone: '🎨', expressions: '😀', hair: '💇', hats: '🧢' };
+  // Categories whose variants can also be "none"
+  const OPTIONAL_NONE = ['expressions', 'hair', 'hats'];
+
+  // i18n helper (graceful fallback to Italian copy)
+  const t = (key, fallback) => {
+    try {
+      const api = window.BadianiI18n;
+      if (api && typeof api.t === 'function') {
+        const v = api.t(key);
+        if (v && v !== key) return String(v);
+      }
+    } catch {}
+    return String(fallback);
+  };
+
+  const categoryLabels = () => ({
+    body: t('avatarLab.cat.body', 'Outfit'),
+    face_skin_tone: t('avatarLab.cat.skin', 'Pelle'),
+    expressions: t('avatarLab.cat.mood', 'Mood'),
+    hair: t('avatarLab.cat.hair', 'Capelli'),
+    hats: t('avatarLab.cat.hats', 'Cappelli')
+  });
 
   // State
   let state = {
@@ -39,10 +63,10 @@ const AvatarLab = (() => {
     hair: 0.25,
     hats: 0.25
   };
-  
+
   let manifest = null;
-  let activeCategory = 'body'; 
-  let isDrawerOpen = true;
+  let activeCategory = 'body';
+  let advancedMode = false;
 
   // --- Dynamic Loader ---
   function loadManifest(callback) {
@@ -64,99 +88,115 @@ const AvatarLab = (() => {
     document.body.appendChild(script);
   }
 
-  function initDefaultState() {
-     if (!state.offsets) state.offsets = {};
-     if (!state.scales) state.scales = {};
-     if (!state.layerOrder || state.layerOrder.length === 0) state.layerOrder = [...DEFAULT_LAYER_ORDER];
-
-     CATEGORIES.forEach(cat => {
-         if (!state.offsets[cat]) state.offsets[cat] = {x:0, y:0};
-         if (typeof state.scales[cat] === 'undefined') state.scales[cat] = DEFAULT_SCALES[cat];
-         
-         // REMOVED: Do not auto-equip items. Start empty.
-         /*
-         if (!state[cat] && manifest[cat] && manifest[cat].length > 0) {
-             if (['body', 'face_skin_tone', 'expressions'].includes(cat)) {
-                 state[cat] = manifest[cat][0];
-             }
-         }
-         */
-     });
+  function randomPick(list) {
+    return list[Math.floor(Math.random() * list.length)];
   }
 
-  // --- UI Construction (New "Floating Studio" Design) ---
+  // Random full look: body + skin + expression + hair always, hat 50%.
+  function randomizeState() {
+    if (!manifest) return;
+    CATEGORIES.forEach(cat => {
+      const items = manifest[cat] || [];
+      if (!items.length) { state[cat] = null; return; }
+      if (cat === 'hats') {
+        state[cat] = (Math.random() < 0.5) ? randomPick(items) : null;
+      } else {
+        state[cat] = randomPick(items);
+      }
+      state.scales[cat] = DEFAULT_SCALES[cat];
+      state.offsets[cat] = { x: 0, y: 0 };
+    });
+  }
+
+  function initDefaultState() {
+    if (!state.offsets) state.offsets = {};
+    if (!state.scales) state.scales = {};
+    if (!state.layerOrder || state.layerOrder.length === 0) state.layerOrder = [...DEFAULT_LAYER_ORDER];
+
+    CATEGORIES.forEach(cat => {
+      if (!state.offsets[cat]) state.offsets[cat] = { x: 0, y: 0 };
+      if (typeof state.scales[cat] === 'undefined') state.scales[cat] = DEFAULT_SCALES[cat];
+    });
+
+    // Never start empty: if no part is equipped, dress a random character right away.
+    const hasAny = CATEGORIES.some(cat => !!state[cat]);
+    if (!hasAny) randomizeState();
+  }
+
+  // --- UI Construction (Playful Studio) ---
   function getHTML() {
     return `
-      <div id="avatar-lab-root" class="avatar-studio-root">
+      <div id="avatar-lab-root" class="avatar-studio-root" role="group" aria-label="${t('avatarLab.title', 'Avatar Lab')}">
         <style>
           .avatar-studio-root {
             position: relative;
             width: 100%;
-            height: clamp(500px, 85vh, 600px);
+            height: clamp(500px, 80vh, 620px);
             background: #fff;
-            border-radius: 24px;
+            border: 1px solid rgba(33,64,152,0.12);
+            border-radius: 22px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
             font-family: var(--font-regular, sans-serif);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 16px 36px rgba(15,33,84,0.12);
           }
 
-          /* STAGE & GRID */
+          /* STAGE */
           .studio-stage {
-            flex: 1; /* Takes available space */
-            min-height: 0; /* Allow shrinking */
+            flex: 1;
+            min-height: 170px;
             position: relative;
             overflow: hidden;
-            background-image: 
-              linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
-            background-size: 20px 20px;
-            cursor: grab;
+            background:
+              linear-gradient(rgba(33,64,152,0.045) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(33,64,152,0.045) 1px, transparent 1px),
+              #f9f6ec;
+            background-size: 20px 20px, 20px 20px, auto;
             display: flex;
-            align-items: center; /* Center Vertically */
-            justify-content: center; /* Center Horizontally */
+            align-items: center;
+            justify-content: center;
             z-index: 1;
+            outline: none;
           }
-          .studio-stage:active { cursor: grabbing; }
+          .studio-stage:focus-visible {
+            box-shadow: inset 0 0 0 3px rgba(33,64,152,0.35);
+          }
+          .avatar-studio-root.is-advanced .studio-stage { cursor: grab; }
+          .avatar-studio-root.is-advanced .studio-stage:active { cursor: grabbing; }
 
-          /* CAPTURE FRAME (The Square) */
+          /* CAPTURE FRAME */
           .capture-frame {
-            width: min(300px, 75vw); /* Slightly smaller to be safe */
-            height: min(300px, 75vw);
-            border: 2px dashed rgba(33, 64, 152, 0.3);
-            border-radius: 4px;
+            width: min(230px, 58vw);
+            height: min(230px, 58vw);
+            border: 2px dashed rgba(33, 64, 152, 0.22);
+            border-radius: 8px;
             position: relative;
-            pointer-events: none; 
-            box-shadow: 0 0 0 9999px rgba(255,255,255,0.5); 
-            flex-shrink: 0; /* Prevent squashing */
+            pointer-events: none;
+            flex-shrink: 0;
           }
-          .capture-frame::after {
-            content: 'AREA FOTO (SQUARE)';
-            position: absolute;
-            top: -20px; left: 50%; transform: translateX(-50%);
-            font-size: 10px; font-weight: bold; color: var(--brand-blue, #222);
-            opacity: 0.5;
-            white-space: nowrap;
-          }
-          /* Corner markers */
-          .capture-marker {
-            position: absolute; width: 10px; height: 10px;
-            border: 2px solid var(--brand-blue, #000);
-            border-radius: 1px;
-          }
-          .tl { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
-          .tr { top: -1px; right: -1px; border-left: 0; border-bottom: 0; }
-          .bl { bottom: -1px; left: -1px; border-right: 0; border-top: 0; }
-          .br { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+          .avatar-studio-root.is-advanced .capture-frame { border-color: rgba(33,64,152,0.45); }
 
-          /* COMPOSITE CONTAINER */
-          /* Placed exactly inside the frame */
           .avatar-composite {
             width: 100%; height: 100%;
             position: relative;
           }
-          
+          .avatar-composite.pop { animation: lab-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+          .avatar-composite.swap { animation: lab-swap 0.25s ease-out; }
+          @keyframes lab-pop {
+            0%   { transform: scale(1) rotate(0deg); }
+            35%  { transform: scale(1.12) rotate(-2deg); }
+            70%  { transform: scale(0.95) rotate(1.5deg); }
+            100% { transform: scale(1) rotate(0deg); }
+          }
+          @keyframes lab-swap {
+            0%   { transform: scale(0.96); opacity: 0.65; }
+            100% { transform: scale(1); opacity: 1; }
+          }
+          @media (prefers-reduced-motion: reduce) {
+            .avatar-composite.pop, .avatar-composite.swap { animation: none; }
+          }
+
           .avatar-layer {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -165,102 +205,95 @@ const AvatarLab = (() => {
             transition: opacity 0.2s;
           }
           .avatar-layer.is-active {
-            filter: drop-shadow(0 0 5px var(--brand-blue, #00BCD4));
-            z-index: 1000 !important; /* Temporarily bring to front visually only? No, confusing. keep z-index but glow */
+            filter: drop-shadow(0 0 5px rgba(33,64,152,0.55));
           }
 
-          /* FLOATING TOOLS (Moved to Top Left) */
-          .floating-tools {
+          /* ARROWS */
+          .lab-arrow {
             position: absolute;
-            top: 16px; left: 16px; /* Moved Left */
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            z-index: 50;
-            pointer-events: auto; /* Ensure clickable */
-          }
-          .tool-pill.compact {
-            background: rgba(255,255,255,0.9);
-            backdrop-filter: blur(4px);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            border-radius: 8px;
-            padding: 4px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transform: none; /* remove old scale */
-          }
-          .tool-icon { font-size: 14px; opacity: 0.7; padding-left: 4px; }
-          .tool-actions { display: flex; gap: 2px; }
-          .tool-btn.mini {
-            width: 28px; height: 28px;
-            background: #f0f0f0;
-            border-radius: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 42px; height: 42px;
+            border-radius: 50%;
+            border: 1px solid rgba(33,64,152,0.22);
+            background: #fff;
+            color: #214098;
+            font-size: 24px;
+            line-height: 1;
+            font-family: var(--font-medium, inherit);
             display: flex; align-items: center; justify-content: center;
-            font-weight: bold; font-size: 14px;
             cursor: pointer;
+            box-shadow: 0 6px 16px rgba(15,33,84,0.16);
+            z-index: 20;
+            padding: 0 0 3px 0;
+            transition: transform 0.15s ease;
           }
-          .tool-btn.mini:active { background: #ddd; transform: scale(0.95); }
+          .lab-arrow:active { transform: translateY(-50%) scale(0.92); }
+          .lab-arrow.prev { left: 10px; }
+          .lab-arrow.next { right: 10px; }
 
-          /* EXIT BUTTON (Top Right) */
-          .exit-btn-corner {
-             position: absolute; top: 16px; right: 16px;
-             width: 40px; height: 40px;
-             background: #fff;
-             border-radius: 12px;
-             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-             display: flex; align-items: center; justify-content: center;
-             color: #333;
-             cursor: pointer;
-             z-index: 100;
-             transition: transform 0.2s;
+          /* HINT */
+          .lab-hint {
+            margin: 0;
+            padding: 7px 12px 0;
+            text-align: center;
+            font-size: 11.5px;
+            color: var(--brand-gray-soft, #6b7280);
           }
-          .exit-btn-corner:active { transform: scale(0.95); }
 
-          /* DOCK (Bottom) */
+          /* DOCK */
           .studio-dock {
-            position: relative; /* Part of flex flow */
+            position: relative;
             width: 100%;
-            padding: 12px 0;
+            padding: 8px 0 12px;
             background: #fff;
             z-index: 60;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 -10px 30px rgba(0,0,0,0.05);
+            gap: 8px;
+            box-shadow: 0 -10px 30px rgba(15,33,84,0.05);
           }
 
-          /* ASSET DRAWER (Pop-up) */
-          .asset-drawer {
-            position: absolute;
-            bottom: 100%; /* Sits on top of dock */
-            left: 0; right: 0;
-            background: rgba(255,255,255,0.98);
-            backdrop-filter: blur(10px);
-            border-top: 1px solid rgba(0,0,0,0.05);
-            padding: 12px;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
-            max-height: 0;
-            opacity: 0;
-            overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            transform: translateY(10px);
-            z-index: -1; 
+          /* CATEGORY CHIPS */
+          .category-chips {
+            display: flex;
+            gap: 6px;
+            padding: 4px 12px 0;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
           }
-          .asset-drawer.open {
-            max-height: 220px; 
-            opacity: 1;
-            transform: translateY(0);
+          .category-chips::-webkit-scrollbar { display: none; }
+          .cat-chip {
+            flex-shrink: 0;
+            padding: 8px 13px;
+            border-radius: 999px;
+            border: 1.5px solid rgba(33,64,152,0.28);
+            background: #fff;
+            color: #214098;
+            font-family: var(--font-medium, inherit);
+            font-weight: 500;
+            font-size: 12px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s, transform 0.15s;
+          }
+          .cat-chip:active { transform: scale(0.96); }
+          .cat-chip.active {
+            background: #214098;
+            border-color: #214098;
+            color: #fff;
           }
 
+          /* ASSET DRAWER */
+          .asset-drawer { padding: 0; }
           .items-grid {
             display: flex;
             overflow-x: auto;
-            gap: 12px;
-            padding: 8px 12px;
-            /* ...existing scroll code... */
-            scrollbar-width: none; 
+            gap: 10px;
+            padding: 6px 12px;
+            scrollbar-width: none;
             scroll-snap-type: x mandatory;
             scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
@@ -268,171 +301,154 @@ const AvatarLab = (() => {
           .items-grid::-webkit-scrollbar { display: none; }
 
           .item-thumb {
-            width: 60px; height: 60px;
-            border-radius: 12px;
-            background: #f0f0f0;
+            width: 56px; height: 56px;
+            border-radius: 14px;
+            background: #f6f3ea;
             flex-shrink: 0;
             border: 2px solid transparent;
             cursor: pointer;
             display: flex; align-items: center; justify-content: center;
             scroll-snap-align: start;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 5px rgba(15,33,84,0.06);
+            transition: transform 0.15s;
           }
-          .item-thumb.selected { border-color: var(--brand-blue, #000); background: #fff; }
-          .item-thumb img { width: 80%; height: 80%; object-fit: contain; }
+          .item-thumb:active { transform: scale(0.94); }
+          .item-thumb.selected { border-color: #214098; background: #fff; }
+          .item-thumb img { width: 82%; height: 82%; object-fit: contain; }
+          .item-thumb .none-mark {
+            font-family: var(--font-medium, inherit);
+            font-weight: 500;
+            font-size: 18px;
+            color: var(--brand-gray-soft, #6b7280);
+          }
 
-          /* CATEGORY BAR */
-          .category-bar {
-            background: #222;
-            border-radius: 40px;
-            padding: 6px 8px;
+          /* ACTION ROW */
+          .lab-actions {
             display: flex;
-            gap: 4px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-            pointer-events: auto;
-            max-width: 95%; /* Fit on screen */
-            overflow-x: auto; /* Scroll if needed */
+            gap: 8px;
+            padding: 0 12px;
           }
-          
-          .cat-pill {
-            width: 44px; height: 44px;
-            border-radius: 50%;
-            color: #888;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 20px;
-            flex-shrink: 0;
+          .lab-btn {
+            flex: 1;
+            padding: 12px 10px;
+            border-radius: 12px;
+            font-family: var(--font-medium, inherit);
+            font-weight: 500;
+            font-size: 13px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
             cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
+            transition: transform 0.15s;
+            white-space: nowrap;
           }
-          .cat-pill:hover { background: rgba(255,255,255,0.1); color: #fff; }
-          .cat-pill.active { background: var(--brand-blue, #4455bb); color: #fff; transform: translateY(-4px); }
-          .cat-pill.active::after {
-            content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
-            width: 4px; height: 4px; background: inherit; border-radius: 50%;
+          .lab-btn:active { transform: scale(0.97); }
+          .lab-btn.surprise {
+            background: #fff;
+            color: var(--brand-rose-ink, #9d1f5d);
+            border: 1.5px solid rgba(236,65,140,0.45);
+          }
+          .lab-btn.save {
+            background: #214098;
+            color: #fff;
+            border: 1.5px solid #214098;
           }
 
-          .dock-divider { width: 1px; background: #444; margin: 0 4px; flex-shrink:0; }
-          
-          .save-btn-round {
-            background: var(--brand-rose, #e91e63);
-            color: white;
-            border-radius: 30px;
-            padding: 0 16px;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: bold; font-size: 14px;
-            cursor: pointer;
+          /* ADVANCED */
+          .advanced-toggle {
+            margin: 0 12px;
+            padding: 6px 4px;
+            background: transparent;
             border: none;
-            transition: transform 0.2s;
-            white-space: nowrap;
-          }
-          .save-btn-round:active { transform: scale(0.95); }
-          
-          .icon-btn-round {
-             background: #333;
-             color: #fff;
-             width: 44px; height: 44px; border-radius: 50%;
-             display: flex; align-items: center; justify-content: center;
-             cursor: pointer;
-             font-size: 18px;
-             border: none;
-             flex-shrink: 0;
-          }
-
-          /* TOP INFO */
-          .current-info {
-            position: absolute; top: 16px; left: 16px;
-            background: rgba(255,255,255,0.8);
-            padding: 4px 10px; border-radius: 20px;
-            font-size: 12px; font-weight: 600; color: #555;
-            pointer-events: none;
-            z-index: 50;
-          }
-          
-          /* EMPTY STATE OVERLAY */
-          .empty-state-msg {
-            position: absolute;
-            top: 40%; left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255,255,255,0.95);
-            padding: 12px 20px;
-            border-radius: 20px;
-            color: #555;
-            font-size: 14px;
-            font-weight: 600;
+            color: var(--brand-gray-soft, #6b7280);
+            font-size: 11.5px;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            text-decoration: underline;
+            cursor: pointer;
             text-align: center;
-            pointer-events: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-            white-space: nowrap;
-            animation: fadeIn 0.5s ease-out;
-            z-index: 2000;
-            line-height: 1.4;
-            border: 1px solid rgba(0,0,0,0.05);
           }
-          @keyframes fadeIn { from { opacity:0; transform:translate(-50%,-40%); } to { opacity:1; transform:translate(-50%,-50%); } }
+          .advanced-toggle[aria-expanded="true"] { color: #214098; }
+          .advanced-panel {
+            display: flex;
+            gap: 8px;
+            padding: 0 12px;
+          }
+          .advanced-panel[hidden] { display: none; }
+          .adv-row {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            background: #f6f3ea;
+            border-radius: 12px;
+            padding: 6px 8px 6px 12px;
+          }
+          .adv-row > span {
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--ink, #0f2154);
+          }
+          .adv-actions { display: flex; gap: 4px; }
+          .adv-btn {
+            width: 30px; height: 30px;
+            background: #fff;
+            border: 1px solid rgba(33,64,152,0.2);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--font-medium, inherit);
+            font-weight: 500; font-size: 14px;
+            color: #214098;
+            cursor: pointer;
+          }
+          .adv-btn:active { transform: scale(0.94); }
         </style>
-        
-        <!-- Exit Button (Top Right) -->
-        <div class="exit-btn-corner" onclick="window.dispatchEvent(new CustomEvent('avatar-logout-request'))">
-           <!-- Icon: Square with arrow out -->
-           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-             <polyline points="16 17 21 12 16 7"></polyline>
-             <line x1="21" y1="12" x2="9" y2="12"></line>
-           </svg>
-        </div>
-
-        <!-- Floating Tools (Moved to Top Left) -->
-        <div class="floating-tools">
-          <!-- Size Control -->
-          <div class="tool-pill compact">
-             <div class="tool-icon">📏</div>
-             <div class="tool-actions">
-               <div class="tool-btn mini" onclick="AvatarLab.adjustLayerScale(-0.05)">-</div>
-               <div class="tool-btn mini" onclick="AvatarLab.adjustLayerScale(0.05)">+</div>
-             </div>
-          </div>
-          
-          <!-- Layer Control -->
-          <div class="tool-pill compact">
-             <div class="tool-icon">📚</div>
-             <div class="tool-actions">
-               <div class="tool-btn mini" onclick="AvatarLab.moveLayerOrder(-1)">⬇</div>
-               <div class="tool-btn mini" onclick="AvatarLab.moveLayerOrder(1)">⬆</div>
-             </div>
-          </div>
-        </div>
 
         <!-- STAGE -->
-        <div class="studio-stage" id="lab-stage">
-           <!-- The capture frame is the viewport for the avatar -->
-           <div class="capture-frame">
-              <div class="capture-marker tl"></div>
-              <div class="capture-marker tr"></div>
-              <div class="capture-marker bl"></div>
-              <div class="capture-marker br"></div>
-              
-              <div class="avatar-composite" id="avatar-composite">
-                 <!-- Layers go here -->
-              </div>
-           </div>
+        <div class="studio-stage" id="lab-stage" tabindex="0" aria-label="${t('avatarLab.stageAria', 'Anteprima avatar: tocca per cambiare la variante')}">
+          <button type="button" class="lab-arrow prev" aria-label="${t('avatarLab.prevAria', 'Variante precedente')}" onclick="AvatarLab.cycleVariant(-1)">&#8249;</button>
+          <div class="capture-frame">
+            <div class="avatar-composite" id="avatar-composite"></div>
+          </div>
+          <button type="button" class="lab-arrow next" aria-label="${t('avatarLab.nextAria', 'Variante successiva')}" onclick="AvatarLab.cycleVariant(1)">&#8250;</button>
         </div>
+
+        <p class="lab-hint" id="lab-hint">${t('avatarLab.tapHint', "Tocca l'avatar o le frecce per cambiare look")}</p>
 
         <!-- DOCK -->
         <div class="studio-dock">
-           <!-- Pop-up Drawer -->
-           <div class="asset-drawer open" id="asset-drawer">
-              <div class="items-grid" id="items-grid"></div>
-           </div>
-           
-           <!-- Tab Bar -->
-           <div class="category-bar" id="category-bar">
-              <!-- Icons Injected Here -->
-              <div class="dock-divider"></div>
-              <button class="save-btn-round" onclick="AvatarLab.save()">SALVA</button>
-           </div>
-        </div>
+          <div class="category-chips" id="category-bar" role="tablist" aria-label="${t('avatarLab.title', 'Avatar Lab')}"></div>
 
+          <div class="asset-drawer open" id="asset-drawer">
+            <div class="items-grid" id="items-grid"></div>
+          </div>
+
+          <div class="lab-actions">
+            <button type="button" class="lab-btn surprise" id="lab-surprise" onclick="AvatarLab.surprise()">${t('avatarLab.surprise', 'Sorprendimi!')}</button>
+            <button type="button" class="lab-btn save" id="lab-save" onclick="AvatarLab.save()">${t('avatarLab.save', 'Salva')}</button>
+          </div>
+
+          <button type="button" class="advanced-toggle" id="advanced-toggle" aria-expanded="false" aria-controls="advanced-panel" onclick="AvatarLab.toggleAdvanced()">${t('avatarLab.advanced', 'Regolazioni avanzate')}</button>
+
+          <div class="advanced-panel" id="advanced-panel" hidden>
+            <div class="adv-row">
+              <span>${t('avatarLab.size', 'Dimensione')}</span>
+              <div class="adv-actions">
+                <button type="button" class="adv-btn" aria-label="${t('avatarLab.size', 'Dimensione')} -" onclick="AvatarLab.adjustLayerScale(-0.05)">&minus;</button>
+                <button type="button" class="adv-btn" aria-label="${t('avatarLab.size', 'Dimensione')} +" onclick="AvatarLab.adjustLayerScale(0.05)">+</button>
+              </div>
+            </div>
+            <div class="adv-row">
+              <span>${t('avatarLab.layer', 'Livello')}</span>
+              <div class="adv-actions">
+                <button type="button" class="adv-btn" aria-label="${t('avatarLab.layer', 'Livello')} &darr;" onclick="AvatarLab.moveLayerOrder(-1)">&darr;</button>
+                <button type="button" class="adv-btn" aria-label="${t('avatarLab.layer', 'Livello')} &uarr;" onclick="AvatarLab.moveLayerOrder(1)">&uarr;</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     `;
   }
@@ -446,57 +462,31 @@ const AvatarLab = (() => {
     });
   }
 
-  function renderUI(container) {
-    const bar = document.getElementById('category-bar');
-    if (bar) {
-      // Just the SAVE button, as requested. Removed the profile switch button.
-      const actionsHTML = `
-        <div class="dock-divider"></div>
-        <button class="save-btn-round" onclick="AvatarLab.save()">SALVA</button>
-      `;
-      
-      const buttons = CATEGORIES.map(cat => `
-        <div class="cat-pill ${cat === activeCategory ? 'active' : ''}" 
-             onclick="AvatarLab.setCategory('${cat}')">
-          ${CATEGORY_ICONS[cat]}
-        </div>
-      `).join('');
-      
-      bar.innerHTML = buttons + actionsHTML;
-    }
-
+  function renderUI() {
+    renderChips();
     renderItemsGrid();
     renderAvatar();
     setupInteractions();
-    updateLabel();
+  }
+
+  function renderChips() {
+    const bar = document.getElementById('category-bar');
+    if (!bar) return;
+    const labels = categoryLabels();
+    bar.innerHTML = CATEGORIES.map(cat => `
+      <button type="button" class="cat-chip ${cat === activeCategory ? 'active' : ''}"
+              role="tab" aria-selected="${cat === activeCategory}"
+              data-cat="${cat}"
+              onclick="AvatarLab.setCategory('${cat}')">${labels[cat]}</button>
+    `).join('');
   }
 
   function setCategory(cat) {
-    if (activeCategory === cat) {
-        // Toggle drawer if clicking same category
-        const d = document.getElementById('asset-drawer');
-        if(d) d.classList.toggle('open');
-    } else {
-        activeCategory = cat;
-        // Ensure open
-        const d = document.getElementById('asset-drawer');
-        if(d && !d.classList.contains('open')) d.classList.add('open');
-    }
-    
-    // UI Updates
-    document.querySelectorAll('.cat-pill').forEach((btn, i) => {
-       if (CATEGORIES[i] === activeCategory) btn.classList.add('active');
-       else btn.classList.remove('active');
-    });
-
+    if (!CATEGORIES.includes(cat)) return;
+    activeCategory = cat;
+    renderChips();
     renderItemsGrid();
-    renderAvatar(); // To update visual highlight
-    updateLabel();
-  }
-  
-  function updateLabel() {
-     const lbl = document.getElementById('lab-info-text');
-     if(lbl) lbl.textContent = `Modifica: ${CATEGORY_NAMES[activeCategory]}`;
+    renderAvatar(); // Update visual highlight
   }
 
   function renderItemsGrid() {
@@ -505,21 +495,23 @@ const AvatarLab = (() => {
 
     const items = manifest[activeCategory];
     const html = [
-      ...( ['hair', 'hats', 'expressions'].includes(activeCategory) ? [{ name: 'none', label: '🚫' }] : [] ),
+      ...(OPTIONAL_NONE.includes(activeCategory) ? [{ name: 'none' }] : []),
       ...items.map(name => ({ name }))
     ].map(item => {
       const isNone = item.name === 'none';
       const isSelected = state[activeCategory] === (isNone ? null : item.name);
       const src = isNone ? '' : `${ASSET_PATH}${activeCategory}/${item.name}`;
-      
+
       return `
-        <div class="item-thumb ${isSelected ? 'selected' : ''}" 
-             onclick="AvatarLab.equip('${activeCategory}', '${item.name}')">
-             ${isNone ? '<span style="font-size:18px;">🚫</span>' : `<img src="${src}" loading="lazy">`}
+        <div class="item-thumb ${isSelected ? 'selected' : ''}" role="button" tabindex="0"
+             aria-label="${isNone ? t('avatarLab.none', 'Nessuno') : item.name.replace(/\.webp$/, '')}"
+             onclick="AvatarLab.equip('${activeCategory}', '${item.name}')"
+             onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();AvatarLab.equip('${activeCategory}', '${item.name}');}">
+             ${isNone ? `<span class="none-mark" aria-hidden="true">&ndash;</span>` : `<img src="${src}" alt="" loading="lazy">`}
         </div>
       `;
     }).join('');
-    
+
     grid.innerHTML = html;
   }
 
@@ -528,29 +520,23 @@ const AvatarLab = (() => {
     if (!comp) return;
 
     let html = '';
-    // Shadow
-    html += `<div style="position:absolute; bottom:30px; left:50%; transform:translateX(-50%) scale(0.6); width:140px; height:12px; background:rgba(0,0,0,0.1); border-radius:50%;"></div>`;
+    // Soft shadow
+    html += `<div style="position:absolute; bottom:30px; left:50%; transform:translateX(-50%) scale(0.6); width:140px; height:12px; background:rgba(15,33,84,0.1); border-radius:50%;"></div>`;
 
-    let activeLayersCount = 0;
     state.layerOrder.forEach((cat, idx) => {
-       const item = state[cat];
-       if (item) {
-          activeLayersCount++;
-          const offset = state.offsets[cat] || {x:0, y:0};
-          const scale = state.scales[cat] || DEFAULT_SCALES[cat];
-          const isActive = cat === activeCategory;
-          
-          const style = `z-index:${idx*10}; transform: translate(${offset.x}px, ${offset.y}px) scale(${scale});`;
-          html += `<img class="avatar-layer ${isActive ? 'is-active' : ''}" 
-                        src="${ASSET_PATH}${cat}/${item}" 
-                        style="${style}">`;
-       }
+      const item = state[cat];
+      if (item) {
+        const offset = state.offsets[cat] || { x: 0, y: 0 };
+        const scale = state.scales[cat] || DEFAULT_SCALES[cat];
+        const isActive = advancedMode && cat === activeCategory;
+
+        const style = `z-index:${idx * 10}; transform: translate(${offset.x}px, ${offset.y}px) scale(${scale});`;
+        html += `<img class="avatar-layer ${isActive ? 'is-active' : ''}"
+                      src="${ASSET_PATH}${cat}/${item}"
+                      style="${style}" alt="">`;
+      }
     });
-    
-    if (activeLayersCount === 0) {
-       html += `<div class="empty-state-msg">Tocca le icone in basso 👇<br>per creare il tuo avatar!</div>`;
-    }
-    
+
     comp.innerHTML = html;
   }
 
@@ -558,140 +544,220 @@ const AvatarLab = (() => {
     state[cat] = (val === 'none') ? null : val;
     renderItemsGrid();
     renderAvatar();
+    pulsePreview('swap');
+  }
+
+  // Cycle the variants of the active category (arrows / tap on the avatar).
+  function cycleVariant(dir) {
+    if (!manifest || !manifest[activeCategory]) return;
+    const items = manifest[activeCategory];
+    const list = OPTIONAL_NONE.includes(activeCategory) ? [null, ...items] : items.slice();
+    if (!list.length) return;
+    const cur = list.indexOf(state[activeCategory]);
+    const next = ((cur < 0 ? 0 : cur) + dir + list.length) % list.length;
+    state[activeCategory] = list[next];
+    renderItemsGrid();
+    renderAvatar();
+    pulsePreview('swap');
+  }
+
+  // --- Animations ---
+  function pulsePreview(kind) {
+    const comp = document.getElementById('avatar-composite');
+    if (!comp) return;
+    comp.classList.remove('pop', 'swap');
+    // Force reflow so the animation restarts on rapid taps.
+    void comp.offsetWidth;
+    comp.classList.add(kind);
+    setTimeout(() => comp.classList.remove(kind), kind === 'pop' ? 520 : 270);
   }
 
   // --- Interactions ---
+  function toggleAdvanced() {
+    advancedMode = !advancedMode;
+    const panel = document.getElementById('advanced-panel');
+    const toggle = document.getElementById('advanced-toggle');
+    const root = document.getElementById('avatar-lab-root');
+    if (panel) panel.hidden = !advancedMode;
+    if (toggle) toggle.setAttribute('aria-expanded', advancedMode ? 'true' : 'false');
+    if (root) root.classList.toggle('is-advanced', advancedMode);
+    renderAvatar();
+  }
+
   function adjustLayerScale(d) {
-     if(!state.scales[activeCategory]) state.scales[activeCategory] = DEFAULT_SCALES[activeCategory];
-     state.scales[activeCategory] = Math.max(0.1, state.scales[activeCategory] + d);
-     renderAvatar();
+    if (!state.scales[activeCategory]) state.scales[activeCategory] = DEFAULT_SCALES[activeCategory];
+    state.scales[activeCategory] = Math.max(0.1, state.scales[activeCategory] + d);
+    renderAvatar();
   }
 
   function moveLayerOrder(dir) {
-     const idx = state.layerOrder.indexOf(activeCategory);
-     if (idx === -1) return;
-     const newIdx = idx + dir;
-     if (newIdx >= 0 && newIdx < state.layerOrder.length) {
-        const t = state.layerOrder[newIdx];
-        state.layerOrder[newIdx] = activeCategory;
-        state.layerOrder[idx] = t;
-        renderAvatar();
-     }
+    const idx = state.layerOrder.indexOf(activeCategory);
+    if (idx === -1) return;
+    const newIdx = idx + dir;
+    if (newIdx >= 0 && newIdx < state.layerOrder.length) {
+      const tmp = state.layerOrder[newIdx];
+      state.layerOrder[newIdx] = activeCategory;
+      state.layerOrder[idx] = tmp;
+      renderAvatar();
+    }
   }
 
   function randomize() {
-    CATEGORIES.forEach(cat => {
-       if (manifest[cat]?.length) {
-          if(['hair', 'hats'].includes(cat) && Math.random()>0.7) state[cat]=null;
-          else state[cat] = manifest[cat][Math.floor(Math.random()*manifest[cat].length)];
-          state.scales[cat] = DEFAULT_SCALES[cat];
-          state.offsets[cat] = {x:0, y:0};
-       }
-    });
+    if (!manifest) return;
+    randomizeState();
     renderAvatar();
     renderItemsGrid();
+    pulsePreview('pop');
+  }
+
+  // Alias used by the big playful button.
+  function surprise() {
+    randomize();
+  }
+
+  function celebrateSave() {
+    try {
+      const comp = document.getElementById('avatar-composite');
+      const r = comp ? comp.getBoundingClientRect() : null;
+      const x = r ? r.left + r.width / 2 : window.innerWidth / 2;
+      const y = r ? r.top + r.height / 2 : window.innerHeight / 2;
+      if (window.GelatoEffects && typeof window.GelatoEffects.celebrate === 'function') {
+        window.GelatoEffects.celebrate(x, y);
+      }
+    } catch {}
+    pulsePreview('pop');
   }
 
   function save() {
     localStorage.setItem('badiani_user_avatar_v2_state', JSON.stringify(state));
     exportToCanvas((base64) => {
-        localStorage.setItem('badiani_user_avatar', base64);
-        window.dispatchEvent(new CustomEvent('avatar-updated', { detail: base64 }));
-        if(window.showToast) window.showToast('Foto scattata e salvata!');
-        
-        // Visual feedback on button
-        const btn = document.querySelector('.save-btn-round');
-        if(btn) { btn.innerText = 'OK!'; setTimeout(()=>btn.innerText='SALVA', 1500); }
+      localStorage.setItem('badiani_user_avatar', base64);
+      window.dispatchEvent(new CustomEvent('avatar-updated', { detail: base64 }));
+      celebrateSave();
+      if (window.showToast) window.showToast(t('avatarLab.saved', 'Avatar salvato! Sei ufficialmente parte della squadra.'));
+
+      // Visual feedback on button
+      const btn = document.getElementById('lab-save');
+      if (btn) {
+        const original = t('avatarLab.save', 'Salva');
+        btn.textContent = t('avatarLab.saveDone', 'Fatto!');
+        setTimeout(() => { btn.textContent = original; }, 1600);
+      }
     });
   }
 
   // NOTE: Square export (350x350)
   function exportToCanvas(cb) {
-     const size = 350; 
-     const canvas = document.createElement('canvas');
-     canvas.width = size; canvas.height = size;
-     const ctx = canvas.getContext('2d');
+    const size = 350;
+    const canvas = document.createElement('canvas');
+    canvas.width = size; canvas.height = size;
+    const ctx = canvas.getContext('2d');
 
-     // Background fill (white)
-     ctx.fillStyle = "#ffffff";
-     ctx.fillRect(0,0,size,size);
+    // Background fill (white)
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, size, size);
 
-     const layers = state.layerOrder.map(cat => state[cat] ? {
-        src: `${ASSET_PATH}${cat}/${state[cat]}`,
-        offset: state.offsets[cat] || {x:0,y:0},
-        scale: state.scales[cat] || DEFAULT_SCALES[cat]
-     } : null).filter(Boolean);
+    const layers = state.layerOrder.map(cat => state[cat] ? {
+      src: `${ASSET_PATH}${cat}/${state[cat]}`,
+      offset: state.offsets[cat] || { x: 0, y: 0 },
+      scale: state.scales[cat] || DEFAULT_SCALES[cat]
+    } : null).filter(Boolean);
 
-     let loaded = 0;
-     if (layers.length === 0) { cb(canvas.toDataURL()); return; }
+    let loaded = 0;
+    if (layers.length === 0) { cb(canvas.toDataURL()); return; }
 
-     layers.forEach(l => {
-        const img = new Image();
-        img.crossOrigin = "Anonymous";
-        img.onload = () => {
-           l.img = img;
-           loaded++;
-           if(loaded === layers.length) {
-              layers.forEach(layer => {
-                 ctx.save();
-                 ctx.translate(layer.offset.x, layer.offset.y);
-                 ctx.translate(size/2, size/2);
-                 ctx.scale(layer.scale, layer.scale);
-                 ctx.translate(-size/2, -size/2);
-                 ctx.drawImage(layer.img, 0, 0, size, size); // Draw stretched to fill? No, assume sprite is large enough
-                 ctx.restore();
-              });
-              cb(canvas.toDataURL());
-           }
-        };
-        img.src = l.src;
-     });
+    layers.forEach(l => {
+      const img = new Image();
+      img.crossOrigin = "Anonymous";
+      img.onload = () => {
+        l.img = img;
+        loaded++;
+        if (loaded === layers.length) {
+          layers.forEach(layer => {
+            ctx.save();
+            ctx.translate(layer.offset.x, layer.offset.y);
+            ctx.translate(size / 2, size / 2);
+            ctx.scale(layer.scale, layer.scale);
+            ctx.translate(-size / 2, -size / 2);
+            ctx.drawImage(layer.img, 0, 0, size, size);
+            ctx.restore();
+          });
+          cb(canvas.toDataURL());
+        }
+      };
+      img.src = l.src;
+    });
   }
-  
+
   function setupInteractions() {
-     const el = document.getElementById('lab-stage');
-     if(!el) return;
-     
-     let isDown=false;
-     let lastX=0, lastY=0;
-     
-     const start = (x,y) => {
-        if(!state[activeCategory]) return;
-        isDown=true; lastX=x; lastY=y;
-        el.style.cursor='grabbing';
-        // Auto close drawer on drag to see better?
-        // document.getElementById('asset-drawer').classList.remove('open');
-     };
-     const move = (x,y) => {
-        if(!isDown) return;
-        const dx=x-lastX; const dy=y-lastY;
-        lastX=x; lastY=y;
+    const el = document.getElementById('lab-stage');
+    if (!el) return;
+
+    let isDown = false;
+    let moved = false;
+    let lastX = 0, lastY = 0, startX = 0, startY = 0;
+
+    const start = (x, y, target) => {
+      // Ignore presses that begin on the arrows (they have their own click handlers).
+      if (target && target.closest && target.closest('.lab-arrow')) return;
+      isDown = true; moved = false;
+      lastX = x; lastY = y; startX = x; startY = y;
+    };
+    const move = (x, y) => {
+      if (!isDown) return;
+      if (Math.abs(x - startX) + Math.abs(y - startY) > 6) moved = true;
+      if (advancedMode && state[activeCategory]) {
+        const dx = x - lastX; const dy = y - lastY;
+        lastX = x; lastY = y;
         state.offsets[activeCategory].x += dx;
         state.offsets[activeCategory].y += dy;
         requestAnimationFrame(renderAvatar);
-     };
-     const end = () => { isDown=false; el.style.cursor='grab'; };
+      } else {
+        lastX = x; lastY = y;
+      }
+    };
+    const end = () => {
+      if (isDown && !moved && !advancedMode) {
+        // Simple mode: a tap on the avatar cycles the active category.
+        cycleVariant(1);
+      }
+      isDown = false;
+    };
 
-     el.addEventListener('mousedown', e => { e.preventDefault(); start(e.clientX, e.clientY); });
-     window.addEventListener('mousemove', e => move(e.clientX, e.clientY));
-     window.addEventListener('mouseup', end);
+    el.addEventListener('mousedown', e => { e.preventDefault(); start(e.clientX, e.clientY, e.target); });
+    window.addEventListener('mousemove', e => move(e.clientX, e.clientY));
+    window.addEventListener('mouseup', end);
 
-     el.addEventListener('touchstart', e => { e.preventDefault(); start(e.touches[0].clientX, e.touches[0].clientY); }, {passive:false});
-     el.addEventListener('touchmove', e => { e.preventDefault(); move(e.touches[0].clientX, e.touches[0].clientY); }, {passive:false});
-     window.addEventListener('touchend', end);
+    el.addEventListener('touchstart', e => {
+      if (e.target && e.target.closest && e.target.closest('.lab-arrow')) return;
+      e.preventDefault();
+      start(e.touches[0].clientX, e.touches[0].clientY, e.target);
+    }, { passive: false });
+    el.addEventListener('touchmove', e => { e.preventDefault(); move(e.touches[0].clientX, e.touches[0].clientY); }, { passive: false });
+    window.addEventListener('touchend', end);
+
+    // Keyboard: arrows cycle variants, Enter/Space = next.
+    el.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight' || e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        cycleVariant(1);
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        cycleVariant(-1);
+      }
+    });
   }
 
   function loadState() {
-     const s = localStorage.getItem('badiani_user_avatar_v2_state');
-     if(s) {
-       try { 
-         const p = JSON.parse(s);
-         state = { ...state, ...p };
-         if(p.sales) state.scales = p.scales; // typo fix from old versions
-       } catch {}
-     }
+    const s = localStorage.getItem('badiani_user_avatar_v2_state');
+    if (s) {
+      try {
+        const p = JSON.parse(s);
+        state = { ...state, ...p };
+        if (p.sales) state.scales = p.scales; // typo fix from old versions
+      } catch {}
+    }
   }
 
-  return { init, getHTML, render: renderAvatar, setCategory, equip, randomize, save, adjustLayerScale, moveLayerOrder };
+  return { init, getHTML, render: renderAvatar, setCategory, equip, randomize, surprise, cycleVariant, toggleAdvanced, save, adjustLayerScale, moveLayerOrder };
 })();
-

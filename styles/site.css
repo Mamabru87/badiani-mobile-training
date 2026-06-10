@@ -335,6 +335,31 @@ video {
 }
 
 /* ========================================================================
+   Accessibility: skip link (visually hidden until focused)
+   ======================================================================== */
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 16px;
+  z-index: 6000;
+  padding: 8px 16px;
+  background: var(--brand-blue, #214098);
+  color: #ffffff;
+  border-radius: 12px;
+  text-decoration: none;
+  font-family: var(--font-medium);
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  top: 0;
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+/* ========================================================================
    Homepage: modern layout polish (desktop-first)
    ======================================================================== */
 
@@ -418,6 +443,7 @@ body.page-home {
 .user-nickname-bar {
   display: none;
   align-items: center;
+  gap: 8px;
   margin-left: auto;
 }
 
@@ -1099,7 +1125,7 @@ body.page-home {
 }
 
 .hub-card__big-text--gold {
-  color: var(--brand-gold);
+  color: var(--brand-gold-ink);
 }
 
 .hub-card__icon {
@@ -1278,7 +1304,7 @@ body.page-home {
 .badge--live {
   border-color: rgba(236, 65, 140, 0.35);
   background: rgba(236, 65, 140, 0.10);
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
 }
 
 @keyframes badgePulse {
@@ -2518,7 +2544,7 @@ h4 {
 }
 
 .reward-hint--alert {
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
 }
 
 .reward-popover__link {
@@ -3141,7 +3167,7 @@ h4 {
   font-size: 13px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
   font-family: var(--font-medium);
 }
 
@@ -3178,7 +3204,7 @@ h4 {
 }
 
 .challenge-card__option.is-correct {
-  border-color: var(--brand-gold);
+  border-color: rgba(138, 86, 0, 0.7);
   background: rgba(242, 190, 88, 0.2);
 }
 
@@ -3319,7 +3345,7 @@ h4 {
 }
 
 .reward-hint--alert {
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
 }
 
 .reward-toast {
@@ -3778,7 +3804,7 @@ h4 {
 }
 
 .quiz-option.is-correct {
-  border-color: var(--brand-gold);
+  border-color: rgba(138, 86, 0, 0.7);
   background: rgba(242, 190, 88, 0.18);
 }
 
@@ -3847,7 +3873,7 @@ h4 {
 
 .quiz-screen--yellow .quiz-option:hover,
 .quiz-screen--yellow .quiz-option:focus-visible {
-  border-color: var(--brand-gold);
+  border-color: rgba(138, 86, 0, 0.7);
   box-shadow: 0 12px 24px rgba(242, 190, 88, 0.25);
 }
 
@@ -4035,19 +4061,19 @@ h4 {
 }
 
 .quiz-order__list--selected.is-correct {
-  outline: 2px solid rgba(242, 190, 88, 0.55);
+  outline: 2px solid rgba(138, 86, 0, 0.7);
   outline-offset: 6px;
   border-radius: var(--radius-xl);
 }
 
 .quiz-order__list--selected.is-wrong {
-  outline: 2px solid rgba(236, 65, 140, 0.55);
+  outline: 2px solid rgba(157, 31, 93, 0.7);
   outline-offset: 6px;
   border-radius: var(--radius-xl);
 }
 
 .reward-hint--alert {
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
 }
 
 .reward-toast {
@@ -4366,7 +4392,7 @@ h4 {
 .menu-cluster a:hover,
 .menu-cluster a:focus-visible,
 .menu-cluster a[aria-current="page"] {
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
   padding-left: 6px;
 }
 
@@ -4628,7 +4654,7 @@ h4 {
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
   font-family: var(--font-medium);
   font-weight: 500;
 }
@@ -4840,7 +4866,7 @@ h4 {
 }
 
 .summary-list__btn:focus-visible {
-  outline: 3px solid rgba(242, 190, 88, 0.55);
+  outline: 3px solid rgba(138, 86, 0, 0.7);
   outline-offset: 2px;
 }
 
@@ -5244,6 +5270,11 @@ button,
   user-select: none;
 }
 
+.btn:focus-visible {
+  outline: 2px solid var(--brand-blue);
+  outline-offset: 2px;
+}
+
 /* Aumenta target touch per accessibilità */
 @media (pointer: coarse) {
   button, a, [role="button"] {
@@ -5313,7 +5344,7 @@ button,
 .btn-text:hover,
 .btn-text:focus-visible {
   transform: translateY(-1px);
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
   text-decoration: underline;
 }
 
@@ -5542,7 +5573,7 @@ button,
 .section-switcher__close:hover,
 .section-switcher__close:focus-visible {
   border-color: var(--brand-rose);
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
 }
 
 .section-switcher__options {
@@ -5716,13 +5747,13 @@ button,
 .guide-card .tag.tag--maintenance {
   background: rgba(236, 65, 140, 0.16);
   border-color: rgba(236, 65, 140, 0.3);
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
 }
 
 .guide-card .tag.tag--upsell {
   background: rgba(236, 65, 140, 0.22);
   border-color: rgba(236, 65, 140, 0.36);
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
 }
 
 .tag--product {
@@ -5737,12 +5768,12 @@ button,
 
 .tag--maintenance {
   background: rgba(236, 65, 140, 0.18);
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
 }
 
 .tag--upsell {
   background: rgba(236, 65, 140, 0.22);
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
 }
 
 .card p { color: var(--ink-soft); }
@@ -6504,19 +6535,19 @@ section.carousel:last-of-type {
   line-height: 1;
   font-weight: 500;
   background: transparent;
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
   flex: 0 0 auto;
 }
 
 .guide-card button[data-toggle-card].is-starred {
-  border-color: rgba(242, 190, 88, 0.55);
+  border-color: rgba(138, 86, 0, 0.7);
   background: rgba(242, 190, 88, 0.18);
-  color: var(--brand-gold);
+  color: var(--brand-gold-ink);
 }
 
 .guide-card button[data-toggle-card].is-starred .card-progress-indicator {
   background: transparent;
-  color: var(--brand-gold);
+  color: var(--brand-gold-ink);
 }
 
 .guide-card button[data-toggle-card]:hover,
@@ -6610,19 +6641,19 @@ section.carousel:last-of-type {
 }
 
 .guide-card--procedure h3 {
-  color: var(--brand-gold);
+  color: var(--brand-gold-ink);
 }
 
 .guide-card--procedure .tag {
   background: rgba(242, 190, 88, 0.1);
-  color: var(--brand-gold);
+  color: var(--brand-gold-ink);
   border-color: rgba(242, 190, 88, 0.3);
 }
 
 .guide-card--procedure button[data-toggle-card] {
   border-color: rgba(242, 190, 88, 0.26);
   background: rgba(242, 190, 88, 0.06);
-  color: var(--brand-gold);
+  color: var(--brand-gold-ink);
 }
 
 .guide-card--procedure button[data-toggle-card]:hover,
@@ -6656,7 +6687,7 @@ section.carousel:last-of-type {
 
 .shelf-life-table th {
   background: var(--brand-gold);
-  color: #fff;
+  color: var(--brand-blue-deep);
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -6680,7 +6711,7 @@ section.carousel:last-of-type {
 
 .shelf-life-table td:nth-child(2) {
   font-weight: 500;
-  color: var(--brand-gold);
+  color: var(--brand-gold-ink);
 }
 
 .accordion-body .shelf-life-table-wrap {
@@ -6704,19 +6735,19 @@ section.carousel:last-of-type {
 }
 
 .guide-card--maintenance h3 {
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
 }
 
 .guide-card--maintenance .tag {
   background: rgba(236, 65, 140, 0.1);
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
   border-color: rgba(236, 65, 140, 0.3);
 }
 
 .guide-card--maintenance button[data-toggle-card] {
   border-color: rgba(236, 65, 140, 0.26);
   background: rgba(236, 65, 140, 0.06);
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
 }
 
 .guide-card--maintenance button[data-toggle-card]:hover,
@@ -7519,7 +7550,7 @@ section.carousel:last-of-type {
 .card-modal-crystals__value {
   font-size: 1.05em;
   font-weight: 500;
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
 }
 
 .card-modal-crystals__suffix {
@@ -7539,10 +7570,10 @@ section.carousel:last-of-type {
   display: none;
 }
 .card-modal-crystals.is-starred .card-modal-crystals__icon {
-  color: var(--brand-gold);
+  color: var(--brand-gold-ink);
 }
 .card-modal-crystals.is-starred .card-modal-crystals__suffix {
-  color: var(--brand-gold);
+  color: var(--brand-gold-ink);
 }
 
 /* small indicator on accordion headers for unopened tabs */
@@ -7598,7 +7629,7 @@ section.carousel:last-of-type {
 
 .accordion-header .crystal-indicator.is-starred {
   background: rgba(242, 190, 88, 0.18);
-  color: var(--brand-gold);
+  color: var(--brand-gold-ink);
 }
 
 .card-modal-close {
@@ -7733,7 +7764,7 @@ section.carousel:last-of-type {
   font-size: 13px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
   font-family: "SuperGrotesk-Medium", Arial, sans-serif;
 }
 
@@ -7819,7 +7850,7 @@ section.carousel:last-of-type {
   left: 10px;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
   font-weight: 500;
   font-size: 15px;
   background: rgba(236, 65, 140, 0.12);
@@ -7844,7 +7875,7 @@ section.carousel:last-of-type {
   font-size: 14px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
   margin-bottom: 6px;
   font-family: var(--font-medium);
 }
@@ -8150,7 +8181,7 @@ section.carousel:last-of-type {
   font-size: 13px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
   padding-bottom: 12px;
   border-bottom: 2px solid rgba(236, 65, 140, 0.2);
 }
@@ -8193,14 +8224,14 @@ section.carousel:last-of-type {
   font-size: 13px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--brand-gold);
+  color: var(--brand-gold-ink);
   padding-bottom: 10px;
   border-bottom: 2px solid rgba(242, 190, 88, 0.3);
 }
 
 .tips strong {
   font-family: "SuperGrotesk-Medium", Arial, sans-serif;
-  color: var(--brand-gold);
+  color: var(--brand-gold-ink);
   font-size: 13px;
   letter-spacing: 0.04em;
 }
@@ -8307,7 +8338,7 @@ body.page-product .badge {
 
 .quick-nav a[aria-current="true"] {
   background: rgba(242, 190, 88, 0.18);
-  border-color: rgba(242, 190, 88, 0.55);
+  border-color: rgba(138, 86, 0, 0.7);
 }
 
 .card-modal-intro {
@@ -8391,7 +8422,7 @@ body.page-product .badge {
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
   font-family: var(--font-medium);
 }
 
@@ -8781,9 +8812,9 @@ body.page-product .badge {
 }
 
 .card-modal .modal-tabs-toolbar__btn.btn-ghost[aria-pressed="true"] {
-  --eye-color: var(--brand-gold);
+  --eye-color: var(--brand-gold-ink);
   background: rgba(242, 190, 88, 0.14);
-  border-color: rgba(242, 190, 88, 0.50);
+  border-color: rgba(138, 86, 0, 0.7);
 }
 
 @media (max-width: 600px) {
@@ -8887,7 +8918,7 @@ body.page-product .badge {
 }
 
 .card-modal .modal-accordion .accordion-item .modal-specs__key {
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
 }
 
 /* Uniform gray labels inside tabs */
@@ -8902,7 +8933,7 @@ body.page-product .badge {
   text-transform: uppercase;
   letter-spacing: 0.18em;
   font-size: 13px;
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
 }
 
 /* Specs grid items inside tabs: flattened design without individual borders */
@@ -8937,7 +8968,7 @@ body.page-product .badge {
   letter-spacing: 0.18em;
   text-transform: uppercase;
   font-weight: 500;
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
 }
 
 .card-modal .modal-accordion .accordion-item .modal-specs__value {
@@ -9006,7 +9037,7 @@ body.page-product .badge {
 .card-modal .modal-accordion .accordion-body strong {
   font-family: "SuperGrotesk-Medium", Arial, sans-serif;
   font-weight: 500;
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
 }
 
 /* Checklist + mini-specs: labels like “Obiettivo:” / “Focus:” should match the uppercase pink heading style */
@@ -9018,7 +9049,7 @@ body.page-product .badge {
   letter-spacing: 0.18em;
   font-size: 13px;
   margin-bottom: 6px;
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
 }
 
 /* Essentials bullets inside accordion: keep labels consistent too */
@@ -9030,7 +9061,7 @@ body.page-product .badge {
   letter-spacing: 0.18em;
   font-size: 13px;
   margin-bottom: 6px;
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
 }
 
 /* Tips strong: uppercase, on separate line */
@@ -9064,7 +9095,7 @@ body.page-product .badge {
   font-family: "SuperGrotesk-Medium", Arial, sans-serif;
   font-size: 13px;
   letter-spacing: 0.18em;
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
 }
 
 /* Horizontal rules */
@@ -9540,7 +9571,7 @@ body.page-product .badge {
 
 .story-link:hover,
 .story-link:focus-visible {
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
 }
 
 .story-collage {
@@ -9979,7 +10010,7 @@ body.page-home {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   font-family: var(--font-medium);
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
 }
 
 /* Scroll container = body (so the avatar can be sticky inside the same scroller) */
@@ -10393,7 +10424,7 @@ body.page-home {
 }
 
 .guide-card.is-search-target {
-  outline: 2px solid rgba(236, 65, 140, 0.45);
+  outline: 2px solid rgba(157, 31, 93, 0.7);
   box-shadow: 0 18px 55px rgba(236, 65, 140, 0.18);
 }
 
@@ -10631,7 +10662,7 @@ body.page-home {
   letter-spacing: 0.18em;
   text-transform: uppercase;
   font-family: var(--font-medium);
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
 }
 
 .menu-search__assistant-clear {
@@ -10919,7 +10950,7 @@ body.page-home {
   place-items: center;
   border-radius: 999px;
   background: rgba(242, 190, 88, 0.16);
-  color: var(--sun);
+  color: var(--brand-gold-ink);
   font-size: 14px;
   line-height: 1;
   box-shadow: 0 10px 18px rgba(15, 33, 84, 0.12);
@@ -10932,7 +10963,7 @@ body.page-home {
 .menu-categories a:hover,
 .menu-categories a:focus-visible {
   background: rgba(236, 65, 140, 0.08);
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
 }
 
 /* =========================
@@ -12535,7 +12566,7 @@ body.page-product .hero + .carousel .carousel-header {
   transform: none;
   box-shadow: none;
   background: rgba(236, 65, 140, 0.08);
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
 }
 
 .menu-categories a:active {
@@ -12599,7 +12630,7 @@ body.page-product .hero + .carousel .carousel-header {
     rgba(236,65,140,0.16) 20px
   );
   border-color: rgba(236,65,140,0.45);
-  color: var(--brand-rose);
+  color: var(--brand-rose-ink);
 }
 .guide-photo-placeholder[data-state="good"],
 .guide-photo-placeholder[data-state="after"] {

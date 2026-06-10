@@ -1,0 +1,39 @@
+name: Smoke tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Playwright (Chromium)
+        run: |
+          pip install playwright
+          playwright install chromium --with-deps
+
+      - name: i18n consistency check
+        run: python build-tools/i18n_diff.py
+
+      - name: Start static server
+        run: |
+          python -m http.server 4173 --bind 127.0.0.1 &
+          for i in $(seq 1 20); do
+            curl -fsS -o /dev/null http://127.0.0.1:4173/index.html && break
+            sleep 0.5
+          done
+
+      - name: Smoke + regression tests
+        run: python build-tools/smoke_test.py --base http://127.0.0.1:4173

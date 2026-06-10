@@ -16,9 +16,9 @@
   <meta name="description" content="Pagina di soluzione quiz — revisione delle risposte e approfondimento argomenti Badiani Training Orbit." />
   <link rel="preload" href="fonts/SuperGroteskA-Rg.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="fonts/SuperGroteskB-CdMed.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="styles/site.css?v=20260610_19" />
-  <script defer src="scripts/i18n.js?v=20260610_19"></script>
-  <script defer src="scripts/i18n-manager.js?v=20260610_19"></script>
+  <link rel="stylesheet" href="styles/site.css?v=20260610_21" />
+  <script defer src="scripts/i18n.js?v=20260610_21"></script>
+  <script defer src="scripts/i18n-manager.js?v=20260610_21"></script>
   <style>
     body { background: var(--paper); }
     .solution-shell {
@@ -127,7 +127,8 @@
   </style>
 </head>
 <body>
-  <main class="solution-shell">
+  <a href="#main" class="skip-link">Salta al contenuto</a>
+  <main id="main" class="solution-shell">
     <p class="solution-eyebrow" data-i18n="quizSolution.eyebrow">Quiz · Soluzione</p>
     <h1 class="solution-title" data-i18n="quizSolution.title">Rivedi la risposta corretta</h1>
     <p class="solution-question" data-solution-question data-i18n="quizSolution.loadingQuestion">Caricamento domanda...</p>
@@ -260,11 +261,4 @@
         }
       } else {
         questionEl.textContent = t('quizSolution.noQuestion', null, 'Nessuna domanda ricevuta.');
-        answerEl.textContent = t('quizSolution.retry', null, 'Riprova dal quiz.');
-      }
-    });
-  </script>
-</body>
-</html>
-
-
+        answerEl.textContent = t('quizSolution.retry', null, 'Ripro

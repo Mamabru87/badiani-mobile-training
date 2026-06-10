@@ -54,6 +54,27 @@ if ('serviceWorker' in navigator && location.protocol.startsWith('http') && !win
 })();
 
 // ============================================================
+// SWALLOW: tracked handler for intentionally-ignored errors.
+// Records each error in a ring buffer (window.__badianiErrors,
+// inspectable from devtools) and emits a console.warn (visible
+// in dev / with __BADIANI_DEBUG__), so "silent" failures stay
+// silent for users but remain traceable for debugging.
+// ============================================================
+const swallow = (err, context) => {
+  try {
+    const buf = (window.__badianiErrors = window.__badianiErrors || []);
+    buf.push({
+      context: String(context || 'unknown'),
+      message: (err && err.message) ? String(err.message) : String(err),
+      time: Date.now(),
+    });
+    if (buf.length > 50) buf.splice(0, buf.length - 50);
+    console.warn(`[Badiani:swallow] ${context}`, err);
+  } catch { /* never throw from the error tracker itself */ }
+};
+try { window.__badianiSwallow = swallow; } catch { /* noop */ }
+
+// ============================================================
 // GLOBAL: DISABLE PAGE ZOOM (mobile double-tap / pinch + desktop ctrl+wheel)
 // Requested behavior: the site must stay fixed; no zoom.
 // ============================================================
@@ -968,6 +989,78 @@ window.addEventListener('DOMContentLoaded', function() {
   refreshNicknameBar(user);
 });
 
+// ============================================================
+// AVATAR ONBOARDING PROMPT
+// Mostrato una sola volta dopo un signup completato con successo
+// (flag impostato dal form di iscrizione, mai dal login).
+// ============================================================
+const AVATAR_PROMPT_FLAG = 'badianiAvatarPrompt.v1';
+
+const showAvatarPrompt = () => {
+  try {
+    if (document.getElementById('avatar-prompt-overlay')) return;
+
+    const overlay = document.createElement('div');
+    overlay.id = 'avatar-prompt-overlay';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-labelledby', 'avatar-prompt-title');
+    overlay.style.cssText = 'position:fixed; inset:0; z-index:100000; background:rgba(15,33,84,0.45); backdrop-filter:blur(3px); display:flex; align-items:center; justify-content:center; padding:16px;';
+
+    const card = document.createElement('div');
+    card.style.cssText = 'width:min(92vw, 380px); background:linear-gradient(180deg,#fff 0%,#fdf7ec 100%); border:1px solid rgba(33,64,152,0.14); border-radius:22px; box-shadow:0 22px 60px rgba(15,33,84,0.28); padding:24px 22px; text-align:center; color:var(--ink, #0f2154);';
+    card.innerHTML = `
+      <div aria-hidden="true" style="width:54px; height:54px; margin:0 auto 12px; border-radius:16px; display:grid; place-items:center; background:#fff; border:1px solid rgba(33,64,152,.16); box-shadow:0 10px 22px rgba(33,64,152,.14); font-family:var(--font-medium); font-weight:500; font-size:24px; color:#214098;">B</div>
+      <h3 id="avatar-prompt-title" style="margin:0 0 8px 0; font-size:21px; line-height:1.1; font-family:var(--font-medium); font-weight:500; text-transform:uppercase; letter-spacing:.02em;">${tr('avatarLab.prompt.title', null, 'Vuoi creare il tuo avatar?')}</h3>
+      <p style="margin:0 0 18px 0; color:var(--brand-gray, #4f515e); font-size:14px; line-height:1.45;">${tr('avatarLab.prompt.lede', null, 'Dai un volto al tuo profilo: scegli outfit, mood e cappello in pochi tocchi.')}</p>
+      <button type="button" data-avatar-now style="display:block; width:100%; padding:12px 14px; border-radius:12px; background:#214098; color:#fff; border:none; font-family:var(--font-medium); font-weight:500; font-size:14px; letter-spacing:.06em; text-transform:uppercase; cursor:pointer;">${tr('avatarLab.prompt.now', null, 'Crealo ora')}</button>
+      <button type="button" data-avatar-later style="display:block; width:100%; margin-top:10px; padding:8px; background:transparent; border:none; color:var(--brand-gray-soft, #6b7280); font-size:13px; text-decoration:underline; cursor:pointer;">${tr('avatarLab.prompt.later', null, 'Più tardi')}</button>
+    `;
+
+    const prevFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const onKey = (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        close();
+      }
+    };
+    const close = () => {
+      try { document.removeEventListener('keydown', onKey, true); } catch {}
+      try { overlay.remove(); } catch {}
+      if (prevFocus) { try { prevFocus.focus({ preventScroll: true }); } catch {} }
+    };
+    document.addEventListener('keydown', onKey, true);
+
+    card.querySelector('[data-avatar-later]')?.addEventListener('click', close);
+    card.querySelector('[data-avatar-now]')?.addEventListener('click', () => {
+      close();
+      try {
+        if (typeof window.openAvatarProfileModal === 'function') window.openAvatarProfileModal();
+      } catch {}
+    });
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+
+    overlay.appendChild(card);
+    document.body.appendChild(overlay);
+    requestAnimationFrame(() => {
+      try { card.querySelector('[data-avatar-now]')?.focus({ preventScroll: true }); } catch {}
+    });
+  } catch {}
+};
+
+window.addEventListener('DOMContentLoaded', () => {
+  try {
+    if (localStorage.getItem(AVATAR_PROMPT_FLAG) !== '1') return;
+    localStorage.removeItem(AVATAR_PROMPT_FLAG);
+    const user = window.BadianiProfile?.getActive?.() || null;
+    if (!user) return;
+    let hasAvatar = false;
+    try { hasAvatar = !!localStorage.getItem('badiani_user_avatar'); } catch {}
+    if (hasAvatar) return;
+    setTimeout(showAvatarPrompt, 700);
+  } catch {}
+});
+
 // Live update nickname bar if profile changes while the app is open.
 document.addEventListener('badiani:profile-updated', (e) => {
   const profile = e?.detail?.profile;
@@ -1132,7 +1225,7 @@ window.addEventListener('avatar-updated', (e) => {
         profiles.push(profile);
       }
       saveProfiles(profiles);
-    } catch {}
+    } catch (err) { swallow(err, 'profile:saveProfiles'); }
     try {
       document.dispatchEvent(new CustomEvent('badiani:profile-updated', { detail: { profile } }));
     } catch {}
@@ -1424,7 +1517,7 @@ window.addEventListener('avatar-updated', (e) => {
         enableBetaPreview();
         overlay.remove();
         bodyScrollLock.unlock();
-        setTimeout(() => { try { window.location.reload(); } catch {} }, 50);
+        setTimeout(() => { try { window.location.reload(); } catch (err) { swallow(err, 'nav:reload:betaPreview'); } }, 50);
       });
     }
 
@@ -1468,12 +1561,14 @@ window.addEventListener('avatar-updated', (e) => {
           return;
         }
         console.log('User created successfully, reloading...');
+        // Nuovo profilo: dopo il reload proponi (opzionale) la creazione dell'avatar.
+        try { localStorage.setItem('badianiAvatarPrompt.v1', '1'); } catch {}
         // Chiudi overlay prima del reload per evitare problemi
         overlay.remove();
         bodyScrollLock.unlock();
         // Breve delay per permettere la chiusura dell\'overlay
         setTimeout(() => {
-          try { window.location.reload(); } catch {}
+          try { window.location.reload(); } catch (err) { swallow(err, 'nav:reload:signup'); }
         }, 50);
       });
 
@@ -1531,7 +1626,7 @@ window.addEventListener('avatar-updated', (e) => {
         bodyScrollLock.unlock();
         // Breve delay per permettere la chiusura dell\'overlay
         setTimeout(() => {
-          try { window.location.reload(); } catch {}
+          try { window.location.reload(); } catch (err) { swallow(err, 'nav:reload:login'); }
         }, 50);
       });
 
@@ -3529,7 +3624,7 @@ scrollButtons.forEach((btn) => {
     setExpanded(false);
     bodyScrollLock.unlock();
     if (lastFocus) {
-      try { lastFocus.focus({ preventScroll: true }); } catch (e) {}
+      try { lastFocus.focus({ preventScroll: true }); } catch (e) { swallow(e, 'modal:restoreFocus'); }
       lastFocus = null;
     }
   };
@@ -5128,7 +5223,7 @@ const gamification = (() => {
       if (!raw) {
         try {
           raw = sessionStorage.getItem(sessionKey());
-        } catch {}
+        } catch (err) { swallow(err, 'gamification:load:sessionStorage'); }
       }
 
       // Fallback to same-tab navigation via window.name (useful on file:// where origins differ per page)
@@ -5139,8 +5234,8 @@ const gamification = (() => {
             const serialized = JSON.stringify(fromWindow);
             raw = serialized;
             // Persist to local/session if possible for next loads on the same origin
-            try { localStorage.setItem(key, serialized); } catch {}
-            try { sessionStorage.setItem(sessionKey(), serialized); } catch {}
+            try { localStorage.setItem(key, serialized); } catch (err) { swallow(err, 'gamification:persist:localStorage'); }
+            try { sessionStorage.setItem(sessionKey(), serialized); } catch (err) { swallow(err, 'gamification:persist:sessionStorage'); }
           } catch {}
         }
       }
@@ -5313,7 +5408,7 @@ const gamification = (() => {
       console.log('? State saved after pruning');
     } catch (error) {
       console.warn('? Gamification state not persisted after pruning', error);
-      try { sessionStorage.setItem(sessionKey(), JSON.stringify(state)); } catch {}
+      try { sessionStorage.setItem(sessionKey(), JSON.stringify(state)); } catch (err) { swallow(err, 'gamification:persist:lastResort'); }
       writeWindowNameState(state);
     }
   }
@@ -5447,7 +5542,7 @@ const gamification = (() => {
         params.delete('open');
         const next = `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ''}${window.location.hash || ''}`;
         window.history.replaceState({}, '', next);
-      } catch {}
+      } catch (err) { swallow(err, 'nav:replaceState:gameInfo'); }
     } catch {}
   }
 
@@ -5469,6 +5564,15 @@ const gamification = (() => {
     init();
   }
 
+  function escapeHtml(value) {
+    return String(value ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
   function formatStatListLabels() {
     document.querySelectorAll('.stat-list li').forEach((item) => {
       if (item.querySelector('strong')) return;
@@ -5478,7 +5582,7 @@ const gamification = (() => {
       const label = text.slice(0, idx).trim();
       const rest = text.slice(idx + 1).trim();
       if (!label || !rest) return;
-      item.innerHTML = `<strong>${label}:</strong> ${rest}`;
+      item.innerHTML = `<strong>${escapeHtml(label)}:</strong> ${escapeHtml(rest)}`;
     });
   }
 
@@ -5895,7 +5999,7 @@ const gamification = (() => {
       };
       state.history.quiz.push(lastItem);
       if (state.history.quiz.length > 300) state.history.quiz = state.history.quiz.slice(-300);
-    } catch (e) {}
+    } catch (e) { swallow(e, 'gamification:quizHistory'); }
 
     state.stars = Math.max(0, state.stars - CHALLENGE_INTERVAL);
     state.quizTokens = Math.max(0, state.quizTokens - CHALLENGE_INTERVAL);
@@ -6942,7 +7046,7 @@ const gamification = (() => {
         item.specHref = specHref;
         item.specLabel = specLabel;
         saveState();
-      } catch (e) {}
+      } catch (e) { swallow(e, 'gamification:saveState:specLink'); }
     }
 
     const container = document.createElement('div');
@@ -7152,7 +7256,7 @@ const gamification = (() => {
         const key = window.BadianiProfile?.KEY_ACTIVE || 'badianiUser.profile.v1';
         if (window.BadianiStorage?.setJSON) window.BadianiStorage.setJSON(key, profile);
         else localStorage.setItem(key, JSON.stringify(profile));
-      } catch {}
+      } catch (err) { swallow(err, 'profile:saveActive'); }
       return profile;
     };
 
@@ -7218,7 +7322,7 @@ const gamification = (() => {
     
     container.innerHTML = `
       <div style="text-align:center; margin-bottom:12px;">
-        <p style="font-size:28px; margin:0; line-height:1;">👤</p>
+        <span aria-hidden="true" style="display:inline-grid; place-items:center; width:44px; height:44px; border-radius:14px; background:#fff; border:1px solid rgba(33,64,152,.16); box-shadow:0 8px 18px rgba(33,64,152,.12); font-family:var(--font-medium); font-weight:500; font-size:20px; color:#214098;">B</span>
       </div>
       <h3 style="margin:0 0 8px 0; font-size:20px;">${tr('profile.avatarTitle', null, 'Il tuo Avatar')}</h3>
       <p style="margin:0 0 16px 0; color:var(--brand-gray-soft, #6b7280); font-size:14px;">${tr('profile.avatarDesc', null, "Personalizza il tuo look per l\'Hub.")}</p>
@@ -7250,13 +7354,13 @@ const gamification = (() => {
         try {
           if (window.BadianiProfile?.logout) window.BadianiProfile.logout();
           else localStorage.removeItem('badianiUser.profile.v1');
-        } catch {}
+        } catch (err) { swallow(err, 'profile:logout'); }
 
         try { closeOverlay({ force: true }); } catch { try { closeOverlay(); } catch {} }
         try { bodyScrollLock.forceUnlock(); } catch {}
 
         setTimeout(() => {
-          try { window.location.reload(); } catch {}
+          try { window.location.reload(); } catch (err) { swallow(err, 'nav:reload:logout'); }
         }, 50);
       });
     }
@@ -7370,7 +7474,7 @@ const gamification = (() => {
     setTimeout(() => node.classList.remove('is-rolling'), 600);
   }
 
-  let toastTimer = null;
+  var toastTimer = null; // var: showToast can run during init(), before this line (TDZ guard)
   function showToast(message, options = {}) {
     let toast = document.querySelector('[data-toast]');
     if (!toast) {
@@ -9667,6 +9771,9 @@ Rispondi SOLO con il JSON, nient\'altro.`;
       if (kind === 'thinking') messageEl.classList.add('berny-thinking');
 
       if (options && typeof options.html === 'string') {
+        // SECURITY: options.html deve contenere SOLO markup statico interno
+        // (es. i puntini "thinking"). Mai passare dati utente/esterni qui:
+        // per testo dinamico usare il parametro `text` (textContent).
         messageEl.innerHTML = options.html;
       } else {
         messageEl.textContent = text;
@@ -11164,8 +11271,11 @@ Rispondi SOLO con il JSON, nient\'altro.`;
     openOverlay(container, { fullScreen: true });
   }
 
-  let fxLayerEl = null;
-  const getFxLayer = () => {
+  // NOTE: hoisted (var/function) on purpose: init() can run synchronously
+  // during script evaluation (story-orbit rewards) before this point,
+  // and let/const here would throw a TDZ ReferenceError.
+  var fxLayerEl = null;
+  function getFxLayer() {
     if (fxLayerEl && fxLayerEl.isConnected) return fxLayerEl;
     fxLayerEl = document.querySelector('[data-fx-layer]');
     if (!fxLayerEl) {
@@ -11175,7 +11285,7 @@ Rispondi SOLO con il JSON, nient\'altro.`;
       (document.documentElement || document.body).appendChild(fxLayerEl);
     }
     return fxLayerEl;
-  };
+  }
 
   function playCrystalPing(source, evt = null) {
     const { x: cx, y: cy } = getOriginPoint(source, evt);
@@ -11193,7 +11303,7 @@ Rispondi SOLO con il JSON, nient\'altro.`;
     ).onfinish = () => crystal.remove();
   }
 
-  const getOriginPoint = (el, evt = null) => {
+  function getOriginPoint(el, evt = null) {
     // Prefer viewport coordinates (FX layer is fixed to viewport).
     const xFromEvt = evt?.clientX ?? null;
     const yFromEvt = evt?.clientY ?? null;
@@ -11211,7 +11321,7 @@ Rispondi SOLO con il JSON, nient\'altro.`;
 
     // Last resort: screen center.
     return { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-  };
+  }
 
   function playCrystalTabAnimation(source, evt = null) {
     const { x: startX, y: startY } = getOriginPoint(source, evt);
@@ -12622,6 +12732,10 @@ toggles.forEach((button) => {
     // Crea modal
     const modal = document.createElement('div');
     modal.className = 'card-modal';
+    // A11y: announce as modal dialog (close: X button, Escape, swipe)
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    try { if (cardTitle) modal.setAttribute('aria-label', cardTitle); } catch (e) {}
 
     // Log BEFORE body scroll lock
     logScrollState('BEFORE bodyScrollLock.lock()');
