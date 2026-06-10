@@ -3,9 +3,9 @@
 
 /* Scope everything to the widget to avoid leaking styles. */
 .berny-widget {
-  --berny-blue: #0066cc;
-  --berny-blue-deep: #004499;
-  --berny-blue-soft: rgba(0, 102, 204, 0.08);
+  --berny-blue: var(--brand-blue, #214098);
+  --berny-blue-deep: var(--brand-blue-deep, #0f2154);
+  --berny-blue-soft: rgba(33, 64, 152, 0.08);
   --berny-shadow: 0 18px 44px rgba(15, 33, 84, 0.22);
   --berny-radius: 18px;
 
@@ -30,8 +30,8 @@
   border: none;
   cursor: pointer;
   padding: 0;
-  background: linear-gradient(135deg, var(--berny-blue) 0%, #0099ff 100%);
-  box-shadow: 0 16px 34px rgba(0, 102, 204, 0.32);
+  background: linear-gradient(135deg, var(--berny-blue) 0%, var(--berny-blue-deep) 100%);
+  box-shadow: 0 16px 34px rgba(33, 64, 152, 0.32);
   display: grid;
   place-items: center;
   position: relative;
@@ -65,7 +65,7 @@
   height: 22px;
   padding: 0 6px;
   border-radius: 999px;
-  background: #ec4899;
+  background: var(--brand-rose, #ec418c);
   color: #fff;
   font-size: 12px;
   font-family: var(--font-medium, system-ui, sans-serif);
@@ -210,7 +210,7 @@
 }
 
 .berny-widget .user-message .user-bubble {
-  background: linear-gradient(135deg, var(--berny-blue) 0%, #0099ff 100%);
+  background: linear-gradient(135deg, var(--berny-blue) 0%, var(--berny-blue-deep) 100%);
   color: #fff;
   border-top-right-radius: 6px;
 }
@@ -280,8 +280,8 @@
 }
 
 .berny-widget .berny-input:focus {
-  border-color: rgba(0, 102, 204, 0.65);
-  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.15);
+  border-color: rgba(33, 64, 152, 0.65);
+  box-shadow: 0 0 0 3px rgba(33, 64, 152, 0.15);
 }
 
 .berny-widget .berny-send-btn {
@@ -289,12 +289,12 @@
   height: 44px;
   border-radius: 999px;
   border: none;
-  background: linear-gradient(135deg, var(--berny-blue) 0%, #0099ff 100%);
+  background: linear-gradient(135deg, var(--berny-blue) 0%, var(--berny-blue-deep) 100%);
   color: #fff;
   cursor: pointer;
   display: grid;
   place-items: center;
-  box-shadow: 0 8px 18px rgba(0, 102, 204, 0.22);
+  box-shadow: 0 8px 18px rgba(33, 64, 152, 0.22);
 }
 
 .berny-widget .berny-send-btn:disabled {
@@ -332,7 +332,7 @@
   background: var(--berny-blue);
   color: #fff;
   transform: translateY(-2px);
-  box-shadow: 0 10px 18px rgba(0, 102, 204, 0.22);
+  box-shadow: 0 10px 18px rgba(33, 64, 152, 0.22);
 }
 
 .berny-widget .suggestion-chip:active {
@@ -349,13 +349,13 @@
 
 .berny-widget .berny-message .message-bubble b,
 .berny-widget .berny-message .message-bubble strong {
-  color: #E30613; /* Rosso Badiani per i concetti chiave */
-  font-weight: 700;
+  color: var(--brand-blue, #214098);
+  font-weight: 500;
 }
 
 /* Pulsante Link */
 .berny-link-btn:hover {
-  background-color: #E30613 !important; /* Hover Rosso */
+  background-color: var(--brand-blue-deep, #0f2154) !important;
   transform: translateY(-1px);
   transition: all 0.2s;
 }
@@ -401,21 +401,21 @@
   }
   .berny-widget .suggestion-chip {
     background: #1b1b1b;
-    color: #0099ff;
-    border-color: #0099ff;
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.28);
   }
 }
 
 /* Effetto Evidenziatore Badiani */
 @keyframes badianiPulse {
-  0% { box-shadow: 0 0 0 0 rgba(227, 6, 19, 0.7); transform: scale(1); }
-  50% { box-shadow: 0 0 0 20px rgba(227, 6, 19, 0); transform: scale(1.02); }
-  100% { box-shadow: 0 0 0 0 rgba(227, 6, 19, 0); transform: scale(1); }
+  0% { box-shadow: 0 0 0 0 rgba(33, 64, 152, 0.55); transform: scale(1); }
+  50% { box-shadow: 0 0 0 20px rgba(33, 64, 152, 0); transform: scale(1.02); }
+  100% { box-shadow: 0 0 0 0 rgba(33, 64, 152, 0); transform: scale(1); }
 }
 
 .berny-highlight-pulse {
   animation: badianiPulse 1s ease-out infinite;
-  border: 2px solid #E30613 !important; /* Bordo rosso */
+  border: 2px solid var(--brand-blue, #214098) !important;
   position: relative;
   z-index: 9999; /* Sopra tutto */
 }

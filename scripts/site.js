@@ -5449,7 +5449,7 @@ const gamification = (() => {
 
     const clean = (value) => String(value || '')
       .replace(/\s+/g, ' ')
-      .replace(/^(Troubleshooting|Pro tip|qualit(?:à|a)|Take Away \(TW\)):\s*/i, '')
+      .replace(/^(Troubleshooting|Pro tip|qualit(?:à|a)|Take Away \(TW\)|Suggerimenti|Suggerimento|Tips? & Tricks|Tips|Checklist|Procedura):?\s*/i, '')
       .trim();
 
     const firstText = (root, selector) => clean(root.querySelector(selector)?.textContent || '');

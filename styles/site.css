@@ -29,6 +29,8 @@
   --brand-gray-soft: #6b7082;
   --brand-rose: #ec418c;
   --brand-gold: #f2be58;
+  --brand-rose-ink: #9d1f5d;
+  --brand-gold-ink: #8a5600;
   --paper: #ffffff;
   --paper-soft: #fff8f0;
   --ink: var(--brand-blue);
@@ -2690,7 +2692,7 @@ h4 {
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  border: 2px solid #E30613;
+  border: 2px solid var(--brand-blue);
   object-fit: cover;
   animation: pulse 1.5s ease-in-out infinite;
 }
@@ -3095,9 +3097,9 @@ h4 {
   align-items: center;
   gap: 14px;
   padding: 16px;
-  background: linear-gradient(135deg, rgba(227, 6, 19, 0.08) 0%, rgba(236, 65, 140, 0.08) 100%);
+  background: linear-gradient(135deg, rgba(33, 64, 152, 0.08) 0%, rgba(236, 65, 140, 0.08) 100%);
   border-radius: var(--radius-lg);
-  border: 2px solid rgba(227, 6, 19, 0.2);
+  border: 2px solid rgba(33, 64, 152, 0.2);
   margin-bottom: 4px;
 }
 
@@ -3127,7 +3129,7 @@ h4 {
 .berny-quiz-name {
   font-size: 18px;
   font-weight: 500;
-  color: #E30613;
+  color: var(--brand-blue);
   margin: 0 0 2px 0;
   letter-spacing: 0.02em;
 }
@@ -3142,12 +3144,12 @@ h4 {
 
 .berny-chat-bubble {
   background: white;
-  border: 2px solid rgba(227, 6, 19, 0.15);
+  border: 2px solid rgba(33, 64, 152, 0.15);
   border-radius: 20px;
   border-top-left-radius: 4px;
   padding: 18px 20px;
   margin-bottom: 8px;
-  box-shadow: 0 4px 12px rgba(227, 6, 19, 0.1);
+  box-shadow: 0 4px 12px rgba(33, 64, 152, 0.1);
   position: relative;
   animation: bernyBubbleSlide 0.4s ease-out;
 }
@@ -3183,7 +3185,7 @@ h4 {
   height: 0;
   border-style: solid;
   border-width: 0 12px 12px 0;
-  border-color: transparent rgba(227, 6, 19, 0.15) transparent transparent;
+  border-color: transparent rgba(33, 64, 152, 0.15) transparent transparent;
 }
 
 .berny-chat-bubble::after {
@@ -3208,7 +3210,7 @@ h4 {
 .berny-chat-text p strong {
   display: block;
   font-size: 16px;
-  color: #E30613;
+  color: var(--brand-blue);
   margin-bottom: 6px;
   font-weight: 500;
 }
@@ -3237,7 +3239,7 @@ h4 {
 }
 
 .berny-chat-container::-webkit-scrollbar-thumb {
-  background: #E30613;
+  background: var(--brand-blue);
   border-radius: 3px;
 }
 
@@ -3246,7 +3248,7 @@ h4 {
   padding: 9px 12px;
   border-radius: 16px;
   margin-bottom: 8px;
-  border-left: 3px solid #E30613;
+  border-left: 3px solid var(--brand-blue);
   font-size: 13.5px;
   line-height: 1.5;
   color: var(--ink);
@@ -3426,18 +3428,18 @@ h4 {
 
 /* Stile speciale per quiz screen Berny */
 .quiz-screen--berny .quiz-card {
-  border-color: rgba(227, 6, 19, 0.25);
-  box-shadow: 0 24px 60px rgba(227, 6, 19, 0.15);
+  border-color: rgba(33, 64, 152, 0.25);
+  box-shadow: 0 24px 60px rgba(33, 64, 152, 0.15);
 }
 
 .quiz-screen--berny .quiz-option {
-  border-color: rgba(227, 6, 19, 0.2);
+  border-color: rgba(33, 64, 152, 0.2);
 }
 
 .quiz-screen--berny .quiz-option:hover,
 .quiz-screen--berny .quiz-option:focus-visible {
-  border-color: #E30613;
-  box-shadow: 0 12px 24px rgba(227, 6, 19, 0.25);
+  border-color: var(--brand-blue);
+  box-shadow: 0 12px 24px rgba(33, 64, 152, 0.25);
 }
 
 .quiz-progress {
@@ -9959,14 +9961,14 @@ body.page-home {
    Used by scripts/deep-link.js to spotlight a card after redirect
 ------------------------------------------------------------ */
 @keyframes badianiPulse {
-  0% { box-shadow: 0 0 0 0 rgba(227, 6, 19, 0.55); transform: scale(1); }
-  50% { box-shadow: 0 0 0 18px rgba(227, 6, 19, 0); transform: scale(1.02); }
-  100% { box-shadow: 0 0 0 0 rgba(227, 6, 19, 0); transform: scale(1); }
+  0% { box-shadow: 0 0 0 0 rgba(33, 64, 152, 0.55); transform: scale(1); }
+  50% { box-shadow: 0 0 0 18px rgba(33, 64, 152, 0); transform: scale(1.02); }
+  100% { box-shadow: 0 0 0 0 rgba(33, 64, 152, 0); transform: scale(1); }
 }
 
 .berny-highlight-pulse {
   animation: badianiPulse 1s ease-out infinite;
-  border: 2px solid #E30613 !important;
+  border: 2px solid var(--brand-blue) !important;
   position: relative;
   z-index: 3;
 }
@@ -11610,7 +11612,7 @@ body.page-home {
 
 /* Pulsante Ripassa Scheda (Quiz Feedback) */
 .study-link-btn {
-    background-color: #E30613 !important; /* Rosso Badiani */
+    background-color: var(--brand-blue) !important; /* Brandbook: primary Badiani blue */
     color: white !important;
     border: none;
     margin-right: 10px;
@@ -11624,14 +11626,14 @@ body.page-home {
 /* Effetto Pulse per Card Evidenziata */
 @keyframes cardPulse {
     0% { transform: scale(1); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-    50% { transform: scale(1.05); box-shadow: 0 0 15px rgba(227, 6, 19, 0.6); border-color: #E30613; }
+    50% { transform: scale(1.05); box-shadow: 0 0 15px rgba(33, 64, 152, 0.45); border-color: var(--brand-blue); }
     100% { transform: scale(1); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
 }
 
 .highlight-pulse {
     animation: cardPulse 1s ease-in-out infinite;
     z-index: 10; /* Porta in primo piano */
-    border: 2px solid #E30613 !important;
+    border: 2px solid var(--brand-blue) !important;
 }
 
 
@@ -11757,8 +11759,8 @@ body.page-home {
 
 .menu-item:hover {
   background: white;
-  border-color: #E30613;
-  box-shadow: 0 4px 12px rgba(227, 6, 19, 0.1);
+  border-color: var(--brand-blue);
+  box-shadow: 0 4px 12px rgba(33, 64, 152, 0.1);
   transform: translateY(-2px);
 }
 
@@ -12493,5 +12495,51 @@ strong, b, .btn, .btn-primary, .btn-secondary, .btn-ghost, .tag, .badge, .nav-to
 .menu-action-btn, .training-brief__copy strong {
   font-family: var(--font-medium);
   font-weight: 500;
+}
+
+/* Final Badiani brandbook color guard
+   Pink/yellow stay decorative accents; readable copy stays blue/gray on white. */
+.hub-card__big-text--gold,
+.mission-reward__star,
+.card-modal-crystals.is-starred .card-modal-crystals__icon,
+.card-modal-crystals.is-starred .card-modal-crystals__suffix {
+  color: var(--brand-gold-ink);
+}
+
+.guide-card--procedure h3,
+.guide-card--procedure .tag,
+.guide-card--procedure .guide-card__meta,
+.guide-card--procedure .guide-card__badge,
+.shelf-life-table td:first-child,
+.menu-drawer__profile-flavour {
+  color: var(--brand-blue);
+}
+
+.shelf-life-table th {
+  background: var(--brand-blue);
+  color: var(--cloud);
+}
+
+.btn-rose,
+.reward-action.primary,
+.menu-drawer__close,
+.berny-quick-actions__button--primary {
+  background: var(--brand-blue);
+  border-color: rgba(33, 64, 152, 0.55);
+  color: var(--cloud);
+}
+
+.btn-rose:hover,
+.reward-action.primary:hover,
+.menu-drawer__close:hover,
+.menu-drawer__close:focus-visible,
+.berny-quick-actions__button--primary:hover {
+  background: var(--brand-blue-deep);
+  border-color: rgba(15, 33, 84, 0.75);
+}
+
+.btn-gold {
+  background: var(--brand-gold);
+  color: var(--brand-blue-deep);
 }
 
