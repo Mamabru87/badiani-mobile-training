@@ -6210,6 +6210,47 @@ const gamification = (() => {
     });
   }
 
+  function renderStaffRoutine({ correct = 0 } = {}) {
+    const routine = document.querySelector('[data-staff-routine]');
+    if (!routine) return;
+
+    const openedCount = Object.keys(state.openedToday || {}).length;
+    const wrongCount = sanitizeQuizHistory(state.history?.quiz).filter(q => q.correct === false).length;
+    const review = openedCount < 1
+      ? { title: 'Cappuccino', href: 'caffe.html?q=cappuccino#card-cappuccino' }
+      : openedCount < 2
+        ? { title: 'Buontalenti', href: 'gelato-lab.html?q=buontalenti#card-buontalenti' }
+        : { title: 'Afternoon Tea Set', href: 'sweet-treats.html?q=afternoon-tea-set#card-afternoon-tea-set' };
+    const avoid = wrongCount > 0
+      ? { title: 'Ultimo errore quiz', href: 'index.html?berny=avoid&card=Cappuccino' }
+      : { title: 'Coppette', href: 'index.html?berny=avoid&card=Coppette' };
+    const quiz = correct < 1
+      ? { title: 'Espresso Single', href: 'index.html?berny=quiz&card=Espresso%20Single' }
+      : { title: 'Operations', href: 'quiz-solution.html' };
+
+    const setCard = (key, data, labelSelector) => {
+      const card = routine.querySelector(`[data-routine-card="${key}"]`);
+      if (card && data.href) card.href = data.href;
+      const label = routine.querySelector(labelSelector);
+      if (label) label.textContent = data.title;
+    };
+
+    setCard('review', review, '[data-routine-review-label]');
+    setCard('avoid', avoid, '[data-routine-avoid-label]');
+    setCard('quiz', quiz, '[data-routine-quiz-label]');
+
+    const lede = routine.querySelector('[data-routine-lede]');
+    if (lede) {
+      if (openedCount < 1) {
+        lede.textContent = tr('routine.lede.start', null, 'Prima apertura: fai un giro guidato su prodotto, errore e quiz. Cinque minuti, zero dispersione.');
+      } else if (correct < 1) {
+        lede.textContent = tr('routine.lede.quiz', null, 'Hai già iniziato: ora chiudi il giro con un quiz e un ripasso BERNY.');
+      } else {
+        lede.textContent = tr('routine.lede.advance', null, 'Routine avviata: scegli un errore da evitare o una scheda nuova per consolidare.');
+      }
+    }
+  }
+
   function renderDailyMission({ stars = 0, correct = 0 } = {}) {
     const mission = document.querySelector('[data-daily-mission]');
     if (!mission) return;
@@ -6331,6 +6372,7 @@ const gamification = (() => {
     setText('[data-perf-gelati-total]', totals.gelati || 0);
     setText('[data-perf-bonus-total]', totals.bonusPoints || 0);
     renderDailyMission({ stars, correct, totals });
+    renderStaffRoutine({ correct, wrong });
     const list = root.querySelector('[data-wrong-list]');
     const wrongCountNode = root.querySelector('[data-wrong-count]');
     if (list) {

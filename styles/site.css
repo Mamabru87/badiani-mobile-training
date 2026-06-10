@@ -650,6 +650,130 @@ body.page-home {
   font-style: normal;
 }
 
+
+.page-home .staff-routine {
+  margin: 14px 6px 0;
+  padding: 16px;
+  border: 1px solid rgba(33, 64, 152, 0.10);
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(33, 64, 152, 0.055), rgba(255, 255, 255, 0.96));
+  box-shadow: 0 16px 34px rgba(15, 33, 84, 0.07);
+}
+
+.page-home .staff-routine__header {
+  display: grid;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+
+.page-home .staff-routine__eyebrow {
+  margin: 0;
+  color: var(--brand-blue);
+  font-family: var(--font-medium);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.page-home .staff-routine h2 {
+  margin: 0;
+  color: var(--brand-blue);
+  font-size: clamp(22px, 4vw, 32px);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.page-home .staff-routine__header p:last-child {
+  margin: 0;
+  color: var(--brand-gray);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.page-home .staff-routine__cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.page-home .staff-routine__card {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  min-height: 118px;
+  padding: 13px;
+  border: 1px solid rgba(33, 64, 152, 0.12);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.92);
+  color: inherit;
+  text-decoration: none;
+  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.page-home .staff-routine__card:hover,
+.page-home .staff-routine__card:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(33, 64, 152, 0.30);
+  box-shadow: 0 14px 24px rgba(15, 33, 84, 0.10);
+  outline: none;
+}
+
+.page-home .staff-routine__icon {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 11px;
+  background: rgba(33, 64, 152, 0.09);
+  color: var(--brand-blue);
+  font-family: var(--font-medium);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  flex: 0 0 auto;
+}
+
+.page-home .staff-routine__copy {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.page-home .staff-routine__copy strong {
+  color: var(--brand-gray);
+  font-family: var(--font-medium);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.page-home .staff-routine__copy em {
+  color: var(--brand-blue);
+  font-family: var(--font-medium);
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.page-home .staff-routine__copy small {
+  color: var(--brand-gray-soft);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+@media (max-width: 760px) {
+  .page-home .staff-routine__cards {
+    grid-template-columns: 1fr;
+  }
+
+  .page-home .staff-routine__card {
+    min-height: 0;
+  }
+}
+
 /* Daily mission dashboard — Sprint 3.1 training UX */
 .page-home .daily-mission {
   display: grid;
