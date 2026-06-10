@@ -6214,29 +6214,37 @@ const gamification = (() => {
     const mission = document.querySelector('[data-daily-mission]');
     if (!mission) return;
 
-    const goals = { cards: 3, quiz: 1, stars: 3 };
+    const todayKey = new Date().toISOString().slice(0, 10);
+    const coachDone = (() => {
+      try { return localStorage.getItem(`badiani.mission.coach.${todayKey}`) ? 1 : 0; } catch { return 0; }
+    })();
+    const goals = { cards: 3, quiz: 1, coach: 1, stars: 3 };
     const openedCards = Object.keys(state.openedToday || {}).length;
     const values = {
       cards: Math.min(openedCards, goals.cards),
       quiz: Math.min(correct, goals.quiz),
+      coach: Math.min(coachDone, goals.coach),
       stars: Math.min(stars, goals.stars),
     };
-    const completedSteps = ['cards', 'quiz', 'stars'].filter((key) => values[key] >= goals[key]).length;
+    const missionKeys = ['cards', 'quiz', 'coach', 'stars'];
+    const completedSteps = missionKeys.filter((key) => values[key] >= goals[key]).length;
 
     const setText = (sel, val) => {
       const el = mission.querySelector(sel);
       if (el) el.textContent = String(val);
     };
 
-    setText('[data-mission-progress]', `${completedSteps}/3`);
+    setText('[data-mission-progress]', `${completedSteps}/${missionKeys.length}`);
     setText('[data-mission-cards-current]', values.cards);
     setText('[data-mission-cards-goal]', goals.cards);
     setText('[data-mission-quiz-current]', values.quiz);
     setText('[data-mission-quiz-goal]', goals.quiz);
+    setText('[data-mission-coach-current]', values.coach);
+    setText('[data-mission-coach-goal]', goals.coach);
     setText('[data-mission-stars-current]', values.stars);
     setText('[data-mission-stars-goal]', goals.stars);
 
-    ['cards', 'quiz', 'stars'].forEach((key) => {
+    missionKeys.forEach((key) => {
       const step = mission.querySelector(`[data-mission-step="${key}"]`);
       if (step) step.classList.toggle('is-complete', values[key] >= goals[key]);
     });
@@ -6255,13 +6263,16 @@ const gamification = (() => {
       setCta('caffe.html', 'mission.cta.cards', 'Apri una categoria');
     } else if (values.quiz < goals.quiz) {
       if (next) next.textContent = tr('mission.next.quiz', null, 'Prossimo obiettivo: completa un mini quiz corretto.');
-      setCta('caffe.html#quiz', 'mission.cta.quiz', 'Vai a un quiz');
+      setCta('quiz-solution.html', 'mission.cta.quiz', 'Vai a un quiz');
+    } else if (values.coach < goals.coach) {
+      if (next) next.textContent = tr('mission.next.coach', null, 'Prossimo obiettivo: chiedi a BERNY un ripasso o un errore da evitare.');
+      setCta('index.html?berny=review&card=Cappuccino', 'mission.cta.coach', 'Chiedi a BERNY');
     } else if (values.stars < goals.stars) {
       if (next) next.textContent = tr('mission.next.stars', null, 'Prossimo obiettivo: raccogli 3 stelline.');
       setCta('gelato-lab.html', 'mission.cta.stars', 'Raccogli stelline');
     } else {
       if (next) next.textContent = tr('mission.next.done', null, 'Missione completata: ottimo giro training, ora puoi ripassare gli errori o continuare a esplorare.');
-      setCta('index.html#berny', 'mission.cta.done', 'Chiedi un ripasso a BERNY');
+      setCta('index.html?berny=avoid&card=Coppette', 'mission.cta.done', 'Ripassa gli errori con BERNY');
     }
   }
 

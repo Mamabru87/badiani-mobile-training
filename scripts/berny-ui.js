@@ -39,7 +39,7 @@
 
   const sanitize = (value) => String(value ?? '').trim();
 
-  const BERNY_SUITE_VERSION = '20260610_10';
+  const BERNY_SUITE_VERSION = '20260610_11';
   const BERNY_SUITE_SCRIPTS = [
     'scripts/berny-knowledge.js',
     'scripts/berny-super-knowledge.js',
@@ -447,6 +447,8 @@
 
       return {
         text,
+        intent,
+        title,
         links: [{ url: href, label: `Apri ${title}` }],
       };
     }
@@ -487,6 +489,14 @@
         return null;
       });
       if (coachReply) {
+        try {
+          const todayKey = new Date().toISOString().slice(0, 10);
+          localStorage.setItem(`badiani.mission.coach.${todayKey}`, JSON.stringify({
+            intent: coachReply.intent || 'coach',
+            title: coachReply.title || '',
+            at: Date.now(),
+          }));
+        } catch {}
         this.hideTypingIndicator();
         this.addMessage(coachReply.text, 'berny');
         if (coachReply.links?.length) this.enqueueActionsMessage(coachReply.links, 250);

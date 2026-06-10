@@ -3,7 +3,7 @@
  * - Network-first for HTML (so updates land fast)
  * - Skip cache for video_embargo (large) and external URLs
  */
-const VERSION = 'badiani-v2-20260610-10';
+const VERSION = 'badiani-v2-20260610-11';
 const STATIC_CACHE = `${VERSION}-static`;
 const RUNTIME_CACHE = `${VERSION}-runtime`;
 
