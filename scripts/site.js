@@ -1033,7 +1033,34 @@ window.addEventListener('avatar-updated', (e) => {
     return (exp * 1000) > Date.now();
   };
 
-  // Phone verification is mandatory in production.
+  const makeBetaToken = () => {
+    const payload = {
+      sub: 'beta-preview',
+      mode: 'beta-preview',
+      exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 14),
+    };
+    const json = JSON.stringify(payload);
+    try {
+      return btoa(json).replace(/=+$/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+    } catch {
+      return '';
+    }
+  };
+
+  const enableBetaPreview = () => {
+    const token = makeBetaToken();
+    if (token) {
+      try { localStorage.setItem(AUTH_TOKEN_KEY, token); } catch {}
+      try { localStorage.setItem(AUTH_VERIFIED_AT_KEY, String(Date.now())); } catch {}
+    }
+    const existing = getUser();
+    if (!existing) {
+      saveUser('beta-preview', 'Marco Beta', 'Buontalenti', Date.now());
+    }
+    return true;
+  };
+
+  // Phone verification remains the normal path; beta preview is a temporary local bypass for Marco/testing.
   const isVerifiedOrBeta = () => isVerified();
 
   const getAuthBase = () => {
@@ -1155,7 +1182,7 @@ window.addEventListener('avatar-updated', (e) => {
 
     card.innerHTML = `
       <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
-        <div aria-hidden="true" style="width:52px; height:52px; border-radius:18px; display:grid; place-items:center; background:#214098; color:#fff; box-shadow:0 12px 26px rgba(33,64,152,0.24); font-family:var(--font-title); font-size:30px; font-weight:500; letter-spacing:.02em;">B</div>
+        <div aria-hidden="true" style="width:58px; height:58px; border-radius:18px; display:grid; place-items:center; background:#fff; border:1px solid rgba(33,64,152,.14); box-shadow:0 12px 26px rgba(33,64,152,0.16); padding:8px;"><img src="assets/brand/logo-b-blue-192.png" alt="" width="42" height="42" decoding="async" style="display:block; width:42px; height:42px; object-fit:contain;" /></div>
         <div>
           <p style="margin:0 0 4px 0; color:#9d1f5d; font-size:12px; letter-spacing:.12em; text-transform:uppercase; font-weight:500;">Training Orbit</p>
           <h2 id="signup-title" style="margin:0; font-size:26px; line-height:1.02; font-family: var(--font-medium);">${tr('auth.welcome.title', null, 'Benvenuto nel playbook Badiani')}</h2>
@@ -1188,6 +1215,8 @@ window.addEventListener('avatar-updated', (e) => {
           <p data-info-verify style="margin:0; color:#1f2937; display:none; font-size:14px;"></p>
 
           <button type="button" data-action="verify-otp" style="padding:10px 14px; border-radius:10px; background:#0f2154; color:#fff; border:none; font-weight:500; cursor:pointer;">${tr('auth.verify.confirmBtn', null, 'Conferma e continua')}</button>
+          <button type="button" data-action="beta-preview" style="padding:10px 14px; border-radius:10px; background:#fff; color:#214098; border:1px solid rgba(33,64,152,.28); font-weight:500; cursor:pointer;">${tr('auth.beta.enterBtn', null, 'Entra in beta senza SMS')}</button>
+          <p style="margin:0; color:var(--brand-gray-soft, #6b7280); font-size:12px; line-height:1.4;">${tr('auth.beta.note', null, 'Solo anteprima interna: salta l’SMS su questo dispositivo per vedere e testare la training app.')}</p>
 
         </div>
       </div>
@@ -1227,6 +1256,7 @@ window.addEventListener('avatar-updated', (e) => {
     const otpInput = verifyPanel?.querySelector('[data-input="otp"]');
     const sendOtpBtn = verifyPanel?.querySelector('[data-action="send-otp"]');
     const verifyOtpBtn = verifyPanel?.querySelector('[data-action="verify-otp"]');
+    const betaPreviewBtn = verifyPanel?.querySelector('[data-action="beta-preview"]');
     const verifyErr = verifyPanel?.querySelector('[data-error-verify]');
     const verifyInfo = verifyPanel?.querySelector('[data-info-verify]');
 
@@ -1388,6 +1418,15 @@ window.addEventListener('avatar-updated', (e) => {
 
     if (sendOtpBtn) sendOtpBtn.addEventListener('click', (e) => { e.preventDefault(); requestOtp(); });
     if (verifyOtpBtn) verifyOtpBtn.addEventListener('click', (e) => { e.preventDefault(); confirmOtp(); });
+    if (betaPreviewBtn) {
+      betaPreviewBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        enableBetaPreview();
+        overlay.remove();
+        bodyScrollLock.unlock();
+        setTimeout(() => { try { window.location.reload(); } catch {} }, 50);
+      });
+    }
 
     if (signupForm) {
       const submitBtn = signupForm.querySelector('button[type="submit"]');
