@@ -39,7 +39,7 @@
 
   const sanitize = (value) => String(value ?? '').trim();
 
-  const BERNY_SUITE_VERSION = '20260610_13';
+  const BERNY_SUITE_VERSION = '20260610_17';
   const BERNY_SUITE_SCRIPTS = [
     'scripts/berny-knowledge.js',
     'scripts/berny-super-knowledge.js',

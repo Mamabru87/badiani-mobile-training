@@ -6331,10 +6331,30 @@ const gamification = (() => {
 
     const cta = mission.querySelector('[data-mission-primary]');
     const next = mission.querySelector('[data-reward-next]');
+    if (cta && !document.documentElement.dataset.missionCtaCaptureBound) {
+      document.documentElement.dataset.missionCtaCaptureBound = '1';
+      const navigateMissionCta = (event) => {
+        const target = event.target?.closest?.('[data-mission-primary]');
+        if (!target) return;
+        const href = target.getAttribute('href') || '';
+        if (!href || href.startsWith('#')) return;
+        event.preventDefault();
+        event.stopPropagation();
+        try { event.stopImmediatePropagation(); } catch {}
+        if (target.dataset.navigating === '1') return;
+        target.dataset.navigating = '1';
+        window.location.assign(href);
+      };
+      document.addEventListener('click', navigateMissionCta, true);
+      document.addEventListener('pointerup', navigateMissionCta, true);
+      document.addEventListener('touchend', navigateMissionCta, true);
+    }
+
     const setCta = (href, labelKey, fallback) => {
       if (cta) {
         cta.href = href;
         cta.textContent = tr(labelKey, null, fallback);
+        cta.dataset.navigating = '0';
       }
     };
 
@@ -6343,7 +6363,7 @@ const gamification = (() => {
       setCta('caffe.html', 'mission.cta.cards', 'Apri una categoria');
     } else if (values.quiz < goals.quiz) {
       if (next) next.textContent = tr('mission.next.quiz', null, 'Prossimo obiettivo: completa un mini quiz corretto.');
-      setCta('quiz-solution.html', 'mission.cta.quiz', 'Vai a un quiz');
+      setCta('index.html?berny=quiz&card=Espresso%20Single', 'mission.cta.quiz', 'Vai a un quiz');
     } else if (values.coach < goals.coach) {
       if (next) next.textContent = tr('mission.next.coach', null, 'Prossimo obiettivo: chiedi a BERNY un ripasso o un errore da evitare.');
       setCta('index.html?berny=review&card=Cappuccino', 'mission.cta.coach', 'Chiedi a BERNY');
