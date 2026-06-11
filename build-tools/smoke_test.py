@@ -70,10 +70,23 @@ IGNORED_ERROR_FRAGMENTS = (
 )
 
 
+# Resources the app fetches opportunistically but that are intentionally NOT
+# in the public repo (gitignored: internal notes / BERNY KB). The app handles
+# their absence gracefully (try/catch), so their 404s are expected in CI and
+# on GitHub Pages and must not fail the smoke run — in ANY base mode.
+OPTIONAL_RESOURCE_FRAGMENTS = (
+    "/notes/",
+    "notes/kb/",
+)
+
+
 def is_ignorable(text: str, base_is_file: bool) -> bool:
+    lowered = text.lower()
+    if any(frag.lower() in lowered for frag in OPTIONAL_RESOURCE_FRAGMENTS):
+        return True
     if not base_is_file:
         return False
-    return any(frag.lower() in text.lower() for frag in IGNORED_ERROR_FRAGMENTS)
+    return any(frag.lower() in lowered for frag in IGNORED_ERROR_FRAGMENTS)
 
 
 def resolve_base(base):
@@ -90,11 +103,19 @@ def resolve_base(base):
 
 
 def attach_error_collectors(page, errors):
-    page.on(
-        "console",
-        lambda msg, errs=errors: errs.append(msg.text)
-        if msg.type == "error" else None,
-    )
+    # Console "Failed to load resource" messages don't include the URL in
+    # msg.text — append msg.location's URL so ignore-filters can match paths.
+    def _on_console(msg, errs=errors):
+        if msg.type != "error":
+            return
+        loc = ""
+        try:
+            loc = (msg.location or {}).get("url", "") or ""
+        except Exception:
+            loc = ""
+        errs.append(f"{msg.text} [{loc}]" if loc else msg.text)
+
+    page.on("console", _on_console)
     page.on(
         "pageerror",
         lambda exc, errs=errors: errs.append(f"pageerror: {exc}"),
