@@ -917,8 +917,8 @@ normalize(s) = s.toLowerCase().normalize('NFD')
 
 ### Aggiungere una nuova pagina
 
-- [ ] Copiare struttura HTML da una pagina esistente (hero, carousel, footer, nav, scripts)
-- [ ] Aggiungere la pagina nel menu drawer (tutte le pagine)
+- [ ] Creare `build-tools/content/<pagina>.html` copiando un content esistente (es. `festive.html`) e registrare la pagina in `build-tools/pages.json` (title, description, og:image) — vedi [sistema template](#checklist-per-modifiche-sicure)
+- [ ] Aggiungere la voce nei partial `build-tools/templates/drawer*.html` e `nav--*.html`, poi rigenerare con `python build-tools/build_pages.py`
 - [ ] Creare le chiavi i18n per hero, card, footer
 - [ ] Registrare nel catalogo ricerca (`allProducts`)
 - [ ] Aggiungere nel menu burger di index.html
@@ -926,6 +926,25 @@ normalize(s) = s.toLowerCase().normalize('NFD')
 ---
 
 ## Checklist per modifiche sicure
+
+### Modificare header / nav / drawer / head comune (sistema template)
+
+Le 9 pagine HTML in root sono **generate** da `build-tools/build_pages.py` a partire da:
+
+- `build-tools/templates/` — partial condivisi: `head-open` (meta/CSP), `head-seo` (title/og, parametrizzato), `head-assets` (font + css), `head-scripts` (script standard), `skip-link`, `nav` (+ varianti `nav--index`, `nav--story-orbit`), `drawer` (+ varianti `drawer--index`, `drawer--operations`)
+- `build-tools/content/<pagina>.html` — contenuto specifico della pagina, con direttive `{{> nome-partial}}` e segnaposto `{{VERSION}}`
+- `build-tools/pages.json` — per ogni pagina: title, description, og:image (`{{PAGE_TITLE}}`, `{{PAGE_DESCRIPTION}}`, `{{OG_IMAGE}}`)
+
+**Flusso di lavoro:**
+
+- [ ] **1.** Modificare il partial in `templates/` (per blocchi condivisi) o il file in `content/` (per contenuto di pagina) — MAI gli HTML in root a mano
+- [ ] **2.** Rigenerare: `python build-tools/build_pages.py` (riscrive le 9 pagine in root)
+- [ ] **3.** Verificare: `python build-tools/build_pages.py --check` (exit 0 = root allineata) + smoke test
+- [ ] **4.** Commit di sorgenti (`templates/`, `content/`, `pages.json`) **e** HTML generati insieme (il deploy GitHub Pages usa gli HTML committati in root — nessun build step a runtime)
+
+**Versione cache-busting:** `build_pages.py` rileva automaticamente la versione `?v=YYYYMMDD_NN` corrente dagli HTML in root + `sw.js` (stessa logica di `bump_version.py`, che resta invariato e continua a operare sugli HTML generati). Dopo `bump_version.py`, una rigenerazione produce la stessa versione: i due tool sono coerenti senza file di versione separato. Override manuale: `--set-version`.
+
+**Nota byte-exact:** i partial vengono inseriti senza riformattazione; alcuni file root non terminano con newline (stato storico committato, riprodotto fedelmente). Se gli HTML in root vengono modificati a mano, `--check` fallisce: riportare la modifica nei sorgenti e rigenerare.
 
 ### Prima di modificare
 

@@ -1,0 +1,76 @@
+{
+  "_comment": "Config per build_pages.py: vars sostituite nei partial head-seo e nei content. VERSION viene rilevata automaticamente dagli HTML in root (stessa logica di bump_version.py).",
+  "pages": {
+    "index.html": {
+      "content": "index.html",
+      "vars": {
+        "PAGE_TITLE": "Badiani Training Orbit",
+        "PAGE_DESCRIPTION": "Badiani Training Orbit — piattaforma di formazione interattiva per lo staff Badiani. Gamification, quiz e guida prodotti.",
+        "OG_IMAGE": "https://training.badiani.it/assets/covers/sweet-treat-atelier.webp"
+      }
+    },
+    "caffe.html": {
+      "content": "caffe.html",
+      "vars": {
+        "PAGE_TITLE": "Coffee & Drinks — Badiani",
+        "PAGE_DESCRIPTION": "Guida formativa Coffee & Drinks — preparazione caffè, bevande calde e fredde, tecniche di servizio Badiani.",
+        "OG_IMAGE": "https://training.badiani.it/assets/covers/bar-and-drinks.webp"
+      }
+    },
+    "gelato-lab.html": {
+      "content": "gelato-lab.html",
+      "vars": {
+        "PAGE_TITLE": "Gelato Lab - Badiani",
+        "PAGE_DESCRIPTION": "Guida formativa Gelato Lab — ricettario, tecniche di servizio e conservazione del gelato artigianale Badiani.",
+        "OG_IMAGE": "https://training.badiani.it/assets/covers/gelato-lab.webp"
+      }
+    },
+    "pastries.html": {
+      "content": "pastries.html",
+      "vars": {
+        "PAGE_TITLE": "Pastry Lab — Badiani",
+        "PAGE_DESCRIPTION": "Guida formativa Pastry Lab — pasticceria da banco, mignon, torte e servizio vetrina Badiani.",
+        "OG_IMAGE": "https://training.badiani.it/assets/covers/pastry-lab.webp"
+      }
+    },
+    "sweet-treats.html": {
+      "content": "sweet-treats.html",
+      "vars": {
+        "PAGE_TITLE": "Sweet Treat Atelier — Badiani",
+        "PAGE_DESCRIPTION": "Guida formativa Sweet Treat Atelier — crêpes, waffle, pancake e dessert personalizzati Badiani.",
+        "OG_IMAGE": "https://training.badiani.it/assets/covers/sweet-treat-atelier.webp"
+      }
+    },
+    "festive.html": {
+      "content": "festive.html",
+      "vars": {
+        "PAGE_TITLE": "Seasonal - Badiani",
+        "PAGE_DESCRIPTION": "Guida formativa Seasonal — prodotti stagionali, panettone, pandoro, colomba e cioccolata calda Badiani.",
+        "OG_IMAGE": "https://training.badiani.it/assets/covers/festive.webp"
+      }
+    },
+    "operations.html": {
+      "content": "operations.html",
+      "vars": {
+        "PAGE_TITLE": "Operations &amp; Setup — Badiani",
+        "PAGE_DESCRIPTION": "Guida operativa Operations & Setup — procedure di apertura, chiusura, igiene e manutenzione punti vendita Badiani.",
+        "OG_IMAGE": "https://training.badiani.it/assets/covers/operation-e-setup.webp"
+      }
+    },
+    "story-orbit.html": {
+      "content": "story-orbit.html",
+      "vars": {
+        "PAGE_TITLE": "Story Orbit — Badiani",
+        "PAGE_DESCRIPTION": "Story Orbit — la storia del brand Badiani, dalla fondazione a oggi, in formato interattivo.",
+        "OG_IMAGE": "https://training.badiani.it/assets/covers/story-orbit.webp"
+      }
+    },
+    "quiz-solution.html": {
+      "content": "quiz-solution.html",
+      "vars": {
+        "PAGE_TITLE": "Soluzione quiz · Badiani",
+        "PAGE_DESCRIPTION": "Pagina di soluzione quiz — revisione delle risposte e approfondimento argomenti Badiani Training Orbit."
+      }
+    }
+  }
+}

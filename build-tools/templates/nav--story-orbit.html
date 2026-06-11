@@ -1,0 +1,55 @@
+    <nav class="nav-shell">
+        <a class="brand" href="index.html" aria-label="Torna alla home Badiani" data-i18n-attr="aria-label:nav.homeAria">
+          <img loading="lazy"  decoding="async" data-default-src="assets/brand/logo-badiani.webp"  alt="Badiani logo" class="brand-avatar" width="500" height="193" src="assets/brand/logo-badiani.webp" data-alt-src="assets/brand/logo-b-blue.webp">
+          <div class="brand-text">
+            <small>Training</small>
+          </div>
+        </a>
+        <div class="user-nickname-bar" id="user-nickname-bar" style="margin-left:auto; font-weight:600; color:#214098; font-size:1.1em; display:none; align-items:center; gap:0.5em;">
+          <img loading="lazy" decoding="async" id="nav-avatar" class="user-nav-avatar" alt="" aria-hidden="true" />
+          <span id="nickname-display"></span>
+        </div>
+        <button class="menu-trigger" type="button" data-menu-toggle aria-expanded="false" aria-controls="nav-panel">
+          <span class="menu-trigger__label" data-i18n="nav.menu">Menu</span>
+          <span class="menu-icon" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </button>
+        <div class="menu-panel" id="nav-panel" data-menu-panel>
+          <div class="menu-panel__inner">
+            <div class="menu-panel__glow"></div>
+            <div class="menu-cluster">
+              <p class="menu-label" data-i18n="menu.cluster.orbit">Orbit</p>
+              <a href="index.html" data-i18n="menu.link.hub">Hub</a>
+              <a href="story-orbit.html" aria-current="page" data-i18n="menu.link.storyOrbit">Story Orbit</a>
+              <a href="operations.html" data-i18n="menu.link.operations">Operations &amp; Setup</a>
+            </div>
+            <div class="menu-cluster">
+              <p class="menu-label" data-i18n="menu.cluster.beverage">Beverage &amp; Treats</p>
+              <a href="caffe.html" data-i18n="menu.link.caffe">Coffee & Drinks</a>
+              <a href="sweet-treats.html" data-i18n="menu.link.sweetTreats">Sweet Treat Atelier</a>
+              <a href="pastries.html" data-i18n="menu.link.pastries">Pastry Lab</a>
+            </div>
+            <div class="menu-cluster">
+              <p class="menu-label" data-i18n="menu.cluster.gelato">Gelato &amp; Speciali</p>
+              <a href="gelato-lab.html" data-i18n="menu.link.gelatoLab">Gelato Lab</a>
+              <a href="festive.html" data-i18n="menu.link.festive">Seasonal</a>
+            </div>
+
+            <details class="menu-lang menu-lang--panel" data-lang-selector>
+              <summary class="menu-lang__summary">
+                <span class="menu-lang__label" data-lang-label>Lingua</span>
+                <span class="menu-lang__current" data-lang-current>Italiano</span>
+              </summary>
+              <div class="menu-lang__options" role="radiogroup" aria-label="Lingua">
+                <button type="button" class="menu-lang__option" role="radio" data-lang-option="it" data-i18n="lang.it" aria-checked="true">Italiano</button>
+                <button type="button" class="menu-lang__option" role="radio" data-lang-option="en" data-i18n="lang.en" aria-checked="false">English</button>
+                <button type="button" class="menu-lang__option" role="radio" data-lang-option="es" data-i18n="lang.es" aria-checked="false">Español</button>
+                <button type="button" class="menu-lang__option" role="radio" data-lang-option="fr" data-i18n="lang.fr" aria-checked="false">Français</button>
+              </div>
+            </details>
+          </div>
+        </div>
+      </nav>
