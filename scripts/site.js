@@ -3042,7 +3042,7 @@ scrollButtons.forEach((btn) => {
         },
         'fr': {
           question: 'OK · je vous emm“ne ” la fiche la plus pertinente. · l\'intérieur, vous trouverez le standard complet.',
-          found: 'Trouv�. Je vous emm“ne ” la fiche de référence.'
+          found: 'Trouvé. Je vous emmène à la fiche de référence.'
         }
       };
       
@@ -4687,7 +4687,7 @@ const gamification = (() => {
     {
       id: 'tm-029',
       question: 'Box gelato: qual è la priorità per evitare difetti visivi e strutturali?',
-      options: ['Lasciare aria per �morbidezza…', 'Spingere il gelato dentro evitando air bubbles', 'Non pulire i bordi per velocità', 'Mettere subito il nastro prima del coperchio'],
+      options: ['Lasciare aria per morbidezza…', 'Spingere il gelato dentro evitando air bubbles', 'Non pulire i bordi per velocità', 'Mettere subito il nastro prima del coperchio'],
       correct: 1,
       explain: 'Lo standard · riempire comprimendo e senza bolle d\'aria.',
     },
@@ -4873,6 +4873,240 @@ const gamification = (() => {
       correct: 0,
       explain: 'Lo standard ricette cocktail pouches usa 50ml shot, 50ml water (o coconut milk per piùa Colada), 3 scoops e ghiaccio fino al ridge line.',
     },
+    {
+      id: 'tm-056',
+      question: 'Strawberry Daiquiri: quale alcol · previsto?',
+      options: ['Vodka', 'White Rum', 'Aperol', 'Gin'],
+      correct: 1,
+      explain: 'Lo standard Strawberry Daiquiri usa 50ml white rum.',
+    },
+    {
+      id: 'tm-057',
+      question: 'Frozen Lemonade: quale alcol · previsto?',
+      options: ['Vodka', 'White Rum', 'Aperol', 'Whisky'],
+      correct: 0,
+      explain: 'Lo standard Frozen Lemonade usa 50ml vodka.',
+    },
+    {
+      id: 'tm-058',
+      question: 'Frozen Aperol: quale ingrediente alcolico compare?',
+      options: ['Aperol', 'Vodka', 'White Rum', 'Gin'],
+      correct: 0,
+      explain: 'Lo standard Frozen Aperol usa 50ml Aperol.',
+    },
+    {
+      id: 'tm-059',
+      question: 'piùa Colada: quale “milk” · previsto al posto dell\'acqua?',
+      options: ['Oat milk', 'Coconut milk', 'Whole milk', 'Soy milk'],
+      correct: 1,
+      explain: 'Lo standard piùa Colada usa 50ml coconut milk.',
+    },
+    {
+      id: 'tm-060',
+      question: 'Churros: quale triade · corretta?',
+      options: ['180°C + 6 churros + 5 min', '190°C + 8 churros + 8-9 min', '200°C + 10 churros + 2 min', '170°C + 8 churros + 15 min'],
+      correct: 1,
+      explain: 'Standard churros = 190°C, porzione 8, frittura 8-9 min.',
+    },
+    {
+      id: 'tm-061',
+      question: 'Coating churros: quale rapporto · corretto?',
+      options: ['600g zucchero + 20g cannella', '600g cannella + 20g zucchero', '300g zucchero + 30g cannella', '500g zucchero + 50g cannella'],
+      correct: 0,
+      explain: 'Lo standard coating · 600g white sugar e 20g cinnamon.',
+    },
+    {
+      id: 'tm-062',
+      question: 'Panettone warm slice: qual è la sequenza corretta?',
+      options: ['Olio ? 10 sec ? flip ? 10 sec', '10 sec ? flip ? 10 sec (senza olio)', '20 sec un lato solo', '5 sec e basta'],
+      correct: 1,
+      explain: 'Lo standard scalda 10 sec per lato e vieta l\'olio.',
+    },
+    {
+      id: 'tm-063',
+      question: 'Pandoro: quale finitura “base” · corretta?',
+      options: ['Sale', 'Cacao amaro', 'Zucchero a velo', 'Sciroppo d\'acero'],
+      correct: 2,
+      explain: 'Lo standard prevede zucchero a velo sulla fetta.',
+    },
+    {
+      id: 'tm-064',
+      question: 'Mini panettone in-store: quale coppia “azione + quantità salsa” · corretta?',
+      options: ['Prendi dalla vertical vitrina + riempi espresso cup 1/3', 'Prendi dal forno + riempi espresso cup piena', 'Prendi dalla cassa + riempi espresso cup 1/10', 'Prendi dal frigo + riempi espresso cup 2/3'],
+      correct: 0,
+      explain: 'Lo standard prevede prelievo dalla vertical vitrina (con guanti) e salsa 1/3 espresso cup.',
+    },
+    {
+      id: 'tm-065',
+      question: 'Delivery mini panettone: qual è il layout corretto nella treat box?',
+      options: ['Sauce pot in un angolo', 'Panettoni al centro, salsa fuori', 'Un panettone per angolo e sauce pot al centro', 'Tutto mescolato'],
+      correct: 2,
+      explain: 'Lo standard posiziona i mini panettoni negli angoli e la salsa al centro.',
+    },
+    {
+      id: 'tm-066',
+      question: 'Delivery mini panettone: quando va conservata la box in attesa del driver?',
+      options: ['A temperatura ambiente', 'In frigo', 'In freezer', 'Nel forno spento'],
+      correct: 2,
+      explain: 'Lo standard prevede che la box vada in freezer finché arriva il driver.',
+    },
+    {
+      id: 'tm-081',
+      question: 'Yo-Yo: qual è la porzione gelato standard?',
+      options: ['50-60g', '70g', '80-90g', '120g'],
+      correct: 2,
+      explain: 'Lo standard Yo-Yo · una scoop circa 80/90g tra due wafers.',
+    },
+    {
+      id: 'tm-082',
+      question: 'Yo-Yo: quale combo · corretta per il servizio?',
+      options: ['Senza guanti, 1 wafer', 'Guanti + tool + 2 wafers', 'Solo spatola gelato', 'Solo coppetta'],
+      correct: 1,
+      explain: 'Lo standard prevede guanti, tool e due wafers per chiusura.',
+    },
+    {
+      id: 'tm-083',
+      question: 'Yo-Yo: quale pratica evita un risultato “sbordato”?',
+      options: ['Fare due scoops', 'Porzionare con precisione e non far overflow', 'Premere con forza', 'Sciogliere il gelato'],
+      correct: 1,
+      explain: 'La regola · porzionare con precisione evitando overflow.',
+    },
+    {
+      id: 'tm-084',
+      question: 'Gelato box: quale azione migliora l\'ordine e la pulizia in consegna?',
+      options: ['Non pulire i bordi', 'Pulire i bordi con blue roll e rimuovere eccessi', 'Mettere topping sui bordi', 'Riempire oltre il bordo'],
+      correct: 1,
+      explain: 'Lo standard prevede pulizia dei bordi del box prima di servire.',
+    },
+    {
+      id: 'tm-085',
+      question: 'Gelato box: quale logica di riempimento · corretta quando hai gusti molto morbidi e gusti più “tenaci”?',
+      options: ['Mettere prima i gusti morbidi', 'Mettere prima i gusti duri', 'Alternare a caso', 'Solo sorbetti'],
+      correct: 0,
+      explain: 'Lo standard suggerisce di “push soft flavours first” nel box.',
+    },
+    {
+      id: 'tm-086',
+      question: 'Coppa gelato: quale strumento · usato per fare le tre palline?',
+      options: ['Scoop spatula', 'Round scooper', 'Mestolo', 'Spatola piatta'],
+      correct: 1,
+      explain: 'La coppa prevede “round scooper” per le tre balls.',
+    },
+    {
+      id: 'tm-087',
+      question: 'Morning prep: prima di riutilizzare spatole “di pulizia” su altri gusti, cosa fai?',
+      options: ['Nulla', 'Lavare e asciugare con blue roll', 'Solo sciacquare', 'Metterle in freezer'],
+      correct: 1,
+      explain: 'Lo standard impone lavaggio dopo ogni uso e asciugatura con blue roll prima di passare ad altri gusti.',
+    },
+    {
+      id: 'tm-088',
+      question: 'Deep clean vetrina: quale step · parte della sequenza?',
+      options: ['Aggiungere olio alle superfici', 'Rimuovere briciole/noci e residui dentro la macchina', 'Mettere ghiaccio', 'Spegnere e non pulire'],
+      correct: 1,
+      explain: 'La deep clean include rimozione di nuts/crumbs e residui, poi sanificazione.',
+    },
+    {
+      id: 'tm-089',
+      question: 'Deep clean vetrina: cosa “brilla” alla fine del ciclo?',
+      options: ['Solo le etichette', 'Le superfici con blue spray e blue roll', 'Il pavimento', 'Le mani'],
+      correct: 1,
+      explain: 'Lo standard prevede finishing con blue spray/blue roll per far brillare le superfici.',
+    },
+    {
+      id: 'tm-090',
+      question: 'Smoothie: tempo minimo di blending indicativo?',
+      options: ['10 sec', '20 sec', '30 sec', '90 sec'],
+      correct: 2,
+      explain: 'Lo standard indica 30 secondi o fino a consistenza smooth.',
+    },
+    {
+      id: 'tm-091',
+      question: 'Matcha iced latte: perché si versa lentamente la premade matcha su latte e ghiaccio?',
+      options: ['Per scaldare la bevanda', 'Per creare un pattern visivo', 'Per sciogliere il gelato', 'Per aumentare lo zucchero'],
+      correct: 1,
+      explain: 'La procedura standard punta a creare un pattern versando lentamente.',
+    },
+    {
+      id: 'tm-092',
+      question: 'Buontalenti/Strawberry iced (matcha): dove deve “sedere” il topping gelato?',
+      options: ['Sul fondo', 'A metà', 'Sopra, come strato superiore', 'Fuori dal bicchiere'],
+      correct: 2,
+      explain: 'Lo standard · versare il topping lentamente così resta sopra la bevanda.',
+    },
+    {
+      id: 'tm-093',
+      question: 'Cocktail pouches: quanti “large ice cubes” sono indicati come riferimento?',
+      options: ['2', '4', '~6', '10'],
+      correct: 2,
+      explain: 'Lo standard indica ghiaccio fino al ridge line, circa 6 cubi grandi.',
+    },
+    {
+      id: 'tm-096',
+      question: 'Panettone/Pandoro: quale azione aumenta l\'appeal “al banco”?',
+      options: ['Servire sempre freddo senza opzioni', 'Chiedere se lo vogliono warm e tostare 10 sec per lato', 'Friggerlo', 'Mettere olio sulla piastra'],
+      correct: 1,
+      explain: 'Lo standard prevede opzione warm slice con tostatura 10+10 sec senza olio.',
+    },
+    {
+      id: 'tm-097',
+      question: 'Gelato cups: quale affermazione · coerente con il servizio (tecnica)?',
+      options: ['Si prende la coppetta dal bordo', 'Si pressa delicatamente per togliere air bubbles', 'Non si usa mai wafer', 'Si mescola il gelato con acqua'],
+      correct: 1,
+      explain: 'Lo standard prevede pressare delicatamente per ridurre air bubbles e migliorare resa.',
+    },
+    {
+      id: 'tm-098',
+      question: 'Gelato cones: quale upsell · coerente con lo standard?',
+      options: ['Non proporre nulla', 'Proporre whipped cream o passare al cono chocolate', 'Proporre solo acqua', 'Proporre spezie salate'],
+      correct: 1,
+      explain: 'Lo standard suggerisce upsell con whipped cream o cono chocolate.',
+    },
+  ];
+
+  // Super-easy pool (sm-001 .. sm-100). Base text is intentionally minimal; UI will pull i18n.
+  const SM_CORRECT_ANSWERS = [2, 2, 0, 1, 0, 1, 1, 1, 1, 2, 1, 1, 1, 0, 2, 2, 0, 0, 1, 1, 1, 0, 1, 1, 1, 2, 1, 0, 1, 0, 1, 2, 2, 1, 1, 2, 1, 1, 2, 1, 1, 0, 2, 2, 0, 1, 0, 2, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 2, 0, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 0, 0, 1, 2, 2, 1, 1, 1, 0, 1, 1, 1, 1, 2, 1, 2, 2, 2, 1, 1, 1, 1, 1, 2];
+
+  const SUPER_EASY_QUESTIONS = Array.from({ length: 100 }, (_, idx) => ({
+    id: `sm-${String(idx + 1).padStart(3, '0')}`,
+    question: '',
+    options: ['', '', '', ''],
+    explain: '',
+    correct: SM_CORRECT_ANSWERS[idx],
+  }));
+  // NOTE: "Sfida continua" was an experimental extra flow that can pop up on every 3rd star.
+  // It contains legacy questions (incl. "Sicurezza") and was confusing users who expect the
+  // 3-star moment to be the tab-based Quiz Slot.
+  // Keep the code for future iterations, but disable auto-trigger by default.
+  const ENABLE_CONTINUOUS_CHALLENGE = false;
+  const CHALLENGE_INTERVAL = 3;
+  const CHALLENGE_QUESTIONS = [
+    { id: 'c1', topic: 'Emergenza', question: 'Fumo dalla macchina espresso. Azioni primi 30 sec?', options: ['Spegni + estintore', 'Continuo', 'Chiamo tecnico'], correct: 0 },
+    { id: 'c2', topic: 'qualità', question: 'Cliente dice: questo sa di detersivo. Possibili contaminazioni?', options: ['Pulizia mal risciacquata', 'Latte', 'Caffè'], correct: 0 },
+    { id: 'c3', topic: 'Sicurezza', question: 'Coworker si scotta con steam wand. First aid?', options: ['Acqua fredda immediata', 'Ghiaccio', 'Niente'], correct: 0 },
+    { id: 'c4', topic: 'Prodotto', question: 'Vetrina gelato -8°C invece -14°C. Procedura?', options: ['Ok', 'Chiama tecnico + check prodotti', 'Chiudo'], correct: 1 },
+    { id: 'c5', topic: 'Inventario', question: 'Noti discrepanza inventario. Procedura?', options: ['Ignoro', 'Report + verifica', 'Aggiusto'], correct: 1 },
+    { id: 'c6', topic: 'Team', question: 'Collega sembra ubriaco. Cosa fai?', options: ['Ignoro', 'Parlo con manager', 'Rido'], correct: 1 },
+    { id: 'c7', topic: 'Cliente', question: 'Cliente minaccia recensione negativa. De-escalation?', options: ['Ignoro', 'Ascolto + soluzione', 'Minaccio'], correct: 1 },
+    { id: 'c8', topic: 'Igiene', question: 'Noti collega non segue igiene. Come intervieni?', options: ['Ignoro', 'Richiamo gentile', 'Segnalo'], correct: 1 },
+    { id: 'c9', topic: 'Prodotto', question: 'Delivery con prodotti danneggiati. Accetti?', options: ['S…', 'Rifiuto + foto', 'Accetto parziale'], correct: 1 },
+    { id: 'c10', topic: 'Servizio', question: 'Cliente rovescia caffè bollente. Procedura?', options: ['Ignoro', 'First aid + report', 'Solo scuse'], correct: 1 },
+    { id: 'c11', topic: 'Attrezzature', question: 'Grinder bloccato con chicchi. Come sblocchi?', options: ['Forzo', 'Spegni + pulisci', 'Continuo'], correct: 1 },
+    { id: 'c12', topic: 'Conservazione', question: 'Frigo pasticceria non raffredda. Cosa salvi prima?', options: ['Tutto', 'Prodotti più deperibili', 'Niente'], correct: 1 },
+    { id: 'c13', topic: 'POS', question: 'POS non funziona, cliente solo carta. Opzioni?', options: ['Rifiuto', 'Contanti o gratuito', 'Aspetto'], correct: 1 },
+    { id: 'c14', topic: 'Sicurezza', question: 'Bambino corre verso vetrina calda. Azione?', options: ['Ignoro', 'Blocco + avviso genitore', 'Urlo'], correct: 1 },
+    { id: 'c15', topic: 'Stock', question: 'Finisci coni gelato pomeriggio. Alternative?', options: ['Chiudo', 'Solo coppette + comunicazione', 'Uso altro'], correct: 1 },
+    { id: 'c16', topic: 'qualità', question: 'Shot esce in 18 sec invece 28. Correttivo?', options: ['Ok', 'Grinder più fine', 'Rifaccio'], correct: 1 },
+    { id: 'c17', topic: 'Pulizia', question: 'Come pulisci group head tra servizi?', options: ['Non pulisco', 'Flush + wipe', 'Solo flush'], correct: 1 },
+    { id: 'c18', topic: 'Tecnica', question: 'Portafiltro freddo. Impatto estrazione?', options: ['Nessuno', 'Shot sotto-estratto', 'Shot bruciato'], correct: 1 },
+    { id: 'c19', topic: 'Servizio', question: 'Cliente celiaco chiede dolce. Procedura?', options: ['Normale', 'Verifico ingredienti + contamination', 'Rifiuto'], correct: 1 },
+    { id: 'c20', topic: 'Manutenzione', question: 'Backflush macchina: quando?', options: ['Mai', 'Fine giornata', 'Ogni ora'], correct: 1 },
+    { id: 'c21', topic: 'Menu', question: 'Cliente allergico noci chiede brownie. Procedura?', options: ['Dico ok', 'Verifico + avviso rischio', 'Rifiuto'], correct: 1 },
+    { id: 'c22', topic: 'Attrezzature', question: 'Macchina gruppo non scalda. Workaround?', options: ['Chiudo', 'Uso altri gruppi', 'Forzo'], correct: 1 },
+    { id: 'c23', topic: 'Stock', question: 'Finisci ghiaccio per iced. Alternative?', options: ['Non servo', 'Uso congelato + comunico', 'Tiepido'], correct: 1 },
+    { id: 'c24', topic: 'Team', question: 'Coworker assente, sei solo con 15 ordini. Strategia?', options: ['Panico', 'Priorizzo + batch', 'Chiudo'], correct: 1 },
+    { id: 'c25', topic: 'Cliente', question: 'Cliente filma dicendo: Vi segnalo ASL. Reazione?', options: ['Calma + dialogo', 'Minaccio', 'Chiamo polizia'], correct: 0 }
+  ];
 
   const defaultState = {
     version: 4,
@@ -5086,7 +5320,7 @@ const gamification = (() => {
   const clampText = (value, max) => {
     const s = String(value || '');
     if (s.length <= max) return s;
-    return `${s.slice(0, max - 1)}�`;
+    return `${s.slice(0, max - 1)}…`;
   };
 
   const trimObjectByRecentTs = (obj, max) => {
@@ -5743,7 +5977,7 @@ const gamification = (() => {
   }
 
   function applyChallengePenalty(challenge = null) {
-    // Log the mistake so it shows up in the Hub “Revisione ” errore recente� list.
+    // Log the mistake so it shows up in the Hub “Revisione” errore recente list.
     // Also: immediately open the same review modal (like Test me) so the trainee knows exactly what to re-read.
     let lastItem = null;
     try {
@@ -6401,7 +6635,7 @@ const gamification = (() => {
     numMatches.forEach(n => numbers.add(n.replace(',', '.')));
     const fracMatches = text.match(/\b\d+\s*\/\s*\d+\b/g) || [];
     fracMatches.forEach(f => numbers.add(f.replace(/\s+/g, '')));
-    const rangeMatches = text.match(/\b\d+\s*[�-]\s*\d+\b/g) || [];
+    const rangeMatches = text.match(/\b\d+\s*[–-]\s*\d+\b/g) || [];
     rangeMatches.forEach(r => numbers.add(r.replace(/\s+/g, '')));
 
     const norm = (s) => String(s || '').toLowerCase();
@@ -6776,7 +7010,7 @@ const gamification = (() => {
       .replace(/modalità/gi, 'modalità')
       .replace(/qualità/gi, 'qualità')
       // Generic: normalize leftover replacement chars in obvious separators.
-      .replace(/\s*�\s*/g, ' - ')
+      .replace(/\s*[–—]\s*/g, ' - ')
       .replace(/\s+-\s+-\s+/g, ' - ')
       .trim();
   };
@@ -8211,10 +8445,10 @@ const gamification = (() => {
     { id: 'f1', question: 'Qual · la priorità in caso di cliente con reazione allergica?', options: ['Chiamo 118', 'Aspetto che passi', 'Offro acqua', 'Cambio argomento'], correct: 0 },
     { id: 'f2', question: 'Temperatura ideale del latte per un cappuccino equilibrato?', options: ['65°C circa', '80°C', '45°C', '100°C'], correct: 0 },
     { id: 'f3', question: 'Cosa fai se noti fumo dalla macchina espresso?', options: ['Spegni e attivi procedura sicurezza', 'Continui a servire', 'Aumenti la pressione', 'Ignori e speri'], correct: 0 },
-    { id: 'f4', question: 'Per evitare channeling nell\'espresso la cosa più importante �', options: ['Distribuzione e tamp uniforme', 'Tampare fortissimo', 'Bagnare il caffè', 'Usare tazza fredda'], correct: 0 },
+    { id: 'f4', question: 'Per evitare channeling nell\'espresso la cosa più importante è?', options: ['Distribuzione e tamp uniforme', 'Tampare fortissimo', 'Bagnare il caffè', 'Usare tazza fredda'], correct: 0 },
     { id: 'f5', question: 'Come fai upsell senza pressione con uno studente budget-limitato?', options: ['Proponi una combo risparmio', 'Insisti finché dice s…', 'Non dici nulla mai', 'Sminuisci la scelta'], correct: 0 },
     { id: 'f6', question: 'Churros: olio a 160°C. Cosa fai?', options: ['Porti a 180°C', 'Continui così', 'Aggiungi zucchero in olio', 'Raffreddi l\'olio'], correct: 0 },
-    { id: 'f7', question: 'Se il frigo non raffredda correttamente, qual è l\'azione corretta?', options: ['Metti al sicuro i prodotti deperibili e segnali', 'Lasci tutto com\'�', 'Aumenti la temperatura', 'Servi più veloce'], correct: 0 },
+    { id: 'f7', question: 'Se il frigo non raffredda correttamente, qual è l\'azione corretta?', options: ['Metti al sicuro i prodotti deperibili e segnali', 'Lasci tutto com\'è', 'Aumenti la temperatura', 'Servi più veloce'], correct: 0 },
     { id: 'f8', question: 'perché esiste il cooldown gelato?', options: ['Limitare spam premi', 'Per far sembrare il sito lento', 'Serve per i font', 'È un errore'], correct: 0 },
     { id: 'f9', question: 'Cliente indeciso tra cappuccino e latte: come guidi?', options: ['Chiedi preferenza di foam/morbidezza', 'Decidi tu senza domande', 'Ignori e fai espresso', 'Dici che · uguale'], correct: 0 },
     { id: 'f10', question: 'Gelato con cristalli di ghiaccio: cosa indica?', options: ['È stato scongelato/ricongelato', 'È perfetto', 'È più fresco', 'È più dolce'], correct: 0 },
@@ -9425,7 +9659,7 @@ Rispondi SOLO con il JSON, nient\'altro.`;
         if (parts.length) return parts[Math.floor(Math.random() * parts.length)];
 
         if (cleaned.length <= 140) return cleaned;
-        return `${cleaned.slice(0, 120).trim()}�`;
+        return `${cleaned.slice(0, 120).trim()}…`;
       };
 
       const templates = entries
@@ -12144,7 +12378,7 @@ const normalizeGuideCardStatLists = () => {
     const t = specTidy(value).toLowerCase();
     if (!t) return true;
     // Pasted separators / placeholders that should never become a list item.
-    if (/^[��\-��.]+$/.test(t)) return true;
+    if (/^[•·–—\-.]+$/.test(t)) return true;
     if (t === 'life') return true;
     if (t === 'niente' || t === 'nulla' || t === 'nessuno') return true;
     if (t === 'da definire') return true;
@@ -12154,13 +12388,13 @@ const normalizeGuideCardStatLists = () => {
     const text = specTidy(value);
     if (!text) return '';
     return text
-      // Clean odd paste artifacts like "�. �" or "+.".
+      // Clean odd paste artifacts like "•. •" or "+.".
       .replace(/\s*\+\s*\./g, ' +')
-      .replace(/\s*�\s*\./g, ' �')
-      .replace(/\s*\.\s*�\s*/g, ' · ')
-      .replace(/\s*�\s*/g, ' · ')
+      .replace(/\s*•\s*\./g, ' ·')
+      .replace(/\s*\.\s*•\s*/g, ' · ')
+      .replace(/\s*•\s*/g, ' · ')
       // Collapse repeated separators and punctuation noise.
-      .replace(/(\s*�\s*){2,}/g, ' · ')
+      .replace(/(\s*•\s*){2,}/g, ' · ')
       .replace(/,{2,}/g, ',')
       .replace(/\s*\+\s*$/g, '')
       .replace(/\s+/g, ' ')
@@ -12213,7 +12447,7 @@ const normalizeGuideCardStatLists = () => {
       const [labelPart, ...rest] = text.split(':');
       return { label: specTidy(labelPart) || 'Dettaglio', detail: specTidy(rest.join(':')) || 'Da definire' };
     }
-    const tokenMatch = text.match(/^([A-Za-z�-�0-9�]{2,14})\s+(.+)$/);
+    const tokenMatch = text.match(/^([A-Za-zÀ-ÿ0-9]{2,14})\s+(.+)$/);
     if (tokenMatch) {
       const labelCandidate = specTidy(tokenMatch[1]);
       const rest = specTidy(tokenMatch[2]);
@@ -12922,7 +13156,7 @@ toggles.forEach((button) => {
       const t = tidy(value).toLowerCase();
       if (!t) return false;
       // Discard pasted separators / punctuation-only fragments.
-      if (/^[��\-��.]+$/.test(t)) return false;
+      if (/^[•·–—\-.]+$/.test(t)) return false;
       // Discard explicit placeholders.
       if (t === 'life') return false;
       if (t === 'niente' || t === 'nulla' || t === 'nessuno') return false;
@@ -12934,13 +13168,13 @@ toggles.forEach((button) => {
       const text = tidy(value);
       if (!text) return '';
       return text
-        // Clean odd paste artifacts like "�. �" or "+.".
+        // Clean odd paste artifacts like "•. •" or "+.".
         .replace(/\s*\+\s*\./g, ' +')
-        .replace(/\s*�\s*\./g, ' �')
-        .replace(/\s*\.\s*�\s*/g, ' · ')
-        .replace(/\s*�\s*/g, ' · ')
+        .replace(/\s*•\s*\./g, ' ·')
+        .replace(/\s*\.\s*•\s*/g, ' · ')
+        .replace(/\s*•\s*/g, ' · ')
         // Collapse repeated separators and punctuation noise.
-        .replace(/(\s*�\s*){2,}/g, ' · ')
+        .replace(/(\s*•\s*){2,}/g, ' · ')
         .replace(/,{2,}/g, ',')
         .replace(/\s*\+\s*$/g, '')
         .replace(/\s+/g, ' ')
@@ -12952,7 +13186,7 @@ toggles.forEach((button) => {
       if (!text) return [];
       const parts = text
         .split(' · ')
-        .map((p) => tidy(p).replace(/^[\-�]+\s*/g, '').trim())
+        .map((p) => tidy(p).replace(/^[-•·]+\s*/g, '').trim())
         .map((p) => p.replace(/^[.]+\s*/g, '').trim())
         .map((p) => p.replace(/[.\s]+$/g, '').trim())
         .map((p) => p.replace(/\s*\+\s*$/g, '').trim())
@@ -13192,7 +13426,7 @@ toggles.forEach((button) => {
       }
 
       // Heuristic: "Key value" (e.g., Milk stretch...).
-      const tokenMatch = text.match(/^([A-Za-z�-�0-9�]{2,14})\s+(.+)$/);
+      const tokenMatch = text.match(/^([A-Za-zÀ-ÿ0-9]{2,14})\s+(.+)$/);
       if (tokenMatch) {
         const labelCandidate = tidy(tokenMatch[1]);
         const rest = tidy(tokenMatch[2]);
@@ -13291,7 +13525,7 @@ toggles.forEach((button) => {
       const isPlaceholderDetail = (value) => {
         const v = tidy(value).toLowerCase();
         if (!v) return true;
-        if (v === '-' || v === '�' || v === '�') return true;
+        if (v === '-' || v === '•' || v === '·') return true;
         if (v === 'n/a' || v === 'na') return true;
         if (v.includes('da definire')) return true;
         return false;
